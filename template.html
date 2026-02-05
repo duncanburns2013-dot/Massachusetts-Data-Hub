@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dashboard Template — Massachusetts Data Hub</title>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<style>
+/* =============================================================
+   MASSACHUSETTS DATA HUB — REUSABLE DASHBOARD TEMPLATE
+   
+   USAGE:
+   1. Copy this file and rename it (e.g., immigration/index.html)
+   2. Update the <title> and hero section
+   3. Add your tabs to the nav bar
+   4. Add tab content sections
+   5. Add chart data to the initCharts() switch cases
+   6. Deploy to GitHub Pages
+   
+   SOLVED BUGS (do not revert):
+   - Tab system uses onclick="showTab(this,'name')" — NOT event.target
+   - Charts use lazy initialization — only render when tab is visible
+   - Chart cleanup on tab switch prevents memory leaks
+   - Responsive grid stacks properly on mobile
+   ============================================================= */
+
+/* ---------- CSS Custom Properties (Theme) ---------- */
+:root {
+  /* Light theme (default) */
+  --bg: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-hero: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+  --text: #0f172a;
+  --text-muted: #64748b;
+  --text-hero: #ffffff;
+  --border: #e2e8f0;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  
+  /* Chart Colors — vivid, high contrast */
+  --c-red: #ef4444;
+  --c-blue: #3b82f6;
+  --c-green: #22c55e;
+  --c-purple: #8b5cf6;
+  --c-yellow: #eab308;
+  --c-orange: #f97316;
+  --c-cyan: #06b6d4;
+  --c-pink: #ec4899;
+  
+  /* Spacing */
+  --section-pad: 32px 24px;
+  --card-radius: 12px;
+  --card-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+}
+
+/* Dark theme variant — uncomment to use */
+/*
+:root {
+  --bg: #0f172a;
+  --bg-card: #1e293b;
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+  --border: #334155;
+}
+*/
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* ---------- Hero Header ---------- */
+.hero {
+  background: var(--bg-hero);
+  color: var(--text-hero);
+  padding: 48px 24px 56px;
+  text-align: center;
+}
+.hero h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.hero p {
+  font-size: 1rem;
+  opacity: 0.85;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Hero stat badges */
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+.hero-stat {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 10px 18px;
+  text-align: center;
+}
+.hero-stat .val {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+.hero-stat .lbl {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ---------- Tab Navigation ---------- */
+.tab-nav {
+  display: flex;
+  gap: 0;
+  background: var(--bg-card);
+  border-bottom: 2px solid var(--border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.tab-btn {
+  padding: 14px 20px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+}
+.tab-btn:hover {
+  color: var(--text);
+  background: rgba(0,0,0,0.03);
+}
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ---------- Tab Content ---------- */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ---------- Sections ---------- */
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--section-pad);
+}
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+
+/* ---------- KPI Cards Grid ---------- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.card {
+  background: var(--bg-card);
+  border-radius: var(--card-radius);
+  padding: 20px;
+  box-shadow: var(--card-shadow);
+  border-left: 4px solid var(--border);
+}
+.card.red    { border-left-color: var(--c-red); }
+.card.blue   { border-left-color: var(--c-blue); }
+.card.green  { border-left-color: var(--c-green); }
+.card.purple { border-left-color: var(--c-purple); }
+.card.orange { border-left-color: var(--c-orange); }
+
+.card-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.card-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text);
+}
+.card-sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ---------- Chart Containers ---------- */
+.chart-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+  margin-bottom: 28px;
+}
+.chart-box {
+  background: var(--bg-card);
+  border-radius: var(--card-radius);
+  padding: 20px;
+  box-shadow: var(--card-shadow);
+}
+.chart-box h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+.chart-area {
+  position: relative;
+  height: 300px;
+}
+
+/* ---------- Callout / Insight Boxes ---------- */
+.callout {
+  background: #fef3c7;
+  border-left: 4px solid var(--c-yellow);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  color: #92400e;
+}
+.callout.red {
+  background: #fef2f2;
+  border-left-color: var(--c-red);
+  color: #991b1b;
+}
+.callout.blue {
+  background: #eff6ff;
+  border-left-color: var(--c-blue);
+  color: #1e40af;
+}
+.callout.green {
+  background: #f0fdf4;
+  border-left-color: var(--c-green);
+  color: #166534;
+}
+.callout strong {
+  font-weight: 700;
+}
+
+/* ---------- Data Tables ---------- */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  margin-bottom: 20px;
+}
+.data-table th {
+  background: var(--bg);
+  font-weight: 700;
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--border);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+.data-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+.data-table tr:nth-child(even) td {
+  background: rgba(0,0,0,0.015);
+}
+.data-table .bold {
+  font-weight: 700;
+}
+.data-table .red { color: var(--c-red); font-weight: 700; }
+.data-table .green { color: var(--c-green); font-weight: 700; }
+
+/* ---------- Footer ---------- */
+.footer {
+  text-align: center;
+  padding: 24px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .hero { padding: 32px 16px 40px; }
+  .hero h1 { font-size: 1.5rem; }
+  .hero-stats { gap: 8px; }
+  .hero-stat { padding: 8px 12px; }
+  .hero-stat .val { font-size: 1.2rem; }
+  .section { padding: 24px 16px; }
+  .cards { grid-template-columns: repeat(2, 1fr); }
+  .chart-row { grid-template-columns: 1fr; }
+  .chart-area { height: 250px; }
+  .tab-btn { padding: 12px 14px; font-size: 0.8rem; }
+}
+@media (max-width: 480px) {
+  .cards { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     HERO SECTION — Update title, subtitle, and stat badges
+     ============================================================ -->
+<div class="hero">
+  <h1>📊 Dashboard Title Here</h1>
+  <p>Brief description of what this dashboard covers and key data sources.</p>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="val">$000K</div>
+      <div class="lbl">Metric One</div>
+    </div>
+    <div class="hero-stat">
+      <div class="val">00.0%</div>
+      <div class="lbl">Metric Two</div>
+    </div>
+    <div class="hero-stat">
+      <div class="val">0,000</div>
+      <div class="lbl">Metric Three</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TAB NAVIGATION
+     
+     IMPORTANT: Use onclick="showTab(this,'tabname')"
+     Do NOT use event.target — that's the bug that keeps breaking tabs.
+     ============================================================ -->
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="showTab(this,'overview')">📊 Overview</button>
+  <button class="tab-btn" onclick="showTab(this,'tab2')">📈 Tab Two</button>
+  <button class="tab-btn" onclick="showTab(this,'tab3')">📋 Tab Three</button>
+  <!-- ADD MORE TABS HERE -->
+</div>
+
+<!-- ============================================================
+     TAB CONTENT: OVERVIEW
+     ============================================================ -->
+<div id="tab-overview" class="tab-content active">
+  <div class="section">
+    <h2 class="section-title">Key Metrics</h2>
+
+    <!-- KPI Cards -->
+    <div class="cards">
+      <div class="card red">
+        <div class="card-label">Metric One</div>
+        <div class="card-value">$638,000</div>
+        <div class="card-sub">+3.7% year-over-year</div>
+      </div>
+      <div class="card blue">
+        <div class="card-label">Metric Two</div>
+        <div class="card-value">15.6%</div>
+        <div class="card-sub">vs. 10.4% poverty rate</div>
+      </div>
+      <div class="card green">
+        <div class="card-label">Metric Three</div>
+        <div class="card-value">+29.2%</div>
+        <div class="card-sub">5-year growth</div>
+      </div>
+      <div class="card purple">
+        <div class="card-label">Metric Four</div>
+        <div class="card-value">86,382</div>
+        <div class="card-sub">Cumulative total</div>
+      </div>
+    </div>
+
+    <!-- Callout Box -->
+    <div class="callout red">
+      <strong>Key Finding:</strong> Replace this with your most important insight. 
+      This callout draws attention to critical data points.
+    </div>
+
+    <!-- Charts -->
+    <div class="chart-row">
+      <div class="chart-box">
+        <h3>Chart Title One</h3>
+        <div class="chart-area"><canvas id="chart-overview-1"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <h3>Chart Title Two</h3>
+        <div class="chart-area"><canvas id="chart-overview-2"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="chart-box">
+      <h3>Data Summary</h3>
+      <table class="data-table">
+        <thead>
+          <tr><th>Category</th><th>Value</th><th>Change</th><th>Source</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Row One</td><td class="bold">$638,000</td><td class="green">+3.7%</td><td>Warren Group</td></tr>
+          <tr><td>Row Two</td><td class="bold">$800,000</td><td class="red">+4.2%</td><td>Warren Group</td></tr>
+          <tr><td>Row Three</td><td class="bold">$699,000</td><td class="green">+5.1%</td><td>Warren Group</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TAB CONTENT: TAB TWO (copy this pattern for more tabs)
+     ============================================================ -->
+<div id="tab-tab2" class="tab-content">
+  <div class="section">
+    <h2 class="section-title">Tab Two Content</h2>
+    
+    <div class="callout blue">
+      <strong>Note:</strong> Add your content here. Charts will render lazily when this tab is first opened.
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-box">
+        <h3>Chart Title</h3>
+        <div class="chart-area"><canvas id="chart-tab2-1"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TAB CONTENT: TAB THREE
+     ============================================================ -->
+<div id="tab-tab3" class="tab-content">
+  <div class="section">
+    <h2 class="section-title">Tab Three Content</h2>
+    <p style="color:var(--text-muted);">Add your content here.</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<div class="footer">
+  Data compiled February 2026 · All data from official government sources ·
+  <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub" style="color:var(--accent);">GitHub Repository</a>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT — Tab System + Lazy Chart Initialization
+     
+     CRITICAL PATTERNS (do not change):
+     1. showTab() receives `btn` element directly via onclick
+     2. initCharts() only fires once per tab (tracked by `initialized` Set)
+     3. Charts are destroyed before re-creating (prevents memory leaks)
+     ============================================================ -->
+<script>
+// ---------- Utility Functions ----------
+
+// Number formatter: nF(1234567) → "1,234,567"
+function nF(n) {
+  if (n === null || n === undefined) return '—';
+  return Number(n).toLocaleString('en-US');
+}
+
+// Dollar formatter: dF(1234567) → "$1,234,567"
+function dF(n) {
+  return '$' + nF(n);
+}
+
+// Percentage formatter: pF(12.345) → "12.3%"
+function pF(n, decimals) {
+  return Number(n).toFixed(decimals !== undefined ? decimals : 1) + '%';
+}
+
+// ---------- Chart Color Constants ----------
+const C = {
+  red:    '#ef4444',
+  blue:   '#3b82f6',
+  green:  '#22c55e',
+  purple: '#8b5cf6',
+  yellow: '#eab308',
+  orange: '#f97316',
+  cyan:   '#06b6d4',
+  pink:   '#ec4899',
+  slate:  '#64748b',
+  // Semi-transparent versions for fills
+  redA:   'rgba(239,68,68,0.15)',
+  blueA:  'rgba(59,130,246,0.15)',
+  greenA: 'rgba(34,197,94,0.15)',
+};
+
+// Grid line color
+const GC = 'rgba(0,0,0,0.06)';
+
+// ---------- Chart Default Options ----------
+
+// Standard bar chart options
+function barOpts(yLabel, formatFn) {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false }
+    },
+    scales: {
+      y: {
+        ticks: { callback: formatFn || function(v) { return nF(v); } },
+        grid: { color: GC }
+      },
+      x: { grid: { display: false } }
+    }
+  };
+}
+
+// Standard line chart options
+function lineOpts(yLabel, formatFn) {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { boxWidth: 12, padding: 16 } }
+    },
+    scales: {
+      y: {
+        ticks: { callback: formatFn || function(v) { return nF(v); } },
+        grid: { color: GC }
+      },
+      x: { grid: { display: false } }
+    }
+  };
+}
+
+// Horizontal bar chart options
+function hBarOpts(xMin, xMax, pct) {
+  return {
+    indexAxis: 'y',   // CORRECT — do NOT use 'horizontal'
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        min: xMin,
+        max: xMax,
+        ticks: pct ? { callback: function(v) { return v + '%'; } } : {},
+        grid: { color: GC }
+      },
+      y: { grid: { display: false } }
+    },
+    plugins: { legend: { display: false } }
+  };
+}
+
+// ---------- Safe Chart Creation ----------
+// Always destroy existing chart on a canvas before creating a new one
+function safeChart(canvasId, config) {
+  var existing = Chart.getChart(canvasId);
+  if (existing) existing.destroy();
+  return new Chart(document.getElementById(canvasId), config);
+}
+
+// ---------- Tab System ----------
+// CRITICAL: This receives the button element directly via onclick="showTab(this,'name')"
+// Do NOT use event.target — it breaks when clicking on emoji/span inside the button
+
+var initialized = new Set(); // Track which tabs have had charts initialized
+
+function showTab(btn, tabName) {
+  // Hide all tab content
+  document.querySelectorAll('.tab-content').forEach(function(el) {
+    el.classList.remove('active');
+  });
+  
+  // Deactivate all tab buttons
+  document.querySelectorAll('.tab-btn').forEach(function(el) {
+    el.classList.remove('active');
+  });
+  
+  // Show selected tab content
+  document.getElementById('tab-' + tabName).classList.add('active');
+  
+  // Activate clicked button
+  btn.classList.add('active');
+  
+  // Lazy-initialize charts for this tab (only once)
+  if (!initialized.has(tabName)) {
+    initialized.add(tabName);
+    initCharts(tabName);
+  }
+}
+
+// ---------- Chart Initialization ----------
+// ADD YOUR CHART DATA HERE — one case per tab
+// Charts only render when their tab is first opened (lazy loading)
+
+function initCharts(tabName) {
+  switch (tabName) {
+
+    case 'overview':
+      // EXAMPLE: Bar chart
+      safeChart('chart-overview-1', {
+        type: 'bar',
+        data: {
+          labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
+          datasets: [{
+            label: 'Sample Data',
+            data: [100, 150, 200, 180, 220, 250],
+            backgroundColor: C.blue,
+            borderRadius: 4
+          }]
+        },
+        options: barOpts()
+      });
+
+      // EXAMPLE: Line chart
+      safeChart('chart-overview-2', {
+        type: 'line',
+        data: {
+          labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
+          datasets: [{
+            label: 'Trend A',
+            data: [10, 12, 15, 14, 18, 20],
+            borderColor: C.red,
+            backgroundColor: C.redA,
+            fill: true,
+            tension: 0.3,
+            borderWidth: 2.5,
+            pointRadius: 4
+          }, {
+            label: 'Trend B',
+            data: [8, 9, 11, 13, 15, 16],
+            borderColor: C.blue,
+            backgroundColor: C.blueA,
+            fill: true,
+            tension: 0.3,
+            borderWidth: 2.5,
+            pointRadius: 4
+          }]
+        },
+        options: lineOpts()
+      });
+      break;
+
+    case 'tab2':
+      // ADD TAB 2 CHARTS HERE
+      safeChart('chart-tab2-1', {
+        type: 'bar',
+        data: {
+          labels: ['Category A', 'Category B', 'Category C', 'Category D'],
+          datasets: [{
+            label: 'Values',
+            data: [45, 32, 67, 28],
+            backgroundColor: [C.red, C.blue, C.green, C.purple],
+            borderRadius: 4
+          }]
+        },
+        options: barOpts()
+      });
+      break;
+
+    case 'tab3':
+      // ADD TAB 3 CHARTS HERE
+      break;
+
+    // ADD MORE CASES FOR MORE TABS
+  }
+}
+
+// ---------- Initialize First Tab on Load ----------
+initCharts('overview');
+</script>
+
+</body>
+</html>
