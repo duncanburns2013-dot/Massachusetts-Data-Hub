@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Hampshire Housing Market Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg-primary: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f1f5f9;
+    --border: #e2e8f0;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --accent-blue: #2563eb;
+    --accent-red: #dc2626;
+    --accent-green: #16a34a;
+    --accent-amber: #d97706;
+    --accent-purple: #7c3aed;
+    --accent-teal: #0d9488;
+    --gradient-blue: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    --gradient-red: linear-gradient(135deg, #ef4444, #b91c1c);
+    --gradient-green: linear-gradient(135deg, #22c55e, #15803d);
+    --gradient-amber: linear-gradient(135deg, #f59e0b, #d97706);
+    --gradient-purple: linear-gradient(135deg, #a855f7, #7c3aed);
+    --gradient-teal: linear-gradient(135deg, #14b8a6, #0d9488);
+    --shadow: 0 4px 24px rgba(0,0,0,0.06);
+    --shadow-glow-blue: 0 4px 20px rgba(37,99,235,0.1);
+    --shadow-glow-red: 0 4px 20px rgba(220,38,38,0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(37,99,235,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(220,38,38,0.03) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(124,58,237,0.02) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  .header {
+    padding: 48px 0 32px;
+    text-align: center;
+    position: relative;
+  }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(59,130,246,0.12);
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 100px;
+    padding: 6px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent-blue);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+  }
+
+  .header-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent-blue);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+  }
+
+  h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .header-sub {
+    font-size: 16px;
+    color: var(--text-secondary);
+    max-width: 700px;
+    margin: 0 auto 8px;
+    line-height: 1.5;
+  }
+
+  .header-date {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* HERO STATS */
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 32px 0 40px;
+  }
+
+  .hero-stat {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .hero-stat:hover {
+    transform: translateY(-2px);
+    border-color: rgba(37,99,235,0.25);
+    box-shadow: var(--shadow-glow-blue);
+  }
+
+  .hero-stat::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .hero-stat:nth-child(1)::before { background: var(--gradient-blue); }
+  .hero-stat:nth-child(2)::before { background: var(--gradient-red); }
+  .hero-stat:nth-child(3)::before { background: var(--gradient-green); }
+  .hero-stat:nth-child(4)::before { background: var(--gradient-amber); }
+  .hero-stat:nth-child(5)::before { background: var(--gradient-purple); }
+
+  .hero-stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .hero-stat-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    margin-bottom: 4px;
+  }
+
+  .hero-stat:nth-child(1) .hero-stat-value { color: var(--accent-blue); }
+  .hero-stat:nth-child(2) .hero-stat-value { color: var(--accent-red); }
+  .hero-stat:nth-child(3) .hero-stat-value { color: var(--accent-green); }
+  .hero-stat:nth-child(4) .hero-stat-value { color: var(--accent-amber); }
+  .hero-stat:nth-child(5) .hero-stat-value { color: var(--accent-purple); }
+
+  .hero-stat-context {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* TABS */
+  .tabs-container {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 28px;
+    overflow-x: auto;
+    padding: 4px;
+    background: var(--bg-card);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tab {
+    flex-shrink: 0;
+    padding: 10px 20px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+  }
+
+  .tab:hover { color: var(--text-secondary); background: rgba(255,255,255,0.04); }
+
+  .tab.active {
+    background: var(--accent-blue);
+    color: white;
+    box-shadow: 0 2px 12px rgba(59,130,246,0.35);
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 24px;
+    transition: all 0.3s ease;
+  }
+
+  .card:hover {
+    border-color: rgba(37,99,235,0.15);
+    box-shadow: var(--shadow);
+  }
+
+  .card-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .card-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  /* CHART CONTAINERS */
+  .chart-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+
+  .chart-wrapper {
+    position: relative;
+    height: 340px;
+  }
+
+  .chart-wrapper-tall {
+    position: relative;
+    height: 420px;
+  }
+
+  .chart-wrapper-full {
+    position: relative;
+    height: 380px;
+  }
+
+  /* TAB PANELS */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* MARKET TABLE */
+  .market-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 20px;
+  }
+
+  .market-table thead th {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .market-table tbody td {
+    padding: 14px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(226,232,240,0.7);
+    color: var(--text-secondary);
+  }
+
+  .market-table tbody tr:hover td {
+    background: rgba(37,99,235,0.04);
+    color: var(--text-primary);
+  }
+
+  .market-table .market-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .market-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .highlight-value {
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+  }
+
+  .badge-up {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: rgba(34,197,94,0.12);
+    color: var(--accent-green);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .badge-down {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: rgba(239,68,68,0.12);
+    color: var(--accent-red);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .badge-hot {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: rgba(245,158,11,0.12);
+    color: var(--accent-amber);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  /* AFFORDABILITY CALLOUT */
+  .callout {
+    background: linear-gradient(135deg, rgba(220,38,38,0.06), rgba(220,38,38,0.02));
+    border: 1px solid rgba(220,38,38,0.2);
+    border-radius: 16px;
+    padding: 28px;
+    margin: 24px 0;
+    text-align: center;
+  }
+
+  .callout-amount {
+    font-family: 'Inter', sans-serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--accent-red);
+    margin: 8px 0;
+  }
+
+  .callout-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* AFFORDABILITY GRID */
+  .afford-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .afford-card {
+    background: rgba(0,0,0,0.01);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .afford-card-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .afford-card-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+    margin-bottom: 4px;
+  }
+
+  .afford-card-sub {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .afford-card-gap {
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  .footer p {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.8;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .chart-row { grid-template-columns: 1fr; }
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+    .afford-grid { grid-template-columns: 1fr 1fr; }
+    h1 { font-size: 2rem; }
+    .container { padding: 0 16px; }
+    .card { padding: 20px; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-stats { grid-template-columns: 1fr; }
+    .afford-grid { grid-template-columns: 1fr; }
+  }
+
+  /* INSIGHT BOX */
+  .insight-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: rgba(37,99,235,0.04);
+    border: 1px solid rgba(37,99,235,0.12);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 20px;
+  }
+
+  .insight-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .insight-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .insight-text strong {
+    color: var(--text-primary);
+  }
+
+  /* Comparison bars */
+  .compare-bar-container {
+    margin: 8px 0;
+  }
+
+  .compare-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  .compare-bar-label span:first-child { color: var(--text-secondary); font-weight: 500; }
+  .compare-bar-label span:last-child { color: var(--text-primary); font-weight: 700; }
+
+  .compare-bar-track {
+    height: 8px;
+    background: rgba(0,0,0,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .compare-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-badge">
+      <span></span>
+      PrimeMLS Data · Single Family Homes
+    </div>
+    <h1>New Hampshire<br>Housing Market</h1>
+    <p class="header-sub">
+      Market analysis across 5 New Hampshire markets: statewide, Portsmouth, Salem, Derry & Windham.
+      Single-family residential sales 2021–2026.
+    </p>
+    <p class="header-date">Data as of February 3, 2026 · Source: PrimeMLS</p>
+  </div>
+
+  <!-- HERO STATS -->
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-label">NH Median Sale</div>
+      <div class="hero-stat-value">$438K</div>
+      <div class="hero-stat-context">102,567 homes sold (2021–2026)</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">Portsmouth Median</div>
+      <div class="hero-stat-value">$765K</div>
+      <div class="hero-stat-context">75% premium over statewide</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">Avg Sale/List Ratio</div>
+      <div class="hero-stat-value">100.2%</div>
+      <div class="hero-stat-context">Buyers paying at or above asking</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">Derry Avg DOM</div>
+      <div class="hero-stat-value">16 Days</div>
+      <div class="hero-stat-context">Fastest-moving market</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">Income Gap</div>
+      <div class="hero-stat-value">−$85K</div>
+      <div class="hero-stat-context">Portsmouth vs NH median income</div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs-container">
+    <button class="tab active" onclick="switchTab('overview')">Overview</button>
+    <button class="tab" onclick="switchTab('prices')">Prices</button>
+    <button class="tab" onclick="switchTab('distribution')">Price Distribution</button>
+    <button class="tab" onclick="switchTab('market-health')">Market Health</button>
+    <button class="tab" onclick="switchTab('affordability')">Affordability</button>
+    <button class="tab" onclick="switchTab('southern-nh')">Southern NH</button>
+  </div>
+
+  <!-- TAB: OVERVIEW -->
+  <div class="tab-panel active" id="panel-overview">
+    <div class="card">
+      <div class="card-title">Market Overview</div>
+      <div class="card-subtitle">New Hampshire single-family home market statistics · January 2021 – February 2026</div>
+
+      <table class="market-table">
+        <thead>
+          <tr>
+            <th>Market</th>
+            <th>Avg Sale Price</th>
+            <th>Median Sale</th>
+            <th>Homes Sold</th>
+            <th>Avg DOM</th>
+            <th>SP/LP Ratio</th>
+            <th>Sell-Through</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="market-name"><span class="market-dot" style="background:var(--accent-blue)"></span>New Hampshire</div></td>
+            <td class="highlight-value">$530,781</td>
+            <td>$438,000</td>
+            <td>102,567</td>
+            <td>29 days</td>
+            <td><span class="badge-up">100.24%</span></td>
+            <td>85.56%</td>
+          </tr>
+          <tr>
+            <td><div class="market-name"><span class="market-dot" style="background:var(--accent-red)"></span>Portsmouth</div></td>
+            <td class="highlight-value">$994,254</td>
+            <td>$765,359</td>
+            <td>790</td>
+            <td>24 days</td>
+            <td>99.38%</td>
+            <td>80.20%</td>
+          </tr>
+          <tr>
+            <td><div class="market-name"><span class="market-dot" style="background:var(--accent-green)"></span>Salem</div></td>
+            <td class="highlight-value">$612,200</td>
+            <td>$555,000</td>
+            <td>1,361</td>
+            <td>17 days</td>
+            <td><span class="badge-up">101.62%</span></td>
+            <td>90.67%</td>
+          </tr>
+          <tr>
+            <td><div class="market-name"><span class="market-dot" style="background:var(--accent-amber)"></span>Derry</div></td>
+            <td class="highlight-value">$518,587</td>
+            <td>$491,000</td>
+            <td>1,371</td>
+            <td>16 days</td>
+            <td><span class="badge-hot">102.69%</span></td>
+            <td>90.44%</td>
+          </tr>
+          <tr>
+            <td><div class="market-name"><span class="market-dot" style="background:var(--accent-purple)"></span>Windham</div></td>
+            <td class="highlight-value">$860,186</td>
+            <td>$760,000</td>
+            <td>957</td>
+            <td>23 days</td>
+            <td>101.37%</td>
+            <td>89.61%</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="insight-box">
+        <span class="insight-icon">🔥</span>
+        <div class="insight-text">
+          <strong>Derry is the hottest market in NH.</strong> With a 102.69% sale-to-list price ratio and only 16 days on market,
+          buyers are consistently paying above asking price. Salem follows closely at 101.62% SP/LP.
+          Meanwhile, Portsmouth commands nearly double the statewide median but has a lower sell-through rate (80.2%),
+          indicating the luxury tier takes longer to transact.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: PRICES -->
+  <div class="tab-panel" id="panel-prices">
+    <div class="chart-row">
+      <div class="card">
+        <div class="card-title">Average Sale Price</div>
+        <div class="card-subtitle">By market · Single-family homes · 2021–2026</div>
+        <div class="chart-wrapper">
+          <canvas id="chart-avg-price"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Median Sale Price</div>
+        <div class="card-subtitle">By market · Single-family homes · 2021–2026</div>
+        <div class="chart-wrapper">
+          <canvas id="chart-median-price"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Price by Bedroom Count</div>
+      <div class="card-subtitle">Average sale price by number of bedrooms across NH markets</div>
+      <div class="chart-wrapper-full">
+        <canvas id="chart-bedrooms"></canvas>
+      </div>
+      <div class="insight-box">
+        <span class="insight-icon">💡</span>
+        <div class="insight-text">
+          <strong>Portsmouth 4-bedroom homes average $1.2M</strong> — more than double the same home type in Derry ($610K).
+          Even 2-bedroom homes in Portsmouth ($688K) cost more than 3-bedroom homes in Derry ($500K).
+          The seacoast premium is massive and consistent across all home sizes.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: DISTRIBUTION -->
+  <div class="tab-panel" id="panel-distribution">
+    <div class="card">
+      <div class="card-title">Price Distribution — All New Hampshire</div>
+      <div class="card-subtitle">Number of closed sales by price bracket · 102,567 total sales</div>
+      <div class="chart-wrapper-tall">
+        <canvas id="chart-dist-nh"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-row">
+      <div class="card">
+        <div class="card-title">Portsmouth Price Distribution</div>
+        <div class="card-subtitle">790 total sales · Median $765,359</div>
+        <div class="chart-wrapper">
+          <canvas id="chart-dist-portsmouth"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Windham Price Distribution</div>
+        <div class="card-subtitle">957 total sales · Median $760,000</div>
+        <div class="chart-wrapper">
+          <canvas id="chart-dist-windham"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-row">
+      <div class="card">
+        <div class="card-title">Salem Price Distribution</div>
+        <div class="card-subtitle">1,361 total sales · Median $555,000</div>
+        <div class="chart-wrapper">
+          <canvas id="chart-dist-salem"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Derry Price Distribution</div>
+        <div class="card-subtitle">1,371 total sales · Median $491,000</div>
+        <div class="chart-wrapper">
+          <canvas id="chart-dist-derry"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: MARKET HEALTH -->
+  <div class="tab-panel" id="panel-market-health">
+    <div class="chart-row">
+      <div class="card">
+        <div class="card-title">Days on Market</div>
+        <div class="card-subtitle">Average days from listing to accepted offer</div>
+        <div class="chart-wrapper">
+          <canvas id="chart-dom"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Sale Price / List Price Ratio</div>
+        <div class="card-subtitle">100% = selling at ask · >100% = bidding wars</div>
+        <div class="chart-wrapper">
+          <canvas id="chart-splp"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-row">
+      <div class="card">
+        <div class="card-title">Sell-Through Rate</div>
+        <div class="card-subtitle">Percentage of listed homes that actually sold</div>
+        <div class="chart-wrapper">
+          <canvas id="chart-sellthrough"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Sales Volume</div>
+        <div class="card-subtitle">Total homes sold per local market · 2021–2026 · NH statewide: 102,567</div>
+        <div class="chart-wrapper">
+          <canvas id="chart-volume"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Current Active Listings</div>
+      <div class="card-subtitle">Homes currently on market as of Feb 3, 2026</div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:16px;">
+        <div class="afford-card">
+          <div class="afford-card-title" style="color:var(--accent-blue)">New Hampshire</div>
+          <div class="afford-card-value" style="color:var(--accent-blue)">2,755</div>
+          <div class="afford-card-sub">Avg List: $873,488</div>
+          <div class="afford-card-sub">Median List: $579,000</div>
+        </div>
+        <div class="afford-card">
+          <div class="afford-card-title" style="color:var(--accent-red)">Portsmouth</div>
+          <div class="afford-card-value" style="color:var(--accent-red)">18</div>
+          <div class="afford-card-sub">Avg List: $1,363,983</div>
+          <div class="afford-card-sub">Median List: $1,412,450</div>
+        </div>
+        <div class="afford-card">
+          <div class="afford-card-title" style="color:var(--accent-green)">Salem</div>
+          <div class="afford-card-value" style="color:var(--accent-green)">9</div>
+          <div class="afford-card-sub">Avg List: $734,255</div>
+          <div class="afford-card-sub">Median List: $679,900</div>
+        </div>
+        <div class="afford-card">
+          <div class="afford-card-title" style="color:var(--accent-amber)">Derry</div>
+          <div class="afford-card-value" style="color:var(--accent-amber)">18</div>
+          <div class="afford-card-sub">Avg List: $713,783</div>
+          <div class="afford-card-sub">Median List: $607,500</div>
+        </div>
+        <div class="afford-card">
+          <div class="afford-card-title" style="color:var(--accent-purple)">Windham</div>
+          <div class="afford-card-value" style="color:var(--accent-purple)">11</div>
+          <div class="afford-card-sub">Avg List: $895,171</div>
+          <div class="afford-card-sub">Median List: $774,995</div>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <span class="insight-icon">⚠️</span>
+        <div class="insight-text">
+          <strong>Salem has only 9 active listings</strong> for a town that sold 1,361 homes over the past 5 years —
+          that's essentially zero inventory. Windham has just 11, Derry and Portsmouth each have only 18.
+          This extreme scarcity is why sale-to-list ratios are above 100% across southern NH.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: AFFORDABILITY -->
+  <div class="tab-panel" id="panel-affordability">
+    <div class="callout">
+      <div class="callout-label">Income needed to afford the median Portsmouth home ($765K)</div>
+      <div class="callout-amount">$197,400</div>
+      <div class="callout-label">
+        at 6.75% mortgage rate · 20% down · 30-year fixed · $3.10/sqft NH property tax<br>
+        NH Median Household Income: <strong>$111,800</strong> &nbsp;→&nbsp;
+        <span style="color:var(--accent-red);font-weight:700;">Shortfall of $85,600 (43%)</span>
+      </div>
+    </div>
+
+    <div class="afford-grid" id="afford-grid">
+      <!-- Filled by JS -->
+    </div>
+
+    <div class="card" style="margin-top:24px">
+      <div class="card-title">Affordability by Market</div>
+      <div class="card-subtitle">Income required vs. NH median household income ($111,800) · 6.75% rate, 20% down, 30-yr fixed</div>
+      <div class="chart-wrapper-full">
+        <canvas id="chart-affordability"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Monthly Payment Breakdown</div>
+      <div class="card-subtitle">What a median-priced home costs per month in each market</div>
+      <div class="chart-wrapper-full">
+        <canvas id="chart-monthly"></canvas>
+      </div>
+      <div class="insight-box">
+        <span class="insight-icon">🏠</span>
+        <div class="insight-text">
+          <strong>NH has no state income tax</strong>, which attracts MA commuters — but property taxes are among the highest
+          in the nation (avg effective rate ~2.09%). A $555K Salem home carries roughly $11,600/year in property taxes,
+          eating into any income-tax savings. The "no income tax" benefit largely evaporates for homeowners.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: SOUTHERN NH -->
+  <div class="tab-panel" id="panel-southern-nh">
+    <div class="card">
+      <div class="card-title">Southern NH Corridor</div>
+      <div class="card-subtitle">Salem · Derry · Windham — the I-93 corridor towns attracting MA buyers</div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0;">
+        <div class="afford-card" style="border-color:rgba(34,197,94,0.3);">
+          <div class="afford-card-title" style="color:var(--accent-green)">Salem</div>
+          <div class="afford-card-value" style="color:var(--accent-green);font-size:26px;">$555K</div>
+          <div class="afford-card-sub">Median Sale · 1,361 sold</div>
+          <div class="afford-card-sub" style="margin-top:6px;color:var(--accent-green);">🔥 17 DOM · 101.62% SP/LP</div>
+        </div>
+        <div class="afford-card" style="border-color:rgba(245,158,11,0.3);">
+          <div class="afford-card-title" style="color:var(--accent-amber)">Derry</div>
+          <div class="afford-card-value" style="color:var(--accent-amber);font-size:26px;">$491K</div>
+          <div class="afford-card-sub">Median Sale · 1,371 sold</div>
+          <div class="afford-card-sub" style="margin-top:6px;color:var(--accent-amber);">🔥 16 DOM · 102.69% SP/LP</div>
+        </div>
+        <div class="afford-card" style="border-color:rgba(168,85,247,0.3);">
+          <div class="afford-card-title" style="color:var(--accent-purple)">Windham</div>
+          <div class="afford-card-value" style="color:var(--accent-purple);font-size:26px;">$760K</div>
+          <div class="afford-card-sub">Median Sale · 957 sold</div>
+          <div class="afford-card-sub" style="margin-top:6px;color:var(--accent-purple);">🔥 23 DOM · 101.37% SP/LP</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-row">
+      <div class="card">
+        <div class="card-title">Price Distribution Comparison</div>
+        <div class="card-subtitle">Where buyers land in each southern NH market</div>
+        <div class="chart-wrapper-tall">
+          <canvas id="chart-southern-dist"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Bedroom Price Comparison</div>
+        <div class="card-subtitle">Average sale price by bedrooms — Salem, Derry & Windham</div>
+        <div class="chart-wrapper-tall">
+          <canvas id="chart-southern-beds"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Southern NH vs. Portsmouth vs. NH Statewide</div>
+      <div class="card-subtitle">How the I-93 corridor compares to the seacoast and statewide benchmarks</div>
+
+      <div style="margin-top:20px;">
+        <div class="compare-bar-container">
+          <div class="compare-bar-label"><span>Derry — Median</span><span>$491,000</span></div>
+          <div class="compare-bar-track"><div class="compare-bar-fill" style="width:64%;background:var(--gradient-amber);"></div></div>
+        </div>
+        <div class="compare-bar-container">
+          <div class="compare-bar-label"><span>Salem — Median</span><span>$555,000</span></div>
+          <div class="compare-bar-track"><div class="compare-bar-fill" style="width:73%;background:var(--gradient-green);"></div></div>
+        </div>
+        <div class="compare-bar-container">
+          <div class="compare-bar-label"><span>Windham — Median</span><span>$760,000</span></div>
+          <div class="compare-bar-track"><div class="compare-bar-fill" style="width:99%;background:var(--gradient-purple);"></div></div>
+        </div>
+        <div class="compare-bar-container">
+          <div class="compare-bar-label"><span>Portsmouth — Median</span><span>$765,359</span></div>
+          <div class="compare-bar-track"><div class="compare-bar-fill" style="width:100%;background:var(--gradient-red);"></div></div>
+        </div>
+        <div class="compare-bar-container">
+          <div class="compare-bar-label"><span>NH Statewide — Median</span><span>$438,000</span></div>
+          <div class="compare-bar-track"><div class="compare-bar-fill" style="width:57%;background:var(--gradient-blue);"></div></div>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <span class="insight-icon">🚗</span>
+        <div class="insight-text">
+          <strong>The MA-to-NH migration corridor is reshaping southern NH.</strong> All three I-93 corridor towns show SP/LP ratios above 101%,
+          with Derry leading at 102.69%. DOM ranges from 16 days (Derry) to 23 days (Windham), all well below the statewide 29-day average.
+          Windham commands a premium — effectively matching Portsmouth's median at $760K — driven by its school system and larger lot sizes.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>
+      New Hampshire Housing Market Dashboard · Data from PrimeMLS<br>
+      Single-family residential sales · January 2021 – February 2026 · Updated February 3, 2026<br>
+      <span style="color:var(--text-secondary)">Created for informational purposes only. Verify all figures with PrimeMLS for transactions.</span>
+    </p>
+  </div>
+
+</div>
+
+<script>
+// ============================================
+// CHART.JS DEFAULTS
+// ============================================
+Chart.defaults.color = '#475569';
+Chart.defaults.borderColor = 'rgba(226,232,240,0.7)';
+Chart.defaults.font.family = "'Inter', sans-serif";
+
+const BLUE = '#3b82f6';
+const RED = '#ef4444';
+const GREEN = '#22c55e';
+const AMBER = '#f59e0b';
+const PURPLE = '#a855f7';
+const TEAL = '#14b8a6';
+
+// ============================================
+// TAB SWITCHING
+// ============================================
+function switchTab(tabName) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + tabName).classList.add('active');
+  event.target.classList.add('active');
+
+  // Trigger chart resize
+  setTimeout(() => { window.dispatchEvent(new Event('resize')); }, 50);
+}
+
+// ============================================
+// PRICES TAB
+// ============================================
+new Chart(document.getElementById('chart-avg-price'), {
+  type: 'bar',
+  data: {
+    labels: ['New Hampshire', 'Portsmouth', 'Windham', 'Salem', 'Derry'],
+    datasets: [{
+      label: 'Avg Sale Price',
+      data: [530781, 994254, 860186, 612200, 518587],
+      backgroundColor: [BLUE + 'cc', RED + 'cc', PURPLE + 'cc', GREEN + 'cc', AMBER + 'cc'],
+      borderColor: [BLUE, RED, PURPLE, GREEN, AMBER],
+      borderWidth: 2,
+      borderRadius: 8,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => '$' + ctx.raw.toLocaleString()
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: { callback: v => '$' + (v/1000) + 'K' },
+        grid: { color: 'rgba(0,0,0,0.06)' }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+new Chart(document.getElementById('chart-median-price'), {
+  type: 'bar',
+  data: {
+    labels: ['New Hampshire', 'Portsmouth', 'Salem', 'Derry', 'Windham'],
+    datasets: [{
+      label: 'Median Sale Price',
+      data: [438000, 765359, 555000, 491000, 760000],
+      backgroundColor: [BLUE + 'cc', RED + 'cc', GREEN + 'cc', AMBER + 'cc', PURPLE + 'cc'],
+      borderColor: [BLUE, RED, GREEN, AMBER, PURPLE],
+      borderWidth: 2,
+      borderRadius: 8,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => '$' + ctx.raw.toLocaleString() } }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: { callback: v => '$' + (v/1000) + 'K' },
+        grid: { color: 'rgba(0,0,0,0.06)' }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// Bedroom price chart
+new Chart(document.getElementById('chart-bedrooms'), {
+  type: 'bar',
+  data: {
+    labels: ['1 BR', '2 BR', '3 BR', '4 BR', '5+ BR'],
+    datasets: [
+      { label: 'NH', data: [252083, 362560, 480852, 669974, 984755], backgroundColor: BLUE + '99', borderColor: BLUE, borderWidth: 1.5, borderRadius: 4 },
+      { label: 'Portsmouth', data: [555000, 688016, 920540, 1201241, 2046891], backgroundColor: RED + '99', borderColor: RED, borderWidth: 1.5, borderRadius: 4 },
+      { label: 'Salem', data: [411697, 474523, 550966, 743114, 850466], backgroundColor: GREEN + '99', borderColor: GREEN, borderWidth: 1.5, borderRadius: 4 },
+      { label: 'Derry', data: [328670, 376085, 500069, 610323, 683724], backgroundColor: AMBER + '99', borderColor: AMBER, borderWidth: 1.5, borderRadius: 4 },
+      { label: 'Windham', data: [194363, 515190, 651288, 986880, 1286382], backgroundColor: PURPLE + '99', borderColor: PURPLE, borderWidth: 1.5, borderRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'circle', padding: 20 } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': $' + ctx.raw.toLocaleString() } }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: { callback: v => '$' + (v >= 1000000 ? (v/1000000).toFixed(1) + 'M' : (v/1000) + 'K') },
+        grid: { color: 'rgba(0,0,0,0.06)' }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// ============================================
+// DISTRIBUTION TAB
+// ============================================
+const nhDistLabels = ['<$100K','$100-200K','$200-300K','$300-400K','$400-500K','$500-600K','$600-700K','$700-800K','$800-900K','$900K-1M','$1-1.2M','$1.2-1.4M','$1.4-1.6M','$1.6-1.8M','$1.8-2M','$2-2.5M','$2.5-3M','$3M+'];
+const nhDistData = [
+  12+137+330+602+727, // <100K
+  799+1081+1374+1666+1741, // 100-200K
+  1966+2590+2963+3212+3281, // 200-300K
+  4661+4941+5256+5346, // 300-400K
+  5434+4935+4531+4182, // 400-500K
+  7157+5990, // 500-600K
+  5121+4203, // 600-700K
+  3212+2594, // 700-800K
+  1960+1745, // 800-900K
+  1171+1023, // 900K-1M
+  1882, // 1-1.2M
+  1503, // 1.2-1.4M
+  833, // 1.4-1.6M
+  591, // 1.6-1.8M
+  424, // 1.8-2M
+  525, // 2-2.5M
+  336, // 2.5-3M
+  178+109+59+49+140 // 3M+
+];
+
+new Chart(document.getElementById('chart-dist-nh'), {
+  type: 'bar',
+  data: {
+    labels: nhDistLabels,
+    datasets: [{
+      label: 'Homes Sold',
+      data: nhDistData,
+      backgroundColor: nhDistLabels.map((_, i) => {
+        const ratio = i / (nhDistLabels.length - 1);
+        if (ratio < 0.33) return BLUE + 'cc';
+        if (ratio < 0.66) return TEAL + 'cc';
+        return RED + 'cc';
+      }),
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.raw.toLocaleString() + ' homes' } }
+    },
+    scales: {
+      y: {
+        ticks: { callback: v => v.toLocaleString() },
+        grid: { color: 'rgba(0,0,0,0.06)' }
+      },
+      x: {
+        grid: { display: false },
+        ticks: { maxRotation: 45, font: { size: 10 } }
+      }
+    }
+  }
+});
+
+// Portsmouth distribution
+const portLabels = ['$300-400K','$400-500K','$500-600K','$600-700K','$700-800K','$800-900K','$900K-1M','$1-1.2M','$1.2-1.4M','$1.4-1.6M','$1.6-2M','$2-3M','$3M+'];
+const portData = [8+2+9+21, 19+18+28+26, 44+42, 61+54, 44+41, 30+38, 28+28, 50, 55, 45, 27+20, 18+13, 8+6+2+3+2];
+
+new Chart(document.getElementById('chart-dist-portsmouth'), {
+  type: 'bar',
+  data: {
+    labels: portLabels,
+    datasets: [{ label: 'Sales', data: portData, backgroundColor: RED + '99', borderColor: RED, borderWidth: 1, borderRadius: 3 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { grid: { color: 'rgba(0,0,0,0.06)' } },
+      x: { grid: { display: false }, ticks: { maxRotation: 45, font: { size: 9 } } }
+    }
+  }
+});
+
+// Windham distribution
+const windLabels = ['<$300K','$300-400K','$400-500K','$500-600K','$600-700K','$700-800K','$800-900K','$900K-1M','$1-1.2M','$1.2-1.4M','$1.4-1.6M','$1.6-2M','$2M+'];
+const windData = [2+3+2+3+3+1+2+6+6+5+5, 7+13+11+11, 14+15+21+28, 37+66, 66+75, 56+72, 53+51, 37+41, 89, 59, 36, 22+10, 17+7+3+1+1];
+
+new Chart(document.getElementById('chart-dist-windham'), {
+  type: 'bar',
+  data: {
+    labels: windLabels,
+    datasets: [{ label: 'Sales', data: windData, backgroundColor: PURPLE + '99', borderColor: PURPLE, borderWidth: 1, borderRadius: 3 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { grid: { color: 'rgba(0,0,0,0.06)' } },
+      x: { grid: { display: false }, ticks: { maxRotation: 45, font: { size: 9 } } }
+    }
+  }
+});
+
+// Salem distribution
+const salemLabels = ['<$200K','$200-300K','$300-400K','$400-500K','$500-600K','$600-700K','$700-800K','$800-900K','$900K-1M','$1M+'];
+const salemData = [1+2+6+2+2+3, 7+11+15+35, 39+54+72+58, 88+86, 161+146, 104+91, 75+66, 46+46, 30+27, 26+20+16+13+15+5+6+2+5];
+
+new Chart(document.getElementById('chart-dist-salem'), {
+  type: 'bar',
+  data: {
+    labels: salemLabels,
+    datasets: [{ label: 'Sales', data: salemData, backgroundColor: GREEN + '99', borderColor: GREEN, borderWidth: 1, borderRadius: 3 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { grid: { color: 'rgba(0,0,0,0.06)' } },
+      x: { grid: { display: false }, ticks: { maxRotation: 45, font: { size: 9 } } }
+    }
+  }
+});
+
+// Derry distribution
+const derryLabels = ['<$200K','$200-300K','$300-400K','$400-500K','$500-600K','$600-700K','$700-800K','$800-900K','$900K-1M','$1M+'];
+const derryData = [1+3+6+2+1+6, 11+9+18+22, 40+69+62+54, 103+111+107+80, 183+142, 106+52, 43+42, 29+14, 8+7, 10+3+4+2+1+1];
+
+new Chart(document.getElementById('chart-dist-derry'), {
+  type: 'bar',
+  data: {
+    labels: derryLabels,
+    datasets: [{ label: 'Sales', data: derryData, backgroundColor: AMBER + '99', borderColor: AMBER, borderWidth: 1, borderRadius: 3 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { grid: { color: 'rgba(0,0,0,0.06)' } },
+      x: { grid: { display: false }, ticks: { maxRotation: 45, font: { size: 9 } } }
+    }
+  }
+});
+
+// ============================================
+// MARKET HEALTH TAB
+// ============================================
+new Chart(document.getElementById('chart-dom'), {
+  type: 'line',
+  data: {
+    labels: ['Derry', 'Salem', 'Windham', 'Portsmouth', 'NH Statewide'],
+    datasets: [{
+      label: 'Avg Days on Market',
+      data: [16, 17, 23, 24, 29],
+      borderColor: BLUE,
+      backgroundColor: BLUE + '15',
+      borderWidth: 3,
+      pointBackgroundColor: [AMBER, GREEN, PURPLE, RED, BLUE],
+      pointBorderColor: [AMBER, GREEN, PURPLE, RED, BLUE],
+      pointBorderWidth: 2,
+      pointRadius: 9,
+      pointHoverRadius: 12,
+      fill: true,
+      tension: 0.35
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.raw + ' days' } }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: { color: 'rgba(0,0,0,0.06)' },
+        ticks: { callback: v => v + ' days' }
+      },
+      x: { grid: { color: 'rgba(0,0,0,0.04)' } }
+    }
+  }
+});
+
+new Chart(document.getElementById('chart-splp'), {
+  type: 'bar',
+  data: {
+    labels: ['Derry', 'Salem', 'Windham', 'NH Statewide', 'Portsmouth'],
+    datasets: [{
+      label: 'SP/LP Ratio',
+      data: [102.69, 101.62, 101.37, 100.24, 99.38],
+      backgroundColor: [GREEN + 'cc', GREEN + '99', PURPLE + '99', BLUE + '99', RED + '99'],
+      borderColor: [GREEN, GREEN, PURPLE, BLUE, RED],
+      borderWidth: 2,
+      borderRadius: 8,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    indexAxis: 'y',
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.raw.toFixed(2) + '%' } }
+    },
+    scales: {
+      x: {
+        min: 98.5, max: 103.5,
+        grid: { color: 'rgba(0,0,0,0.06)' },
+        ticks: { callback: v => v.toFixed(1) + '%' }
+      },
+      y: { grid: { display: false } }
+    }
+  }
+});
+
+new Chart(document.getElementById('chart-sellthrough'), {
+  type: 'line',
+  data: {
+    labels: ['Portsmouth', 'NH Statewide', 'Windham', 'Derry', 'Salem'],
+    datasets: [{
+      label: 'Sell-Through Rate',
+      data: [80.20, 85.56, 89.61, 90.44, 90.67],
+      borderColor: GREEN,
+      backgroundColor: GREEN + '12',
+      borderWidth: 3,
+      pointBackgroundColor: [RED, BLUE, PURPLE, AMBER, GREEN],
+      pointBorderColor: [RED, BLUE, PURPLE, AMBER, GREEN],
+      pointBorderWidth: 2,
+      pointRadius: 9,
+      pointHoverRadius: 12,
+      fill: true,
+      tension: 0.35
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.raw.toFixed(1) + '%' } }
+    },
+    scales: {
+      y: {
+        min: 75, max: 95,
+        grid: { color: 'rgba(0,0,0,0.06)' },
+        ticks: { callback: v => v + '%' }
+      },
+      x: { grid: { color: 'rgba(0,0,0,0.04)' } }
+    }
+  }
+});
+
+new Chart(document.getElementById('chart-volume'), {
+  type: 'bar',
+  data: {
+    labels: ['Portsmouth', 'Windham', 'Salem', 'Derry'],
+    datasets: [{
+      label: 'Homes Sold (2021–2026)',
+      data: [790, 957, 1361, 1371],
+      backgroundColor: [RED + 'cc', PURPLE + 'cc', GREEN + 'cc', AMBER + 'cc'],
+      borderColor: [RED, PURPLE, GREEN, AMBER],
+      borderWidth: 2,
+      borderRadius: 8,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.raw.toLocaleString() + ' homes sold' } },
+      title: {
+        display: true,
+        text: 'Local markets shown · NH Statewide total: 102,567',
+        font: { size: 12, weight: '500' },
+        color: '#94a3b8',
+        padding: { bottom: 12 }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: { color: 'rgba(0,0,0,0.06)' },
+        ticks: { callback: v => v.toLocaleString() }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// ============================================
+// AFFORDABILITY TAB
+// ============================================
+const nhMedianIncome = 111800;
+const mortgageRate = 0.0675;
+const downPaymentPct = 0.20;
+const propertyTaxRate = 0.0209; // NH average
+const insuranceAnnual = 2400;
+const monthlyRate = mortgageRate / 12;
+const numPayments = 360;
+
+function calcIncomeNeeded(homePrice) {
+  const loanAmt = homePrice * (1 - downPaymentPct);
+  const monthlyPI = loanAmt * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+  const monthlyTax = (homePrice * propertyTaxRate) / 12;
+  const monthlyIns = insuranceAnnual / 12;
+  const totalMonthly = monthlyPI + monthlyTax + monthlyIns;
+  return {
+    monthlyPI: monthlyPI,
+    monthlyTax: monthlyTax,
+    monthlyIns: monthlyIns,
+    totalMonthly: totalMonthly,
+    annualIncome: totalMonthly * 12 / 0.30 // 30% rule
+  };
+}
+
+const markets = [
+  { name: 'NH Statewide', median: 438000, color: BLUE },
+  { name: 'Derry', median: 491000, color: AMBER },
+  { name: 'Salem', median: 555000, color: GREEN },
+  { name: 'Windham', median: 760000, color: PURPLE },
+  { name: 'Portsmouth', median: 765359, color: RED }
+];
+
+// Affordability cards
+const affordGrid = document.getElementById('afford-grid');
+markets.forEach(m => {
+  const calc = calcIncomeNeeded(m.median);
+  const gap = nhMedianIncome - calc.annualIncome;
+  const pctGap = ((gap / calc.annualIncome) * 100).toFixed(0);
+  const card = document.createElement('div');
+  card.className = 'afford-card';
+  card.innerHTML = `
+    <div class="afford-card-title" style="color:${m.color}">${m.name}</div>
+    <div class="afford-card-value" style="color:${m.color};font-size:24px;">$${Math.round(calc.annualIncome).toLocaleString()}</div>
+    <div class="afford-card-sub">Income needed for $${(m.median/1000).toFixed(0)}K home</div>
+    <div class="afford-card-sub">Monthly: $${Math.round(calc.totalMonthly).toLocaleString()}</div>
+    <div class="afford-card-gap" style="color:${gap >= 0 ? GREEN : RED}">
+      ${gap >= 0 ? '✅ Affordable' : '❌ Gap: $' + Math.abs(Math.round(gap)).toLocaleString() + ' (' + Math.abs(pctGap) + '% short)'}
+    </div>
+  `;
+  affordGrid.appendChild(card);
+});
+
+// Affordability bar chart
+const affordData = markets.map(m => Math.round(calcIncomeNeeded(m.median).annualIncome));
+new Chart(document.getElementById('chart-affordability'), {
+  type: 'bar',
+  data: {
+    labels: markets.map(m => m.name),
+    datasets: [
+      {
+        label: 'Income Needed',
+        data: affordData,
+        backgroundColor: markets.map(m => m.color + 'cc'),
+        borderColor: markets.map(m => m.color),
+        borderWidth: 2,
+        borderRadius: 8,
+        borderSkipped: false
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => '$' + ctx.raw.toLocaleString() } },
+      annotation: {
+        annotations: {
+          incomeLine: {
+            type: 'line',
+            yMin: nhMedianIncome, yMax: nhMedianIncome,
+            borderColor: '#0f172a',
+            borderWidth: 2,
+            borderDash: [8, 4],
+            label: {
+              display: true,
+              content: 'NH Median Income: $111,800',
+              position: 'end',
+              backgroundColor: 'rgba(15,23,42,0.85)',
+              color: '#ffffff',
+              font: { weight: 'bold', size: 11 }
+            }
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: { callback: v => '$' + (v/1000) + 'K' },
+        grid: { color: 'rgba(0,0,0,0.06)' }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// Monthly payment stacked chart
+const monthlyData = markets.map(m => calcIncomeNeeded(m.median));
+new Chart(document.getElementById('chart-monthly'), {
+  type: 'bar',
+  data: {
+    labels: markets.map(m => m.name),
+    datasets: [
+      {
+        label: 'Principal & Interest',
+        data: monthlyData.map(d => Math.round(d.monthlyPI)),
+        backgroundColor: BLUE + 'cc',
+        borderRadius: { topLeft: 0, topRight: 0 }
+      },
+      {
+        label: 'Property Tax',
+        data: monthlyData.map(d => Math.round(d.monthlyTax)),
+        backgroundColor: AMBER + 'cc'
+      },
+      {
+        label: 'Insurance',
+        data: monthlyData.map(d => Math.round(d.monthlyIns)),
+        backgroundColor: GREEN + 'cc',
+        borderRadius: { topLeft: 4, topRight: 4 }
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'circle', padding: 16 } },
+      tooltip: {
+        callbacks: {
+          afterBody: (items) => {
+            const idx = items[0].dataIndex;
+            return 'Total: $' + Math.round(monthlyData[idx].totalMonthly).toLocaleString() + '/mo';
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        stacked: true,
+        ticks: { callback: v => '$' + v.toLocaleString() },
+        grid: { color: 'rgba(0,0,0,0.06)' }
+      },
+      x: { stacked: true, grid: { display: false } }
+    }
+  }
+});
+
+// ============================================
+// SOUTHERN NH TAB
+// ============================================
+// Overlapping price distributions for southern NH towns
+const sDistLabels = ['<$300K','$300-400K','$400-500K','$500-600K','$600-700K','$700-800K','$800K-1M','$1M+'];
+new Chart(document.getElementById('chart-southern-dist'), {
+  type: 'bar',
+  data: {
+    labels: sDistLabels,
+    datasets: [
+      {
+        label: 'Salem',
+        data: [16+11, 39+54+72+58, 88+86, 161+146, 104+91, 75+66, 46+46+30+27, 26+20+16+13+15+5+6+2+5],
+        backgroundColor: GREEN + '88',
+        borderColor: GREEN,
+        borderWidth: 1.5,
+        borderRadius: 3
+      },
+      {
+        label: 'Derry',
+        data: [1+3+6+2+1+6+11+9+18+22, 40+69+62+54, 103+111+107+80, 183+142, 106+52, 43+42, 29+14+8+7, 10+3+4+2+1+1],
+        backgroundColor: AMBER + '88',
+        borderColor: AMBER,
+        borderWidth: 1.5,
+        borderRadius: 3
+      },
+      {
+        label: 'Windham',
+        data: [2+3+2+3+3+1+2+6+6+5+5, 7+13+11+11, 14+15+21+28, 37+66, 66+75, 56+72, 53+51+37+41, 89+59+36+22+10+17+7+3+1+1],
+        backgroundColor: PURPLE + '88',
+        borderColor: PURPLE,
+        borderWidth: 1.5,
+        borderRadius: 3
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'circle', padding: 16 } } },
+    scales: {
+      y: { grid: { color: 'rgba(0,0,0,0.06)' } },
+      x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+    }
+  }
+});
+
+// Bedroom comparison Salem vs Derry
+new Chart(document.getElementById('chart-southern-beds'), {
+  type: 'bar',
+  data: {
+    labels: ['1 BR', '2 BR', '3 BR', '4 BR', '5+ BR'],
+    datasets: [
+      {
+        label: 'Salem',
+        data: [411697, 474523, 550966, 743114, 850466],
+        backgroundColor: GREEN + '99',
+        borderColor: GREEN,
+        borderWidth: 1.5,
+        borderRadius: 4
+      },
+      {
+        label: 'Derry',
+        data: [328670, 376085, 500069, 610323, 683724],
+        backgroundColor: AMBER + '99',
+        borderColor: AMBER,
+        borderWidth: 1.5,
+        borderRadius: 4
+      },
+      {
+        label: 'Windham',
+        data: [194363, 515190, 651288, 986880, 1286382],
+        backgroundColor: PURPLE + '99',
+        borderColor: PURPLE,
+        borderWidth: 1.5,
+        borderRadius: 4
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { usePointStyle: true, pointStyle: 'circle', padding: 16 } },
+      tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': $' + ctx.raw.toLocaleString() } }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: { callback: v => '$' + (v/1000) + 'K' },
+        grid: { color: 'rgba(0,0,0,0.06)' }
+      },
+      x: { grid: { display: false } }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
