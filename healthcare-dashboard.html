@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Massachusetts Healthcare & Insurance Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,sans-serif;background:#f5f5f5;color:#1f2937;line-height:1.6}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1e40af 0%,#1e3a5f 100%);color:#fff;padding:48px 24px 72px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.18);padding:6px 18px;border-radius:50px;font-size:.82rem;font-weight:500;margin-bottom:18px}
+.hero h1{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;margin-bottom:8px}
+.hero-sub{font-size:1rem;opacity:.85;max-width:560px;margin:0 auto}
+
+/* SUMMARY CARDS */
+.summary-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:-40px auto 32px;max-width:1200px;padding:0 24px;position:relative;z-index:2}
+.sc{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.08);border-top:4px solid #2563eb}
+.sc.red{border-top-color:#dc2626} .sc.green{border-top-color:#16a34a} .sc.amber{border-top-color:#d97706} .sc.purple{border-top-color:#7c3aed}
+.sc-label{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:#6b7280;margin-bottom:4px}
+.sc-val{font-size:1.5rem;font-weight:800}
+.sc-val.red{color:#dc2626} .sc-val.blue{color:#2563eb} .sc-val.green{color:#16a34a} .sc-val.amber{color:#d97706}
+.sc-ctx{font-size:.72rem;color:#6b7280;margin-top:4px}
+
+/* TABS */
+.tabs-wrap{max-width:1200px;margin:0 auto 24px;padding:0 24px}
+.tabs{display:flex;gap:4px;background:#fff;border-radius:12px;padding:4px;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #e5e7eb;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tab-btn{flex-shrink:0;padding:10px 20px;border:none;background:transparent;color:#6b7280;font-family:inherit;font-size:.82rem;font-weight:600;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.tab-btn:hover{color:#374151;background:#f3f4f6}
+.tab-btn.active{background:#2563eb;color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.25)}
+.tab-panel{display:none}.tab-panel.active{display:block}
+
+/* SECTION */
+.section{max-width:1200px;margin:0 auto 32px;padding:0 24px}
+.sec-title{font-size:1.4rem;font-weight:800;margin-bottom:4px}
+.sec-desc{font-size:.85rem;color:#6b7280;margin-bottom:20px}
+
+/* CARDS & GRIDS */
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:16px;margin-bottom:24px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:24px}
+.card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 6px rgba(0,0,0,.06);border:1px solid #e5e7eb}
+.card-title{font-size:.9rem;font-weight:700;margin-bottom:4px}
+.card-sub{font-size:.75rem;color:#6b7280;margin-bottom:16px}
+.card-canvas{position:relative;height:280px}
+
+/* HIGHLIGHT BAR — red for alarming */
+.hl{background:#fef2f2;border-left:4px solid #dc2626;border-radius:0 8px 8px 0;padding:14px 20px;margin-bottom:16px}
+.hl .hl-label{font-size:.7rem;font-weight:600;color:#991b1b;text-transform:uppercase;letter-spacing:.5px}
+.hl .hl-val{font-size:1.3rem;font-weight:800;color:#dc2626}
+.hl .hl-ctx{font-size:.78rem;color:#7f1d1d}
+
+/* INFO BOX */
+.info{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:16px 20px;margin-bottom:24px;display:flex;gap:12px;align-items:flex-start}
+.info.warn{background:#fef3c7;border-color:#fde68a}
+.info.danger{background:#fef2f2;border-color:#fecaca}
+.info-icon{font-size:1.2rem;flex-shrink:0}
+.info-text{font-size:.82rem;color:#374151;line-height:1.6}
+
+/* TABLE */
+.table-wrap{background:#fff;border-radius:12px;box-shadow:0 1px 6px rgba(0,0,0,.06);border:1px solid #e5e7eb;overflow-x:auto;margin-bottom:24px}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+thead th{background:#f8fafc;padding:12px 16px;text-align:left;font-weight:700;color:#374151;border-bottom:2px solid #e5e7eb;white-space:nowrap}
+tbody td{padding:12px 16px;border-bottom:1px solid #f3f4f6;color:#374151}
+tbody tr:hover{background:#f9fafb}
+.td-red{color:#dc2626;font-weight:700} .td-green{color:#16a34a;font-weight:700} .td-amber{color:#d97706;font-weight:700}
+
+/* DATA CARD VALUES */
+.dc-label{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#6b7280;margin-bottom:6px}
+.dc-val{font-size:1.4rem;font-weight:800;margin-bottom:8px}
+.dc-val.red{color:#dc2626} .dc-val.blue{color:#2563eb} .dc-val.green{color:#16a34a} .dc-val.amber{color:#d97706}
+.dc-meta{display:flex;flex-wrap:wrap;gap:14px}
+.dc-ml{font-size:.68rem;color:#9ca3af} .dc-mv{font-size:.8rem;font-weight:600;color:#374151}
+
+/* FOOTER */
+.footer{text-align:center;padding:32px 24px;color:#9ca3af;font-size:.78rem;border-top:1px solid #e5e7eb;margin-top:40px}
+.footer strong{color:#6b7280}
+.footer a{color:#2563eb;text-decoration:none}
+
+@media(max-width:640px){.summary-row{grid-template-columns:repeat(2,1fr)}.grid-2,.grid-3{grid-template-columns:1fr}.tabs{gap:2px}.tab-btn{padding:8px 14px;font-size:.75rem}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">🏥 DOI · KFF · CHIA Data</div>
+  <h1>Massachusetts Healthcare & Insurance</h1>
+  <p class="hero-sub">Premiums, rate increases, and spending — MA vs. the nation</p>
+</div>
+
+<div class="summary-row">
+  <div class="sc red"><div class="sc-label">Avg Family Premium</div><div class="sc-val red">$28,151</div><div class="sc-ctx">+14.7% above US average</div></div>
+  <div class="sc red"><div class="sc-label">2026 Rate Increases</div><div class="sc-val red">~9.9%</div><div class="sc-ctx">3× the rate of inflation</div></div>
+  <div class="sc amber"><div class="sc-label">Per-Capita Spending</div><div class="sc-val amber">$13,319</div><div class="sc-ctx">+30.7% above national avg</div></div>
+  <div class="sc red"><div class="sc-label">THCE Growth</div><div class="sc-val red">8.6%</div><div class="sc-ctx">vs 3.6% benchmark (+139%)</div></div>
+</div>
+
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(event,'overview')">Overview</button>
+    <button class="tab-btn" onclick="switchTab(event,'premiums')">Premiums</button>
+    <button class="tab-btn" onclick="switchTab(event,'rates')">2026 Rates</button>
+    <button class="tab-btn" onclick="switchTab(event,'spending')">Spending</button>
+    <button class="tab-btn" onclick="switchTab(event,'affordability')">Affordability</button>
+  </div>
+</div>
+
+<!-- OVERVIEW TAB -->
+<div class="tab-panel active" id="tab-overview">
+  <div class="section">
+    <div class="sec-title">Healthcare Cost Crisis</div>
+    <div class="sec-desc">Massachusetts has the highest healthcare costs in the nation by nearly every measure</div>
+
+    <div class="hl"><div class="hl-label">⚠️ Premium Gap</div><div class="hl-val">MA families pay $3,611 MORE per year than the national average</div><div class="hl-ctx">$28,151 (MA) vs $24,540 (US) — Kaiser Family Foundation 2024</div></div>
+    <div class="hl"><div class="hl-label">⚠️ Healthcare Spending</div><div class="hl-val">MA spends $3,128 MORE per person than the national average</div><div class="hl-ctx">$13,319 (MA) vs $10,191 (US) — CMS State Health Expenditure Accounts 2020</div></div>
+
+    <div class="grid-2">
+      <div class="card"><div class="card-title">Family Premiums: MA vs. National</div><div class="card-sub">Annual employer-sponsored family coverage</div><div class="card-canvas"><canvas id="c-premiums"></canvas></div></div>
+      <div class="card"><div class="card-title">Premium Growth vs. Wage Growth</div><div class="card-sub">2021–2023 cumulative change</div><div class="card-canvas"><canvas id="c-growth"></canvas></div></div>
+    </div>
+
+    <div class="info danger"><div class="info-icon">🔴</div><div class="info-text"><strong>Premiums are growing 25% faster than wages.</strong> From 2021-2023, MA premiums rose 12.1% while wages grew only 9.7%. The average MA family now spends over $28,000/year on health insurance — before any deductibles or co-pays.</div></div>
+  </div>
+</div>
+
+<!-- PREMIUMS TAB -->
+<div class="tab-panel" id="tab-premiums">
+  <div class="section">
+    <div class="sec-title">Premium Comparison</div>
+    <div class="sec-desc">Massachusetts vs. national employer-sponsored family premiums</div>
+
+    <div class="grid-3">
+      <div class="card"><div class="dc-label">MA Family Premium (2024)</div><div class="dc-val red">$28,151</div><div class="dc-meta"><div><div class="dc-ml">Monthly Cost</div><div class="dc-mv">$2,346</div></div><div><div class="dc-ml">Employee Share (~28%)</div><div class="dc-mv">$7,882</div></div></div></div>
+      <div class="card"><div class="dc-label">US Family Premium (2024)</div><div class="dc-val blue">$24,540</div><div class="dc-meta"><div><div class="dc-ml">Monthly Cost</div><div class="dc-mv">$2,045</div></div><div><div class="dc-ml">Employee Share</div><div class="dc-mv">$6,296</div></div></div></div>
+      <div class="card"><div class="dc-label">MA Premium Gap</div><div class="dc-val red">+$3,611</div><div class="dc-meta"><div><div class="dc-ml">% Above National</div><div class="dc-mv" style="color:#dc2626">+14.7%</div></div><div><div class="dc-ml">Rank</div><div class="dc-mv" style="color:#dc2626">#1 Highest</div></div></div></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card"><div class="card-title">Premium Trend: MA vs. US</div><div class="card-sub">Annual family premiums, 2020–2024</div><div class="card-canvas"><canvas id="c-prem-trend"></canvas></div></div>
+      <div class="card"><div class="card-title">Employee Out-of-Pocket Share</div><div class="card-sub">What workers actually pay annually</div><div class="card-canvas"><canvas id="c-oop"></canvas></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 2026 RATES TAB -->
+<div class="tab-panel" id="tab-rates">
+  <div class="section">
+    <div class="sec-title">2026 Approved Rate Increases</div>
+    <div class="sec-desc">MA Division of Insurance approved increases — most are 3× the inflation rate</div>
+
+    <div class="hl"><div class="hl-label">⚠️ Average Approved Increase</div><div class="hl-val">~9.9% — while inflation is ~3%</div><div class="hl-ctx">MA Division of Insurance filings, effective 2026</div></div>
+
+    <div class="grid-2">
+      <div class="card"><div class="card-title">2026 Rate Increases by Carrier</div><div class="card-sub">Approved increases — red = above 10%</div><div class="card-canvas"><canvas id="c-carriers"></canvas></div></div>
+      <div class="card"><div class="card-title">Rate Increases vs. Inflation</div><div class="card-sub">Healthcare premiums far outpace general inflation</div><div class="card-canvas"><canvas id="c-vs-inflation"></canvas></div></div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Carrier</th><th>Approved Increase</th><th>vs. Inflation (3%)</th><th>Impact on $28K Premium</th></tr></thead>
+        <tbody>
+          <tr><td>Blue Cross Blue Shield</td><td class="td-red">11.2%</td><td class="td-red">3.7× inflation</td><td class="td-red">+$3,154</td></tr>
+          <tr><td>Harvard Pilgrim</td><td class="td-red">10.8%</td><td class="td-red">3.6× inflation</td><td class="td-red">+$3,042</td></tr>
+          <tr><td>Tufts Health Plan</td><td class="td-red">10.5%</td><td class="td-red">3.5× inflation</td><td class="td-red">+$2,958</td></tr>
+          <tr><td>Fallon Health</td><td class="td-amber">9.2%</td><td class="td-amber">3.1× inflation</td><td class="td-amber">+$2,590</td></tr>
+          <tr><td>Health New England</td><td class="td-amber">8.4%</td><td class="td-amber">2.8× inflation</td><td class="td-amber">+$2,365</td></tr>
+          <tr><td>AllWays Health Partners</td><td class="td-amber">8.1%</td><td class="td-amber">2.7× inflation</td><td class="td-amber">+$2,280</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info danger"><div class="info-icon">🔴</div><div class="info-text"><strong>A family paying $28,151 today can expect to pay $30,900+ in 2026</strong> based on average approved increases. That's nearly $2,800 more per year — roughly $233/month — with no improvement in coverage.</div></div>
+  </div>
+</div>
+
+<!-- SPENDING TAB -->
+<div class="tab-panel" id="tab-spending">
+  <div class="section">
+    <div class="sec-title">Healthcare Spending</div>
+    <div class="sec-desc">Per-capita and total health care expenditures — MA consistently #1</div>
+
+    <div class="grid-2">
+      <div class="card"><div class="card-title">Per-Capita Spending: MA vs. US</div><div class="card-sub">CMS State Health Expenditure Accounts</div><div class="card-canvas"><canvas id="c-percap"></canvas></div></div>
+      <div class="card"><div class="card-title">THCE Growth vs. Benchmark</div><div class="card-sub">Total Health Care Expenditure growth rate — CHIA 2023</div><div class="card-canvas"><canvas id="c-thce"></canvas></div></div>
+    </div>
+
+    <div class="hl"><div class="hl-label">⚠️ THCE Exceeded Benchmark by 139%</div><div class="hl-val">8.6% actual growth vs. 3.6% benchmark</div><div class="hl-ctx">CHIA Annual Report 2025 — Massachusetts consistently exceeds its own cost containment targets</div></div>
+  </div>
+</div>
+
+<!-- AFFORDABILITY TAB -->
+<div class="tab-panel" id="tab-affordability">
+  <div class="section">
+    <div class="sec-title">Healthcare Affordability</div>
+    <div class="sec-desc">Who is most impacted by Massachusetts' healthcare costs</div>
+
+    <div class="grid-2">
+      <div class="card"><div class="card-title">Affordability Issues by Race/Ethnicity</div><div class="card-sub">% reporting difficulty affording healthcare — CHIA</div><div class="card-canvas"><canvas id="c-race"></canvas></div></div>
+      <div class="card"><div class="card-title">Premium as % of Median Income</div><div class="card-sub">Family premium burden on MA median household income</div><div class="card-canvas"><canvas id="c-burden"></canvas></div></div>
+    </div>
+
+    <div class="info danger"><div class="info-icon">🔴</div><div class="info-text"><strong>58.2% of Hispanic/Latino residents report difficulty affording healthcare</strong> — compared to 39.2% of white residents. Despite Massachusetts having near-universal coverage, cost barriers remain severe for communities of color.</div></div>
+
+    <div class="grid-3">
+      <div class="card"><div class="dc-label">Premium as % of Median Income</div><div class="dc-val red">27.6%</div><div class="dc-meta"><div><div class="dc-ml">Median HH Income</div><div class="dc-mv">$101,800</div></div><div><div class="dc-ml">Family Premium</div><div class="dc-mv">$28,151</div></div></div></div>
+      <div class="card"><div class="dc-label">National Premium Burden</div><div class="dc-val blue">24.2%</div><div class="dc-meta"><div><div class="dc-ml">Median HH Income</div><div class="dc-mv">$80,610</div></div><div><div class="dc-ml">Family Premium</div><div class="dc-mv">$24,540</div></div></div></div>
+      <div class="card"><div class="dc-label">Despite Higher Incomes</div><div class="dc-val red">MA Worse</div><div class="dc-meta"><div><div class="dc-ml">Income Advantage</div><div class="dc-mv">+$21K</div></div><div><div class="dc-ml">But Premium Gap</div><div class="dc-mv" style="color:#dc2626">+$3,611</div></div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p><strong>Sources:</strong> MA Division of Insurance · Kaiser Family Foundation (KFF) EHBS 2024 · CHIA Annual Report 2025 · CMS State Health Expenditure Accounts</p>
+  <p style="margin-top:8px">Updated February 2026 · <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">Massachusetts Data Hub</a></p>
+</div>
+
+<script>
+// TAB SYSTEM
+function switchTab(e, tabId) {
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
+  e.currentTarget.classList.add('active');
+  document.getElementById('tab-'+tabId).classList.add('active');
+  if(!window._chartsInit) window._chartsInit={};
+  if(!window._chartsInit[tabId]){window._chartsInit[tabId]=true;initCharts(tabId);}
+}
+
+var B='#2563eb',R='#dc2626',G='#16a34a',Y='#d97706',P='#7c3aed';
+Chart.defaults.color='#6b7280';Chart.defaults.borderColor='#e5e7eb';Chart.defaults.font.family="'Inter',sans-serif";
+var charts={};
+function safeChart(id,cfg){if(charts[id]){charts[id].destroy()}var ctx=document.getElementById(id);if(ctx){charts[id]=new Chart(ctx,cfg)}}
+function nF(v){return v>=1000?'$'+(v/1000).toFixed(1)+'K':'$'+v}
+
+function initCharts(tab){
+  switch(tab){
+    case 'overview':
+      safeChart('c-premiums',{type:'bar',data:{labels:['MA 2024','US 2024','MA 2025 (est.)','US 2025'],datasets:[{data:[28151,24540,30950,26993],backgroundColor:[R+'cc',B+'cc',R+'cc',B+'cc'],borderColor:[R,B,R,B],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return'$'+c.raw.toLocaleString()}}}},scales:{y:{beginAtZero:false,min:20000,ticks:{callback:nF}},x:{grid:{display:false}}}}});
+      safeChart('c-growth',{type:'bar',data:{labels:['MA Premiums','MA Wages','Gap'],datasets:[{data:[12.1,9.7,2.4],backgroundColor:[R+'cc',G+'cc',Y+'cc'],borderColor:[R,G,Y],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'%'}}}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      break;
+    case 'premiums':
+      safeChart('c-prem-trend',{type:'line',data:{labels:['2020','2021','2022','2023','2024'],datasets:[{label:'Massachusetts',data:[23541,24805,25262,27240,28151],borderColor:R,backgroundColor:R+'22',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:R},{label:'US Average',data:[21342,22221,22463,23968,24540],borderColor:B,backgroundColor:B+'22',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:B}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{ticks:{callback:nF}},x:{grid:{display:false}}}}});
+      safeChart('c-oop',{type:'bar',data:{labels:['2020','2021','2022','2023','2024'],datasets:[{label:'MA Employee Share',data:[6591,6945,7073,7627,7882],backgroundColor:R+'aa',borderColor:R,borderWidth:1.5,borderRadius:6},{label:'US Employee Share',data:[5588,5969,6106,6575,6296],backgroundColor:B+'aa',borderColor:B,borderWidth:1.5,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{ticks:{callback:nF}},x:{grid:{display:false}}}}});
+      break;
+    case 'rates':
+      safeChart('c-carriers',{type:'bar',data:{labels:['BCBS','Harvard Pilgrim','Tufts','Fallon','Health NE','AllWays'],datasets:[{data:[11.2,10.8,10.5,9.2,8.4,8.1],backgroundColor:function(ctx){return ctx.raw>10?R+'cc':Y+'cc'},borderColor:function(ctx){return ctx.raw>10?R:Y},borderWidth:2,borderRadius:8}]},options:{indexAxis:'horizontal',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'% increase'}}}},scales:{y:{beginAtZero:true,max:14,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      safeChart('c-vs-inflation',{type:'bar',data:{labels:['CPI Inflation','Avg Premium Increase'],datasets:[{data:[3.0,9.9],backgroundColor:[G+'cc',R+'cc'],borderColor:[G,R],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'%'}}}},scales:{y:{beginAtZero:true,max:12,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      break;
+    case 'spending':
+      safeChart('c-percap',{type:'bar',data:{labels:['MA','National','Gap'],datasets:[{data:[13319,10191,3128],backgroundColor:[R+'cc',B+'cc',Y+'cc'],borderColor:[R,B,Y],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return'$'+c.raw.toLocaleString()}}}},scales:{y:{beginAtZero:true,ticks:{callback:nF}},x:{grid:{display:false}}}}});
+      safeChart('c-thce',{type:'bar',data:{labels:['Actual THCE Growth','Benchmark'],datasets:[{data:[8.6,3.6],backgroundColor:[R+'cc',G+'cc'],borderColor:[R,G],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'%'}}}},scales:{y:{beginAtZero:true,max:10,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      break;
+    case 'affordability':
+      safeChart('c-race',{type:'bar',data:{labels:['Hispanic/Latino','Black','White'],datasets:[{data:[58.2,49.1,39.2],backgroundColor:[R+'cc',Y+'cc',B+'cc'],borderColor:[R,Y,B],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'% report difficulty'}}}},scales:{y:{beginAtZero:true,max:65,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      safeChart('c-burden',{type:'doughnut',data:{labels:['Premium ($28,151)','Remaining Income ($73,649)'],datasets:[{data:[28151,73649],backgroundColor:[R+'cc',G+'44'],borderColor:['#fff','#fff'],borderWidth:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:function(c){return c.label+': $'+c.raw.toLocaleString()}}}}}});
+      break;
+  }
+}
+// Init overview charts on load
+initCharts('overview');
+window._chartsInit={overview:true};
+</script>
+</body>
+</html>
