@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merrimack Valley Education Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #111827; 
+            color: #f3f4f6;
+            padding: 20px;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        h1 { text-align: center; margin-bottom: 10px; font-size: 28px; }
+        .subtitle { color: #9ca3af; text-align: center; margin-bottom: 30px; }
+        .tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 30px; }
+        .tab-btn { 
+            padding: 10px 20px; 
+            border-radius: 8px; 
+            font-weight: 500; 
+            border: none; 
+            cursor: pointer;
+            font-size: 14px;
+            background: #374151; 
+            color: #d1d5db;
+        }
+        .tab-btn:hover { background: #4b5563; }
+        .tab-btn.active { background: #2563eb; color: white; }
+        .card { 
+            background: #1f2937; 
+            border-radius: 12px; 
+            padding: 24px; 
+            margin-bottom: 24px; 
+        }
+        .card h2 { font-size: 20px; margin-bottom: 8px; }
+        .card p { color: #9ca3af; margin-bottom: 20px; }
+        .chart-container { position: relative; height: 320px; }
+        .chart-container.tall { height: 400px; }
+        .hidden { display: none; }
+        .legend { display: flex; justify-content: center; gap: 24px; margin-bottom: 24px; flex-wrap: wrap; }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+        .legend-dot { width: 14px; height: 14px; border-radius: 50%; }
+        .dot-h { background: #3b82f6; }
+        .dot-m { background: #8b5cf6; }
+        .dot-l { background: #ef4444; }
+        .dot-s { background: #22c55e; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-top: 20px; }
+        .stat-box { background: #374151; border-radius: 8px; padding: 16px; text-align: center; }
+        .stat-label { color: #9ca3af; font-size: 14px; margin-bottom: 4px; }
+        .stat-value { font-size: 24px; font-weight: bold; }
+        .stat-value.green { color: #22c55e; }
+        .stat-value.red { color: #ef4444; }
+        .stat-value.blue { color: #3b82f6; }
+        .stat-value.purple { color: #8b5cf6; }
+        .stat-value.yellow { color: #eab308; }
+        .bar-row { display: flex; align-items: center; padding: 12px; background: #374151; border-radius: 8px; margin-bottom: 10px; }
+        .bar-city { width: 100px; font-weight: 600; }
+        .bar-track { flex: 1; height: 28px; background: #1f2937; border-radius: 6px; margin: 0 16px; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; font-weight: bold; font-size: 13px; }
+        .bar-val { width: 60px; text-align: right; font-weight: bold; font-size: 18px; }
+        .alert-box { background: #7f1d1d; border: 1px solid #dc2626; border-radius: 10px; padding: 16px; margin-top: 20px; }
+        .alert-box h3 { color: #fca5a5; font-size: 15px; margin-bottom: 8px; }
+        .alert-box p { color: #fecaca; font-size: 14px; line-height: 1.6; }
+        .hl { background: #dc2626; color: white; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
+        .footer { text-align: center; color: #6b7280; font-size: 14px; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Merrimack Valley Education</h1>
+        <p class="subtitle">MCAS 2025 Data: Haverhill, Methuen & Lawrence</p>
+        
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot dot-h"></div> Haverhill</div>
+            <div class="legend-item"><div class="legend-dot dot-m"></div> Methuen</div>
+            <div class="legend-item"><div class="legend-dot dot-l"></div> Lawrence</div>
+            <div class="legend-item"><div class="legend-dot dot-s"></div> State Avg</div>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
+            <button class="tab-btn" onclick="showTab('mcas')">MCAS Scores</button>
+            <button class="tab-btn" onclick="showTab('failure')">Failure Rates</button>
+            <button class="tab-btn" onclick="showTab('teachers')">Teachers</button>
+            <button class="tab-btn" onclick="showTab('compare')">Compare</button>
+        </div>
+
+        <!-- OVERVIEW -->
+        <div id="overview" class="tab-content">
+            <div class="card">
+                <h2>ELA: % Meeting Expectations</h2>
+                <p>All three cities fall far below the 43% state average</p>
+                <div class="bar-row">
+                    <span class="bar-city">State Avg</span>
+                    <div class="bar-track"><div class="bar-fill" style="width:86%;background:#22c55e;">43%</div></div>
+                    <span class="bar-val" style="color:#22c55e;">43%</span>
+                </div>
+                <div class="bar-row">
+                    <span class="bar-city">Methuen</span>
+                    <div class="bar-track"><div class="bar-fill" style="width:60%;background:#8b5cf6;">30%</div></div>
+                    <span class="bar-val" style="color:#8b5cf6;">30%</span>
+                </div>
+                <div class="bar-row">
+                    <span class="bar-city">Haverhill</span>
+                    <div class="bar-track"><div class="bar-fill" style="width:56%;background:#3b82f6;">28%</div></div>
+                    <span class="bar-val" style="color:#3b82f6;">28%</span>
+                </div>
+                <div class="bar-row">
+                    <span class="bar-city">Lawrence</span>
+                    <div class="bar-track"><div class="bar-fill" style="width:36%;background:#ef4444;">18%</div></div>
+                    <span class="bar-val" style="color:#ef4444;">18%</span>
+                </div>
+                <div class="alert-box">
+                    <h3>⚠️ Key Finding</h3>
+                    <p>Lawrence has only <span class="hl">18%</span> meeting ELA standards — the <strong>5th lowest in Massachusetts</strong>. Even Methuen at 30% is <span class="hl">13 points below</span> state average.</p>
+                </div>
+            </div>
+            <div class="card">
+                <h2>Gap from State Average</h2>
+                <p>How far each city falls below state benchmarks</p>
+                <div class="stats-grid">
+                    <div class="stat-box"><div class="stat-label">Haverhill ELA</div><div class="stat-value blue">-15 pts</div></div>
+                    <div class="stat-box"><div class="stat-label">Methuen ELA</div><div class="stat-value purple">-13 pts</div></div>
+                    <div class="stat-box"><div class="stat-label">Lawrence ELA</div><div class="stat-value red">-25 pts</div></div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-box"><div class="stat-label">Haverhill Math</div><div class="stat-value blue">-13 pts</div></div>
+                    <div class="stat-box"><div class="stat-label">Methuen Math</div><div class="stat-value purple">-15 pts</div></div>
+                    <div class="stat-box"><div class="stat-label">Lawrence Math</div><div class="stat-value red">-23 pts</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MCAS -->
+        <div id="mcas" class="tab-content hidden">
+            <div class="card">
+                <h2>MCAS: % Meeting/Exceeding Expectations</h2>
+                <p>Performance across all three subjects</p>
+                <div class="chart-container tall">
+                    <canvas id="mcasChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h2>Average Scaled Scores</h2>
+                <p>State target is 500 — all three cities fall short</p>
+                <div class="chart-container">
+                    <canvas id="scoresChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAILURE -->
+        <div id="failure" class="tab-content hidden">
+            <div class="card">
+                <h2>Students NOT Meeting Expectations</h2>
+                <p>Lawrence failure rate is 2-3x the state average</p>
+                <div class="chart-container tall">
+                    <canvas id="failureChart"></canvas>
+                </div>
+                <div class="alert-box">
+                    <h3>⚠️ Crisis Level</h3>
+                    <p><span class="hl">41%</span> of Lawrence students fail ELA. <span class="hl">36%</span> fail Math. Nearly 4 in 10 students are being left behind.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TEACHERS -->
+        <div id="teachers" class="tab-content hidden">
+            <div class="card">
+                <h2>Average Teacher Salary (2020-21)</h2>
+                <p>All three cities pay below state average of $81,399</p>
+                <div class="chart-container">
+                    <canvas id="salaryChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h2>Teacher Attendance (2025)</h2>
+                <p>Rates are close to state average of 93.8%</p>
+                <div class="chart-container">
+                    <canvas id="attendanceChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h2>Educator Evaluations (2021-22)</h2>
+                <p>How teachers are rated in each district</p>
+                <div class="chart-container">
+                    <canvas id="evalChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMPARE -->
+        <div id="compare" class="tab-content hidden">
+            <div class="card">
+                <h2>Radar: All Metrics</h2>
+                <p>Normalized scores (100 = state average)</p>
+                <div class="chart-container tall">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h2>Student Growth Percentile (SGP)</h2>
+                <p>Year-over-year improvement (50 = typical growth)</p>
+                <div class="chart-container">
+                    <canvas id="sgpChart"></canvas>
+                </div>
+                <div class="alert-box" style="background:#14532d;border-color:#22c55e;">
+                    <h3 style="color:#86efac;">📈 Good News</h3>
+                    <p style="color:#bbf7d0;">All three cities show typical or above-typical growth (SGP 48-53), meaning students are making progress even if achievement levels remain low.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">Data: MA DESE MCAS 2025, Teacher Salaries 2020-21, Staff Attendance 2025</div>
+    </div>
+
+    <script>
+        Chart.defaults.color = '#9ca3af';
+        Chart.defaults.borderColor = '#374151';
+        const c = { h:'#3b82f6', m:'#8b5cf6', l:'#ef4444', s:'#22c55e' };
+
+        function showTab(id) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.remove('hidden');
+            event.target.classList.add('active');
+        }
+
+        new Chart(document.getElementById('mcasChart'), {
+            type: 'bar',
+            data: {
+                labels: ['ELA', 'Math', 'Science'],
+                datasets: [
+                    { label: 'Haverhill', data: [28,29,29], backgroundColor: c.h },
+                    { label: 'Methuen', data: [30,27,27], backgroundColor: c.m },
+                    { label: 'Lawrence', data: [18,19,17], backgroundColor: c.l },
+                    { label: 'State Avg', data: [43,42,42], backgroundColor: c.s }
+                ]
+            },
+            options: { responsive:true, maintainAspectRatio:false, scales:{ y:{ beginAtZero:true, max:50, ticks:{callback:v=>v+'%'}, grid:{color:'#374151'} }, x:{grid:{display:false}} } }
+        });
+
+        new Chart(document.getElementById('scoresChart'), {
+            type: 'bar',
+            data: {
+                labels: ['ELA', 'Math', 'Science'],
+                datasets: [
+                    { label: 'Haverhill', data: [486,488,486], backgroundColor: c.h },
+                    { label: 'Methuen', data: [487,486,485], backgroundColor: c.m },
+                    { label: 'Lawrence', data: [477,481,478], backgroundColor: c.l },
+                    { label: 'Target (500)', data: [500,500,500], backgroundColor: c.s }
+                ]
+            },
+            options: { responsive:true, maintainAspectRatio:false, scales:{ y:{ min:470, max:510, grid:{color:'#374151'} }, x:{grid:{display:false}} } }
+        });
+
+        new Chart(document.getElementById('failureChart'), {
+            type: 'bar',
+            data: {
+                labels: ['ELA', 'Math', 'Science'],
+                datasets: [
+                    { label: 'Haverhill', data: [27,25,26], backgroundColor: c.h },
+                    { label: 'Methuen', data: [25,27,27], backgroundColor: c.m },
+                    { label: 'Lawrence', data: [41,36,40], backgroundColor: c.l },
+                    { label: 'State Avg', data: [16,16,16], backgroundColor: c.s }
+                ]
+            },
+            options: { responsive:true, maintainAspectRatio:false, scales:{ y:{ beginAtZero:true, max:50, ticks:{callback:v=>v+'%'}, grid:{color:'#374151'} }, x:{grid:{display:false}} } }
+        });
+
+        new Chart(document.getElementById('salaryChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Haverhill', 'Methuen', 'Lawrence', 'State Avg'],
+                datasets: [{ data: [77182,79604,74603,81399], backgroundColor: [c.h,c.m,c.l,c.s] }]
+            },
+            options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ y:{ min:70000, max:85000, ticks:{callback:v=>'$'+(v/1000)+'k'}, grid:{color:'#374151'} }, x:{grid:{display:false}} } }
+        });
+
+        new Chart(document.getElementById('attendanceChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Haverhill', 'Methuen', 'Lawrence', 'State Avg'],
+                datasets: [{ data: [94.0,94.1,93.1,93.8], backgroundColor: [c.h,c.m,c.l,c.s] }]
+            },
+            options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ y:{ min:91, max:96, ticks:{callback:v=>v+'%'}, grid:{color:'#374151'} }, x:{grid:{display:false}} } }
+        });
+
+        new Chart(document.getElementById('evalChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Haverhill', 'Methuen', 'Lawrence'],
+                datasets: [
+                    { label: 'Exemplary', data: [7.8,4.0,25.4], backgroundColor: '#22c55e' },
+                    { label: 'Proficient', data: [86.2,94.4,69.5], backgroundColor: '#3b82f6' },
+                    { label: 'Needs Improv.', data: [5.8,1.6,5.0], backgroundColor: '#f97316' }
+                ]
+            },
+            options: { responsive:true, maintainAspectRatio:false, scales:{ y:{ stacked:true, max:100, ticks:{callback:v=>v+'%'}, grid:{color:'#374151'} }, x:{stacked:true, grid:{display:false}} } }
+        });
+
+        new Chart(document.getElementById('radarChart'), {
+            type: 'radar',
+            data: {
+                labels: ['ELA', 'Math', 'Science', 'Salary', 'Attendance'],
+                datasets: [
+                    { label: 'Haverhill', data: [65,69,69,95,100], borderColor: c.h, backgroundColor: 'rgba(59,130,246,0.15)' },
+                    { label: 'Methuen', data: [70,64,64,98,100], borderColor: c.m, backgroundColor: 'rgba(139,92,246,0.15)' },
+                    { label: 'Lawrence', data: [42,45,40,92,99], borderColor: c.l, backgroundColor: 'rgba(239,68,68,0.15)' }
+                ]
+            },
+            options: { responsive:true, maintainAspectRatio:false, scales:{ r:{ beginAtZero:true, max:100, grid:{color:'#374151'}, angleLines:{color:'#374151'} } } }
+        });
+
+        new Chart(document.getElementById('sgpChart'), {
+            type: 'bar',
+            data: {
+                labels: ['ELA', 'Math'],
+                datasets: [
+                    { label: 'Haverhill', data: [49,52], backgroundColor: c.h },
+                    { label: 'Methuen', data: [48,51], backgroundColor: c.m },
+                    { label: 'Lawrence', data: [51,53], backgroundColor: c.l },
+                    { label: 'Typical (50)', data: [50,50], backgroundColor: '#64748b' }
+                ]
+            },
+            options: { responsive:true, maintainAspectRatio:false, scales:{ y:{ min:40, max:60, grid:{color:'#374151'} }, x:{grid:{display:false}} } }
+        });
+    </script>
+</body>
+</html>
