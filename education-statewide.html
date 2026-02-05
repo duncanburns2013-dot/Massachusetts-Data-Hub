@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Massachusetts K-12 Education Crisis Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #111827; 
+            color: #f3f4f6;
+            padding: 20px;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        h1 { text-align: center; margin-bottom: 10px; font-size: 28px; }
+        .subtitle { color: #9ca3af; text-align: center; margin-bottom: 30px; }
+        .tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 30px; }
+        .tab-btn { 
+            padding: 10px 20px; 
+            border-radius: 8px; 
+            font-weight: 500; 
+            border: none; 
+            cursor: pointer;
+            font-size: 14px;
+            background: #374151; 
+            color: #d1d5db;
+        }
+        .tab-btn:hover { background: #4b5563; }
+        .tab-btn.active { background: #2563eb; color: white; }
+        .card { 
+            background: #1f2937; 
+            border-radius: 12px; 
+            padding: 24px; 
+            margin-bottom: 24px; 
+        }
+        .card h2 { font-size: 20px; margin-bottom: 8px; }
+        .card p { color: #9ca3af; margin-bottom: 20px; }
+        .chart-container { position: relative; height: 350px; }
+        .chart-container.tall { height: 450px; }
+        .hidden { display: none; }
+        .stats-row { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
+            gap: 16px; 
+            margin-top: 20px; 
+        }
+        .stat-box { 
+            background: #374151; 
+            border-radius: 8px; 
+            padding: 16px; 
+            text-align: center; 
+        }
+        .stat-label { color: #9ca3af; font-size: 14px; margin-bottom: 4px; }
+        .stat-value { font-size: 24px; font-weight: bold; }
+        .stat-value.green { color: #22c55e; }
+        .stat-value.red { color: #ef4444; }
+        .stat-value.yellow { color: #eab308; }
+        .highlight-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+        .highlight-box { border-radius: 8px; padding: 16px; }
+        .highlight-box.red { background: rgba(127,29,29,0.3); border: 1px solid #b91c1c; }
+        .highlight-box.green { background: rgba(20,83,45,0.3); border: 1px solid #15803d; }
+        .highlight-box .label { font-weight: 600; margin-bottom: 4px; }
+        .highlight-box.red .label { color: #f87171; }
+        .highlight-box.green .label { color: #4ade80; }
+        .highlight-box .value { font-size: 28px; font-weight: bold; }
+        .highlight-box.red .value { color: #ef4444; }
+        .highlight-box.green .value { color: #22c55e; }
+        .big-stat { text-align: center; margin-top: 16px; }
+        .big-stat .number { font-size: 48px; font-weight: bold; color: #ef4444; }
+        .big-stat .desc { color: #9ca3af; }
+        .footer { text-align: center; color: #6b7280; font-size: 14px; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Massachusetts K-12 Education Crisis</h1>
+        <p class="subtitle">Data-Driven Analysis of Systemic Decline</p>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('enrollment')">Enrollment</button>
+            <button class="tab-btn" onclick="showTab('mcas')">MCAS</button>
+            <button class="tab-btn" onclick="showTab('gateway')">Gateway Cities</button>
+            <button class="tab-btn" onclick="showTab('spending')">Spending</button>
+            <button class="tab-btn" onclick="showTab('gaps')">Gaps</button>
+        </div>
+
+        <!-- ENROLLMENT TAB -->
+        <div id="enrollment" class="tab-content">
+            <div class="card">
+                <h2>K-12 Enrollment Change (2019-2025)</h2>
+                <p>Families are voting with their feet—leaving traditional public schools for alternatives</p>
+                <div class="chart-container">
+                    <canvas id="enrollmentChart"></canvas>
+                </div>
+                <div class="highlight-row">
+                    <div class="highlight-box red">
+                        <div class="label">Traditional Public Schools</div>
+                        <div class="value">-6.4%</div>
+                    </div>
+                    <div class="highlight-box green">
+                        <div class="label">Homeschooling</div>
+                        <div class="value">+56%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MCAS TAB -->
+        <div id="mcas" class="tab-content hidden">
+            <div class="card">
+                <h2>MCAS % Meeting/Exceeding Expectations</h2>
+                <p>Five years post-pandemic, scores remain far below 2019 levels</p>
+                <div class="chart-container">
+                    <canvas id="mcasChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h2>District Performance Distribution (ELA)</h2>
+                <p>65% of districts have fewer than half of students meeting standards</p>
+                <div class="chart-container">
+                    <canvas id="distributionChart"></canvas>
+                </div>
+                <div class="big-stat">
+                    <span class="number">230</span>
+                    <span class="desc">of 352 districts below 50% proficiency</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- GATEWAY TAB -->
+        <div id="gateway" class="tab-content hidden">
+            <div class="card">
+                <h2>Gateway Cities vs. Rest of State</h2>
+                <p>A 15-16 percentage point achievement gap</p>
+                <div class="chart-container">
+                    <canvas id="gapChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h2>Gateway City Performance (MCAS 2025)</h2>
+                <p>Holyoke: Only 6% of students meet math expectations</p>
+                <div class="chart-container tall">
+                    <canvas id="gatewayChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- SPENDING TAB -->
+        <div id="spending" class="tab-content hidden">
+            <div class="card">
+                <h2>Per-Pupil Spending vs. Achievement</h2>
+                <p>Spending increases haven't translated to better outcomes</p>
+                <div class="chart-container">
+                    <canvas id="spendingChart"></canvas>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-box">
+                        <div class="stat-label">Per-Pupil Spending</div>
+                        <div class="stat-value green">$21,886</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Above Required</div>
+                        <div class="stat-value yellow">+27%</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Students Proficient</div>
+                        <div class="stat-value red">42%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAPS TAB -->
+        <div id="gaps" class="tab-content hidden">
+            <div class="card">
+                <h2>High School Chronic Absenteeism by Group</h2>
+                <p>Nearly 40% of English Learners and Hispanic students are chronically absent</p>
+                <div class="chart-container">
+                    <canvas id="absenteeismChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h2>Grade 10 Score Changes (2024→2025)</h2>
+                <p>Every student group declined after MCAS graduation requirement removed</p>
+                <div class="chart-container">
+                    <canvas id="declineChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Data Sources: MA DESE MCAS Results 2025, Accountability Data, Per-Pupil Expenditure Reports
+        </div>
+    </div>
+
+    <script>
+        Chart.defaults.color = '#9ca3af';
+        Chart.defaults.borderColor = '#374151';
+
+        // Tab switching
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.remove('hidden');
+            event.target.classList.add('active');
+        }
+
+        // 1. Enrollment Chart
+        new Chart(document.getElementById('enrollmentChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Homeschooling', 'Vocational-Tech', 'Charter Schools', 'Private Schools', 'Overall K-12', 'Traditional Public'],
+                datasets: [{
+                    data: [56, 18, 11, -1, -3.5, -6.4],
+                    backgroundColor: ['#059669', '#10b981', '#22c55e', '#eab308', '#f97316', '#ef4444'],
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { 
+                        grid: { color: '#374151' },
+                        ticks: { callback: v => v + '%' }
+                    },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+
+        // 2. MCAS Comparison Chart
+        new Chart(document.getElementById('mcasChart'), {
+            type: 'bar',
+            data: {
+                labels: ['ELA (Gr 3-8)', 'Math (Gr 3-8)', 'ELA (Gr 10)', 'Math (Gr 10)'],
+                datasets: [
+                    { label: '2019', data: [52, 49, 61, 59], backgroundColor: '#22c55e' },
+                    { label: '2024', data: [39, 41, 57, 48], backgroundColor: '#eab308' },
+                    { label: '2025', data: [42, 41, 51, 45], backgroundColor: '#ef4444' }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { 
+                        beginAtZero: true, 
+                        max: 70,
+                        ticks: { callback: v => v + '%' },
+                        grid: { color: '#374151' }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // 3. Distribution Pie Chart
+        new Chart(document.getElementById('distributionChart'), {
+            type: 'pie',
+            data: {
+                labels: ['<25% Meeting (41)', '25-50% Meeting (189)', '50-75% Meeting (116)', '≥75% Meeting (6)'],
+                datasets: [{
+                    data: [41, 189, 116, 6],
+                    backgroundColor: ['#dc2626', '#f97316', '#eab308', '#22c55e']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'right' }
+                }
+            }
+        });
+
+        // 4. Gateway vs State Gap Chart
+        new Chart(document.getElementById('gapChart'), {
+            type: 'bar',
+            data: {
+                labels: ['ELA Meeting Standards', 'Math Meeting Standards'],
+                datasets: [
+                    { label: 'Gateway Cities', data: [30.2, 27.3], backgroundColor: '#ef4444' },
+                    { label: 'Rest of State', data: [45.1, 43.7], backgroundColor: '#3b82f6' }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { 
+                        beginAtZero: true,
+                        ticks: { callback: v => v + '%' },
+                        grid: { color: '#374151' }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // 5. Gateway Cities Detail Chart
+        new Chart(document.getElementById('gatewayChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Holyoke', 'Lynn', 'Lawrence', 'Fall River', 'Brockton', 'Springfield', 'Worcester', 'Lowell', 'Salem', 'Malden', 'Westfield', 'Leominster', 'Attleboro', 'Quincy'],
+                datasets: [
+                    { label: 'ELA', data: [11, 17, 18, 19, 21, 22, 26, 28, 32, 34, 35, 36, 37, 46], backgroundColor: '#3b82f6' },
+                    { label: 'Math', data: [6, 14, 19, 18, 19, 17, 24, 31, 24, 34, 34, 35, 39, 42], backgroundColor: '#8b5cf6' }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { 
+                        beginAtZero: true,
+                        max: 50,
+                        ticks: { callback: v => v + '%' },
+                        grid: { color: '#374151' }
+                    },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+
+        // 6. Spending Chart
+        new Chart(document.getElementById('spendingChart'), {
+            type: 'line',
+            data: {
+                labels: ['2022', '2023', '2024', '2025'],
+                datasets: [
+                    { 
+                        label: 'Per-Pupil Spending', 
+                        data: [19712, 21256, 21886, 22500], 
+                        borderColor: '#22c55e',
+                        backgroundColor: 'rgba(34, 197, 94, 0.2)',
+                        fill: true,
+                        yAxisID: 'y'
+                    },
+                    { 
+                        label: 'ELA %', 
+                        data: [39, 39, 39, 42], 
+                        borderColor: '#3b82f6',
+                        borderWidth: 3,
+                        yAxisID: 'y1'
+                    },
+                    { 
+                        label: 'Math %', 
+                        data: [41, 41, 41, 41], 
+                        borderColor: '#ef4444',
+                        borderWidth: 3,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { 
+                        type: 'linear',
+                        position: 'left',
+                        min: 18000,
+                        max: 24000,
+                        ticks: { callback: v => '$' + (v/1000) + 'k' },
+                        grid: { color: '#374151' }
+                    },
+                    y1: {
+                        type: 'linear',
+                        position: 'right',
+                        min: 30,
+                        max: 50,
+                        ticks: { callback: v => v + '%' },
+                        grid: { display: false }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // 7. Absenteeism Chart
+        new Chart(document.getElementById('absenteeismChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Asian', 'White', 'Multi-Race', 'Black', 'Am Indian', 'Disabilities', 'Low Income', 'Hispanic', 'EL Students'],
+                datasets: [{
+                    data: [11.6, 18.3, 25.9, 28.0, 31.7, 34.9, 37.5, 38.3, 38.3],
+                    backgroundColor: ['#22c55e', '#22c55e', '#f97316', '#f97316', '#ef4444', '#ef4444', '#ef4444', '#ef4444', '#ef4444']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { 
+                        beginAtZero: true,
+                        max: 45,
+                        ticks: { callback: v => v + '%' },
+                        grid: { color: '#374151' }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // 8. Decline Chart
+        new Chart(document.getElementById('declineChart'), {
+            type: 'bar',
+            data: {
+                labels: ['All Students', 'White', 'Black', 'Hispanic', 'Asian', 'Low Income', 'Disabilities'],
+                datasets: [
+                    { label: 'ELA', data: [-4.7, -4.8, -5.1, -4.1, -3.7, -4.6, -4.0], backgroundColor: '#3b82f6' },
+                    { label: 'Math', data: [-2.8, -3.1, -1.9, -2.5, -1.6, -3.0, -3.2], backgroundColor: '#8b5cf6' }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { 
+                        max: 0,
+                        min: -6,
+                        grid: { color: '#374151' }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

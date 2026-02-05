@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Haverhill MA Housing Market Report</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{--brand:#1e355e;--brand-light:#2a4a7a;--brand-dark:#152744;--red:#dc2626;--green:#16a34a;--yellow:#ca8a04;--orange:#ea580c;--teal:#0d9488;--bg:#f8fafc;--white:#fff;--text:#1e293b;--mid:#475569;--light:#64748b;--muted:#94a3b8;--border:#e2e8f0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:1100px;margin:0 auto;padding:0 20px}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--brand) 0%,var(--brand-dark) 100%);color:#fff;padding:48px 24px 64px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.14);padding:6px 16px;border-radius:50px;font-size:0.8rem;margin-bottom:16px}
+.hero h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;margin-bottom:6px}
+.hero-sub{font-size:0.9rem;opacity:0.8;max-width:460px;margin:0 auto 28px}
+.hero-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;max-width:800px;margin:0 auto}
+.hs{background:rgba(255,255,255,0.1);padding:14px 10px;border-radius:8px;text-align:center}
+.hs-label{font-size:0.55rem;text-transform:uppercase;letter-spacing:0.1em;opacity:0.7;margin-bottom:2px}
+.hs-val{font-size:1.2rem;font-weight:700}
+.hs-note{font-size:0.6rem;opacity:0.6;margin-top:1px}
+
+/* TOGGLE */
+.toggle-wrap{display:flex;justify-content:center;gap:4px;padding:14px;background:var(--white);border-bottom:1px solid var(--border)}
+.tog{padding:8px 18px;border:none;border-radius:6px;font-family:inherit;font-size:0.82rem;font-weight:500;cursor:pointer;color:var(--mid);background:none;transition:all 0.2s}
+.tog:hover{background:var(--bg)}
+.tog.active{background:var(--brand);color:#fff}
+
+/* SECTIONS */
+.panel{display:none;padding:32px 0}
+.panel.active{display:block}
+.sec-title{font-size:1.3rem;font-weight:700;margin-bottom:2px}
+.sec-desc{color:var(--light);font-size:0.85rem;margin-bottom:20px}
+
+/* CARDS */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:20px}
+.card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:14px;transition:box-shadow 0.2s}
+.card:hover{box-shadow:0 3px 10px rgba(0,0,0,0.05)}
+.card.w2{grid-column:span 2}
+.card-l{font-size:0.58rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--light);font-weight:600;margin-bottom:2px}
+.card-v{font-size:1.3rem;font-weight:700;margin-bottom:6px}
+.card-v.brand{color:var(--brand)}
+.card-v.red{color:var(--red)}
+.card-v.green{color:var(--green)}
+.card-v.yellow{color:var(--yellow)}
+.card-v.teal{color:var(--teal)}
+.card-v.orange{color:var(--orange)}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.cm{background:var(--bg);padding:6px 8px;border-radius:5px}
+.cm-l{font-size:0.55rem;text-transform:uppercase;color:var(--muted)}
+.cm-v{font-size:0.8rem;font-weight:600}
+.up{color:var(--red)}.dn{color:var(--green)}
+.bl{border-left:3px solid var(--brand)}.rl{border-left:3px solid var(--red)}.gl{border-left:3px solid var(--green)}.yl{border-left:3px solid var(--yellow)}.tl{border-left:3px solid var(--teal)}.ol{border-left:3px solid var(--orange)}
+
+/* CHARTS */
+.cb{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px}
+.ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:6px}
+.ct{font-size:0.85rem;font-weight:600}
+.cleg{display:flex;gap:10px;flex-wrap:wrap}
+.li{display:flex;align-items:center;gap:4px;font-size:0.68rem;color:var(--mid)}
+.ld{width:7px;height:7px;border-radius:50%;display:inline-block}
+.ca{height:250px;position:relative}
+.ca canvas{width:100%!important;height:100%!important}
+
+/* TABLE */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:0.78rem}
+th,td{padding:8px;text-align:left;border-bottom:1px solid var(--border)}
+th{font-size:0.58rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);font-weight:600;background:var(--bg)}
+tr:hover td{background:#f9fafb}
+td:first-child{font-weight:600;color:var(--brand)}
+
+/* COMPARE BOX */
+.comp{background:linear-gradient(135deg,#eef2f7,#dce4ed);border:1px solid #b4c4d9;border-radius:10px;padding:20px;margin-bottom:20px}
+.comp-title{text-align:center;font-size:1rem;font-weight:700;color:var(--brand-dark);margin-bottom:14px}
+.comp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.comp-item{text-align:center}
+.comp-label{font-size:0.55rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--mid);margin-bottom:2px}
+.comp-val{font-size:1.15rem;font-weight:700}
+.comp-note{font-size:0.6rem;color:var(--muted);margin-top:1px}
+
+.footer{background:var(--brand);color:#fff;padding:20px;text-align:center;font-size:0.75rem;opacity:0.85}
+.footer .fd{font-size:0.65rem;opacity:0.6;margin-top:4px}
+
+@media(max-width:768px){
+.hero{padding:36px 16px 50px}.hero h1{font-size:1.4rem}
+.hero-stats{grid-template-columns:repeat(2,1fr)}
+.card.w2{grid-column:span 1}.ca{height:200px}
+.panel{padding:24px 0}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+<div class="hero-badge">📊 Haverhill, MA • MLS PIN Data</div>
+<h1>Haverhill Housing<br>Market Report</h1>
+<p class="hero-sub">Single Family &amp; Condominium market trends vs. Massachusetts &amp; Essex County (2022–2026)</p>
+<div class="hero-stats">
+<div class="hs"><div class="hs-label">SF Avg Sale</div><div class="hs-val">$571K</div><div class="hs-note">YTD 2026</div></div>
+<div class="hs"><div class="hs-label">Condo Avg Sale</div><div class="hs-val">$396K</div><div class="hs-note">YTD 2026</div></div>
+<div class="hs"><div class="hs-label">SF DOM</div><div class="hs-val">37</div><div class="hs-note">Days on Market</div></div>
+<div class="hs"><div class="hs-label">Condo DOM</div><div class="hs-val">46</div><div class="hs-note">Days on Market</div></div>
+<div class="hs"><div class="hs-label">SF Supply</div><div class="hs-val">0.65 mo</div><div class="hs-note">19 listings</div></div>
+<div class="hs"><div class="hs-label">Condo Supply</div><div class="hs-val">0.91 mo</div><div class="hs-note">23 listings</div></div>
+</div>
+</header>
+
+<div class="toggle-wrap">
+<button class="tog active" data-t="sf">Single Family</button>
+<button class="tog" data-t="condo">Condominium</button>
+<button class="tog" data-t="compare">Compare All</button>
+<button class="tog" data-t="afford">Affordability</button>
+</div>
+
+<!-- SINGLE FAMILY -->
+<div class="panel active" id="p-sf"><div class="container">
+<div class="sec-title">Single Family</div>
+<p class="sec-desc">Haverhill vs. Massachusetts &amp; Essex County • 2022–2026 YTD</p>
+
+<div class="cards">
+<div class="card bl"><div class="card-l">Avg Sale Price</div><div class="card-v brand">$571,329</div><div class="cg"><div class="cm"><div class="cm-l">2022</div><div class="cm-v">$547,511</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v up">+4.3%</div></div></div></div>
+<div class="card gl"><div class="card-l">$/SqFt</div><div class="card-v green">$344</div><div class="cg"><div class="cm"><div class="cm-l">2022</div><div class="cm-v">$301</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v up">+14.3%</div></div></div></div>
+<div class="card yl"><div class="card-l">Days on Market</div><div class="card-v yellow">37</div><div class="cg"><div class="cm"><div class="cm-l">2022</div><div class="cm-v">28</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v up">+32.1%</div></div></div></div>
+<div class="card tl"><div class="card-l">Months Supply</div><div class="card-v teal">0.65</div><div class="cg"><div class="cm"><div class="cm-l">2022</div><div class="cm-v">0.19</div></div><div class="cm"><div class="cm-l">Balanced</div><div class="cm-v">4-6 mo</div></div></div></div>
+</div>
+
+<div class="comp"><div class="comp-title">How Haverhill SF Compares (2026)</div>
+<div class="comp-grid">
+<div class="comp-item"><div class="comp-label">Haverhill SF</div><div class="comp-val brand">$571K</div><div class="comp-note">$344/sqft • 37 DOM</div></div>
+<div class="comp-item"><div class="comp-label">Massachusetts</div><div class="comp-val" style="color:var(--red)">$818K</div><div class="comp-note">$384/sqft • 56 DOM</div></div>
+<div class="comp-item"><div class="comp-label">Essex County</div><div class="comp-val" style="color:var(--green)">$825K</div><div class="comp-note">$411/sqft • 53 DOM</div></div>
+<div class="comp-item"><div class="comp-label">Haverhill Discount</div><div class="comp-val" style="color:var(--teal)">30% below</div><div class="comp-note">vs MA median</div></div>
+</div></div>
+
+<div class="cb"><div class="ch"><div class="ct">Average Sale Price — Haverhill SF vs. Benchmarks</div><div class="cleg"><div class="li"><span class="ld" style="background:var(--brand)"></span>Haverhill SF</div><div class="li"><span class="ld" style="background:var(--red)"></span>Massachusetts</div><div class="li"><span class="ld" style="background:var(--green)"></span>Essex County</div></div></div><div class="ca"><canvas id="c-sf-price"></canvas></div></div>
+
+<div class="cb"><div class="ch"><div class="ct">$/SqFt Comparison</div></div><div class="ca"><canvas id="c-sf-sqft"></canvas></div></div>
+
+<div class="cb"><div class="ch"><div class="ct">Days on Market</div></div><div class="ca"><canvas id="c-sf-dom"></canvas></div></div>
+
+<div class="cb"><div class="ch"><div class="ct">12-Month Sales Volume</div></div><div class="ca"><canvas id="c-sf-vol"></canvas></div></div>
+
+<div class="cb"><div class="ch"><div class="ct">Inventory &amp; Months Supply</div></div><div class="ca"><canvas id="c-sf-inv"></canvas></div></div>
+
+<div class="cb"><div class="ch"><div class="ct">Haverhill Single Family — Full Data</div></div><div class="tw"><table>
+<thead><tr><th>Metric</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th><th>Chg</th></tr></thead>
+<tbody>
+<tr><td>Avg Sale Price</td><td>$547,511</td><td>$486,964</td><td>$550,095</td><td>$538,736</td><td>$571,329</td><td class="up">+4%</td></tr>
+<tr><td>Avg $/SqFt</td><td>$301</td><td>$270</td><td>$291</td><td>$329</td><td>$344</td><td class="up">+14%</td></tr>
+<tr><td>DOM</td><td>28</td><td>23</td><td>38</td><td>34</td><td>37</td><td class="up">+32%</td></tr>
+<tr><td>12-Mo Sold</td><td>497</td><td>355</td><td>290</td><td>301</td><td>351</td><td class="dn">-29%</td></tr>
+<tr><td>Listed (12mo)</td><td>517</td><td>409</td><td>320</td><td>352</td><td>413</td><td class="dn">-20%</td></tr>
+<tr><td>Inventory</td><td>8</td><td>13</td><td>20</td><td>20</td><td>19</td><td class="up">+138%</td></tr>
+<tr><td>Mo Supply</td><td>0.19</td><td>0.44</td><td>0.83</td><td>0.80</td><td>0.65</td><td>+242%</td></tr>
+<tr><td>SP/LP %</td><td>103.4%</td><td>101.6%</td><td>103.7%</td><td>99.9%</td><td>100.1%</td><td>—</td></tr>
+</tbody></table></div></div>
+</div></div>
+
+<!-- CONDOMINIUM -->
+<div class="panel" id="p-condo"><div class="container">
+<div class="sec-title">Condominium</div>
+<p class="sec-desc">Haverhill vs. Massachusetts &amp; Essex County • 2022–2026 YTD</p>
+
+<div class="cards">
+<div class="card ol"><div class="card-l">Avg Sale Price</div><div class="card-v orange">$396,286</div><div class="cg"><div class="cm"><div class="cm-l">2022</div><div class="cm-v">$368,692</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v up">+7.5%</div></div></div></div>
+<div class="card gl"><div class="card-l">$/SqFt</div><div class="card-v green">$329</div><div class="cg"><div class="cm"><div class="cm-l">2022</div><div class="cm-v">$241</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v up">+36.4%</div></div></div></div>
+<div class="card yl"><div class="card-l">Days on Market</div><div class="card-v yellow">46</div><div class="cg"><div class="cm"><div class="cm-l">2022</div><div class="cm-v">23</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v up">+100%</div></div></div></div>
+<div class="card tl"><div class="card-l">Months Supply</div><div class="card-v teal">0.91</div><div class="cg"><div class="cm"><div class="cm-l">2022</div><div class="cm-v">0.07</div></div><div class="cm"><div class="cm-l">Balanced</div><div class="cm-v">4-6 mo</div></div></div></div>
+</div>
+
+<div class="cb"><div class="ch"><div class="ct">Average Sale Price — Haverhill Condo</div></div><div class="ca"><canvas id="c-co-price"></canvas></div></div>
+<div class="cb"><div class="ch"><div class="ct">$/SqFt Trends</div></div><div class="ca"><canvas id="c-co-sqft"></canvas></div></div>
+<div class="cb"><div class="ch"><div class="ct">Days on Market</div></div><div class="ca"><canvas id="c-co-dom"></canvas></div></div>
+<div class="cb"><div class="ch"><div class="ct">12-Month Sales Volume</div></div><div class="ca"><canvas id="c-co-vol"></canvas></div></div>
+
+<div class="cb"><div class="ch"><div class="ct">Haverhill Condominium — Full Data</div></div><div class="tw"><table>
+<thead><tr><th>Metric</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th><th>Chg</th></tr></thead>
+<tbody>
+<tr><td>Avg Sale Price</td><td>$368,692</td><td>$331,858</td><td>$344,786</td><td>$408,730</td><td>$396,286</td><td class="up">+7%</td></tr>
+<tr><td>Avg $/SqFt</td><td>$241</td><td>$270</td><td>$304</td><td>$318</td><td>$329</td><td class="up">+36%</td></tr>
+<tr><td>DOM</td><td>23</td><td>25</td><td>40</td><td>37</td><td>46</td><td class="up">+100%</td></tr>
+<tr><td>12-Mo Sold</td><td>360</td><td>270</td><td>234</td><td>236</td><td>304</td><td class="dn">-16%</td></tr>
+<tr><td>Listed (12mo)</td><td>391</td><td>294</td><td>256</td><td>302</td><td>354</td><td class="dn">-9%</td></tr>
+<tr><td>Inventory</td><td>2</td><td>15</td><td>10</td><td>21</td><td>23</td><td class="up">+1050%</td></tr>
+<tr><td>Mo Supply</td><td>0.07</td><td>0.67</td><td>0.51</td><td>1.07</td><td>0.91</td><td>+1200%</td></tr>
+<tr><td>SP/LP %</td><td>102.7%</td><td>100.8%</td><td>100.7%</td><td>100.9%</td><td>102.1%</td><td>—</td></tr>
+</tbody></table></div></div>
+</div></div>
+
+<!-- COMPARE ALL -->
+<div class="panel" id="p-compare"><div class="container">
+<div class="sec-title">Market Comparison</div>
+<p class="sec-desc">Haverhill SF &amp; Condo vs. Massachusetts &amp; Essex County • 2026</p>
+
+<div class="comp"><div class="comp-title">2026 Price Comparison</div>
+<div class="comp-grid">
+<div class="comp-item"><div class="comp-label">Massachusetts</div><div class="comp-val" style="color:var(--red)">$818K</div><div class="comp-note">$384/sqft</div></div>
+<div class="comp-item"><div class="comp-label">Essex County</div><div class="comp-val" style="color:var(--green)">$825K</div><div class="comp-note">$411/sqft</div></div>
+<div class="comp-item"><div class="comp-label">Haverhill SF</div><div class="comp-val brand">$571K</div><div class="comp-note">$344/sqft</div></div>
+<div class="comp-item"><div class="comp-label">Haverhill Condo</div><div class="comp-val" style="color:var(--orange)">$396K</div><div class="comp-note">$329/sqft</div></div>
+</div></div>
+
+<div class="cb"><div class="ch"><div class="ct">Sale Price — All Markets</div><div class="cleg"><div class="li"><span class="ld" style="background:var(--red)"></span>MA</div><div class="li"><span class="ld" style="background:var(--green)"></span>Essex</div><div class="li"><span class="ld" style="background:var(--brand)"></span>Haverhill SF</div><div class="li"><span class="ld" style="background:var(--orange)"></span>Haverhill Condo</div></div></div><div class="ca"><canvas id="c-all-price"></canvas></div></div>
+
+<div class="cb"><div class="ch"><div class="ct">$/SqFt — All Markets</div></div><div class="ca"><canvas id="c-all-sqft"></canvas></div></div>
+
+<div class="cb"><div class="ch"><div class="ct">Days on Market — All Markets</div></div><div class="ca"><canvas id="c-all-dom"></canvas></div></div>
+
+<div class="cb"><div class="ch"><div class="ct">Side-by-Side (2026 YTD)</div></div><div class="tw"><table>
+<thead><tr><th>Metric</th><th>MA</th><th>Essex Co.</th><th>Haverhill SF</th><th>Haverhill Condo</th></tr></thead>
+<tbody>
+<tr><td>Avg Sale Price</td><td>$818K</td><td>$825K</td><td>$571K</td><td>$396K</td></tr>
+<tr><td>$/SqFt</td><td>$384</td><td>$411</td><td>$344</td><td>$329</td></tr>
+<tr><td>DOM</td><td>56</td><td>53</td><td>37</td><td>46</td></tr>
+<tr><td>Mo Supply</td><td>1.09</td><td>—</td><td>0.65</td><td>0.91</td></tr>
+<tr><td>SP/LP %</td><td>—</td><td>—</td><td>100.1%</td><td>102.1%</td></tr>
+<tr><td>vs MA Price</td><td>—</td><td>+1%</td><td class="dn">-30%</td><td class="dn">-52%</td></tr>
+</tbody></table></div></div>
+</div></div>
+
+<!-- AFFORDABILITY -->
+<div class="panel" id="p-afford"><div class="container">
+<div class="sec-title">Affordability Analysis</div>
+<p class="sec-desc">Income requirements at standard lending criteria • 30yr @ 6.5%, 20% down, 28% DTI</p>
+
+<div class="comp" style="background:linear-gradient(135deg,#fefce8,#fef9c3);border-color:#fde047;">
+<div class="comp-title" style="color:#92400e;">Haverhill — The Affordability Advantage</div>
+<div class="comp-grid">
+<div class="comp-item"><div class="comp-label">Local Median Income</div><div class="comp-val brand">$88,326</div><div class="comp-note">ACS 2020-2024</div></div>
+<div class="comp-item"><div class="comp-label">MA Median Income</div><div class="comp-val" style="color:var(--red)">$104,800</div><div class="comp-note">ACS 2020-2024</div></div>
+<div class="comp-item"><div class="comp-label">SF Income Needed</div><div class="comp-val" style="color:var(--yellow)">$124K</div><div class="comp-note">For $571K home</div></div>
+<div class="comp-item"><div class="comp-label">Condo Income Needed</div><div class="comp-val" style="color:var(--green)">$86K</div><div class="comp-note">For $396K condo ✓</div></div>
+</div></div>
+
+<div class="cards">
+<div class="card w2 bl"><div class="card-l">Single Family — $571,329</div><div class="card-v brand">$124K income needed</div>
+<div class="cg"><div class="cm"><div class="cm-l">Down Payment (20%)</div><div class="cm-v">$114,266</div></div><div class="cm"><div class="cm-l">Monthly Payment</div><div class="cm-v">$2,889</div></div><div class="cm"><div class="cm-l">Income Gap (Local)</div><div class="cm-v up">-$36K</div></div><div class="cm"><div class="cm-l">Income Gap (MA)</div><div class="cm-v up">-$19K</div></div></div></div>
+<div class="card w2 ol"><div class="card-l">Condominium — $396,286</div><div class="card-v green">$86K income needed ✓</div>
+<div class="cg"><div class="cm"><div class="cm-l">Down Payment (20%)</div><div class="cm-v">$79,257</div></div><div class="cm"><div class="cm-l">Monthly Payment</div><div class="cm-v">$2,004</div></div><div class="cm"><div class="cm-l">vs Local Income</div><div class="cm-v dn">Affordable ✓</div></div><div class="cm"><div class="cm-l">vs MA Income</div><div class="cm-v dn">Affordable ✓</div></div></div></div>
+</div>
+
+<div class="cb"><div class="ch"><div class="ct">Income Required vs. Median Income</div></div><div class="ca"><canvas id="c-income"></canvas></div></div>
+
+<div class="cb"><div class="ch"><div class="ct">Monthly Payment Comparison</div></div><div class="ca"><canvas id="c-monthly"></canvas></div></div>
+
+<div class="cb"><div class="ch"><div class="ct">Down Payment Comparison</div></div><div class="ca"><canvas id="c-down"></canvas></div></div>
+
+<div class="cb"><div class="ch"><div class="ct">Full Affordability Breakdown</div></div><div class="tw"><table>
+<thead><tr><th>Market</th><th>Price</th><th>Down (20%)</th><th>Monthly</th><th>Income Needed</th><th>vs Local $88K</th><th>vs MA $105K</th></tr></thead>
+<tbody>
+<tr><td>Massachusetts</td><td>$818K</td><td>$164K</td><td>$4,135</td><td>$177K</td><td class="up">-$89K</td><td class="up">-$72K</td></tr>
+<tr><td>Essex County</td><td>$825K</td><td>$165K</td><td>$4,172</td><td>$179K</td><td class="up">-$91K</td><td class="up">-$74K</td></tr>
+<tr><td>Haverhill SF</td><td>$571K</td><td>$114K</td><td>$2,889</td><td>$124K</td><td class="up">-$36K</td><td class="up">-$19K</td></tr>
+<tr><td style="color:var(--orange)">Haverhill Condo</td><td>$396K</td><td>$79K</td><td>$2,004</td><td>$86K</td><td class="dn">Affordable ✓</td><td class="dn">Affordable ✓</td></tr>
+</tbody></table></div>
+<p style="margin-top:10px;font-size:0.7rem;color:var(--muted);">30yr fixed @ 6.5%, 20% down, 28% DTI. Haverhill median: $88,326 (U.S. Census Bureau QuickFacts, ACS 2020-2024). MA median: $104,800 (ACS 2020-2024). Does not include taxes, insurance, or HOA.</p></div>
+
+<div class="cards">
+<div class="card gl"><div class="card-l">Key Takeaway</div><div class="card-v green">Haverhill condos are affordable</div><p style="color:var(--mid);font-size:0.78rem;margin-top:5px;">At $396K, Haverhill condos are within reach of the local median household income — one of the few markets in Essex County where this is true.</p></div>
+<div class="card rl"><div class="card-l">SF Gap</div><div class="card-v red">$36K shortfall</div><p style="color:var(--mid);font-size:0.78rem;margin-top:5px;">Single family homes require $124K income vs. $88K local median. Still 30% cheaper than MA/Essex County equivalents.</p></div>
+<div class="card bl"><div class="card-l">vs. Newburyport</div><div class="card-v brand">50% less</div><p style="color:var(--mid);font-size:0.78rem;margin-top:5px;">Haverhill SF at $571K vs. Newburyport at $1.14M — same county, half the price, similar commute access.</p></div>
+<div class="card yl"><div class="card-l">Down Payment Savings</div><div class="card-v yellow">$50K–$86K less</div><p style="color:var(--mid);font-size:0.78rem;margin-top:5px;">Haverhill SF down payment ($114K) is $50K less than MA avg; condo ($79K) saves $86K vs. MA.</p></div>
+</div>
+</div></div>
+
+<footer class="footer">
+<p><strong>Data:</strong> MLS PIN • Haverhill, MA Area Market Review</p>
+<p class="fd">Prepared February 4, 2026 • YTD Sold Data • Single Family &amp; Condominium</p>
+</footer>
+
+<script>
+var Y=['2022','2023','2024','2025','2026'];
+var B='#1e355e',R='#dc2626',G='#16a34a',YL='#ca8a04',O='#ea580c',T='#0d9488';
+Chart.defaults.color='#64748b';Chart.defaults.borderColor='#e2e8f0';Chart.defaults.font.family="'DM Sans',sans-serif";
+var kF=function(v){return'$'+(v/1000)+'K'};
+
+// DATA
+var hSF={price:[547511,486964,550095,538736,571329],sqft:[301,270,291,329,344],dom:[28,23,38,34,37],sold:[497,355,290,301,351],inv:[8,13,20,20,19],supply:[0.19,0.44,0.83,0.80,0.65]};
+var hCO={price:[368692,331858,344786,408730,396286],sqft:[241,270,304,318,329],dom:[23,25,40,37,46],sold:[360,270,234,236,304]};
+var ma={price:[658290,673198,739097,802664,817789],sqft:[318,325,347,375,384],dom:[36,46,43,48,56]};
+var es={price:[651947,702345,776574,867768,825075],sqft:[336,349,371,406,411],dom:[29,39,39,40,53]};
+
+// SF PRICE
+new Chart(document.getElementById('c-sf-price'),{type:'line',data:{labels:Y,datasets:[
+{label:'Haverhill SF',data:hSF.price,borderColor:B,backgroundColor:'rgba(30,53,94,0.1)',borderWidth:3,tension:0.3,fill:true,pointRadius:5},
+{label:'MA',data:ma.price,borderColor:R,borderWidth:2,tension:0.3,borderDash:[5,5],pointRadius:4},
+{label:'Essex',data:es.price,borderColor:G,borderWidth:2,tension:0.3,borderDash:[5,5],pointRadius:4}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:12}}},scales:{y:{ticks:{callback:kF}},x:{grid:{display:false}}}}});
+
+// SF SQFT
+new Chart(document.getElementById('c-sf-sqft'),{type:'line',data:{labels:Y,datasets:[
+{label:'Haverhill SF',data:hSF.sqft,borderColor:B,backgroundColor:'rgba(30,53,94,0.1)',borderWidth:3,tension:0.3,fill:true,pointRadius:5},
+{label:'MA',data:ma.sqft,borderColor:R,borderWidth:2,tension:0.3,borderDash:[5,5],pointRadius:4},
+{label:'Essex',data:es.sqft,borderColor:G,borderWidth:2,tension:0.3,borderDash:[5,5],pointRadius:4}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:12}}},scales:{y:{ticks:{callback:function(v){return'$'+v}}},x:{grid:{display:false}}}}});
+
+// SF DOM
+new Chart(document.getElementById('c-sf-dom'),{type:'bar',data:{labels:Y,datasets:[
+{label:'Haverhill SF',data:hSF.dom,backgroundColor:B,borderRadius:4},
+{label:'MA',data:ma.dom,backgroundColor:R,borderRadius:4},
+{label:'Essex',data:es.dom,backgroundColor:G,borderRadius:4}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:12}}},scales:{y:{ticks:{callback:function(v){return v+' days'}}},x:{grid:{display:false}}}}});
+
+// SF VOLUME
+new Chart(document.getElementById('c-sf-vol'),{type:'bar',data:{labels:Y,datasets:[
+{label:'Haverhill SF (12mo)',data:hSF.sold,backgroundColor:B,borderRadius:4}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}}}}});
+
+// SF INVENTORY
+new Chart(document.getElementById('c-sf-inv'),{type:'bar',data:{labels:Y,datasets:[
+{label:'Listings',data:hSF.inv,backgroundColor:'rgba(30,53,94,0.3)',borderColor:B,borderWidth:2,borderRadius:4,yAxisID:'y'},
+{label:'Mo Supply',data:hSF.supply,type:'line',borderColor:T,borderWidth:3,tension:0.3,pointRadius:5,yAxisID:'y1'}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:12}}},scales:{y:{position:'left',title:{display:true,text:'Listings',font:{size:10}}},y1:{position:'right',grid:{display:false},title:{display:true,text:'Months Supply',font:{size:10}}},x:{grid:{display:false}}}}});
+
+// CONDO PRICE
+new Chart(document.getElementById('c-co-price'),{type:'line',data:{labels:Y,datasets:[
+{label:'Haverhill Condo',data:hCO.price,borderColor:O,backgroundColor:'rgba(249,115,22,0.1)',borderWidth:3,tension:0.3,fill:true,pointRadius:5}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:kF}},x:{grid:{display:false}}}}});
+
+// CONDO SQFT
+new Chart(document.getElementById('c-co-sqft'),{type:'line',data:{labels:Y,datasets:[
+{label:'Haverhill Condo',data:hCO.sqft,borderColor:O,backgroundColor:'rgba(249,115,22,0.1)',borderWidth:3,tension:0.3,fill:true,pointRadius:5}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:function(v){return'$'+v}}},x:{grid:{display:false}}}}});
+
+// CONDO DOM
+new Chart(document.getElementById('c-co-dom'),{type:'bar',data:{labels:Y,datasets:[
+{label:'Haverhill Condo',data:hCO.dom,backgroundColor:O,borderRadius:4}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:function(v){return v+' days'}}},x:{grid:{display:false}}}}});
+
+// CONDO VOLUME
+new Chart(document.getElementById('c-co-vol'),{type:'bar',data:{labels:Y,datasets:[
+{label:'Haverhill Condo (12mo)',data:hCO.sold,backgroundColor:O,borderRadius:4}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}}}}});
+
+// COMPARE ALL PRICE
+new Chart(document.getElementById('c-all-price'),{type:'line',data:{labels:Y,datasets:[
+{label:'MA',data:ma.price,borderColor:R,borderWidth:3,tension:0.3,pointRadius:5},
+{label:'Essex',data:es.price,borderColor:G,borderWidth:3,tension:0.3,pointRadius:5},
+{label:'Haverhill SF',data:hSF.price,borderColor:B,backgroundColor:'rgba(30,53,94,0.08)',borderWidth:3,tension:0.3,fill:true,pointRadius:5},
+{label:'Haverhill Condo',data:hCO.price,borderColor:O,backgroundColor:'rgba(249,115,22,0.08)',borderWidth:3,tension:0.3,fill:true,pointRadius:5}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:12}}},scales:{y:{ticks:{callback:kF}},x:{grid:{display:false}}}}});
+
+// COMPARE ALL SQFT
+new Chart(document.getElementById('c-all-sqft'),{type:'line',data:{labels:Y,datasets:[
+{label:'MA',data:ma.sqft,borderColor:R,borderWidth:3,tension:0.3,pointRadius:5},
+{label:'Essex',data:es.sqft,borderColor:G,borderWidth:3,tension:0.3,pointRadius:5},
+{label:'Haverhill SF',data:hSF.sqft,borderColor:B,borderWidth:3,tension:0.3,pointRadius:5},
+{label:'Haverhill Condo',data:hCO.sqft,borderColor:O,borderWidth:3,tension:0.3,pointRadius:5}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:12}}},scales:{y:{ticks:{callback:function(v){return'$'+v}}},x:{grid:{display:false}}}}});
+
+// COMPARE ALL DOM
+new Chart(document.getElementById('c-all-dom'),{type:'bar',data:{labels:Y,datasets:[
+{label:'MA',data:ma.dom,backgroundColor:R,borderRadius:4},
+{label:'Essex',data:es.dom,backgroundColor:G,borderRadius:4},
+{label:'Haverhill SF',data:hSF.dom,backgroundColor:B,borderRadius:4},
+{label:'Haverhill Condo',data:hCO.dom,backgroundColor:O,borderRadius:4}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:12}}},scales:{y:{ticks:{callback:function(v){return v+' days'}}},x:{grid:{display:false}}}}});
+
+// AFFORDABILITY CHARTS
+new Chart(document.getElementById('c-income'),{type:'bar',data:{labels:['Massachusetts','Essex County','Haverhill SF','Haverhill Condo'],datasets:[
+{label:'Income Needed',data:[177214,178800,123814,85886],backgroundColor:[R,G,B,O],borderRadius:4},
+{label:'Haverhill Median ($88K)',data:[88326,88326,88326,88326],type:'line',borderColor:'#7c3aed',borderWidth:3,borderDash:[8,4],pointRadius:0},
+{label:'MA Median ($105K)',data:[104800,104800,104800,104800],type:'line',borderColor:R,borderWidth:2,borderDash:[4,4],pointRadius:0}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:12}}},scales:{y:{ticks:{callback:kF}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('c-monthly'),{type:'bar',data:{labels:['Massachusetts','Essex County','Haverhill SF','Haverhill Condo'],datasets:[
+{label:'Monthly Payment',data:[4135,4172,2889,2004],backgroundColor:[R,G,B,O],borderRadius:4}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:function(v){return'$'+v.toLocaleString()}}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('c-down'),{type:'bar',data:{labels:['Massachusetts','Essex County','Haverhill SF','Haverhill Condo'],datasets:[
+{label:'Down Payment (20%)',data:[163558,165015,114266,79257],backgroundColor:[R,G,B,O],borderRadius:4}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:kF}},x:{grid:{display:false}}}}});
+
+// NAV
+document.querySelectorAll('.tog').forEach(function(b){
+b.addEventListener('click',function(){
+document.querySelectorAll('.tog').forEach(function(t){t.classList.remove('active')});
+document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+b.classList.add('active');
+document.getElementById('p-'+b.getAttribute('data-t')).classList.add('active');
+});
+});
+</script>
+</body>
+</html>
