@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Massachusetts Data Hub</title>
+    <meta name="description" content="Interactive dashboards and data analysis covering housing, immigration, education, healthcare, and affordability across the Commonwealth.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Archivo:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy:         #1e3a5f;
+            --navy-b:       #3a7bd5;
+            --navy-s:       rgba(58,123,213,0.10);
+            --navy-m:       rgba(58,123,213,0.18);
+
+            --bg:           #080a0e;
+            --bg-r:         #0d0f14;
+            --bg-c:         #111318;
+            --bg-ch:        #171a21;
+
+            --teal:         #2ba89e;
+            --teal-s:       rgba(43,168,158,0.10);
+
+            --tx:           #d8dae0;
+            --tx2:          #8b8f9a;
+            --tx3:          #4e5260;
+            --wh:           #f0f1f4;
+            --bd:           rgba(255,255,255,0.05);
+            --bdh:          rgba(255,255,255,0.09);
+            --r:            14px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Archivo', sans-serif;
+            background: var(--bg);
+            color: var(--tx);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Grain */
+        body::after {
+            content: '';
+            position: fixed; inset: 0;
+            pointer-events: none; z-index: 10000;
+            opacity: 0.3;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.06'/%3E%3C/svg%3E");
+        }
+
+        .glow {
+            position: fixed; inset: 0; pointer-events: none; z-index: -1;
+            background:
+                radial-gradient(ellipse 80% 60% at 12% 5%, rgba(30,58,95,0.14) 0%, transparent 55%),
+                radial-gradient(ellipse 60% 50% at 88% 95%, rgba(58,123,213,0.06) 0%, transparent 55%);
+        }
+
+        .w { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
+
+        /* ═══════════ HERO ═══════════ */
+        .hero {
+            padding: 100px 0 64px;
+            position: relative;
+        }
+        .hero::after {
+            content: '';
+            position: absolute; bottom: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 5%, var(--bdh) 50%, transparent 95%);
+        }
+
+        .eyebrow {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px; font-weight: 500;
+            letter-spacing: 0.14em; text-transform: uppercase;
+            color: var(--navy-b);
+            margin-bottom: 32px;
+            opacity: 0; animation: rise .7s ease forwards;
+        }
+        .eyebrow .dot {
+            width: 7px; height: 7px;
+            background: var(--navy-b); border-radius: 50%;
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%,100% { opacity:1; box-shadow:0 0 0 0 rgba(58,123,213,.4); }
+            50% { opacity:.5; box-shadow:0 0 0 7px rgba(58,123,213,0); }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 5.8vw, 5rem);
+            font-weight: 400; line-height: 1.06;
+            letter-spacing: -0.02em; color: var(--wh);
+            margin-bottom: 22px;
+            opacity: 0; animation: rise .7s .08s ease forwards;
+        }
+        .hero h1 i { font-style: italic; color: var(--navy-b); }
+
+        .hero-sub {
+            font-size: 17px; font-weight: 300;
+            color: var(--tx2); max-width: 600px; line-height: 1.7;
+            opacity: 0; animation: rise .7s .16s ease forwards;
+        }
+
+        .rail {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 1px; background: var(--bd);
+            border-radius: var(--r); overflow: hidden;
+            margin-top: 48px;
+            opacity: 0; animation: rise .7s .24s ease forwards;
+        }
+        .rc {
+            background: var(--bg-r); padding: 24px 20px;
+            text-align: center; transition: background 0.3s;
+        }
+        .rc:hover { background: var(--bg-c); }
+        .rval {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 27px; font-weight: 500; color: var(--wh);
+        }
+        .rval small { font-size: 14px; font-weight: 400; color: var(--tx2); }
+        .rlab {
+            font-size: 11px; color: var(--tx3);
+            text-transform: uppercase; letter-spacing: 0.07em; margin-top: 4px;
+        }
+
+        /* ═══════════ SECTION ═══════════ */
+        .sec { padding: 64px 0 80px; }
+
+        .sec-head { text-align: center; margin-bottom: 44px; }
+
+        .sec-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.7rem, 3vw, 2.4rem);
+            font-weight: 400; color: var(--wh);
+            line-height: 1.15; margin-bottom: 10px;
+        }
+
+        .sec-desc {
+            font-size: 15px; font-weight: 300;
+            color: var(--tx2); max-width: 520px;
+            margin: 0 auto; line-height: 1.6;
+        }
+
+        /* ═══════════ CARD GRID ═══════════ */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .card {
+            position: relative;
+            display: flex; flex-direction: column;
+            background: var(--bg-c);
+            border: 1px solid var(--bd);
+            border-radius: var(--r);
+            padding: 28px 26px 22px;
+            text-decoration: none; color: inherit;
+            transition: all 0.35s cubic-bezier(0.25,0.46,0.45,0.94);
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute; top: 0; left: 15%; right: 15%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(58,123,213,0.12), transparent);
+            opacity: 0; transition: opacity 0.35s;
+        }
+        .card:hover {
+            background: var(--bg-ch);
+            border-color: var(--bdh);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 36px rgba(0,0,0,0.28);
+        }
+        .card:hover::before { opacity: 1; }
+
+        .card-top {
+            display: flex; align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .card-icon {
+            width: 44px; height: 44px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 11px; font-size: 20px;
+            background: var(--navy-m);
+        }
+
+        .badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9.5px; font-weight: 500;
+            letter-spacing: 0.06em; text-transform: uppercase;
+            padding: 3px 10px; border-radius: 100px;
+            color: var(--teal); background: var(--teal-s);
+        }
+
+        .card-name {
+            font-size: 17px; font-weight: 600;
+            color: var(--wh); line-height: 1.3;
+            margin-bottom: 10px;
+        }
+
+        .card-desc {
+            font-size: 13.5px; font-weight: 300;
+            color: var(--tx2); line-height: 1.6;
+            flex-grow: 1; margin-bottom: 18px;
+        }
+
+        .card-foot {
+            display: flex; align-items: center;
+            justify-content: space-between;
+            padding-top: 14px;
+            border-top: 1px solid var(--bd);
+        }
+
+        .tags { display: flex; gap: 5px; flex-wrap: wrap; }
+
+        .tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9.5px; font-weight: 500;
+            letter-spacing: 0.02em;
+            padding: 3px 8px; border-radius: 4px;
+            background: rgba(255,255,255,0.04);
+            color: var(--tx3);
+        }
+
+        .arrow {
+            width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.03);
+            color: var(--tx3); font-size: 13px;
+            flex-shrink: 0; transition: all 0.3s;
+        }
+        .card:hover .arrow {
+            background: var(--navy-s);
+            color: var(--navy-b);
+            transform: translateX(2px);
+        }
+
+        /* ═══════════ FOOTER ═══════════ */
+        footer {
+            padding: 48px 0;
+            border-top: 1px solid var(--bd);
+        }
+        .foot-row {
+            display: flex; justify-content: space-between;
+            align-items: flex-start; gap: 24px; flex-wrap: wrap;
+        }
+        .foot-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px; color: var(--wh); margin-bottom: 6px;
+        }
+        .foot-note {
+            font-size: 12.5px; font-weight: 300;
+            color: var(--tx3); max-width: 460px; line-height: 1.65;
+        }
+        .foot-links { display: flex; gap: 20px; }
+        .foot-links a {
+            font-size: 12.5px; color: var(--tx2);
+            text-decoration: none; transition: color 0.2s;
+        }
+        .foot-links a:hover { color: var(--wh); }
+
+        /* ═══════════ ANIMATION ═══════════ */
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .rv {
+            opacity: 0; transform: translateY(18px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .rv.vis { opacity: 1; transform: translateY(0); }
+
+        /* ═══════════ RESPONSIVE ═══════════ */
+        @media (max-width: 960px) {
+            .grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .hero { padding: 60px 0 44px; }
+            .rail { grid-template-columns: repeat(2, 1fr); }
+            .sec { padding: 48px 0 60px; }
+            .foot-row { flex-direction: column; }
+        }
+        @media (max-width: 540px) {
+            .w { padding: 0 18px; }
+            .grid { grid-template-columns: 1fr; }
+            .rail { grid-template-columns: 1fr; }
+            .card { padding: 22px 20px 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="glow"></div>
+
+<!-- ═══════ HERO ═══════ -->
+<header class="hero">
+    <div class="w">
+        <div class="eyebrow"><span class="dot"></span> Independent Analysis</div>
+        <h1>Massachusetts<br>Data <i>Hub</i></h1>
+        <p class="hero-sub">Interactive dashboards and data analysis covering housing, immigration, education, healthcare, and affordability across the Commonwealth.</p>
+        <div class="rail">
+            <div class="rc"><div class="rval">12</div><div class="rlab">Dashboards</div></div>
+            <div class="rc"><div class="rval">6</div><div class="rlab">Topics</div></div>
+            <div class="rc"><div class="rval">200<small>+</small></div><div class="rlab">Data Points</div></div>
+            <div class="rc"><div class="rval">Feb 2026</div><div class="rlab">Last Updated</div></div>
+        </div>
+    </div>
+</header>
+
+<!-- ═══════ DASHBOARDS ═══════ -->
+<section class="sec">
+    <div class="w">
+        <div class="sec-head rv">
+            <h2 class="sec-title">Dashboards</h2>
+            <p class="sec-desc">All analyses built from official government data sources. Click any card to explore.</p>
+        </div>
+
+        <div class="grid">
+
+            <!-- 1 — Immigration -->
+            <a href="immigration-dashboard.html" class="card rv">
+                <div class="card-top">
+                    <div class="card-icon">🛂</div>
+                    <span class="badge">Live</span>
+                </div>
+                <div class="card-name">Immigration — National + Massachusetts</div>
+                <div class="card-desc">Border encounters, net international migration, deportation math, Census revisions, fiscal impact (Cato/NASEM), MA shelter crisis, H-1B data, and city-level concentration analysis.</div>
+                <div class="card-foot">
+                    <div class="tags"><span class="tag">CBP</span><span class="tag">Census</span><span class="tag">ICE</span><span class="tag">CBO</span></div>
+                    <div class="arrow">→</div>
+                </div>
+            </a>
+
+            <!-- 2 — MA Housing -->
+            <a href="ma-housing-dashboard.html" class="card rv">
+                <div class="card-top">
+                    <div class="card-icon">🏠</div>
+                    <span class="badge">Live</span>
+                </div>
+                <div class="card-name">Massachusetts Housing Market</div>
+                <div class="card-desc">Statewide, Boston, Essex County, and Greater Newburyport. Median prices, DOM, SP/LP ratios, 5-year MLS trends, and affordability calculations.</div>
+                <div class="card-foot">
+                    <div class="tags"><span class="tag">Warren Group</span><span class="tag">MLS PIN</span><span class="tag">Census ACS</span></div>
+                    <div class="arrow">→</div>
+                </div>
+            </a>
+
+            <!-- 3 — NH Housing -->
+            <a href="nh-housing-dashboard.html" class="card rv">
+                <div class="card-top">
+                    <div class="card-icon">🏔️</div>
+                    <span class="badge">Live</span>
+                </div>
+                <div class="card-name">New Hampshire Housing Market</div>
+                <div class="card-desc">Statewide market data with regional breakdowns. Median prices, average sales, DOM, sell-through rates, and SP/LP ratios.</div>
+                <div class="card-foot">
+                    <div class="tags"><span class="tag">Paragon MLS</span></div>
+                    <div class="arrow">→</div>
+                </div>
+            </a>
+
+            <!-- 4 — Haverhill -->
+            <a href="haverhill-market-report.html" class="card rv">
+                <div class="card-top">
+                    <div class="card-icon">📋</div>
+                    <span class="badge">Live</span>
+                </div>
+                <div class="card-name">Haverhill Market Report</div>
+                <div class="card-desc">Deep dive into Haverhill's SF and condo markets. Affordability analysis comparing median income ($88K) to income needed for homeownership.</div>
+                <div class="card-foot">
+                    <div class="tags"><span class="tag">MLS</span><span class="tag">Census QuickFacts</span></div>
+                    <div class="arrow">→</div>
+                </div>
+            </a>
+
+            <!-- 5 — Affordability -->
+            <a href="affordability-dashboard.html" class="card rv">
+                <div class="card-top">
+                    <div class="card-icon">💰</div>
+                    <span class="badge">Live</span>
+                </div>
+                <div class="card-name">Master Affordability &amp; Employment</div>
+                <div class="card-desc">Comprehensive view of MA cost of living: CPI, wages vs. housing, unemployment, JOLTS data, electricity costs, property taxes, and exodus data.</div>
+                <div class="card-foot">
+                    <div class="tags"><span class="tag">BLS</span><span class="tag">IRS SOI</span><span class="tag">BU Study</span></div>
+                    <div class="arrow">→</div>
+                </div>
+            </a>
+
+            <!-- 6 — Education Statewide -->
+            <a href="education-statewide.html" class="card rv">
+                <div class="card-top">
+                    <div class="card-icon">🎓</div>
+                    <span class="badge">Live</span>
+                </div>
+                <div class="card-name">MA Education — Statewide</div>
+                <div class="card-desc">Enrollment shifts (traditional −6.4%, vocational +18%, homeschool +56%), per-pupil spending, MCAS proficiency, Gateway Cities vs. wealthy towns.</div>
+                <div class="card-foot">
+                    <div class="tags"><span class="tag">DESE</span><span class="tag">MCAS</span></div>
+                    <div class="arrow">→</div>
+                </div>
+            </a>
+
+            <!-- 7 — Education Boston -->
+            <a href="education-boston.html" class="card rv">
+                <div class="card-top">
+                    <div class="card-icon">🏫</div>
+                    <span class="badge">Live</span>
+                </div>
+                <div class="card-name">Boston Education Dashboard</div>
+                <div class="card-desc">Boston Public Schools deep dive — chronic absenteeism by race/grade, achievement gaps, spending per pupil, and demographic breakdowns.</div>
+                <div class="card-foot">
+                    <div class="tags"><span class="tag">DESE</span><span class="tag">BPS</span></div>
+                    <div class="arrow">→</div>
+                </div>
+            </a>
+
+            <!-- 8 — Education MV -->
+            <a href="education-merrimack-valley.html" class="card rv">
+                <div class="card-top">
+                    <div class="card-icon">📐</div>
+                    <span class="badge">Live</span>
+                </div>
+                <div class="card-name">Merrimack Valley Education</div>
+                <div class="card-desc">Haverhill, Methuen, and Lawrence comparison. MCAS scores, spending gaps, ELL populations, and district-level performance analysis.</div>
+                <div class="card-foot">
+                    <div class="tags"><span class="tag">DESE</span><span class="tag">MassINC</span></div>
+                    <div class="arrow">→</div>
+                </div>
+            </a>
+
+            <!-- 9 — Healthcare -->
+            <a href="healthcare-dashboard.html" class="card rv">
+                <div class="card-top">
+                    <div class="card-icon">🏥</div>
+                    <span class="badge">Live</span>
+                </div>
+                <div class="card-name">Healthcare &amp; Insurance</div>
+                <div class="card-desc">2026 rate increases by carrier (avg 9.9%), MA vs. national premium gap (+14.7%), premium growth vs. wage growth, and CHIA data.</div>
+                <div class="card-foot">
+                    <div class="tags"><span class="tag">DOI</span><span class="tag">KFF</span><span class="tag">CHIA</span></div>
+                    <div class="arrow">→</div>
+                </div>
+            </a>
+
+            <!-- 10 — Employment -->
+            <a href="employment-dashboard.html" class="card rv">
+                <div class="card-top">
+                    <div class="card-icon">💼</div>
+                    <span class="badge">Live</span>
+                </div>
+                <div class="card-name">Employment &amp; Labor Market</div>
+                <div class="card-desc">JOLTS data, NFP revisions (−911K), hiring recession analysis, MA job openings rate decline, and the healthcare employment mask.</div>
+                <div class="card-foot">
+                    <div class="tags"><span class="tag">BLS JOLTS</span><span class="tag">BLS CES</span></div>
+                    <div class="arrow">→</div>
+                </div>
+            </a>
+
+            <!-- 11 — Commercial RE -->
+            <a href="commercial-re-dashboard.html" class="card rv">
+                <div class="card-top">
+                    <div class="card-icon">🏢</div>
+                    <span class="badge">Live</span>
+                </div>
+                <div class="card-name">Boston Commercial Real Estate</div>
+                <div class="card-desc">Office vacancy trajectory (7.5% → 23.9%), CMBS delinquencies, major sale discounts (31–62%), and property tax revenue impact.</div>
+                <div class="card-foot">
+                    <div class="tags"><span class="tag">Trepp</span><span class="tag">C&amp;W</span><span class="tag">Colliers</span></div>
+                    <div class="arrow">→</div>
+                </div>
+            </a>
+
+            <!-- 12 — Tax Burden -->
+            <a href="tax-budget-dashboard.html" class="card rv">
+                <div class="card-top">
+                    <div class="card-icon">🏛️</div>
+                    <span class="badge">Live</span>
+                </div>
+                <div class="card-name">Tax Burden, Budget &amp; Cost of Living</div>
+                <div class="card-desc">Income tax + 4% surtax, property tax burden, $62B state budget breakdown, state rankings, and BEA/BLS cost-of-living analysis showing MA's purchasing power erosion.</div>
+                <div class="card-foot">
+                    <div class="tags"><span class="tag">BEA</span><span class="tag">BLS</span><span class="tag">Census</span><span class="tag">DOR</span><span class="tag">EIA</span></div>
+                    <div class="arrow">→</div>
+                </div>
+            </a>
+
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer>
+    <div class="w">
+        <div class="foot-row">
+            <div>
+                <div class="foot-brand">Massachusetts Data Hub</div>
+                <p class="foot-note">Compiled by Duncan Burns · February 2026<br>All data from official government sources (BLS, Census, CBP, DESE, CHIA, Warren Group, MLS PIN). See MASTER_DATA.md for full citations.</p>
+            </div>
+            <div class="foot-links">
+                <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub" target="_blank">GitHub Repository</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
