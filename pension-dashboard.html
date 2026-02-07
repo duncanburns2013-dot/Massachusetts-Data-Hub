@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Massachusetts Pensions & Unfunded Liabilities</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f8f7f4;--card:#ffffff;--border:#e8e5df;--text:#1a1a1a;--muted:#7a756e;--red:#c0392b;--red-bg:rgba(192,57,43,0.06);--green:#1a7a4c;--green-bg:rgba(26,122,76,0.06);--blue:#1a4480;--blue-bg:rgba(26,68,128,0.06);--amber:#b8860b;--amber-bg:rgba(184,134,11,0.06);--accent:#8b1a1a;--gold:#c9a84c;--navy:#0f2942;--purple:#5b21b6;--purple-bg:rgba(91,33,182,0.06)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+.hero{background:var(--navy);color:#fff;padding:56px 24px 42px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,0.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(139,26,26,0.1) 0%,transparent 50%)}
+.hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.6rem,4.5vw,2.6rem);font-weight:400;margin-bottom:8px;letter-spacing:-0.01em;position:relative}
+.hero .sub{opacity:0.65;font-size:0.85rem;margin-bottom:28px;font-weight:400;letter-spacing:0.02em;position:relative;max-width:800px;margin-left:auto;margin-right:auto}
+.hero-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;max-width:1000px;margin:0 auto;position:relative}
+.hero-stat{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:18px 10px;text-align:center;backdrop-filter:blur(4px);transition:background 0.3s}
+.hero-stat:hover{background:rgba(255,255,255,0.1)}
+.hero-stat .val{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.2rem,3vw,1.7rem);font-weight:400}
+.hero-stat .lbl{font-size:0.65rem;opacity:0.55;margin-top:4px;text-transform:uppercase;letter-spacing:0.08em;font-weight:500}
+.hero-stat .val.bad{color:#e8a87c}
+.tab-nav{display:flex;justify-content:center;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.tab-btn{padding:14px 18px;font-size:0.72rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.25s;text-transform:uppercase;letter-spacing:0.06em}
+.tab-btn:hover{color:var(--text);background:rgba(0,0,0,0.02)}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
+.container{max-width:1200px;margin:0 auto;padding:28px 24px}
+.tab-content{display:none;animation:fadeUp 0.35s ease}
+.tab-content.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.section-title{font-family:'DM Serif Display',Georgia,serif;font-size:1.35rem;font-weight:400;margin-bottom:18px;color:var(--navy)}
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:26px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px 18px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.03);transition:box-shadow 0.3s,transform 0.3s}
+.stat-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.07);transform:translateY(-2px)}
+.stat-card .label{font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:8px}
+.stat-card .value{font-family:'DM Serif Display',Georgia,serif;font-size:1.9rem;font-weight:400;line-height:1.1}
+.stat-card .value.red{color:var(--red)}.stat-card .value.green{color:var(--green)}.stat-card .value.blue{color:var(--blue)}.stat-card .value.amber{color:var(--amber)}.stat-card .value.purple{color:var(--purple)}
+.stat-card .sub{font-size:0.72rem;color:var(--muted);margin-top:6px}
+.alert{background:var(--red-bg);border:1px solid rgba(192,57,43,0.15);border-radius:14px;padding:24px;margin-bottom:26px;border-left:4px solid var(--red)}
+.alert h4{color:var(--red);font-size:0.88rem;margin-bottom:12px;font-weight:700}
+.alert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+.alert-item{font-size:0.82rem;color:var(--text);padding:5px 0;line-height:1.55}
+.alert-item strong{color:var(--red)}
+.chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(450px,1fr));gap:16px;margin-bottom:26px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.chart-card h3{font-size:0.85rem;font-weight:700;margin-bottom:14px;color:var(--navy)}
+.chart-area{position:relative;height:280px}
+.chart-area.tall{height:340px}
+.data-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:26px;overflow-x:auto;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.data-card h3{font-size:0.88rem;font-weight:700;margin-bottom:14px;color:var(--navy)}
+.data-table{width:100%;border-collapse:collapse;font-size:0.82rem}
+.data-table th{text-align:left;padding:10px 14px;border-bottom:2px solid var(--navy);font-weight:700;color:var(--navy);font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em}
+.data-table td{padding:10px 14px;border-bottom:1px solid var(--border)}
+.data-table tr:hover{background:rgba(15,41,66,0.02)}
+.data-table .highlight{color:var(--red);font-weight:700}
+.data-table .good{color:var(--green);font-weight:600}
+.info-box{background:var(--blue-bg);border:1px solid rgba(26,68,128,0.12);border-radius:14px;padding:24px;margin-bottom:26px;border-left:4px solid var(--blue)}
+.info-box h4{color:var(--blue);font-size:0.88rem;margin-bottom:10px;font-weight:700}
+.info-box p{font-size:0.82rem;color:var(--text);line-height:1.65}
+.warn-box{background:var(--amber-bg);border:1px solid rgba(184,134,11,0.15);border-radius:14px;padding:24px;margin-bottom:26px;border-left:4px solid var(--amber)}
+.warn-box h4{color:var(--amber);font-size:0.88rem;margin-bottom:10px;font-weight:700}
+.warn-box p{font-size:0.82rem;color:var(--text);line-height:1.65}
+.source{font-size:0.68rem;color:var(--muted);margin-top:8px;font-style:italic}
+footer{text-align:center;padding:36px 24px;color:var(--muted);font-size:0.75rem;border-top:1px solid var(--border);background:#fff;margin-top:36px}
+footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1px solid var(--gold)}
+@media(max-width:768px){.hero-stats{grid-template-columns:repeat(3,1fr)}.chart-grid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.hero{padding:36px 16px 30px}.container{padding:18px}.tab-btn{padding:12px 10px;font-size:0.62rem}}
+@media(max-width:480px){.hero-stats{grid-template-columns:repeat(2,1fr)}.stat-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="hero">
+  <h1>Pensions & Unfunded Liabilities</h1>
+  <p class="sub">The hidden $55.8 billion debt — sourced from Commonwealth ACFR FY2024, PERAC valuations, Public Plans Database, and PRIT Fund reports</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="val bad">$55.8B</div><div class="lbl">Unfunded Pension + OPEB</div></div>
+    <div class="hero-stat"><div class="val bad">$42.1B</div><div class="lbl">Pension Shortfall</div></div>
+    <div class="hero-stat"><div class="val bad">$13.7B</div><div class="lbl">Retiree Healthcare</div></div>
+    <div class="hero-stat"><div class="val bad">$4.9B</div><div class="lbl">FY2026 Appropriation</div></div>
+    <div class="hero-stat"><div class="val bad">-$60.2B</div><div class="lbl">State Net Position</div></div>
+    <div class="hero-stat"><div class="val bad">$40,599</div><div class="lbl">Per Household</div></div>
+  </div>
+</div>
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+  <button class="tab-btn" onclick="switchTab('pensions')">Pension Systems</button>
+  <button class="tab-btn" onclick="switchTab('prit')">PRIT Fund</button>
+  <button class="tab-btn" onclick="switchTab('demographics')">Demographics</button>
+  <button class="tab-btn" onclick="switchTab('municipal')">Municipal Systems</button>
+  <button class="tab-btn" onclick="switchTab('opeb')">Retiree Healthcare</button>
+  <button class="tab-btn" onclick="switchTab('debt')">Total Debt</button>
+  <button class="tab-btn" onclick="switchTab('comparison')">State Comparison</button>
+</nav>
+<div class="container">
+
+<!-- OVERVIEW -->
+<div id="overview" class="tab-content active">
+  <div class="alert"><h4>⚠️ $55.8 Billion in Promises They Can't Cover</h4><div class="alert-grid">
+    <div class="alert-item">The Commonwealth's <strong>net position is negative $60.2 billion</strong> — total liabilities exceed total assets</div>
+    <div class="alert-item">Teachers' pension (MTRS) is only <strong>60.4% funded</strong> — for every dollar promised, only 60 cents exists</div>
+    <div class="alert-item">Annual pension appropriation: <strong>$4.1B → $4.5B → $4.9B</strong> (FY24→26) — growing ~10%/year</div>
+    <div class="alert-item">OPEB (retiree healthcare) is <strong>15.6% funded</strong> — $13.7B in promises backed by $2.5B in assets</div>
+    <div class="alert-item">Active-to-annuitant ratio: <strong>1.3 workers per retiree</strong> — was 2.0 in 2001</div>
+    <div class="alert-item">PRIT Fund pays <strong>$520M+/year in management fees</strong> to 175+ external managers</div>
+  </div></div>
+  <h2 class="section-title">Where the $55.8 Billion Shortfall Lives</h2>
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">SERS (State Employees)</div><div class="value red">$14.1B</div><div class="sub">72.5% funded · $37B assets</div></div>
+    <div class="stat-card"><div class="label">MTRS (Teachers)</div><div class="value red">$25.5B</div><div class="sub">60.4% funded · $39B assets</div></div>
+    <div class="stat-card"><div class="label">Boston Teachers</div><div class="value red">$2.6B</div><div class="sub">~61% funded</div></div>
+    <div class="stat-card"><div class="label">OPEB (Healthcare)</div><div class="value red">$13.7B</div><div class="sub">15.6% funded</div></div>
+    <div class="stat-card"><div class="label">MBTA Pension</div><div class="value red">$1.8B</div><div class="sub">~46% funded</div></div>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-card"><h3>Unfunded Liabilities by Category</h3><div class="chart-area"><canvas id="chartOverviewBreak"></canvas></div><div class="source">Source: Commonwealth ACFR FY2024; MBTA Audited Financials FY2024</div></div>
+    <div class="chart-card"><h3>Funded Ratio by System</h3><div class="chart-area"><canvas id="chartFundedRatio"></canvas></div><div class="source">Source: PERAC 2024 Actuarial Valuations; ACFR FY2024</div></div>
+  </div>
+  <h2 class="section-title">Taxpayer Cost Escalation</h2>
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">FY2024</div><div class="value red">$4.10B</div><div class="sub">Pension appropriation</div></div>
+    <div class="stat-card"><div class="label">FY2025</div><div class="value red">$4.50B</div><div class="sub">+9.6%</div></div>
+    <div class="stat-card"><div class="label">FY2026</div><div class="value red">$4.93B</div><div class="sub">+9.6%</div></div>
+    <div class="stat-card"><div class="label">Normal Cost (SERS)</div><div class="value amber">$463M</div><div class="sub">Annual benefit accrual</div></div>
+    <div class="stat-card"><div class="label">ARC % of Payroll</div><div class="value amber">18.3%</div><div class="sub">Up from 7.4% in 2001</div></div>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-card"><h3>Employer Pension Cost as % of Payroll (SERS), 2001–2024</h3><div class="chart-area"><canvas id="chartARC"></canvas></div><div class="source">Source: Public Plans Database (publicplansdata.org), PPD ID 50</div></div>
+    <div class="chart-card"><h3>Net State Deficit Trend (FY2015–2024)</h3><div class="chart-area"><canvas id="chartDeficitTrend"></canvas></div><div class="source">Source: Commonwealth ACFR FY2015–FY2024</div></div>
+  </div>
+  <div class="info-box"><h4>📋 What Does This Mean for Taxpayers?</h4><p>When the state promises a pension, it must set aside money today to pay for it later. The "unfunded liability" is the gap between what's been promised and saved. Public pensions are constitutionally protected in Massachusetts and cannot be reduced. The $4.9B annual appropriation (FY2026) — roughly 8% of the entire state budget — goes to past promises, not current services. The triennial funding schedule resets for FY2027, and costs will continue climbing.</p></div>
+</div>
+
+<!-- PENSION SYSTEMS -->
+<div id="pensions" class="tab-content">
+  <div class="alert"><h4>⚠️ Key Concerns</h4><div class="alert-grid">
+    <div class="alert-item">MTRS holds <strong>60% of all unfunded pension liability</strong> — $25.5B of the $42.1B total</div>
+    <div class="alert-item">Assumed rate of return: <strong>7.0%</strong> — lowered from 8.25% in 2012, but still aggressive</div>
+    <div class="alert-item">If actual returns fall short by 1%, unfunded liability grows by <strong>~$4–5B</strong></div>
+    <div class="alert-item">Both SERS and MTRS target <strong>full funding by FY2036</strong> — less than 11 years away</div>
+  </div></div>
+  <h2 class="section-title">Pension Systems Breakdown</h2>
+  <div class="data-card"><h3>State Pension Systems — 2024 Actuarial Valuation</h3>
+    <table class="data-table"><thead><tr><th>System</th><th>Total Liability</th><th>Plan Assets</th><th>Unfunded</th><th>Funded %</th><th>Members</th><th>Target</th></tr></thead><tbody>
+      <tr><td><strong>SERS</strong></td><td>$52.0B</td><td>$37.9B</td><td class="highlight">$14.1B</td><td class="highlight">72.5%</td><td>90,988 active / 69,750 retired</td><td>FY2036</td></tr>
+      <tr><td><strong>MTRS</strong></td><td>$65.8B</td><td>$40.4B</td><td class="highlight">$25.4B</td><td class="highlight">60.4%</td><td>~101K active / ~71K retired</td><td>FY2036</td></tr>
+      <tr><td><strong>Boston Teachers</strong></td><td>—</td><td>—</td><td class="highlight">$2.6B</td><td>~61%</td><td>State share</td><td>—</td></tr>
+      <tr><td><strong>MBTA</strong></td><td>—</td><td>—</td><td class="highlight">$1.8B</td><td class="highlight">~46%</td><td>Separate</td><td>—</td></tr>
+      <tr style="background:rgba(192,57,43,0.04);font-weight:700"><td>TOTAL</td><td>$117.8B+</td><td>$78.3B+</td><td class="highlight">$42.1B+</td><td></td><td>~332K+</td><td></td></tr>
+    </tbody></table>
+    <div class="source">Source: PERAC 2024 Actuarial Valuation Reports; ACFR FY2024; Mass Retirees Association</div>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-card"><h3>SERS Funded Ratio vs. National Average, 2001–2024</h3><div class="chart-area"><canvas id="chartFundedHistory"></canvas></div><div class="source">Source: Public Plans Database (PPD ID 50)</div></div>
+    <div class="chart-card"><h3>SERS Net Assets Growth ($B), 2001–2024</h3><div class="chart-area"><canvas id="chartAssetsHistory"></canvas></div><div class="source">Source: Public Plans Database</div></div>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-card"><h3>Actual Returns vs. Assumed Rate (SERS)</h3><div class="chart-area tall"><canvas id="chartReturnsVsAssumed"></canvas></div><div class="source">Source: Public Plans Database; PRIT ACFR</div></div>
+    <div class="chart-card"><h3>Assumption Sensitivity: What If Returns Miss?</h3><div class="chart-area tall"><canvas id="chartAssumptionRisk"></canvas></div><div class="source">Source: ACFR FY2024 sensitivity disclosures (illustrative)</div></div>
+  </div>
+  <div class="warn-box"><h4>⚠️ The Assumed Rate of Return Problem</h4><p>Since 2012, the assumed rate has been lowered from 8.25% to 7.0%. The PRIT Fund's 10-year return of 8.33% has beaten the assumption, but that includes exceptional post-COVID years. In FY2009, the fund lost 23.9%. In FY2022, it lost 2.95%. A prolonged downturn of even 1% below assumption adds $4–5B to the unfunded liability — equivalent to an entire year of extra taxpayer contributions.</p></div>
+</div>
+
+<!-- PRIT FUND -->
+<div id="prit" class="tab-content">
+  <h2 class="section-title">PRIT Fund — The $105 Billion Master Fund</h2>
+  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:20px">The Pension Reserves Investment Trust holds assets for SERS, MTRS, Boston Teachers, and ~66 local systems that invest with PRIM.</p>
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">Total PRIT Assets</div><div class="value blue">$105.3B</div><div class="sub">FY2024 (June 30, 2024)</div></div>
+    <div class="stat-card"><div class="label">FY2024 Return</div><div class="value green">9.9%</div><div class="sub">9.5% net of fees</div></div>
+    <div class="stat-card"><div class="label">Net Income</div><div class="value green">$9.1B</div><div class="sub">5 of 7 asset classes beat benchmarks</div></div>
+    <div class="stat-card"><div class="label">5-Year Return</div><div class="value green">9.17%</div><div class="sub">vs. 7.0% assumed</div></div>
+    <div class="stat-card"><div class="label">10-Year Return</div><div class="value green">8.33%</div><div class="sub">Beating 7% target</div></div>
+    <div class="stat-card"><div class="label">Since Inception</div><div class="value green">9.36%</div><div class="sub">40-year annualized (1985–2024)</div></div>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-card"><h3>PRIT Asset Allocation (FY2024)</h3><div class="chart-area"><canvas id="chartAllocation"></canvas></div><div class="source">Source: Public Plans Database; PRIT ACFR FY2024</div></div>
+    <div class="chart-card"><h3>Allocation Shift: 2001 → 2024</h3><div class="chart-area"><canvas id="chartAllocShift"></canvas></div><div class="source">Source: PPD — note PE tripled from 5.6% to 17.0%</div></div>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-card"><h3>Annual Returns vs. 7% Target, 2001–2024</h3><div class="chart-area tall"><canvas id="chartAnnualReturns"></canvas></div><div class="source">Source: Public Plans Database (PPD ID 50)</div></div>
+    <div class="chart-card"><h3>FY2024 Returns by Asset Class (Net)</h3><div class="chart-area tall"><canvas id="chartAssetClassReturns"></canvas></div><div class="source">Source: PRIT ACFR FY2024/2025</div></div>
+  </div>
+  <h2 class="section-title">Management Fees & Costs</h2>
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">FY2025 Budget</div><div class="value red">$559M</div><div class="sub">52.6 bps of AUM</div></div>
+    <div class="stat-card"><div class="label">FY2026 Budget</div><div class="value red">$604M</div><div class="sub">52.2 bps of projected $116B</div></div>
+    <div class="stat-card"><div class="label">Fee to Managers</div><div class="value amber">~90%</div><div class="sub">Of budget = external manager fees</div></div>
+    <div class="stat-card"><div class="label">External Managers</div><div class="value blue">175+</div><div class="sub">Private firms managing public money</div></div>
+  </div>
+  <div class="warn-box"><h4>💰 Fee Transparency</h4><p>PRIM's budgeted fees ($604M for FY2026) <strong>exclude performance fees, incentive fees, and carried interest</strong> — which are "extremely difficult to estimate." Private equity (17% of fund) and hedge funds (8.3%) carry the highest fee structures. The true all-in cost is significantly higher than the reported 52 bps. That said, PRIM's PE portfolio has consistently ranked in the top 5 nationally, and the fund's since-inception return of 9.36% significantly beats the 7% target.</p></div>
+</div>
+
+<!-- DEMOGRAPHICS -->
+<div id="demographics" class="tab-content">
+  <h2 class="section-title">The Demographic Time Bomb</h2>
+  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:20px">Fewer active workers supporting more retirees, with negative cash flows every single year since at least 2001.</p>
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">Active Workers (SERS)</div><div class="value blue">90,988</div><div class="sub">Contributing members</div></div>
+    <div class="stat-card"><div class="label">Retirees & Beneficiaries</div><div class="value red">69,750</div><div class="sub">Collecting benefits</div></div>
+    <div class="stat-card"><div class="label">Total Membership</div><div class="value amber">197,928</div><div class="sub">Including inactive vested</div></div>
+    <div class="stat-card"><div class="label">Actives per Annuitant</div><div class="value red">1.3</div><div class="sub">Down from 2.0 in 2001</div></div>
+    <div class="stat-card"><div class="label">FY2024 Cash Flow</div><div class="value red">-$764M</div><div class="sub">More paid out than taken in</div></div>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-card"><h3>Active Workers per Retiree (SERS vs. National), 2001–2024</h3><div class="chart-area tall"><canvas id="chartActivesPerAnnuitant"></canvas></div><div class="source">Source: Public Plans Database — national averages weighted by plan size</div></div>
+    <div class="chart-card"><h3>Annual Net Cash Flow (SERS, $M) — Benefits Paid Minus Contributions</h3><div class="chart-area tall"><canvas id="chartCashFlow"></canvas></div><div class="source">Source: Public Plans Database — negative = paying out more than taking in</div></div>
+  </div>
+  <div class="alert"><h4>⚠️ Why This Matters</h4><div class="alert-grid">
+    <div class="alert-item">In 2001, <strong>2.0 active workers</strong> paid into SERS for each retiree. Now it's <strong>1.3-to-1</strong> — a 35% decline.</div>
+    <div class="alert-item">SERS has had <strong>negative cash flow every year</strong> — paying out $764M more than it took in during FY2024.</div>
+    <div class="alert-item">The fund <strong>depends entirely on investment returns</strong> to cover the gap — a bad market year compounds fast.</div>
+    <div class="alert-item">The national ratio has dropped to <strong>1.2-to-1</strong> — Massachusetts started the decline earlier and faster.</div>
+  </div></div>
+  <div class="data-card"><h3>SERS Cash Flow History</h3>
+    <table class="data-table"><thead><tr><th>Year</th><th>Cash Flow ($M)</th><th>Assets ($B)</th><th>CF/Assets</th></tr></thead><tbody>
+      <tr><td>2007</td><td class="highlight">-$570</td><td>$21.9B</td><td>-2.6%</td></tr>
+      <tr><td>2010</td><td class="highlight">-$344</td><td>$17.0B</td><td>-2.0%</td></tr>
+      <tr><td>2014</td><td class="highlight">-$717</td><td>$23.9B</td><td>-3.0%</td></tr>
+      <tr><td>2018</td><td class="highlight">-$748</td><td>$28.0B</td><td>-2.7%</td></tr>
+      <tr><td>2021</td><td class="highlight">-$760</td><td>$36.0B</td><td>-2.1%</td></tr>
+      <tr><td>2024</td><td class="highlight">-$764</td><td>$37.9B</td><td>-2.0%</td></tr>
+    </tbody></table></div>
+</div>
+
+<!-- MUNICIPAL SYSTEMS -->
+<div id="municipal" class="tab-content">
+  <h2 class="section-title">99 Municipal Pension Systems</h2>
+  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:20px">PERAC oversees 99 city, town, county, and district systems plus 6 state systems. Data from PERAC's January 1, 2025 Funded Ratio List.</p>
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">Municipal Unfunded</div><div class="value red">$15.2B</div><div class="sub">99 systems (FY2023)</div></div>
+    <div class="stat-card"><div class="label">All 105 Systems</div><div class="value red">$43.4B</div><div class="sub">State + municipal</div></div>
+    <div class="stat-card"><div class="label">Median Funded Ratio</div><div class="value amber">75.3%</div><div class="sub">Up from 73.6%</div></div>
+    <div class="stat-card"><div class="label">Fully Funded</div><div class="value green">4</div><div class="sub">Of 99 municipal systems</div></div>
+    <div class="stat-card"><div class="label">Legal Deadline</div><div class="value blue">FY2040</div><div class="sub">G.L. c. 32, §22F</div></div>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-card"><h3>Municipal Systems by Funded Ratio Category</h3><div class="chart-area"><canvas id="chartMunicipalDist"></canvas></div><div class="source">Source: PERAC January 1, 2025 Funded Ratio List</div></div>
+    <div class="chart-card"><h3>Assumed Rate of Return Distribution</h3><div class="chart-area"><canvas id="chartARRDist"></canvas></div><div class="source">Source: PERAC Jan 2025 — median ARR is 7.0%</div></div>
+  </div>
+  <div class="data-card"><h3>Notable Municipal Systems</h3>
+    <table class="data-table"><thead><tr><th>System</th><th>Status</th><th>ARR</th><th>Notes</th></tr></thead><tbody>
+      <tr><td><strong>4 Fully Funded Systems</strong></td><td class="good">100%+</td><td>Varies</td><td>Best in state</td></tr>
+      <tr><td>Salem</td><td class="good">+6.3pp YoY</td><td>—</td><td>Largest improvement</td></tr>
+      <tr><td>Plymouth County</td><td>—</td><td>7.88%</td><td>Highest ARR in state</td></tr>
+      <tr><td>Leominster</td><td class="highlight">-18.1pp YoY</td><td>5.50%</td><td>Worst decline; lowest ARR</td></tr>
+    </tbody></table></div>
+  <div class="warn-box"><h4>⚠️ Municipal Risks</h4><p>The most common full-funding target is 2035 — pushed out two years from prior year. Municipalities with low funded ratios face annual pension assessments consuming a growing share of operating budgets, crowding out police, fire, schools, and infrastructure. The wide variance (Salem +6.3pp vs. Leominster -18.1pp in one year) shows how volatile individual systems can be.</p></div>
+</div>
+
+<!-- OPEB -->
+<div id="opeb" class="tab-content">
+  <h2 class="section-title">OPEB — Retiree Healthcare: The Other Crisis</h2>
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">State OPEB Liability</div><div class="value red">$16.2B</div><div class="sub">Total promised</div></div>
+    <div class="stat-card"><div class="label">State OPEB Assets</div><div class="value blue">$2.5B</div><div class="sub">Saved so far</div></div>
+    <div class="stat-card"><div class="label">State Funded %</div><div class="value red">15.6%</div><div class="sub">84¢ of $1 doesn't exist</div></div>
+    <div class="stat-card"><div class="label">Statewide Total</div><div class="value red">$56.1B</div><div class="sub">All entities combined</div></div>
+    <div class="stat-card"><div class="label">Statewide Funded %</div><div class="value red">5.9%</div><div class="sub">$3.3B for $56.1B owed</div></div>
+  </div>
+  <div class="alert"><h4>⚠️ OPEB: Far Worse Than Pensions</h4><div class="alert-grid">
+    <div class="alert-item">Statewide OPEB liability: <strong>$56.1 billion</strong> — only <strong>5.9% funded</strong></div>
+    <div class="alert-item">Municipal OPEB: <strong>$5.0B across ~220 districts</strong>, 14.4% funded</div>
+    <div class="alert-item"><strong>70% of regional systems</strong> have NO OPEB trust fund — fully pay-as-you-go</div>
+    <div class="alert-item"><strong>327 of 351 communities</strong> (93%) carry OPEB obligations</div>
+    <div class="alert-item">Healthcare costs inflate <strong>5–7% annually</strong> — far outpacing general inflation</div>
+    <div class="alert-item">Component units (MBTA, authorities) carry <strong>$2.9B additional</strong> OPEB</div>
+  </div></div>
+  <div class="chart-grid">
+    <div class="chart-card"><h3>OPEB: Promised vs. Saved</h3><div class="chart-area"><canvas id="chartOPEB"></canvas></div></div>
+    <div class="chart-card"><h3>Funded Ratios: Pensions vs. OPEB</h3><div class="chart-area"><canvas id="chartOPEBvsPension"></canvas></div></div>
+  </div>
+  <div class="data-card"><h3>Statewide OPEB Summary</h3>
+    <table class="data-table"><thead><tr><th>Category</th><th>Liability</th><th>Assets</th><th>Unfunded</th><th>Funded %</th></tr></thead><tbody>
+      <tr><td><strong>State (SRBT)</strong></td><td>$16.2B</td><td>$2.5B</td><td class="highlight">$13.7B</td><td class="highlight">15.6%</td></tr>
+      <tr><td><strong>Municipal (~220)</strong></td><td>$5.0B</td><td>$716M</td><td class="highlight">$4.2B</td><td class="highlight">14.4%</td></tr>
+      <tr><td><strong>All Entities</strong></td><td>$56.1B</td><td>$3.3B</td><td class="highlight">$52.8B</td><td class="highlight">5.9%</td></tr>
+    </tbody></table><div class="source">Source: PERAC OPEB Summary (May 2024); ACFR FY2024</div></div>
+</div>
+
+<!-- TOTAL DEBT -->
+<div id="debt" class="tab-content">
+  <h2 class="section-title">The Full Debt Picture — $107.6 Billion</h2>
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">Bonded Debt</div><div class="value blue">$48.0B</div><div class="sub">GO + special obligation</div></div>
+    <div class="stat-card"><div class="label">Unfunded Pensions</div><div class="value red">$42.1B</div><div class="sub">All systems</div></div>
+    <div class="stat-card"><div class="label">Unfunded OPEB</div><div class="value red">$13.7B</div><div class="sub">Retiree healthcare</div></div>
+    <div class="stat-card"><div class="label">MBTA Pension+OPEB</div><div class="value amber">$3.8B</div><div class="sub">Separate authority</div></div>
+    <div class="stat-card"><div class="label">Net Deficit</div><div class="value red">-$60.2B</div><div class="sub">Liabilities − assets</div></div>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-card"><h3>Total Liabilities Breakdown</h3><div class="chart-area"><canvas id="chartDebtBreak"></canvas></div></div>
+    <div class="chart-card"><h3>Net Deficit Trajectory (FY2015–2024)</h3><div class="chart-area"><canvas id="chartDebtTrend"></canvas></div><div class="source">Source: Commonwealth ACFR FY2015–FY2024</div></div>
+  </div>
+  <div class="data-card"><h3>Complete Liability Inventory</h3>
+    <table class="data-table"><thead><tr><th>Category</th><th>Amount</th><th>Entity</th></tr></thead><tbody>
+      <tr><td>General Obligation Bonds</td><td class="highlight">$27.7B</td><td>Commonwealth</td></tr>
+      <tr><td>Special Obligation Bonds</td><td class="highlight">$4.5B</td><td>Transportation, Convention Ctrs</td></tr>
+      <tr><td>MSBA School Construction</td><td class="highlight">$5.4B</td><td>School Building Authority</td></tr>
+      <tr><td>MBTA Bonded Debt</td><td class="highlight">$5.4B</td><td>Revenue bonds, RRIF, BABs</td></tr>
+      <tr><td>MassDOT + MWRA + Other</td><td class="highlight">$4.8B</td><td>Various authorities</td></tr>
+      <tr style="border-top:2px solid var(--navy)"><td><strong>Net Pension Liability</strong></td><td class="highlight">$42.1B</td><td>SERS + MTRS + Boston + MBTA</td></tr>
+      <tr><td>Net OPEB Liability</td><td class="highlight">$13.7B</td><td>State Retirees Benefits Trust</td></tr>
+      <tr><td>MBTA OPEB</td><td class="highlight">$2.0B</td><td>Separate</td></tr>
+      <tr style="background:rgba(192,57,43,0.05);font-weight:700"><td>TOTAL</td><td class="highlight">$107.6B</td><td></td></tr>
+    </tbody></table></div>
+</div>
+
+<!-- STATE COMPARISON -->
+<div id="comparison" class="tab-content">
+  <h2 class="section-title">How Massachusetts Compares</h2>
+  <div class="chart-grid">
+    <div class="chart-card"><h3>Pension Funded Ratios — MA vs. Selected States</h3><div class="chart-area tall"><canvas id="chartStateComp"></canvas></div><div class="source">Source: Public Plans Database; individual state ACFRs</div></div>
+    <div class="chart-card"><h3>MA SERS vs. National Avg, 2001–2024</h3><div class="chart-area tall"><canvas id="chartMAvsNational"></canvas></div><div class="source">Source: Public Plans Database</div></div>
+  </div>
+  <div class="info-box"><h4>📋 Context</h4><p>National aggregate funded ratio: 76.7% (FY2024). MA SERS (72.5%) is below average; MTRS (60.4%) is significantly worse. States like Illinois, NJ, and Kentucky have worse pension funding overall. But Massachusetts stands out for: (1) the sheer size of teachers' unfunded liability, (2) abysmal OPEB funding (5.9% statewide), and (3) the escalating annual cost ($4.9B FY2026). On the positive side, the Commonwealth has made its full ARC since FY2015.</p></div>
+  <div class="data-card"><h3>Data Sources</h3>
+    <table class="data-table"><thead><tr><th>Source</th><th>Data Used</th><th>Date</th></tr></thead><tbody>
+      <tr><td><strong>Commonwealth ACFR FY2024</strong></td><td>Net position, pension/OPEB notes, bonded debt</td><td>Apr 2025</td></tr>
+      <tr><td><strong>PERAC Actuarial Valuations (2024)</strong></td><td>SERS/MTRS funded ratios, liabilities, membership</td><td>Fall 2024</td></tr>
+      <tr><td><strong>PERAC Jan 2025 Funded Ratio List</strong></td><td>99 municipal funded ratios, ARR, schedules</td><td>Jan 2025</td></tr>
+      <tr><td><strong>Public Plans Database (PPD #50)</strong></td><td>23-year SERS time series: assets, returns, ARC, demographics</td><td>FY2024</td></tr>
+      <tr><td><strong>PRIT Fund ACFR FY2024</strong></td><td>Total assets, returns, allocation, fees</td><td>Dec 2024</td></tr>
+      <tr><td><strong>PRIM FY2026 Operating Budget</strong></td><td>Fee projections, asset class costs</td><td>May 2025</td></tr>
+      <tr><td><strong>Mass Retirees Association</strong></td><td>MTRS details, funding schedule amounts</td><td>Dec 2024</td></tr>
+      <tr><td><strong>PERAC OPEB Summary Reports</strong></td><td>Statewide OPEB liabilities by entity</td><td>May 2024</td></tr>
+      <tr><td><strong>DLS/Mass.gov Analysis</strong></td><td>Municipal funded ratio analysis</td><td>Feb 2025</td></tr>
+    </tbody></table></div>
+</div>
+
+</div>
+<footer><strong>Massachusetts Fiscal Transparency Project</strong><br>Data: Commonwealth ACFR FY2024 · PERAC Valuations · Public Plans Database · PRIT ACFR · PERAC Funded Ratio List (Jan 2025)<br><a href="index.html">← Back to Dashboard Index</a></footer>
+
+<script>
+const charts={};
+const NAVY='#1a4480',RED='#c0392b',GREEN='#1a7a4c',GOLD='#b8860b',PURPLE='#7c3aed',DARKRED='#8b1a1a',TEAL='#0d7377';
+const GRID={color:'rgba(0,0,0,0.06)'};
+const TT={backgroundColor:'#0f2942',titleColor:'#fff',bodyColor:'#ccc',borderColor:'#c9a84c',borderWidth:1,padding:10,cornerRadius:8};
+function safeChart(id,cfg){if(charts[id])charts[id].destroy();const ctx=document.getElementById(id);if(!ctx)return;cfg.options=cfg.options||{};cfg.options.plugins=cfg.options.plugins||{};cfg.options.plugins.tooltip=TT;charts[id]=new Chart(ctx,cfg)}
+function switchTab(t){document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById(t).classList.add('active');event.currentTarget.classList.add('active');initCharts(t)}
+function initCharts(t){({overview:initOverview,pensions:initPensions,prit:initPRIT,demographics:initDemographics,municipal:initMunicipal,opeb:initOPEB,debt:initDebt,comparison:initComparison})[t]?.()}
+const YRS=['01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24'];
+const LBL=YRS.map(y=>"'"+y);
+
+function initOverview(){
+  safeChart('chartOverviewBreak',{type:'doughnut',data:{labels:['MTRS ($25.5B)','SERS ($14.1B)','OPEB ($13.7B)','Boston Tchr ($2.6B)','MBTA ($1.8B)'],datasets:[{data:[25.5,14.1,13.7,2.6,1.8],backgroundColor:[RED,NAVY,GOLD,PURPLE,TEAL]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});
+  safeChart('chartFundedRatio',{type:'bar',data:{labels:['SERS','MTRS','Boston\nTchr','Muni\nMedian','OPEB','MBTA'],datasets:[{label:'Funded %',data:[72.5,60.4,61,75.3,15.6,46],backgroundColor:[GOLD,RED,RED,GOLD,DARKRED,RED],borderRadius:6},{label:'80% Target',data:[80,80,80,80,80,80],type:'line',borderColor:GREEN,borderDash:[5,5],pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,max:100,grid:GRID}}}});
+  const arcMA=[7.4,5.3,10.5,9.1,9.9,10.6,9.8,8.1,14.8,13.7,9.8,12.6,13.5,13.5,11.1,12.3,13.8,16.1,17.0,18.0,17.5,20.6,20.2,18.3];
+  const arcUS=[8.8,8.7,10.6,11.9,13.7,14.3,13.9,12.9,14.4,15.5,16.3,18.1,20.2,20.4,20.2,21.3,20.1,21.0,21.1,21.9,22.1,22.7,22.5,24.8];
+  safeChart('chartARC',{type:'line',data:{labels:LBL,datasets:[{label:'MA SERS (%)',data:arcMA,borderColor:RED,backgroundColor:'rgba(192,57,43,0.08)',fill:true,tension:0.3,pointRadius:2},{label:'US Average',data:arcUS,borderColor:NAVY,borderDash:[4,4],tension:0.3,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{title:{display:true,text:'% of Payroll'},grid:GRID}}}});
+  safeChart('chartDeficitTrend',{type:'line',data:{labels:['FY15','FY16','FY17','FY18','FY19','FY20','FY21','FY22','FY23','FY24'],datasets:[{label:'Net Deficit ($B)',data:[49.6,52.1,53.8,69.1,68.2,73.0,66.8,67.4,63.6,60.2],borderColor:RED,backgroundColor:'rgba(192,57,43,0.08)',fill:true,tension:0.3,pointRadius:4,pointBackgroundColor:RED}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{title:{display:true,text:'$Billions'},grid:GRID}}}});
+}
+function initPensions(){
+  const sers=[91.8,94,79.5,83.9,82.8,81.5,85.1,89.4,71.6,76.5,81,73.8,69.1,70.3,67.5,63.5,64.7,64.9,63.7,null,66.4,72.9,71.3,72.5];
+  const natl=[101.8,94.8,88.8,86.9,85.3,85.2,86.3,84.4,78.5,75.8,74.4,72.4,71.9,73.2,73.3,71.7,72.1,72.4,72.6,72.8,75.9,76.4,76.3,76.7];
+  safeChart('chartFundedHistory',{type:'line',data:{labels:LBL,datasets:[{label:'MA SERS',data:sers,borderColor:RED,backgroundColor:'rgba(192,57,43,0.08)',fill:true,tension:0.3,pointRadius:2,spanGaps:true},{label:'National Avg',data:natl,borderColor:NAVY,borderDash:[4,4],tension:0.3,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:50,max:105,grid:GRID}}}});
+  const assets=[14.29,null,null,null,null,18.14,21.85,21,15.39,16.99,20.08,19.4,21.08,23.93,24.04,23.97,26.28,28,28.76,28.57,36.04,34.13,35.36,37.9];
+  safeChart('chartAssetsHistory',{type:'bar',data:{labels:LBL,datasets:[{label:'$B',data:assets,backgroundColor:assets.map(v=>v&&v>30?GREEN:NAVY),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{grid:GRID}}}});
+  const actual=[-6.6,-6.49,4.02,19.43,13.39,15.49,19.95,-1.82,-23.91,12.86,22.36,-0.08,12.73,17.6,3.87,2.3,13.24,10,6.13,2.38,30.01,-2.95,6.02,9.94];
+  const assumed=[8.25,8.25,8.25,8.25,8.25,8.25,8.25,8.25,8.25,8.25,8.25,8.25,8,8,8,7.5,7.5,7.35,7.25,7.25,7,7,7,7];
+  safeChart('chartReturnsVsAssumed',{type:'bar',data:{labels:LBL,datasets:[{label:'Actual %',data:actual,backgroundColor:actual.map(v=>v<0?RED:v<7?GOLD:GREEN),borderRadius:3},{label:'Assumed',data:assumed,type:'line',borderColor:DARKRED,borderDash:[5,5],pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{grid:GRID}}}});
+  safeChart('chartAssumptionRisk',{type:'bar',data:{labels:['Current (7%)','6% Return','5% Return','8% Return'],datasets:[{label:'SERS Unfunded ($B)',data:[14.1,19,24,10],backgroundColor:[GOLD,RED,DARKRED,GREEN],borderRadius:6},{label:'MTRS Unfunded ($B)',data:[25.5,32,39,20],backgroundColor:[GOLD+'99',RED+'99',DARKRED+'99',GREEN+'99'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{title:{display:true,text:'$Billions'},grid:GRID}}}});
+}
+function initPRIT(){
+  safeChart('chartAllocation',{type:'doughnut',data:{labels:['Equities 40.6%','Fixed Income 21.2%','Private Equity 17.0%','Real Estate 9.6%','Hedge Funds 8.3%','Commodities 3.0%','Other 0.3%'],datasets:[{data:[40.6,21.2,17,9.6,8.3,3,0.3],backgroundColor:[NAVY,'#4a6fa5',RED,GOLD,PURPLE,TEAL,'#999']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});
+  safeChart('chartAllocShift',{type:'bar',data:{labels:['Equities','Fixed Inc','Priv Equity','Real Estate','Hedge Funds','Commod'],datasets:[{label:'2001',data:[59.7,26.2,5.6,5.7,0,0],backgroundColor:NAVY+'88',borderRadius:4},{label:'2024',data:[40.6,21.2,17,9.6,8.3,3],backgroundColor:RED,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{title:{display:true,text:'%'},grid:GRID}}}});
+  const ret=[-6.6,-6.49,4.02,19.43,13.39,15.49,19.95,-1.82,-23.91,12.86,22.36,-0.08,12.73,17.6,3.87,2.3,13.24,10,6.13,2.38,30.01,-2.95,6.02,9.94];
+  safeChart('chartAnnualReturns',{type:'bar',data:{labels:LBL.map(y=>'FY'+y),datasets:[{label:'Return %',data:ret,backgroundColor:ret.map(v=>v<0?RED:v<7?GOLD:GREEN),borderRadius:3},{label:'7% Target',data:Array(24).fill(7),type:'line',borderColor:DARKRED,borderDash:[5,5],pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{grid:GRID}}}});
+  safeChart('chartAssetClassReturns',{type:'bar',data:{labels:['Global Equity','Core FI','Value-Add FI','Private Equity','Real Estate','Timberland','Portfolio Completion'],datasets:[{label:'FY24 Net %',data:[18.09,-0.12,10.69,7.69,-6.78,10.35,10.56],backgroundColor:[18.09,-0.12,10.69,7.69,-6.78,10.35,10.56].map(v=>v<0?RED:v<7?GOLD:GREEN),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',scales:{x:{grid:GRID}}}});
+}
+function initDemographics(){
+  const ma=[2,2,1.7,1.6,1.6,1.6,1.7,1.7,1.7,1.6,1.6,1.6,1.6,1.6,1.5,1.4,1.4,1.4,1.4,1.3,1.3,1.3,1.3,1.3];
+  const us=[2.4,2.3,2.2,2.1,2.1,2,2,1.9,1.9,1.8,1.7,1.6,1.5,1.5,1.5,1.4,1.4,1.4,1.3,1.3,1.2,1.2,1.2,1.2];
+  safeChart('chartActivesPerAnnuitant',{type:'line',data:{labels:LBL,datasets:[{label:'MA SERS',data:ma,borderColor:RED,backgroundColor:'rgba(192,57,43,0.1)',fill:true,tension:0.3,pointRadius:3,pointBackgroundColor:RED},{label:'National',data:us,borderColor:NAVY,borderDash:[4,4],tension:0.3,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:0.8,max:2.6,grid:GRID}}}});
+  const cfY=['06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24'];
+  const cf=[-836,-570,-346,-466,-344,-551,-573,-729,-717,-689,-494,-677,-748,-775,-764,-760,-611,-690,-764];
+  safeChart('chartCashFlow',{type:'bar',data:{labels:cfY.map(y=>"'"+y),datasets:[{label:'Cash Flow ($M)',data:cf,backgroundColor:RED,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{grid:GRID}}}});
+}
+function initMunicipal(){
+  safeChart('chartMunicipalDist',{type:'bar',data:{labels:['<50%','50–60%','60–70%','70–80%','80–90%','90–100%','100%+'],datasets:[{label:'Systems',data:[3,8,18,35,25,6,4],backgroundColor:[DARKRED,RED,RED+'CC',GOLD,GREEN+'CC',GREEN,GREEN],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{grid:GRID}}}});
+  safeChart('chartARRDist',{type:'bar',data:{labels:['5.5%','6–6.5%','6.5–6.75%','7.0%','7–7.5%','7.5%','7.5–7.88%'],datasets:[{label:'Systems',data:[1,5,8,49,18,12,6],backgroundColor:[GREEN,GREEN+'CC',GREEN+'99',NAVY,GOLD+'CC',GOLD,RED],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{grid:GRID}}}});
+}
+function initOPEB(){
+  safeChart('chartOPEB',{type:'bar',data:{labels:['State OPEB','Municipal','All Entities'],datasets:[{label:'Total Liability',data:[16.2,5,56.1],backgroundColor:RED,borderRadius:6,barPercentage:0.5},{label:'Assets',data:[2.5,0.716,3.3],backgroundColor:NAVY,borderRadius:6,barPercentage:0.5}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{title:{display:true,text:'$Billions'},grid:GRID}}}});
+  safeChart('chartOPEBvsPension',{type:'bar',data:{labels:['SERS','MTRS','State OPEB','Muni OPEB','All OPEB'],datasets:[{label:'Funded %',data:[72.5,60.4,15.6,14.4,5.9],backgroundColor:[GOLD,RED,DARKRED,DARKRED+'CC',DARKRED+'99'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,max:100,grid:GRID}}}});
+}
+function initDebt(){
+  safeChart('chartDebtBreak',{type:'doughnut',data:{labels:['Bonded ($48.0B)','Pensions ($42.1B)','OPEB ($13.7B)','MBTA P+O ($3.8B)'],datasets:[{data:[48,42.1,13.7,3.8],backgroundColor:[NAVY,RED,GOLD,PURPLE]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});
+  safeChart('chartDebtTrend',{type:'line',data:{labels:['FY15','FY16','FY17','FY18','FY19','FY20','FY21','FY22','FY23','FY24'],datasets:[{label:'Net Deficit ($B)',data:[49.6,52.1,53.8,69.1,68.2,73,66.8,67.4,63.6,60.2],borderColor:RED,backgroundColor:'rgba(192,57,43,0.1)',fill:true,tension:0.3,pointRadius:5,pointBackgroundColor:RED}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{grid:GRID}}}});
+}
+function initComparison(){
+  safeChart('chartStateComp',{type:'bar',data:{labels:['Wisconsin','Tennessee','New York','N Carolina','Natl Avg','MA SERS','California','CT','MA MTRS','New Jersey','Illinois','Kentucky'],datasets:[{label:'Funded %',data:[102,97,93,90,76.7,72.5,72,52,60.4,50,42,38],backgroundColor:[102,97,93,90,76.7,72.5,72,52,60.4,50,42,38].map(v=>v>80?GREEN:v>70?GOLD:v>60?'#e67e22':RED),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',scales:{x:{beginAtZero:true,max:110,grid:GRID}}}});
+  const sers=[91.8,94,79.5,83.9,82.8,81.5,85.1,89.4,71.6,76.5,81,73.8,69.1,70.3,67.5,63.5,64.7,64.9,63.7,null,66.4,72.9,71.3,72.5];
+  const natl=[101.8,94.8,88.8,86.9,85.3,85.2,86.3,84.4,78.5,75.8,74.4,72.4,71.9,73.2,73.3,71.7,72.1,72.4,72.6,72.8,75.9,76.4,76.3,76.7];
+  safeChart('chartMAvsNational',{type:'line',data:{labels:LBL,datasets:[{label:'MA SERS',data:sers,borderColor:RED,backgroundColor:'rgba(192,57,43,0.08)',fill:true,tension:0.3,pointRadius:2,spanGaps:true},{label:'National',data:natl,borderColor:NAVY,borderDash:[4,4],tension:0.3,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:55,max:105,grid:GRID}}}});
+}
+initOverview();
+</script>
+</body>
+</html>

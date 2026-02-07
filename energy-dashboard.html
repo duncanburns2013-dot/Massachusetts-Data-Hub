@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Massachusetts Energy Policy & Costs</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f8f7f4;--card:#ffffff;--border:#e8e5df;--text:#1a1a1a;--muted:#7a756e;--red:#c0392b;--red-bg:rgba(192,57,43,0.06);--green:#1a7a4c;--green-bg:rgba(26,122,76,0.06);--blue:#1a4480;--blue-bg:rgba(26,68,128,0.06);--amber:#b8860b;--amber-bg:rgba(184,134,11,0.06);--accent:#8b1a1a;--gold:#c9a84c;--navy:#0f2942}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+.hero{background:var(--navy);color:#fff;padding:56px 24px 42px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,0.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(139,26,26,0.1) 0%,transparent 50%)}
+.hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.6rem,4.5vw,2.6rem);font-weight:400;margin-bottom:8px;letter-spacing:-0.01em;position:relative}
+.hero .sub{opacity:0.65;font-size:0.85rem;margin-bottom:28px;font-weight:400;letter-spacing:0.02em;position:relative}
+.hero-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;max-width:1000px;margin:0 auto;position:relative}
+.hero-stat{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:18px 10px;text-align:center;backdrop-filter:blur(4px);transition:background 0.3s}
+.hero-stat:hover{background:rgba(255,255,255,0.1)}
+.hero-stat .val{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.2rem,3vw,1.7rem);font-weight:400}
+.hero-stat .lbl{font-size:0.65rem;opacity:0.55;margin-top:4px;text-transform:uppercase;letter-spacing:0.08em;font-weight:500}
+.hero-stat .val.bad{color:#e8a87c}
+.tab-nav{display:flex;justify-content:center;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.tab-btn{padding:15px 22px;font-size:0.78rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.25s;text-transform:uppercase;letter-spacing:0.06em}
+.tab-btn:hover{color:var(--text);background:rgba(0,0,0,0.02)}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
+.container{max-width:1200px;margin:0 auto;padding:28px 24px}
+.tab-content{display:none;animation:fadeUp 0.35s ease}
+.tab-content.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.section-title{font-family:'DM Serif Display',Georgia,serif;font-size:1.35rem;font-weight:400;margin-bottom:18px;color:var(--navy)}
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:26px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px 18px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.03);transition:box-shadow 0.3s,transform 0.3s}
+.stat-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.07);transform:translateY(-2px)}
+.stat-card .label{font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:8px}
+.stat-card .value{font-family:'DM Serif Display',Georgia,serif;font-size:2rem;font-weight:400;line-height:1.1}
+.stat-card .value.red{color:var(--red)}
+.stat-card .value.green{color:var(--green)}
+.stat-card .value.blue{color:var(--blue)}
+.stat-card .value.amber{color:var(--amber)}
+.stat-card .sub{font-size:0.72rem;color:var(--muted);margin-top:6px}
+.alert{background:var(--red-bg);border:1px solid rgba(192,57,43,0.15);border-radius:14px;padding:24px;margin-bottom:26px;border-left:4px solid var(--red)}
+.alert h4{color:var(--red);font-size:0.88rem;margin-bottom:12px;font-weight:700}
+.alert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+.alert-item{font-size:0.82rem;color:var(--text);padding:5px 0;line-height:1.55}
+.alert-item strong{color:var(--red)}
+.chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(450px,1fr));gap:16px;margin-bottom:26px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.chart-card h3{font-size:0.85rem;font-weight:700;margin-bottom:14px;color:var(--navy)}
+.chart-area{position:relative;height:280px}
+.data-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:26px;overflow-x:auto;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.data-card h3{font-size:0.88rem;font-weight:700;margin-bottom:14px;color:var(--navy)}
+.data-table{width:100%;border-collapse:collapse;font-size:0.82rem}
+.data-table th{text-align:left;padding:10px 14px;border-bottom:2px solid var(--navy);font-weight:700;color:var(--navy);font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em}
+.data-table td{padding:10px 14px;border-bottom:1px solid var(--border)}
+.data-table tr:hover{background:rgba(15,41,66,0.02)}
+.data-table .highlight{color:var(--red);font-weight:700}
+.data-table .good{color:var(--green);font-weight:600}
+.info-box{background:var(--blue-bg);border:1px solid rgba(26,68,128,0.12);border-radius:14px;padding:24px;margin-bottom:26px;border-left:4px solid var(--blue)}
+.info-box h4{color:var(--blue);font-size:0.88rem;margin-bottom:10px;font-weight:700}
+.info-box p{font-size:0.82rem;color:var(--text);line-height:1.65}
+.source{font-size:0.68rem;color:var(--muted);margin-top:8px;font-style:italic}
+footer{text-align:center;padding:36px 24px;color:var(--muted);font-size:0.75rem;border-top:1px solid var(--border);background:#fff;margin-top:36px}
+footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1px solid var(--gold)}
+footer a:hover{color:var(--gold)}
+@media(max-width:768px){.hero-stats{grid-template-columns:repeat(3,1fr)}.chart-grid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.hero{padding:36px 16px 30px}.container{padding:18px}}
+@media(max-width:480px){.hero-stats{grid-template-columns:repeat(2,1fr)}.stat-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Energy Policy & Costs</h1>
+  <p class="sub">How green mandates, offshore wind failures, and policy decisions gave Massachusetts the highest electricity rates in the continental U.S.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="val bad">31.5¢</div><div class="lbl">Per kWh (Residential)</div></div>
+    <div class="hero-stat"><div class="val bad">+75%</div><div class="lbl">Above National Avg</div></div>
+    <div class="hero-stat"><div class="val bad">$1.36B</div><div class="lbl">RGGI Carbon Tax (Total)</div></div>
+    <div class="hero-stat"><div class="val bad">$200M</div><div class="lbl">RGGI 2025 Alone</div></div>
+    <div class="hero-stat"><div class="val bad">$10.5M</div><div class="lbl">Vineyard Wind Settlement</div></div>
+    <div class="hero-stat"><div class="val bad">🇪🇸🇩🇰🇳🇱</div><div class="lbl">Foreign Wind Developers</div></div>
+  </div>
+</div>
+
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+  <button class="tab-btn" onclick="switchTab('rates')">Electricity Rates</button>
+  <button class="tab-btn" onclick="switchTab('wind')">Offshore Wind</button>
+  <button class="tab-btn" onclick="switchTab('mandates')">Green Mandates</button>
+  <button class="tab-btn" onclick="switchTab('money')">Follow the Money</button>
+</nav>
+
+<div class="container">
+
+<!-- ===== OVERVIEW ===== -->
+<div id="overview" class="tab-content active">
+  <div class="alert">
+    <h4>⚠️ The Most Expensive Electricity in the Continental U.S.</h4>
+    <div class="alert-grid">
+      <div class="alert-item">MA residential rate: <strong>31.5¢/kWh</strong> — national average: 18.05¢ (EIA, Nov 2025)</div>
+      <div class="alert-item">Your electric bill includes hidden costs: <strong>$1.36B RGGI carbon tax, RPS compliance, offshore wind contracts</strong></div>
+      <div class="alert-item">Vineyard Wind turbine blade failure (July 2024) — debris across <strong>Nantucket beaches</strong>, $10.5M settlement</div>
+      <div class="alert-item">Plymouth turbine blade collapse (November 2025) — <strong>100-ft blade in cranberry bog</strong></div>
+      <div class="alert-item">Gov. Healey boasted about <strong>blocking two gas pipelines</strong>, then claimed she never stopped them</div>
+      <div class="alert-item">Ratepayers GUARANTEE foreign developers profit via <strong>"full cost recovery"</strong> written into state law</div>
+    </div>
+  </div>
+
+  <h2 class="section-title">The Policy-to-Price Pipeline</h2>
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">MA Residential Rate</div><div class="value red">31.5¢</div><div class="sub">Per kWh (EIA Nov 2025)</div></div>
+    <div class="stat-card"><div class="label">National Average</div><div class="value green">18.05¢</div><div class="sub">Per kWh</div></div>
+    <div class="stat-card"><div class="label">NH Rate</div><div class="value amber">27.4¢</div><div class="sub">Per kWh — still high but 13% less</div></div>
+    <div class="stat-card"><div class="label">FL Rate</div><div class="value green">15.8¢</div><div class="sub">Per kWh — half of MA</div></div>
+    <div class="stat-card"><div class="label">TX Rate</div><div class="value green">16.2¢</div><div class="sub">Per kWh — half of MA</div></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>Residential Electricity Rates — MA vs. Selected States (¢/kWh)</h3>
+      <div class="chart-area"><canvas id="chartRatesOverview"></canvas></div>
+      <div class="source">Source: EIA Electric Power Monthly, November 2025</div>
+    </div>
+    <div class="chart-card">
+      <h3>MA Rate Premium Over National Average — Historical</h3>
+      <div class="chart-area"><canvas id="chartRateHistory"></canvas></div>
+      <div class="source">Source: EIA, annual residential average rates 2015–2025</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h4>📋 Why Is Massachusetts Electricity So Expensive?</h4>
+    <p>Massachusetts electricity costs are driven by a combination of policy decisions: (1) the Renewable Portfolio Standard (RPS) mandating 35%+ renewable sources by 2030, (2) RGGI — a cap-and-trade carbon tax that has extracted $1.36 billion from MA ratepayers since 2008 ($200M in 2025 alone), (3) legally guaranteed "full cost recovery" for offshore wind contracts meaning ratepayers absorb all costs, (4) blocking natural gas pipeline capacity (constraining supply), and (5) building electrification mandates that increase demand while constraining supply. Each of these adds layers of cost that appear as line items on your electric bill — but few consumers know what they are or who voted for them.</p>
+  </div>
+</div>
+
+<!-- ===== ELECTRICITY RATES ===== -->
+<div id="rates" class="tab-content">
+  <h2 class="section-title">Electricity Rate Deep Dive</h2>
+
+  <div class="alert">
+    <h4>⚠️ What's Actually On Your Bill</h4>
+    <div class="alert-grid">
+      <div class="alert-item"><strong>Supply charge:</strong> The actual cost of generating electricity — only ~40% of your bill</div>
+      <div class="alert-item"><strong>Distribution charge:</strong> Eversource/National Grid delivery — includes infrastructure costs</div>
+      <div class="alert-item"><strong>Transition charge:</strong> Paying off old utility contracts from deregulation</div>
+      <div class="alert-item"><strong>Renewable energy charge:</strong> RPS compliance costs passed to you</div>
+      <div class="alert-item"><strong>Energy efficiency charge:</strong> Programs you may never use, but always pay for</div>
+      <div class="alert-item"><strong>RGGI costs:</strong> $1.36B in carbon auction costs since 2008 — $200M in 2025 alone — passed to ratepayers</div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>MA Electricity Bill Breakdown (Typical Residential)</h3>
+      <div class="chart-area"><canvas id="chartBillBreak"></canvas></div>
+      <div class="source">Source: Eversource/National Grid rate schedules; DPU filings</div>
+    </div>
+    <div class="chart-card">
+      <h3>MA vs. National Rate Gap Over Time</h3>
+      <div class="chart-area"><canvas id="chartGapTime"></canvas></div>
+      <div class="source">Source: EIA Electric Power Monthly, 2015–2025</div>
+    </div>
+  </div>
+
+  <div class="data-card">
+    <h3>New England Electricity Rates — All Among the Highest (Nov 2025)</h3>
+    <table class="data-table">
+      <thead><tr><th>State</th><th>Rate (¢/kWh)</th><th>vs. National</th><th>Annual Cost (750 kWh/mo)</th><th>Extra vs. US Avg</th></tr></thead>
+      <tbody>
+        <tr><td class="highlight">Massachusetts</td><td class="highlight">31.5</td><td class="highlight">+75%</td><td class="highlight">$2,835</td><td class="highlight">+$1,214</td></tr>
+        <tr><td>Rhode Island</td><td class="highlight">31.3</td><td class="highlight">+73%</td><td>$2,817</td><td>+$1,196</td></tr>
+        <tr><td>Connecticut</td><td class="highlight">27.8</td><td class="highlight">+54%</td><td>$2,502</td><td>+$881</td></tr>
+        <tr><td>New Hampshire</td><td>27.4</td><td>+52%</td><td>$2,466</td><td>+$845</td></tr>
+        <tr><td>Maine</td><td>25.1</td><td>+39%</td><td>$2,259</td><td>+$638</td></tr>
+        <tr><td>Vermont</td><td>22.5</td><td>+25%</td><td>$2,025</td><td>+$404</td></tr>
+        <tr><td>US Average</td><td class="good">18.05</td><td>—</td><td class="good">$1,625</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: EIA Electric Power Monthly, Table 5.6.A, November 2025</div>
+  </div>
+</div>
+
+<!-- ===== OFFSHORE WIND ===== -->
+<div id="wind" class="tab-content">
+  <h2 class="section-title">Offshore Wind — Billions in Costs, Foreign Profits</h2>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">Vineyard Wind Settlement</div><div class="value red">$10.5M</div><div class="sub">Nantucket blade failure</div></div>
+    <div class="stat-card"><div class="label">Plymouth Turbine</div><div class="value red">Collapsed</div><div class="sub">Nov 2025 — blade in cranberry bog</div></div>
+    <div class="stat-card"><div class="label">Contract Structure</div><div class="value red">Full Cost Recovery</div><div class="sub">Ratepayers absorb ALL costs</div></div>
+    <div class="stat-card"><div class="label">Developer Origins</div><div class="value amber">🇪🇸 🇩🇰 🇳🇱</div><div class="sub">Spain, Denmark, Netherlands</div></div>
+  </div>
+
+  <div class="alert">
+    <h4>⚠️ The Offshore Wind Failure Timeline</h4>
+    <div class="alert-grid">
+      <div class="alert-item"><strong>July 2024:</strong> Vineyard Wind turbine blade fails — debris across Nantucket beaches, environmental cleanup</div>
+      <div class="alert-item"><strong>October 2024:</strong> GE Vernova reaches <strong>$10.5M settlement</strong> with Nantucket over blade failure</div>
+      <div class="alert-item"><strong>November 2025:</strong> Plymouth wind turbine — <strong>100-foot blade</strong> collapses into cranberry bog</div>
+      <div class="alert-item"><strong>2023–2024:</strong> Multiple offshore wind contracts <strong>cancelled or renegotiated</strong> at higher prices nationwide</div>
+      <div class="alert-item">Rebecca Tepper (Sept 2024): "By going big now with projects, we're going to <strong>lead the nation</strong>" — one month after Vineyard Wind failure</div>
+      <div class="alert-item">Massachusetts law guarantees developers <strong>"full cost recovery"</strong> — ratepayers bear 100% of the risk</div>
+    </div>
+  </div>
+
+  <div class="data-card">
+    <h3>Offshore Wind Projects — Who Gets Paid</h3>
+    <table class="data-table">
+      <thead><tr><th>Project</th><th>Developer</th><th>Parent Company</th><th>Country</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Vineyard Wind 1</td><td>Avangrid / CIP</td><td>Iberdrola 🇪🇸 / CIP 🇩🇰</td><td>Spain / Denmark</td><td class="highlight">Blade failure, operating</td></tr>
+        <tr><td>New England Wind 1</td><td>Avangrid</td><td>Iberdrola 🇪🇸</td><td>Spain</td><td>Development</td></tr>
+        <tr><td>New England Wind 2</td><td>Avangrid</td><td>Iberdrola 🇪🇸</td><td>Spain</td><td>Development</td></tr>
+        <tr><td>SouthCoast Wind</td><td>Shell / Ocean Winds</td><td>Shell 🇳🇱 / EDPR 🇫🇷</td><td>Netherlands / France</td><td>Renegotiated at higher price</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: BOEM filings; developer public disclosures; state procurement records</div>
+  </div>
+
+  <div class="info-box">
+    <h4>📋 "Full Cost Recovery" — What It Means for You</h4>
+    <p>Under Massachusetts law, offshore wind power purchase agreements include "full cost recovery" provisions, meaning utilities can pass 100% of contract costs to ratepayers. The developers — foreign companies like Spain's Iberdrola and Denmark's Copenhagen Infrastructure Partners — are guaranteed revenue. If construction costs increase, if turbines fail, if contracts need renegotiation at higher prices — ratepayers absorb every dollar. The utility companies (Eversource, National Grid) simply pass costs through and collect their guaranteed margin. The risk sits entirely with Massachusetts households.</p>
+  </div>
+</div>
+
+<!-- ===== GREEN MANDATES ===== -->
+<div id="mandates" class="tab-content">
+  <h2 class="section-title">The Mandate Stack — Policy Decisions Driving Your Bill</h2>
+
+  <div class="alert">
+    <h4>⚠️ Every Mandate Adds Cost</h4>
+    <div class="alert-grid">
+      <div class="alert-item"><strong>Renewable Portfolio Standard (RPS):</strong> 35% renewable by 2030, increasing annually — compliance costs on your bill</div>
+      <div class="alert-item"><strong>RGGI (Cap-and-Trade):</strong> $1.36 billion extracted from MA ratepayers since 2008 — $200M/year and rising</div>
+      <div class="alert-item"><strong>Net-Zero 2050:</strong> State law requires economy-wide carbon neutrality — massive infrastructure costs ahead</div>
+      <div class="alert-item"><strong>Building Electrification:</strong> New construction mandates push heating from gas to electric — increasing demand</div>
+      <div class="alert-item"><strong>Gas Pipeline Opposition:</strong> Healey boasted about blocking pipelines, constraining supply, then denied it</div>
+      <div class="alert-item"><strong>Energy Storage Mandate:</strong> 5,000 MW by 2035 — who builds it and who pays?</div>
+    </div>
+  </div>
+
+  <div class="data-card">
+    <h3>Massachusetts Energy Mandates & Their Cost Impact</h3>
+    <table class="data-table">
+      <thead><tr><th>Mandate</th><th>Requirement</th><th>Cost Mechanism</th><th>Who Pays</th></tr></thead>
+      <tbody>
+        <tr><td class="highlight">Renewable Portfolio Standard</td><td>35%+ by 2030</td><td>RPS compliance charges on bill</td><td class="highlight">Ratepayers</td></tr>
+        <tr><td class="highlight">RGGI Carbon Tax</td><td>$1.36B total ($200M/yr)</td><td>Auction costs passed through</td><td class="highlight">Ratepayers</td></tr>
+        <tr><td>Clean Energy Standard</td><td>80% by 2050</td><td>Additional procurement costs</td><td class="highlight">Ratepayers</td></tr>
+        <tr><td>Offshore Wind Procurement</td><td>5,600 MW by 2035</td><td>Full cost recovery PPAs</td><td class="highlight">Ratepayers</td></tr>
+        <tr><td>Energy Storage</td><td>5,000 MW by 2035</td><td>Utility rate base / incentives</td><td class="highlight">Ratepayers</td></tr>
+        <tr><td>Building Electrification</td><td>No new gas in new construction</td><td>Higher electric demand</td><td class="highlight">Ratepayers + Homeowners</td></tr>
+        <tr><td>EV Mandate</td><td>100% ZEV by 2035</td><td>Grid upgrades, demand increase</td><td class="highlight">Ratepayers + Consumers</td></tr>
+        <tr><td>Net-Zero 2050</td><td>Economy-wide carbon neutrality</td><td>Trillions in infrastructure</td><td class="highlight">Everyone</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: MA DOER; DPU filings; Climate Act (2021); Clean Energy and Climate Plan (2022)</div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">RGGI Total (2008–2025)</div><div class="value red">$1.36B</div><div class="sub">Carbon tax collected from MA</div></div>
+    <div class="stat-card"><div class="label">2025 Alone</div><div class="value red">$200.4M</div><div class="sub">Up from $28M in 2008</div></div>
+    <div class="stat-card"><div class="label">Recent 5-Year Avg</div><div class="value amber">$149.6M/yr</div><div class="sub">2021–2025 average</div></div>
+    <div class="stat-card"><div class="label">Direct Bill Relief</div><div class="value blue">~15%</div><div class="sub">Of RGGI proceeds returned to ratepayers</div></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>RGGI Carbon Tax — MA Auction Proceeds by Year ($M)</h3>
+      <div class="chart-area"><canvas id="chartRGGI"></canvas></div>
+      <div class="source">Source: RGGI Inc., MA Proceeds by Auction (2008–2025). Total: $1.36 billion</div>
+    </div>
+    <div class="chart-card">
+      <h3>RPS Requirement Escalation</h3>
+      <div class="chart-area"><canvas id="chartRPS"></canvas></div>
+      <div class="source">Source: MA DOER Renewable Portfolio Standard schedule</div>
+    </div>
+  </div>
+
+  <div class="data-card">
+    <h3>RGGI Auction Proceeds — Massachusetts (2008–2025)</h3>
+    <table class="data-table">
+      <thead><tr><th>Year</th><th>Allowances Sold</th><th>Auction Proceeds</th><th>Change</th></tr></thead>
+      <tbody>
+        <tr><td>2008</td><td>8,735,068</td><td>$28,176,794</td><td>—</td></tr>
+        <tr><td>2009</td><td>18,777,657</td><td>$50,918,303</td><td>+81%</td></tr>
+        <tr><td>2010</td><td>22,915,581</td><td>$44,134,380</td><td>-13%</td></tr>
+        <tr><td>2011</td><td>14,371,272</td><td>$27,161,704</td><td>-38%</td></tr>
+        <tr><td>2012</td><td>14,782,694</td><td>$28,530,599</td><td>+5%</td></tr>
+        <tr><td>2013</td><td>25,327,192</td><td>$73,955,401</td><td>+159%</td></tr>
+        <tr><td>2014</td><td>13,446,058</td><td>$63,611,112</td><td>-14%</td></tr>
+        <tr><td>2015</td><td>12,180,735</td><td>$74,252,615</td><td>+17%</td></tr>
+        <tr><td>2016</td><td>10,218,385</td><td>$45,650,634</td><td>-39%</td></tr>
+        <tr><td>2017</td><td>10,062,297</td><td>$34,413,056</td><td>-25%</td></tr>
+        <tr><td>2018</td><td>9,520,767</td><td>$41,857,508</td><td>+22%</td></tr>
+        <tr><td>2019</td><td>8,539,575</td><td>$46,327,194</td><td>+11%</td></tr>
+        <tr><td>2020</td><td>8,661,014</td><td>$55,495,446</td><td>+20%</td></tr>
+        <tr><td class="highlight">2021</td><td>10,158,674</td><td class="highlight">$97,527,616</td><td class="highlight">+76%</td></tr>
+        <tr><td class="highlight">2022</td><td>9,368,871</td><td class="highlight">$126,105,004</td><td class="highlight">+29%</td></tr>
+        <tr><td class="highlight">2023</td><td>9,468,624</td><td class="highlight">$128,503,571</td><td class="highlight">+2%</td></tr>
+        <tr><td class="highlight">2024</td><td>9,688,938</td><td class="highlight">$195,522,045</td><td class="highlight">+52%</td></tr>
+        <tr><td class="highlight">2025</td><td>9,183,743</td><td class="highlight">$200,443,522</td><td class="highlight">+3%</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: RGGI Inc., MA Proceeds by Auction spreadsheet. Allowance costs are passed through to ratepayers by utilities.</div>
+  </div>
+
+  <div class="alert">
+    <h4>⚠️ The Hidden Carbon Tax — $1.36 Billion and Counting</h4>
+    <div class="alert-grid">
+      <div class="alert-item">RGGI is a cap-and-trade carbon tax — power plants must buy <strong>\"allowances\"</strong> at quarterly auctions to emit CO₂</div>
+      <div class="alert-item">MA's RGGI costs surged <strong>615% in 7 years</strong>: from $28M (2008) to $200M (2025)</div>
+      <div class="alert-item">Utilities pass 100% of auction costs to ratepayers — it's a <strong>hidden line item on your electric bill</strong></div>
+      <div class="alert-item">Only <strong>~15% of proceeds</strong> go to direct bill assistance. 64% goes to \"energy efficiency\" programs and bureaucracy</div>
+      <div class="alert-item">MA received <strong>$967M through 2023</strong>. Another $177M was committed to future spending. The remaining $200M+ went to state coffers</div>
+      <div class="alert-item">RGGI investments are managed by DOER — the <strong>same agency pushing the mandates</strong> that raise your bills</div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>How RGGI Proceeds Are Spent (All RGGI States, 2023)</h3>
+      <div class="chart-area"><canvas id="chartRGGISpend"></canvas></div>
+      <div class="source">Source: RGGI Proceeds Report 2023. MA invests in Mass Save, Green Communities, electrification.</div>
+    </div>
+    <div class="chart-card">
+      <h3>Capacity Costs: You Pay for Two Systems</h3>
+      <div class="chart-area"><canvas id="chartCapacity"></canvas></div>
+      <div class="source">Source: ISO-NE Forward Capacity Auction results</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h4>📋 The Double-System Problem</h4>
+    <p>Renewable energy is intermittent — wind doesn't always blow, sun doesn't always shine. Massachusetts ratepayers pay for the renewable generators AND for conventional backup plants that must stand ready to fill in during calm or cloudy periods. This "capacity cost" is hidden in your bill but adds billions annually. You're essentially paying for two parallel power systems — one that works sometimes, and one that must always be ready. No other industry works this way.</p>
+  </div>
+</div>
+
+<!-- ===== FOLLOW THE MONEY ===== -->
+<div id="money" class="tab-content">
+  <h2 class="section-title">Follow the Money — Who Benefits</h2>
+
+  <div class="alert">
+    <h4>⚠️ The Lobbying Loop</h4>
+    <div class="alert-grid">
+      <div class="alert-item">Eversource + National Grid spent <strong>$439,000+</strong> lobbying in the first half of 2022 alone (Boston Globe)</div>
+      <div class="alert-item">Rep. Jeff Roy (lead energy negotiator) received <strong>$10,000</strong> from utility executives during conference committee</div>
+      <div class="alert-item">Rep. Jim O'Day received <strong>$3,500+</strong> from Eversource, Berkshire Gas, Dominion lobbyists during bill negotiations</div>
+      <div class="alert-item">60% of Rep. Jeffrey Cusack's campaign collections during S.2967 debate came from <strong>industry donations</strong></div>
+      <div class="alert-item">"Clean energy" advocacy groups funded by <strong>Barr Foundation, Bloomberg, Energy Foundation</strong> — pushing mandates that raise your rates</div>
+      <div class="alert-item">The legislature writes "full cost recovery" into law — <strong>utilities pass costs through, developers get paid, ratepayers get the bill</strong></div>
+    </div>
+  </div>
+
+  <div class="data-card">
+    <h3>The Funding Chain — Who Pushes the Mandates</h3>
+    <table class="data-table">
+      <thead><tr><th>Entity</th><th>Type</th><th>Funding Sources</th><th>What They Push</th></tr></thead>
+      <tbody>
+        <tr><td>Acadia Center</td><td>Advocacy Group</td><td>Barr Foundation, Energy Foundation</td><td>RPS increases, RGGI ($1.36B), building electrification</td></tr>
+        <tr><td>Environmental League of MA</td><td>Advocacy Group</td><td>Barr Foundation, Bloomberg</td><td>Net-zero mandates, offshore wind</td></tr>
+        <tr><td>Barr Foundation</td><td>Private Foundation</td><td>Amos & Barbara Hostetter (Cablevision)</td><td>$30M+/yr in climate grants</td></tr>
+        <tr><td>Energy Foundation</td><td>Pass-through Foundation</td><td>Hewlett, Packard, Bloomberg</td><td>State-level clean energy policy</td></tr>
+        <tr><td>Avangrid/Iberdrola</td><td>Developer 🇪🇸</td><td>Spanish utility giant</td><td>Offshore wind contracts</td></tr>
+        <tr><td>Copenhagen Infra Partners</td><td>Developer 🇩🇰</td><td>Danish pension funds</td><td>Offshore wind contracts</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: ProPublica Nonprofit Explorer (Form 990); OCPF; MA Secretary of State Lobbying Database; Boston Globe (Dec 2025)</div>
+  </div>
+
+  <div class="info-box">
+    <h4>📋 The Loop</h4>
+    <p>Private foundations (Barr, Bloomberg, Energy Foundation) fund advocacy groups (Acadia Center, Environmental League). Those groups lobby Beacon Hill for mandates (RPS, RGGI, offshore wind procurement). Legislators pass laws with "full cost recovery" for developers. Foreign developers (Iberdrola, CIP, Shell) get guaranteed contracts. RGGI auctions extract $200M/year from ratepayers — $1.36B and counting. Utilities pass all costs to ratepayers. Utility lobbyists donate to legislators. Legislators pass more mandates. Massachusetts households pay the highest electricity rates in the continental U.S. Everyone in the loop gets paid except you.</p>
+  </div>
+</div>
+
+</div>
+
+<footer>
+  <a href="index.html">← Back to Massachusetts Data Hub</a><br>
+  <span>Sources: EIA Electric Power Monthly, ISO-NE, MA DOER, DPU, BOEM, RGGI Inc. (MA Proceeds by Auction, Proceeds Reports 2019–2023), OCPF, ProPublica, Boston Globe, MA Secretary of State Lobbying Database</span><br>
+  <span>Data compiled February 2026 · All data from official government and public disclosure sources</span>
+</footer>
+
+<script>
+const charts={};
+function safeChart(id,config){if(charts[id])charts[id].destroy();const ctx=document.getElementById(id);if(!ctx)return;charts[id]=new Chart(ctx,config)}
+function switchTab(tabId){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById(tabId).classList.add('active');event.currentTarget.classList.add('active');initCharts(tabId)}
+function initCharts(tab){
+  switch(tab){
+    case 'overview':
+      safeChart('chartRatesOverview',{type:'bar',data:{labels:['Massachusetts','Rhode Island','Connecticut','New Hampshire','New York','US Average','Florida','North Carolina','Texas'],datasets:[{label:'¢ per kWh',data:[31.5,31.3,27.8,27.4,27.1,18.05,15.8,15.1,16.2],backgroundColor:ctx=>ctx.raw>25?'#c0392b':ctx.raw>20?'#b8860b':'#1a7a4c',borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Cents per kWh'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartRateHistory',{type:'line',data:{labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'MA Rate (¢/kWh)',data:[22.1,22.6,22.0,22.6,22.9,22.7,25.2,28.5,29.6,30.8,31.5],borderColor:'#c0392b',backgroundColor:'rgba(192,57,43,0.08)',fill:true,tension:0.3,pointRadius:4},{label:'US Average',data:[12.7,12.6,12.9,12.9,13.0,13.0,13.7,15.1,15.8,16.6,18.05],borderColor:'#1a7a4c',borderDash:[5,5],fill:false,tension:0.3,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:false,min:10,title:{display:true,text:'¢ per kWh'}}},plugins:{legend:{position:'top',labels:{font:{size:11}}}}}});
+      break;
+    case 'rates':
+      safeChart('chartBillBreak',{type:'doughnut',data:{labels:['Supply (~40%)','Distribution (~30%)','Transition/Stranded Costs (~8%)','Renewable Energy (~10%)','Energy Efficiency (~7%)','RGGI + Other (~5%)'],datasets:[{data:[40,30,8,10,7,5],backgroundColor:['#1a4480','#5a8fba','#6b7280','#c0392b','#b8860b','#8b1a1a']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});
+      safeChart('chartGapTime',{type:'bar',data:{labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'MA Premium Over US Avg (¢/kWh)',data:[9.4,10.0,9.1,9.7,9.9,9.7,11.5,13.4,13.8,14.2,13.45],backgroundColor:'rgba(192,57,43,0.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,title:{display:true,text:'Premium (¢/kWh)'}}},plugins:{legend:{display:false}}}});
+      break;
+    case 'mandates':
+      safeChart('chartRGGI',{type:'bar',data:{labels:['2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'Auction Proceeds ($M)',data:[28.2,50.9,44.1,27.2,28.5,74.0,63.6,74.3,45.7,34.4,41.9,46.3,55.5,97.5,126.1,128.5,195.5,200.4],backgroundColor:function(ctx){return ctx.dataIndex>=13?'#c0392b':'#1a4480'},borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,title:{display:true,text:'Millions ($)'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartRPS',{type:'line',data:{labels:['2020','2022','2024','2026','2028','2030','2035','2040','2050'],datasets:[{label:'RPS Class I Requirement (%)',data:[16,20,24,28,32,35,50,65,80],borderColor:'#c0392b',backgroundColor:'rgba(192,57,43,0.06)',fill:true,tension:0.3,pointRadius:5,pointBackgroundColor:'#c0392b'}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,max:100,title:{display:true,text:'% of Retail Sales'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartRGGISpend',{type:'doughnut',data:{labels:['Energy Efficiency (64%)','Direct Bill Assistance (15%)','Beneficial Electrification (9%)','Clean & Renewable (6%)','GHG Abatement (2%)','Admin & Other (4%)'],datasets:[{data:[64,15,9,6,2,4],backgroundColor:['#1a4480','#1a7a4c','#b8860b','#5a8fba','#6b7280','#8b1a1a']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});
+      safeChart('chartCapacity',{type:'bar',data:{labels:['2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'ISO-NE Capacity Clearing Price ($/kW-mo)',data:[3.80,5.30,7.03,3.98,2.59,3.98,7.03,4.63],backgroundColor:'#1a4480',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,title:{display:true,text:'$/kW-month'}}},plugins:{legend:{display:false}}}});
+      break;
+  }
+}
+initCharts('overview');
+</script>
+</body>
+</html>

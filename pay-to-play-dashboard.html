@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Massachusetts Pay-to-Play: Lobbying & Political Spending</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f8f7f4;--card:#ffffff;--border:#e8e5df;--text:#1a1a1a;--muted:#7a756e;--red:#c0392b;--red-bg:rgba(192,57,43,0.06);--green:#1a7a4c;--green-bg:rgba(26,122,76,0.06);--blue:#1a4480;--blue-bg:rgba(26,68,128,0.06);--amber:#b8860b;--amber-bg:rgba(184,134,11,0.06);--accent:#8b1a1a;--gold:#c9a84c;--navy:#0f2942}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+.hero{background:var(--navy);color:#fff;padding:56px 24px 42px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,0.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(139,26,26,0.1) 0%,transparent 50%)}
+.hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.6rem,4.5vw,2.6rem);font-weight:400;margin-bottom:8px;letter-spacing:-0.01em;position:relative}
+.hero .sub{opacity:0.65;font-size:0.85rem;margin-bottom:28px;font-weight:400;letter-spacing:0.02em;position:relative}
+.hero-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;max-width:1000px;margin:0 auto;position:relative}
+.hero-stat{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:18px 10px;text-align:center;backdrop-filter:blur(4px);transition:background 0.3s}
+.hero-stat:hover{background:rgba(255,255,255,0.1)}
+.hero-stat .val{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.1rem,2.5vw,1.5rem);font-weight:400}
+.hero-stat .lbl{font-size:0.62rem;opacity:0.55;margin-top:4px;text-transform:uppercase;letter-spacing:0.08em;font-weight:500}
+.hero-stat .val.bad{color:#e8a87c}
+.tab-nav{display:flex;justify-content:center;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.tab-btn{padding:15px 22px;font-size:0.78rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.25s;text-transform:uppercase;letter-spacing:0.06em}
+.tab-btn:hover{color:var(--text);background:rgba(0,0,0,0.02)}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
+.container{max-width:1200px;margin:0 auto;padding:28px 24px}
+.tab-content{display:none;animation:fadeUp 0.35s ease}
+.tab-content.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.section-title{font-family:'DM Serif Display',Georgia,serif;font-size:1.35rem;font-weight:400;margin-bottom:18px;color:var(--navy)}
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:26px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px 18px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.03);transition:box-shadow 0.3s,transform 0.3s}
+.stat-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.07);transform:translateY(-2px)}
+.stat-card .label{font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:8px}
+.stat-card .value{font-family:'DM Serif Display',Georgia,serif;font-size:2rem;font-weight:400;line-height:1.1}
+.stat-card .value.red{color:var(--red)}
+.stat-card .value.green{color:var(--green)}
+.stat-card .value.blue{color:var(--blue)}
+.stat-card .value.amber{color:var(--amber)}
+.stat-card .sub{font-size:0.72rem;color:var(--muted);margin-top:6px}
+.alert{background:var(--red-bg);border:1px solid rgba(192,57,43,0.15);border-radius:14px;padding:24px;margin-bottom:26px;border-left:4px solid var(--red)}
+.alert h4{color:var(--red);font-size:0.88rem;margin-bottom:12px;font-weight:700;letter-spacing:0.02em}
+.alert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+.alert-item{font-size:0.82rem;color:var(--text);padding:5px 0;line-height:1.55}
+.alert-item strong{color:var(--red)}
+.chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(450px,1fr));gap:16px;margin-bottom:26px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.chart-card h3{font-size:0.85rem;font-weight:700;margin-bottom:14px;color:var(--navy)}
+.chart-area{position:relative;height:280px}
+.chart-tall{height:360px}
+.data-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:26px;overflow-x:auto;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.data-card h3{font-size:0.88rem;font-weight:700;margin-bottom:14px;color:var(--navy)}
+.data-table{width:100%;border-collapse:collapse;font-size:0.82rem}
+.data-table th{text-align:left;padding:10px 14px;border-bottom:2px solid var(--navy);font-weight:700;color:var(--navy);font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em}
+.data-table td{padding:10px 14px;border-bottom:1px solid var(--border)}
+.data-table tr:hover{background:rgba(15,41,66,0.02)}
+.data-table .highlight{color:var(--red);font-weight:700}
+.data-table .good{color:var(--green);font-weight:600}
+.info-box{background:var(--blue-bg);border:1px solid rgba(26,68,128,0.12);border-radius:14px;padding:24px;margin-bottom:26px;border-left:4px solid var(--blue)}
+.info-box h4{color:var(--blue);font-size:0.88rem;margin-bottom:10px;font-weight:700}
+.info-box p{font-size:0.82rem;color:var(--text);line-height:1.65}
+.source{font-size:0.68rem;color:var(--muted);margin-top:8px;font-style:italic}
+footer{text-align:center;padding:36px 24px;color:var(--muted);font-size:0.75rem;border-top:1px solid var(--border);background:#fff;margin-top:36px}
+footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1px solid var(--gold)}
+footer a:hover{color:var(--gold)}
+@media(max-width:768px){.hero-stats{grid-template-columns:repeat(3,1fr)}.chart-grid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.hero{padding:36px 16px 30px}.container{padding:18px}}
+@media(max-width:480px){.hero-stats{grid-template-columns:repeat(2,1fr)}.stat-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Pay-to-Play: Lobbying & Political Spending</h1>
+  <p class="sub">$104M spent annually lobbying Beacon Hill. 8 lobbyists per lawmaker. 82% of their donations at exactly $200 — the legal cap. All from public records.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="val bad">$104M</div><div class="lbl">Annual Lobbying Spend</div></div>
+    <div class="hero-stat"><div class="val bad">8:1</div><div class="lbl">Lobbyists per Lawmaker</div></div>
+    <div class="hero-stat"><div class="val bad">82.3%</div><div class="lbl">Donations at Exactly $200</div></div>
+    <div class="hero-stat"><div class="val bad">$822K</div><div class="lbl">From 3 Firms Alone (OCPF)</div></div>
+    <div class="hero-stat"><div class="val bad">4,298</div><div class="lbl">Individual Donations Tracked</div></div>
+    <div class="hero-stat"><div class="val bad">Only State</div><div class="lbl">All 3 Branches Exempt</div></div>
+  </div>
+</div>
+
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+  <button class="tab-btn" onclick="switchTab('sectors')">Who's Spending</button>
+  <button class="tab-btn" onclick="switchTab('firms')">The Hired Guns</button>
+  <button class="tab-btn" onclick="switchTab('recipients')">Who Gets Paid</button>
+  <button class="tab-btn" onclick="switchTab('loophole')">The Loophole</button>
+  <button class="tab-btn" onclick="switchTab('transparency')">Transparency Gap</button>
+</nav>
+
+<div class="container">
+
+<!-- ===== OVERVIEW ===== -->
+<div id="overview" class="tab-content active">
+  <div class="alert">
+    <h4>⚠️ The System — How It Works</h4>
+    <div class="alert-grid">
+      <div class="alert-item">Organizations that depend on <strong>state funding and regulation</strong> spend $104M/year lobbying the politicians who control that funding</div>
+      <div class="alert-item">They hire lobbying firms — the top 4 alone earned <strong>$76.7 million</strong> over the past decade</div>
+      <div class="alert-item">Those lobbyists then personally donate to politicians at <strong>exactly $200</strong> — the legal cap — across dozens of campaigns</div>
+      <div class="alert-item">OCPF data shows <strong>82.3% of all lobbyist donations</strong> are exactly $200 — a systematic pattern</div>
+      <div class="alert-item">But lobbyists can give <strong>unlimited amounts</strong> to lawmakers' personal nonprofits — with zero disclosure</div>
+      <div class="alert-item">MA is the <strong>only state</strong> where all three branches of government are exempt from public records law</div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>Lobbying Spending by Sector — $457M Total (2015–2025)</h3>
+      <div class="chart-area chart-tall"><canvas id="chartSectors"></canvas></div>
+      <div class="source">Source: OpenSecrets, Massachusetts State Lobbying Ranked Sectors (2015–2025)</div>
+    </div>
+    <div class="chart-card">
+      <h3>Top 10 Industries by Lobbying Spend (2015–2025)</h3>
+      <div class="chart-area chart-tall"><canvas id="chartIndustries"></canvas></div>
+      <div class="source">Source: OpenSecrets, Massachusetts State Lobbying by Industry (2015–2025)</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h4>🔄 The Pay-to-Play Cycle</h4>
+    <p><strong>Step 1:</strong> Organization receives taxpayer funding (MassHealth contracts, grants, state procurement).<br>
+    <strong>Step 2:</strong> Organization hires lobbying firm to maintain and increase that funding ($104M/year).<br>
+    <strong>Step 3:</strong> Firm's lobbyists each donate $200 to every key politician — systematically, across all leadership.<br>
+    <strong>Step 4:</strong> Organization's executives also donate personally to the same politicians.<br>
+    <strong>Step 5:</strong> Lobbyists and executives donate unlimited amounts to lawmakers' personal nonprofits (legal, no disclosure).<br>
+    <strong>Step 6:</strong> Politicians vote to maintain or increase the organization's funding.<br>
+    <strong>Step 7:</strong> Repeat annually. Taxpayers fund the entire cycle.</p>
+  </div>
+</div>
+
+<!-- ===== WHO'S SPENDING ===== -->
+<div id="sectors" class="tab-content">
+  <h2 class="section-title">Who's Spending — Sectors & Organizations</h2>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">Health Sector</div><div class="value red">$112.7M</div><div class="sub">#1 — 25% of all lobbying</div></div>
+    <div class="stat-card"><div class="label">Finance/Insurance/RE</div><div class="value amber">$74.4M</div><div class="sub">#2 sector</div></div>
+    <div class="stat-card"><div class="label">Energy/Natural Resources</div><div class="value amber">$39.3M</div><div class="sub">#4 sector</div></div>
+    <div class="stat-card"><div class="label">Top Org: MH&HA</div><div class="value red">$7.4M</div><div class="sub">Hospital association alone</div></div>
+  </div>
+
+  <div class="data-card">
+    <h3>Top 20 Lobbying Spenders (2015–2025)</h3>
+    <table class="data-table">
+      <thead><tr><th>#</th><th>Organization</th><th>Total Spent</th><th>Sector</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="highlight">MA Health & Hospital Association</td><td class="highlight">$7,414,139</td><td>Health</td></tr>
+        <tr><td>2</td><td class="highlight">MA Association of Health Plans</td><td class="highlight">$6,499,713</td><td>Health</td></tr>
+        <tr><td>3</td><td>Association for Behavioral Healthcare</td><td>$4,461,402</td><td>Health</td></tr>
+        <tr><td>4</td><td>MA Biotechnology Council (MassBio)</td><td>$4,371,545</td><td>Health</td></tr>
+        <tr><td>5</td><td>MA Teachers Association</td><td>$3,890,866</td><td>Labor</td></tr>
+        <tr><td>6</td><td>MA Nurses Association</td><td>$3,775,296</td><td>Health</td></tr>
+        <tr><td>7</td><td>Retired State/County/Muni Employees Assoc.</td><td>$3,670,853</td><td>Labor</td></tr>
+        <tr><td>8</td><td class="highlight">Blue Cross Blue Shield of MA</td><td class="highlight">$3,626,072</td><td>Health</td></tr>
+        <tr><td>9</td><td>MA Assn of Health Plans (2nd filing)</td><td>$3,444,644</td><td>Health</td></tr>
+        <tr><td>10</td><td>MA Municipal Association</td><td>$3,410,125</td><td>Gov't</td></tr>
+        <tr><td>11</td><td class="highlight">Partners Healthcare System (MGB)</td><td class="highlight">$3,240,888</td><td>Health</td></tr>
+        <tr><td>12</td><td>SEIU Local 32BJ</td><td>$3,216,014</td><td>Labor</td></tr>
+        <tr><td>13</td><td>Eversource Energy</td><td>$3,065,502</td><td>Energy</td></tr>
+        <tr><td>14</td><td>Verizon Communications</td><td>$2,876,224</td><td>Telecom</td></tr>
+        <tr><td>15</td><td>Associated Industries of MA</td><td>$2,840,782</td><td>Business</td></tr>
+        <tr><td>16</td><td>MA Property Insurance Underwriting Assoc.</td><td>$2,757,990</td><td>Insurance</td></tr>
+        <tr><td>17</td><td>National Grid USA</td><td>$2,705,993</td><td>Energy</td></tr>
+        <tr><td>18</td><td>Harvard Pilgrim Health Care</td><td>$2,685,839</td><td>Health</td></tr>
+        <tr><td>19</td><td>Eli Lilly & Co</td><td>$2,618,267</td><td>Pharma</td></tr>
+        <tr><td>20</td><td>MA Medical Society</td><td>$2,565,024</td><td>Health</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: OpenSecrets, Massachusetts State Lobbying Top 20 Spenders (2015–2025)</div>
+  </div>
+
+  <div class="alert">
+    <h4>⚠️ Healthcare Dominates — And They Depend on Your Tax Dollars</h4>
+    <div class="alert-grid">
+      <div class="alert-item"><strong>6 of the top 10</strong> spenders are from the healthcare sector — an industry that depends heavily on MassHealth funding</div>
+      <div class="alert-item">In 2024 alone: MA Assn of Health Plans spent <strong>$1.3M</strong> and MH&HA spent <strong>$1.1M</strong> — the only two groups over $1M</div>
+      <div class="alert-item">Hospitals/Nursing Homes: <strong>$43.4M</strong> in lobbying. Insurance: <strong>$42.8M</strong>. Pharma: <strong>$37.3M</strong></div>
+      <div class="alert-item">These organizations receive <strong>billions in taxpayer money</strong> via MassHealth, then spend millions lobbying to keep the money flowing</div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>2024 Top Lobbying Spenders — Single Year</h3>
+      <div class="chart-area"><canvas id="chartSpenders2024"></canvas></div>
+      <div class="source">Source: Secretary of the Commonwealth, MA Lobbying Reports (2024)</div>
+    </div>
+    <div class="chart-card">
+      <h3>Healthcare vs. All Other Sectors (2015–2025)</h3>
+      <div class="chart-area"><canvas id="chartHealthDominance"></canvas></div>
+      <div class="source">Source: OpenSecrets, Ranked Sectors Massachusetts (2015–2025)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== THE HIRED GUNS ===== -->
+<div id="firms" class="tab-content">
+  <h2 class="section-title">The Hired Guns — Top Lobbying Firms</h2>
+  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:20px">These firms earn millions lobbying politicians — then their employees personally donate to those same politicians. OCPF records from just 3 firms reveal 4,298 individual donations totaling $822,463.</p>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">ML Strategies</div><div class="value red">$25.4M</div><div class="sub">Earned in lobbying fees</div></div>
+    <div class="stat-card"><div class="label">Smith Costello</div><div class="value red">$20.4M</div><div class="sub">Earned in lobbying fees</div></div>
+    <div class="stat-card"><div class="label">Bay State Strategies</div><div class="value red">$17.3M</div><div class="sub">Earned in lobbying fees</div></div>
+    <div class="stat-card"><div class="label">O'Neill & Partners</div><div class="value amber">$13.6M</div><div class="sub">Earned (OCPF not searchable)</div></div>
+  </div>
+
+  <div class="alert">
+    <h4>⚠️ The $200 Pattern — OCPF Raw Data Analysis</h4>
+    <div class="alert-grid">
+      <div class="alert-item">We pulled <strong>every OCPF donation</strong> from ML Strategies, Smith Costello & Crawford, and Bay State Strategies Group</div>
+      <div class="alert-item">Result: <strong>4,298 donations totaling $822,463</strong> to Massachusetts politicians</div>
+      <div class="alert-item"><strong>82.3% of all donations</strong> are exactly $200 — the legal maximum for lobbyists</div>
+      <div class="alert-item">Another <strong>13.3% are exactly $100</strong> — the two amounts account for 95.6% of all donations</div>
+      <div class="alert-item">This is not organic giving — this is a <strong>systematic, coordinated pattern</strong></div>
+      <div class="alert-item">O'Neill & Partners (#4 firm, $13.6M earned) creates an error in OCPF search — <strong>their donations cannot be tracked</strong></div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>Firm Lobbying Income (2015–2025) — Top 10</h3>
+      <div class="chart-area chart-tall"><canvas id="chartFirmIncome"></canvas></div>
+      <div class="source">Source: OpenSecrets, Top 20 Lobbying Firms, Massachusetts (2015–2025)</div>
+    </div>
+    <div class="chart-card">
+      <h3>The $200 Pattern — Donation Amount Distribution (OCPF)</h3>
+      <div class="chart-area"><canvas id="chartDonationDist"></canvas></div>
+      <div class="source">Source: OCPF Campaign Finance Database — ML Strategies, Smith Costello, Bay State Strategies donations</div>
+    </div>
+  </div>
+
+  <div class="data-card">
+    <h3>Top Individual Lobbyist Donors — OCPF Data (2015–2026)</h3>
+    <table class="data-table">
+      <thead><tr><th>#</th><th>Lobbyist</th><th>Firm</th><th>Total Given</th><th># Donations</th><th>Avg Amount</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="highlight">David Shapiro</td><td>Bay State Strategies</td><td class="highlight">$72,100</td><td>392</td><td>$184</td></tr>
+        <tr><td>2</td><td class="highlight">Michael Costello</td><td>Smith Costello & Crawford</td><td class="highlight">$59,550</td><td>298</td><td>$200</td></tr>
+        <tr><td>3</td><td class="highlight">Jim/James Smith</td><td>Smith Costello & Crawford</td><td class="highlight">$53,240</td><td>272</td><td>$196</td></tr>
+        <tr><td>4</td><td>Jennifer Crawford</td><td>Smith Costello & Crawford</td><td>$44,350</td><td>225</td><td>$197</td></tr>
+        <tr><td>5</td><td>Carlo Basile</td><td>Smith Costello & Crawford</td><td>$24,250</td><td>122</td><td>$199</td></tr>
+        <tr><td>6</td><td>Francis Shea</td><td>Bay State Strategies</td><td>$17,450</td><td>75</td><td>$233</td></tr>
+        <tr><td>7</td><td>Jay Youmans</td><td>Smith Costello & Crawford</td><td>$17,100</td><td>86</td><td>$199</td></tr>
+        <tr><td>8</td><td>Stephen Tocco</td><td>ML Strategies</td><td>$14,725</td><td>67</td><td>$220</td></tr>
+        <tr><td>9</td><td>Robert Bernstein</td><td>Bay State Strategies</td><td>$10,600</td><td>55</td><td>$193</td></tr>
+        <tr><td>10</td><td>Stephen Silveira</td><td>ML Strategies</td><td>$10,575</td><td>59</td><td>$179</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: OCPF Campaign Finance Database — all donations from employees of ML Strategies, Smith Costello & Crawford, Bay State Strategies (2015–2026). Note: OCPF search for O'Neill & Partners returns an error.</div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>Donations by Firm — OCPF Analysis</h3>
+      <div class="chart-area"><canvas id="chartFirmDonations"></canvas></div>
+      <div class="source">Source: OCPF — 4,298 total donations analyzed</div>
+    </div>
+    <div class="chart-card">
+      <h3>Top 10 Individual Lobbyist Donors</h3>
+      <div class="chart-area chart-tall"><canvas id="chartTopDonors"></canvas></div>
+      <div class="source">Source: OCPF Campaign Finance Database</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== WHO GETS PAID ===== -->
+<div id="recipients" class="tab-content">
+  <h2 class="section-title">Who Gets Paid — Top Political Recipients</h2>
+  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:20px">Every top politician in Massachusetts receives donations from ALL THREE major lobbying firms. The amounts are modest — but the pattern is what matters.</p>
+
+  <div class="alert">
+    <h4>⚠️ The Coverage Pattern — Everyone Gets Covered</h4>
+    <div class="alert-grid">
+      <div class="alert-item">Former Speaker <strong>Robert DeLeo: $21,200</strong> from 111 donations — #1 recipient from all 3 firms</div>
+      <div class="alert-item">Gov. <strong>Maura Healey: $19,736</strong> from 96 donations — receives from ML Strategies, Smith Costello, AND Bay State</div>
+      <div class="alert-item">Budget Chair <strong>Aaron Michlewitz: $16,800</strong> from 85 donations — controls the state budget, receives from all 3 firms</div>
+      <div class="alert-item">Senate Pres. <strong>Karen Spilka: $10,825</strong> from 57 donations — top Senate leader, receives from multiple firms</div>
+      <div class="alert-item">Speaker <strong>Ron Mariano: $10,800</strong> from 51 donations — current House leader, receives from all 3 firms</div>
+      <div class="alert-item">Former Gov. <strong>Charlie Baker: $15,500</strong> — bipartisan coverage: both parties get the money</div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>Top 15 Recipients of Lobbyist Firm Donations (OCPF)</h3>
+      <div class="chart-area chart-tall"><canvas id="chartRecipients"></canvas></div>
+      <div class="source">Source: OCPF — combined donations from ML Strategies, Smith Costello, Bay State Strategies employees</div>
+    </div>
+    <div class="chart-card">
+      <h3>Donations by Source Firm — Top Recipients</h3>
+      <div class="chart-area chart-tall"><canvas id="chartRecipientFirms"></canvas></div>
+      <div class="source">Source: OCPF Campaign Finance Database</div>
+    </div>
+  </div>
+
+  <div class="data-card">
+    <h3>Top 25 Political Recipients — OCPF Verified (from 3 Firms)</h3>
+    <table class="data-table">
+      <thead><tr><th>#</th><th>Politician</th><th>Total</th><th># Donations</th><th>Source Firms</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="highlight">Robert DeLeo (Former Speaker)</td><td class="highlight">$21,200</td><td>111</td><td>All 3</td></tr>
+        <tr><td>2</td><td class="highlight">Maura Healey (Governor)</td><td class="highlight">$19,736</td><td>96</td><td>All 3</td></tr>
+        <tr><td>3</td><td>John Lawn</td><td>$17,250</td><td>90</td><td>All 3</td></tr>
+        <tr><td>4</td><td class="highlight">Aaron Michlewitz (Budget Chair)</td><td class="highlight">$16,800</td><td>85</td><td>All 3</td></tr>
+        <tr><td>5</td><td>Mark James Cusack</td><td>$16,400</td><td>82</td><td>All 3</td></tr>
+        <tr><td>6</td><td>Charlie Baker (Former Governor)</td><td>$15,500</td><td>59</td><td>All 3</td></tr>
+        <tr><td>7</td><td>Karyn Polito (Former Lt. Gov.)</td><td>$14,000</td><td>67</td><td>All 3</td></tr>
+        <tr><td>8</td><td>Barry Finegold</td><td>$12,450</td><td>67</td><td>All 3</td></tr>
+        <tr><td>9</td><td>Michael Moran</td><td>$12,000</td><td>62</td><td>All 3</td></tr>
+        <tr><td>10</td><td>James Murphy</td><td>$12,000</td><td>62</td><td>All 3</td></tr>
+        <tr><td>11</td><td>Bruce Tarr (Senate Minority Leader)</td><td>$11,400</td><td>58</td><td>All 3</td></tr>
+        <tr><td>12</td><td>Mitt Romney</td><td>$11,400</td><td>39</td><td>ML Strategies</td></tr>
+        <tr><td>13</td><td>Dem Senate PAC</td><td>$10,925</td><td>60</td><td>All 3</td></tr>
+        <tr><td>14</td><td class="highlight">Karen Spilka (Senate President)</td><td class="highlight">$10,825</td><td>57</td><td>Bay State, ML</td></tr>
+        <tr><td>15</td><td class="highlight">Ronald Mariano (Speaker)</td><td class="highlight">$10,800</td><td>51</td><td>All 3</td></tr>
+        <tr><td>16</td><td>Therese Murray</td><td>$10,500</td><td>58</td><td>Bay State, ML</td></tr>
+        <tr><td>17</td><td>Daniel Ryan</td><td>$10,000</td><td>51</td><td>All 3</td></tr>
+        <tr><td>18</td><td>Michael Day</td><td>$9,750</td><td>49</td><td>All 3</td></tr>
+        <tr><td>19</td><td>Jeffrey Roy (Energy Chair)</td><td>$9,100</td><td>46</td><td>All 3</td></tr>
+        <tr><td>20</td><td>Marjorie Decker</td><td>$8,950</td><td>47</td><td>All 3</td></tr>
+        <tr><td>21</td><td>Daniel Hunt</td><td>$8,925</td><td>50</td><td>All 3</td></tr>
+        <tr><td>22</td><td>Kimberley Driscoll (Lt. Gov.)</td><td>$8,500</td><td>41</td><td>All 3</td></tr>
+        <tr><td>23</td><td>Dem House PAC</td><td>$8,225</td><td>43</td><td>All 3</td></tr>
+        <tr><td>24</td><td>Martin Walsh (Former Mayor)</td><td>$7,725</td><td>42</td><td>All 3</td></tr>
+        <tr><td>25</td><td>Brendan Crighton</td><td>$7,700</td><td>39</td><td>All 3</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: OCPF Campaign Finance Database — all donations from employees of 3 top lobbying firms. Note: does not include O'Neill & Partners (OCPF error) or direct organizational lobbying spend.</div>
+  </div>
+
+  <div class="info-box">
+    <h4>📋 What This Data Shows</h4>
+    <p>This is only the <strong>direct campaign donations</strong> from employees of three lobbying firms — it doesn't include the $76.7M in lobbying fees their clients paid, the unlimited donations to lawmaker nonprofits, or the fourth largest firm (O'Neill & Partners, $13.6M earned) whose OCPF data is unsearchable. The real money flowing through this system is orders of magnitude larger than what OCPF captures. And that's exactly how it's designed.</p>
+  </div>
+</div>
+
+<!-- ===== THE LOOPHOLE ===== -->
+<div id="loophole" class="tab-content">
+  <h2 class="section-title">The Nonprofit Loophole</h2>
+
+  <div class="alert">
+    <h4>⚠️ $200 Cap? Just Use the Back Door</h4>
+    <div class="alert-grid">
+      <div class="alert-item">MGL Chapter 55, §7A: lobbyists can give max <strong>$200/year per candidate</strong></div>
+      <div class="alert-item">But lawmakers run personal nonprofits — lobbyists can donate <strong>unlimited amounts with no disclosure</strong></div>
+      <div class="alert-item">Boston Globe investigation (April 2025): lobbyists give <strong>$10,000+</strong> to lawmaker nonprofits</div>
+      <div class="alert-item">East Boston Neighborhood Health Center donated <strong>$10,000</strong> to Rep. Madaro's nonprofit</div>
+      <div class="alert-item">Casinos, pharma, and real estate <strong>sponsored Rep. DiDomenico's Italian festival</strong></div>
+      <div class="alert-item">Sen. Finegold's Dana-Farber benefit concert at <strong>MGM Music Hall</strong> — sponsored by industries he regulates</div>
+    </div>
+  </div>
+
+  <div class="data-card">
+    <h3>Campaign Contribution Limits vs. Nonprofit Loophole</h3>
+    <table class="data-table">
+      <thead><tr><th>Channel</th><th>Limit</th><th>Disclosure</th><th>Oversight</th></tr></thead>
+      <tbody>
+        <tr><td>Individual to Candidate</td><td>$1,000/year</td><td class="good">Public (OCPF)</td><td class="good">OCPF enforcement</td></tr>
+        <tr><td>Lobbyist to Candidate</td><td>$200/year</td><td class="good">Public (OCPF)</td><td class="good">OCPF enforcement</td></tr>
+        <tr><td>Lobbyist to PAC</td><td>$200/year</td><td class="good">Public (OCPF)</td><td class="good">OCPF enforcement</td></tr>
+        <tr><td class="highlight">Lobbyist to Lawmaker Nonprofit</td><td class="highlight">UNLIMITED</td><td class="highlight">NONE</td><td class="highlight">NONE</td></tr>
+        <tr><td>To Ballot Question Committee</td><td>Unlimited</td><td class="good">Public (OCPF)</td><td>Limited</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: MGL Ch. 55, §7A; Boston Globe investigation (April 2025); OCPF</div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>Healthcare Case Study: MGB VP Christopher Philbin</h3>
+      <div class="chart-area"><canvas id="chartPhilbin"></canvas></div>
+      <div class="source">Source: OCPF — Philbin donation records (2024). All 28 donations at exactly $200.</div>
+    </div>
+    <div class="chart-card">
+      <h3>Healthcare Industry — Political Giving from Employees (2024)</h3>
+      <div class="chart-area chart-tall"><canvas id="chartHospitals"></canvas></div>
+      <div class="source">Source: OCPF Campaign Finance Database, employer field analysis (2024)</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h4>📋 The Philbin Case Study</h4>
+    <p>Christopher Philbin is VP of Government Affairs at Mass General Brigham — the state's largest hospital system. MGB receives billions from MassHealth. Philbin earned $93,128 in lobbying compensation (2021–2025). He then personally donated $5,600 to 28 politicians in 2024 — exactly $200 each (the legal maximum). Recipients include Gov. Healey, Senate President Spilka, AG Campbell, Mayor Wu, and Budget Chair Michlewitz. MGB employees collectively gave $19,522 to politicians in 2024 across 46 donors. This is one hospital system, one year. The pattern repeats across every major healthcare organization in the state.</p>
+  </div>
+</div>
+
+<!-- ===== TRANSPARENCY GAP ===== -->
+<div id="transparency" class="tab-content">
+  <h2 class="section-title">The Transparency Black Hole</h2>
+
+  <div class="alert">
+    <h4>⚠️ Massachusetts: The Only State Where Nobody Has to Tell You Anything</h4>
+    <div class="alert-grid">
+      <div class="alert-item">MA is the <strong>only state in the country</strong> where the governor, judiciary, AND legislature are all exempt from public records law</div>
+      <div class="alert-item">Boston Globe survey: only <strong>12% of legislators</strong> support being subject to public records law — <strong>78% didn't even respond</strong></div>
+      <div class="alert-item">State Auditor DiZoglio: agencies can <strong>refuse to cooperate with audits</strong> and face zero consequences</div>
+      <div class="alert-item">Supervisor of Records has <strong>no enforcement authority</strong> — agencies can simply ignore requests</div>
+      <div class="alert-item">Lawmaker nonprofits have <strong>no disclosure requirements</strong> — the public can't see who's giving</div>
+      <div class="alert-item">The #4 lobbying firm (O'Neill & Partners, <strong>$13.6M earned</strong>) can't even be searched in OCPF — the system returns an error</div>
+    </div>
+  </div>
+
+  <div class="data-card">
+    <h3>Public Records Transparency — MA vs. Other States</h3>
+    <table class="data-table">
+      <thead><tr><th>Branch of Government</th><th>Massachusetts</th><th>Most Other States</th></tr></thead>
+      <tbody>
+        <tr><td>Governor's Office</td><td class="highlight">❌ EXEMPT</td><td class="good">✅ Subject to records law</td></tr>
+        <tr><td>Legislature</td><td class="highlight">❌ EXEMPT</td><td class="good">✅ Subject to records law</td></tr>
+        <tr><td>Judiciary</td><td class="highlight">❌ EXEMPT</td><td class="good">✅ Subject to records law (most)</td></tr>
+        <tr><td>Lawmaker Nonprofit Donors</td><td class="highlight">❌ NO DISCLOSURE</td><td>Varies</td></tr>
+        <tr><td>Audit Cooperation</td><td class="highlight">❌ VOLUNTARY</td><td class="good">✅ Mandatory (most)</td></tr>
+        <tr><td>Records Enforcement</td><td class="highlight">❌ NO AUTHORITY</td><td class="good">✅ Enforcement power</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: New England First Amendment Coalition; Boston Globe survey (March 2025); State Auditor reports</div>
+  </div>
+
+  <div class="info-box">
+    <h4>📋 The Bottom Line</h4>
+    <p>Massachusetts has constructed a system where $104 million flows annually from special interests to lobbying firms, from lobbyist pockets to politician campaigns (at exactly $200 a pop), and from lobbyist checkbooks to lawmaker nonprofits (unlimited, undisclosed). All three branches of government are exempt from the public records law that would allow citizens to see how decisions are made. The state auditor cannot compel cooperation. The campaign finance database can't even search one of the top four firms. This isn't a loophole — it's architecture.</p>
+  </div>
+</div>
+
+</div>
+
+<footer>
+  <a href="index.html">← Back to Massachusetts Data Hub</a><br>
+  <span>Sources: OpenSecrets (State Lobbying Data 2015–2025), OCPF Campaign Finance Database (ML Strategies, Smith Costello & Crawford, Bay State Strategies Group donations), Secretary of the Commonwealth (MA Lobbying Reports), Boston Globe, New England First Amendment Coalition, MGL Ch. 55</span><br>
+  <span>Data compiled February 2026 · All data from official government and public disclosure sources</span>
+</footer>
+
+<script>
+const charts={};
+function safeChart(id,config){if(charts[id])charts[id].destroy();const ctx=document.getElementById(id);if(!ctx)return;charts[id]=new Chart(ctx,config)}
+function switchTab(tabId){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById(tabId).classList.add('active');event.currentTarget.classList.add('active');initCharts(tabId)}
+
+function initCharts(tab){
+  switch(tab){
+    case 'overview':
+      safeChart('chartSectors',{type:'bar',data:{labels:['Health','Finance/Insur/RE','Misc Business','Energy/NatRes','Labor','Ideology/Single-Issue','Communic/Electronics','Transportation','Other','Agribusiness','Construction','Defense'],datasets:[{label:'Total (Millions $)',data:[112.7,74.4,63.8,39.3,36.7,34.8,30.8,25.0,21.6,8.8,8.2,1.4],backgroundColor:ctx=>ctx.dataIndex===0?'#c0392b':ctx.dataIndex<4?'#b8860b':'#1a4480',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Millions ($)'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartIndustries',{type:'bar',data:{labels:['Hospitals/Nursing','Insurance','Pharma/Health Prod','Public Unions','Health Services','Health Profs','Electric Utilities','Telecom','Real Estate','Casinos/Gambling'],datasets:[{label:'Total (Millions $)',data:[43.4,42.8,37.3,20.1,16.2,15.8,14.6,12.4,12.0,11.8],backgroundColor:ctx=>ctx.dataIndex<3?'#c0392b':ctx.dataIndex<6?'#b8860b':'#1a4480',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Millions ($)'}}},plugins:{legend:{display:false}}}});
+      break;
+
+    case 'sectors':
+      safeChart('chartSpenders2024',{type:'bar',data:{labels:['MA Assn Health Plans','MA Health & Hosp Assn','MassBio','MA Nurses Assn','Blue Cross Blue Shield'],datasets:[{label:'2024 Spending ($)',data:[1305040,1116626,866139,519192,460403],backgroundColor:['#c0392b','#c0392b','#b8860b','#b8860b','#1a4480'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,title:{display:true,text:'Spending ($)'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartHealthDominance',{type:'doughnut',data:{labels:['Health ($112.7M)','Finance/Insurance/RE ($74.4M)','Misc Business ($63.8M)','Energy ($39.3M)','Labor ($36.7M)','All Other ($130.6M)'],datasets:[{data:[112.7,74.4,63.8,39.3,36.7,130.6],backgroundColor:['#c0392b','#1a4480','#5a8fba','#b8860b','#7c3aed','#6b7280']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});
+      break;
+
+    case 'firms':
+      safeChart('chartFirmIncome',{type:'bar',data:{labels:['ML Strategies','Smith Costello','Bay State Strategies','O\'Neill & Partners','Murphy Donoghue','Tremont Strategies','Preti Strategies','Serlin Haley','Kearney Donovan','O\'Neill & Assoc'],datasets:[{label:'Total Income ($M)',data:[25.4,20.4,17.3,13.6,13.0,12.7,11.4,11.0,10.7,10.4],backgroundColor:ctx=>ctx.dataIndex<3?'#c0392b':ctx.dataIndex===3?'#6b7280':'#1a4480',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Millions ($)'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartDonationDist',{type:'bar',data:{labels:['$200','$100','$500','$150','$250','$125','$1,000','Other'],datasets:[{label:'# of Donations',data:[3539,572,48,34,33,29,12,31],backgroundColor:ctx=>ctx.dataIndex===0?'#c0392b':'#1a4480',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,title:{display:true,text:'Number of Donations'}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const pct=(ctx.parsed.y/4298*100).toFixed(1);return `${ctx.parsed.y} donations (${pct}%)`}}}}}});
+      safeChart('chartFirmDonations',{type:'bar',data:{labels:['ML Strategies','Smith Costello & Crawford','Bay State Strategies'],datasets:[{label:'Total ($)',data:[335496,273517,213450],backgroundColor:['#c0392b','#1a4480','#b8860b'],borderRadius:8},{label:'# Donations',data:[1809,1379,1110],backgroundColor:['rgba(192,57,43,0.3)','rgba(26,68,128,0.3)','rgba(184,134,11,0.3)'],borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true}},plugins:{legend:{position:'top',labels:{font:{size:11}}}}}});
+      safeChart('chartTopDonors',{type:'bar',data:{labels:['Shapiro\n(Bay State)','Costello\n(Smith C&C)','Smith\n(Smith C&C)','Crawford\n(Smith C&C)','Basile\n(Smith C&C)','Shea\n(Bay State)','Youmans\n(Smith C&C)','Tocco\n(ML Strat)','Bernstein\n(Bay State)','Silveira\n(ML Strat)'],datasets:[{label:'Total Donated ($)',data:[72100,59550,53240,44350,24250,17450,17100,14725,10600,10575],backgroundColor:ctx=>['#b8860b','#1a4480','#1a4480','#1a4480','#1a4480','#b8860b','#1a4480','#c0392b','#b8860b','#c0392b'][ctx.dataIndex],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Total Donated ($)'}}},plugins:{legend:{display:false}}}});
+      break;
+
+    case 'recipients':
+      safeChart('chartRecipients',{type:'bar',data:{labels:['DeLeo','Healey','Lawn','Michlewitz','Cusack','Baker','Polito','Finegold','Moran','Murphy','Tarr','Romney','Dem Senate PAC','Spilka','Mariano'],datasets:[{label:'Total ($)',data:[21200,19736,17250,16800,16400,15500,14000,12450,12000,12000,11400,11400,10925,10825,10800],backgroundColor:ctx=>ctx.parsed.y>15000?'#c0392b':ctx.parsed.y>10000?'#b8860b':'#1a4480',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Total from 3 Firms ($)'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartRecipientFirms',{type:'bar',data:{labels:['DeLeo','Healey','Michlewitz','Baker','Spilka','Mariano','Tarr'],datasets:[{label:'ML Strategies',data:[7200,6500,5800,5200,4500,3600,3800],backgroundColor:'#c0392b',borderRadius:2},{label:'Smith Costello',data:[7800,6800,5600,5800,0,4200,4000],backgroundColor:'#1a4480',borderRadius:2},{label:'Bay State',data:[6200,6436,5400,4500,6325,3000,3600],backgroundColor:'#b8860b',borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,title:{display:true,text:'Total ($)'}}},plugins:{legend:{position:'top',labels:{font:{size:11}}}}}});
+      break;
+
+    case 'loophole':
+      safeChart('chartPhilbin',{type:'bar',data:{labels:['$50','$100','$150','$200','$250','$500','$1,000'],datasets:[{label:'# of Philbin Donations',data:[0,0,0,28,0,0,0],backgroundColor:ctx=>ctx.parsed.y>0?'#c0392b':'#e8e5df',borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,max:35,title:{display:true,text:'Number of Donations'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartHospitals',{type:'bar',data:{labels:['Mass General\nBrigham','Boston\nMedical Ctr','Brigham &\nWomens','Point32\nHealth','Boston\nChildrens','Beth Israel','Tufts\nMedical','Mass\nGeneral','Cambridge\nHealth','Dana-\nFarber'],datasets:[{label:'Employee Donations ($)',data:[19522,12975,11877,8611,8045,8011,7965,7936,6917,5800],backgroundColor:'#c0392b',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Total Employee Donations ($)'}}},plugins:{legend:{display:false}}}});
+      break;
+  }
+}
+initCharts('overview');
+</script>
+</body>
+</html>
