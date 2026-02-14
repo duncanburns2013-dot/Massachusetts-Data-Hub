@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Massachusetts Real Estate Market Report | MLS Data Analysis</title>
+    <meta property="og:title" content="Massachusetts Housing Report — February 2026">
+    <meta property="og:description" content="6-year market analysis: MA avg $797K (+20%), Newburyport $1.10M, 57 DOM, sales volume −26%. Statewide, Boston, Essex County & Greater Newburyport.">
+    <meta property="og:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-social-card.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/ma-housing-dashboard.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Massachusetts Housing Report — February 2026">
+    <meta name="twitter:description" content="6-year market analysis: MA avg $797K (+20%), Newburyport $1.10M, 57 DOM, sales volume −26%.">
+    <meta name="twitter:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-social-card.png">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg: #f4f2ee;
+            --white: #ffffff;
+            --ink: #0c1117;
+            --ink-mid: #2a3140;
+            --ink-light: #5a6374;
+            --ink-muted: #8e95a2;
+            --border: #ddd8d0;
+            --accent: #c8a44e;
+            --accent-bright: #e4be5a;
+            --accent-dim: #a08338;
+            --signal-red: #c23b22;
+            --signal-green: #2d8a56;
+            --signal-blue: #2d6bc4;
+            --signal-amber: #c08c20;
+            --card-bg: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        
+        /* ── HERO ── */
+        .hero {
+            background: var(--ink);
+            color: #fff;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: url('boston-bg.jpg') center 30% / cover no-repeat;
+            filter: saturate(0.5) brightness(0.3);
+            transform: scale(1.02);
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                linear-gradient(to bottom, rgba(12,17,23,0.55) 0%, rgba(12,17,23,0.3) 35%, rgba(12,17,23,0.6) 65%, rgba(12,17,23,0.95) 100%),
+                radial-gradient(ellipse 80% 60% at 20% 80%, rgba(200,164,78,0.1) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 80% at 90% 20%, rgba(200,164,78,0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 56px 32px 64px;
+        }
+        .hero-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 48px;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .hero-badge::before {
+            content: '';
+            width: 8px; height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.7); }
+        }
+        .hero-date {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: rgba(255,255,255,0.35);
+            font-weight: 500;
+        }
+        .hero-headline {
+            margin-bottom: 14px;
+        }
+        .hero-headline h1 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(2.6rem, 6.5vw, 4.2rem);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            color: #fff;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+        }
+        .hero-headline h1 em {
+            font-style: italic;
+            color: var(--accent);
+            font-weight: 700;
+        }
+        .hero-sub {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.5);
+            max-width: 520px;
+            line-height: 1.6;
+            font-weight: 300;
+            margin-bottom: 52px;
+        }
+        .hero-divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, var(--accent) 0%, rgba(200,164,78,0.15) 60%, transparent 100%);
+            margin-bottom: 40px;
+        }
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+        }
+        .hero-stat {
+            padding: 0 28px;
+            border-right: 1px solid rgba(255,255,255,0.08);
+            position: relative;
+        }
+        .hero-stat:first-child { padding-left: 0; }
+        .hero-stat:last-child { border-right: none; }
+        .hs-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: rgba(255,255,255,0.35);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .hs-val {
+            font-family: 'Fraunces', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 6px;
+            color: #fff;
+        }
+        .hs-val.gold { color: var(--accent-bright); }
+        .hs-note {
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.3);
+            font-weight: 400;
+        }
+        .hs-note .chg-up { color: var(--signal-red); font-weight: 600; }
+        .hs-note .chg-dn { color: var(--signal-green); font-weight: 600; }
+        
+        /* ── NAV ── */
+        .nav { position: sticky; top: 0; z-index: 100; background: var(--white); border-bottom: 1px solid var(--border); backdrop-filter: blur(12px); }
+        .nav-inner { display: flex; gap: 2px; max-width: 1200px; margin: 0 auto; padding: 10px 24px; overflow-x: auto; }
+        .nav-inner::-webkit-scrollbar { display: none; }
+        .nav-btn { padding: 9px 18px; background: none; border: none; border-radius: 6px; color: var(--ink-light); font-family: 'Outfit', sans-serif; font-size: 0.82rem; font-weight: 500; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+        .nav-btn:hover { background: rgba(12,17,23,0.04); color: var(--ink); }
+        .nav-btn.active { background: var(--ink); color: #fff; }
+        
+        /* ── SECTIONS ── */
+        .section { padding: 44px 0; display: none; }
+        .section.active { display: block; animation: fadeIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .section-header { margin-bottom: 28px; }
+        .section-title { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 4px; color: var(--ink); }
+        .section-desc { color: var(--ink-light); font-size: 0.9rem; font-weight: 400; }
+        
+        .timeline-box { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin-bottom: 28px; }
+        .timeline-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+        .timeline-label { color: var(--ink-light); font-size: 0.85rem; }
+        .timeline-year { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 700; color: var(--ink); }
+        .timeline-slider { width: 100%; height: 6px; -webkit-appearance: none; background: var(--border); border-radius: 3px; }
+        .timeline-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; background: var(--ink); border-radius: 50%; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .timeline-ticks { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.75rem; color: var(--ink-muted); }
+        
+        /* ── CARDS ── */
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-bottom: 28px; }
+        .card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 20px; transition: all 0.25s; }
+        .card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.06); transform: translateY(-2px); }
+        .card.wide { grid-column: span 2; }
+        .card.blue-border { border-left: 4px solid var(--signal-blue); }
+        .card.red-border { border-left: 4px solid var(--signal-red); }
+        .card.green-border { border-left: 4px solid var(--signal-green); }
+        .card.yellow-border { border-left: 4px solid var(--signal-amber); }
+        .card-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-light); font-weight: 600; margin-bottom: 4px; }
+        .card-val { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 10px; }
+        .card-val.blue { color: var(--signal-blue); }
+        .card-val.red { color: var(--signal-red); }
+        .card-val.green { color: var(--signal-green); }
+        .card-val.yellow { color: var(--signal-amber); }
+        .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .card-metric { background: var(--bg); padding: 8px 10px; border-radius: 6px; }
+        .card-metric-label { font-size: 0.58rem; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 1px; letter-spacing: 0.04em; }
+        .card-metric-val { font-size: 0.9rem; font-weight: 600; }
+        .up { color: var(--signal-red); }
+        .down { color: var(--signal-green); }
+        
+        /* ── CHARTS ── */
+        .chart-box { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+        .chart-title { font-size: 0.95rem; font-weight: 600; color: var(--ink); }
+        .chart-legend { display: flex; gap: 14px; flex-wrap: wrap; }
+        .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.75rem; color: var(--ink-light); }
+        .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .chart-area { height: 280px; }
+        
+        /* ── TABLES ── */
+        .table-wrap { overflow-x: auto; }
+        .data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        .data-table th, .data-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+        .data-table th { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-muted); font-weight: 600; background: var(--bg); }
+        .data-table tr:hover td { background: rgba(200,164,78,0.04); }
+        .data-table td:first-child { font-weight: 600; color: var(--ink); }
+        
+        /* ── TOWNS ── */
+        .towns { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+        .town { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-align: center; transition: all 0.25s; }
+        .town:hover { border-color: var(--accent-dim); box-shadow: 0 6px 16px rgba(0,0,0,0.05); transform: translateY(-2px); }
+        .town-name { font-size: 0.78rem; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+        .town-price { font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+        .town-badge { display: inline-block; font-size: 0.65rem; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+        .town-badge.up { background: #fef2f2; color: var(--signal-red); }
+        .town-badge.down { background: #f0fdf4; color: var(--signal-green); }
+        .town-meta { margin-top: 6px; font-size: 0.7rem; color: var(--ink-muted); }
+        
+        .summary-box { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 28px; margin-bottom: 28px; }
+        .summary-title { text-align: center; font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 700; color: var(--ink); margin-bottom: 20px; }
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+        .summary-item { text-align: center; }
+        .summary-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-light); margin-bottom: 4px; }
+        .summary-val { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 700; }
+        .summary-val.blue { color: var(--signal-blue); }
+        .summary-val.red { color: var(--signal-red); }
+        .summary-val.green { color: var(--signal-green); }
+        .summary-val.yellow { color: var(--signal-amber); }
+        .summary-note { font-size: 0.7rem; color: var(--ink-muted); margin-top: 2px; }
+        
+        .afford-box { background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%); border: 1px solid #fde047; border-radius: 14px; padding: 28px; margin-bottom: 28px; }
+        
+        .footer { background: var(--ink); color: #fff; padding: 32px 24px; text-align: center; position: relative; overflow: hidden; }
+        .footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
+        .footer-text { font-size: 0.8rem; opacity: 0.6; margin-bottom: 6px; }
+        .footer-date { font-size: 0.75rem; opacity: 0.35; }
+        
+        @media (max-width: 768px) {
+            .hero-inner { padding: 40px 20px 48px; }
+            .hero-headline h1 { font-size: 2rem; }
+            .hero-top { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 24px 0; }
+            .hero-stat { padding: 0 16px; }
+            .hero-stat:nth-child(2) { border-right: none; }
+            .hero-stat:nth-child(3) { border-top: 1px solid rgba(255,255,255,0.06); padding-top: 20px; }
+            .hero-stat:nth-child(4) { border-top: 1px solid rgba(255,255,255,0.06); padding-top: 20px; }
+            .hs-val { font-size: 1.6rem; }
+            .card.wide { grid-column: span 1; }
+            .chart-area { height: 240px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-inner">
+            <div class="hero-top">
+                <div class="hero-badge">Single Family Residential • 6-Year Analysis</div>
+                <div class="hero-date">February 14, 2026</div>
+            </div>
+            <div class="hero-headline">
+                <h1>Massachusetts<br>Real Estate <em>Report</em></h1>
+            </div>
+            <p class="hero-sub">Comprehensive MLS data for Massachusetts, Boston, Essex County, and Greater Newburyport — tracking the affordability crisis from 2021 to present.</p>
+            <div class="hero-divider"></div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hs-label">MA Average</div>
+                    <div class="hs-val gold">$797K</div>
+                    <div class="hs-note"><span class="chg-up">+20%</span> since 2021</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hs-label">Newburyport</div>
+                    <div class="hs-val gold">$1.10M</div>
+                    <div class="hs-note"><span class="chg-up">+17%</span> since 2021</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hs-label">Days on Market</div>
+                    <div class="hs-val">57</div>
+                    <div class="hs-note">Was 30 in 2021</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hs-label">Sales Volume</div>
+                    <div class="hs-val" style="color:var(--signal-red);">−26%</div>
+                    <div class="hs-note">Since 2021</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <nav class="nav"><div class="nav-inner">
+        <button class="nav-btn active" data-tab="overview">Overview</button>
+        <button class="nav-btn" data-tab="massachusetts">Massachusetts</button>
+        <button class="nav-btn" data-tab="boston">Boston</button>
+        <button class="nav-btn" data-tab="essex">Essex County</button>
+        <button class="nav-btn" data-tab="greater-newburyport">Greater Newburyport</button>
+        <button class="nav-btn" data-tab="newburyport">Newburyport</button>
+        <button class="nav-btn" data-tab="affordability">Affordability</button>
+    </div></nav>
+    
+    <section class="section active" id="overview"><div class="container">
+        <div class="section-header"><h2 class="section-title">Market Overview</h2><p class="section-desc">6-year comparison (2021–2026) as of February 14, 2026</p></div>
+        <div class="timeline-box">
+            <div class="timeline-top"><span class="timeline-label">📅 Select Year</span><span class="timeline-year" id="selected-year">2026</span></div>
+            <input type="range" class="timeline-slider" id="year-slider" min="2021" max="2026" value="2026">
+            <div class="timeline-ticks"><span>2021</span><span>2022</span><span>2023</span><span>2024</span><span>2025</span><span>2026</span></div>
+        </div>
+        <div class="cards">
+            <div class="card wide blue-border"><div class="card-label">Massachusetts Statewide</div><div class="card-val blue" id="ma-price">$796,654</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">$/SqFt</div><div class="card-metric-val" id="ma-sqft">$378</div></div><div class="card-metric"><div class="card-metric-label">Days on Market</div><div class="card-metric-val" id="ma-dom">57</div></div><div class="card-metric"><div class="card-metric-label">Units Sold (12mo)</div><div class="card-metric-val" id="ma-units">38,677</div></div><div class="card-metric"><div class="card-metric-label">Months Supply</div><div class="card-metric-val" id="ma-supply">1.08</div></div></div></div>
+            <div class="card red-border"><div class="card-label">Boston</div><div class="card-val red" id="boston-price">$1,094K</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">$/SqFt</div><div class="card-metric-val" id="boston-sqft">$545</div></div><div class="card-metric"><div class="card-metric-label">Days on Market</div><div class="card-metric-val" id="boston-dom">49</div></div></div></div>
+            <div class="card green-border"><div class="card-label">Essex County</div><div class="card-val green" id="essex-price">$807,005</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">$/SqFt</div><div class="card-metric-val" id="essex-sqft">$401</div></div><div class="card-metric"><div class="card-metric-label">Days on Market</div><div class="card-metric-val" id="essex-dom">51</div></div></div></div>
+            <div class="card yellow-border"><div class="card-label">Newburyport</div><div class="card-val yellow" id="nbpt-price">$1,104K</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">$/SqFt</div><div class="card-metric-val" id="nbpt-sqft">$616</div></div><div class="card-metric"><div class="card-metric-label">Days on Market</div><div class="card-metric-val" id="nbpt-dom">31</div></div></div></div>
+        </div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Average Sale Price (2021–2026)</h3><div class="chart-legend"><div class="legend-item"><div class="legend-dot" style="background:#2d6bc4"></div>Massachusetts</div><div class="legend-item"><div class="legend-dot" style="background:#c23b22"></div>Boston</div><div class="legend-item"><div class="legend-dot" style="background:#2d8a56"></div>Essex County</div><div class="legend-item"><div class="legend-dot" style="background:#c08c20"></div>Newburyport</div></div></div><div class="chart-area"><canvas id="price-chart"></canvas></div></div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Days on Market</h3></div><div class="chart-area"><canvas id="dom-chart"></canvas></div></div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Sales Volume (Frozen)</h3></div><div class="chart-area"><canvas id="volume-chart"></canvas></div></div>
+    </div></section>
+    
+    <section class="section" id="massachusetts"><div class="container">
+        <div class="section-header"><h2 class="section-title">Massachusetts Statewide</h2><p class="section-desc">Single-family residential • 6-year trend</p></div>
+        <div class="cards">
+            <div class="card blue-border"><div class="card-label">Average Sale Price</div><div class="card-val blue">$796,654</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2021</div><div class="card-metric-val">$664,120</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val up">+20.0%</div></div></div></div>
+            <div class="card green-border"><div class="card-label">$/SqFt</div><div class="card-val green">$378</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2021</div><div class="card-metric-val">$316</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val up">+19.6%</div></div></div></div>
+            <div class="card red-border"><div class="card-label">Volume</div><div class="card-val">38,677</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2021</div><div class="card-metric-val">52,185</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val down">-25.9%</div></div></div></div>
+            <div class="card yellow-border"><div class="card-label">Days on Market</div><div class="card-val">57</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2021</div><div class="card-metric-val">30</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val up">+90.0%</div></div></div></div>
+        </div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">6-Year Data</h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th><th>Chg</th></tr></thead><tbody><tr><td>Avg Price</td><td>$664K</td><td>$658K</td><td>$673K</td><td>$739K</td><td>$803K</td><td>$797K</td><td class="up">+20%</td></tr><tr><td>$/SqFt</td><td>$316</td><td>$318</td><td>$325</td><td>$347</td><td>$375</td><td>$378</td><td class="up">+20%</td></tr><tr><td>Units</td><td>52,185</td><td>53,775</td><td>44,997</td><td>36,481</td><td>38,151</td><td>38,677</td><td class="down">-26%</td></tr><tr><td>DOM</td><td>30</td><td>36</td><td>46</td><td>43</td><td>48</td><td>57</td><td class="up">+90%</td></tr><tr><td>Supply</td><td>0.35</td><td>0.46</td><td>0.83</td><td>0.96</td><td>0.99</td><td>1.08</td><td>+209%</td></tr></tbody></table></div></div>
+    </div></section>
+    
+    <section class="section" id="boston"><div class="container">
+        <div class="section-header"><h2 class="section-title">Boston</h2><p class="section-desc">Urban core • 6-year trend</p></div>
+        <div class="cards">
+            <div class="card red-border"><div class="card-label">Average Sale Price</div><div class="card-val red">$1,093,638</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2021</div><div class="card-metric-val">$1,080,332</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val up">+1.2%</div></div></div></div>
+            <div class="card blue-border"><div class="card-label">$/SqFt</div><div class="card-val blue">$545</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2021</div><div class="card-metric-val">$517</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val up">+5.4%</div></div></div></div>
+            <div class="card green-border"><div class="card-label">Volume</div><div class="card-val">808</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2021</div><div class="card-metric-val">1,066</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val down">-24.2%</div></div></div></div>
+            <div class="card yellow-border"><div class="card-label">Days on Market</div><div class="card-val">49</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2021</div><div class="card-metric-val">36</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val up">+36.1%</div></div></div></div>
+        </div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Average Sale Price (2021–2026)</h3><div class="chart-legend"><div class="legend-item"><div class="legend-dot" style="background:#c23b22"></div>Boston</div><div class="legend-item"><div class="legend-dot" style="background:#2d6bc4"></div>Massachusetts</div></div></div><div class="chart-area"><canvas id="boston-price-chart"></canvas></div></div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">$/SqFt Trends</h3></div><div class="chart-area"><canvas id="boston-sqft-chart"></canvas></div></div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Days on Market & Volume</h3></div><div class="chart-area"><canvas id="boston-domvol-chart"></canvas></div></div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">6-Year Data</h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th><th>Chg</th></tr></thead><tbody><tr><td>Avg Price</td><td>$1,080K</td><td>$985K</td><td>$929K</td><td>$905K</td><td>$1,423K</td><td>$1,094K</td><td class="up">+1%</td></tr><tr><td>$/SqFt</td><td>$517</td><td>$473</td><td>$487</td><td>$459</td><td>$579</td><td>$545</td><td class="up">+5%</td></tr><tr><td>Units</td><td>1,066</td><td>1,110</td><td>974</td><td>755</td><td>812</td><td>808</td><td class="down">-24%</td></tr><tr><td>DOM</td><td>36</td><td>51</td><td>49</td><td>48</td><td>54</td><td>49</td><td class="up">+36%</td></tr></tbody></table></div></div>
+    </div></section>
+    
+    <section class="section" id="essex"><div class="container">
+        <div class="section-header"><h2 class="section-title">Essex County</h2><p class="section-desc">North Shore • 6-year trend</p></div>
+        <div class="cards">
+            <div class="card green-border"><div class="card-label">Average Sale Price</div><div class="card-val green">$807,005</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2021</div><div class="card-metric-val">$715,539</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val up">+12.8%</div></div></div></div>
+            <div class="card blue-border"><div class="card-label">$/SqFt</div><div class="card-val blue">$401</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2021</div><div class="card-metric-val">$335</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val up">+19.7%</div></div></div></div>
+            <div class="card red-border"><div class="card-label">Volume</div><div class="card-val">4,363</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2021</div><div class="card-metric-val">5,773</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val down">-24.4%</div></div></div></div>
+            <div class="card yellow-border"><div class="card-label">Days on Market</div><div class="card-val">51</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2021</div><div class="card-metric-val">27</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val up">+88.9%</div></div></div></div>
+        </div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Average Sale Price (2021–2026)</h3><div class="chart-legend"><div class="legend-item"><div class="legend-dot" style="background:#2d8a56"></div>Essex County</div><div class="legend-item"><div class="legend-dot" style="background:#2d6bc4"></div>Massachusetts</div></div></div><div class="chart-area"><canvas id="essex-price-chart"></canvas></div></div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">$/SqFt Trends</h3></div><div class="chart-area"><canvas id="essex-sqft-chart"></canvas></div></div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Days on Market & Volume</h3></div><div class="chart-area"><canvas id="essex-domvol-chart"></canvas></div></div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">6-Year Data</h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th><th>Chg</th></tr></thead><tbody><tr><td>Avg Price</td><td>$716K</td><td>$652K</td><td>$702K</td><td>$777K</td><td>$868K</td><td>$807K</td><td class="up">+13%</td></tr><tr><td>$/SqFt</td><td>$335</td><td>$336</td><td>$349</td><td>$371</td><td>$406</td><td>$401</td><td class="up">+20%</td></tr><tr><td>Units</td><td>5,773</td><td>5,950</td><td>4,965</td><td>3,963</td><td>4,201</td><td>4,363</td><td class="down">-24%</td></tr><tr><td>DOM</td><td>27</td><td>29</td><td>39</td><td>39</td><td>40</td><td>51</td><td class="up">+89%</td></tr></tbody></table></div></div>
+    </div></section>
+    
+    <section class="section" id="greater-newburyport"><div class="container">
+        <div class="section-header"><h2 class="section-title">Greater Newburyport</h2><p class="section-desc">Newburyport, West Newbury, Newbury, Rowley, Salisbury, Amesbury</p></div>
+        <div class="summary-box"><h3 class="summary-title">Regional Summary (2026)</h3><div class="summary-grid"><div class="summary-item"><div class="summary-label">Avg Price</div><div class="summary-val blue">$835K</div><div class="summary-note">Weighted</div></div><div class="summary-item"><div class="summary-label">12-Mo Sales</div><div class="summary-val green">456</div><div class="summary-note">All towns</div></div><div class="summary-item"><div class="summary-label">$/SqFt</div><div class="summary-val red">$438</div><div class="summary-note">Avg</div></div><div class="summary-item"><div class="summary-label">Days on Market</div><div class="summary-val yellow">62</div><div class="summary-note">Avg</div></div></div></div>
+        <h3 style="margin-bottom:14px;font-weight:600;">Town Breakdown</h3>
+        <div class="towns">
+            <div class="town"><div class="town-name">Newburyport</div><div class="town-price">$1,104K</div><span class="town-badge up">+17% vs 2021</span><div class="town-meta">$616/sqft • 31 DOM</div></div>
+            <div class="town"><div class="town-name">West Newbury</div><div class="town-price">$670K</div><span class="town-badge down">-39% YoY</span><div class="town-meta">$297/sqft • 66 DOM</div></div>
+            <div class="town"><div class="town-name">Newbury</div><div class="town-price">$851K</div><span class="town-badge down">-23% YoY</span><div class="town-meta">$434/sqft • 48 DOM</div></div>
+            <div class="town"><div class="town-name">Rowley</div><div class="town-price">$690K</div><span class="town-badge down">-20% YoY</span><div class="town-meta">$366/sqft • 28 DOM</div></div>
+            <div class="town"><div class="town-name">Salisbury</div><div class="town-price">$675K</div><span class="town-badge up">+7% YoY</span><div class="town-meta">$559/sqft • 139 DOM</div></div>
+            <div class="town"><div class="town-name">Amesbury</div><div class="town-price">$679K</div><span class="town-badge down">-3% YoY</span><div class="town-meta">$353/sqft • 63 DOM</div></div>
+        </div>
+        <div class="chart-box" style="margin-top:28px;"><div class="chart-header"><h3 class="chart-title">Town Comparison — Avg Sale Price (YTD 2026)</h3></div><div class="chart-area"><canvas id="gnbpt-chart"></canvas></div></div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">YTD Listing Activity</h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Town</th><th>Listing Units</th><th>Avg List Price</th><th>DOM</th><th>$/SqFt</th><th>Months Supply</th></tr></thead><tbody>
+            <tr><td>Newburyport</td><td>10</td><td>$1,102K</td><td>31</td><td>$615</td><td>0.87</td></tr>
+            <tr><td>West Newbury</td><td>2</td><td>$683K</td><td>66</td><td>$301</td><td>0.71</td></tr>
+            <tr><td>Newbury</td><td>10</td><td>$850K</td><td>48</td><td>$434</td><td>1.64</td></tr>
+            <tr><td>Rowley</td><td>3</td><td>$681K</td><td>28</td><td>$359</td><td>0.92</td></tr>
+            <tr><td>Salisbury</td><td>5</td><td>$700K</td><td>139</td><td>$579</td><td>1.30</td></tr>
+            <tr><td>Amesbury</td><td>5</td><td>$716K</td><td>63</td><td>$380</td><td>0.48</td></tr>
+        </tbody></table></div></div>
+    </div></section>
+    
+    <section class="section" id="newburyport"><div class="container">
+        <div class="section-header"><h2 class="section-title">Newburyport</h2><p class="section-desc">Historic coastal community • 6-year trend</p></div>
+        <div class="cards">
+            <div class="card wide yellow-border"><div class="card-label">Average Sale Price</div><div class="card-val yellow">$1,104,188</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2021</div><div class="card-metric-val">$940,514</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val up">+17.4%</div></div><div class="card-metric"><div class="card-metric-label">$/SqFt</div><div class="card-metric-val">$616</div></div><div class="card-metric"><div class="card-metric-label">vs 2021 $/SqFt</div><div class="card-metric-val up">+36%</div></div></div></div>
+            <div class="card green-border"><div class="card-label">Market Speed</div><div class="card-val green">31 days</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2021</div><div class="card-metric-val">30 days</div></div><div class="card-metric"><div class="card-metric-label">vs State (57)</div><div class="card-metric-val down">46% faster</div></div></div></div>
+            <div class="card blue-border"><div class="card-label">12-Mo Volume</div><div class="card-val blue">138</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2021</div><div class="card-metric-val">177</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val down">-22.0%</div></div></div></div>
+        </div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Price & $/SqFt (2021–2026)</h3></div><div class="chart-area"><canvas id="nbpt-chart"></canvas></div></div>
+    </div></section>
+    
+    <section class="section" id="affordability"><div class="container">
+        <div class="section-header"><h2 class="section-title">Affordability Analysis</h2><p class="section-desc">Income requirements at standard lending criteria</p></div>
+        <div class="afford-box"><h3 class="summary-title" style="color:#92400e;">Newburyport — Income Requirements</h3><div class="summary-grid"><div class="summary-item"><div class="summary-label">Home Price</div><div class="summary-val blue">$1,104K</div></div><div class="summary-item"><div class="summary-label">Down (20%)</div><div class="summary-val yellow">$221K</div></div><div class="summary-item"><div class="summary-label">Monthly @6.5%</div><div class="summary-val green">$5,583</div></div><div class="summary-item"><div class="summary-label">Income Needed</div><div class="summary-val red">$239K</div><div class="summary-note">28% DTI</div></div></div></div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Income Required</h3></div><div class="chart-area"><canvas id="income-chart"></canvas></div></div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Comparison</h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Market</th><th>Price</th><th>Down</th><th>Monthly</th><th>Income</th><th>Median</th><th>Gap</th></tr></thead><tbody><tr><td>Massachusetts</td><td>$797K</td><td>$159K</td><td>$4,028</td><td>$173K</td><td>$105K</td><td class="up">-$68K</td></tr><tr><td>Boston</td><td>$1.09M</td><td>$219K</td><td>$5,530</td><td>$237K</td><td>$105K</td><td class="up">-$132K</td></tr><tr><td>Essex County</td><td>$807K</td><td>$161K</td><td>$4,081</td><td>$175K</td><td>$105K</td><td class="up">-$70K</td></tr><tr><td>Newburyport</td><td>$1.10M</td><td>$221K</td><td>$5,583</td><td>$239K</td><td>$105K</td><td class="up">-$134K</td></tr></tbody></table></div><p style="margin-top:12px;font-size:0.75rem;color:var(--text-muted);">30yr @6.5%, 20% down, 28% DTI. MA Median: $104,800 (ACS 2023)</p></div>
+        <div class="cards">
+            <div class="card red-border"><div class="card-label">Income Gap</div><div class="card-val red">39–56%</div><p style="color:var(--text-mid);font-size:0.8rem;margin-top:6px;">Gap between median income and required income.</p></div>
+            <div class="card yellow-border"><div class="card-label">Down Payment</div><div class="card-val yellow">$159K–$221K</div><p style="color:var(--text-mid);font-size:0.8rem;margin-top:6px;">1.5–2.1x median annual income.</p></div>
+            <div class="card blue-border"><div class="card-label">Newburyport Premium</div><div class="card-val blue">+39%</div><p style="color:var(--text-mid);font-size:0.8rem;margin-top:6px;">Above state average due to coastal location.</p></div>
+            <div class="card green-border"><div class="card-label">Inventory</div><div class="card-val green">1.08 mo</div><p style="color:var(--text-mid);font-size:0.8rem;margin-top:6px;">Balanced market = 4–6 months.</p></div>
+        </div>
+    </div></section>
+    
+    <footer class="footer"><p class="footer-text"><strong>Data:</strong> MLS PIN • Census ACS • Bankrate</p><p class="footer-date">Updated February 14, 2026 • 6-Year Analysis (2021–2026)</p></footer>
+    
+    <script>
+        const years=['2021','2022','2023','2024','2025','2026'];
+        const d={
+            ma:{price:[664120,658290,673198,739097,802664,796654],sqft:[316,318,325,347,375,378],dom:[30,36,46,43,48,57],units:[52185,53775,44997,36481,38151,38677],supply:[0.35,0.46,0.83,0.96,0.99,1.08]},
+            boston:{price:[1080332,985441,928904,904704,1422587,1093638],sqft:[517,473,487,459,579,545],dom:[36,51,49,48,54,49],units:[1066,1110,974,755,812,808]},
+            essex:{price:[715539,651947,702345,776574,867768,807005],sqft:[335,336,349,371,406,401],dom:[27,29,39,39,40,51],units:[5773,5950,4965,3963,4201,4363]},
+            nbpt:{price:[940514,819071,976000,902323,1178429,1104188],sqft:[454,444,399,536,559,616],dom:[30,40,37,40,71,31],units:[177,186,154,133,125,138]}
+        };
+        Chart.defaults.color='#8e95a2';Chart.defaults.borderColor='#ddd8d0';Chart.defaults.font.family="'Outfit',sans-serif";
+        
+        new Chart(document.getElementById('price-chart'),{type:'line',data:{labels:years,datasets:[{label:'MA',data:d.ma.price,borderColor:'#2d6bc4',backgroundColor:'rgba(45,107,196,0.1)',borderWidth:3,tension:0.3,fill:true},{label:'Boston',data:d.boston.price,borderColor:'#c23b22',backgroundColor:'rgba(194,59,34,0.05)',borderWidth:3,tension:0.3,fill:true},{label:'Essex',data:d.essex.price,borderColor:'#2d8a56',backgroundColor:'rgba(45,138,86,0.05)',borderWidth:3,tension:0.3,fill:true},{label:'Newburyport',data:d.nbpt.price,borderColor:'#c08c20',backgroundColor:'rgba(192,140,32,0.05)',borderWidth:3,tension:0.3,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'$'+(v/1000)+'K'}},x:{grid:{display:false}}}}});
+        
+        new Chart(document.getElementById('dom-chart'),{type:'bar',data:{labels:years,datasets:[{label:'MA',data:d.ma.dom,backgroundColor:'#2d6bc4',borderRadius:4},{label:'Essex',data:d.essex.dom,backgroundColor:'#2d8a56',borderRadius:4},{label:'Newburyport',data:d.nbpt.dom,backgroundColor:'#c08c20',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:14}}},scales:{y:{ticks:{callback:v=>v+' days'}},x:{grid:{display:false}}}}});
+        
+        new Chart(document.getElementById('volume-chart'),{type:'line',data:{labels:years,datasets:[{label:'MA (÷100)',data:d.ma.units.map(v=>v/100),borderColor:'#2d6bc4',borderWidth:3,tension:0.3,fill:true,backgroundColor:'rgba(45,107,196,0.1)'},{label:'Essex (÷10)',data:d.essex.units.map(v=>v/10),borderColor:'#2d8a56',borderWidth:3,tension:0.3},{label:'Newburyport',data:d.nbpt.units,borderColor:'#c08c20',borderWidth:3,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:14}}},scales:{x:{grid:{display:false}}}}});
+        
+        new Chart(document.getElementById('gnbpt-chart'),{type:'bar',data:{labels:['Newburyport','West Newbury','Newbury','Rowley','Salisbury','Amesbury'],datasets:[{data:[1104188,670000,850800,689967,675000,679400],backgroundColor:['#c08c20','#6b5ce7','#2d6bc4','#2d8a56','#d46a2e','#c23b22'],borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>'$'+(v/1000)+'K'}},y:{grid:{display:false}}}}});
+        
+        new Chart(document.getElementById('nbpt-chart'),{type:'bar',data:{labels:years,datasets:[{label:'Price',data:d.nbpt.price,backgroundColor:'#c08c20',borderRadius:4,yAxisID:'y'},{label:'$/SqFt',data:d.nbpt.sqft,type:'line',borderColor:'#c23b22',borderWidth:3,tension:0.3,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:14}}},scales:{y:{position:'left',ticks:{callback:v=>'$'+(v/1000)+'K'}},y1:{position:'right',grid:{display:false},ticks:{callback:v=>'$'+v}},x:{grid:{display:false}}}}});
+        
+        new Chart(document.getElementById('income-chart'),{type:'bar',data:{labels:['Massachusetts','Boston','Essex County','Newburyport'],datasets:[{label:'Income Needed',data:[172642,237001,174885,239288],backgroundColor:'#c23b22',borderRadius:4},{label:'MA Median',data:[104800,104800,104800,104800],backgroundColor:'#2d6bc4',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:14}}},scales:{y:{ticks:{callback:v=>'$'+(v/1000)+'K'}},x:{grid:{display:false}}}}});
+        
+        new Chart(document.getElementById('boston-price-chart'),{type:'line',data:{labels:years,datasets:[{label:'Boston',data:d.boston.price,borderColor:'#c23b22',backgroundColor:'rgba(194,59,34,0.1)',borderWidth:3,tension:0.3,fill:true,pointRadius:5,pointHoverRadius:8},{label:'Massachusetts',data:d.ma.price,borderColor:'#2d6bc4',backgroundColor:'rgba(45,107,196,0.05)',borderWidth:2,tension:0.3,fill:true,borderDash:[5,5],pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{boxWidth:10,padding:14}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': $'+Math.round(ctx.parsed.y/1000)+'K'}}},scales:{y:{ticks:{callback:v=>'$'+(v/1000)+'K'}},x:{grid:{display:false}}}}});
+        
+        new Chart(document.getElementById('boston-sqft-chart'),{type:'line',data:{labels:years,datasets:[{label:'Boston $/SqFt',data:d.boston.sqft,borderColor:'#c23b22',backgroundColor:'rgba(194,59,34,0.1)',borderWidth:3,tension:0.3,fill:true,pointRadius:5,pointHoverRadius:8},{label:'MA $/SqFt',data:d.ma.sqft,borderColor:'#2d6bc4',borderWidth:2,tension:0.3,borderDash:[5,5],pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{boxWidth:10,padding:14}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': $'+ctx.parsed.y}}},scales:{y:{ticks:{callback:v=>'$'+v}},x:{grid:{display:false}}}}});
+        
+        new Chart(document.getElementById('boston-domvol-chart'),{type:'bar',data:{labels:years,datasets:[{label:'Volume',data:d.boston.units,backgroundColor:'rgba(194,59,34,0.2)',borderColor:'#c23b22',borderWidth:2,borderRadius:4,yAxisID:'y'},{label:'DOM',data:d.boston.dom,type:'line',borderColor:'#c08c20',borderWidth:3,tension:0.3,pointRadius:5,pointHoverRadius:8,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{boxWidth:10,padding:14}}},scales:{y:{position:'left',title:{display:true,text:'Units Sold',font:{size:11}},grid:{display:true}},y1:{position:'right',title:{display:true,text:'Days on Market',font:{size:11}},grid:{display:false}},x:{grid:{display:false}}}}});
+        
+        new Chart(document.getElementById('essex-price-chart'),{type:'line',data:{labels:years,datasets:[{label:'Essex County',data:d.essex.price,borderColor:'#2d8a56',backgroundColor:'rgba(45,138,86,0.1)',borderWidth:3,tension:0.3,fill:true,pointRadius:5,pointHoverRadius:8},{label:'Massachusetts',data:d.ma.price,borderColor:'#2d6bc4',backgroundColor:'rgba(45,107,196,0.05)',borderWidth:2,tension:0.3,fill:true,borderDash:[5,5],pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{boxWidth:10,padding:14}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': $'+Math.round(ctx.parsed.y/1000)+'K'}}},scales:{y:{ticks:{callback:v=>'$'+(v/1000)+'K'}},x:{grid:{display:false}}}}});
+        
+        new Chart(document.getElementById('essex-sqft-chart'),{type:'line',data:{labels:years,datasets:[{label:'Essex $/SqFt',data:d.essex.sqft,borderColor:'#2d8a56',backgroundColor:'rgba(45,138,86,0.1)',borderWidth:3,tension:0.3,fill:true,pointRadius:5,pointHoverRadius:8},{label:'MA $/SqFt',data:d.ma.sqft,borderColor:'#2d6bc4',borderWidth:2,tension:0.3,borderDash:[5,5],pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{boxWidth:10,padding:14}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': $'+ctx.parsed.y}}},scales:{y:{ticks:{callback:v=>'$'+v}},x:{grid:{display:false}}}}});
+        
+        new Chart(document.getElementById('essex-domvol-chart'),{type:'bar',data:{labels:years,datasets:[{label:'Volume',data:d.essex.units,backgroundColor:'rgba(45,138,86,0.2)',borderColor:'#2d8a56',borderWidth:2,borderRadius:4,yAxisID:'y'},{label:'DOM',data:d.essex.dom,type:'line',borderColor:'#c08c20',borderWidth:3,tension:0.3,pointRadius:5,pointHoverRadius:8,yAxisID:'y1'}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{boxWidth:10,padding:14}}},scales:{y:{position:'left',title:{display:true,text:'Units Sold',font:{size:11}},grid:{display:true}},y1:{position:'right',title:{display:true,text:'Days on Market',font:{size:11}},grid:{display:false}},x:{grid:{display:false}}}}});
+        
+        document.querySelectorAll('.nav-btn').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));btn.classList.add('active');document.getElementById(btn.dataset.tab).classList.add('active');});});
+        
+        document.getElementById('year-slider').addEventListener('input',e=>{const i=e.target.value-2021;document.getElementById('selected-year').textContent=e.target.value;document.getElementById('ma-price').textContent='$'+d.ma.price[i].toLocaleString();document.getElementById('ma-sqft').textContent='$'+d.ma.sqft[i];document.getElementById('ma-dom').textContent=d.ma.dom[i];document.getElementById('ma-units').textContent=d.ma.units[i].toLocaleString();document.getElementById('ma-supply').textContent=d.ma.supply[i];document.getElementById('boston-price').textContent='$'+Math.round(d.boston.price[i]/1000)+'K';document.getElementById('boston-sqft').textContent='$'+d.boston.sqft[i];document.getElementById('boston-dom').textContent=d.boston.dom[i];document.getElementById('essex-price').textContent='$'+d.essex.price[i].toLocaleString();document.getElementById('essex-sqft').textContent='$'+d.essex.sqft[i];document.getElementById('essex-dom').textContent=d.essex.dom[i];document.getElementById('nbpt-price').textContent='$'+Math.round(d.nbpt.price[i]/1000)+'K';document.getElementById('nbpt-sqft').textContent='$'+d.nbpt.sqft[i];document.getElementById('nbpt-dom').textContent=d.nbpt.dom[i];});
+    </script>
+</body>
+</html>
