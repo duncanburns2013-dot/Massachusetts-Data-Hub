@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Massachusetts Employment & Labor Market</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f8f7f4;--card:#ffffff;--border:#e8e5df;--text:#1a1a1a;--muted:#7a756e;--red:#c0392b;--red-bg:rgba(192,57,43,0.06);--green:#1a7a4c;--green-bg:rgba(26,122,76,0.06);--blue:#1a4480;--blue-bg:rgba(26,68,128,0.06);--amber:#b8860b;--amber-bg:rgba(184,134,11,0.06);--purple:#7e22ce;--gold:#c9a84c;--navy:#0f2942}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+
+/* HERO */
+.hero{background:var(--navy);color:#fff;padding:48px 24px 36px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,0.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(26,68,128,0.15) 0%,transparent 50%)}
+.hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.5rem,4.5vw,2.5rem);font-weight:400;margin-bottom:6px;letter-spacing:-0.01em;position:relative}
+.hero .sub{opacity:0.65;font-size:0.82rem;margin-bottom:24px;position:relative;max-width:600px;margin-left:auto;margin-right:auto}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:1000px;margin:0 auto;position:relative}
+.hero-stat{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:14px 8px;text-align:center}
+.hero-stat .val{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.1rem,2.5vw,1.6rem)}
+.hero-stat .lbl{font-size:0.6rem;opacity:0.55;margin-top:3px;text-transform:uppercase;letter-spacing:0.08em;font-weight:500}
+.hero-stat .val.bad{color:#e8a87c}.hero-stat .val.warn{color:#ffd080}.hero-stat .val.good{color:#7fd8a6}
+
+/* TAB NAV */
+.tab-nav{display:flex;justify-content:center;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.tab-nav::-webkit-scrollbar{display:none}
+.tab-btn{padding:13px 16px;font-size:0.72rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.25s;text-transform:uppercase;letter-spacing:0.05em;font-family:'DM Sans',sans-serif}
+.tab-btn:hover{color:var(--text);background:rgba(0,0,0,0.02)}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
+.tab-btn.new-tab{color:var(--amber)}
+.tab-btn.new-tab.active{color:var(--navy)}
+
+/* LAYOUT */
+.tab-content{display:none;animation:fadeUp 0.3s ease}
+.tab-content.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.container{max-width:1200px;margin:0 auto;padding:24px}
+
+/* SECTION TITLES */
+.section-title{font-family:'DM Serif Display',Georgia,serif;font-size:1.3rem;font-weight:400;margin-bottom:6px;color:var(--navy)}
+.section-desc{font-size:0.82rem;color:var(--muted);margin-bottom:20px}
+
+/* STAT ROW */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:22px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.03);transition:box-shadow 0.3s,transform 0.3s}
+.stat-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.07);transform:translateY(-2px)}
+.stat-card .label{font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px}
+.stat-card .value{font-family:'DM Serif Display',Georgia,serif;font-size:1.8rem;line-height:1.1}
+.stat-card .value.red{color:var(--red)}.stat-card .value.green{color:var(--green)}.stat-card .value.blue{color:var(--blue)}.stat-card .value.amber{color:var(--amber)}
+.stat-card .sub{font-size:0.68rem;color:var(--muted);margin-top:4px}
+
+/* ALERTS */
+.alert{background:var(--red-bg);border:1px solid rgba(192,57,43,0.15);border-radius:12px;padding:18px 20px;margin-bottom:18px;border-left:4px solid var(--red)}
+.alert.green{background:var(--green-bg);border-color:rgba(26,122,76,0.15);border-left-color:var(--green)}
+.alert.amber{background:var(--amber-bg);border-color:rgba(184,134,11,0.2);border-left-color:var(--amber)}
+.alert.blue{background:var(--blue-bg);border-color:rgba(26,68,128,0.15);border-left-color:var(--blue)}
+.alert h4{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--red);margin-bottom:6px}
+.alert.green h4{color:var(--green)}.alert.amber h4{color:var(--amber)}.alert.blue h4{color:var(--blue)}
+.alert p{font-size:0.82rem;color:var(--text);line-height:1.6}
+.alert p strong{color:var(--red)}
+.alert.green p strong{color:var(--green)}.alert.amber p strong{color:var(--amber)}.alert.blue p strong{color:var(--blue)}
+
+/* INFO BOX */
+.info-box{background:var(--blue-bg);border:1px solid rgba(26,68,128,0.12);border-radius:12px;padding:16px 20px;margin-bottom:18px;border-left:4px solid var(--blue);display:flex;gap:12px;align-items:flex-start}
+.info-box.danger{background:var(--red-bg);border-left-color:var(--red);border-color:rgba(192,57,43,0.12)}
+.info-box .icon{font-size:1rem;flex-shrink:0;margin-top:1px}
+.info-box p{font-size:0.82rem;color:var(--text);line-height:1.6}
+.info-box p strong{color:var(--navy)}
+
+/* CHART GRID */
+.chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:14px;margin-bottom:18px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.chart-card h3{font-size:0.82rem;font-weight:700;margin-bottom:12px;color:var(--navy)}
+.chart-area{position:relative;height:260px}
+
+/* DATA CARDS (3-col metric boxes) */
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:18px}
+.metric-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.metric-card .mc-label{font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:8px}
+.metric-card .mc-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.6rem;line-height:1.1;margin-bottom:8px}
+.metric-card .mc-val.red{color:var(--red)}.metric-card .mc-val.blue{color:var(--blue)}.metric-card .mc-val.amber{color:var(--amber)}.metric-card .mc-val.green{color:var(--green)}
+.mc-meta{display:flex;flex-wrap:wrap;gap:16px;margin-top:4px}
+.mc-ml{font-size:0.65rem;color:var(--muted)}.mc-mv{font-size:0.78rem;font-weight:600;color:var(--text)}
+
+/* DATA TABLE */
+.data-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:18px;overflow-x:auto;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.data-card h3{font-size:0.85rem;font-weight:700;margin-bottom:14px;color:var(--navy)}
+.data-table{width:100%;border-collapse:collapse;font-size:0.78rem}
+.data-table th{text-align:left;padding:9px 12px;border-bottom:2px solid var(--navy);font-weight:700;color:var(--navy);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em}
+.data-table td{padding:9px 12px;border-bottom:1px solid var(--border)}
+.data-table tr:hover{background:rgba(15,41,66,0.02)}
+.td-red{color:var(--red);font-weight:700}.td-green{color:var(--green);font-weight:700}.td-amber{color:var(--amber);font-weight:700}
+.source{font-size:0.65rem;color:var(--muted);margin-top:8px;font-style:italic}
+
+/* FOOTER */
+footer{text-align:center;padding:32px 24px;color:var(--muted);font-size:0.72rem;border-top:1px solid var(--border);background:#fff;margin-top:30px}
+footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1px solid var(--gold)}
+footer a:hover{color:var(--gold)}
+
+/* RESPONSIVE */
+@media(max-width:768px){.hero-stats{grid-template-columns:repeat(2,1fr)}.chart-grid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.container{padding:16px}}
+@media(max-width:480px){.hero-stats{grid-template-columns:1fr 1fr}.stat-row{grid-template-columns:1fr}.tab-btn{padding:10px 10px;font-size:0.65rem}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Employment &amp; Labor Market</h1>
+  <p class="sub">Massachusetts job growth, unemployment, and JOLTS analysis — built from official BLS data.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="val bad">4.8%</div><div class="lbl">MA Unemployment (Dec 2025)</div></div>
+    <div class="hero-stat"><div class="val bad">+1,300</div><div class="lbl">Jobs Added in 2025</div></div>
+    <div class="hero-stat"><div class="val warn">3.9%</div><div class="lbl">Openings Rate (Dec 2025)</div></div>
+    <div class="hero-stat"><div class="val bad">−911K</div><div class="lbl">NFP Revision</div></div>
+  </div>
+</div>
+
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('overview',this)">Overview</button>
+  <button class="tab-btn" onclick="switchTab('unemployment',this)">Unemployment</button>
+  <button class="tab-btn" onclick="switchTab('jobs',this)">Job Growth</button>
+  <button class="tab-btn" onclick="switchTab('jolts',this)">JOLTS</button>
+  <button class="tab-btn" onclick="switchTab('sectors',this)">By Sector</button>
+  <button class="tab-btn new-tab" onclick="switchTab('latest',this)">📅 Latest Data</button>
+</nav>
+
+<div class="container">
+
+<!-- OVERVIEW -->
+<div class="tab-content active" id="overview">
+  <div class="section-title">Labor Market Overview</div>
+  <div class="section-desc">Massachusetts added just 1,300 jobs in all of 2025 — the weakest year since the pandemic</div>
+
+  <div class="alert">
+    <h4>⚠️ Hiring Recession</h4>
+    <p>Only <strong>1,300 jobs added in 2025</strong> — while 27,000 more people became unemployed. BLS CES &amp; LAUS — employers in "low-hire, low-fire" mode.</p>
+  </div>
+  <div class="alert amber">
+    <h4>⚠️ Only State to Extend Benefits</h4>
+    <p>MA extended unemployment benefits to <strong>30 weeks</strong> — the only state to do so. Standard duration is 26 weeks.</p>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card"><h3>Unemployment Rate Trajectory — MA vs. National (2019–2025)</h3><div class="chart-area"><canvas id="c-unemp"></canvas></div></div>
+    <div class="chart-card"><h3>Annual Net Job Growth</h3><div class="chart-area"><canvas id="c-jobs"></canvas></div></div>
+  </div>
+
+  <div class="info-box danger">
+    <span class="icon">🔴</span>
+    <p><strong>The supply of workers outpaced demand from employers in 2025.</strong> The outlook for 2026 is for more of the same. Executives cite tariff concerns and AI uncertainty as reasons for the hiring falloff. — Boston Globe, Jan 2026</p>
+  </div>
+</div>
+
+<!-- UNEMPLOYMENT -->
+<div class="tab-content" id="unemployment">
+  <div class="section-title">Unemployment Deep Dive</div>
+  <div class="section-desc">MA unemployment has risen 37% in two years — from 3.5% to 4.8%</div>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">MA Rate (Dec 2025)</div><div class="value red">4.8%</div><div class="sub">Pre-COVID (2019): 2.9%</div></div>
+    <div class="stat-card"><div class="label">National Rate (Mar 2026)</div><div class="value blue">4.1%</div><div class="sub">MA above national by +0.7%</div></div>
+    <div class="stat-card"><div class="label">Unemployed Persons</div><div class="value red">~188K</div><div class="sub">+27,000 year over year</div></div>
+    <div class="stat-card"><div class="label">Labor Force</div><div class="value amber">3.95M</div><div class="sub">LFPR: 66.6%</div></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card"><h3>MA vs. National Unemployment — Monthly (2024–2025)</h3><div class="chart-area"><canvas id="c-unemp2"></canvas></div></div>
+    <div class="chart-card"><h3>Labor Force Participation Rate</h3><div class="chart-area"><canvas id="c-lfpr"></canvas></div></div>
+  </div>
+</div>
+
+<!-- JOB GROWTH -->
+<div class="tab-content" id="jobs">
+  <div class="section-title">Job Growth Analysis</div>
+  <div class="section-desc">Two years of stagnation — employers shed 4,500 jobs from 2024–2025 combined</div>
+
+  <div class="alert">
+    <h4>⚠️ September 2025 — Worst Month Since COVID</h4>
+    <p><strong>-11,100 jobs</strong> in a single month — the largest single-month decline since the COVID shutdowns of 2020. Source: BLS CES preliminary data.</p>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card"><h3>Monthly Job Changes — 2025</h3><div class="chart-area"><canvas id="c-monthly"></canvas></div></div>
+    <div class="chart-card"><h3>NFP Benchmark Revision — National Payroll Overcount</h3><div class="chart-area"><canvas id="c-nfp"></canvas></div></div>
+  </div>
+
+  <div class="info-box danger">
+    <span class="icon">🔴</span>
+    <p><strong>National payrolls were overstated by 911,000 jobs</strong> in the BLS benchmark revision — the largest downward revision since 2009. This means the labor market was significantly weaker than reported throughout 2024.</p>
+  </div>
+</div>
+
+<!-- JOLTS -->
+<div class="tab-content" id="jolts">
+  <div class="section-title">JOLTS Data — Job Openings</div>
+  <div class="section-desc">National job openings fell 966K over the year — Northeast bore a 19% decline</div>
+
+  <div class="chart-grid">
+    <div class="chart-card"><h3>Job Openings Rate: MA vs. US</h3><div class="chart-area"><canvas id="c-jolts"></canvas></div></div>
+    <div class="chart-card"><h3>Openings per Unemployed Person</h3><div class="chart-area"><canvas id="c-ratio"></canvas></div></div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">National Openings (Dec 2025)</div><div class="value amber">6.54M</div><div class="sub">Rate: 3.9% · YoY: −966K</div></div>
+    <div class="stat-card"><div class="label">Northeast Openings (Dec 2025)</div><div class="value amber">1.07M</div><div class="sub">Rate: 3.6% · YoY: −251K (−19%)</div></div>
+    <div class="stat-card"><div class="label">Openings per Unemployed</div><div class="value amber">0.87</div><div class="sub">2022 peak: 2.0 · Healthy: 1.0–1.2</div></div>
+  </div>
+
+  <div class="data-card">
+    <h3>JOLTS December 2025 — Key Metrics</h3>
+    <table class="data-table">
+      <thead><tr><th>Metric</th><th>Dec 2025</th><th>Dec 2024</th><th>YoY Change</th></tr></thead>
+      <tbody>
+        <tr><td>National Job Openings</td><td class="td-amber">6.54M (3.9%)</td><td>7.51M (4.5%)</td><td class="td-red">−966K</td></tr>
+        <tr><td>Northeast Openings</td><td class="td-amber">1.07M (3.6%)</td><td>1.32M (4.5%)</td><td class="td-red">−251K (−19%)</td></tr>
+        <tr><td>National Hires</td><td>5.29M (3.3%)</td><td>5.37M (3.4%)</td><td class="td-red">−81K</td></tr>
+        <tr><td>National Quits</td><td>3.20M (2.0%)</td><td>3.10M (1.9%)</td><td class="td-amber">+109K</td></tr>
+        <tr><td>Layoffs &amp; Discharges</td><td>1.76M (1.1%)</td><td>1.67M (1.1%)</td><td class="td-red">+93K</td></tr>
+        <tr><td>Federal Hires Rate</td><td class="td-red">0.9%</td><td>1.0%</td><td class="td-red">Lowest sector</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: BLS JOLTS Release, February 5, 2026</div>
+  </div>
+</div>
+
+<!-- SECTORS -->
+<div class="tab-content" id="sectors">
+  <div class="section-title">Employment by Sector (2025)</div>
+  <div class="section-desc">Construction was the only real bright spot — core sectors stalled or shed jobs</div>
+
+  <div class="chart-grid">
+    <div class="chart-card"><h3>2025 Job Changes by Sector</h3><div class="chart-area"><canvas id="c-sectors"></canvas></div></div>
+    <div class="chart-card"><h3>The Healthcare Employment Mask</h3><div class="chart-area"><canvas id="c-mask"></canvas></div></div>
+  </div>
+
+  <div class="data-card">
+    <h3>Sector Detail — Full Year 2025</h3>
+    <table class="data-table">
+      <thead><tr><th>Sector</th><th>2025 Job Change</th><th>Signal</th></tr></thead>
+      <tbody>
+        <tr><td>Professional &amp; Business Services</td><td class="td-red">−2,700</td><td class="td-red">Contracting</td></tr>
+        <tr><td>Leisure &amp; Hospitality</td><td class="td-red">−1,200</td><td class="td-red">Contracting</td></tr>
+        <tr><td>Education &amp; Health Services</td><td class="td-amber">+400</td><td class="td-amber">Stalled</td></tr>
+        <tr><td>Financial Services</td><td class="td-amber">+200</td><td class="td-amber">Flat</td></tr>
+        <tr><td>Trade, Transport &amp; Utilities</td><td class="td-green">+1,300</td><td class="td-green">Modest growth</td></tr>
+        <tr><td>Construction</td><td class="td-green">+1,800</td><td class="td-green">Bright spot</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: BLS CES, Massachusetts</div>
+  </div>
+
+  <div class="info-box danger">
+    <span class="icon">🔴</span>
+    <p><strong>Professional &amp; Business Services lost 2,700 jobs</strong> — this is Massachusetts' core white-collar economy. Combined with anemic education/health growth (+400), the state's traditional strengths are no longer generating employment.</p>
+  </div>
+</div>
+
+<!-- LATEST DATA -->
+<div class="tab-content" id="latest">
+  <div class="section-title">Latest BLS Releases</div>
+  <div class="section-desc">Updated through February 2026 JOLTS (released Mar 31) and March 2026 Employment Situation (released Apr 4)</div>
+
+  <div class="alert green">
+    <h4>✅ February 2026 JOLTS — Released March 31, 2026</h4>
+    <p>Job Openings: <strong>6.9M</strong> | Hires: <strong>4.8M</strong> | Separations: <strong>5.0M</strong> | Quits: 3.0M | Layoffs: 1.7M<br>Source: BLS JOLTS Release USDL-26-0579</p>
+  </div>
+  <div class="alert amber">
+    <h4>⚠️ March 2026 Employment Situation — Released April 4, 2026</h4>
+    <p>National Unemployment: <strong>4.1%</strong> | Discouraged Workers: <strong>510,000 (↑144K in March)</strong> | Healthcare: +76K<br>Source: BLS CES/LAUS Release, April 4, 2026</p>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card"><h3>National Job Openings — Dec 2024 through Feb 2026</h3><div class="chart-area"><canvas id="c-trend"></canvas></div></div>
+    <div class="chart-card">
+      <h3>March 2026 Employment Situation — Key Indicators</h3>
+      <div style="padding:8px 0">
+        <div class="stat-row" style="margin-bottom:12px">
+          <div class="stat-card"><div class="label">Unemployment</div><div class="value amber">4.1%</div><div class="sub">National, Mar 2026</div></div>
+          <div class="stat-card"><div class="label">LFPR</div><div class="value blue">61.9%</div><div class="sub">Labor force participation</div></div>
+          <div class="stat-card"><div class="label">Discouraged Workers</div><div class="value red">510K</div><div class="sub">+144K in March alone</div></div>
+        </div>
+        <div class="alert" style="margin-bottom:0">
+          <h4>🚨 Discouraged Worker Spike</h4>
+          <p>510,000 nationally — people who have <strong>given up looking for work</strong>. Up 144K in a single month. Combined with 1.8M long-term unemployed (+322K YoY), this signals sustained structural weakness beyond the headline rate.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="data-card" style="margin-bottom:0">
+      <h3>JOLTS — February 2026 (Preliminary)</h3>
+      <table class="data-table">
+        <thead><tr><th>Metric</th><th>Feb 2026</th><th>Feb 2025</th></tr></thead>
+        <tbody>
+          <tr><td>Job Openings</td><td class="td-amber">6.9M</td><td>~7.4M</td></tr>
+          <tr><td>Hires</td><td>4.8M</td><td>~5.2M</td></tr>
+          <tr><td>Total Separations</td><td>5.0M</td><td>~4.9M</td></tr>
+          <tr><td>Quits</td><td>3.0M</td><td>~3.1M</td></tr>
+          <tr><td>Layoffs &amp; Discharges</td><td class="td-red">1.7M</td><td>~1.6M</td></tr>
+        </tbody>
+      </table>
+      <div class="source">Source: BLS JOLTS USDL-26-0579, March 31, 2026</div>
+    </div>
+    <div class="data-card" style="margin-bottom:0">
+      <h3>Employment Situation — March 2026</h3>
+      <table class="data-table">
+        <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>National Unemployment</td><td class="td-amber">4.1%</td></tr>
+          <tr><td>Labor Force Participation</td><td>61.9%</td></tr>
+          <tr><td>Employment-Population Ratio</td><td>59.2%</td></tr>
+          <tr><td>Long-term Unemployed</td><td class="td-red">1.8M (+322K YoY)</td></tr>
+          <tr><td>Discouraged Workers</td><td class="td-red">510,000 (+144K in March)</td></tr>
+          <tr><td>Healthcare Jobs Added (Mar)</td><td class="td-green">+76,000</td></tr>
+          <tr><td>Jan 2026 NFP Revision</td><td class="td-green">+34K upward</td></tr>
+          <tr><td>Feb 2026 NFP Revision</td><td class="td-red">−41K downward</td></tr>
+        </tbody>
+      </table>
+      <div class="source">Source: BLS CES/LAUS, April 4, 2026</div>
+    </div>
+  </div>
+
+  <div class="info-box" style="margin-top:18px">
+    <span class="icon">📅</span>
+    <p><strong>Next releases:</strong> JOLTS March 2026 → May 5, 2026 &nbsp;·&nbsp; Employment Situation April 2026 → May 2, 2026</p>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<footer>
+  <strong>Sources:</strong> BLS LAUS · BLS CES · BLS JOLTS · Boston Globe · Mass.gov Economic Research<br>
+  <span style="margin-top:6px;display:block">Updated April 6, 2026 · <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">Massachusetts Data Hub</a></span>
+</footer>
+
+<script>
+// Tab switching
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+  document.querySelectorAll('.tab-content').forEach(function(p){p.classList.remove('active')});
+  if(btn) btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+  if(!window._ci) window._ci={};
+  if(!window._ci[tabId]){window._ci[tabId]=true; initCharts(tabId);}
+}
+
+// Chart palette — matches energy dashboard
+var R='#c0392b', G='#1a7a4c', B='#1a4480', Y='#b8860b', P='#7e22ce';
+Chart.defaults.color='#7a756e';
+Chart.defaults.borderColor='#e8e5df';
+Chart.defaults.font.family="'DM Sans',system-ui,sans-serif";
+var charts={};
+function sc(id,cfg){
+  if(charts[id]) charts[id].destroy();
+  var ctx=document.getElementById(id);
+  if(ctx) charts[id]=new Chart(ctx,cfg);
+}
+
+function initCharts(tab){
+  switch(tab){
+    case 'overview':
+      sc('c-unemp',{type:'line',data:{
+        labels:['2019','2020','2021','2022','2023','2024','2025'],
+        datasets:[
+          {label:'Massachusetts',data:[2.9,9.3,5.2,3.5,3.5,4.1,4.8],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:R,borderWidth:2.5},
+          {label:'National',data:[3.5,8.1,5.4,3.6,3.6,4.0,4.4],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:B,borderWidth:2,borderDash:[5,3]}
+        ]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      sc('c-jobs',{type:'bar',data:{
+        labels:['2021','2022','2023','2024','2025'],
+        datasets:[{data:[176000,123000,62000,-5800,1300],
+          backgroundColor:function(ctx){return ctx.raw<0?R+'cc':(ctx.raw<10000?Y+'cc':G+'cc')},
+          borderColor:function(ctx){return ctx.raw<0?R:(ctx.raw<10000?Y:G)},
+          borderWidth:1.5,borderRadius:6}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return(c.raw>0?'+':'')+c.raw.toLocaleString()+' jobs'}}}},scales:{y:{ticks:{callback:function(v){return(v/1000)+'K'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      break;
+
+    case 'unemployment':
+      sc('c-unemp2',{type:'line',data:{
+        labels:['Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Apr 25','Jul 25','Oct 25','Dec 25','Mar 26'],
+        datasets:[
+          {label:'MA',data:[3.8,3.9,4.1,4.3,4.5,4.6,4.7,4.7,4.8,null],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2.5},
+          {label:'National',data:[3.7,3.9,4.2,4.1,4.0,4.2,4.3,4.1,4.4,4.1],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2,borderDash:[5,3]}
+        ]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{min:3,max:5.5,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      sc('c-lfpr',{type:'line',data:{
+        labels:['2019','2020','2021','2022','2023','2024','2025'],
+        datasets:[{label:'LFPR',data:[68.1,65.2,66.5,67.2,67.5,67.0,66.6],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:B,borderWidth:2.5}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:64,max:69,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      break;
+
+    case 'jobs':
+      sc('c-monthly',{type:'bar',data:{
+        labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+        datasets:[{data:[2100,-800,1500,200,-1200,3100,-2400,1800,-11100,4600,2400,1100],
+          backgroundColor:function(ctx){return ctx.raw<0?R+'cc':G+'cc'},
+          borderColor:function(ctx){return ctx.raw<0?R:G},
+          borderWidth:1.5,borderRadius:5}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return(c.raw>0?'+':'')+c.raw.toLocaleString()+' jobs'}}}},scales:{y:{ticks:{callback:function(v){return(v/1000)+'K'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      sc('c-nfp',{type:'bar',data:{
+        labels:['Originally Reported','After Revision','Overcount'],
+        datasets:[{data:[2980000,2069000,911000],backgroundColor:[B+'cc',G+'cc',R+'cc'],borderColor:[B,G,R],borderWidth:2,borderRadius:8}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw.toLocaleString()+' jobs'}}}},scales:{y:{ticks:{callback:function(v){return(v/1000000).toFixed(1)+'M'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      break;
+
+    case 'jolts':
+      sc('c-jolts',{type:'line',data:{
+        labels:['Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Apr 25','Jul 25','Oct 25','Dec 25'],
+        datasets:[
+          {label:'MA Openings Rate',data:[5.2,4.9,4.7,4.4,4.5,4.3,4.1,4.2,4.0],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2.5},
+          {label:'National',data:[5.3,5.0,4.8,4.6,4.5,4.5,4.4,4.5,3.9],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2,borderDash:[5,3]}
+        ]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{min:3.5,max:6,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      sc('c-ratio',{type:'line',data:{
+        labels:['2019','2020','2021','2022','2023','2024','2025'],
+        datasets:[{label:'Openings per Unemployed',data:[1.1,0.4,0.9,2.0,1.5,1.0,0.87],borderColor:Y,backgroundColor:Y+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:Y,borderWidth:2.5}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:2.5,grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      break;
+
+    case 'sectors':
+      sc('c-sectors',{type:'bar',data:{
+        labels:['Construction','Trade/Transport','Ed & Health','Financial','Leisure/Hosp','Prof/Business'],
+        datasets:[{data:[1800,1300,400,200,-1200,-2700],
+          backgroundColor:function(ctx){return ctx.raw<0?R+'cc':(ctx.raw<500?Y+'cc':G+'cc')},
+          borderColor:function(ctx){return ctx.raw<0?R:(ctx.raw<500?Y:G)},
+          borderWidth:1.5,borderRadius:6}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return(c.raw>0?'+':'')+c.raw.toLocaleString()+' jobs'}}}},scales:{y:{ticks:{callback:function(v){return(v>0?'+':'')+v.toLocaleString()}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      sc('c-mask',{type:'doughnut',data:{
+        labels:['Ed & Health (+400)','Construction (+1,800)','Trade/Transport (+1,300)','Sectors Losing Jobs (−3,900)','Financial (+200)'],
+        datasets:[{data:[400,1800,1300,3900,200],
+          backgroundColor:[Y+'cc',G+'cc',B+'cc',R+'cc',P+'99'],
+          borderColor:['#fff','#fff','#fff','#fff','#fff'],borderWidth:3}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}});
+      break;
+
+    case 'latest':
+      sc('c-trend',{type:'line',data:{
+        labels:['Dec 24','Jan 25','Feb 25','Mar 25','Apr 25','May 25','Jun 25','Jul 25','Aug 25','Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26 (p)'],
+        datasets:[{label:'National Job Openings (M)',
+          data:[7.51,6.95,7.40,7.36,7.19,7.39,7.68,7.67,7.44,6.93,7.45,6.93,6.54,6.95,6.9],
+          borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:B,borderWidth:2.5}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw.toFixed(2)+'M openings'}}}},scales:{y:{min:6,max:8,ticks:{callback:function(v){return v+'M'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      break;
+  }
+}
+
+initCharts('overview');
+window._ci = {overview: true};
+</script>
+</body>
+</html>

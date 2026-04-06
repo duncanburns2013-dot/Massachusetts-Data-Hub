@@ -651,12 +651,12 @@ function initCharts(tab) {
   switch(tab) {
     case 'overview':
       // Jan 2026 EIA data: MA 31.16, RI 30.14, CT 28.30, NY 28.37, US 17.45, FL 15.92, TX 15.69, LA 12.46
-      safeChart('chartRatesOverview',{type:'bar',data:{labels:['Massachusetts','Rhode Island','Connecticut','New York','US Average','Florida','Texas','Louisiana'],datasets:[{label:'&#x00A2;/kWh',data:[31.16,30.14,28.30,28.37,17.45,15.92,15.69,12.46],backgroundColor:ctx=>ctx.raw>25?'#c0392b':ctx.raw>20?'#b8860b':'#1a7a4c',borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Cents per kWh'}}},plugins:{legend:{display:false}}}});
-      safeChart('chartRateHistory',{type:'line',data:{labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','Jan 2026'],datasets:[{label:'MA Rate',data:[22.1,22.6,22.0,22.6,22.9,22.7,25.2,28.5,29.6,30.8,30.88,31.16],borderColor:'#c0392b',backgroundColor:'rgba(192,57,43,0.08)',fill:true,tension:0.3,pointRadius:4},{label:'US Average',data:[12.7,12.6,12.9,12.9,13.0,13.0,13.7,15.1,15.8,16.6,17.24,17.45],borderColor:'#1a7a4c',borderDash:[5,5],fill:false,tension:0.3,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:false,min:10,title:{display:true,text:'&#x00A2;/kWh'}}},plugins:{legend:{position:'top',labels:{font:{size:11}}}}}});
+      safeChart('chartRatesOverview',{type:'bar',data:{labels:['Massachusetts','Rhode Island','Connecticut','New York','US Average','Florida','Texas','Louisiana'],datasets:[{label:'¢/kWh',data:[31.16,30.14,28.30,28.37,17.45,15.92,15.69,12.46],backgroundColor:ctx=>ctx.raw>25?'#c0392b':ctx.raw>20?'#b8860b':'#1a7a4c',borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Cents per kWh'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartRateHistory',{type:'line',data:{labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','Jan 2026'],datasets:[{label:'MA Rate',data:[22.1,22.6,22.0,22.6,22.9,22.7,25.2,28.5,29.6,30.8,30.88,31.16],borderColor:'#c0392b',backgroundColor:'rgba(192,57,43,0.08)',fill:true,tension:0.3,pointRadius:4},{label:'US Average',data:[12.7,12.6,12.9,12.9,13.0,13.0,13.7,15.1,15.8,16.6,17.24,17.45],borderColor:'#1a7a4c',borderDash:[5,5],fill:false,tension:0.3,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:false,min:10,title:{display:true,text:'¢/kWh'}}},plugins:{legend:{position:'top',labels:{font:{size:11}}}}}});
       break;
     case 'rates':
       safeChart('chartBillBreak',{type:'doughnut',data:{labels:['Supply (~40%)','Distribution (~30%)','Transition/Stranded (~8%)','Renewable Energy (~10%)','Energy Efficiency (~7%)','RGGI + Other (~5%)'],datasets:[{data:[40,30,8,10,7,5],backgroundColor:['#1a4480','#5a8fba','#6b7280','#c0392b','#b8860b','#8b1a1a']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});
-      safeChart('chartGapTime',{type:'bar',data:{labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','Jan 2026'],datasets:[{label:'MA Premium (&#x00A2;/kWh)',data:[9.4,10.0,9.1,9.7,9.9,9.7,11.5,13.4,13.8,14.2,13.64,13.71],backgroundColor:'rgba(192,57,43,0.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,title:{display:true,text:'Premium (&#x00A2;/kWh)'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartGapTime',{type:'bar',data:{labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','Jan 2026'],datasets:[{label:'MA Premium (¢/kWh)',data:[9.4,10.0,9.1,9.7,9.9,9.7,11.5,13.4,13.8,14.2,13.64,13.71],backgroundColor:'rgba(192,57,43,0.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,title:{display:true,text:'Premium (¢/kWh)'}}},plugins:{legend:{display:false}}}});
       break;
     case 'h5151': {
       // Updated Jan 2026: MA overpayment $987, chart bars updated
@@ -667,7 +667,7 @@ function initCharts(tab) {
       safeChart('c4a',{type:'doughnut',data:{labels:['Supply $75','Distribution $56','Policy $31','Transmission $25'],datasets:[{data:[75,56,31,25],backgroundColor:['#1a4480','#7e22ce','#c0392b','#94a3b8'],borderWidth:0}]},options:dO});
       safeChart('c4b',{type:'doughnut',data:{labels:['Supply $70','Distribution $52','Policy $28 &#x2B07;','Transmission $23'],datasets:[{data:[70,52,28,23],backgroundColor:['#1a4480','#7e22ce','#1a7a4c','#94a3b8'],borderWidth:0}]},options:dO});
       // Monthly bill at 600 kWh: LA=75, TX=94, FL=96, US=105, CT=170, NY=170, MA After=173, MA Now=187
-      safeChart('c4c',{type:'bar',data:{labels:['LA\n12.46&#x00A2;','TX\n15.69&#x00A2;','FL\n15.92&#x00A2;','US Avg\n17.45&#x00A2;','CT\n28.30&#x00A2;','NY\n28.37&#x00A2;','MA After\nH.5151','MA Now\n31.16&#x00A2;'],datasets:[{data:[75,94,96,105,170,170,173,187],backgroundColor:['#1a7a4c','#1a7a4c','#1a7a4c','#1a4480','#1a4480','#7e22ce','#c0392b','#c0392b'],borderRadius:6,barThickness:32}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'  $'+c.raw+'/month'}}},scales:{y:{beginAtZero:true,max:200,ticks:{callback:v=>'$'+v}},x:{grid:{display:false}}}}});
+      safeChart('c4c',{type:'bar',data:{labels:['LA\n12.46¢','TX\n15.69¢','FL\n15.92¢','US Avg\n17.45¢','CT\n28.30¢','NY\n28.37¢','MA After\nH.5151','MA Now\n31.16¢'],datasets:[{data:[75,94,96,105,170,170,173,187],backgroundColor:['#1a7a4c','#1a7a4c','#1a7a4c','#1a4480','#1a4480','#7e22ce','#c0392b','#c0392b'],borderRadius:6,barThickness:32}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'  $'+c.raw+'/month'}}},scales:{y:{beginAtZero:true,max:200,ticks:{callback:v=>'$'+v}},x:{grid:{display:false}}}}});
       break;
     }
     case 'cutkept':
@@ -683,7 +683,7 @@ function initCharts(tab) {
       break;
     case 'gasvsutil':
       safeChart('chartGasMA',{type:'line',data:{labels:YEARS,datasets:[{label:'US Avg',data:GAS_US,borderColor:'#1a4480',fill:false,tension:0.3,pointRadius:3,borderWidth:2,borderDash:[5,3]},{label:'Massachusetts',data:GAS_MA,borderColor:'#b8860b',backgroundColor:'rgba(184,134,11,0.07)',fill:true,tension:0.3,pointRadius:3,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:false,min:1.5,title:{display:true,text:'$/gallon'},ticks:{callback:v=>'$'+v}}},plugins:{legend:{position:'top',labels:{font:{size:11}}},tooltip:{callbacks:{label:c=>' $'+c.raw.toFixed(3)+'/gal'}}}}});
-      safeChart('chartElecComp',{type:'line',data:{labels:YEARS,datasets:[{label:'US Avg',data:ELEC_US,borderColor:'#1a4480',fill:false,tension:0.3,pointRadius:3,borderWidth:2,borderDash:[5,3]},{label:'Massachusetts',data:ELEC_MA,borderColor:'#c0392b',backgroundColor:'rgba(192,57,43,0.07)',fill:true,tension:0.3,pointRadius:3,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:false,min:10,title:{display:true,text:'&#x00A2;/kWh'},ticks:{callback:v=>v+'&#x00A2;'}}},plugins:{legend:{position:'top',labels:{font:{size:11}}},tooltip:{callbacks:{label:c=>' '+c.raw+'&#x00A2;/kWh'}}}}});
+      safeChart('chartElecComp',{type:'line',data:{labels:YEARS,datasets:[{label:'US Avg',data:ELEC_US,borderColor:'#1a4480',fill:false,tension:0.3,pointRadius:3,borderWidth:2,borderDash:[5,3]},{label:'Massachusetts',data:ELEC_MA,borderColor:'#c0392b',backgroundColor:'rgba(192,57,43,0.07)',fill:true,tension:0.3,pointRadius:3,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:false,min:10,title:{display:true,text:'¢/kWh'},ticks:{callback:v=>v+'¢'}}},plugins:{legend:{position:'top',labels:{font:{size:11}}},tooltip:{callbacks:{label:c=>' '+c.raw+'¢/kWh'}}}}});
       const premElec = YEARS.map((_,i)=>+((ELEC_MA[i]-ELEC_US[i])/ELEC_US[i]*100).toFixed(1));
       const premGas  = YEARS.map((_,i)=>+((GAS_MA[i]-GAS_US[i])/GAS_US[i]*100).toFixed(1));
       const premNG   = YEARS.map((_,i)=>+((NG_MA[i]-NG_US[i])/NG_US[i]*100).toFixed(1));
@@ -698,7 +698,7 @@ function initCharts(tab) {
           const ep=((ELEC_MA[i]-ELEC_US[i])/ELEC_US[i]*100).toFixed(1);
           const gpCls=parseFloat(gp)>5?'highlight':parseFloat(gp)<0?'good':'';
           const epCls=parseFloat(ep)>50?'highlight':parseFloat(ep)>30?'amber':'';
-          return `<tr><td><strong>${yr}</strong></td><td>$${GAS_US[i].toFixed(3)}</td><td>$${GAS_MA[i].toFixed(3)}</td><td class="${gpCls}">${gp>0?'+':''}${gp}%</td><td>$${DSL_US[i].toFixed(3)}</td><td>$${DSL_NE[i].toFixed(3)}</td><td class="amber">+${dp}%</td><td class="${epCls}">${ELEC_MA[i]}&#x00A2;</td><td>${ELEC_US[i]}&#x00A2;</td><td class="${epCls}">+${ep}%</td></tr>`;
+          return `<tr><td><strong>${yr}</strong></td><td>$${GAS_US[i].toFixed(3)}</td><td>$${GAS_MA[i].toFixed(3)}</td><td class="${gpCls}">${gp>0?'+':''}${gp}%</td><td>$${DSL_US[i].toFixed(3)}</td><td>$${DSL_NE[i].toFixed(3)}</td><td class="amber">+${dp}%</td><td class="${epCls}">${ELEC_MA[i]}¢</td><td>${ELEC_US[i]}¢</td><td class="${epCls}">+${ep}%</td></tr>`;
         }).join('');
       }
       const burdenMA=YEARS.map((_,i)=>Math.round(ELEC_MA[i]/100*7200+NG_MA[i]*700+GAS_MA[i]*500));
@@ -717,7 +717,7 @@ function initCharts(tab) {
         ]
       },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:10}}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'$'+v}},x:{grid:{display:false}}}}});
       safeChart('chartOutrage',{type:'bar',data:{
-        labels:['50&#x00A2; gas spike\n(makes headlines)','MA utility mandate\npremium (silent)'],
+        labels:['50¢ gas spike\n(makes headlines)','MA utility mandate\npremium (silent)'],
         datasets:[{data:[250,1932],backgroundColor:['#b8860b','#c0392b'],borderRadius:8,barThickness:52}]
       },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'  $'+c.raw.toLocaleString()+'/yr per household'}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'$'+v}},x:{grid:{display:false}}}}});
       break;
