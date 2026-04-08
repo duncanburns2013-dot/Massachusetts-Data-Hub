@@ -1,0 +1,52 @@
+name: Update Employment Dashboard
+
+on:
+  schedule:
+    - cron: '30 14 15-21 * 5'
+    - cron: '0 13 1-7 * 5'
+  workflow_dispatch:
+    inputs:
+      force_update:
+        description: 'Force update even if no new data'
+        required: false
+        default: 'false'
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install dependencies
+        run: |
+          cd scripts
+          npm ci
+          
+      - name: Fetch BLS data and update dashboard
+        env:
+          BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
+        run: |
+          cd scripts
+          node fetch-bls-data.js
+          
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet employment-dashboard.html || echo "changed=true" >> $GITHUB_OUTPUT
+          
+      - name: Commit and push updates
+        if: steps.changes.outputs.changed == 'true' || github.event.inputs.force_update == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add employment-dashboard.html
+          git add data/employment-latest.json
+          git commit -m "📊 Auto-update: Employment data $(date +'%B %Y')"
+          git push
