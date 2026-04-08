@@ -1,0 +1,8 @@
+{
+  "name": "ma-data-hub-scripts",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "update-employment": "node fetch-bls-data.js"
+  }
+}
