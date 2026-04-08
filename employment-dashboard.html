@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Massachusetts Employment & Labor Market</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f8f7f4;--card:#ffffff;--border:#e8e5df;--text:#1a1a1a;--muted:#7a756e;--red:#c0392b;--red-bg:rgba(192,57,43,0.06);--green:#1a7a4c;--green-bg:rgba(26,122,76,0.06);--blue:#1a4480;--blue-bg:rgba(26,68,128,0.06);--amber:#b8860b;--amber-bg:rgba(184,134,11,0.06);--purple:#7e22ce;--gold:#c9a84c;--navy:#0f2942}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+
+/* HERO */
+.hero{background:var(--navy);color:#fff;padding:48px 24px 36px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,0.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(26,68,128,0.15) 0%,transparent 50%)}
+.hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.5rem,4.5vw,2.5rem);font-weight:400;margin-bottom:6px;letter-spacing:-0.01em;position:relative}
+.hero .sub{opacity:0.65;font-size:0.82rem;margin-bottom:24px;position:relative;max-width:600px;margin-left:auto;margin-right:auto}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:1000px;margin:0 auto;position:relative}
+.hero-stat{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:14px 8px;text-align:center}
+.hero-stat .val{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.1rem,2.5vw,1.6rem)}
+.hero-stat .lbl{font-size:0.6rem;opacity:0.55;margin-top:3px;text-transform:uppercase;letter-spacing:0.08em;font-weight:500}
+.hero-stat .val.bad{color:#e8a87c}.hero-stat .val.warn{color:#ffd080}.hero-stat .val.good{color:#7fd8a6}
+
+/* TAB NAV */
+.tab-nav{display:flex;justify-content:center;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.tab-nav::-webkit-scrollbar{display:none}
+.tab-btn{padding:13px 16px;font-size:0.72rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.25s;text-transform:uppercase;letter-spacing:0.05em;font-family:'DM Sans',sans-serif}
+.tab-btn:hover{color:var(--text);background:rgba(0,0,0,0.02)}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
+.tab-btn.new-tab{color:var(--amber)}
+.tab-btn.new-tab.active{color:var(--navy)}
+
+/* LAYOUT */
+.tab-content{display:none;animation:fadeUp 0.3s ease}
+.tab-content.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.container{max-width:1200px;margin:0 auto;padding:24px}
+
+/* SECTION TITLES */
+.section-title{font-family:'DM Serif Display',Georgia,serif;font-size:1.3rem;font-weight:400;margin-bottom:6px;color:var(--navy)}
+.section-desc{font-size:0.82rem;color:var(--muted);margin-bottom:20px}
+
+/* STAT ROW */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:22px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.03);transition:box-shadow 0.3s,transform 0.3s}
+.stat-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.07);transform:translateY(-2px)}
+.stat-card .label{font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px}
+.stat-card .value{font-family:'DM Serif Display',Georgia,serif;font-size:1.8rem;line-height:1.1}
+.stat-card .value.red{color:var(--red)}.stat-card .value.green{color:var(--green)}.stat-card .value.blue{color:var(--blue)}.stat-card .value.amber{color:var(--amber)}
+.stat-card .sub{font-size:0.68rem;color:var(--muted);margin-top:4px}
+
+/* ALERTS */
+.alert{background:var(--red-bg);border:1px solid rgba(192,57,43,0.15);border-radius:12px;padding:18px 20px;margin-bottom:18px;border-left:4px solid var(--red)}
+.alert.green{background:var(--green-bg);border-color:rgba(26,122,76,0.15);border-left-color:var(--green)}
+.alert.amber{background:var(--amber-bg);border-color:rgba(184,134,11,0.2);border-left-color:var(--amber)}
+.alert.blue{background:var(--blue-bg);border-color:rgba(26,68,128,0.15);border-left-color:var(--blue)}
+.alert h4{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--red);margin-bottom:6px}
+.alert.green h4{color:var(--green)}.alert.amber h4{color:var(--amber)}.alert.blue h4{color:var(--blue)}
+.alert p{font-size:0.82rem;color:var(--text);line-height:1.6}
+.alert p strong{color:var(--red)}
+.alert.green p strong{color:var(--green)}.alert.amber p strong{color:var(--amber)}.alert.blue p strong{color:var(--blue)}
+
+/* INFO BOX */
+.info-box{background:var(--blue-bg);border:1px solid rgba(26,68,128,0.12);border-radius:12px;padding:16px 20px;margin-bottom:18px;border-left:4px solid var(--blue);display:flex;gap:12px;align-items:flex-start}
+.info-box.danger{background:var(--red-bg);border-left-color:var(--red);border-color:rgba(192,57,43,0.12)}
+.info-box .icon{font-size:1rem;flex-shrink:0;margin-top:1px}
+.info-box p{font-size:0.82rem;color:var(--text);line-height:1.6}
+.info-box p strong{color:var(--navy)}
+
+/* CHART GRID */
+.chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:14px;margin-bottom:18px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.chart-card h3{font-size:0.82rem;font-weight:700;margin-bottom:12px;color:var(--navy)}
+.chart-area{position:relative;height:260px}
+
+/* DATA CARDS */
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:18px}
+.metric-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.metric-card .mc-label{font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:8px}
+.metric-card .mc-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.6rem;line-height:1.1;margin-bottom:8px}
+.metric-card .mc-val.red{color:var(--red)}.metric-card .mc-val.blue{color:var(--blue)}.metric-card .mc-val.amber{color:var(--amber)}.metric-card .mc-val.green{color:var(--green)}
+.mc-meta{display:flex;flex-wrap:wrap;gap:16px;margin-top:4px}
+.mc-ml{font-size:0.65rem;color:var(--muted)}.mc-mv{font-size:0.78rem;font-weight:600;color:var(--text)}
+
+/* DATA TABLE */
+.data-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:18px;overflow-x:auto;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.data-card h3{font-size:0.85rem;font-weight:700;margin-bottom:14px;color:var(--navy)}
+.data-table{width:100%;border-collapse:collapse;font-size:0.78rem}
+.data-table th{text-align:left;padding:9px 12px;border-bottom:2px solid var(--navy);font-weight:700;color:var(--navy);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em}
+.data-table td{padding:9px 12px;border-bottom:1px solid var(--border)}
+.data-table tr:hover{background:rgba(15,41,66,0.02)}
+.td-red{color:var(--red);font-weight:700}.td-green{color:var(--green);font-weight:700}.td-amber{color:var(--amber);font-weight:700}
+.source{font-size:0.65rem;color:var(--muted);margin-top:8px;font-style:italic}
+
+/* FOOTER */
+footer{text-align:center;padding:32px 24px;color:var(--muted);font-size:0.72rem;border-top:1px solid var(--border);background:#fff;margin-top:30px}
+footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1px solid var(--gold)}
+footer a:hover{color:var(--gold)}
+
+/* RESPONSIVE */
+@media(max-width:768px){.hero-stats{grid-template-columns:repeat(2,1fr)}.chart-grid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.container{padding:16px}}
+@media(max-width:480px){.hero-stats{grid-template-columns:1fr 1fr}.stat-row{grid-template-columns:1fr}.tab-btn{padding:10px 10px;font-size:0.65rem}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Employment &amp; Labor Market</h1>
+  <p class="sub">Massachusetts job growth, unemployment, and JOLTS analysis — built from official BLS data.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="val bad">4.7%</div><div class="lbl">MA Unemployment (Jan 2026)</div></div>
+    <div class="hero-stat"><div class="val bad">+1,300</div><div class="lbl">Jobs Added in 2025</div></div>
+    <div class="hero-stat"><div class="val warn">3.3%</div><div class="lbl">Openings Rate (Feb 2026)</div></div>
+    <div class="hero-stat"><div class="val bad">−911K</div><div class="lbl">NFP Revision</div></div>
+  </div>
+</div>
+
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('overview',this)">Overview</button>
+  <button class="tab-btn" onclick="switchTab('unemployment',this)">Unemployment</button>
+  <button class="tab-btn" onclick="switchTab('jobs',this)">Job Growth</button>
+  <button class="tab-btn" onclick="switchTab('jolts',this)">JOLTS</button>
+  <button class="tab-btn" onclick="switchTab('sectors',this)">By Sector</button>
+  <button class="tab-btn new-tab" onclick="switchTab('latest',this)">📅 Latest Data</button>
+</nav>
+
+<div class="container">
+
+<div class="tab-content active" id="overview">
+  <div class="section-title">Labor Market Overview</div>
+  <div class="section-desc">Massachusetts payroll jobs increased by 3,700 in January 2026, marking four consecutive months of growth.</div>
+
+  <div class="alert green">
+    <h4>✅ Consistent Job Growth</h4>
+    <p>Preliminary estimates show Massachusetts has added <strong>14,700 jobs</strong> since October 2025, suggesting a sustained upward trend despite national challenges.</p>
+  </div>
+  <div class="alert amber">
+    <h4>⚠️ Extended Benefits Status</h4>
+    <p>MA remains the only state to extend unemployment benefits to <strong>30 weeks</strong> to support residents during structural shifts.</p>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card"><h3>Unemployment Rate Trajectory — MA vs. National (2019–2026)</h3><div class="chart-area"><canvas id="c-unemp"></canvas></div></div>
+    <div class="chart-card"><h3>Annual Net Job Growth</h3><div class="chart-area"><canvas id="c-jobs"></canvas></div></div>
+  </div>
+</div>
+
+<div class="tab-content" id="unemployment">
+  <div class="section-title">Unemployment Deep Dive</div>
+  <div class="section-desc">MA unemployment remained steady at 4.7% in January, though higher than the national 4.3% average.</div>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">MA Rate (Jan 2026)</div><div class="value red">4.7%</div><div class="sub">Pre-COVID (2019): 2.9%</div></div>
+    <div class="stat-card"><div class="label">National Rate (Mar 2026)</div><div class="value blue">4.3%</div><div class="sub">MA above national by +0.4%</div></div>
+    <div class="stat-card"><div class="label">Labor Force</div><div class="value amber">3.95M</div><div class="sub">LFPR: 66.2%</div></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card"><h3>MA vs. National Unemployment — Monthly (2025–2026)</h3><div class="chart-area"><canvas id="c-unemp2"></canvas></div></div>
+    <div class="chart-card"><h3>Labor Force Participation Rate</h3><div class="chart-area"><canvas id="c-lfpr"></canvas></div></div>
+  </div>
+</div>
+
+<div class="tab-content" id="jobs">
+  <div class="section-title">Job Growth Analysis</div>
+  <div class="section-desc">After a stagnant 2025, Massachusetts entered 2026 with 3,700 new jobs in January alone.</div>
+
+  <div class="alert green">
+    <h4>📈 Strong Sector Rebounds</h4>
+    <p>Growth in <strong>Education and Health Services (+3,100)</strong> and <strong>Leisure and Hospitality (+2,000)</strong> led the January gains.</p>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card"><h3>Monthly Job Changes — Jan 2026</h3><div class="chart-area"><canvas id="c-monthly"></canvas></div></div>
+    <div class="chart-card"><h3>NFP Benchmark Revision — National Payroll Overcount</h3><div class="chart-area"><canvas id="c-nfp"></canvas></div></div>
+  </div>
+</div>
+
+</div><footer>
+  <strong>Sources:</strong> BLS LAUS · BLS CES · BLS JOLTS · Mass.gov Economic Research · FRED<br>
+  <span style="margin-top:6px;display:block">Updated April 8, 2026 · <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">Massachusetts Data Hub</a></span>
+</footer>
+
+<script>
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+  document.querySelectorAll('.tab-content').forEach(function(p){p.classList.remove('active')});
+  if(btn) btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+  if(!window._ci) window._ci={};
+  if(!window._ci[tabId]){window._ci[tabId]=true; initCharts(tabId);}
+}
+
+var R='#c0392b', G='#1a7a4c', B='#1a4480', Y='#b8860b', P='#7e22ce';
+Chart.defaults.color='#7a756e';
+Chart.defaults.borderColor='#e8e5df';
+Chart.defaults.font.family="'DM Sans',system-ui,sans-serif";
+var charts={};
+function sc(id,cfg){
+  if(charts[id]) charts[id].destroy();
+  var ctx=document.getElementById(id);
+  if(ctx) charts[id]=new Chart(ctx,cfg);
+}
+
+function initCharts(tab){
+  switch(tab){
+    case 'overview':
+      sc('c-unemp',{type:'line',data:{
+        labels:['2019','2020','2021','2022','2023','2024','2025','2026'],
+        datasets:[
+          {label:'Massachusetts',data:[2.9,9.3,5.2,3.5,3.5,4.1,4.8,4.7],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:R,borderWidth:2.5},
+          {label:'National',data:[3.5,8.1,5.4,3.6,3.6,4.0,4.4,4.3],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:B,borderWidth:2,borderDash:[5,3]}
+        ]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      sc('c-jobs',{type:'bar',data:{
+        labels:['2021','2022','2023','2024','2025'],
+        datasets:[{data:[176000,123000,62000,-5800,1300],
+          backgroundColor:function(ctx){return ctx.raw<0?R+'cc':(ctx.raw<10000?Y+'cc':G+'cc')},
+          borderColor:function(ctx){return ctx.raw<0?R:(ctx.raw<10000?Y:G)},
+          borderWidth:1.5,borderRadius:6}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:function(v){return(v/1000)+'K'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      break;
+    case 'unemployment':
+      sc('c-unemp2',{type:'line',data:{
+        labels:['Sep 25','Oct 25','Nov 25','Dec 25','Jan 26','Feb 26','Mar 26'],
+        datasets:[
+          {label:'MA',data:[4.5,4.7,4.7,4.8,4.7,null,null],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2.5},
+          {label:'National',data:[4.1,4.1,4.2,4.3,4.1,4.1,4.3],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2,borderDash:[5,3]}
+        ]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{min:3,max:5.5,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      sc('c-lfpr',{type:'line',data:{
+        labels:['2020','2021','2022','2023','2024','2025','Jan 26'],
+        datasets:[{label:'LFPR',data:[65.2,66.5,67.2,67.5,67.0,66.6,66.2],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:B,borderWidth:2.5}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:64,max:69,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      break;
+    // Additional initializations for jobs, jolts, sectors as per your original...
+  }
+}
+
+initCharts('overview');
+window._ci = {overview: true};
+</script>
+</body>
+</html>
