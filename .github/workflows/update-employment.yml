@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd scripts
-          npm ci
+          npm install
           
       - name: Fetch BLS data and update dashboard
         env:
