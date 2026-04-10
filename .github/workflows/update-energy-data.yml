@@ -21,6 +21,10 @@ jobs:
         env:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
         run: python update-affordability-dashboard.py
+      - name: Update tax-budget dashboard
+        env:
+          EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+        run: python update-tax-budget-dashboard.py
       - name: Commit if changed
         run: |
           git diff --quiet -- '*.html' && exit 0
