@@ -384,6 +384,37 @@ footer a:hover{color:var(--gold)}
     <div class="stat-card"><div class="label">Infant Childcare</div><div class="value red">$24K+/yr</div><div class="sub">#2 most expensive (DOL/EPI)</div></div>
   </div>
 
+
+  <!-- ===== LIVE COST TRACKER (auto-updated) ===== -->
+  <div class="data-card" style="border-left:4px solid var(--red);margin-bottom:26px">
+    <h3>&#x1F4E1; Live Cost Tracker &#x2014; Boston vs. National (BLS CPI, Monthly)</h3>
+    <p style="font-size:0.78rem;color:var(--muted);margin-bottom:16px">Year-over-year inflation by category. Auto-updated monthly from BLS Consumer Price Index and EIA.</p>
+    <table class="data-table">
+      <thead><tr><th>Category</th><th>Boston / NE</th><th>US Average</th><th>MA Premium</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td><strong>All Items (CPI-U)</strong></td><td class="highlight">+2.8%</td><td>+2.7%</td><td class="highlight">+0.1pp</td><td>BLS CPI</td></tr>
+        <tr><td><strong>Shelter / Housing</strong></td><td class="highlight">+4.0%</td><td>+3.6%</td><td class="highlight">+0.4pp</td><td>BLS CPI</td></tr>
+        <tr><td><strong>Electricity</strong></td><td class="highlight">31.2&#x00A2;/kWh</td><td>17.45&#x00A2;/kWh</td><td class="highlight">+79%</td><td>EIA</td></tr>
+        <tr><td><strong>Overall Price Level</strong></td><td class="highlight">108.2</td><td>100.0</td><td class="highlight">+8.2%</td><td>BEA RPP (2023)</td></tr>
+        <tr><td><strong>Purchasing Power of $100</strong></td><td class="highlight">$92.38</td><td>$100.00</td><td class="highlight">-$7.62</td><td>BEA RPP (2023)</td></tr>
+      </tbody>
+    </table>
+    <div class="source">CPI and electricity data auto-updated via GitHub Actions. BEA RPP updates annually.</div>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>Boston vs. National Inflation by Category (YoY %)</h3>
+      <div class="chart-area"><canvas id="chartCPIlive"></canvas></div>
+      <div class="source">Source: BLS CPI-U, Boston-Cambridge-Newton MSA vs US City Average</div>
+    </div>
+    <div class="chart-card">
+      <h3>MA Cost Premium &#x2014; Where You Pay More</h3>
+      <div class="chart-area"><canvas id="chartCostPrem"></canvas></div>
+      <div class="source">Source: BEA RPP (overall), EIA (electricity), BLS CPI (shelter), DOL (childcare)</div>
+    </div>
+  </div>
+  <!-- ===== END LIVE COST TRACKER ===== -->
+
   <div class="alert">
     <h4>⚠️ The Purchasing Power Illusion — Official BEA Data</h4>
     <div class="alert-grid">
@@ -1614,7 +1645,40 @@ function initCharts(tab) {
         },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: false, min: 50000, title: { display: true, text: 'Median Household Income ($)' } } }, plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } } }
       });
-      break;
+      
+      safeChart('chartCPIlive', {
+        type: 'bar',
+        data: {
+          labels: ['All Items', 'Shelter', 'Food', 'Energy', 'Medical'],
+          datasets: [
+            { label: 'Boston / NE', data: [2.8, 4.0, 2.5, 5.6, 3.2], backgroundColor: '#c0392b', borderRadius: 6 },
+            { label: 'US Average', data: [2.7, 3.6, 2.3, 3.2, 3.0], backgroundColor: '#d4d0ca', borderRadius: 6 }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          scales: { y: { beginAtZero: true, title: { display: true, text: 'YoY Change (%)' } } },
+          plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } }
+        }
+      });
+      safeChart('chartCostPrem', {
+        type: 'bar',
+        data: {
+          labels: ['Electricity', 'Childcare', 'Housing', 'Utilities', 'Overall'],
+          datasets: [{
+            label: 'MA Premium Over US Average (%)',
+            data: [75, 62, 96, 53, 8.2],
+            backgroundColor: ['#c0392b', '#c0392b', '#b8860b', '#b8860b', '#1a4480'],
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          scales: { y: { beginAtZero: true, title: { display: true, text: '% Above US Average' } } },
+          plugins: { legend: { display: false } }
+        }
+      });
+break;
 
     case 'fraud':
       safeChart('chartFraudGap', {
