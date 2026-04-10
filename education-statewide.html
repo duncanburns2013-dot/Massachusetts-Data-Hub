@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Massachusetts K-12 Education Crisis — 2025 Performance Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#1e2235;--surface:#262b44;--surface2:#2e3452;--border:#3d4566;
+--text:#f1f5f9;--muted:#a3aed0;--accent:#4da6ff;--accent2:#22d3ee;
+--blue:#4da6ff;--green:#2ecc71;--purple:#c084fc;--cyan:#22d3ee;
+--yellow:#fbbf24;--pink:#f472b6;--red:#ff5757;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.hero{
+background:linear-gradient(135deg,#1a2540 0%,#1e2235 40%,#1e2235 60%,#1a2540 100%);
+border-bottom:2px solid var(--accent);padding:2.5rem 2rem 1.5rem;text-align:center;
+position:relative;overflow:hidden;
+}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+background:radial-gradient(ellipse at 30% 0%,rgba(77,166,255,0.12),transparent 60%),
+radial-gradient(ellipse at 70% 100%,rgba(34,211,238,0.1),transparent 60%);pointer-events:none}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;
+background:linear-gradient(135deg,#fff 0%,#4da6ff 100%);-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;letter-spacing:-1px;position:relative}
+.hero .sub{color:var(--muted);margin-top:.5rem;font-size:.95rem}
+.hero .stat-row{display:flex;justify-content:center;gap:2rem;margin-top:1.2rem;flex-wrap:wrap}
+.hero .stat-box{background:rgba(77,166,255,0.12);border:1px solid rgba(77,166,255,0.3);
+border-radius:12px;padding:.8rem 1.4rem;min-width:140px}
+.hero .stat-box .num{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:#4da6ff}
+.hero .stat-box .lbl{font-size:.7rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-top:.2rem}
+
+nav{display:flex;gap:0;background:var(--surface);border-bottom:1px solid var(--border);
+overflow-x:auto;position:sticky;top:0;z-index:100}
+nav button{flex:1;min-width:120px;padding:.9rem .5rem;background:none;border:none;
+color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:500;
+cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;text-transform:uppercase;
+letter-spacing:1px;white-space:nowrap}
+nav button:hover{color:var(--text);background:rgba(255,255,255,0.03)}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:rgba(77,166,255,0.05)}
+
+.container{max-width:1200px;margin:0 auto;padding:1.5rem}
+.tab{display:none}.tab.active{display:block}
+
+.grid{display:grid;gap:1.2rem}
+.grid-2{grid-template-columns:repeat(auto-fit,minmax(min(100%,480px),1fr))}
+.grid-3{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;
+padding:1.4rem;position:relative;overflow:hidden}
+.card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+background:linear-gradient(90deg,var(--accent),var(--accent2),var(--cyan));opacity:.8}
+.card h3{font-size:.85rem;text-transform:uppercase;letter-spacing:1.2px;
+color:var(--muted);margin-bottom:1rem;font-weight:500}
+.card.full{grid-column:1/-1}
+
+.chart-wrap{position:relative;height:320px}
+.chart-wrap.tall{height:420px}
+.chart-wrap.short{height:260px}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.8rem;margin-bottom:1.5rem}
+.kpi{background:var(--surface2);border:1px solid var(--border);border-radius:12px;
+padding:1rem;text-align:center}
+.kpi .val{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900}
+.kpi .lbl{font-size:.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-top:.2rem}
+.kpi.red .val{color:#ff5757}.kpi.green .val{color:#2ecc71}
+.kpi.blue .val{color:#4da6ff}.kpi.orange .val{color:#ff9f43}
+.kpi.purple .val{color:#c084fc}.kpi.yellow .val{color:#fbbf24}
+
+.insight{background:rgba(77,166,255,0.1);border-left:3px solid var(--accent);
+padding:.8rem 1rem;border-radius:0 8px 8px 0;margin-top:1rem;font-size:.85rem;line-height:1.5}
+.insight strong{color:var(--accent)}
+
+footer{text-align:center;padding:2rem 1rem;color:var(--muted);font-size:.75rem;
+border-top:1px solid var(--border);margin-top:2rem}
+footer a{color:var(--accent);text-decoration:none}
+
+@media(max-width:640px){
+.hero h1{font-size:1.6rem}.hero .stat-row{gap:.8rem}
+.hero .stat-box{min-width:100px;padding:.5rem .8rem}
+.hero .stat-box .num{font-size:1.3rem}
+.chart-wrap{height:260px}.chart-wrap.tall{height:340px}
+.container{padding:1rem}.card{padding:1rem}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+<h1>Massachusetts K-12 Education Crisis</h1>
+<p class="sub">2025 MCAS Performance Dashboard &mdash; Data from Massachusetts DESE</p>
+<div class="stat-row">
+<div class="stat-box"><div class="num">42%</div><div class="lbl">ELA Proficient<br>Grades 3-8</div></div>
+<div class="stat-box"><div class="num">41%</div><div class="lbl">Math Proficient<br>Grades 3-8</div></div>
+<div class="stat-box"><div class="num">$21,886</div><div class="lbl">Per Pupil<br>Spending</div></div>
+<div class="stat-box"><div class="num">-6.4%</div><div class="lbl">Traditional<br>Public School</div></div>
+</div>
+</div>
+
+<nav>
+<button class="active" onclick="showTab('overview',this)">Overview</button>
+<button onclick="showTab('enrollment',this)">Enrollment</button>
+<button onclick="showTab('mcas',this)">MCAS Trends</button>
+<button onclick="showTab('gateway',this)">Gateway Cities</button>
+<button onclick="showTab('spending',this)">Spending</button>
+<button onclick="showTab('gaps',this)">Achievement Gaps</button>
+</nav>
+
+<div class="container">
+
+<!-- ═══ OVERVIEW ═══ -->
+<div class="tab active" id="overview">
+<div class="kpi-grid">
+<div class="kpi red"><div class="val">58%</div><div class="lbl">Not Proficient<br>ELA Statewide</div></div>
+<div class="kpi red"><div class="val">59%</div><div class="lbl">Not Proficient<br>Math Statewide</div></div>
+<div class="kpi yellow"><div class="val">230</div><div class="lbl">Districts Below<br>50% Proficiency</div></div>
+<div class="kpi orange"><div class="val">65%</div><div class="lbl">Districts Under<br>Half Proficient</div></div>
+<div class="kpi blue"><div class="val">+27%</div><div class="lbl">Spending Above<br>Required</div></div>
+<div class="kpi purple"><div class="val">56%</div><div class="lbl">Homeschool<br>Growth 2019-25</div></div>
+</div>
+<div class="grid grid-2">
+<div class="card">
+<h3>Current MCAS Performance (2025)</h3>
+<div class="chart-wrap"><canvas id="overviewCurrent"></canvas></div>
+</div>
+<div class="card">
+<h3>District Performance Distribution — ELA</h3>
+<div class="chart-wrap"><canvas id="overviewDist"></canvas></div>
+<div class="insight"><strong>System-wide failure:</strong> 230 of 352 districts (65%) have fewer than half of students meeting standards. Only 6 districts achieve 75%+ proficiency.</div>
+</div>
+</div>
+</div>
+
+<!-- ═══ ENROLLMENT ═══ -->
+<div class="tab" id="enrollment">
+<div class="kpi-grid">
+<div class="kpi red"><div class="val">-6.4%</div><div class="lbl">Traditional<br>Public Schools</div></div>
+<div class="kpi green"><div class="val">+56%</div><div class="lbl">Homeschooling<br>Increase</div></div>
+<div class="kpi green"><div class="val">+18%</div><div class="lbl">Vocational-Tech<br>Growth</div></div>
+<div class="kpi blue"><div class="val">+11%</div><div class="lbl">Charter School<br>Enrollment</div></div>
+</div>
+<div class="grid grid-2">
+<div class="card full">
+<h3>K-12 Enrollment Change (2019-2025)</h3>
+<div class="chart-wrap short"><canvas id="enrollChart"></canvas></div>
+<div class="insight"><strong>Families voting with their feet:</strong> Traditional public schools lost 6.4% enrollment while homeschooling exploded 56%. Parents are fleeing a failing system.</div>
+</div>
+</div>
+</div>
+
+<!-- ═══ MCAS TRENDS ═══ -->
+<div class="tab" id="mcas">
+<div class="kpi-grid">
+<div class="kpi red"><div class="val">-10pts</div><div class="lbl">ELA (Gr 3-8)<br>vs 2019</div></div>
+<div class="kpi red"><div class="val">-8pts</div><div class="lbl">Math (Gr 3-8)<br>vs 2019</div></div>
+<div class="kpi orange"><div class="val">-10pts</div><div class="lbl">ELA (Gr 10)<br>vs 2019</div></div>
+<div class="kpi orange"><div class="val">-14pts</div><div class="lbl">Math (Gr 10)<br>vs 2019</div></div>
+</div>
+<div class="grid grid-2">
+<div class="card full">
+<h3>MCAS % Meeting/Exceeding Expectations (2019 vs 2024 vs 2025)</h3>
+<div class="chart-wrap"><canvas id="mcasTrend"></canvas></div>
+<div class="insight"><strong>Five years post-pandemic, no recovery:</strong> Scores remain catastrophically below 2019 levels. Grade 10 math dropped from 59% to 45% — a 14-point collapse.</div>
+</div>
+<div class="card">
+<h3>Grade 10 Score Changes (2024→2025)</h3>
+<div class="chart-wrap"><canvas id="mcasDecline"></canvas></div>
+</div>
+<div class="card">
+<h3>High School Chronic Absenteeism by Group</h3>
+<div class="chart-wrap"><canvas id="mcasAbsent"></canvas></div>
+</div>
+</div>
+</div>
+
+<!-- ═══ GATEWAY CITIES ═══ -->
+<div class="tab" id="gateway">
+<div class="kpi-grid">
+<div class="kpi red"><div class="val">30.2%</div><div class="lbl">Gateway Cities<br>ELA Average</div></div>
+<div class="kpi red"><div class="val">27.3%</div><div class="lbl">Gateway Cities<br>Math Average</div></div>
+<div class="kpi blue"><div class="val">45.1%</div><div class="lbl">Rest of State<br>ELA Average</div></div>
+<div class="kpi purple"><div class="val">15pts</div><div class="lbl">Achievement<br>Gap</div></div>
+</div>
+<div class="grid grid-2">
+<div class="card">
+<h3>Gateway Cities vs. Rest of State</h3>
+<div class="chart-wrap"><canvas id="gatewayGap"></canvas></div>
+<div class="insight"><strong>Persistent inequality:</strong> Gateway Cities lag 15-16 percentage points behind the rest of Massachusetts in both ELA and Math.</div>
+</div>
+<div class="card full">
+<h3>Gateway City Performance (MCAS 2025)</h3>
+<div class="chart-wrap tall"><canvas id="gatewayCities"></canvas></div>
+<div class="insight"><strong>Holyoke catastrophe:</strong> Only 6% of students meet math expectations — the worst in the state. Lawrence and Lynn also in crisis.</div>
+</div>
+</div>
+</div>
+
+<!-- ═══ SPENDING ═══ -->
+<div class="tab" id="spending">
+<div class="kpi-grid">
+<div class="kpi green"><div class="val">$21,886</div><div class="lbl">Per-Pupil<br>Spending 2024</div></div>
+<div class="kpi yellow"><div class="val">+27%</div><div class="lbl">Above Required<br>Minimum</div></div>
+<div class="kpi red"><div class="val">42%</div><div class="lbl">Students<br>Proficient ELA</div></div>
+<div class="kpi orange"><div class="val">No Gain</div><div class="lbl">Achievement<br>Despite Spending</div></div>
+</div>
+<div class="grid grid-2">
+<div class="card full">
+<h3>Per-Pupil Spending vs. Achievement (2022-2025)</h3>
+<div class="chart-wrap tall"><canvas id="spendChart"></canvas></div>
+<div class="insight"><strong>Money isn't the answer:</strong> Spending increased from $19,712 to $22,500 (+14%), yet ELA proficiency barely moved (39%→42%) and Math stayed flat at 41%.</div>
+</div>
+</div>
+</div>
+
+<!-- ═══ ACHIEVEMENT GAPS ═══ -->
+<div class="tab" id="gaps">
+<div class="kpi-grid">
+<div class="kpi green"><div class="val">11.6%</div><div class="lbl">Asian<br>Chronic Absent</div></div>
+<div class="kpi yellow"><div class="val">18.3%</div><div class="lbl">White<br>Chronic Absent</div></div>
+<div class="kpi red"><div class="val">38.3%</div><div class="lbl">Hispanic/EL<br>Chronic Absent</div></div>
+<div class="kpi purple"><div class="val">27pts</div><div class="lbl">Gap Between<br>Groups</div></div>
+</div>
+<div class="grid grid-2">
+<div class="card">
+<h3>High School Chronic Absenteeism by Group</h3>
+<div class="chart-wrap"><canvas id="gapsAbsent"></canvas></div>
+</div>
+<div class="card">
+<h3>Grade 10 Score Changes (2024→2025)</h3>
+<div class="chart-wrap"><canvas id="gapsDecline"></canvas></div>
+<div class="insight"><strong>Universal decline after requirement removed:</strong> Every single student group saw Grade 10 scores drop in 2025 after MCAS graduation requirement was eliminated.</div>
+</div>
+</div>
+</div>
+
+</div><!-- container -->
+
+<footer>
+Data: <a href="https://profiles.doe.mass.edu" target="_blank">Massachusetts DESE MCAS Results 2025</a>, Accountability Data, Per-Pupil Expenditure Reports<br>
+Dashboard created February 2026
+</footer>
+
+<script>
+Chart.defaults.color='#a3aed0';
+Chart.defaults.borderColor='#3d4566';
+Chart.defaults.font.family="'DM Sans',sans-serif";
+Chart.defaults.plugins.legend.labels.boxWidth=12;
+Chart.defaults.plugins.legend.labels.padding=16;
+const C={r:'#ff5757',o:'#ff9f43',b:'#4da6ff',g:'#2ecc71',p:'#c084fc',c:'#22d3ee',y:'#fbbf24',pk:'#f472b6',w:'#a3b8d8'};
+const GC='#353b58';
+const initialized={};
+
+function showTab(id,btn){
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+btn.classList.add('active');
+if(!initialized[id]){initialized[id]=true;initTab(id);}
+}
+
+function bOpts(yMax,pct){return{responsive:true,maintainAspectRatio:false,scales:{y:{max:yMax,ticks:pct?{callback:function(v){return v+'%'}}:{},grid:{color:GC}},x:{grid:{display:false}}}}}
+function hOpts(xMin,xMax,pct){return{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{min:xMin,max:xMax,ticks:pct?{callback:function(v){return v+'%'}}:{},grid:{color:GC}},y:{grid:{display:false}}},plugins:{legend:{display:false}}}}
+
+function initTab(id){
+if(id==='overview') initOverview();
+if(id==='enrollment') initEnrollment();
+if(id==='mcas') initMCAS();
+if(id==='gateway') initGateway();
+if(id==='spending') initSpending();
+if(id==='gaps') initGaps();
+}
+
+function initOverview(){
+new Chart(document.getElementById('overviewCurrent'),{type:'bar',data:{
+labels:['ELA (Gr 3-8)','Math (Gr 3-8)','ELA (Gr 10)','Math (Gr 10)'],
+datasets:[{label:'2025',data:[42,41,51,45],backgroundColor:C.r}]
+},options:bOpts(70,true)});
+
+new Chart(document.getElementById('overviewDist'),{type:'pie',data:{
+labels:['<25% Meeting (41)','25-50% Meeting (189)','50-75% Meeting (116)','≥75% Meeting (6)'],
+datasets:[{data:[41,189,116,6],backgroundColor:[C.r,C.o,C.y,C.g],borderWidth:0}]
+},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
+}
+
+function initEnrollment(){
+new Chart(document.getElementById('enrollChart'),{type:'bar',data:{
+labels:['Homeschooling','Vocational-Tech','Charter Schools','Private Schools','Overall K-12','Traditional Public'],
+datasets:[{data:[56,18,11,-1,-3.5,-6.4],backgroundColor:[C.g,C.g,C.g,C.y,C.o,C.r]}]
+},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+scales:{x:{grid:{color:GC},ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}}}});
+}
+
+function initMCAS(){
+new Chart(document.getElementById('mcasTrend'),{type:'bar',data:{
+labels:['ELA (Gr 3-8)','Math (Gr 3-8)','ELA (Gr 10)','Math (Gr 10)'],
+datasets:[
+{label:'2019',data:[52,49,61,59],backgroundColor:C.g},
+{label:'2024',data:[39,41,57,48],backgroundColor:C.y},
+{label:'2025',data:[42,41,51,45],backgroundColor:C.r}
+]},options:bOpts(70,true)});
+
+new Chart(document.getElementById('mcasDecline'),{type:'bar',data:{
+labels:['All Students','White','Black','Hispanic','Asian','Low Income','Disabilities'],
+datasets:[
+{label:'ELA',data:[-4.7,-4.8,-5.1,-4.1,-3.7,-4.6,-4.0],backgroundColor:C.b},
+{label:'Math',data:[-2.8,-3.1,-1.9,-2.5,-1.6,-3.0,-3.2],backgroundColor:C.p}
+]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{max:0,min:-6,grid:{color:GC}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('mcasAbsent'),{type:'bar',data:{
+labels:['Asian','White','Multi-Race','Black','Am Indian','Disabilities','Low Income','Hispanic','EL Students'],
+datasets:[{data:[11.6,18.3,25.9,28.0,31.7,34.9,37.5,38.3,38.3],
+backgroundColor:[C.g,C.g,C.o,C.o,C.r,C.r,C.r,C.r,C.r]}]
+},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+scales:{y:{beginAtZero:true,max:45,ticks:{callback:v=>v+'%'},grid:{color:GC}},x:{grid:{display:false}}}}});
+}
+
+function initGateway(){
+new Chart(document.getElementById('gatewayGap'),{type:'bar',data:{
+labels:['ELA Meeting Standards','Math Meeting Standards'],
+datasets:[
+{label:'Gateway Cities',data:[30.2,27.3],backgroundColor:C.r},
+{label:'Rest of State',data:[45.1,43.7],backgroundColor:C.b}
+]},options:bOpts(50,true)});
+
+new Chart(document.getElementById('gatewayCities'),{type:'bar',data:{
+labels:['Holyoke','Lynn','Lawrence','Fall River','Brockton','Springfield','Worcester','Lowell','Salem','Malden','Westfield','Leominster','Attleboro','Quincy'],
+datasets:[
+{label:'ELA',data:[11,17,18,19,21,22,26,28,32,34,35,36,37,46],backgroundColor:C.b},
+{label:'Math',data:[6,14,19,18,19,17,24,31,24,34,34,35,39,42],backgroundColor:C.p}
+]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+scales:{x:{beginAtZero:true,max:50,ticks:{callback:v=>v+'%'},grid:{color:GC}},y:{grid:{display:false}}}}});
+}
+
+function initSpending(){
+new Chart(document.getElementById('spendChart'),{type:'line',data:{
+labels:['2022','2023','2024','2025'],
+datasets:[
+{label:'Per-Pupil Spending',data:[19712,21256,21886,22500],borderColor:C.g,
+backgroundColor:'rgba(46,204,113,0.2)',fill:true,yAxisID:'y'},
+{label:'ELA %',data:[39,39,39,42],borderColor:C.b,borderWidth:3,yAxisID:'y1'},
+{label:'Math %',data:[41,41,41,41],borderColor:C.r,borderWidth:3,yAxisID:'y1'}
+]},options:{responsive:true,maintainAspectRatio:false,
+scales:{y:{type:'linear',position:'left',min:18000,max:24000,
+ticks:{callback:v=>'$'+(v/1000)+'k'},grid:{color:GC}},
+y1:{type:'linear',position:'right',min:30,max:50,
+ticks:{callback:v=>v+'%'},grid:{display:false}},
+x:{grid:{display:false}}}}});
+}
+
+function initGaps(){
+new Chart(document.getElementById('gapsAbsent'),{type:'bar',data:{
+labels:['Asian','White','Multi-Race','Black','Am Indian','Disabilities','Low Income','Hispanic','EL Students'],
+datasets:[{data:[11.6,18.3,25.9,28.0,31.7,34.9,37.5,38.3,38.3],
+backgroundColor:[C.g,C.g,C.o,C.o,C.r,C.r,C.r,C.r,C.r]}]
+},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+scales:{y:{beginAtZero:true,max:45,ticks:{callback:v=>v+'%'},grid:{color:GC}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('gapsDecline'),{type:'bar',data:{
+labels:['All Students','White','Black','Hispanic','Asian','Low Income','Disabilities'],
+datasets:[
+{label:'ELA',data:[-4.7,-4.8,-5.1,-4.1,-3.7,-4.6,-4.0],backgroundColor:C.b},
+{label:'Math',data:[-2.8,-3.1,-1.9,-2.5,-1.6,-3.0,-3.2],backgroundColor:C.p}
+]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{max:0,min:-6,grid:{color:GC}},x:{grid:{display:false}}}}});
+}
+
+// Init overview immediately since it is visible on load
+initialized['overview']=true;
+initOverview();
+</script>
+</body>
+</html>
