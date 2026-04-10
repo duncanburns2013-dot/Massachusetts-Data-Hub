@@ -1,0 +1,41 @@
+name: Update Energy Data
+
+on:
+  # Run monthly on the 15th (EIA publishes Electric Power Monthly ~mid-month)
+  schedule:
+    - cron: "0 10 15 * *"   # 10am UTC on the 15th of each month
+  # Also allow manual trigger
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch EIA + RGGI data
+        env:
+          EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+        run: python scripts/fetch_energy_data.py
+
+      - name: Check for changes
+        id: diff
+        run: |
+          git diff --quiet data/ && echo "changed=false" >> $GITHUB_OUTPUT || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          PERIOD=$(python3 -c "import json; d=json.load(open('data/energy-data.json')); print(d['electricity'].get('MA',{}).get('_latest_period','unknown'))")
+          git commit -m "data: auto-update energy data (EIA ${PERIOD})"
+          git push
