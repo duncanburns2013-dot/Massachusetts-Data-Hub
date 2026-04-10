@@ -217,7 +217,7 @@ footer a:hover{color:var(--gold)}
     <div class="stat-card"><div class="label">FL Rate</div><div class="value green">15.92&#x00A2;</div><div class="sub">Per kWh &#x2014; half of MA</div></div>
   </div>
   <div class="chart-grid">
-    <div class="chart-card"><h3>Residential Electricity Rates &#x2014; MA vs. Selected States (&#x00A2;/kWh)</h3><div class="chart-area"><canvas id="chartRatesOverview"></canvas></div><div class="source">Source: EIA Electric Power Monthly Table 5.6.A, January 2026</div></div>
+    <div class="chart-card"><h3>Residential Electricity Rates &#x2014; MA vs. Selected States (&#x00A2;/kWh)</h3><div class="chart-area"><canvas id="chartRatesOverview"></canvas></div><div class="source">Source: EIA Electric Power Monthly Table 5.6.A, Jan 2026</div></div>
     <div class="chart-card"><h3>MA Rate Premium Over National Average &#x2014; Historical</h3><div class="chart-area"><canvas id="chartRateHistory"></canvas></div><div class="source">Source: EIA, annual residential average rates 2015&#x2013;2025</div></div>
   </div>
   <div class="info-box"><h4>&#x1F4CB; Why Is Massachusetts Electricity So Expensive?</h4><p>Massachusetts electricity costs are driven by a combination of policy decisions: the Renewable Portfolio Standard (RPS) mandating 35%+ renewable sources by 2030, RGGI &#x2014; a cap-and-trade carbon tax that has extracted $1.36 billion from MA ratepayers since 2008, legally guaranteed "full cost recovery" for offshore wind contracts meaning ratepayers absorb all costs, blocking natural gas pipeline capacity (constraining supply), and building electrification mandates that increase demand while constraining supply. Each adds layers of cost that appear as line items on your bill.</p></div>
@@ -242,13 +242,13 @@ footer a:hover{color:var(--gold)}
     <table class="data-table"><thead><tr><th>State</th><th>Rate (&#x00A2;/kWh)</th><th>vs. National</th><th>Annual Cost (600 kWh/mo)</th><th>Extra vs. US Avg</th></tr></thead><tbody>
       <tr><td class="highlight">Massachusetts</td><td class="highlight">31.16</td><td class="highlight">+79%</td><td class="highlight">$2,244</td><td class="highlight">+$988</td></tr>
       <tr><td>Rhode Island</td><td>30.14</td><td>+73%</td><td>$2,170</td><td>+$914</td></tr>
-      <tr><td>Connecticut</td><td>28.30</td><td>+62%</td><td>$2,038</td><td>+$782</td></tr>
+      <tr><td>Connecticut</td><td>28.3</td><td>+62%</td><td>$2,038</td><td>+$782</td></tr>
       <tr><td>New York</td><td>28.37</td><td>+63%</td><td>$2,043</td><td>+$787</td></tr>
       <tr><td>US Average</td><td class="good">17.45</td><td>&#x2014;</td><td class="good">$1,256</td><td>&#x2014;</td></tr>
       <tr><td>Florida</td><td class="good">15.92</td><td>-9%</td><td class="good">$1,146</td><td>-$110</td></tr>
       <tr><td>Texas</td><td class="good">15.69</td><td>-10%</td><td class="good">$1,130</td><td>-$126</td></tr>
     </tbody></table>
-    <div class="source">Source: EIA Electric Power Monthly, Table 5.6.A, January 2026.</div>
+    <div class="source">Source: EIA Electric Power Monthly, Table 5.6.A, Jan 2026.</div>
   </div>
 </div>
 
@@ -650,8 +650,8 @@ function switchTab(tabId, btn) {
 function initCharts(tab) {
   switch(tab) {
     case 'overview':
-      // Jan 2026 EIA data: MA 31.16, RI 30.14, CT 28.30, NY 28.37, US 17.45, FL 15.92, TX 15.69, LA 12.46
-      safeChart('chartRatesOverview',{type:'bar',data:{labels:['Massachusetts','Rhode Island','Connecticut','New York','US Average','Florida','Texas','Louisiana'],datasets:[{label:'¢/kWh',data:[31.16,30.14,28.30,28.37,17.45,15.92,15.69,12.46],backgroundColor:ctx=>ctx.raw>25?'#c0392b':ctx.raw>20?'#b8860b':'#1a7a4c',borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Cents per kWh'}}},plugins:{legend:{display:false}}}});
+      // Jan 2026 EIA data: MA 31.16, RI 30.14, CT 28.3, NY 28.37, US 17.45, FL 15.92, TX 15.69, LA 12.46
+      safeChart('chartRatesOverview',{type:'bar',data:{labels:['Massachusetts','Rhode Island','Connecticut','New York','US Average','Florida','Texas','Louisiana'],datasets:[{label:'¢/kWh',data:[31.16,30.14,28.3,28.37,17.45,15.92,15.69,12.46],backgroundColor:ctx=>ctx.raw>25?'#c0392b':ctx.raw>20?'#b8860b':'#1a7a4c',borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Cents per kWh'}}},plugins:{legend:{display:false}}}});
       safeChart('chartRateHistory',{type:'line',data:{labels:['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','Jan 2026'],datasets:[{label:'MA Rate',data:[22.1,22.6,22.0,22.6,22.9,22.7,25.2,28.5,29.6,30.8,30.88,31.16],borderColor:'#c0392b',backgroundColor:'rgba(192,57,43,0.08)',fill:true,tension:0.3,pointRadius:4},{label:'US Average',data:[12.7,12.6,12.9,12.9,13.0,13.0,13.7,15.1,15.8,16.6,17.24,17.45],borderColor:'#1a7a4c',borderDash:[5,5],fill:false,tension:0.3,pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:false,min:10,title:{display:true,text:'¢/kWh'}}},plugins:{legend:{position:'top',labels:{font:{size:11}}}}}});
       break;
     case 'rates':
@@ -667,7 +667,7 @@ function initCharts(tab) {
       safeChart('c4a',{type:'doughnut',data:{labels:['Supply $75','Distribution $56','Policy $31','Transmission $25'],datasets:[{data:[75,56,31,25],backgroundColor:['#1a4480','#7e22ce','#c0392b','#94a3b8'],borderWidth:0}]},options:dO});
       safeChart('c4b',{type:'doughnut',data:{labels:['Supply $70','Distribution $52','Policy $28 &#x2B07;','Transmission $23'],datasets:[{data:[70,52,28,23],backgroundColor:['#1a4480','#7e22ce','#1a7a4c','#94a3b8'],borderWidth:0}]},options:dO});
       // Monthly bill at 600 kWh: LA=75, TX=94, FL=96, US=105, CT=170, NY=170, MA After=173, MA Now=187
-      safeChart('c4c',{type:'bar',data:{labels:['LA\n12.46¢','TX\n15.69¢','FL\n15.92¢','US Avg\n17.45¢','CT\n28.30¢','NY\n28.37¢','MA After\nH.5151','MA Now\n31.16¢'],datasets:[{data:[75,94,96,105,170,170,173,187],backgroundColor:['#1a7a4c','#1a7a4c','#1a7a4c','#1a4480','#1a4480','#7e22ce','#c0392b','#c0392b'],borderRadius:6,barThickness:32}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'  $'+c.raw+'/month'}}},scales:{y:{beginAtZero:true,max:200,ticks:{callback:v=>'$'+v}},x:{grid:{display:false}}}}});
+      safeChart('c4c',{type:'bar',data:{labels:['LA\n12.46¢','TX\n15.69¢','FL\n15.92¢','US Avg\n17.45¢','CT\n28.3¢','NY\n28.37¢','MA After\nH.5151','MA Now\n31.16¢'],datasets:[{data:[75,94,96,105,170,170,173,187],backgroundColor:['#1a7a4c','#1a7a4c','#1a7a4c','#1a4480','#1a4480','#7e22ce','#c0392b','#c0392b'],borderRadius:6,barThickness:32}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'  $'+c.raw+'/month'}}},scales:{y:{beginAtZero:true,max:200,ticks:{callback:v=>'$'+v}},x:{grid:{display:false}}}}});
       break;
     }
     case 'cutkept':
