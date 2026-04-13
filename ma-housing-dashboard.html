@@ -14,10 +14,6 @@
         :root {
             --bg: #f4f2ee;
             --white: #ffffff;
-         
-        :root {
-            --bg: #f4f2ee;
-            --white: #ffffff;
             --ink: #0c1117;
             --ink-mid: #2a3140;
             --ink-light: #5a6374;
@@ -284,7 +280,11 @@
             .card.wide { grid-column: span 1; }
             .chart-area { height: 240px; }
         }
-    v>
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <div class="hero-bg"></div>
         <div class="hero-inner">
             <div class="hero-top">
                 <div class="hero-badge">Single Family Residential • 7-Year Analysis</div>
@@ -443,7 +443,7 @@
             essex:{price:[615000,715539,651947,702345,776574,867768,807005],sqft:[315,335,336,349,371,406,401],dom:[25,27,29,39,39,40,51],units:[5400,5773,5950,4965,3963,4201,4363]},
             nbpt:{price:[870000,940514,819071,976000,902323,1178429,1118625],sqft:[418,454,444,399,536,559,576],dom:[25,30,40,37,40,71,66],units:[162,177,186,154,133,125,138]}
         };
-        Chart.defaults.color='#7a756e';Chart.defaults.borderColor='#e8e5df';Chart.defaults.font.family="'DM Sans',sans-serif"Outfit',sans-serif";
+        Chart.defaults.color='#8e95a2';Chart.defaults.borderColor='#ddd8d0';Chart.defaults.font.family="'DM Sans',system-ui,sans-serif";
         
         new Chart(document.getElementById('price-chart'),{type:'line',data:{labels:years,datasets:[{label:'MA',data:d.ma.price,borderColor:'#2d6bc4',backgroundColor:'rgba(45,107,196,0.1)',borderWidth:3,tension:0.3,fill:true},{label:'Boston',data:d.boston.price,borderColor:'#c23b22',backgroundColor:'rgba(194,59,34,0.05)',borderWidth:3,tension:0.3,fill:true},{label:'Essex',data:d.essex.price,borderColor:'#2d8a56',backgroundColor:'rgba(45,138,86,0.05)',borderWidth:3,tension:0.3,fill:true},{label:'Newburyport',data:d.nbpt.price,borderColor:'#c08c20',backgroundColor:'rgba(192,140,32,0.05)',borderWidth:3,tension:0.3,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'$'+(v/1000)+'K'}},x:{grid:{display:false}}}}});
         
