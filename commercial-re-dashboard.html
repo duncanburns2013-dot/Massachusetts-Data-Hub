@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boston Commercial Real Estate Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f8f7f4;--card:#ffffff;--border:#e8e5df;--text:#1a1a1a;--muted:#7a756e;--red:#c0392b;--red-bg:rgba(192,57,43,0.06);--green:#1a7a4c;--green-bg:rgba(26,122,76,0.06);--blue:#1a4480;--blue-bg:rgba(26,68,128,0.06);--amber:#b8860b;--amber-bg:rgba(184,134,11,0.06);--purple:#7e22ce;--purple-bg:rgba(126,34,206,0.06);--accent:#8b1a1a;--gold:#c9a84c;--navy:#0f2942}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+.hero{background:var(--navy);color:#fff;padding:48px 24px 36px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,0.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(139,26,26,0.1) 0%,transparent 50%)}
+.hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.5rem,4.5vw,2.5rem);font-weight:400;margin-bottom:6px;letter-spacing:-0.01em;position:relative}
+.hero .sub{opacity:0.65;font-size:0.82rem;margin-bottom:24px;font-weight:400;letter-spacing:0.02em;position:relative;max-width:700px;margin-left:auto;margin-right:auto}
+.hero .hero-badge{display:inline-block;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;opacity:0.5;margin-bottom:14px;font-weight:500;position:relative}
+.hero-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;max-width:1000px;margin:0 auto;position:relative}
+.hero-stat{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:14px 8px;text-align:center;backdrop-filter:blur(4px);transition:background 0.3s}
+.hero-stat:hover{background:rgba(255,255,255,0.1)}
+.hero-stat .val{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.1rem,2.5vw,1.6rem);font-weight:400}
+.hero-stat .lbl{font-size:0.6rem;opacity:0.55;margin-top:3px;text-transform:uppercase;letter-spacing:0.08em;font-weight:500}
+.hero-stat .ctx{font-size:0.55rem;opacity:0.4;margin-top:2px}
+.hero-stat .val.bad{color:#e8a87c}.hero-stat .val.good{color:#7fd8a6}.hero-stat .val.warn{color:#f0d78c}
+.tab-nav{display:flex;justify-content:center;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.tab-btn{padding:13px 16px;font-size:0.72rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.25s;text-transform:uppercase;letter-spacing:0.05em;font-family:'DM Sans',system-ui,sans-serif}
+.tab-btn:hover{color:var(--text);background:rgba(0,0,0,0.02)}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
+.container{max-width:1200px;margin:0 auto;padding:24px}
+.tab-content{display:none;animation:fadeUp 0.35s ease}.tab-content.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.section-title{font-family:'DM Serif Display',Georgia,serif;font-size:1.3rem;font-weight:400;margin-bottom:16px;color:var(--navy)}
+.sec-desc{font-size:0.82rem;color:var(--muted);margin-bottom:20px}
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:22px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.03);transition:box-shadow 0.3s,transform 0.3s}
+.stat-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.07);transform:translateY(-2px)}
+.stat-card .label{font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px}
+.stat-card .value{font-family:'DM Serif Display',Georgia,serif;font-size:1.8rem;font-weight:400;line-height:1.1}
+.stat-card .value.red{color:var(--red)}.stat-card .value.green{color:var(--green)}.stat-card .value.blue{color:var(--blue)}.stat-card .value.amber{color:var(--amber)}.stat-card .value.purple{color:var(--purple)}
+.stat-card .sub{font-size:0.68rem;color:var(--muted);margin-top:4px}
+.stat-card .meta-row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:8px}
+.stat-card .meta-label{font-size:0.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em}
+.stat-card .meta-val{font-size:0.78rem;font-weight:600;color:var(--text)}
+.alert{background:var(--red-bg);border:1px solid rgba(192,57,43,0.15);border-radius:12px;padding:20px;margin-bottom:22px;border-left:4px solid var(--red)}
+.alert.blue{background:var(--blue-bg);border-color:rgba(26,68,128,0.15);border-left-color:var(--blue)}
+.alert.amber{background:var(--amber-bg);border-color:rgba(184,134,11,0.2);border-left-color:var(--amber)}
+.alert.green{background:var(--green-bg);border-color:rgba(26,122,76,0.15);border-left-color:var(--green)}
+.alert.purple{background:var(--purple-bg);border-color:rgba(126,34,206,0.15);border-left-color:var(--purple)}
+.alert h4{color:var(--red);font-size:0.85rem;margin-bottom:10px;font-weight:700}
+.alert.blue h4{color:var(--blue)}.alert.purple h4{color:var(--purple)}.alert.amber h4{color:var(--amber)}.alert.green h4{color:var(--green)}
+.alert p,.alert-item{font-size:0.78rem;color:var(--text);line-height:1.55}
+.alert-item strong{color:var(--red)}.alert.blue .alert-item strong{color:var(--blue)}
+.chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:14px;margin-bottom:22px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.chart-card h3{font-size:0.82rem;font-weight:700;margin-bottom:4px;color:var(--navy)}
+.chart-card .chart-sub{font-size:0.72rem;color:var(--muted);margin-bottom:12px}
+.chart-area{position:relative;height:280px}.chart-area.tall{height:320px}.chart-area.short{height:220px}
+.data-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:22px;overflow-x:auto;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.data-card h3{font-size:0.85rem;font-weight:700;margin-bottom:12px;color:var(--navy)}
+.data-table{width:100%;border-collapse:collapse;font-size:0.78rem}
+.data-table th{text-align:left;padding:9px 12px;border-bottom:2px solid var(--navy);font-weight:700;color:var(--navy);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em}
+.data-table td{padding:9px 12px;border-bottom:1px solid var(--border)}
+.data-table tr:hover{background:rgba(15,41,66,0.02)}
+.data-table .highlight,.data-table .td-red{color:var(--red);font-weight:700}
+.data-table .good,.data-table .td-green{color:var(--green);font-weight:600}
+.data-table .td-amber{color:var(--amber);font-weight:600}
+.info-box{background:var(--blue-bg);border:1px solid rgba(26,68,128,0.12);border-radius:12px;padding:20px;margin-bottom:22px;border-left:4px solid var(--blue)}
+.info-box.red{background:var(--red-bg);border-left-color:var(--red);border-color:rgba(192,57,43,0.12)}
+.info-box.amber{background:var(--amber-bg);border-left-color:var(--amber);border-color:rgba(184,134,11,0.12)}
+.info-box.green{background:var(--green-bg);border-left-color:var(--green);border-color:rgba(26,122,76,0.12)}
+.info-box h4{color:var(--blue);font-size:0.85rem;margin-bottom:8px;font-weight:700}
+.info-box.red h4{color:var(--red)}.info-box.amber h4{color:var(--amber)}.info-box.green h4{color:var(--green)}
+.info-box p{font-size:0.78rem;color:var(--text);line-height:1.65}
+.source{font-size:0.65rem;color:var(--muted);margin-top:6px;font-style:italic}
+.quote-block{background:var(--blue-bg);border-left:4px solid var(--blue);border-radius:0 10px 10px 0;padding:14px 16px;margin:14px 0;font-size:0.85rem;font-style:italic;color:var(--text);line-height:1.55}
+.quote-block.red{background:var(--red-bg);border-left-color:var(--red)}
+.quote-block cite{display:block;font-size:0.65rem;font-style:normal;font-weight:700;color:var(--muted);margin-top:6px;letter-spacing:0.06em;text-transform:uppercase}
+.verdict{border-radius:10px;padding:18px 20px;text-align:center;margin:16px 0}
+.verdict.red{background:linear-gradient(135deg,#7f1d1d,#991b1b);color:#fff}
+.verdict.blue{background:linear-gradient(135deg,var(--navy),#1a4480);color:#fff}
+.verdict h3{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(0.95rem,2vw,1.3rem);font-weight:400}
+.verdict p{font-size:0.78rem;margin-top:4px;opacity:.85}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:16px;justify-content:center}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--muted);font-weight:500}
+.legend-dot{width:10px;height:10px;border-radius:50%}
+.expose-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.expose-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.expose-card h4{font-size:0.82rem;color:var(--navy);margin-bottom:6px;font-weight:700}
+.expose-card .num{font-family:'DM Serif Display',Georgia,serif;font-size:2rem;line-height:1}
+.expose-card .num.red{color:var(--red)}.expose-card .num.green{color:var(--green)}.expose-card .num.blue{color:var(--blue)}.expose-card .num.amber{color:var(--amber)}
+.expose-card p{font-size:0.7rem;color:var(--muted);margin-top:6px;line-height:1.4}
+footer{text-align:center;padding:32px 24px;color:var(--muted);font-size:0.72rem;border-top:1px solid var(--border);background:#fff;margin-top:30px}
+footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1px solid var(--gold)}
+footer a:hover{color:var(--gold)}
+footer strong{color:var(--text)}
+@media(max-width:768px){.hero-stats{grid-template-columns:repeat(3,1fr)}.chart-grid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.hero{padding:32px 16px 26px}.container{padding:16px}.expose-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.hero-stats{grid-template-columns:repeat(2,1fr)}.stat-row{grid-template-columns:1fr}.tab-btn{padding:10px 10px;font-size:0.65rem}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">🏢 Trepp · C&W · Colliers · Newmark Data</div>
+  <h1>Boston Commercial Real Estate</h1>
+  <p class="sub">Office vacancy, CMBS delinquencies, property sales, and tax impact</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="val bad">18.2%</div><div class="lbl">Office Vacancy (Q4 2025)</div></div>
+    <div class="hero-stat"><div class="val bad">Since 2021</div><div class="lbl">First Positive Absorption</div></div>
+    <div class="hero-stat"><div class="val bad">11.0%</div><div class="lbl">CMBS Office Delinquency</div></div>
+    <div class="hero-stat"><div class="val bad">31–62%</div><div class="lbl">Sale Discounts</div></div>
+  </div>
+</div>  <div class="sc green"><div class="sc-label">First Positive Absorption</div><div class="sc-val green">Since 2021</div><div class="sc-ctx">H2 2025 — strongest since COVID</div></div>
+  <div class="sc red"><div class="sc-label">CMBS Office Delinquency</div><div class="sc-val red">11.0%</div><div class="sc-ctx">National — historic high (end 2024)</div></div>
+  <div class="sc amber"><div class="sc-label">Sale Discounts</div><div class="sc-val amber">31–62%</div><div class="sc-ctx">Major 2025 property sales vs. prior value</div></div>
+</div>
+
+
+  <nav class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('overview',this)">Overview</button>
+    <button class="tab-btn" onclick="switchTab('vacancy',this)">Vacancy</button>
+    <button class="tab-btn" onclick="switchTab('recovery',this)">Downtown Recovery</button>
+    <button class="tab-btn" onclick="switchTab('cmbs',this)">CMBS & Distress</button>
+    <button class="tab-btn" onclick="switchTab('sales',this)">Property Sales</button>
+    <button class="tab-btn" onclick="switchTab('tax',this)">Tax Impact</button>
+</nav>
+
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="section-title">Commercial Real Estate Overview</div>
+    <div class="sec-desc">Boston's office market has more than doubled its vacancy rate since 2019 — but early signs of stabilization emerged in H2 2025</div>
+
+    <div class="alert"><h4>⚠️ Vacancy Has More Than Doubled</h4><p><strong>7.5% (2019) → 18.2% (Q4 2025) — a 143% increase</strong></p><p class="source">Cushman & Wakefield Q4 2025 Boston MarketBeat</p></div>
+    <div class="hl-green"><div class="hl-label">📈 First Positive Absorption Since 2021</div><div class="hl-val">H2 2025 saw +2.5M SF net absorption — strongest back-to-back quarters since COVID</div><div class="hl-ctx">Newmark Q4 2025 — vacancy ticked up only 10 bps QoQ, signaling stabilization</div></div>
+
+    <div class="chart-grid">
+      <div class="chart-card"><h3>Office Vacancy Trajectory</h3><div class="chart-sub">Boston overall vacancy, 2019–Q4 2025</div><div class="chart-area"><canvas id="c-vacancy"></canvas></div></div>
+      <div class="chart-card"><h3>Vacancy by Source</h3><div class="chart-sub">Different brokerages, different methodologies — same trend</div><div class="chart-area"><canvas id="c-sources"></canvas></div></div>
+    </div>
+
+    <div class="info-box amber"><div class=""><strong>Early stabilization signals:</strong> Q4 2025 vacancy rose only 10 bps QoQ (C&W). Class A vacancy actually declined 5 bps. New construction at 20-year low (750K SF, all build-to-suit). Downtown Boston has seen 6 consecutive quarters of declining vacancy. But recovery to pre-pandemic levels could take a decade+ at current absorption rates.</div></div>
+  </div>
+</div>
+
+<!-- VACANCY -->
+<div class="tab-content" id="tab-vacancy">
+  <div class="section-title">Vacancy Deep Dive</div>
+    <div class="sec-desc">Class A vs B divide, life sciences trends, and the flight to quality</div>
+
+    <div class="stat-row">
+      <div class="stat-card"><div class="label">Class A Vacancy</div><div class="value amber">~16%</div><div class="meta-row"><div><div class="meta-label">Pre-COVID</div><div class="meta-val">7%</div></div><div><div class="meta-label">Trend</div><div class="meta-val" style="color:#16a34a">Declining 5bps QoQ</div></div></div></div>
+      <div class="stat-card"><div class="label">Class B Vacancy</div><div class="value red">~22%</div><div class="meta-row"><div><div class="meta-label">Pre-COVID</div><div class="meta-val">8.3%</div></div><div><div class="meta-label">Rents</div><div class="meta-val" style="color:#dc2626">Off 15%+ from peak</div></div></div></div>
+      <div class="stat-card"><div class="label">Life Sciences</div><div class="value amber">Improving</div><div class="meta-row"><div><div class="meta-label">Q4 Absorption</div><div class="meta-val" style="color:#16a34a">Positive</div></div><div><div class="meta-label">Sublease Down</div><div class="meta-val" style="color:#16a34a">-100bps YoY</div></div></div></div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card"><h3>Class A vs. Class B Vacancy</h3><div class="chart-sub">The flight-to-quality gap is widening</div><div class="chart-area"><canvas id="c-class"></canvas></div></div>
+      <div class="chart-card"><h3>National Comparison</h3><div class="chart-sub">Boston vs. national and peer cities</div><div class="chart-area"><canvas id="c-cities"></canvas></div></div>
+    </div>
+
+    <div class="info-box"><div class=""><strong>Construction pipeline at 20-year low:</strong> Only 750K SF under construction in Greater Boston, all build-to-suit. No major speculative office projects. This supply constraint should help vacancy stabilize over 2026-2027.</div></div>
+    <div class="info-box red"><div class=""><strong>Life sciences showing improvement:</strong> Positive net absorption in Q4 2025, sublease availability down 100 bps YoY (lowest since Q2 2023). However, biotech layoffs continue and the labor market remains sluggish.</div></div>
+  </div>
+</div>
+
+<!-- DOWNTOWN RECOVERY (NEW TAB) -->
+<div class="tab-content" id="tab-recovery">
+  <div class="section-title">Downtown Boston Recovery</div>
+    <div class="sec-desc">6 consecutive quarters of declining vacancy — recovering faster than Back Bay</div>
+
+    <div class="hl-green"><div class="hl-label">📈 Downtown Turnaround</div><div class="hl-val">6 consecutive quarters of declining vacancy — peak 28.5% → 25.2% year-end 2025</div><div class="hl-ctx">Downtown Boston Alliance / Newmark — recovery rate 2× faster than Back Bay</div></div>
+
+    <div class="stat-row">
+      <div class="stat-card"><div class="label">Downtown Peak Vacancy</div><div class="value red">28.5%</div><div class="meta-row"><div><div class="meta-label">Pandemic Peak</div><div class="meta-val">Mid-2024</div></div></div></div>
+      <div class="stat-card"><div class="label">Year-End 2025</div><div class="value green">25.2%</div><div class="meta-row"><div><div class="meta-label">Improvement</div><div class="meta-val" style="color:#16a34a">-3.3 percentage points</div></div></div></div>
+      <div class="stat-card"><div class="label">Subway Ridership Q4</div><div class="value blue">4.4M</div><div class="meta-row"><div><div class="meta-label">Trend</div><div class="meta-val" style="color:#16a34a">Rising each quarter</div></div></div></div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card"><h3>Downtown Vacancy — 6 Quarter Decline</h3><div class="chart-sub">From 28.5% peak to 25.2% — recovery accelerating</div><div class="chart-area"><canvas id="c-downtown"></canvas></div></div>
+      <div class="chart-card"><h3>Key Recovery Metrics</h3><div class="chart-sub">Downtown Boston revitalization indicators</div><div class="chart-area"><canvas id="c-recovery-metrics"></canvas></div></div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card"><div class="label">Retail Vacancy</div><div class="value green">Down 50%</div><div class="meta-row"><div><div class="meta-label">From Peak</div><div class="meta-val">Street-level filling up</div></div></div></div>
+      <div class="stat-card"><div class="label">Recovery vs Back Bay</div><div class="value green">2× Faster</div><div class="meta-row"><div><div class="meta-label">Absorption Rate</div><div class="meta-val">Downtown outperforming</div></div></div></div>
+      <div class="stat-card"><div class="label">Industrial Vacancy</div><div class="value amber">9.6%</div><div class="meta-row"><div><div class="meta-label">Leasing Volume</div><div class="meta-val" style="color:#16a34a">+36% vs 2024</div></div></div></div>
+    </div>
+
+    <div class="info-box"><div class=""><strong>What's driving downtown recovery:</strong> Large-block leasing activity is strong (top 6 transactions each exceeded 115K SF). Direct leases are gaining share over sublease in the CBD. Subway ridership hit 4.4M rides in Q4 2025, rising each quarter. Retail vacancy has dropped 50% from peak.</div></div>
+  </div>
+</div>
+
+<!-- CMBS & DISTRESS -->
+<div class="tab-content" id="tab-cmbs">
+  <div class="section-title">CMBS & Financial Distress</div>
+    <div class="sec-desc">Office CMBS delinquency hit 11% — a historic high — with $950B in loans maturing in 2025</div>
+
+    <div class="alert"><h4>⚠️ CMBS Office Delinquency at Historic High</h4><p><strong>11.01% — end of 2024 (up from 1.6% pre-COVID)</strong></p><p class="source">Overall CRE CMBS delinquency: 6.57%, up from 4.51% end of 2023</p></div>
+
+    <div class="chart-grid">
+      <div class="chart-card"><h3>CMBS Delinquency Trend</h3><div class="chart-sub">Office sector — spiraling since 2022</div><div class="chart-area"><canvas id="c-cmbs"></canvas></div></div>
+      <div class="chart-card"><h3>CRE Loan Maturities</h3><div class="chart-sub">$2.3 trillion maturing through 2028</div><div class="chart-area"><canvas id="c-maturities"></canvas></div></div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card"><div class="label">Bank CRE Lending</div><div class="value red">-58%</div><div class="meta-row"><div><div class="meta-label">vs Pre-Pandemic</div><div class="meta-val" style="color:#dc2626">Office: -65%</div></div></div></div>
+      <div class="stat-card"><div class="label">National Office Vacancy</div><div class="value red">20.5%</div><div class="meta-row"><div><div class="meta-label">Q4 2025</div><div class="meta-val">+30bps YoY (smallest increase in 5.5 yrs)</div></div></div></div>
+      <div class="stat-card"><div class="label">Loans Maturing (2025)</div><div class="value red">$950B</div><div class="meta-row"><div><div class="meta-label">Refinancing</div><div class="meta-val" style="color:#dc2626">At higher rates</div></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROPERTY SALES -->
+<div class="tab-content" id="tab-sales">
+  <div class="section-title">Major Boston Property Sales</div>
+    <div class="sec-desc">Distressed sales revealing the true extent of value destruction</div>
+
+    <div class="chart-grid">
+      <div class="chart-card"><h3>Sale Discounts from Prior Value</h3><div class="chart-sub">Major Boston office transactions, 2024–2025</div><div class="chart-area"><canvas id="c-discounts"></canvas></div></div>
+      <div class="chart-card"><h3>Boston vs. National Sale Trends</h3><div class="chart-sub">Average office sale price per sq ft</div><div class="chart-area"><canvas id="c-psf"></canvas></div></div>
+    </div>
+
+    <div class="data-card">
+      <table class="data-table">
+        <thead><tr><th>Property</th><th>Sale Price</th><th>Prior Value</th><th>Discount</th></tr></thead>
+        <tbody>
+          <tr><td>One Lincoln Street</td><td>$440M</td><td>$640M</td><td class="td-red">-31%</td></tr>
+          <tr><td>100 Federal Street</td><td>$230M</td><td>$415M</td><td class="td-red">-45%</td></tr>
+          <tr><td>One Post Office Square</td><td>$200M</td><td>$395M</td><td class="td-red">-49%</td></tr>
+          <tr><td>One Boston Place</td><td>$112M</td><td>$293M</td><td class="td-red">-62%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-box red"><div class=""><strong>One Boston Place lost 62% of its value</strong> — selling for $112M after being valued at $293M. These aren't outliers. The national average decline for office properties is approximately 37% from peak values.</div></div>
+  </div>
+</div>
+
+<!-- TAX IMPACT -->
+<div class="tab-content" id="tab-tax">
+  <div class="section-title">Property Tax Revenue Impact</div>
+    <div class="sec-desc">Boston depends on property tax for ~73% of its revenue — commercial values are collapsing</div>
+
+    <div class="alert"><h4>⚠️ Boston's Fiscal Vulnerability</h4><p><strong>~73% of city revenue comes from property taxes</strong></p><p class="source">As commercial property values decline, the tax burden shifts to residential owners</p></div>
+
+    <div class="chart-grid">
+      <div class="chart-card"><h3>City Revenue Composition</h3><div class="chart-sub">Boston's dependence on property tax</div><div class="chart-area"><canvas id="c-revenue"></canvas></div></div>
+      <div class="chart-card"><h3>Commercial Assessment Impact</h3><div class="chart-sub">Before and after revaluation examples</div><div class="chart-area"><canvas id="c-assess"></canvas></div></div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card"><div class="label">Overassessment Claims</div><div class="value red">$545M</div><div class="meta-row"><div><div class="meta-label">Buildings Affected</div><div class="meta-val">39 properties</div></div><div><div class="meta-label">Allegation</div><div class="meta-val" style="color:#dc2626">Retaliatory overvaluation</div></div></div></div>
+      <div class="stat-card"><div class="label">Tax Shift Risk</div><div class="value red">→ Residential</div><div class="meta-row"><div><div class="meta-label">If Commercial Drops</div><div class="meta-val" style="color:#dc2626">Homeowners pay more</div></div></div></div>
+      <div class="stat-card"><div class="label">Recovery Timeline</div><div class="value red">10+ years</div><div class="meta-row"><div><div class="meta-label">At Current Pace</div><div class="meta-val" style="color:#dc2626">To pre-pandemic levels</div></div></div></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+<p><strong>Sources:</strong> Cushman & Wakefield Q4 2025 · Newmark Q4 2025 · Colliers Q4 2025 · Downtown Boston Alliance · Trepp CMBS · Avison Young · MassTaxpayers Foundation</p>
+  <p style="margin-top:8px">Updated February 2026 · <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">Massachusetts Data Hub</a></p>
+</footer>
+
+<script>
+function switchTab(e,tabId){document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});document.querySelectorAll('.tab-content').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('tab-'+tabId).classList.add('active');if(!window._ci)window._ci={};if(!window._ci[tabId]){window._ci[tabId]=true;initCharts(tabId)}}
+var B='#1a4480',R='#c0392b',G='#1a7a4c',Y='#b8860b',P='#7e22ce';
+Chart.defaults.color='#7a756e';Chart.defaults.borderColor='#e8e5df';Chart.defaults.font.family="'DM Sans',sans-serif"Inter',sans-serif";
+var charts={};
+function sc(id,cfg){if(charts[id])charts[id].destroy();var ctx=document.getElementById(id);if(ctx)charts[id]=new Chart(ctx,cfg)}
+
+function initCharts(tab){
+  switch(tab){
+    case 'overview':
+      sc('c-vacancy',{type:'line',data:{labels:['2019','Q2 20','Q4 20','Q2 21','Q4 21','Q2 22','Q4 22','Q2 23','Q4 23','Q2 24','Q4 24','Q2 25','Q4 25'],datasets:[{label:'Boston Office Vacancy',data:[7.5,9.2,11.8,13.5,14.2,15.1,15.8,16.4,17.1,17.5,17.8,18.0,18.2],borderColor:R,backgroundColor:R+'22',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:R}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:25,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false},ticks:{maxRotation:45}}}}});
+      sc('c-sources',{type:'bar',data:{labels:['C&W\n(Overall)','Colliers\n(Availability)','National\nAvg','Newmark\n(CBD)','Life Sci\n(Improving)'],datasets:[{data:[18.2,23.9,20.5,19.0,null],backgroundColor:[R+'cc',R+'99',B+'cc',Y+'cc','transparent'],borderColor:[R,R,B,Y,'transparent'],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw?c.raw+'%':'See recovery tab'}}}},scales:{y:{beginAtZero:true,max:28,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      break;
+    case 'vacancy':
+      sc('c-class',{type:'bar',data:{labels:['Pre-COVID (2019)','Current (Q4 2025)'],datasets:[{label:'Class A',data:[7,16],backgroundColor:[B+'99',Y+'cc'],borderColor:[B,Y],borderWidth:2,borderRadius:8},{label:'Class B',data:[8.3,22],backgroundColor:[B+'66',R+'cc'],borderColor:[B,R],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{beginAtZero:true,max:25,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      sc('c-cities',{type:'bar',data:{labels:['Manhattan','Boston','National','SF','Austin','Seattle'],datasets:[{data:[13.6,18.2,20.5,25.2,27.3,27.2],backgroundColor:[G+'cc',Y+'cc',B+'cc',R+'99',R+'cc',R+'cc'],borderColor:[G,Y,B,R,R,R],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'% vacancy'}}}},scales:{y:{beginAtZero:true,max:32,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      break;
+    case 'recovery':
+      sc('c-downtown',{type:'line',data:{labels:['Q2 24\n(Peak)','Q3 24','Q4 24','Q1 25','Q2 25','Q3 25','Q4 25'],datasets:[{label:'Downtown Vacancy',data:[28.5,28.0,27.3,26.7,26.1,25.6,25.2],borderColor:G,backgroundColor:G+'22',fill:true,tension:.3,pointRadius:6,pointBackgroundColor:G,borderWidth:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:24,max:30,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      sc('c-recovery-metrics',{type:'bar',data:{labels:['Vacancy Drop\nfrom Peak','Retail Vacancy\nDrop','Sublease\nDrop YoY','Industrial\nLeasing +YoY'],datasets:[{data:[3.3,50,1.0,36],backgroundColor:[G+'cc',G+'99',G+'cc',B+'cc'],borderColor:[G,G,G,B],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){var units=['pp','%','pp','%'];return c.raw+units[c.dataIndex]+' improvement'}}}},scales:{y:{beginAtZero:true},x:{grid:{display:false}}}}});
+      break;
+    case 'cmbs':
+      sc('c-cmbs',{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024'],datasets:[{label:'Office CMBS Delinquency',data:[1.6,3.2,2.8,2.5,5.8,11.01],borderColor:R,backgroundColor:R+'22',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:R},{label:'All CRE CMBS',data:[2.3,5.1,4.2,3.1,4.51,6.57],borderColor:Y,backgroundColor:Y+'22',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:Y}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{beginAtZero:true,max:13,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      sc('c-maturities',{type:'bar',data:{labels:['2025','2026','2027','2028'],datasets:[{label:'Maturing CRE Loans',data:[950,600,400,350],backgroundColor:[R+'cc',Y+'cc',Y+'99',B+'cc'],borderColor:[R,Y,Y,B],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return'$'+c.raw+'B'}}}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return'$'+v+'B'}}},x:{grid:{display:false}}}}});
+      break;
+    case 'sales':
+      sc('c-discounts',{type:'bar',data:{labels:['One Lincoln St','100 Federal St','One Post Office Sq','One Boston Place'],datasets:[{data:[31,45,49,62],backgroundColor:[Y+'cc',R+'99',R+'cc',R+'ee'],borderColor:[Y,R,R,R],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'% discount from prior value'}}}},scales:{y:{beginAtZero:true,max:70,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      sc('c-psf',{type:'bar',data:{labels:['Manhattan','Bay Area','National Avg','Boston','Philadelphia'],datasets:[{data:[498,392,192,175,95],backgroundColor:[G+'cc',G+'99',B+'cc',Y+'cc',R+'cc'],borderColor:[G,G,B,Y,R],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return'$'+c.raw+'/sq ft'}}}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return'$'+v}}},x:{grid:{display:false}}}}});
+      break;
+    case 'tax':
+      sc('c-revenue',{type:'doughnut',data:{labels:['Property Tax (~73%)','State Aid (~15%)','Other Revenue (~12%)'],datasets:[{data:[73,15,12],backgroundColor:[R+'cc',B+'cc',G+'cc'],borderColor:['#fff','#fff','#fff'],borderWidth:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
+      sc('c-assess',{type:'bar',data:{labels:['One Lincoln St','100 Federal St','One Post Office Sq','One Boston Place'],datasets:[{label:'Prior Assessment',data:[640,415,395,293],backgroundColor:B+'99',borderColor:B,borderWidth:1.5,borderRadius:6},{label:'Sale Price',data:[440,230,200,112],backgroundColor:R+'99',borderColor:R,borderWidth:1.5,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return'$'+v+'M'}}},x:{grid:{display:false}}}}});
+      break;
+  }
+}
+initCharts('overview');window._ci={overview:true};
+</script>
+</body>
+</html>

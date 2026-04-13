@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boston Public Schools — 2025 Performance Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f8f7f4;--card:#ffffff;--border:#e8e5df;--text:#1a1a1a;--muted:#7a756e;--red:#c0392b;--red-bg:rgba(192,57,43,0.06);--green:#1a7a4c;--green-bg:rgba(26,122,76,0.06);--blue:#1a4480;--blue-bg:rgba(26,68,128,0.06);--amber:#b8860b;--amber-bg:rgba(184,134,11,0.06);--purple:#7e22ce;--purple-bg:rgba(126,34,206,0.06);--accent:#8b1a1a;--gold:#c9a84c;--navy:#0f2942}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+.hero{background:var(--navy);color:#fff;padding:48px 24px 36px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,0.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(139,26,26,0.1) 0%,transparent 50%)}
+.hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.5rem,4.5vw,2.5rem);font-weight:400;margin-bottom:6px;letter-spacing:-0.01em;position:relative}
+.hero .sub{opacity:0.65;font-size:0.82rem;margin-bottom:24px;font-weight:400;letter-spacing:0.02em;position:relative;max-width:700px;margin-left:auto;margin-right:auto}
+.hero .hero-badge{display:inline-block;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;opacity:0.5;margin-bottom:14px;font-weight:500;position:relative}
+.hero-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;max-width:1000px;margin:0 auto;position:relative}
+.hero-stat{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:14px 8px;text-align:center;backdrop-filter:blur(4px);transition:background 0.3s}
+.hero-stat:hover{background:rgba(255,255,255,0.1)}
+.hero-stat .val{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.1rem,2.5vw,1.6rem);font-weight:400}
+.hero-stat .lbl{font-size:0.6rem;opacity:0.55;margin-top:3px;text-transform:uppercase;letter-spacing:0.08em;font-weight:500}
+.hero-stat .ctx{font-size:0.55rem;opacity:0.4;margin-top:2px}
+.hero-stat .val.bad{color:#e8a87c}.hero-stat .val.good{color:#7fd8a6}.hero-stat .val.warn{color:#f0d78c}
+.tab-nav{display:flex;justify-content:center;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.tab-btn{padding:13px 16px;font-size:0.72rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.25s;text-transform:uppercase;letter-spacing:0.05em;font-family:'DM Sans',system-ui,sans-serif}
+.tab-btn:hover{color:var(--text);background:rgba(0,0,0,0.02)}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
+.container{max-width:1200px;margin:0 auto;padding:24px}
+.tab-content{display:none;animation:fadeUp 0.35s ease}.tab-content.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.section-title{font-family:'DM Serif Display',Georgia,serif;font-size:1.3rem;font-weight:400;margin-bottom:16px;color:var(--navy)}
+.sec-desc{font-size:0.82rem;color:var(--muted);margin-bottom:20px}
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:22px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.03);transition:box-shadow 0.3s,transform 0.3s}
+.stat-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.07);transform:translateY(-2px)}
+.stat-card .label{font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px}
+.stat-card .value{font-family:'DM Serif Display',Georgia,serif;font-size:1.8rem;font-weight:400;line-height:1.1}
+.stat-card .value.red{color:var(--red)}.stat-card .value.green{color:var(--green)}.stat-card .value.blue{color:var(--blue)}.stat-card .value.amber{color:var(--amber)}.stat-card .value.purple{color:var(--purple)}
+.stat-card .sub{font-size:0.68rem;color:var(--muted);margin-top:4px}
+.stat-card .meta-row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:8px}
+.stat-card .meta-label{font-size:0.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em}
+.stat-card .meta-val{font-size:0.78rem;font-weight:600;color:var(--text)}
+.alert{background:var(--red-bg);border:1px solid rgba(192,57,43,0.15);border-radius:12px;padding:20px;margin-bottom:22px;border-left:4px solid var(--red)}
+.alert.blue{background:var(--blue-bg);border-color:rgba(26,68,128,0.15);border-left-color:var(--blue)}
+.alert.amber{background:var(--amber-bg);border-color:rgba(184,134,11,0.2);border-left-color:var(--amber)}
+.alert.green{background:var(--green-bg);border-color:rgba(26,122,76,0.15);border-left-color:var(--green)}
+.alert.purple{background:var(--purple-bg);border-color:rgba(126,34,206,0.15);border-left-color:var(--purple)}
+.alert h4{color:var(--red);font-size:0.85rem;margin-bottom:10px;font-weight:700}
+.alert.blue h4{color:var(--blue)}.alert.purple h4{color:var(--purple)}.alert.amber h4{color:var(--amber)}.alert.green h4{color:var(--green)}
+.alert p,.alert-item{font-size:0.78rem;color:var(--text);line-height:1.55}
+.alert-item strong{color:var(--red)}.alert.blue .alert-item strong{color:var(--blue)}
+.chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:14px;margin-bottom:22px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.chart-card h3{font-size:0.82rem;font-weight:700;margin-bottom:4px;color:var(--navy)}
+.chart-card .chart-sub{font-size:0.72rem;color:var(--muted);margin-bottom:12px}
+.chart-area{position:relative;height:280px}.chart-area.tall{height:320px}.chart-area.short{height:220px}
+.data-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:22px;overflow-x:auto;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.data-card h3{font-size:0.85rem;font-weight:700;margin-bottom:12px;color:var(--navy)}
+.data-table{width:100%;border-collapse:collapse;font-size:0.78rem}
+.data-table th{text-align:left;padding:9px 12px;border-bottom:2px solid var(--navy);font-weight:700;color:var(--navy);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em}
+.data-table td{padding:9px 12px;border-bottom:1px solid var(--border)}
+.data-table tr:hover{background:rgba(15,41,66,0.02)}
+.data-table .highlight,.data-table .td-red{color:var(--red);font-weight:700}
+.data-table .good,.data-table .td-green{color:var(--green);font-weight:600}
+.data-table .td-amber{color:var(--amber);font-weight:600}
+.info-box{background:var(--blue-bg);border:1px solid rgba(26,68,128,0.12);border-radius:12px;padding:20px;margin-bottom:22px;border-left:4px solid var(--blue)}
+.info-box.red{background:var(--red-bg);border-left-color:var(--red);border-color:rgba(192,57,43,0.12)}
+.info-box.amber{background:var(--amber-bg);border-left-color:var(--amber);border-color:rgba(184,134,11,0.12)}
+.info-box.green{background:var(--green-bg);border-left-color:var(--green);border-color:rgba(26,122,76,0.12)}
+.info-box h4{color:var(--blue);font-size:0.85rem;margin-bottom:8px;font-weight:700}
+.info-box.red h4{color:var(--red)}.info-box.amber h4{color:var(--amber)}.info-box.green h4{color:var(--green)}
+.info-box p{font-size:0.78rem;color:var(--text);line-height:1.65}
+.source{font-size:0.65rem;color:var(--muted);margin-top:6px;font-style:italic}
+.quote-block{background:var(--blue-bg);border-left:4px solid var(--blue);border-radius:0 10px 10px 0;padding:14px 16px;margin:14px 0;font-size:0.85rem;font-style:italic;color:var(--text);line-height:1.55}
+.quote-block.red{background:var(--red-bg);border-left-color:var(--red)}
+.quote-block cite{display:block;font-size:0.65rem;font-style:normal;font-weight:700;color:var(--muted);margin-top:6px;letter-spacing:0.06em;text-transform:uppercase}
+.verdict{border-radius:10px;padding:18px 20px;text-align:center;margin:16px 0}
+.verdict.red{background:linear-gradient(135deg,#7f1d1d,#991b1b);color:#fff}
+.verdict.blue{background:linear-gradient(135deg,var(--navy),#1a4480);color:#fff}
+.verdict h3{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(0.95rem,2vw,1.3rem);font-weight:400}
+.verdict p{font-size:0.78rem;margin-top:4px;opacity:.85}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:16px;justify-content:center}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--muted);font-weight:500}
+.legend-dot{width:10px;height:10px;border-radius:50%}
+.expose-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.expose-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.expose-card h4{font-size:0.82rem;color:var(--navy);margin-bottom:6px;font-weight:700}
+.expose-card .num{font-family:'DM Serif Display',Georgia,serif;font-size:2rem;line-height:1}
+.expose-card .num.red{color:var(--red)}.expose-card .num.green{color:var(--green)}.expose-card .num.blue{color:var(--blue)}.expose-card .num.amber{color:var(--amber)}
+.expose-card p{font-size:0.7rem;color:var(--muted);margin-top:6px;line-height:1.4}
+footer{text-align:center;padding:32px 24px;color:var(--muted);font-size:0.72rem;border-top:1px solid var(--border);background:#fff;margin-top:30px}
+footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1px solid var(--gold)}
+footer a:hover{color:var(--gold)}
+footer strong{color:var(--text)}
+@media(max-width:768px){.hero-stats{grid-template-columns:repeat(3,1fr)}.chart-grid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.hero{padding:32px 16px 26px}.container{padding:16px}.expose-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.hero-stats{grid-template-columns:repeat(2,1fr)}.stat-row{grid-template-columns:1fr}.tab-btn{padding:10px 10px;font-size:0.65rem}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Boston Public Schools</h1>
+  <p class="sub">2025 MCAS Performance Dashboard &mdash; Data from Massachusetts DESE</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="val bad">29%</div><div class="lbl">ELA Proficient Grades 3-8</div></div>
+    <div class="hero-stat"><div class="val bad">28%</div><div class="lbl">Math Proficient Grades 3-8</div></div>
+    <div class="hero-stat"><div class="val bad">~$27K</div><div class="lbl">Per Pupil Spending</div></div>
+    <div class="hero-stat"><div class="val bad">26.3%</div><div class="lbl">Chronic Absenteeism</div></div>
+  </div>
+</div><nav class="tab-nav">
+<button class="tab-btn active" onclick="switchTab('overview',this)">Overview</button>
+<button class="tab-btn" onclick="switchTab('grades',this)">By Grade</button>
+<button class="tab-btn" onclick="switchTab('gaps',this)">Achievement Gaps</button>
+<button class="tab-btn" onclick="switchTab('growth',this)">Growth</button>
+<button class="tab-btn" onclick="switchTab('absenteeism',this)">Absenteeism</button>
+<button class="tab-btn" onclick="switchTab('graduation',this)">Graduation</button>
+<button class="tab-btn" onclick="switchTab('accountability',this)">Accountability</button>
+</nav>
+
+<div class="container">
+
+<!-- ═══ OVERVIEW ═══ -->
+<div class="tab-content active" id="overview">
+<div class="stat-row">
+<div class="stat-card"><div class="val">71%</div><div class="lbl">Not Proficient<br>ELA 3-8</div></div>
+<div class="stat-card"><div class="val">72%</div><div class="lbl">Not Proficient<br>Math 3-8</div></div>
+<div class="stat-card"><div class="val">60%</div><div class="lbl">Not Proficient<br>ELA Gr.10</div></div>
+<div class="stat-card"><div class="val">62%</div><div class="lbl">Not Proficient<br>Math Gr.10</div></div>
+<div class="stat-card"><div class="val">17,710</div><div class="lbl">Students Tested<br>Grades 3-8</div></div>
+<div class="stat-card"><div class="val">3,078</div><div class="lbl">Students Tested<br>Grade 10</div></div>
+</div>
+<div class="chart-grid">
+<div class="chart-card"><h3>Boston vs State — Meeting or Exceeding Expectations</h3>
+<div class="chart-area"><canvas id="overviewBar"></canvas></div>
+</div>
+<div class="chart-card"><h3>Where Boston Students Fall — Grades 3-8 ELA</h3>
+<div class="chart-area"><canvas id="overviewPie"></canvas></div>
+</div>
+<div class="card full">
+<h3>All Subjects — Boston vs Massachusetts</h3>
+<div class="chart-wrap tall"><canvas id="overviewAll"></canvas></div>
+<div class="info-box"><strong>Key takeaway:</strong> Boston trails the state by 11-20 percentage points across every subject and grade span. Only 22% of students meet science standards in grades 5 & 8, compared to 42% statewide — a 20-point gap.</div>
+</div>
+</div>
+</div>
+
+<!-- ═══ BY GRADE ═══ -->
+<div class="tab-content" id="grades">
+<div class="chart-grid">
+<div class="chart-card"><h3>ELA — % Meeting/Exceeding by Grade</h3>
+<div class="chart-area"><canvas id="gradeELA"></canvas></div>
+</div>
+<div class="chart-card"><h3>Math — % Meeting/Exceeding by Grade</h3>
+<div class="chart-area"><canvas id="gradeMath"></canvas></div>
+</div>
+<div class="chart-card"><h3>Average Scaled Scores by Grade — ELA</h3>
+<div class="chart-area"><canvas id="gradeScoreELA"></canvas></div>
+</div>
+<div class="chart-card"><h3>Average Scaled Scores by Grade — Math</h3>
+<div class="chart-area"><canvas id="gradeScoreMath"></canvas></div>
+</div>
+<div class="card full">
+<h3>Science & Civics</h3>
+<div class="chart-wrap short"><canvas id="gradeScience"></canvas></div>
+<div class="info-box"><strong>Science gap is stark:</strong> In Grade 8, only 17% of Boston students meet science standards vs 37% statewide. The new Civics test (Grade 8) shows 23% meeting expectations vs 39% statewide.</div>
+</div>
+</div>
+</div>
+
+<!-- ═══ ACHIEVEMENT GAPS ═══ -->
+<div class="tab-content" id="gaps">
+<div class="stat-row">
+<div class="stat-card"><div class="val">506.7</div><div class="lbl">White Avg<br>ELA Score</div></div>
+<div class="stat-card"><div class="val">501.5</div><div class="lbl">Asian Avg<br>ELA Score</div></div>
+<div class="stat-card"><div class="val">479.7</div><div class="lbl">Black Avg<br>ELA Score</div></div>
+<div class="stat-card"><div class="val">478.7</div><div class="lbl">Hispanic Avg<br>ELA Score</div></div>
+<div class="stat-card"><div class="val">470.6</div><div class="lbl">Disability<br>ELA Score</div></div>
+<div class="stat-card"><div class="val">36.1 pts</div><div class="lbl">Widest Gap<br>ELA Score</div></div>
+</div>
+<div class="chart-grid">
+<div class="chart-card"><h3>ELA Scaled Scores by Race — Grades 3-8</h3>
+<div class="chart-area"><canvas id="gapELA"></canvas></div>
+</div>
+<div class="chart-card"><h3>Math Scaled Scores by Race — Grades 3-8</h3>
+<div class="chart-area"><canvas id="gapMath"></canvas></div>
+</div>
+<div class="chart-card"><h3>Special Populations — ELA Scores (3-8)</h3>
+<div class="chart-area"><canvas id="gapSpecial"></canvas></div>
+</div>
+<div class="chart-card"><h3>High School (Gr. 10) — ELA by Race</h3>
+<div class="chart-area"><canvas id="gapHS"></canvas></div>
+</div>
+<div class="card full">
+<h3>Year-Over-Year Change by Group — High School ELA</h3>
+<div class="chart-wrap short"><canvas id="gapChange"></canvas></div>
+<div class="info-box"><strong>Alarming decline:</strong> Every single racial/ethnic group and special population saw high school ELA scores <em>decline</em> in 2025. English Learners dropped 3.9 points, Black students dropped 3.9 points, and All Students dropped 2.9 points.</div>
+</div>
+</div>
+</div>
+
+<!-- ═══ GROWTH ═══ -->
+<div class="tab-content" id="growth">
+<div class="chart-grid">
+<div class="chart-card"><h3>Student Growth Percentile (SGP) — Non-High School</h3>
+<div class="chart-area"><canvas id="growthNHS"></canvas></div>
+</div>
+<div class="chart-card"><h3>Student Growth Percentile (SGP) — High School</h3>
+<div class="chart-area"><canvas id="growthHS"></canvas></div>
+</div>
+<div class="card full">
+<h3>Growth by Race/Ethnicity — All Subjects</h3>
+<div class="chart-wrap tall"><canvas id="growthRace"></canvas></div>
+<div class="info-box"><strong>Growth vs Achievement paradox:</strong> High school math SGP is 57.8 (above typical), yet only 38% meet proficiency. Students are growing, but from such a low base that most remain far below grade level. Growth alone doesn't close the gap.</div>
+</div>
+</div>
+</div>
+
+<!-- ═══ ABSENTEEISM ═══ -->
+<div class="tab-content" id="absenteeism">
+<div class="stat-row">
+<div class="stat-card"><div class="val">26.3%</div><div class="lbl">Elem/Middle<br>Chronic Absent</div></div>
+<div class="stat-card"><div class="val">36.1%</div><div class="lbl">High School<br>Chronic Absent</div></div>
+<div class="stat-card"><div class="val">-1.1</div><div class="lbl">Elem/Middle<br>YoY Change</div></div>
+<div class="stat-card"><div class="val">-2.2</div><div class="lbl">High School<br>YoY Change</div></div>
+</div>
+<div class="chart-grid">
+<div class="chart-card"><h3>Chronic Absenteeism by Race — Elem/Middle</h3>
+<div class="chart-area"><canvas id="absentRace"></canvas></div>
+</div>
+<div class="chart-card"><h3>Chronic Absenteeism by Race — High School</h3>
+<div class="chart-area"><canvas id="absentRaceHS"></canvas></div>
+</div>
+<div class="card full">
+<h3>Special Populations — Chronic Absenteeism</h3>
+<div class="chart-wrap short"><canvas id="absentSpecial"></canvas></div>
+<div class="info-box"><strong>Progress with a long way to go:</strong> Boston reduced chronic absenteeism from 27.4% to 26.3% in grades K-8, but over 1 in 4 students are still chronically absent. Students with disabilities (35.5%) and low-income students (31.6%) face the highest rates.</div>
+</div>
+</div>
+</div>
+
+<!-- ═══ GRADUATION ═══ -->
+<div class="tab-content" id="graduation">
+<div class="stat-row">
+<div class="stat-card"><div class="val">79.7%</div><div class="lbl">4-Year Grad<br>Rate 2024</div></div>
+<div class="stat-card"><div class="val">-0.8</div><div class="lbl">Change from<br>Prior Year</div></div>
+<div class="stat-card"><div class="val">4.5%</div><div class="lbl">Annual<br>Dropout Rate</div></div>
+<div class="stat-card"><div class="val">88.9%</div><div class="lbl">Extended<br>Engagement</div></div>
+</div>
+<div class="chart-grid">
+<div class="chart-card"><h3>4-Year Graduation Rate by Race</h3>
+<div class="chart-area"><canvas id="gradRace"></canvas></div>
+</div>
+<div class="chart-card"><h3>Graduation Rate by Special Population</h3>
+<div class="chart-area"><canvas id="gradSpecial"></canvas></div>
+</div>
+<div class="card full">
+<h3>Dropout Rate by Group</h3>
+<div class="chart-wrap short"><canvas id="dropout"></canvas></div>
+<div class="info-box"><strong>Graduation declining:</strong> The overall 4-year grad rate fell from 80.5% to 79.7%. English Learners have only a 68.1% grad rate (-1.2 YoY) and an 8.2% dropout rate — nearly double the district average. Students with disabilities have a 63.8% grad rate.</div>
+</div>
+</div>
+</div>
+
+<!-- ═══ ACCOUNTABILITY ═══ -->
+<div class="tab-content" id="accountability">
+<div class="stat-row">
+<div class="stat-card"><div class="val">48%</div><div class="lbl">Accountability<br>Target %</div></div>
+<div class="stat-card"><div class="val">Moderate</div><div class="lbl">Progress<br>Classification</div></div>
+<div class="stat-card"><div class="val">23%</div><div class="lbl">HS All Students<br>Points %</div></div>
+<div class="stat-card"><div class="val">62%</div><div class="lbl">Non-HS<br>Points %</div></div>
+</div>
+<div class="chart-grid">
+<div class="chart-card"><h3>2025 Points Earned — Non-High School</h3>
+<div class="chart-area"><canvas id="accNHS"></canvas></div>
+</div>
+<div class="chart-card"><h3>2025 Points Earned — High School</h3>
+<div class="chart-area"><canvas id="accHS"></canvas></div>
+</div>
+<div class="card full">
+<h3>Accountability Breakdown</h3>
+<table class="data-table">
+<thead><tr><th>Indicator</th><th>Non-HS Points</th><th>Non-HS Max</th><th>HS Points</th><th>HS Max</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>ELA Achievement</td><td>2</td><td>4</td><td>0</td><td>4</td><td><span class="badge red">HS Declined</span></td></tr>
+<tr><td>Math Achievement</td><td>2</td><td>4</td><td>0</td><td>4</td><td><span class="badge red">HS Declined</span></td></tr>
+<tr><td>Science Achievement</td><td>2</td><td>4</td><td>0</td><td>4</td><td><span class="badge red">HS Declined</span></td></tr>
+<tr><td>ELA Growth</td><td>2</td><td>4</td><td>2</td><td>4</td><td><span class="badge yellow">Typical Low</span></td></tr>
+<tr><td>Math Growth</td><td>2</td><td>4</td><td>3</td><td>4</td><td><span class="badge green">Typical High</span></td></tr>
+<tr><td>Graduation Rate</td><td>—</td><td>—</td><td>0</td><td>4</td><td><span class="badge red">Declined</span></td></tr>
+<tr><td>Extended Engagement</td><td>—</td><td>—</td><td>0</td><td>4</td><td><span class="badge red">Declined</span></td></tr>
+<tr><td>Dropout Rate</td><td>—</td><td>—</td><td>1</td><td>4</td><td><span class="badge yellow">No Change</span></td></tr>
+<tr><td>EL Proficiency</td><td>3</td><td>4</td><td>4</td><td>4</td><td><span class="badge green">Met/Exceeded</span></td></tr>
+<tr><td>Chronic Absenteeism</td><td>3</td><td>4</td><td>4</td><td>4</td><td><span class="badge green">Met/Exceeded</span></td></tr>
+<tr><td>Adv. Coursework</td><td>—</td><td>—</td><td>3</td><td>4</td><td><span class="badge green">Typical High</span></td></tr>
+</tbody>
+</table>
+<div class="info-box"><strong>High school is the crisis point:</strong> Boston earned 0 out of 12 possible achievement points at the high school level — every subject declined. The district's "moderate progress" classification is propped up by non-HS scores and chronic absenteeism improvements.</div>
+</div>
+</div>
+</div>
+
+</div><!-- container -->
+
+<footer>
+Data: <a href="https://profiles.doe.mass.edu" target="_blank">Massachusetts DESE School & District Profiles</a> — 2025 MCAS &amp; Accountability Results<br>
+Boston District Code: 00350000 | Dashboard created Feb 2026
+</footer>
+
+<script>
+Chart.defaults.color='#7a756e';
+Chart.defaults.borderColor='#e8e5df';
+Chart.defaults.font.family="'DM Sans',sans-serif"DM Sans',system-ui,sans-serif";
+Chart.defaults.plugins.legend.labels.boxWidth=12;
+Chart.defaults.plugins.legend.labels.padding=16;
+const C={r:'#c0392b',o:'#b8860b',b:'#1a4480',g:'#1a7a4c',p:'#7e22ce',c:'#1a7a4c',y:'#fbbf24',pk:'#f472b6',w:'#a3b8d8'};
+const GC='#353b58';
+const initialized={};
+
+function switchTab(id,btn){
+document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+btn.classList.add('active');
+}
+
+function bOpts(yMax,pct){return{responsive:true,maintainAspectRatio:false,scales:{y:{max:yMax,ticks:pct?{callback:function(v){return v+'%'}}:{},grid:{color:GC}},x:{grid:{display:false}}}}}
+function hOpts(xMin,xMax,pct){return{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{min:xMin,max:xMax,ticks:pct?{callback:function(v){return v+'%'}}:{},grid:{color:GC}},y:{grid:{display:false}}},plugins:{legend:{display:false}}}}
+
+function initTab(id){
+if(id==='overview') initOverview();
+if(id==='grades') initGrades();
+if(id==='gaps') initGaps();
+if(id==='growth') initGrowth();
+if(id==='absenteeism') initAbsenteeism();
+if(id==='graduation') initGraduation();
+if(id==='accountability') initAccountability();
+}
+
+function initOverview(){
+new Chart(document.getElementById('overviewBar'),{type:'bar',data:{
+labels:['ELA 3-8','Math 3-8','ELA Gr.10','Math Gr.10','Science 5&8','Science Gr.10'],
+datasets:[
+{label:'Boston',data:[29,28,40,38,22,33],backgroundColor:C.r},
+{label:'State',data:[42,41,51,45,42,46],backgroundColor:C.w}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},
+scales:{y:{max:60,ticks:{callback:function(v){return v+'%'}},grid:{color:GC}},x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('overviewPie'),{type:'doughnut',data:{
+labels:['Exceeding','Meeting','Partially Meeting','Not Meeting'],
+datasets:[{data:[6,24,39,32],backgroundColor:[C.g,C.b,C.y,C.r],borderWidth:0}]
+},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',
+plugins:{legend:{position:'bottom'}}}});
+
+new Chart(document.getElementById('overviewAll'),{type:'bar',data:{
+labels:['ELA 3-8','Math 3-8','Science 5&8','ELA Gr.10','Math Gr.10','Science Gr.10','Civics Gr.8'],
+datasets:[
+{label:'Boston',data:[29,28,22,40,38,33,23],backgroundColor:'rgba(255,87,87,0.85)'},
+{label:'State',data:[42,41,42,51,45,46,39],backgroundColor:'rgba(163,184,216,0.65)'},
+{label:'Gap',data:[-13,-13,-20,-11,-7,-13,-16],backgroundColor:'rgba(255,159,67,0.6)',type:'bar'}
+]},options:{responsive:true,maintainAspectRatio:false,
+scales:{y:{ticks:{callback:function(v){return v+'%'}},grid:{color:GC}},x:{grid:{display:false}}},
+plugins:{legend:{position:'top'}}}});
+}
+
+function initGrades(){
+var grades=['Gr.3','Gr.4','Gr.5','Gr.6','Gr.7','Gr.8','Gr.10'];
+new Chart(document.getElementById('gradeELA'),{type:'bar',data:{labels:grades,datasets:[
+{label:'Boston',data:[31,28,28,30,31,28,40],backgroundColor:C.r},
+{label:'State',data:[42,40,38,42,42,44,51],backgroundColor:C.w}
+]},options:bOpts(60,true)});
+new Chart(document.getElementById('gradeMath'),{type:'bar',data:{labels:grades,datasets:[
+{label:'Boston',data:[31,29,27,26,28,25,38],backgroundColor:C.o},
+{label:'State',data:[44,43,40,41,39,38,45],backgroundColor:C.w}
+]},options:bOpts(60,true)});
+new Chart(document.getElementById('gradeScoreELA'),{type:'line',data:{labels:grades,datasets:[
+{label:'Boston',data:[488,485,488,485,485,483,492],borderColor:C.r,backgroundColor:'rgba(255,87,87,0.15)',fill:true,tension:.3,borderWidth:3},
+{label:'State Baseline (500)',data:[500,500,500,500,500,500,500],borderColor:C.w,borderDash:[5,5],pointRadius:0}
+]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:475,max:510,grid:{color:GC}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('gradeScoreMath'),{type:'line',data:{labels:grades,datasets:[
+{label:'Boston',data:[487,486,486,486,485,484,493],borderColor:C.o,backgroundColor:'rgba(255,159,67,0.15)',fill:true,tension:.3,borderWidth:3},
+{label:'State Baseline (500)',data:[500,500,500,500,500,500,500],borderColor:C.w,borderDash:[5,5],pointRadius:0}
+]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:475,max:510,grid:{color:GC}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('gradeScience'),{type:'bar',data:{
+labels:['Science Gr.5','Science Gr.8','Civics Gr.8','Science Gr.10'],
+datasets:[
+{label:'Boston',data:[27,17,23,33],backgroundColor:[C.p,C.p,C.c,C.p]},
+{label:'State',data:[46,37,39,46],backgroundColor:C.w}
+]},options:bOpts(55,true)});
+}
+
+function initGaps(){
+var rL=['White','Asian','Multi-Race','All Students','Black','Hispanic','EL','Disability'];
+new Chart(document.getElementById('gapELA'),{type:'bar',data:{labels:rL,datasets:[{
+label:'ELA Avg Score (3-8)',data:[506.7,501.5,499.5,485.8,479.7,478.7,477.2,470.6],
+backgroundColor:[C.g,C.c,C.p,C.b,C.y,C.o,C.pk,C.r]
+}]},options:hOpts(465,510)});
+new Chart(document.getElementById('gapMath'),{type:'bar',data:{labels:rL,datasets:[{
+label:'Math Avg Score (3-8)',data:[506.2,508.3,497.6,485.8,477.8,479.1,479.9,470.8],
+backgroundColor:[C.g,C.c,C.p,C.b,C.y,C.o,C.pk,C.r]
+}]},options:hOpts(465,512)});
+new Chart(document.getElementById('gapSpecial'),{type:'bar',data:{
+labels:['All Students','High Needs','Low Income','EL/Former EL','Disability'],
+datasets:[
+{label:'ELA',data:[485.8,480.3,479.3,477.2,470.6],backgroundColor:C.r},
+{label:'Math',data:[485.8,480.6,479.3,479.9,470.8],backgroundColor:C.o}
+]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:465,max:490,grid:{color:GC}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('gapHS'),{type:'bar',data:{
+labels:['White','Asian','Multi-Race','All','Black','Hispanic','EL','Disability'],
+datasets:[{label:'HS ELA Score',data:[512.8,509.3,503.7,491.5,487.0,484.4,471.7,476.1],
+backgroundColor:[C.g,C.c,C.p,C.b,C.y,C.o,C.pk,C.r]}]
+},options:hOpts(465,520)});
+new Chart(document.getElementById('gapChange'),{type:'bar',data:{
+labels:['All','Asian','White','Multi-Race','Hispanic','Black','EL','Disability'],
+datasets:[{label:'HS ELA Score Change 2024-2025',
+data:[-2.9,-2.2,-1.8,-0.2,-1.9,-3.9,-3.9,-1.1],
+backgroundColor:function(ctx){var v=ctx.raw;return v<-2?C.r:v<0?C.o:C.g;}}]
+},options:{responsive:true,maintainAspectRatio:false,scales:{y:{grid:{color:GC}},x:{grid:{display:false}}},plugins:{legend:{display:false}}}});
+}
+
+function initGrowth(){
+new Chart(document.getElementById('growthNHS'),{type:'bar',data:{
+labels:['ELA All','ELA Low Perf','ELA High Needs','ELA Disability','Math All','Math Low Perf','Math High Needs','Math Disability'],
+datasets:[
+{label:'SGP',data:[48.7,45.5,47.6,43.2,49.9,46.6,48.9,44.1],
+backgroundColor:function(ctx){var v=ctx.raw;return v>=50?C.g:v>=45?C.y:C.r;}},
+{label:'Typical (50)',data:[50,50,50,50,50,50,50,50],type:'line',borderColor:C.w,borderDash:[4,4],pointRadius:0}
+]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:35,max:60,grid:{color:GC}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('growthHS'),{type:'bar',data:{
+labels:['ELA All','ELA Low Perf','ELA High Needs','ELA Disability','Math All','Math Low Perf','Math High Needs','Math Disability'],
+datasets:[
+{label:'SGP',data:[49.6,51.4,48.8,46.9,57.8,52.4,56.3,50.1],
+backgroundColor:function(ctx){var v=ctx.raw;return v>=50?C.g:v>=45?C.y:C.r;}},
+{label:'Typical (50)',data:[50,50,50,50,50,50,50,50],type:'line',borderColor:C.w,borderDash:[4,4],pointRadius:0}
+]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:35,max:65,grid:{color:GC}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('growthRace'),{type:'bar',data:{
+labels:['White','Asian','Multi-Race','All','Black','Hispanic','Am. Indian'],
+datasets:[
+{label:'ELA SGP (3-8)',data:[53.1,53.3,51.7,48.7,46.7,47.2,46.9],backgroundColor:'rgba(255,87,87,0.75)'},
+{label:'Math SGP (3-8)',data:[52.8,56.0,51.2,49.9,47.5,49.1,46.6],backgroundColor:'rgba(255,159,67,0.75)'},
+{label:'ELA SGP (HS)',data:[52.1,51.8,50.7,49.6,47.3,49.8,null],backgroundColor:'rgba(77,166,255,0.75)'},
+{label:'Math SGP (HS)',data:[60.1,64.2,60.8,57.8,55.2,56.9,null],backgroundColor:'rgba(46,204,113,0.75)'}
+]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:40,max:70,grid:{color:GC}},x:{grid:{display:false}}}}});
+}
+
+function initAbsenteeism(){
+new Chart(document.getElementById('absentRace'),{type:'bar',data:{
+labels:['Am. Indian','Disability','Hispanic','Low Income','Black','All','Multi-Race','Asian'],
+datasets:[{label:'Chronic Absent % (K-8)',data:[41.0,35.5,32.7,31.6,27.2,26.3,26.0,9.9],
+backgroundColor:[C.r,C.r,C.o,C.o,C.y,C.b,C.y,C.g]}]
+},options:hOpts(0,45,true)});
+new Chart(document.getElementById('absentRaceHS'),{type:'bar',data:{
+labels:['Am. Indian','Disability','Hispanic','Low Income','Black','All','Multi-Race','Asian'],
+datasets:[{label:'Chronic Absent % (HS)',data:[52.0,48.1,42.9,40.4,39.3,36.1,38.4,15.6],
+backgroundColor:[C.r,C.r,C.o,C.o,C.o,C.b,C.y,C.g]}]
+},options:hOpts(0,55,true)});
+new Chart(document.getElementById('absentSpecial'),{type:'bar',data:{
+labels:['All Students','High Needs','Low Income','EL/Former EL','Disability'],
+datasets:[
+{label:'Elem/Middle 2025',data:[26.3,29.5,31.6,24.5,35.5],backgroundColor:C.o},
+{label:'Elem/Middle 2024',data:[27.4,30.6,32.6,25.4,37.1],backgroundColor:'rgba(255,159,67,0.35)'},
+{label:'High School 2025',data:[36.1,39.7,40.4,35.1,48.1],backgroundColor:C.r},
+{label:'High School 2024',data:[38.3,41.5,42.2,35.2,50.5],backgroundColor:'rgba(255,87,87,0.35)'}
+]},options:bOpts(55,true)});
+}
+
+function initGraduation(){
+new Chart(document.getElementById('gradRace'),{type:'bar',data:{
+labels:['Asian','White','Multi-Race','Black','All','Hispanic','EL'],
+datasets:[
+{label:'2024 Rate',data:[91.7,88.7,80.2,79.3,79.7,75.6,68.1],backgroundColor:C.b},
+{label:'2023 Rate',data:[93.3,87.3,79.8,78.2,80.5,77.5,69.3],backgroundColor:'rgba(77,166,255,0.35)'}
+]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:55,max:100,ticks:{callback:function(v){return v+'%'}},grid:{color:GC}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('gradSpecial'),{type:'bar',data:{
+labels:['All Students','Low Income','High Needs','Disability','EL/Former EL'],
+datasets:[
+{label:'2024 Rate',data:[79.7,77.3,77.1,63.8,68.1],backgroundColor:[C.b,C.o,C.o,C.r,C.r]}
+]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:55,max:90,ticks:{callback:function(v){return v+'%'}},grid:{color:GC}},x:{grid:{display:false}}},plugins:{legend:{display:false}}}});
+new Chart(document.getElementById('dropout'),{type:'bar',data:{
+labels:['Asian','White','All','Low Income','Black','Hispanic','High Needs','Disability','EL'],
+datasets:[{label:'Dropout Rate %',data:[0.7,2.5,4.5,4.8,4.5,5.7,5.2,4.3,8.2],
+backgroundColor:function(ctx){var v=ctx.raw;return v>5?C.r:v>3?C.o:C.g;}}]
+},options:{responsive:true,maintainAspectRatio:false,scales:{y:{max:10,ticks:{callback:function(v){return v+'%'}},grid:{color:GC}},x:{grid:{display:false}}},plugins:{legend:{display:false}}}});
+}
+
+function initAccountability(){
+new Chart(document.getElementById('accNHS'),{type:'bar',data:{
+labels:['ELA Ach','Math Ach','Science','ELA Growth','Math Growth','EL Prof','Absenteeism'],
+datasets:[
+{label:'Points Earned',data:[2,2,2,2,2,3,3],backgroundColor:C.b},
+{label:'Max Possible',data:[4,4,4,4,4,4,4],backgroundColor:'rgba(163,184,216,0.2)'}
+]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{max:5,grid:{color:GC}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('accHS'),{type:'bar',data:{
+labels:['ELA Ach','Math Ach','Science','ELA Growth','Math Growth','Grad Rate','Ext. Engage','Dropout','EL Prof','Absent','Adv. Course'],
+datasets:[
+{label:'Points Earned',data:[0,0,0,2,3,0,0,1,4,4,3],backgroundColor:function(ctx){var v=ctx.raw;return v===0?C.r:v<=2?C.y:C.g;}},
+{label:'Max Possible',data:[4,4,4,4,4,4,4,4,4,4,4],backgroundColor:'rgba(163,184,216,0.15)'}
+]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{max:5,grid:{color:GC}},x:{grid:{display:false},ticks:{maxRotation:45}}}}});
+}
+
+// Init overview immediately since it is visible on load
+initialized['overview']=true;
+initOverview();
+</script>
+</body>
+</html>
