@@ -50,6 +50,7 @@ jobs:
           # and add BLS_API_KEY as a repo secret for higher API rate limits.
           # The script works without it (25 series/day free tier).
           BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: |
           python scripts/update_cumulative_inflation.py
 
