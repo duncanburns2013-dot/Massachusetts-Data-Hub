@@ -1,0 +1,92 @@
+# .github/workflows/update-cpi.yml
+#
+# Runs the cumulative inflation updater on the 12th of each month
+# (BLS typically releases the prior month's CPI data around the 10th–12th).
+# Also runs whenever you push changes to the updater script itself,
+# and can be triggered manually from the Actions tab.
+
+name: Update Cumulative CPI Data
+
+on:
+  schedule:
+    # 14:00 UTC on the 12th of every month
+    # (adjust if BLS releases earlier — check https://www.bls.gov/schedule/news_release/cpi.htm)
+    - cron: "0 14 12 * *"
+
+  # Re-run automatically if you edit the updater script
+  push:
+    paths:
+      - "scripts/update_cumulative_inflation.py"
+
+  # Allow manual trigger from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  update-cpi:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write    # needed to push the updated HTML back to the repo
+
+    steps:
+      # ── 1. Check out the repo ───────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Use a PAT if you have branch protection rules, otherwise GITHUB_TOKEN works
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # ── 2. Set up Python ────────────────────────────────────────────────────
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # The script uses only stdlib (json, re, urllib) — no pip install needed.
+
+      # ── 3. Run the updater ──────────────────────────────────────────────────
+      - name: Fetch BLS data and update dashboard
+        env:
+          # Optional: register at https://data.bls.gov/registrationEngine/
+          # and add BLS_API_KEY as a repo secret for higher API rate limits.
+          # The script works without it (25 series/day free tier).
+          BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
+        run: |
+          python scripts/update_cumulative_inflation.py
+
+      # ── 4. Check if anything actually changed ───────────────────────────────
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet tax-budget-dashboard.html \
+            && echo "changed=false" >> $GITHUB_OUTPUT \
+            || echo "changed=true"  >> $GITHUB_OUTPUT
+
+      # ── 5. Commit and push if the HTML changed ───────────────────────────────
+      - name: Commit updated dashboard
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add tax-budget-dashboard.html
+          # Include the status file if it was written
+          git add cpi_update_status.txt 2>/dev/null || true
+          # Read the status line for the commit message
+          STATUS=$(cat cpi_update_status.txt 2>/dev/null || echo "BLS CPI data update")
+          git commit -m "chore: auto-update cumulative CPI data — ${STATUS}"
+          git push
+
+      # ── 6. No-op message if data hasn't changed ──────────────────────────────
+      - name: No new data
+        if: steps.changes.outputs.changed == 'false'
+        run: echo "BLS data unchanged since last run — no commit needed."
+
+      # ── 7. Write a job summary ───────────────────────────────────────────────
+      - name: Write job summary
+        if: always()
+        run: |
+          echo "### CPI Update Result" >> $GITHUB_STEP_SUMMARY
+          if [ -f cpi_update_status.txt ]; then
+            cat cpi_update_status.txt >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Changed: ${{ steps.changes.outputs.changed }}" >> $GITHUB_STEP_SUMMARY
