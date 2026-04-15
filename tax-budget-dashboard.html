@@ -1438,14 +1438,14 @@ function initCharts(tab) {
 
     case 'costliving':
       // ── Cumulative Inflation Charts ──
-      var cumL=['Jan 21','May 21','Sep 21','Jan 22','May 22','Sep 22','Jan 23','May 23','Sep 23','Jan 24','May 24','Sep 24','Jan 25','May 25','Sep 25','Jan 26','Mar 26'];
-      var cumNat=[0,3.2,5.7,7.5,11.6,13.9,14.4,16.0,17.6,17.9,19.7,20.7,21.5,22.3,24.2,24.8,26.1];
-      var cumBos=[0,3.5,5.8,6.3,11.0,13.5,13.2,15.5,17.0,15.5,17.8,19.5,19.8,21.0,22.5,23.6,null];
-      var cumNatCore=[0,1.8,4.5,6.0,9.0,11.0,11.5,13.5,15.2,15.7,17.8,18.7,19.4,20.2,21.8,22.5,23.4];
-      var cumNatSh=[0,1.8,3.5,4.2,7.5,10.5,11.3,14.5,17.3,18.2,21.0,22.5,23.0,24.0,25.1,25.5,26.2];
-      var cumBosSh=[0,1.5,3.0,4.1,7.0,9.5,11.5,16.0,20.5,19.3,23.0,25.0,25.5,26.0,27.0,27.5,null];
-      var cumWage=[0,2.5,5.5,6.8,8.8,10.5,11.2,13.0,14.2,15.0,16.2,17.0,17.8,18.5,19.8,20.4,21.0];
-      var cumYoY=[1.4,5.0,5.4,7.5,8.6,8.2,6.4,4.0,3.7,3.1,3.3,2.4,3.0,2.3,2.6,2.4,3.3];
+      var cumL=['Jan 21','May 21','Sep 21','Jan 22','May 22','Sep 22','Jan 23','May 23','Sep 23','Jan 24','May 24','Sep 24','Jan 25','May 25','Sep 25','Jan 26'];
+      var cumNat=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
+      var cumBos=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
+      var cumNatCore=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
+      var cumNatSh=[0.0,1.5,3.3,5.7,8.6,11.6,14.4,15.9,17.8,19.7,21.2,22.6,24.3,26.0,27.3,28.6];
+      var cumBosSh=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
+      var cumWage=[0.0,1.6,3.5,5.6,7.3,8.8,10.3,11.9,13.6,15.2,16.6,18.1,19.7,21.2,22.6,24.1];
+      var cumYoY=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
       var pTip=function(ctx){return ctx.dataset.label+': +'+(ctx.parsed.y!=null?ctx.parsed.y.toFixed(1):'—')+'%'};
 
       safeChart('chartCumNatVsBos',{type:'line',data:{labels:cumL,datasets:[{label:'National CPI-U',data:cumNat,borderColor:'#c0392b',backgroundColor:'rgba(192,57,43,0.06)',fill:true,tension:.35,pointRadius:2,pointHoverRadius:6,borderWidth:2.5},{label:'Boston CPI-U',data:cumBos,borderColor:'#b8860b',borderWidth:2.5,tension:.35,pointRadius:2,pointHoverRadius:6,spanGaps:false},{label:'National Core CPI',data:cumNatCore,borderColor:'#1a7a4c',borderWidth:1.5,borderDash:[6,3],tension:.35,pointRadius:0,pointHoverRadius:5}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{font:{size:11}}},tooltip:{callbacks:{label:pTip}}},scales:{y:{beginAtZero:true,max:30,ticks:{callback:function(v){return v+'%'}},title:{display:true,text:'Cumulative Change (%)'}},x:{grid:{display:false}}}}});
