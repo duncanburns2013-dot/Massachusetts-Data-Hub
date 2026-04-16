@@ -1,0 +1,57 @@
+# .github/workflows/update-census.yml
+#
+# Fetches ACS 5-Year data (foreign-born %, multilingual %, median income)
+# from the Census Bureau API. New ACS vintages typically drop in September.
+# Runs monthly + on demand.
+
+name: Update Census Data (ACS)
+
+on:
+  schedule:
+    # 10:00 UTC on the 20th of each month
+    - cron: "0 10 20 * *"
+  push:
+    paths:
+      - "update-census-data.py"
+  workflow_dispatch:
+
+jobs:
+  update-census:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch Census data and update dashboards
+        env:
+          CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+        run: python update-census-data.py
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet -- '*.html' 'data/*.json' \
+            && echo "changed=false" >> $GITHUB_OUTPUT \
+            || echo "changed=true"  >> $GITHUB_OUTPUT
+
+      - name: Commit updated dashboards
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add immigration-dashboard.html affordability-dashboard.html
+          git add data/census-latest.json
+          git commit -m "ð Auto-update: Census ACS data $(date +'%B %Y')"
+          git push
+
+      - name: No new data
+        if: steps.changes.outputs.changed == 'false'
+        run: echo "Census data unchanged â no commit needed."
