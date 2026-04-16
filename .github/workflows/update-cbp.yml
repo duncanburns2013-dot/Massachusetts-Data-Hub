@@ -1,0 +1,66 @@
+# .github/workflows/update-cbp.yml
+#
+# Downloads CBP encounter data and updates immigration-dashboard.html.
+# CBP updates monthly. Auto-fetch may fail if they change CSV URLs;
+# in that case, manually download the CSV from the CBP Data Portal,
+# save it to data/cbp-encounters-latest.csv, and push.
+
+name: Update CBP Encounters
+
+on:
+  schedule:
+    # 12:00 UTC on the 25th of each month (CBP usually publishes by then)
+    - cron: "0 12 25 * *"
+  push:
+    paths:
+      - "update-cbp-encounters.py"
+      - "data/cbp-encounters-latest.csv"   # Trigger on manual CSV drop
+  workflow_dispatch:
+
+jobs:
+  update-cbp:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch CBP encounter data
+        run: python update-cbp-encounters.py
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet -- '*.html' 'data/*.json' \
+            && echo "changed=false" >> $GITHUB_OUTPUT \
+            || echo "changed=true"  >> $GITHUB_OUTPUT
+
+      - name: Commit updates
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add immigration-dashboard.html data/cbp-encounters-latest.json
+          git commit -m "ð Auto-update: CBP encounter data $(date +'%B %Y')"
+          git push
+
+      - name: No new data
+        if: steps.changes.outputs.changed == 'false'
+        run: echo "CBP data unchanged â no commit needed."
+
+      - name: Job summary
+        if: always()
+        run: |
+          echo "### CBP Encounter Update" >> $GITHUB_STEP_SUMMARY
+          if [ -f data/cbp-encounters-latest.json ]; then
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            python -c "import json; d=json.load(open('data/cbp-encounters-latest.json')); print(f'Auto-fetched: {d[\"auto_fetched\"]}')"  >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
