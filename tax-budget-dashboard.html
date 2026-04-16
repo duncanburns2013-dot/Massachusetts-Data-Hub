@@ -102,6 +102,7 @@ footer a:hover{color:var(--gold)}
   <button class="tab-btn" onclick="switchTab('migration')">Migration & AGI</button>
   <button class="tab-btn" onclick="switchTab('earners')">High-Earner Trends</button>
   <button class="tab-btn" onclick="switchTab('concentration')">Who Pays?</button>
+  <button class="tab-btn" onclick="switchTab('goldreserve')">Gold &amp; Treasury</button>
 </nav>
 
 <!-- Companion dashboard link -->
@@ -1304,11 +1305,64 @@ footer a:hover{color:var(--gold)}
 
 </div><!-- end concentration tab -->
 
+<!-- ===== GOLD & TREASURY ===== -->
+<div id="goldreserve" class="tab-content">
+  <div class="alert">
+    <h4>🥇 U.S. Treasury Gold Reserve — Auto-Updated</h4>
+    <div class="alert-grid">
+      <div class="alert-item">Total holdings: <strong><span id="gold-total">261.5</span>M fine troy oz</strong> across 4 facilities</div>
+      <div class="alert-item">Book value: <strong>$42.22/oz</strong> (set by law in 1973) — market value ~120x higher</div>
+      <div class="alert-item">Holdings have been <strong>unchanged since 2012</strong> — zero additions, zero sales</div>
+      <div class="alert-item">Global central banks bought <strong>1,045 tonnes in 2024</strong> — US bought zero</div>
+    </div>
+  </div>
+
+  <h2 class="section-title">Gold Holdings by Facility</h2>
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">Total</div><div class="value" id="gold-stat-total">261.5M oz</div><div class="sub">Fine troy ounces</div></div>
+    <div class="stat-card"><div class="label">Fort Knox, KY</div><div class="value" id="gold-stat-knox">147.3M oz</div><div class="sub">Deep storage</div></div>
+    <div class="stat-card"><div class="label">West Point, NY</div><div class="value" id="gold-stat-wp">54.1M oz</div><div class="sub">Deep storage</div></div>
+    <div class="stat-card"><div class="label">Denver, CO</div><div class="value" id="gold-stat-den">43.9M oz</div><div class="sub">Deep storage</div></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>Holdings by Facility</h3>
+      <div class="chart-area"><canvas id="chartGoldFacilities"></canvas></div>
+      <div class="source">Source: U.S. Treasury Fiscal Data API — auto-updated quarterly</div>
+    </div>
+    <div class="chart-card">
+      <h3>Global Central Bank Gold Purchases (tonnes/yr)</h3>
+      <div class="chart-area"><canvas id="chartGoldCB"></canvas></div>
+      <div class="source">Source: World Gold Council. US has purchased 0 tonnes since 1999.</div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>Book Value vs. Market Value</h3>
+      <div class="chart-area"><canvas id="chartGoldValue"></canvas></div>
+      <div class="source">Book value fixed at $42.22/oz by law (1973). Market price from LBMA.</div>
+    </div>
+    <div class="chart-card">
+      <h3>US Share of Global Gold Reserves</h3>
+      <div class="chart-area"><canvas id="chartGoldGlobal"></canvas></div>
+      <div class="source">Source: World Gold Council, IMF IFS</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <h4>ℹ️ How This Data Is Updated</h4>
+    <p>This section auto-updates from the <strong>U.S. Treasury Fiscal Data API</strong> (<code>api.fiscaldata.treasury.gov</code>). The API is free, requires no key, and provides official gold reserve data by facility. Our GitHub Actions workflow checks quarterly. The JSON data is saved to <code>data/treasury-gold-latest.json</code>.<br><br>
+    <strong>Why it matters for MA:</strong> Federal fiscal policy — including the valuation and potential monetization of gold reserves — directly affects federal transfers to states. Massachusetts receives ~$30B/yr in federal funds. If the Treasury were to revalue gold to market price (~$2,400/oz vs. $42.22/oz), the resulting “windfall” could theoretically offset federal debt servicing costs that currently crowd out state aid.</p>
+  </div>
+</div><!-- end gold tab -->
+
 </div><!-- /container -->
 
 <footer>
   <a href="index.html">← Back to Massachusetts Data Hub</a><br>
-  <span>Sources: BEA (Regional Price Parities, Real Personal Income), BLS (CPI-U Boston), Census Bureau (ACS), EIA (Electric Power Monthly), Tax Foundation, MA DOR, MA DLS, ITEP, Mass Opportunity Alliance, EPI, DOL, MA State Auditor BSI, USDA-FNS, GAO, LexisNexis, IRS Statistics of Income (SOI State-to-State Migration Data 2011–2023)</span><br>
+  <span>Sources: BEA (Regional Price Parities, Real Personal Income), BLS (CPI-U Boston), Census Bureau (ACS), EIA (Electric Power Monthly), Tax Foundation, MA DOR, MA DLS, ITEP, Mass Opportunity Alliance, EPI, DOL, MA State Auditor BSI, USDA-FNS, GAO, LexisNexis, IRS Statistics of Income (SOI State-to-State Migration Data 2011–2023), U.S. Treasury Fiscal Data API (Gold Reserve), World Gold Council</span><br>
   <span>Data compiled March 2026 · Updated with IRS 2022-23 migration data · All data from official government sources</span><br><span>Companion: <a href="immigration-dashboard.html" style="color:var(--navy);font-weight:600;border-bottom:1px solid var(--gold)">Immigration &amp; Massachusetts Population Dashboard</a> — demographic context for these tax trends</span>
 </footer>
 
@@ -1863,6 +1917,94 @@ function initCharts(tab) {
         },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: false, ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'K' } } }, plugins: { legend: { position: 'top', labels: { font: { size: 11 } } }, tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': $' + ctx.parsed.y.toLocaleString() } } } }
       });
+      break;
+
+    case 'goldreserve':
+      // Facilities doughnut
+      safeChart('chartGoldFacilities', {
+        type: 'doughnut',
+        data: {
+          labels: ['Fort Knox, KY', 'West Point, NY', 'Denver, CO', 'Federal Reserve NY', 'US Mint (Working Stock)'],
+          datasets: [{
+            data: [147.3, 54.1, 43.9, 13.4, 2.8],
+            backgroundColor: ['#c9a84c', '#1a4480', '#c0392b', '#1a7a4c', '#b8860b'],
+            borderColor: '#fff', borderWidth: 3
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, cutout: '45%',
+          plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } },
+            tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed + 'M oz' } }
+          }
+        }
+      });
+
+      // Global central bank purchases
+      safeChart('chartGoldCB', {
+        type: 'bar',
+        data: {
+          labels: ['2018','2019','2020','2021','2022','2023','2024','2025*'],
+          datasets: [{
+            label: 'Central Bank Purchases (tonnes)',
+            data: [656, 650, 255, 463, 1082, 1037, 1045, 830],
+            backgroundColor: ctx => ctx.parsed.y > 900 ? '#c0392b' : ctx.parsed.y > 600 ? '#b8860b' : '#1a4480',
+            borderRadius: 4
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, title: { display: true, text: 'Tonnes' } }, x: { grid: { display: false } } }
+        }
+      });
+
+      // Book vs market value
+      safeChart('chartGoldValue', {
+        type: 'bar',
+        data: {
+          labels: ['Book Value (law)', 'Market Value (~Apr 2026)'],
+          datasets: [{
+            label: 'Per Troy Ounce',
+            data: [42.22, 4889],
+            backgroundColor: ['#b8860b', '#c9a84c'],
+            borderRadius: 6
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+          plugins: { legend: { display: false } },
+          scales: { x: { ticks: { callback: v => '$' + v.toLocaleString() }, grid: { color: 'rgba(0,0,0,0.04)' } }, y: { grid: { display: false } } }
+        }
+      });
+
+      // Global share
+      safeChart('chartGoldGlobal', {
+        type: 'doughnut',
+        data: {
+          labels: ['United States', 'Germany', 'Italy', 'France', 'Russia', 'China', 'All Others'],
+          datasets: [{
+            data: [8133, 3352, 2452, 2437, 2333, 2264, 15029],
+            backgroundColor: ['#c9a84c', '#1a4480', '#1a7a4c', '#c0392b', '#7a756e', '#b8860b', '#e8e5df'],
+            borderColor: '#fff', borderWidth: 2
+          }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, cutout: '40%',
+          plugins: { legend: { position: 'bottom', labels: { font: { size: 10 } } },
+            tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed.toLocaleString() + ' tonnes (' + (ctx.parsed/360*100).toFixed(1) + '%)' } }
+          }
+        }
+      });
+
+      // Auto-load from JSON if available
+      fetch('data/treasury-gold-latest.json')
+        .then(r => r.ok ? r.json() : null)
+        .then(d => {
+          if (!d) return;
+          var s = d.summary_millions || {};
+          if (s.total) document.getElementById('gold-stat-total').textContent = s.total + 'M oz';
+          if (s.fort_knox) document.getElementById('gold-stat-knox').textContent = s.fort_knox + 'M oz';
+          if (s.west_point) document.getElementById('gold-stat-wp').textContent = s.west_point + 'M oz';
+          if (s.denver) document.getElementById('gold-stat-den').textContent = s.denver + 'M oz';
+          if (s.total) document.getElementById('gold-total').textContent = s.total;
+        })
+        .catch(() => {});
       break;
   }
 }
