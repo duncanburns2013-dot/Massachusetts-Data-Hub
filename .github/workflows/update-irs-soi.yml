@@ -1,0 +1,68 @@
+# .github/workflows/update-irs-soi.yml
+#
+# Checks for new IRS SOI migration data and updates tax-budget-dashboard.html.
+# IRS releases ~18 months after tax year (e.g., 2023-24 data expected ~mid-2026).
+# Runs monthly to check; also triggers on manual dispatch.
+
+name: Update IRS SOI Migration
+
+on:
+  schedule:
+    # 14:00 UTC on the 1st of each month
+    - cron: "0 14 1 * *"
+  push:
+    paths:
+      - "update-irs-soi-migration.py"
+  workflow_dispatch:
+
+jobs:
+  update-irs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch IRS SOI migration data
+        run: python update-irs-soi-migration.py
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet -- '*.html' 'data/*.json' \
+            && echo "changed=false" >> $GITHUB_OUTPUT \
+            || echo "changed=true"  >> $GITHUB_OUTPUT
+
+      - name: Commit updates
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add tax-budget-dashboard.html data/irs-soi-migration-latest.json
+          git commit -m "ð Auto-update: IRS SOI migration data $(date +'%B %Y')"
+          git push
+
+      - name: No new data
+        if: steps.changes.outputs.changed == 'false'
+        run: echo "IRS data unchanged â no commit needed."
+
+      - name: Job summary
+        if: always()
+        run: |
+          echo "### IRS SOI Migration Update" >> $GITHUB_STEP_SUMMARY
+          if [ -f data/irs-soi-migration-latest.json ]; then
+            python -c "
+import json
+d = json.load(open('data/irs-soi-migration-latest.json'))
+print(f'Verified: {d[\"latest_year_verified\"]}')
+new = d.get('new_year_found')
+print(f'New year: {new or \"None yet\"}')
+" >> $GITHUB_STEP_SUMMARY
+          fi
