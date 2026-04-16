@@ -1,0 +1,53 @@
+# .github/workflows/update-treasury-gold.yml
+#
+# Fetches U.S. Treasury gold reserve data from the Fiscal Data API.
+# Treasury updates the gold report quarterly. No API key needed.
+
+name: Update Treasury Gold Reserve
+
+on:
+  schedule:
+    # 10:00 UTC on the 5th of Jan, Apr, Jul, Oct (quarterly)
+    - cron: "0 10 5 1,4,7,10 *"
+  push:
+    paths:
+      - "update-treasury-gold.py"
+  workflow_dispatch:
+
+jobs:
+  update-gold:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch Treasury gold data
+        run: python update-treasury-gold.py
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet -- MASTER_DATA.md 'data/*.json' \
+            && echo "changed=false" >> $GITHUB_OUTPUT \
+            || echo "changed=true"  >> $GITHUB_OUTPUT
+
+      - name: Commit updates
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add MASTER_DATA.md data/treasury-gold-latest.json
+          git commit -m "ð¥ Auto-update: Treasury gold reserve $(date +'%B %Y')"
+          git push
+
+      - name: No new data
+        if: steps.changes.outputs.changed == 'false'
+        run: echo "Gold holdings unchanged â no commit needed."
