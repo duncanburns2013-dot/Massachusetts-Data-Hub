@@ -4,7 +4,7 @@
 # Use this for a full refresh â or trigger individual workflows for specific sources.
 #
 # Required secrets: BLS_API_KEY, EIA_API_KEY, FRED_API_KEY, CENSUS_API_KEY
-# No key needed for: Treasury gold, CBP encounters, IRS SOI
+# No key needed for: CBP encounters, IRS SOI
 
 name: "ð Update All Data Sources"
 
@@ -65,9 +65,6 @@ jobs:
         env:
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
         run: python update-census-data.py
-
-      - name: "ð¥ Treasury Gold Reserve"
-        run: python update-treasury-gold.py
 
       - name: "ð CBP Encounters"
         run: python update-cbp-encounters.py
