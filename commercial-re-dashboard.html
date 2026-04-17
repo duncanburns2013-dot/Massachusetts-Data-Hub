@@ -90,6 +90,7 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
     <button class="tab-btn" onclick="switchTab(event,'cmbs')">CMBS & Distress</button>
     <button class="tab-btn" onclick="switchTab(event,'sales')">Property Sales</button>
     <button class="tab-btn" onclick="switchTab(event,'tax')">Tax Impact</button>
+            <button class="tab-btn" onclick="switchTab(event,'mlspin')">MLS PIN Commercial</button>
   </div>
 </div>
 
@@ -230,6 +231,39 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
     </div>
   </div>
 </div>
+        <div class="tab-panel" id="tab-mlspin">
+            <h2 class="sec-title">Boston Commercial — MLS PIN Market Review</h2>
+            <p class="sec-desc">YTD April 16, 2026 — listings, pending sales, and closed transactions from the MLS Property Information Network. Commercial-use properties only.</p>
+            <div class="summary-row">
+                <div class="sc"><div class="sc-label">Closed Sales YTD 2026</div><div class="sc-val red">9</div><div class="sc-ctx">vs. 15 in 2025</div></div>
+                <div class="sc"><div class="sc-label">Avg Sale Price 2026</div><div class="sc-val amber">$2292K</div><div class="sc-ctx">2022 avg: $555K</div></div>
+                <div class="sc"><div class="sc-label">Active Listings (Apr 16)</div><div class="sc-val blue">214</div><div class="sc-ctx">2022: 175 listings</div></div>
+                <div class="sc"><div class="sc-label">Months Supply</div><div class="sc-val red">67.6</div><div class="sc-ctx">Heavily oversupplied</div></div>
+                <div class="sc"><div class="sc-label">12-Mo Sold</div><div class="sc-val green">38</div><div class="sc-ctx">42 in 2022</div></div>
+                <div class="sc"><div class="sc-label">Avg DOM (Sold)</div><div class="sc-val amber">110</div><div class="sc-ctx">2022: 84 days</div></div>
+            </div>
+            <div class="info warn" style="margin:24px 0">
+                <div class="info-icon">⚠</div>
+                <div class="info-text"><strong>Heavy oversupply signal.</strong> 214 active commercial listings against only 38 closed sales in the trailing 12 months — a 68-month supply (balanced markets run 6–9). Average DOM has risen from 84 days in 2022 to 110 days in 2026. The 2026 sale price average ($2292K) reflects a small-sample mix of higher-value closings versus the 2022 baseline of $555K.</div>
+            </div>
+            <div class="grid-2">
+                <div class="card"><div class="card-title">Avg Sale Price (2022–2026)</div><div class="card-sub">Small sample — heavily mix-weighted year to year</div><div class="card-canvas"><canvas id="mls-price-chart"></canvas></div></div>
+                <div class="card"><div class="card-title">Closed Sales — YTD April 16</div><div class="card-sub">Year-to-date closed commercial transactions</div><div class="card-canvas"><canvas id="mls-closed-chart"></canvas></div></div>
+            </div>
+            <div class="grid-2" style="margin-top:16px">
+                <div class="card"><div class="card-title">Active Listings on April 16</div><div class="card-sub">Point-in-time commercial inventory</div><div class="card-canvas"><canvas id="mls-inv-chart"></canvas></div></div>
+                <div class="card"><div class="card-title">Avg Days on Market</div><div class="card-sub">Sold transactions, YTD April 16</div><div class="card-canvas"><canvas id="mls-dom-chart"></canvas></div></div>
+            </div>
+            <div class="card" style="margin-top:16px">
+                <div class="card-title">Full 5-Year Breakdown</div>
+                <div class="card-sub">MLS PIN Boston Commercial — YTD April 16 each year</div>
+                <div class="table-wrap"><table><thead><tr><th>Metric</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th></tr></thead><tbody><tr><td>Closed Sales</td><td>12</td><td>6</td><td>14</td><td>15</td><td>9</td></tr><tr><td>Avg Sale Price</td><td>$555K</td><td>$2942K</td><td>$662K</td><td>$1353K</td><td>$2292K</td></tr><tr><td>Avg Days on Market</td><td>84</td><td>60</td><td>107</td><td>134</td><td>110</td></tr><tr><td>Avg Days to Offer</td><td>76</td><td>48</td><td>99</td><td>123</td><td>102</td></tr><tr><td>Avg List Price</td><td>$610K</td><td>$3902K</td><td>$713K</td><td>$1327K</td><td>$2489K</td></tr><tr><td>Sale:List Ratio</td><td>92.5%</td><td>99.2%</td><td>92.5%</td><td>—</td><td>93.2%</td></tr><tr><td>Listings (Apr 16)</td><td>175</td><td>232</td><td>236</td><td>230</td><td>214</td></tr><tr><td>Inventory Avg DOM</td><td>163</td><td>112</td><td>215</td><td>144</td><td>160</td></tr><tr><td>Months Supply</td><td>50.0</td><td>71.4</td><td>60.3</td><td>58.7</td><td>67.6</td></tr><tr><td>Absorption Rate</td><td>2.0%</td><td>1.4%</td><td>1.7%</td><td>1.7%</td><td>1.5%</td></tr><tr><td>12-Mo: Listed</td><td>407</td><td>487</td><td>472</td><td>514</td><td>513</td></tr><tr><td>12-Mo: Sold</td><td>42</td><td>39</td><td>47</td><td>47</td><td>38</td></tr><tr><td>12-Mo: Price Changed</td><td>82</td><td>125</td><td>123</td><td>119</td><td>112</td></tr><tr><td>12-Mo: Went Pending</td><td>157</td><td>128</td><td>136</td><td>125</td><td>143</td></tr></tbody></table></div>
+            </div>
+            <div class="info" style="margin-top:16px">
+                <div class="info-icon">ℹ</div>
+                <div class="info-text"><strong>Source:</strong> MLS Property Information Network Five-Year Sub-Report, Boston area, commercial-use property category, as of April 16, 2026. Small sample size means year-over-year price averages swing on a single large closing.</div>
+            </div>
+        </div>
 
 <div class="footer">
   <p><strong>Sources:</strong> Cushman & Wakefield Q4 2025 · Newmark Q4 2025 · Colliers Q4 2025 · Downtown Boston Alliance · Trepp CMBS · Avison Young · MassTaxpayers Foundation</p>
@@ -272,6 +306,25 @@ function initCharts(tab){
   }
 }
 initCharts('overview');window._ci={overview:true};
-</script>
+
+        // ── MLS PIN Commercial charts (appended) ──
+        (function(){
+            const yrs = [2022,2023,2024,2025,2026];
+            const mls = {"years5":[2022,2023,2024,2025,2026],"sold":{"closed":[12,6,14,15,9],"dom":[84,60,107,134,110],"dto":[76,48,99,123,102],"sale_price":[555180,2941667,662386,1352583,2291883],"list_price":[609513,3902483,712886,1326683,2488883],"orig_list":[619930,4573317,767414,1375083,2559994],"splp_pct":[92.51,99.22,92.5,null,93.15]},"inv":{"units":[175,232,236,230,214],"dom_inv":[163,112,215,144,160],"list_price_inv":[588916,473429,343109,625541,896705],"absorb_pct":[2,1.4,1.66,1.7,1.48],"months_supply":[50,71.38,60.26,58.72,67.58]},"act12":{"listed":[407,487,472,514,513],"price_chg":[82,125,123,119,112],"pending":[157,128,136,125,143],"sold_12mo":[42,39,47,47,38]}};
+            let initialized = false;
+            const init = () => {
+                if (initialized) return;
+                const priceEl = document.getElementById('mls-price-chart');
+                if (!priceEl) return;
+                initialized = true;
+                new Chart(priceEl, { type:'line', data:{labels:yrs,datasets:[{label:'Avg Sale Price',data:mls.sold.sale_price,borderColor:'#c9a84c',backgroundColor:'#c9a84c20',borderWidth:2.5,tension:0.3,fill:true,pointRadius:4}]}, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'$'+(ctx.parsed.y/1000000).toFixed(1)+'M'}}},scales:{y:{ticks:{callback:v=>'$'+(v/1000000).toFixed(1)+'M'}},x:{grid:{display:false}}}} });
+                new Chart(document.getElementById('mls-closed-chart'), {type:'bar',data:{labels:yrs,datasets:[{label:'Closed Sales',data:mls.sold.closed,backgroundColor:'#1d4ed8',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true},x:{grid:{display:false}}}}});
+                new Chart(document.getElementById('mls-inv-chart'), {type:'bar',data:{labels:yrs,datasets:[{label:'Active Listings',data:mls.inv.units,backgroundColor:'#c23b22',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true},x:{grid:{display:false}}}}});
+                new Chart(document.getElementById('mls-dom-chart'), {type:'line',data:{labels:yrs,datasets:[{label:'Avg DOM',data:mls.sold.dom,borderColor:'#2d8a56',backgroundColor:'#2d8a5620',borderWidth:2.5,tension:0.3,fill:true,pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.parsed.y+' days'}}},scales:{y:{ticks:{callback:v=>v+'d'}},x:{grid:{display:false}}}}});
+            };
+            const panel = document.getElementById('tab-mlspin');
+            if (panel) { const obs = new MutationObserver(init); obs.observe(panel, {attributes:true,attributeFilter:['class','style']}); setTimeout(init, 50); }
+        })();
+    </script>
 </body>
 </html>
