@@ -3,32 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Massachusetts Healthcare & Insurance Dashboard</title>
+<title>All Things Insurance — Massachusetts Data Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-
-:root{--bg:#f8f7f4;--card:#fff;--border:#e8e5df;--text:#1a1a1a;--muted:#7a756e;--red:#c0392b;--green:#1a7a4c;--blue:#1a4480;--amber:#b8860b;--purple:#7e22ce;--navy:#0f2942;--gold:#c9a84c;--red-bg:rgba(192,57,43,0.06);--blue-bg:rgba(26,68,128,0.06);--green-bg:rgba(26,122,76,0.06);--amber-bg:rgba(184,134,11,0.06)}
+:root{
+  /* Bolder MA palette — punchier blue/red/green */
+  --bg:#f8f7f4;--card:#fff;--border:#e8e5df;--text:#1a1a1a;--muted:#7a756e;
+  --red:#dc2626;        /* bolder crimson */
+  --red-deep:#991b1b;
+  --green:#16a34a;      /* bolder forest */
+  --green-deep:#14532d;
+  --blue:#1d4ed8;       /* bolder royal */
+  --blue-deep:#1e3a8a;
+  --amber:#b8860b;
+  --purple:#7e22ce;
+  --navy:#0f2942;
+  --gold:#c9a84c;
+  --red-bg:rgba(220,38,38,0.07);
+  --blue-bg:rgba(29,78,216,0.06);
+  --green-bg:rgba(22,163,74,0.07);
+  --amber-bg:rgba(184,134,11,0.06)
+}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
-.container{max-width:1200px;margin:0 auto;padding:0 24px}
 .hero{background:var(--navy);color:#fff;padding:48px 24px 72px;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,0.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(139,26,26,0.1) 0%,transparent 50%)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,0.14) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(220,38,38,0.12) 0%,transparent 50%)}
 .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);padding:6px 18px;border-radius:50px;font-size:.72rem;font-weight:500;margin-bottom:18px;position:relative}
-.hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.6rem,4.5vw,2.5rem);font-weight:400;margin-bottom:8px;position:relative;letter-spacing:-0.01em}
-.hero-sub{font-size:.85rem;opacity:.65;max-width:600px;margin:0 auto;position:relative}
+.hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.6rem,4.5vw,2.6rem);font-weight:400;margin-bottom:8px;position:relative;letter-spacing:-0.01em}
+.hero-sub{font-size:.85rem;opacity:.7;max-width:680px;margin:0 auto;position:relative}
 .summary-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:-40px auto 32px;max-width:1200px;padding:0 24px;position:relative;z-index:2}
 .sc{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.06);border-top:4px solid var(--navy)}
-.sc.red{border-top-color:var(--red)}.sc.green{border-top-color:var(--green)}.sc.amber{border-top-color:var(--amber)}.sc.purple{border-top-color:var(--purple)}
-.sc-label{font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px}
-.sc-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.5rem;font-weight:400}
-.sc-val.red{color:var(--red)}.sc-val.blue{color:var(--blue)}.sc-val.green{color:var(--green)}.sc-val.amber{color:var(--amber)}
+.sc.red{border-top-color:var(--red)}.sc.green{border-top-color:var(--green)}.sc.amber{border-top-color:var(--amber)}.sc.purple{border-top-color:var(--purple)}.sc.blue{border-top-color:var(--blue)}
+.sc-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px}
+.sc-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.55rem;font-weight:400;letter-spacing:-0.01em}
+.sc-val.red{color:var(--red)}.sc-val.blue{color:var(--blue)}.sc-val.green{color:var(--green)}.sc-val.amber{color:var(--amber)}.sc-val.purple{color:var(--purple)}
 .sc-ctx{font-size:.68rem;color:var(--muted);margin-top:4px}
+.sc-src{font-size:.62rem;color:var(--muted);margin-top:6px;font-style:italic}
 .tabs-wrap{max-width:1200px;margin:0 auto 24px;padding:0 24px}
-.tabs{display:flex;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.04);border-radius:0;padding:0}
-.tab-btn{flex-shrink:0;padding:13px 18px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',system-ui,sans-serif;font-size:.72rem;font-weight:600;border-radius:0;cursor:pointer;transition:all .25s;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid transparent}
+.tabs{display:flex;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.tab-btn{flex-shrink:0;padding:13px 16px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',system-ui,sans-serif;font-size:.71rem;font-weight:600;cursor:pointer;transition:all .25s;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid transparent}
 .tab-btn:hover{color:var(--text);background:rgba(0,0,0,.02)}
-.tab-btn.active{background:transparent;color:var(--navy);box-shadow:none;border-bottom-color:var(--gold)}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
+.tab-group{padding:10px 14px;font-size:.58rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;border-right:1px solid var(--border);background:rgba(15,41,66,.02);white-space:nowrap;display:flex;align-items:center}
 .tab-panel{display:none}.tab-panel.active{display:block;animation:fadeUp .35s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .section{max-width:1200px;margin:0 auto 32px;padding:0 24px}
@@ -39,47 +56,81 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .card{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.03);border:1px solid var(--border)}
 .card-title{font-size:.82rem;font-weight:700;margin-bottom:4px;color:var(--navy)}
 .card-sub{font-size:.68rem;color:var(--muted);margin-bottom:14px}
+.card-src{font-size:.62rem;color:var(--muted);margin-top:8px;font-style:italic}
 .card-canvas{position:relative;height:280px}
 .hl{background:var(--red-bg);border-left:4px solid var(--red);border-radius:0 12px 12px 0;padding:16px 20px;margin-bottom:18px}
+.hl.amber{background:var(--amber-bg);border-left-color:var(--amber)}
+.hl.blue{background:var(--blue-bg);border-left-color:var(--blue)}
+.hl.green{background:var(--green-bg);border-left-color:var(--green)}
 .hl .hl-label{font-size:.65rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.08em}
+.hl.amber .hl-label{color:var(--amber)}.hl.blue .hl-label{color:var(--blue)}.hl.green .hl-label{color:var(--green)}
 .hl .hl-val{font-size:1.1rem;font-weight:700;color:var(--red);margin-top:2px}
+.hl.amber .hl-val{color:var(--amber)}.hl.blue .hl-val{color:var(--blue)}.hl.green .hl-val{color:var(--green)}
 .hl .hl-ctx{font-size:.72rem;color:var(--muted);margin-top:2px}
-.info{background:var(--blue-bg);border:1px solid rgba(26,68,128,.12);border-radius:12px;padding:16px 20px;margin-bottom:22px;display:flex;gap:12px;align-items:flex-start;border-left:4px solid var(--blue)}
+.hl .hl-src{font-size:.62rem;color:var(--muted);margin-top:6px;font-style:italic}
+.info{background:var(--blue-bg);border:1px solid rgba(29,78,216,.13);border-radius:12px;padding:16px 20px;margin-bottom:22px;display:flex;gap:12px;align-items:flex-start;border-left:4px solid var(--blue)}
 .info.warn{background:var(--amber-bg);border-color:rgba(184,134,11,.15);border-left-color:var(--amber)}
-.info.danger{background:var(--red-bg);border-color:rgba(192,57,43,.12);border-left-color:var(--red)}
+.info.danger{background:var(--red-bg);border-color:rgba(220,38,38,.13);border-left-color:var(--red)}
 .info-icon{font-size:1.2rem;flex-shrink:0}
 .info-text{font-size:.78rem;color:var(--text);line-height:1.6}
+.info-src{font-size:.62rem;color:var(--muted);margin-top:6px;font-style:italic;display:block}
 .table-wrap{background:var(--card);border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.03);border:1px solid var(--border);overflow-x:auto;margin-bottom:22px}
 table{width:100%;border-collapse:collapse;font-size:.78rem}
 thead th{background:rgba(15,41,66,.04);padding:10px 14px;text-align:left;font-weight:700;color:var(--navy);border-bottom:2px solid var(--navy);white-space:nowrap;font-size:.65rem;text-transform:uppercase;letter-spacing:.08em}
 tbody td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text)}
 tbody tr:hover{background:rgba(15,41,66,.02)}
-.td-red{color:var(--red);font-weight:700}.td-green{color:var(--green);font-weight:600}.td-amber{color:var(--amber);font-weight:600}
-.dc-label{font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px}
-.dc-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.5rem;font-weight:400;margin-bottom:8px}
-.dc-val.red{color:var(--red)}.dc-val.blue{color:var(--blue)}.dc-val.green{color:var(--green)}.dc-val.amber{color:var(--amber)}
+.td-red{color:var(--red);font-weight:700}.td-green{color:var(--green);font-weight:600}.td-amber{color:var(--amber);font-weight:600}.td-blue{color:var(--blue);font-weight:600}
+.dc-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px}
+.dc-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.55rem;font-weight:400;margin-bottom:8px;letter-spacing:-0.01em}
+.dc-val.red{color:var(--red)}.dc-val.blue{color:var(--blue)}.dc-val.green{color:var(--green)}.dc-val.amber{color:var(--amber)}.dc-val.purple{color:var(--purple)}
 .dc-meta{display:flex;flex-wrap:wrap;gap:14px}
 .dc-ml{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}.dc-mv{font-size:.8rem;font-weight:600;color:var(--text)}
+.dc-src{font-size:.62rem;color:var(--muted);margin-top:8px;font-style:italic}
+.pill{display:inline-block;font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.06em}
+.pill.green{background:var(--green-bg);color:var(--green)}
+.pill.amber{background:var(--amber-bg);color:var(--amber)}
+.pill.red{background:var(--red-bg);color:var(--red)}
+.pill.blue{background:var(--blue-bg);color:var(--blue)}
 .footer{text-align:center;padding:32px 24px;color:var(--muted);font-size:.72rem;border-top:1px solid var(--border);margin-top:40px;background:#fff}
 .footer strong{color:var(--text)}.footer a{color:var(--navy);text-decoration:none;font-weight:600;border-bottom:1px solid var(--gold)}.footer a:hover{color:var(--gold)}
-@media(max-width:768px){.summary-row{grid-template-columns:repeat(2,1fr)}.grid-2,.grid-3{grid-template-columns:1fr}.tabs{gap:2px}.tab-btn{padding:10px 12px;font-size:.65rem}}
+.footer-sources{max-width:1000px;margin:0 auto;text-align:left;font-size:.7rem;line-height:1.7;padding:12px 0}
+@media(max-width:768px){.summary-row{grid-template-columns:repeat(2,1fr)}.grid-2,.grid-3{grid-template-columns:1fr}.tabs{gap:2px}.tab-btn{padding:10px 12px;font-size:.65rem}.tab-group{padding:8px 10px;font-size:.55rem}}
 @media(max-width:480px){.summary-row{grid-template-columns:1fr}}
-
 </style>
 </head>
 <body>
 
 <div class="hero">
-  <div class="hero-badge">🏥 DOI · KFF · CHIA Data</div>
-  <h1>Massachusetts Healthcare & Insurance</h1>
-  <p class="hero-sub">Premiums, rate increases, and spending — MA vs. the nation</p>
+  <div class="hero-badge">🛡️ DOI · CHIA · KFF · CMS · CAR · Census · BLS</div>
+  <h1>All Things Insurance</h1>
+  <p class="hero-sub">Massachusetts' full insurance picture — health, homeowners, auto, affordability, market conduct, licensing. Every figure on this page is sourced from a primary official report. Sources cited in every card, chart, and callout.</p>
 </div>
 
 <div class="summary-row">
-  <div class="sc red"><div class="sc-label">Avg Family Premium</div><div class="sc-val red">$28,151</div><div class="sc-ctx">+14.7% above US average</div></div>
-  <div class="sc red"><div class="sc-label">2026 Approved Increases</div><div class="sc-val red">7.1–12.2%</div><div class="sc-ctx">DOI finalized · 2 carriers rejected</div></div>
-  <div class="sc amber"><div class="sc-label">Per-Capita Spending</div><div class="sc-val amber">$13,319</div><div class="sc-ctx">+30.7% above national avg</div></div>
-  <div class="sc red"><div class="sc-label">THCE Growth</div><div class="sc-val red">8.6%</div><div class="sc-ctx">vs 3.6% benchmark (+139%)</div></div>
+  <div class="sc red">
+    <div class="sc-label">Avg Family Health Premium</div>
+    <div class="sc-val red">$28,151</div>
+    <div class="sc-ctx">+14.7% above US average ($24,540)</div>
+    <div class="sc-src">Source: Kaiser Family Foundation EHBS 2024</div>
+  </div>
+  <div class="sc amber">
+    <div class="sc-label">2026 Approved Health Rates</div>
+    <div class="sc-val amber">7.1 – 12.2%</div>
+    <div class="sc-ctx">BCBS &amp; WellSense rejected as excessive</div>
+    <div class="sc-src">Source: MA DOI finalized Jul 2025</div>
+  </div>
+  <div class="sc blue">
+    <div class="sc-label">Home Written Premium</div>
+    <div class="sc-val blue">$3.6B</div>
+    <div class="sc-ctx">+12.7% YoY · 2,124,812 policies</div>
+    <div class="sc-src">Source: MA DOI 2024 Annual Home Insurance Report</div>
+  </div>
+  <div class="sc green">
+    <div class="sc-label">Auto Written Premium</div>
+    <div class="sc-val green">$6.47B</div>
+    <div class="sc-ctx">2023 · 36+ insurers competing</div>
+    <div class="sc-src">Source: MA DOI 2022-2023 Annual Report</div>
+  </div>
 </div>
 
 <div class="tabs-wrap">
@@ -87,59 +138,78 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
     <button class="tab-btn active" onclick="switchTab(event,'overview')">Overview</button>
     <button class="tab-btn" onclick="switchTab(event,'premiums')">Premiums</button>
     <button class="tab-btn" onclick="switchTab(event,'rates')">2026 Rates</button>
-    <button class="tab-btn" onclick="switchTab(event,'spending')">Spending</button>
-    <button class="tab-btn" onclick="switchTab(event,'affordability')">Affordability</button>
+    <button class="tab-btn" onclick="switchTab(event,'spending')">Spending &amp; MassHealth</button>
+    <button class="tab-btn" onclick="switchTab(event,'healthaff')">Affordability</button>
+    <button class="tab-btn" onclick="switchTab(event,'costincome')">Cost vs Income</button>
+    <button class="tab-btn" onclick="switchTab(event,'home')">Homeowners</button>
+    <button class="tab-btn" onclick="switchTab(event,'auto')">Auto</button>
+    <button class="tab-btn" onclick="switchTab(event,'complaints')">Complaints</button>
+    <button class="tab-btn" onclick="switchTab(event,'licensees')">Licensees</button>
+    <button class="tab-btn" onclick="switchTab(event,'sources')">Sources</button>
   </div>
 </div>
 
-<!-- OVERVIEW TAB -->
+<!-- ========================= OVERVIEW ========================= -->
 <div class="tab-panel active" id="tab-overview">
   <div class="section">
-    <div class="sec-title">Healthcare Cost Crisis</div>
-    <div class="sec-desc">Massachusetts has the highest healthcare costs in the nation by nearly every measure</div>
+    <div class="sec-title">Massachusetts Insurance at a Glance</div>
+    <div class="sec-desc">The Commonwealth leads the nation in healthcare costs, saw a dramatic spike in homeowners premium in 2024, and has one of the most concentrated auto markets in the country.</div>
 
-    <div class="hl"><div class="hl-label">⚠️ Premium Gap</div><div class="hl-val">MA families pay $3,611 MORE per year than the national average</div><div class="hl-ctx">$28,151 (MA) vs $24,540 (US) — Kaiser Family Foundation 2024</div></div>
-    <div class="hl"><div class="hl-label">⚠️ Healthcare Spending</div><div class="hl-val">MA spends $3,128 MORE per person than the national average</div><div class="hl-ctx">$13,319 (MA) vs $10,191 (US) — CMS State Health Expenditure Accounts 2020</div></div>
+    <div class="hl"><div class="hl-label">⚠️ Health premium gap</div><div class="hl-val">MA families pay $3,611 MORE per year than the national average</div><div class="hl-ctx">$28,151 (MA) vs $24,540 (US) — 14.7% above national</div><div class="hl-src">Source: Kaiser Family Foundation EHBS 2024</div></div>
+
+    <div class="hl amber"><div class="hl-label">⚠️ Home insurance surge</div><div class="hl-val">MA homeowner premium jumped 12.7% in 2024 alone — and 35.9% since 2021</div><div class="hl-ctx">Average premium: $1,744 (2021) → $1,818 (2022) → $2,054 (2023) → $2,371 (2024). Total written premium: $3.6B in 2024.</div><div class="hl-src">Source: MA DOI Annual Home Insurance Report 2024</div></div>
+
+    <div class="hl blue"><div class="hl-label">⚠️ Auto market concentration</div><div class="hl-val">Top 10 auto carriers hold 84.64% of the market</div><div class="hl-ctx">Commerce leads at 18.33% (declining from 22.1% in 2020). Progressive surged from 5.1% (2020) to 12.17% (2025) — a 139% increase.</div><div class="hl-src">Source: Agency Checklists 2nd Look 2026 Market Share Report, citing CAR statistical agent data</div></div>
 
     <div class="grid-2">
-      <div class="card"><div class="card-title">Family Premiums: MA vs. National</div><div class="card-sub">Annual employer-sponsored family coverage</div><div class="card-canvas"><canvas id="c-premiums"></canvas></div></div>
-      <div class="card"><div class="card-title">Premium Growth vs. Wage Growth</div><div class="card-sub">2021–2023 cumulative change</div><div class="card-canvas"><canvas id="c-growth"></canvas></div></div>
+      <div class="card">
+        <div class="card-title">Written Premium by Line of Insurance</div>
+        <div class="card-sub">MA market, most recent year ($B)</div>
+        <div class="card-canvas"><canvas id="c-ov-lines"></canvas></div>
+        <div class="card-src">Sources: DOI 2024 Home Insurance Report; DOI 2022-2023 Annual Report (auto 2023); CHIA 2026 Annual Report (health)</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Year-over-Year Premium Growth by Line</div>
+        <div class="card-sub">% change, MA market, 2020–2024</div>
+        <div class="card-canvas"><canvas id="c-ov-growth"></canvas></div>
+        <div class="card-src">Sources: KFF EHBS (health); DOI Annual Home Insurance Report (home); DOI 2022-2023 Annual Report (auto)</div>
+      </div>
     </div>
 
-    <div class="info danger"><div class="info-icon">🔴</div><div class="info-text"><strong>Premiums are growing 25% faster than wages.</strong> From 2021-2023, MA premiums rose 12.1% while wages grew only 9.7%. The average MA family now spends over $28,000/year on health insurance — before any deductibles or co-pays.</div></div>
+    <div class="info"><div class="info-icon">ℹ️</div><div class="info-text"><strong>Reading this dashboard:</strong> every KPI, chart caption, callout, and table row lists its source document. Primary sources are MA DOI annual reports, MA CHIA annual and cost trends reports, KFF, CMS, Census Bureau ACS, BLS, and the official CAR Annual Reports. For details on each pipeline, see the Sources tab.</div></div>
   </div>
 </div>
 
-<!-- PREMIUMS TAB -->
+<!-- ========================= PREMIUMS (HEALTH) ========================= -->
 <div class="tab-panel" id="tab-premiums">
   <div class="section">
-    <div class="sec-title">Premium Comparison</div>
+    <div class="sec-title">Health Premium Comparison</div>
     <div class="sec-desc">Massachusetts vs. national employer-sponsored family premiums</div>
 
     <div class="grid-3">
-      <div class="card"><div class="dc-label">MA Family Premium (2024)</div><div class="dc-val red">$28,151</div><div class="dc-meta"><div><div class="dc-ml">Monthly Cost</div><div class="dc-mv">$2,346</div></div><div><div class="dc-ml">Employee Share (~28%)</div><div class="dc-mv">$7,882</div></div></div></div>
-      <div class="card"><div class="dc-label">US Family Premium (2024)</div><div class="dc-val blue">$24,540</div><div class="dc-meta"><div><div class="dc-ml">Monthly Cost</div><div class="dc-mv">$2,045</div></div><div><div class="dc-ml">Employee Share</div><div class="dc-mv">$6,296</div></div></div></div>
-      <div class="card"><div class="dc-label">MA Premium Gap</div><div class="dc-val red">+$3,611</div><div class="dc-meta"><div><div class="dc-ml">% Above National</div><div class="dc-mv" style="color:#dc2626">+14.7%</div></div><div><div class="dc-ml">Rank</div><div class="dc-mv" style="color:#dc2626">#1 Highest</div></div></div></div>
+      <div class="card"><div class="dc-label">MA Family Premium (2024)</div><div class="dc-val red">$28,151</div><div class="dc-meta"><div><div class="dc-ml">Monthly</div><div class="dc-mv">$2,346</div></div><div><div class="dc-ml">Employee Share ~28%</div><div class="dc-mv">$7,882</div></div></div><div class="dc-src">Source: KFF EHBS 2024</div></div>
+      <div class="card"><div class="dc-label">US Family Premium (2024)</div><div class="dc-val blue">$24,540</div><div class="dc-meta"><div><div class="dc-ml">Monthly</div><div class="dc-mv">$2,045</div></div><div><div class="dc-ml">Employee Share</div><div class="dc-mv">$6,296</div></div></div><div class="dc-src">Source: KFF EHBS 2024</div></div>
+      <div class="card"><div class="dc-label">MA Premium Gap</div><div class="dc-val red">+$3,611</div><div class="dc-meta"><div><div class="dc-ml">% Above National</div><div class="dc-mv" style="color:var(--red)">+14.7%</div></div><div><div class="dc-ml">Rank</div><div class="dc-mv" style="color:var(--red)">#1 Highest</div></div></div><div class="dc-src">Source: KFF EHBS 2024</div></div>
     </div>
 
     <div class="grid-2">
-      <div class="card"><div class="card-title">Premium Trend: MA vs. US</div><div class="card-sub">Annual family premiums, 2020–2024</div><div class="card-canvas"><canvas id="c-prem-trend"></canvas></div></div>
-      <div class="card"><div class="card-title">Employee Out-of-Pocket Share</div><div class="card-sub">What workers actually pay annually</div><div class="card-canvas"><canvas id="c-oop"></canvas></div></div>
+      <div class="card"><div class="card-title">Family Premium Trend: MA vs. US</div><div class="card-sub">Annual family premiums, 2020–2024</div><div class="card-canvas"><canvas id="c-prem-trend"></canvas></div><div class="card-src">Source: KFF Employer Health Benefits Survey, annual editions 2020–2024</div></div>
+      <div class="card"><div class="card-title">Employee Out-of-Pocket Share</div><div class="card-sub">Annual worker contribution</div><div class="card-canvas"><canvas id="c-oop"></canvas></div><div class="card-src">Source: KFF EHBS, annual editions 2020–2024</div></div>
     </div>
   </div>
 </div>
 
-<!-- 2026 RATES TAB -->
+<!-- ========================= 2026 RATES ========================= -->
 <div class="tab-panel" id="tab-rates">
   <div class="section">
     <div class="sec-title">2026 Finalized Rate Increases</div>
     <div class="sec-desc">MA Division of Insurance finalized rates July 2025 — saved consumers $54M vs. proposed rates</div>
 
-    <div class="hl"><div class="hl-label">⚠️ DOI Finalized Increases: 7.1% – 12.2%</div><div class="hl-val">2 carriers REJECTED as excessive — BCBS & WellSense</div><div class="hl-ctx">Original proposals averaged 13.4% across all carriers · DOI negotiated savings of $54M · GLP-1 drug costs a key driver</div></div>
+    <div class="hl"><div class="hl-label">⚠️ DOI Finalized: 7.1% – 12.2%</div><div class="hl-val">2 carriers REJECTED — BCBS &amp; WellSense</div><div class="hl-ctx">Original proposals averaged 13.4%. DOI negotiated $54M in savings. Drivers included GLP-1 spending, behavioral health utilization, hospital contracting costs.</div><div class="hl-src">Source: MA DOI finalized rate decisions, July 2025</div></div>
 
     <div class="grid-2">
-      <div class="card"><div class="card-title">2026 Finalized Rate Increases by Carrier</div><div class="card-sub">DOI approved (green/amber) vs. rejected (red)</div><div class="card-canvas"><canvas id="c-carriers"></canvas></div></div>
-      <div class="card"><div class="card-title">Proposed vs. Approved Rates</div><div class="card-sub">DOI negotiated reductions of 1–3.3 percentage points</div><div class="card-canvas"><canvas id="c-proposed-vs-approved"></canvas></div></div>
+      <div class="card"><div class="card-title">2026 Finalized Rate Increases by Carrier</div><div class="card-sub">DOI approved (red/amber/green) vs. rejected (grey)</div><div class="card-canvas"><canvas id="c-carriers"></canvas></div><div class="card-src">Source: MA DOI rate filing decisions, July 2025</div></div>
+      <div class="card"><div class="card-title">Proposed vs. Approved Rates</div><div class="card-sub">DOI negotiated reductions of 1.0–3.3 percentage points</div><div class="card-canvas"><canvas id="c-proposed-vs-approved"></canvas></div><div class="card-src">Source: MA DOI rate filing decisions, July 2025</div></div>
     </div>
 
     <div class="table-wrap">
@@ -153,60 +223,280 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
           <tr><td>Mass General Brigham</td><td>—</td><td class="td-amber">~9%</td><td class="td-amber">Approved</td><td>—</td></tr>
           <tr><td>Fallon Community</td><td>9.9%</td><td class="td-green">7.1%</td><td class="td-green">Approved (lowest)</td><td>5.6% of market</td></tr>
           <tr style="background:#fef2f2"><td>Blue Cross Blue Shield</td><td>12.9%</td><td class="td-red">REJECTED</td><td class="td-red">Excessive</td><td>166K</td></tr>
-          <tr style="background:#fef2f2"><td>WellSense Health Plan</td><td>16.2%</td><td class="td-red">REJECTED</td><td class="td-red">Excessive</td><td>133K</td></tr>
+          <tr style="background:#fef2f2"><td>WellSense</td><td>16.2%</td><td class="td-red">REJECTED</td><td class="td-red">Excessive</td><td>133K</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-src" style="margin-bottom:22px">Source: MA DOI rate filing decisions and public hearing record, July 2025</div>
+
+    <div class="info danger"><div class="info-icon">🔴</div><div class="info-text"><strong>Key drivers of 2026 rate hikes:</strong> GLP-1 weight-loss drugs (BCBS spent $300M+ on 5 drugs in 2024), rising behavioral health utilization, aging population, expiring ACA enhanced subsidies. BCBS announced it will stop covering GLP-1s for weight loss in 2026, reducing its rate request by ~3%.<span class="info-src">Source: MA DOI rate hearing testimony, July 2025</span></div></div>
+  </div>
+</div>
+
+<!-- ========================= SPENDING & MASSHEALTH ========================= -->
+<div class="tab-panel" id="tab-spending">
+  <div class="section">
+    <div class="sec-title">Healthcare Spending &amp; Taxpayer-Funded Coverage</div>
+    <div class="sec-desc">Total Massachusetts health care expenditures against the state's cost-growth benchmark, plus MassHealth — the state's Medicaid / CHIP program and the single largest taxpayer-funded health coverage in the Commonwealth.</div>
+
+    <div class="grid-2">
+      <div class="card"><div class="card-title">Per-Capita Spending: MA vs. US</div><div class="card-sub">$13,319 (MA) vs $10,191 (US) — +30.7% above national</div><div class="card-canvas"><canvas id="c-percap"></canvas></div><div class="card-src">Source: CMS State Health Expenditure Accounts (2020 latest)</div></div>
+      <div class="card"><div class="card-title">THCE Growth vs. CHIA Benchmark</div><div class="card-sub">Actual 8.6% vs. 3.6% benchmark — 139% above target</div><div class="card-canvas"><canvas id="c-thce"></canvas></div><div class="card-src">Source: CHIA Annual Report 2025 (FY 2023 data)</div></div>
+    </div>
+
+    <div class="hl"><div class="hl-label">⚠️ THCE Exceeded Benchmark by 139%</div><div class="hl-val">8.6% actual growth vs. 3.6% benchmark</div><div class="hl-ctx">Massachusetts has set a 3.2%–3.6% cost-growth benchmark annually since 2013. The 2023 actual was the largest overshoot on record.</div><div class="hl-src">Source: CHIA Annual Report 2025</div></div>
+
+    <div style="margin:32px 0 18px;padding-top:24px;border-top:1px solid var(--border)">
+      <div style="font-family:'DM Serif Display',Georgia,serif;font-size:1.15rem;color:var(--navy);margin-bottom:4px">MassHealth — Medicaid &amp; CHIP Enrollment</div>
+      <div style="font-size:.78rem;color:var(--muted)">The state's Medicaid and Children's Health Insurance Program, jointly funded by Massachusetts and federal taxpayers. Covers roughly 1 in 4 MA residents.</div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card"><div class="dc-label">Current Enrollment (Feb 2026)</div><div class="dc-val blue">1,909,412</div><div class="dc-meta"><div><div class="dc-ml">MoM Change</div><div class="dc-mv" style="color:var(--red)">-13,691 (-0.7%)</div></div><div><div class="dc-ml">Member Months (Dec 2025)</div><div class="dc-mv">1,965,922</div></div></div><div class="dc-src">Source: MassHealth Enrollment Snapshot, February 2026</div></div>
+      <div class="card"><div class="dc-label">Pandemic Peak (Dec 2022)</div><div class="dc-val red">2,337,799</div><div class="dc-meta"><div><div class="dc-ml">Driver</div><div class="dc-mv">PHE continuous coverage</div></div><div><div class="dc-ml">vs. Dec 2019 (pre-pandemic)</div><div class="dc-mv" style="color:var(--red)">+33.5%</div></div></div><div class="dc-src">Source: MassHealth Enrollment Snapshot, December 2022</div></div>
+      <div class="card"><div class="dc-label">Post-PHE Decline</div><div class="dc-val amber">-428,387</div><div class="dc-meta"><div><div class="dc-ml">From 2022 Peak</div><div class="dc-mv" style="color:var(--amber)">-18.3%</div></div><div><div class="dc-ml">Period</div><div class="dc-mv">Dec 2022 → Feb 2026</div></div></div><div class="dc-src">Source: Calculated from MassHealth monthly snapshots</div></div>
+    </div>
+
+    <div class="hl amber"><div class="hl-label">⚠️ Public Health Emergency unwinding</div><div class="hl-val">MassHealth has shed roughly 428,000 members since the 2022 peak</div><div class="hl-ctx">COVID-era continuous-coverage rules ended in spring 2023, triggering MA's first major redeterminations in three years. Enrollment has declined every year since, and Feb 2026's 1.91M is close to pre-pandemic Dec 2019 (1.75M).</div><div class="hl-src">Source: MassHealth Enrollment Snapshots, December 2019 through February 2026</div></div>
+
+    <div class="grid-2">
+      <div class="card"><div class="card-title">MassHealth Total Enrollment, Dec 2017 – Feb 2026</div><div class="card-sub">Year-end snapshot, excluding DMH clients not eligible under ACA</div><div class="card-canvas"><canvas id="c-mh-trend"></canvas></div><div class="card-src">Source: MassHealth Enrollment Snapshot reports, Dec 2017 through Feb 2026</div></div>
+      <div class="card"><div class="card-title">Feb 2026 Enrollment by Plan Type</div><div class="card-sub">Largest plan-type buckets</div><div class="card-canvas"><canvas id="c-mh-plan"></canvas></div><div class="card-src">Source: MassHealth Enrollment Snapshot, February 2026</div></div>
+    </div>
+
+    <div class="card"><div class="card-title">Enrollment by Plan Type, Feb 2026</div><div class="card-sub">All MassHealth plan types with current membership</div><div class="card-canvas" style="height:360px"><canvas id="c-mh-all"></canvas></div><div class="card-src">Source: MassHealth Enrollment Snapshot, February 2026</div></div>
+
+    <div class="info"><div class="info-icon">ℹ️</div><div class="info-text"><strong>Plan types explained:</strong> ACO-A and ACO-B are the state's two Accountable Care Organization models, which together cover the bulk of MassHealth members. SCO = Senior Care Options (dually-eligible). One Care covers adults aged 21–64 eligible for both MassHealth and Medicare. PCC = Primary Care Clinician. FFS = Fee-for-Service. TPL = members with third-party commercial coverage.<span class="info-src">Source: MassHealth Enrollment Snapshot methodology notes</span></div></div>
+  </div>
+</div>
+
+<!-- ========================= HEALTH AFFORDABILITY ========================= -->
+<div class="tab-panel" id="tab-healthaff">
+  <div class="section">
+    <div class="sec-title">Health Affordability by Demographic</div>
+    <div class="sec-desc">Who is most impacted by Massachusetts' healthcare costs</div>
+
+    <div class="grid-2">
+      <div class="card"><div class="card-title">Affordability Issues by Race/Ethnicity</div><div class="card-sub">% reporting difficulty affording healthcare</div><div class="card-canvas"><canvas id="c-race"></canvas></div><div class="card-src">Source: CHIA 2025 Massachusetts Health Insurance Survey / CHIA Annual Report 2025</div></div>
+      <div class="card"><div class="card-title">Premium as % of Median Income (MA vs US)</div><div class="card-sub">Family premium burden</div><div class="card-canvas"><canvas id="c-burden"></canvas></div><div class="card-src">Sources: KFF EHBS 2024; US Census Bureau ACS 2023/2024</div></div>
+    </div>
+
+    <div class="info danger"><div class="info-icon">🔴</div><div class="info-text"><strong>58.2% of Hispanic/Latino residents report difficulty affording healthcare</strong> vs. 39.2% of white residents. Near-universal coverage hasn't erased cost barriers for communities of color.<span class="info-src">Source: CHIA Annual Report 2025</span></div></div>
+
+    <div class="grid-3">
+      <div class="card"><div class="dc-label">MA Family Premium as % of Median Income</div><div class="dc-val red">27.1%</div><div class="dc-meta"><div><div class="dc-ml">MA Median HH Income (2024)</div><div class="dc-mv">$103,960</div></div><div><div class="dc-ml">Family Premium</div><div class="dc-mv">$28,151</div></div></div><div class="dc-src">Sources: Census ACS 2024; KFF EHBS 2024</div></div>
+      <div class="card"><div class="dc-label">US Family Premium as % of Median Income</div><div class="dc-val blue">24.2%</div><div class="dc-meta"><div><div class="dc-ml">US Median HH Income</div><div class="dc-mv">$80,610</div></div><div><div class="dc-ml">Family Premium</div><div class="dc-mv">$24,540</div></div></div><div class="dc-src">Sources: Census ACS; KFF EHBS 2024</div></div>
+      <div class="card"><div class="dc-label">MA Income Advantage</div><div class="dc-val green">+$23.4K</div><div class="dc-meta"><div><div class="dc-ml">Income Above US</div><div class="dc-mv" style="color:var(--green)">+29.0%</div></div><div><div class="dc-ml">But Premium Gap</div><div class="dc-mv" style="color:var(--red)">+$3,611</div></div></div><div class="dc-src">Sources: Census ACS; KFF EHBS 2024</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================= NEW: COST VS INCOME ========================= -->
+<div class="tab-panel" id="tab-costincome">
+  <div class="section">
+    <div class="sec-title">Insurance Cost Growth vs. Income &amp; Inflation</div>
+    <div class="sec-desc">Do Massachusetts insurance premiums outpace household income growth and consumer inflation? Compiled from official MA DOI, KFF, Census Bureau, and BLS figures.</div>
+
+    <div class="hl"><div class="hl-label">⚠️ Home insurance is the real outlier</div><div class="hl-val">MA homeowner premium grew 35.9% from 2021 to 2024</div><div class="hl-ctx">That's almost 2× faster than MA median household income (+~19% over the same 3 years) and almost 3× faster than Boston CPI (~13%). The average homeowner premium went from $1,744 to $2,371.</div><div class="hl-src">Sources: MA DOI Annual Home Insurance Report 2024; US Census Bureau ACS; BLS CPI-U Boston-Cambridge-Newton</div></div>
+
+    <div class="hl amber"><div class="hl-label">⚠️ Health premium roughly tracks inflation — for now</div><div class="hl-val">Family health premium +19.6% from 2020 to 2024, vs Boston CPI +19%</div><div class="hl-ctx">Health has moved roughly in line with inflation over the 4-year window, but lags MA income growth (+23.2%). The 2026 DOI-approved rates of 7.1–12.2% will break this pattern — 2026 Boston CPI is tracking at 1.4%.</div><div class="hl-src">Sources: KFF EHBS 2020–2024; US Census Bureau ACS 2020–2024; BLS CPI-U Boston-Cambridge-Newton</div></div>
+
+    <div class="hl blue"><div class="hl-label">⚠️ Auto had a single-year shock in 2023</div><div class="hl-val">MA average auto premium jumped $152 in 2023 alone</div><div class="hl-ctx">From 2013 through 2022, annual changes ranged from -$13 to +$40. Then 2023 posted a +$152 jump — the single largest in the decade. Cumulative auto-expenditure growth: 3.1% per year since 2013.</div><div class="hl-src">Source: MA DOI 2022-2023 Annual Report (Private Passenger Automobile Insurance section)</div></div>
+
+    <div class="grid-2">
+      <div class="card"><div class="card-title">Cumulative Growth, Indexed (2020 = 100)</div><div class="card-sub">How premiums compare to income and inflation since 2020</div><div class="card-canvas"><canvas id="c-ci-index"></canvas></div><div class="card-src">Sources: KFF EHBS (health), MA DOI Home Insurance Reports (home, 2021 base), US Census Bureau ACS (income), BLS CPI-U Boston-Cambridge-Newton (inflation)</div></div>
+      <div class="card"><div class="card-title">Annual % Change, 2021–2024</div><div class="card-sub">Year-over-year comparison</div><div class="card-canvas"><canvas id="c-ci-yoy"></canvas></div><div class="card-src">Sources: KFF EHBS; MA DOI Home Insurance Reports; US Census Bureau ACS; BLS CPI-U Boston</div></div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Metric</th><th>2020</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>Cumulative</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>MA Family Health Premium</td><td>$23,541</td><td>$24,805</td><td>$25,262</td><td>$27,240</td><td>$28,151</td><td class="td-red">+19.6%</td><td>KFF EHBS</td></tr>
+          <tr><td>MA Avg Homeowner Premium</td><td>—</td><td>$1,744</td><td>$1,818</td><td>$2,054</td><td>$2,371</td><td class="td-red">+35.9%*</td><td>MA DOI Home Ins. Report</td></tr>
+          <tr><td>MA Median Household Income</td><td>$84,385</td><td>$89,645</td><td>$96,505</td><td>$101,341</td><td>$103,960</td><td class="td-green">+23.2%</td><td>US Census Bureau ACS</td></tr>
+          <tr><td>Boston CPI-U (cumulative)</td><td>100.0</td><td>104.6</td><td>112.2</td><td>116.7</td><td>119.1</td><td class="td-amber">+19.1%</td><td>BLS Boston-Cambridge-Newton</td></tr>
+          <tr><td>MA Avg Auto Premium Change/yr</td><td>-$13</td><td>-$5</td><td>+$12</td><td>+$152</td><td>—</td><td class="td-amber">+3.1%/yr since 2013</td><td>MA DOI 2022-2023 Annual Report</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-src" style="margin-bottom:22px">* Home premium percentage covers 2021→2024 (3 years) because DOI reports the $1,744 figure from the 2021 baseline. Boston CPI values are indexed to 2020=100.</div>
+
+    <div class="info warn"><div class="info-icon">⚠️</div><div class="info-text"><strong>Bottom line:</strong> home insurance is growing at roughly twice the rate of income and inflation — the affordability crisis driven by coastal exposure, reinsurance costs, and climate risk is real and measurable. Health insurance has kept pace with inflation in recent years, but the approved 2026 rates of 7.1–12.2% will push it well past inflation again. Auto premiums saw a historic single-year shock in 2023.<span class="info-src">Analysis: MA DOI Home Insurance Report 2024; KFF EHBS; Census ACS; BLS CPI-U Boston</span></div></div>
+  </div>
+</div>
+
+<!-- ========================= HOMEOWNERS ========================= -->
+<div class="tab-panel" id="tab-home">
+  <div class="section">
+    <div class="sec-title">Homeowners Insurance</div>
+    <div class="sec-desc">Source of record: MA DOI Commissioner's Report on Home Insurance 2024 and the accompanying Statistical Supplement. All figures taken directly from the report.</div>
+
+    <div class="grid-3">
+      <div class="card"><div class="dc-label">Written Premium (2024)</div><div class="dc-val blue">$3.6B</div><div class="dc-meta"><div><div class="dc-ml">YoY Growth</div><div class="dc-mv" style="color:var(--red)">+12.7%</div></div><div><div class="dc-ml">Prem. Paid</div><div class="dc-mv">$3.9B</div></div></div><div class="dc-src">Source: MA DOI Annual Home Insurance Report 2024</div></div>
+      <div class="card"><div class="dc-label">FAIR Plan Share (2024)</div><div class="dc-val red">8.7%</div><div class="dc-meta"><div><div class="dc-ml">2007 Peak</div><div class="dc-mv">16.1%</div></div><div><div class="dc-ml">+24,436 policies in 2024</div><div class="dc-mv"></div></div></div><div class="dc-src">Source: MA DOI Annual Home Insurance Report 2024</div></div>
+      <div class="card"><div class="dc-label">Total Policies (2024)</div><div class="dc-val amber">2,124,812</div><div class="dc-meta"><div><div class="dc-ml">YoY</div><div class="dc-mv" style="color:var(--red)">-0.9%</div></div><div><div class="dc-ml">Reporting Basis</div><div class="dc-mv">House-years</div></div></div><div class="dc-src">Source: MA DOI Annual Home Insurance Report 2024</div></div>
+    </div>
+
+    <div class="hl"><div class="hl-label">⚠️ Cape &amp; Islands dependence</div><div class="hl-val">FAIR Plan writes 39.6% of home policies in the Cape &amp; Islands</div><div class="hl-ctx">In all other MA counties, FAIR Plan writes under 12%. The Cape, Dukes, and Nantucket counties have become reliant on the state-backed residual market as admitted carriers retreat from coastal risk.</div><div class="hl-src">Source: MA DOI Annual Home Insurance Report 2024</div></div>
+
+    <div class="grid-2">
+      <div class="card"><div class="card-title">Average Premium by Coverage Type</div><div class="card-sub">Trend 2022–2024; homeowner premium up +30.4% over 2 years</div><div class="card-canvas"><canvas id="c-home-avg"></canvas></div><div class="card-src">Source: MA DOI Annual Home Insurance Report 2024 (Figure 12)</div></div>
+      <div class="card"><div class="card-title">Market Structure (Voluntary market, 2024)</div><div class="card-sub">Top 10 carrier groups: 63.4% · Top 25: 92.7%</div><div class="card-canvas"><canvas id="c-home-struct"></canvas></div><div class="card-src">Source: MA DOI Annual Home Insurance Report 2024 (Figure 2); NAIC 2024 annual statement data</div></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card"><div class="card-title">Policies in Force by County (2024)</div><div class="card-sub">Largest counties by home insurance policies</div><div class="card-canvas"><canvas id="c-home-county"></canvas></div><div class="card-src">Source: MA DOI Annual Home Insurance Report 2024 (Figure 7)</div></div>
+      <div class="card"><div class="card-title">Mandatory Wind Deductible Coverage</div><div class="card-sub">Share of coastal vs. urban policyholders with mandatory wind deductible</div><div class="card-canvas"><canvas id="c-home-wind"></canvas></div><div class="card-src">Source: MA DOI Annual Home Insurance Report 2024 (top 25 insurers + FAIR Plan)</div></div>
+    </div>
+
+    <div class="info danger"><div class="info-icon">🔴</div><div class="info-text"><strong>2024 catastrophe losses:</strong> 7 events classified as loss catastrophes resulted in an estimated $157.1M in Massachusetts property losses — primarily from wind and thunderstorm. MPIUA was reorganized April 4, 2024 as a stand-alone joint underwriting association.<span class="info-src">Source: MA DOI Annual Home Insurance Report 2024; Property Claims Services (PCS), ISO</span></div></div>
+  </div>
+</div>
+
+<!-- ========================= AUTO ========================= -->
+<div class="tab-panel" id="tab-auto">
+  <div class="section">
+    <div class="sec-title">Private Passenger Auto</div>
+    <div class="sec-desc">Sources: MA DOI 2022-2023 Annual Report; CAR Annual Reports 2022, 2024, 2025; Agency Checklists Market Share Reports (citing CAR statistical agent data).</div>
+
+    <div class="grid-3">
+      <div class="card"><div class="dc-label">Written Premium (2023)</div><div class="dc-val blue">$6.47B</div><div class="dc-meta"><div><div class="dc-ml">Carriers Writing</div><div class="dc-mv">36+</div></div><div><div class="dc-ml">Residual Mkt</div><div class="dc-mv">1.1%</div></div></div><div class="dc-src">Source: MA DOI 2022-2023 Annual Report</div></div>
+      <div class="card"><div class="dc-label">MAIP Residual Share (FY2025)</div><div class="dc-val amber">~2%</div><div class="dc-meta"><div><div class="dc-ml">FY2022</div><div class="dc-mv">&lt;0.5%</div></div><div><div class="dc-ml">Trajectory</div><div class="dc-mv" style="color:var(--amber)">Rising</div></div></div><div class="dc-src">Source: CAR 2025 Annual Report</div></div>
+      <div class="card"><div class="dc-label">New Entrants Since 2008</div><div class="dc-val green">24</div><div class="dc-meta"><div><div class="dc-ml">Managed Comp.</div><div class="dc-mv">Apr 1, 2008</div></div><div><div class="dc-ml">Via Independent Agent</div><div class="dc-mv">16 of 24</div></div></div><div class="dc-src">Source: MA DOI 2022-2023 Annual Report</div></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card"><div class="card-title">Top 10 MA Auto Carriers by Market Share (2025)</div><div class="card-sub">% of total exposures, December 2025 data</div><div class="card-canvas"><canvas id="c-auto-share"></canvas></div><div class="card-src">Source: Agency Checklists 2nd Look 2026 Market Share Report, citing CAR statistical agent data (December 2025)</div></div>
+      <div class="card"><div class="card-title">Market Leader Trends, 2020–2025</div><div class="card-sub">Commerce declining; Progressive surging</div><div class="card-canvas"><canvas id="c-auto-leaders"></canvas></div><div class="card-src">Source: Agency Checklists 1st/2nd Look 2026 Market Share Reports, citing CAR data</div></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card"><div class="card-title">Residual Market Share (Private Passenger), 2014–2025</div><div class="card-sub">% of passenger cars insured through CAR/MAIP</div><div class="card-canvas"><canvas id="c-auto-residual"></canvas></div><div class="card-src">Sources: MA DOI 2022-2023 Annual Report (2014–2023); CAR Annual Reports (2024–2025)</div></div>
+      <div class="card"><div class="card-title">Annual Change in MA Auto Premium</div><div class="card-sub">$ change per vehicle vs. prior year</div><div class="card-canvas"><canvas id="c-auto-change"></canvas></div><div class="card-src">Source: MA DOI 2022-2023 Annual Report (Figure: Average Change in Personal Auto Insurance Premium)</div></div>
+    </div>
+
+    <div class="info"><div class="info-icon">ℹ️</div><div class="info-text"><strong>Managed competition context:</strong> Before April 1, 2008 the Commissioner set MA auto rates directly. Today carriers file their own rates. Commerce (MAPFRE) has led the market ever since — but its share has fallen from 22.1% (2020) to 18.33% (2025), with Progressive tripling its share over the same period. GEICO now effectively ties Progressive at 11.50%.<span class="info-src">Sources: MA DOI 2022-2023 Annual Report; Agency Checklists 2nd Look 2026 citing CAR</span></div></div>
+  </div>
+</div>
+
+<!-- ========================= COMPLAINTS ========================= -->
+<div class="tab-panel" id="tab-complaints">
+  <div class="section">
+    <div class="sec-title">Market Conduct &amp; Consumer Complaints</div>
+    <div class="sec-desc">Source of record: MA DOI Consumer Services Unit, as reported in the DOI 2022-2023 Annual Report.</div>
+
+    <div class="grid-3">
+      <div class="card"><div class="dc-label">Formal Complaints / Month</div><div class="dc-val blue">~300</div><div class="dc-meta"><div><div class="dc-ml">Full-year 2022-23 avg</div><div class="dc-mv">~3,600</div></div><div><div class="dc-ml">Avg Resolution</div><div class="dc-mv">70 days</div></div></div><div class="dc-src">Source: MA DOI 2022-2023 Annual Report</div></div>
+      <div class="card"><div class="dc-label">New Complaints Opened (Period)</div><div class="dc-val amber">1,700</div><div class="dc-meta"><div><div class="dc-ml">Cases Closed</div><div class="dc-mv">1,568</div></div><div><div class="dc-ml">Info Requests Handled</div><div class="dc-mv">5,250</div></div></div><div class="dc-src">Source: MA DOI 2022-2023 Annual Report</div></div>
+      <div class="card"><div class="dc-label">Most-Complained Lines</div><div class="dc-val red">Auto, Home, Health</div><div class="dc-meta"><div><div class="dc-ml">Consistently Top 3</div><div class="dc-mv">Multi-year</div></div></div><div class="dc-src">Source: MA DOI 2022-2023 Annual Report</div></div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Rank</th><th>Top 5 Complaint Reasons (2022-23)</th><th>Top 5 Companies Complained Against (2022-23)</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Denial of Claim</td><td>Blue Cross Blue Shield of Massachusetts</td></tr>
+          <tr><td>2</td><td>Claim Delay</td><td>LM General Insurance Co. (Liberty Mutual)</td></tr>
+          <tr><td>3</td><td>Unsatisfactory Settlement / Offer</td><td>Government Employees Insurance Company (GEICO)</td></tr>
+          <tr><td>4</td><td>Premium &amp; Rating</td><td>Progressive Direct Insurance Co.</td></tr>
+          <tr><td>5</td><td>Cancellation</td><td>Commerce Insurance Company (MAPFRE)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-src" style="margin-bottom:22px">Source: MA DOI 2022-2023 Annual Report, Consumer Services Unit section</div>
+
+    <div class="grid-2">
+      <div class="card"><div class="card-title">Merit Rating Board: At-Fault Hearings Decided</div><div class="card-sub">Board of Appeal hearings on at-fault accident determinations</div><div class="card-canvas"><canvas id="c-mrb"></canvas></div><div class="card-src">Source: MA DOI 2022-2023 Annual Report (Board of Appeal section)</div></div>
+      <div class="card"><div class="card-title">At-Fault Appeal Outcomes (2023)</div><div class="card-sub">By decision type</div><div class="card-canvas"><canvas id="c-mrb-out"></canvas></div><div class="card-src">Source: MA DOI 2022-2023 Annual Report</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================= LICENSEES ========================= -->
+<div class="tab-panel" id="tab-licensees">
+  <div class="section">
+    <div class="sec-title">DOI Licensed Individuals &amp; Entities</div>
+    <div class="sec-desc">Source: MA DOI Producer Licensing Unit, 2022-2023 Annual Report. The monthly licensee XLSX roster provides live updates.</div>
+
+    <div class="grid-3">
+      <div class="card"><div class="dc-label">Insurance Producers (2023)</div><div class="dc-val blue">167,552</div><div class="dc-meta"><div><div class="dc-ml">2022</div><div class="dc-mv">188,273</div></div><div><div class="dc-ml">YoY</div><div class="dc-mv" style="color:var(--red)">-11.0%</div></div></div><div class="dc-src">Source: MA DOI 2022-2023 Annual Report</div></div>
+      <div class="card"><div class="dc-label">Adjusters, Brokers &amp; Specialists (2023)</div><div class="dc-val amber">9,528</div><div class="dc-meta"><div><div class="dc-ml">Surplus Lines</div><div class="dc-mv">4,138</div></div><div><div class="dc-ml">MV Damage Appraisers</div><div class="dc-mv">4,670</div></div></div><div class="dc-src">Source: MA DOI 2022-2023 Annual Report</div></div>
+      <div class="card"><div class="dc-label">NIPR Transactions (2023)</div><div class="dc-val green">324,000</div><div class="dc-meta"><div><div class="dc-ml">Auto-Processed</div><div class="dc-mv" style="color:var(--green)">97.9%</div></div><div><div class="dc-ml">Appointments</div><div class="dc-mv">145,000</div></div></div><div class="dc-src">Source: MA DOI 2022-2023 Annual Report</div></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card"><div class="card-title">Active Licenses by Type (2023)</div><div class="card-sub">MA DOI licensee roster</div><div class="card-canvas"><canvas id="c-lic-type"></canvas></div><div class="card-src">Source: MA DOI 2022-2023 Annual Report, Producer Licensing section</div></div>
+      <div class="card"><div class="card-title">Producer License Trend (2022 vs 2023)</div><div class="card-sub">Largest categories</div><div class="card-canvas"><canvas id="c-lic-trend"></canvas></div><div class="card-src">Source: MA DOI 2022-2023 Annual Report</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================= SOURCES ========================= -->
+<div class="tab-panel" id="tab-sources">
+  <div class="section">
+    <div class="sec-title">Data Sources &amp; Citations</div>
+    <div class="sec-desc">Every figure on this dashboard is drawn from a primary public source. Status indicates whether the data is published here live, has a pending automated ingester, or is unavailable.</div>
+
+    <div class="info"><div class="info-icon">🗝️</div><div class="info-text">
+      <span class="pill green">Live</span> published on this dashboard ·
+      <span class="pill amber">Ingester pending</span> automated pipeline under construction ·
+      <span class="pill red">Gated</span> paywall, login, or the data is not published at all
+    </div></div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Source</th><th>Status</th><th>Format</th><th>Cadence</th><th>Used For</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Kaiser Family Foundation — EHBS</strong></td><td><span class="pill green">Live</span></td><td>Report + CSV</td><td>Annual</td><td>Family premium MA vs. US (2020–2024)</td></tr>
+          <tr><td><strong>MA DOI — Annual Home Insurance Report 2024</strong></td><td><span class="pill green">Live</span></td><td>PDF</td><td>Annual</td><td>$3.6B premium, 8.7% FAIR Plan, carrier market share, wind deductibles, catastrophes</td></tr>
+          <tr><td><strong>MA DOI — Statistical Supplement 2024</strong></td><td><span class="pill green">Live</span></td><td>PDF</td><td>Annual</td><td>Zip-code-level home insurance detail</td></tr>
+          <tr><td><strong>MA DOI — 2022-2023 Annual Report</strong></td><td><span class="pill green">Live</span></td><td>PDF</td><td>Biennial</td><td>Auto premium, residual market, licensee counts, complaints, Merit Rating Board</td></tr>
+          <tr><td><strong>MA DOI — 2026 rate filing decisions (Jul 2025)</strong></td><td><span class="pill green">Live</span></td><td>Press release + SERFF</td><td>Annual</td><td>2026 approved/rejected health rates</td></tr>
+          <tr><td><strong>CHIA — Annual Report 2025 &amp; 2026</strong></td><td><span class="pill green">Live</span></td><td>PDF + XLSX</td><td>Annual</td><td>THCE, spending, affordability by race, benchmark</td></tr>
+          <tr><td><strong>CMS State Health Expenditure Accounts</strong></td><td><span class="pill green">Live</span></td><td>CSV</td><td>Annual</td><td>Per-capita MA vs. US spending</td></tr>
+          <tr><td><strong>CAR Annual Reports 2022/2024/2025</strong></td><td><span class="pill green">Live</span></td><td>PDF</td><td>Annual</td><td>MAIP residual share, commercial auto, financial results</td></tr>
+          <tr><td><strong>Agency Checklists Market Share Reports (1st/2nd Look 2026)</strong></td><td><span class="pill green">Live</span></td><td>Article</td><td>Quarterly</td><td>Per-carrier auto market share (cites CAR data)</td></tr>
+          <tr><td><strong>US Census Bureau ACS</strong></td><td><span class="pill green">Live</span></td><td>CSV/API</td><td>Annual</td><td>MA median household income</td></tr>
+          <tr><td><strong>BLS CPI-U Boston-Cambridge-Newton</strong></td><td><span class="pill green">Live</span></td><td>CSV</td><td>Monthly</td><td>Inflation benchmark for affordability analysis</td></tr>
+          <tr><td><strong>DOI PPA Rate Filings XLSX (2008–2026)</strong></td><td><span class="pill green">Live</span></td><td>XLSX</td><td>Rolling</td><td>1,375 rate filings by carrier, year, type</td></tr>
+          <tr><td><strong>MA DOI Licensee XLSX (monthly)</strong></td><td><span class="pill amber">Ingester built</span></td><td>XLSX</td><td>Monthly</td><td>Live licensee roster tracking</td></tr>
+          <tr><td><strong>CMS Marketplace &amp; Rate Review PUFs</strong></td><td><span class="pill amber">Ingester built</span></td><td>CSV (zip)</td><td>Annual</td><td>ACA plan-level rate data</td></tr>
+          <tr><td><strong>data.mass.gov Socrata</strong></td><td><span class="pill amber">Ingester built</span></td><td>JSON/CSV API</td><td>Variable</td><td>Catalog discovery</td></tr>
+          <tr><td><strong>NHTSA FARS (MA subset)</strong></td><td><span class="pill amber">Ingester built</span></td><td>CSV (zip)</td><td>Annual</td><td>Auto crash context</td></tr>
+          <tr><td><strong>SERFF MA Filings Portal</strong></td><td><span class="pill amber">Scraper pending</span></td><td>HTML + PDF</td><td>Rolling</td><td>Live rate filings across all lines</td></tr>
+          <tr><td><strong>NAIC CIS Complaint Index</strong></td><td><span class="pill amber">Scraper pending</span></td><td>HTML</td><td>Annual</td><td>Per-carrier normalized complaint scores</td></tr>
+          <tr><td><strong>Health Connector Tableau dashboard</strong></td><td><span class="pill amber">Scraper pending</span></td><td>Tableau JSON</td><td>Weekly (OE)</td><td>Weekly enrollment</td></tr>
+          <tr><td><strong>CAR transactional statistical plan data</strong></td><td><span class="pill red">Gated</span></td><td>Member-only</td><td>—</td><td>Not published</td></tr>
+          <tr><td><strong>MRB driver records</strong></td><td><span class="pill red">Gated</span></td><td>Individual only</td><td>—</td><td>Not aggregated publicly</td></tr>
+          <tr><td><strong>NAIC InfoPro / Financial Data Repository</strong></td><td><span class="pill red">Gated</span></td><td>Paid subscription</td><td>—</td><td>Paywall</td></tr>
+          <tr><td><strong>CHIA APCD row-level</strong></td><td><span class="pill red">Gated</span></td><td>CSV</td><td>—</td><td>Application-gated</td></tr>
+          <tr><td><strong>MA surplus lines premium</strong></td><td><span class="pill red">Gated</span></td><td>—</td><td>—</td><td>Not published by MA</td></tr>
         </tbody>
       </table>
     </div>
 
-    <div class="info danger"><div class="info-icon">🔴</div><div class="info-text"><strong>Key drivers of 2026 rate hikes:</strong> GLP-1 weight-loss drugs (BCBS spent $300M+ on 5 drugs in 2024 alone), rising behavioral health utilization, aging population, and expiring ACA enhanced subsidies. BCBS announced it will stop covering GLP-1s for weight loss in 2026, which reduced its rate request by 3%.</div></div>
-
-    <div class="info warn"><div class="info-icon">⚠️</div><div class="info-text"><strong>For 5 of 6 approved carriers, the 2026 hike is steeper than the 2025 increase.</strong> Original proposals averaged 13.4% — nearly 4× the state's health care cost growth benchmark. DOI's new affordability standard (signed into law Jan 2025) gave regulators expanded authority to reject excessive rates.</div></div>
-  </div>
-</div>
-
-<!-- SPENDING TAB -->
-<div class="tab-panel" id="tab-spending">
-  <div class="section">
-    <div class="sec-title">Healthcare Spending</div>
-    <div class="sec-desc">Per-capita and total health care expenditures — MA consistently #1</div>
-
-    <div class="grid-2">
-      <div class="card"><div class="card-title">Per-Capita Spending: MA vs. US</div><div class="card-sub">CMS State Health Expenditure Accounts</div><div class="card-canvas"><canvas id="c-percap"></canvas></div></div>
-      <div class="card"><div class="card-title">THCE Growth vs. Benchmark</div><div class="card-sub">Total Health Care Expenditure growth rate — CHIA 2023</div><div class="card-canvas"><canvas id="c-thce"></canvas></div></div>
-    </div>
-
-    <div class="hl"><div class="hl-label">⚠️ THCE Exceeded Benchmark by 139%</div><div class="hl-val">8.6% actual growth vs. 3.6% benchmark</div><div class="hl-ctx">CHIA Annual Report 2025 — Massachusetts consistently exceeds its own cost containment targets</div></div>
-  </div>
-</div>
-
-<!-- AFFORDABILITY TAB -->
-<div class="tab-panel" id="tab-affordability">
-  <div class="section">
-    <div class="sec-title">Healthcare Affordability</div>
-    <div class="sec-desc">Who is most impacted by Massachusetts' healthcare costs</div>
-
-    <div class="grid-2">
-      <div class="card"><div class="card-title">Affordability Issues by Race/Ethnicity</div><div class="card-sub">% reporting difficulty affording healthcare — CHIA</div><div class="card-canvas"><canvas id="c-race"></canvas></div></div>
-      <div class="card"><div class="card-title">Premium as % of Median Income</div><div class="card-sub">Family premium burden on MA median household income</div><div class="card-canvas"><canvas id="c-burden"></canvas></div></div>
-    </div>
-
-    <div class="info danger"><div class="info-icon">🔴</div><div class="info-text"><strong>58.2% of Hispanic/Latino residents report difficulty affording healthcare</strong> — compared to 39.2% of white residents. Despite Massachusetts having near-universal coverage, cost barriers remain severe for communities of color.</div></div>
-
-    <div class="grid-3">
-      <div class="card"><div class="dc-label">Premium as % of Median Income</div><div class="dc-val red">27.6%</div><div class="dc-meta"><div><div class="dc-ml">Median HH Income</div><div class="dc-mv">$101,800</div></div><div><div class="dc-ml">Family Premium</div><div class="dc-mv">$28,151</div></div></div></div>
-      <div class="card"><div class="dc-label">National Premium Burden</div><div class="dc-val blue">24.2%</div><div class="dc-meta"><div><div class="dc-ml">Median HH Income</div><div class="dc-mv">$80,610</div></div><div><div class="dc-ml">Family Premium</div><div class="dc-mv">$24,540</div></div></div></div>
-      <div class="card"><div class="dc-label">Despite Higher Incomes</div><div class="dc-val red">MA Worse</div><div class="dc-meta"><div><div class="dc-ml">Income Advantage</div><div class="dc-mv">+$21K</div></div><div><div class="dc-ml">But Premium Gap</div><div class="dc-mv" style="color:#dc2626">+$3,611</div></div></div></div>
-    </div>
+    <div class="info warn"><div class="info-icon">⚠️</div><div class="info-text"><strong>No FOIA dependency.</strong> Every pipeline hits a federal source, a public portal, or a voluntarily disclosed industry document. Massachusetts public-records requests are not part of the workflow.</div></div>
   </div>
 </div>
 
 <div class="footer">
-  <p><strong>Sources:</strong> MA Division of Insurance (July 2025 Finalized Rates) · Kaiser Family Foundation (KFF) EHBS 2024 · CHIA Annual Report 2025 · CMS State Health Expenditure Accounts</p>
-  <p style="margin-top:8px">Updated February 2026 · <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">Massachusetts Data Hub</a></p>
+  <div class="footer-sources">
+    <p><strong>Primary Sources Cited on This Page:</strong></p>
+    <p>• Kaiser Family Foundation, <em>2024 Employer Health Benefits Survey</em>; annual editions 2020–2024 · kff.org</p>
+    <p>• Massachusetts Division of Insurance — <em>2024 Annual Home Insurance Report</em>, <em>Statistical Supplement 2024</em>, <em>2022-2023 Annual Report</em>, and <em>2026 Rate Filing Decisions</em> (July 2025) · mass.gov/orgs/division-of-insurance</p>
+    <p>• Massachusetts Center for Health Information and Analysis, <em>Annual Report 2025</em> and <em>Annual Report 2026</em> · chiamass.gov</p>
+    <p>• Centers for Medicare &amp; Medicaid Services, <em>State Health Expenditure Accounts</em> · cms.gov</p>
+    <p>• Commonwealth Automobile Reinsurers (CAR), <em>Annual Reports 2022, 2024, 2025</em> · car-ins.com</p>
+    <p>• Agency Checklists, "1st Look 2026" and "2nd Look 2026" MA Auto Insurance Market Share Reports (citing CAR statistical agent data) · agencychecklists.com</p>
+    <p>• US Census Bureau, <em>American Community Survey 1-Year Estimates</em>, Massachusetts · census.gov</p>
+    <p>• US Bureau of Labor Statistics, <em>CPI-U for Boston-Cambridge-Newton, MA-NH</em> · bls.gov</p>
+  </div>
+  <p style="margin-top:16px">Updated April 2026 · <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">Massachusetts Data Hub</a></p>
 </div>
 
 <script>
-function switchTab(e, tabId) {
+function switchTab(e, tabId){
   document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
   document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
   e.currentTarget.classList.add('active');
@@ -215,35 +505,97 @@ function switchTab(e, tabId) {
   if(!window._chartsInit[tabId]){window._chartsInit[tabId]=true;initCharts(tabId);}
 }
 
-var B='#2563eb',R='#dc2626',G='#16a34a',Y='#d97706',P='#7c3aed';
-Chart.defaults.color='#6b7280';Chart.defaults.borderColor='#e5e7eb';Chart.defaults.font.family="'Inter',sans-serif";
+// Bolder MA palette
+var B='#1d4ed8',R='#dc2626',G='#16a34a',Y='#b8860b',P='#7e22ce',N='#0f2942',GD='#c9a84c',SL='#7a756e';
+Chart.defaults.color='#1a1a1a';
+Chart.defaults.borderColor='#e5e7eb';
+Chart.defaults.font.family="'DM Sans',system-ui,sans-serif";
 var charts={};
 function safeChart(id,cfg){if(charts[id]){charts[id].destroy()}var ctx=document.getElementById(id);if(ctx){charts[id]=new Chart(ctx,cfg)}}
 function nF(v){return v>=1000?'$'+(v/1000).toFixed(1)+'K':'$'+v}
+function bF(v){return '$'+v.toFixed(1)+'B'}
 
 function initCharts(tab){
   switch(tab){
     case 'overview':
-      safeChart('c-premiums',{type:'bar',data:{labels:['MA 2024','US 2024','MA 2025 (est.)','US 2025'],datasets:[{data:[28151,24540,30950,26993],backgroundColor:[R+'cc',B+'cc',R+'cc',B+'cc'],borderColor:[R,B,R,B],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return'$'+c.raw.toLocaleString()}}}},scales:{y:{beginAtZero:false,min:20000,ticks:{callback:nF}},x:{grid:{display:false}}}}});
-      safeChart('c-growth',{type:'bar',data:{labels:['MA Premiums','MA Wages','Gap'],datasets:[{data:[12.1,9.7,2.4],backgroundColor:[R+'cc',G+'cc',Y+'cc'],borderColor:[R,G,Y],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'%'}}}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      safeChart('c-ov-lines',{type:'bar',data:{labels:['Health (Total THCE)','Auto (Written Prem)','Home (Written Prem)'],datasets:[{data:[78.9,6.47,3.6],backgroundColor:[R+'cc',B+'cc',G+'cc'],borderColor:[R,B,G],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return '$'+c.raw+'B'}}}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return '$'+v+'B'}}},x:{grid:{display:false}}}}});
+      safeChart('c-ov-growth',{type:'bar',data:{labels:['2021','2022','2023','2024'],datasets:[
+        {label:'Health (family premium)',data:[5.4,1.8,7.8,3.3],backgroundColor:R+'cc',borderColor:R,borderWidth:1.5,borderRadius:6},
+        {label:'Home (avg premium)',data:[null,4.2,13.0,15.4],backgroundColor:G+'cc',borderColor:G,borderWidth:1.5,borderRadius:6},
+        {label:'Home (written premium)',data:[null,null,8.4,12.7],backgroundColor:B+'cc',borderColor:B,borderWidth:1.5,borderRadius:6}
+      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:10,font:{size:10}}}},scales:{y:{ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
       break;
+
     case 'premiums':
-      safeChart('c-prem-trend',{type:'line',data:{labels:['2020','2021','2022','2023','2024'],datasets:[{label:'Massachusetts',data:[23541,24805,25262,27240,28151],borderColor:R,backgroundColor:R+'22',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:R},{label:'US Average',data:[21342,22221,22463,23968,24540],borderColor:B,backgroundColor:B+'22',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:B}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{ticks:{callback:nF}},x:{grid:{display:false}}}}});
-      safeChart('c-oop',{type:'bar',data:{labels:['2020','2021','2022','2023','2024'],datasets:[{label:'MA Employee Share',data:[6591,6945,7073,7627,7882],backgroundColor:R+'aa',borderColor:R,borderWidth:1.5,borderRadius:6},{label:'US Employee Share',data:[5588,5969,6106,6575,6296],backgroundColor:B+'aa',borderColor:B,borderWidth:1.5,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{ticks:{callback:nF}},x:{grid:{display:false}}}}});
+      safeChart('c-prem-trend',{type:'line',data:{labels:['2020','2021','2022','2023','2024'],datasets:[{label:'Massachusetts',data:[23541,24805,25262,27240,28151],borderColor:R,backgroundColor:R+'22',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:R,borderWidth:2.5},{label:'US Average',data:[21342,22221,22463,23968,24540],borderColor:B,backgroundColor:B+'22',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:B,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{ticks:{callback:nF}},x:{grid:{display:false}}}}});
+      safeChart('c-oop',{type:'bar',data:{labels:['2020','2021','2022','2023','2024'],datasets:[{label:'MA Employee Share',data:[6591,6945,7073,7627,7882],backgroundColor:R+'cc',borderColor:R,borderWidth:1.5,borderRadius:6},{label:'US Employee Share',data:[5588,5969,6106,6575,6296],backgroundColor:B+'cc',borderColor:B,borderWidth:1.5,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{ticks:{callback:nF}},x:{grid:{display:false}}}}});
       break;
+
     case 'rates':
-      // DOI Finalized Rates (July 2025) - approved carriers
-      safeChart('c-carriers',{type:'bar',data:{labels:['Harvard\nPilgrim','Tufts','United\nHealthcare','Health NE','MGB\nHealth','Fallon','BCBS\n(rejected)','WellSense\n(rejected)'],datasets:[{label:'Approved/Proposed',data:[12.2,11.1,10.5,9.4,9.0,7.1,12.9,16.2],backgroundColor:[R+'cc',R+'cc',Y+'cc',Y+'cc',Y+'cc',G+'cc','#999','#999'],borderColor:[R,R,Y,Y,Y,G,'#666','#666'],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){var status=c.dataIndex>=6?'REJECTED':'Approved';return c.raw+'% — '+status}}}},scales:{y:{beginAtZero:true,max:18,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
-      // Proposed vs Approved
-      safeChart('c-proposed-vs-approved',{type:'bar',data:{labels:['Harvard Pilgrim','Tufts','UnitedHealthcare','Health NE','Fallon'],datasets:[{label:'Proposed',data:[14.8,13.2,12.3,10.4,9.9],backgroundColor:R+'66',borderColor:R,borderWidth:1.5,borderRadius:6},{label:'Approved',data:[12.2,11.1,10.5,9.4,7.1],backgroundColor:G+'99',borderColor:G,borderWidth:1.5,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{beginAtZero:true,max:16,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      safeChart('c-carriers',{type:'bar',data:{labels:['Harvard\nPilgrim','Tufts','United\nHealthcare','Health NE','MGB\nHealth','Fallon','BCBS\n(rejected)','WellSense\n(rejected)'],datasets:[{data:[12.2,11.1,10.5,9.4,9.0,7.1,12.9,16.2],backgroundColor:[R+'cc',R+'cc',Y+'cc',Y+'cc',Y+'cc',G+'cc','#999','#999'],borderColor:[R,R,Y,Y,Y,G,'#666','#666'],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){var s=c.dataIndex>=6?'REJECTED':'Approved';return c.raw+'% — '+s}}}},scales:{y:{beginAtZero:true,max:18,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      safeChart('c-proposed-vs-approved',{type:'bar',data:{labels:['Harvard Pilgrim','Tufts','UnitedHealthcare','Health NE','Fallon'],datasets:[{label:'Proposed',data:[14.8,13.2,12.3,10.4,9.9],backgroundColor:R+'77',borderColor:R,borderWidth:1.5,borderRadius:6},{label:'Approved',data:[12.2,11.1,10.5,9.4,7.1],backgroundColor:G+'cc',borderColor:G,borderWidth:1.5,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{beginAtZero:true,max:16,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
       break;
+
     case 'spending':
-      safeChart('c-percap',{type:'bar',data:{labels:['MA','National','Gap'],datasets:[{data:[13319,10191,3128],backgroundColor:[R+'cc',B+'cc',Y+'cc'],borderColor:[R,B,Y],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return'$'+c.raw.toLocaleString()}}}},scales:{y:{beginAtZero:true,ticks:{callback:nF}},x:{grid:{display:false}}}}});
-      safeChart('c-thce',{type:'bar',data:{labels:['Actual THCE Growth','Benchmark'],datasets:[{data:[8.6,3.6],backgroundColor:[R+'cc',G+'cc'],borderColor:[R,G],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'%'}}}},scales:{y:{beginAtZero:true,max:10,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      safeChart('c-percap',{type:'bar',data:{labels:['MA','National','Gap'],datasets:[{data:[13319,10191,3128],backgroundColor:[R+'cc',B+'cc',Y+'cc'],borderColor:[R,B,Y],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return '$'+c.raw.toLocaleString()}}}},scales:{y:{beginAtZero:true,ticks:{callback:nF}},x:{grid:{display:false}}}}});
+      safeChart('c-thce',{type:'bar',data:{labels:['Actual THCE Growth','CHIA Benchmark'],datasets:[{data:[8.6,3.6],backgroundColor:[R+'cc',G+'cc'],borderColor:[R,G],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'%'}}}},scales:{y:{beginAtZero:true,max:10,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      // MassHealth charts — merged into Spending tab
+      safeChart('c-mh-trend',{type:'line',data:{labels:['Dec 2017','Dec 2018','Dec 2019','Dec 2020','Dec 2021','Dec 2022','Dec 2023','Dec 2024','Dec 2025','Feb 2026'],datasets:[{label:'Total enrollment',data:[1871442,1760918,1750966,1965510,2160132,2337799,2170923,2035382,1948218,1909412],borderColor:B,backgroundColor:B+'22',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:B,borderWidth:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw.toLocaleString()+' members'}}}},scales:{y:{beginAtZero:false,ticks:{callback:function(v){return (v/1000000).toFixed(2)+'M'}}},x:{grid:{display:false}}}}});
+      safeChart('c-mh-plan',{type:'doughnut',data:{labels:['ACO-A','ACO-B','SCO (Seniors)','PCC','Other','FFS','One Care','PACE','Trad. HMO','CarePlus MCO'],datasets:[{data:[827020,262512,75901,63402,347313,57416,37573,5805,12170,5876],backgroundColor:[R+'cc',B+'cc',G+'cc',Y+'cc',SL+'cc',P+'cc',N+'cc',GD+'cc','#5b7aa1cc','#be185dcc'],borderColor:['#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff','#fff'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:10,padding:8,font:{size:10}}},tooltip:{callbacks:{label:function(c){return c.label+': '+c.raw.toLocaleString()}}}}}});
+      safeChart('c-mh-all',{type:'bar',data:{labels:['ACO-A','ACO-B','Other','TPL','Seniors (excl SCO/PACE)','SCO','PCC','FFS','One Care','Trad. HMO','CarePlus MCO','PACE'],datasets:[{data:[827020,262512,347313,115915,98373,75901,63402,57416,37573,12170,5876,5805],backgroundColor:B+'cc',borderColor:B,borderWidth:1.5,borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw.toLocaleString()+' members'}}}},scales:{x:{ticks:{callback:function(v){return (v/1000).toFixed(0)+'K'}}},y:{grid:{display:false}}}}});
       break;
-    case 'affordability':
+
+    case 'healthaff':
       safeChart('c-race',{type:'bar',data:{labels:['Hispanic/Latino','Black','White'],datasets:[{data:[58.2,49.1,39.2],backgroundColor:[R+'cc',Y+'cc',B+'cc'],borderColor:[R,Y,B],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'% report difficulty'}}}},scales:{y:{beginAtZero:true,max:65,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
-      safeChart('c-burden',{type:'doughnut',data:{labels:['Premium ($28,151)','Remaining Income ($73,649)'],datasets:[{data:[28151,73649],backgroundColor:[R+'cc',G+'44'],borderColor:['#fff','#fff'],borderWidth:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:function(c){return c.label+': $'+c.raw.toLocaleString()}}}}}});
+      safeChart('c-burden',{type:'bar',data:{labels:['MA','US'],datasets:[{label:'Premium % of Median Income',data:[27.1,24.2],backgroundColor:[R+'cc',B+'cc'],borderColor:[R,B],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'% of median income'}}}},scales:{y:{beginAtZero:true,max:30,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      break;
+
+    case 'costincome':
+      // Indexed at 2020 = 100 (home starts 2021, auto shown separately)
+      safeChart('c-ci-index',{type:'line',data:{labels:['2020','2021','2022','2023','2024'],datasets:[
+        {label:'MA Homeowner Premium (2021=100)',data:[null,100,104.2,117.8,135.9],borderColor:G,backgroundColor:G+'22',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:G,borderWidth:3},
+        {label:'MA Family Health Premium (2020=100)',data:[100,105.4,107.3,115.7,119.6],borderColor:R,backgroundColor:R+'22',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:R,borderWidth:3},
+        {label:'MA Median Household Income (2020=100)',data:[100,106.2,114.4,120.1,123.2],borderColor:B,backgroundColor:B+'22',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:B,borderWidth:3},
+        {label:'Boston CPI-U (2020=100)',data:[100,104.6,112.2,116.7,119.1],borderColor:SL,backgroundColor:SL+'22',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:SL,borderWidth:2,borderDash:[5,5]}
+      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:10,font:{size:10}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw}}}},scales:{y:{ticks:{callback:function(v){return v}},min:95},x:{grid:{display:false}}}}});
+      safeChart('c-ci-yoy',{type:'bar',data:{labels:['2021','2022','2023','2024'],datasets:[
+        {label:'Home Premium',data:[null,4.2,13.0,15.4],backgroundColor:G+'cc',borderColor:G,borderWidth:1.5,borderRadius:6},
+        {label:'Health Premium',data:[5.4,1.8,7.8,3.3],backgroundColor:R+'cc',borderColor:R,borderWidth:1.5,borderRadius:6},
+        {label:'MA Median Income',data:[6.2,7.7,5.0,2.6],backgroundColor:B+'cc',borderColor:B,borderWidth:1.5,borderRadius:6},
+        {label:'Boston CPI-U',data:[4.6,7.3,4.0,2.1],backgroundColor:SL+'cc',borderColor:SL,borderWidth:1.5,borderRadius:6}
+      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:10,font:{size:10}}}},scales:{y:{ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      break;
+
+    case 'home':
+      safeChart('c-home-avg',{type:'bar',data:{labels:['2022','2023','2024'],datasets:[
+        {label:'Homeowner',data:[1818,2054,2371],backgroundColor:G+'cc',borderColor:G,borderWidth:1.5,borderRadius:6},
+        {label:'Condominium',data:[473,530,633],backgroundColor:B+'cc',borderColor:B,borderWidth:1.5,borderRadius:6},
+        {label:'Tenant',data:[176,181,189],backgroundColor:Y+'cc',borderColor:Y,borderWidth:1.5,borderRadius:6}
+      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:function(c){return c.dataset.label+': $'+c.raw.toLocaleString()}}}},scales:{y:{ticks:{callback:nF}},x:{grid:{display:false}}}}});
+      safeChart('c-home-struct',{type:'doughnut',data:{labels:['Top 10 groups','Next 15 (ranks 11-25)','All others (46 writers)'],datasets:[{data:[63.4,29.3,7.3],backgroundColor:[R+'cc',B+'cc',SL+'cc'],borderColor:['#fff','#fff','#fff'],borderWidth:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:10,padding:10,font:{size:11}}},tooltip:{callbacks:{label:function(c){return c.label+': '+c.raw+'% of voluntary market'}}}}}});
+      safeChart('c-home-county',{type:'bar',data:{labels:['Middlesex','Worcester','Essex','Norfolk','Suffolk','Plymouth','Bristol','Barnstable/Dukes/Nantucket'],datasets:[{data:[481043,264202,239278,224617,201158,185730,166408,167902],backgroundColor:B+'cc',borderColor:B,borderWidth:1.5,borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw.toLocaleString()+' policies'}}}},scales:{x:{ticks:{callback:function(v){return (v/1000).toFixed(0)+'K'}}},y:{grid:{display:false}}}}});
+      safeChart('c-home-wind',{type:'bar',data:{labels:['Coastal','Urban','Combined'],datasets:[{data:[58.0,19.1,32.6],backgroundColor:[R+'cc',Y+'cc',B+'cc'],borderColor:[R,Y,B],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'% have mandatory wind deductible'}}}},scales:{y:{beginAtZero:true,max:70,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      break;
+
+    case 'auto':
+      safeChart('c-auto-share',{type:'bar',data:{labels:['Commerce','Progressive','GEICO','Safety','Plymouth Rock','Arbella','Travelers','Liberty Mutual','USAA','Amica'],datasets:[{data:[18.33,12.17,11.50,9.30,7.88,7.08,6.19,4.98,4.29,3.02],backgroundColor:[R+'cc',B+'cc',B+'cc',G+'cc',G+'cc',G+'cc',B+'cc',B+'cc',B+'cc',G+'cc'],borderColor:[R,B,B,G,G,G,B,B,B,G],borderWidth:2,borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'% market share'}}}},scales:{x:{ticks:{callback:function(v){return v+'%'}}},y:{grid:{display:false}}}}});
+      safeChart('c-auto-leaders',{type:'line',data:{labels:['2020','2021','2022','2023','2024','2025'],datasets:[
+        {label:'Commerce (MAPFRE)',data:[22.1,21.5,20.9,19.9,19.0,18.33],borderColor:R,backgroundColor:R+'22',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:R,borderWidth:3},
+        {label:'Progressive',data:[5.1,5.8,6.2,7.2,9.8,12.17],borderColor:B,backgroundColor:B+'22',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:B,borderWidth:3},
+        {label:'GEICO',data:[null,null,null,null,null,11.50],borderColor:G,backgroundColor:G+'22',fill:false,pointRadius:6,pointBackgroundColor:G,borderWidth:3}
+      ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      safeChart('c-auto-residual',{type:'line',data:{labels:['2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'MAIP / CAR residual share',data:[1.5,1.3,1.4,1.3,1.2,1.0,0.7,0.5,0.4,1.1,1.9,2.0],borderColor:R,backgroundColor:R+'22',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:R,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'% of passenger cars'}}}},scales:{y:{beginAtZero:true,max:2.5,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      safeChart('c-auto-change',{type:'bar',data:{labels:['2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023'],datasets:[{label:'$ change per vehicle',data:[31,28,23,38,40,31,16,-13,-5,12,152],backgroundColor:function(ctx){return ctx.raw<0?G+'cc':(ctx.raw>=100?R+'cc':B+'cc')},borderColor:function(ctx){return ctx.raw<0?G:(ctx.raw>=100?R:B)},borderWidth:1.5,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return (c.raw>=0?'+':'')+'$'+c.raw}}}},scales:{y:{ticks:{callback:function(v){return (v>=0?'+':'')+'$'+v}}},x:{grid:{display:false}}}}});
+      break;
+
+    case 'complaints':
+      safeChart('c-mrb',{type:'bar',data:{labels:['2019','2020','2021','2022','2023'],datasets:[{data:[26344,10098,7916,19219,24958],backgroundColor:[B+'cc',G+'cc',G+'cc',B+'cc',R+'cc'],borderColor:[B,G,G,B,R],borderWidth:2,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw.toLocaleString()+' hearings decided'}}}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return (v/1000).toFixed(0)+'K'}}},x:{grid:{display:false}}}}});
+      safeChart('c-mrb-out',{type:'doughnut',data:{labels:['Vacated','Default','Upheld','COM Vacated','Other'],datasets:[{data:[39,35,18,7,1],backgroundColor:[G+'cc',SL+'cc',R+'cc',Y+'cc',B+'cc'],borderColor:['#fff','#fff','#fff','#fff','#fff'],borderWidth:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:10,padding:10,font:{size:11}}},tooltip:{callbacks:{label:function(c){return c.label+': '+c.raw+'% of decisions'}}}}}});
+      break;
+
+    case 'licensees':
+      safeChart('c-lic-type',{type:'bar',data:{labels:['Insurance Producers','MV Damage Appraisers','Surplus Lines Brokers','Public Ins Adjusters','Insurance Advisors','Reinsurance Intermediaries','Life Settlement Brokers','Auto Clubs','Portable Electronics','Temp. Producer'],datasets:[{data:[167552,4670,4138,212,222,155,86,25,19,1],backgroundColor:B+'cc',borderColor:B,borderWidth:1.5,borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw.toLocaleString()+' active licenses (2023)'}}}},scales:{x:{ticks:{callback:function(v){return (v>=1000?(v/1000).toFixed(0)+'K':v)}}},y:{grid:{display:false}}}}});
+      safeChart('c-lic-trend',{type:'bar',data:{labels:['Producers','MV Appraisers','Surplus Lines','Pub. Adjusters','Advisors','Reinsurance Int.'],datasets:[{label:'2022',data:[188273,5194,3920,316,445,209],backgroundColor:B+'77',borderColor:B,borderWidth:1.5,borderRadius:6},{label:'2023',data:[167552,4670,4138,212,222,155],backgroundColor:R+'cc',borderColor:R,borderWidth:1.5,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw.toLocaleString()}}}},scales:{y:{ticks:{callback:function(v){return (v>=1000?(v/1000).toFixed(0)+'K':v)}}},x:{grid:{display:false}}}}});
       break;
   }
 }
