@@ -126,10 +126,10 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
     <div class="sc-src">Source: MA DOI 2024 Annual Home Insurance Report</div>
   </div>
   <div class="sc green">
-    <div class="sc-label">Auto Written Premium</div>
-    <div class="sc-val green">$6.47B</div>
-    <div class="sc-ctx">2023 · 36+ insurers competing</div>
-    <div class="sc-src">Source: MA DOI 2022-2023 Annual Report</div>
+    <div class="sc-label">Avg Full Coverage Auto Premium</div>
+    <div class="sc-val green">$1,326</div>
+    <div class="sc-ctx">MA 2023 · 7.8% BELOW national avg of $1,438</div>
+    <div class="sc-src">Source: NAIC 2023 Auto Insurance Database Average Premium Supplement (Jun 2025)</div>
   </div>
 </div>
 
@@ -358,25 +358,44 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
 <div class="tab-panel" id="tab-auto">
   <div class="section">
     <div class="sec-title">Private Passenger Auto</div>
-    <div class="sec-desc">Sources: MA DOI 2022-2023 Annual Report; CAR Annual Reports 2022, 2024, 2025; Agency Checklists Market Share Reports (citing CAR statistical agent data).</div>
+    <div class="sec-desc">What drivers actually pay — plus market structure. Sources: NAIC Auto Insurance Database (2023); MA DOI 2022-2023 Annual Report; CAR Annual Reports; Agency Checklists market share reports.</div>
+
+    <div class="hl green"><div class="hl-label">✓ MA auto is cheaper than the national average</div><div class="hl-val">$1,326 in MA vs. $1,438 nationally — MA is 7.8% BELOW the US average</div><div class="hl-ctx">Massachusetts ranks #17 of 51 states for average full-coverage auto premium — in the middle of the pack, well below states like Louisiana, Florida, and Michigan. The managed-competition regime (2008+) and the state's historically dense independent-agent network keep prices competitive.</div><div class="hl-src">Source: NAIC 2023 Auto Insurance Database Average Premium Supplement (published June 2025)</div></div>
+
+    <div class="hl amber"><div class="hl-label">⚠️ 2023 saw an unusually large jump</div><div class="hl-val">MA auto premiums rose +$152 per vehicle in 2023 alone</div><div class="hl-ctx">From 2013 through 2022, year-over-year dollar changes ranged from −$13 to +$40. 2023's +$152 was the largest single-year increase in a decade, driven by repair costs, labor, and severity. Multi-year growth averages 3.1% per year since 2013.</div><div class="hl-src">Source: MA DOI 2022-2023 Annual Report (Figure: Average Change in Personal Auto Insurance Premium)</div></div>
+
+    <div class="hl"><div class="hl-label">⚠️ July 2025 statutory minimum hike</div><div class="hl-val">Minimum-coverage auto premium jumped roughly 36% on July 1, 2025</div><div class="hl-ctx">A Massachusetts statute raised compulsory liability limits effective July 1, 2025 — the first increase in decades. For drivers carrying minimum coverage only, the average premium rose from approximately $524/year to $711/year. Full-coverage drivers saw a smaller impact.</div><div class="hl-src">Source: MA statutory change effective July 1, 2025; Bankrate analysis of Quadrant Information Services data</div></div>
 
     <div class="grid-3">
-      <div class="card"><div class="dc-label">Written Premium (2023)</div><div class="dc-val blue">$6.47B</div><div class="dc-meta"><div><div class="dc-ml">Carriers Writing</div><div class="dc-mv">36+</div></div><div><div class="dc-ml">Residual Mkt</div><div class="dc-mv">1.1%</div></div></div><div class="dc-src">Source: MA DOI 2022-2023 Annual Report</div></div>
-      <div class="card"><div class="dc-label">MAIP Residual Share (FY2025)</div><div class="dc-val amber">~2%</div><div class="dc-meta"><div><div class="dc-ml">FY2022</div><div class="dc-mv">&lt;0.5%</div></div><div><div class="dc-ml">Trajectory</div><div class="dc-mv" style="color:var(--amber)">Rising</div></div></div><div class="dc-src">Source: CAR 2025 Annual Report</div></div>
-      <div class="card"><div class="dc-label">New Entrants Since 2008</div><div class="dc-val green">24</div><div class="dc-meta"><div><div class="dc-ml">Managed Comp.</div><div class="dc-mv">Apr 1, 2008</div></div><div><div class="dc-ml">Via Independent Agent</div><div class="dc-mv">16 of 24</div></div></div><div class="dc-src">Source: MA DOI 2022-2023 Annual Report</div></div>
+      <div class="card"><div class="dc-label">Avg Full Coverage Premium (MA, 2023)</div><div class="dc-val green">$1,326</div><div class="dc-meta"><div><div class="dc-ml">2022</div><div class="dc-mv">$1,251</div></div><div><div class="dc-ml">YoY Change</div><div class="dc-mv" style="color:var(--amber)">+6.0%</div></div></div><div class="dc-src">Source: NAIC 2023 Auto Insurance Database Avg Premium Supplement</div></div>
+      <div class="card"><div class="dc-label">National Avg (2023)</div><div class="dc-val blue">$1,438</div><div class="dc-meta"><div><div class="dc-ml">US 2022</div><div class="dc-mv">$1,257</div></div><div><div class="dc-ml">YoY Change</div><div class="dc-mv" style="color:var(--red)">+14.4%</div></div></div><div class="dc-src">Source: NAIC 2023 Auto Insurance Database Avg Premium Supplement</div></div>
+      <div class="card"><div class="dc-label">MA State Rank</div><div class="dc-val green">#17 of 51</div><div class="dc-meta"><div><div class="dc-ml">Gap vs. US</div><div class="dc-mv" style="color:var(--green)">−$112 (−7.8%)</div></div><div><div class="dc-ml">Trend</div><div class="dc-mv">Middle of pack</div></div></div><div class="dc-src">Source: NAIC 2023 Auto Insurance Database</div></div>
     </div>
 
     <div class="grid-2">
-      <div class="card"><div class="card-title">Top 10 MA Auto Carriers by Market Share (2025)</div><div class="card-sub">% of total exposures, December 2025 data</div><div class="card-canvas"><canvas id="c-auto-share"></canvas></div><div class="card-src">Source: Agency Checklists 2nd Look 2026 Market Share Report, citing CAR statistical agent data (December 2025)</div></div>
+      <div class="card"><div class="card-title">MA vs. National Average Auto Premium</div><div class="card-sub">Full-coverage expenditure per insured vehicle, 2022–2023</div><div class="card-canvas"><canvas id="c-auto-ma-vs-us"></canvas></div><div class="card-src">Source: NAIC Auto Insurance Database Average Premium Supplements, 2022 &amp; 2023</div></div>
+      <div class="card"><div class="card-title">Annual Change in MA Auto Premium, 2013–2023</div><div class="card-sub">$ change per vehicle vs. prior year — note the 2023 spike</div><div class="card-canvas"><canvas id="c-auto-change"></canvas></div><div class="card-src">Source: MA DOI 2022-2023 Annual Report</div></div>
+    </div>
+
+    <div style="margin:32px 0 18px;padding-top:24px;border-top:1px solid var(--border)">
+      <div style="font-family:'DM Serif Display',Georgia,serif;font-size:1.15rem;color:var(--navy);margin-bottom:4px">Market Structure &amp; Carrier Landscape</div>
+      <div style="font-size:.78rem;color:var(--muted)">Who writes MA auto insurance, market concentration, and the residual market (CAR/MAIP).</div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card"><div class="dc-label">Written Premium (2023)</div><div class="dc-val blue">$6.47B</div><div class="dc-meta"><div><div class="dc-ml">Carriers Writing</div><div class="dc-mv">36+</div></div></div><div class="dc-src">Source: MA DOI 2022-2023 Annual Report</div></div>
+      <div class="card"><div class="dc-label">MAIP Residual Share (FY2025)</div><div class="dc-val amber">~2%</div><div class="dc-meta"><div><div class="dc-ml">FY2022</div><div class="dc-mv">&lt;0.5%</div></div></div><div class="dc-src">Source: CAR 2025 Annual Report</div></div>
+      <div class="card"><div class="dc-label">New Entrants Since 2008</div><div class="dc-val green">24</div><div class="dc-meta"><div><div class="dc-ml">Managed Comp.</div><div class="dc-mv">Apr 1, 2008</div></div></div><div class="dc-src">Source: MA DOI 2022-2023 Annual Report</div></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card"><div class="card-title">Top 10 MA Auto Carriers by Market Share (2025)</div><div class="card-sub">% of total exposures, December 2025 data</div><div class="card-canvas"><canvas id="c-auto-share"></canvas></div><div class="card-src">Source: Agency Checklists 2nd Look 2026 Market Share Report, citing CAR statistical agent data</div></div>
       <div class="card"><div class="card-title">Market Leader Trends, 2020–2025</div><div class="card-sub">Commerce declining; Progressive surging</div><div class="card-canvas"><canvas id="c-auto-leaders"></canvas></div><div class="card-src">Source: Agency Checklists 1st/2nd Look 2026 Market Share Reports, citing CAR data</div></div>
     </div>
 
-    <div class="grid-2">
-      <div class="card"><div class="card-title">Residual Market Share (Private Passenger), 2014–2025</div><div class="card-sub">% of passenger cars insured through CAR/MAIP</div><div class="card-canvas"><canvas id="c-auto-residual"></canvas></div><div class="card-src">Sources: MA DOI 2022-2023 Annual Report (2014–2023); CAR Annual Reports (2024–2025)</div></div>
-      <div class="card"><div class="card-title">Annual Change in MA Auto Premium</div><div class="card-sub">$ change per vehicle vs. prior year</div><div class="card-canvas"><canvas id="c-auto-change"></canvas></div><div class="card-src">Source: MA DOI 2022-2023 Annual Report (Figure: Average Change in Personal Auto Insurance Premium)</div></div>
-    </div>
+    <div class="card"><div class="card-title">Residual Market Share (Private Passenger), 2014–2025</div><div class="card-sub">% of passenger cars insured through CAR/MAIP</div><div class="card-canvas"><canvas id="c-auto-residual"></canvas></div><div class="card-src">Sources: MA DOI 2022-2023 Annual Report (2014–2023); CAR Annual Reports (2024–2025)</div></div>
 
-    <div class="info"><div class="info-icon">ℹ️</div><div class="info-text"><strong>Managed competition context:</strong> Before April 1, 2008 the Commissioner set MA auto rates directly. Today carriers file their own rates. Commerce (MAPFRE) has led the market ever since — but its share has fallen from 22.1% (2020) to 18.33% (2025), with Progressive tripling its share over the same period. GEICO now effectively ties Progressive at 11.50%.<span class="info-src">Sources: MA DOI 2022-2023 Annual Report; Agency Checklists 2nd Look 2026 citing CAR</span></div></div>
+    <div class="info" style="margin-top:22px"><div class="info-icon">ℹ️</div><div class="info-text"><strong>Why MA auto is cheaper despite high cost of living:</strong> The Commonwealth's "managed competition" regime (since April 2008) replaced state-set rates with carrier-filed rates, attracting 24 new insurers into the market. Combined with a dense independent-agent network and tight residual-market rules, this keeps voluntary-market premiums competitive. Even so, 2023 saw a sharp spike driven by repair cost inflation.<span class="info-src">Sources: NAIC; MA DOI 2022-2023 Annual Report; CAR Annual Reports</span></div></div>
   </div>
 </div>
 
@@ -459,6 +478,7 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
           <tr><td><strong>Agency Checklists Market Share Reports (1st/2nd Look 2026)</strong></td><td><span class="pill green">Live</span></td><td>Article</td><td>Quarterly</td><td>Per-carrier auto market share (cites CAR data)</td></tr>
           <tr><td><strong>US Census Bureau ACS</strong></td><td><span class="pill green">Live</span></td><td>CSV/API</td><td>Annual</td><td>MA median household income</td></tr>
           <tr><td><strong>BLS CPI-U Boston-Cambridge-Newton</strong></td><td><span class="pill green">Live</span></td><td>CSV</td><td>Monthly</td><td>Inflation benchmark for affordability analysis</td></tr>
+          <tr><td><strong>NAIC Auto Insurance Database Avg Premium Supplement</strong></td><td><span class="pill green">Live</span></td><td>PDF</td><td>Annual</td><td>MA avg auto premium $1,326 (2023); national comparison; state rank</td></tr>
           <tr><td><strong>DOI PPA Rate Filings XLSX (2008–2026)</strong></td><td><span class="pill green">Live</span></td><td>XLSX</td><td>Rolling</td><td>1,375 rate filings by carrier, year, type</td></tr>
           <tr><td><strong>MA DOI Licensee XLSX (monthly)</strong></td><td><span class="pill amber">Ingester built</span></td><td>XLSX</td><td>Monthly</td><td>Live licensee roster tracking</td></tr>
           <tr><td><strong>CMS Marketplace &amp; Rate Review PUFs</strong></td><td><span class="pill amber">Ingester built</span></td><td>CSV (zip)</td><td>Annual</td><td>ACA plan-level rate data</td></tr>
@@ -489,6 +509,7 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
     <p>• Centers for Medicare &amp; Medicaid Services, <em>State Health Expenditure Accounts</em> · cms.gov</p>
     <p>• Commonwealth Automobile Reinsurers (CAR), <em>Annual Reports 2022, 2024, 2025</em> · car-ins.com</p>
     <p>• Agency Checklists, "1st Look 2026" and "2nd Look 2026" MA Auto Insurance Market Share Reports (citing CAR statistical agent data) · agencychecklists.com</p>
+    <p>• NAIC, <em>2023 Auto Insurance Database Average Premium Supplement</em> (published June 2025); prior supplements for 2022, 2021 · content.naic.org</p>
     <p>• US Census Bureau, <em>American Community Survey 1-Year Estimates</em>, Massachusetts · census.gov</p>
     <p>• US Bureau of Labor Statistics, <em>CPI-U for Boston-Cambridge-Newton, MA-NH</em> · bls.gov</p>
   </div>
@@ -578,6 +599,7 @@ function initCharts(tab){
       break;
 
     case 'auto':
+      safeChart('c-auto-ma-vs-us',{type:'bar',data:{labels:['MA 2022','US 2022','MA 2023','US 2023'],datasets:[{data:[1251,1257,1326,1438],backgroundColor:[G+'cc',B+'cc',G+'cc',B+'cc'],borderColor:[G,B,G,B],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return '$'+c.raw.toLocaleString()}}}},scales:{y:{beginAtZero:false,min:1100,ticks:{callback:function(v){return '$'+v.toLocaleString()}}},x:{grid:{display:false}}}}});
       safeChart('c-auto-share',{type:'bar',data:{labels:['Commerce','Progressive','GEICO','Safety','Plymouth Rock','Arbella','Travelers','Liberty Mutual','USAA','Amica'],datasets:[{data:[18.33,12.17,11.50,9.30,7.88,7.08,6.19,4.98,4.29,3.02],backgroundColor:[R+'cc',B+'cc',B+'cc',G+'cc',G+'cc',G+'cc',B+'cc',B+'cc',B+'cc',G+'cc'],borderColor:[R,B,B,G,G,G,B,B,B,G],borderWidth:2,borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'% market share'}}}},scales:{x:{ticks:{callback:function(v){return v+'%'}}},y:{grid:{display:false}}}}});
       safeChart('c-auto-leaders',{type:'line',data:{labels:['2020','2021','2022','2023','2024','2025'],datasets:[
         {label:'Commerce (MAPFRE)',data:[22.1,21.5,20.9,19.9,19.0,18.33],borderColor:R,backgroundColor:R+'22',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:R,borderWidth:3},
