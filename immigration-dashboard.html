@@ -323,9 +323,9 @@ tr:hover td{background:var(--surface)}
 </div>
 <div class="card">
 <h3>Essex County Spotlight</h3>
-<div class="callout callout-red"><strong>Lawrence:</strong> 35% foreign-born, 78.5% multilingual, 56% poverty rate for immigrant households</div>
+<div class="callout callout-red"><strong>Lawrence:</strong> 45% foreign-born, 78.5% multilingual, 56% poverty rate for immigrant households</div>
 <div class="callout callout-blue"><strong>Lynn:</strong> 31% foreign-born, largest Central American community north of Boston</div>
-<div class="callout callout-yellow"><strong>Methuen:</strong> 23% foreign-born, fastest-growing immigrant pop in Essex County</div>
+<div class="callout callout-yellow"><strong>Methuen:</strong> 24% foreign-born, fastest-growing immigrant pop in Essex County</div>
 <div class="callout callout-green"><strong>Geographic pattern:</strong> 60-mile radius of Beacon Hill. Inner-ring cities bear disproportionate burden while wealthier suburbs remain largely unaffected — and those suburbs are where most departing high-earners live.</div>
 <h3 style="margin-top:1.2rem">Fastest-Growing (2011–2021)</h3>
 <table>
@@ -657,12 +657,12 @@ function initChart(id){
     case 'm-concentration':
       new Chart(document.getElementById('ch-foreignborn'),{type:'bar',data:{
         labels:['Chelsea','Revere','Lawrence','Lynn','Everett','Malden','Framingham','Waltham','Brockton','Lowell','Boston','Quincy','Somerville','Methuen','Worcester','Springfield'],
-        datasets:[{label:'Foreign-Born %',data:[44,38,35,35,34,33,32,31,31,30,29,28,27,23,22,19],backgroundColor:B}]
+        datasets:[{label:'Foreign-Born %',data:[46,44,45,37,46,41,33,26,34,30,28,33,24,24,25,10],backgroundColor:B}]
       },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
         scales:{x:{max:50,ticks:{callback:function(v){return v+'%'}},grid:{color:GC}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
       new Chart(document.getElementById('ch-multilingual'),{type:'bar',data:{
         labels:['Lawrence','Chelsea','Revere','Everett','Lynn','Framingham','Brockton','Lowell','Malden','Waltham'],
-        datasets:[{label:'Multilingual %',data:[78.5,70.4,58.3,55.1,52.6,48.2,45.1,44.8,43.5,42.1],backgroundColor:P}]
+        datasets:[{label:'Multilingual %',data:[78.1,70.6,56.3,63.4,53.5,45.0,46.5,43.3,50.9,32.3],backgroundColor:P}]
       },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
         scales:{x:{max:85,ticks:{callback:function(v){return v+'%'}},grid:{color:GC}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
       new Chart(document.getElementById('ch-shelter-cities'),{type:'bar',data:{
