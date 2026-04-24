@@ -1,15 +1,15 @@
 # .github/workflows/update-all.yml
 #
 # Master workflow: runs ALL data updaters in sequence.
-# Use this for a full refresh â or trigger individual workflows for specific sources.
+# Use this for a full refresh -- or trigger individual workflows for specific sources.
 #
 # Required secrets: BLS_API_KEY, EIA_API_KEY, FRED_API_KEY, CENSUS_API_KEY
 # No key needed for: CBP encounters, IRS SOI
 
-name: "ð Update All Data Sources"
+name: "Update All Data Sources"
 
 on:
-  workflow_dispatch:   # Manual only â individual workflows handle scheduling
+  workflow_dispatch:   # Manual only -- individual workflows handle scheduling
 
 jobs:
   update-all:
@@ -31,48 +31,48 @@ jobs:
       - name: Install Node dependencies
         run: cd scripts && npm install
 
-      # ââ Existing connectors ââ
+      # -- Existing connectors --
 
-      - name: "ð Employment (BLS)"
+      - name: "Employment (BLS)"
         env:
           BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
         run: cd scripts && node fetch-bls-data.js
 
-      - name: "ð¡ Energy (EIA)"
+      - name: "Energy (EIA)"
         env:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
         run: python update-energy-dashboard.py
 
-      - name: "ð° Affordability (BLS + EIA)"
+      - name: "Affordability (BLS + EIA)"
         env:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
         run: python update-affordability-dashboard.py
 
-      - name: "ð Tax/Budget â EIA + CPI (BLS)"
+      - name: "Tax/Budget - EIA + CPI (BLS)"
         env:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
         run: python update-tax-budget-dashboard.py
 
-      - name: "ð Tax/Budget â Cumulative Inflation (BLS + FRED)"
+      - name: "Tax/Budget - Cumulative Inflation (BLS + FRED)"
         env:
           BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: python scripts/update_cumulative_inflation.py
 
-      # ââ New connectors ââ
+      # -- New connectors --
 
-      - name: "ðï¸ Census (ACS 5-Year)"
+      - name: "Census (ACS 5-Year)"
         env:
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
         run: python update-census-data.py
 
-      - name: "ð CBP Encounters"
+      - name: "CBP Encounters"
         run: python update-cbp-encounters.py
 
-      - name: "ð IRS SOI Migration"
+      - name: "IRS SOI Migration"
         run: python update-irs-soi-migration.py
 
-      # ââ Commit everything ââ
+      # -- Commit everything --
 
       - name: Commit all changes
         run: |
@@ -83,9 +83,9 @@ jobs:
             echo "No changes across any data source."
           else
             DATE=$(date -u +'%B %d, %Y')
-            git commit -m "ð Full data refresh â ${DATE}
+            git commit -m "Full data refresh - ${DATE}
 
-          Sources: BLS Â· EIA Â· FRED Â· Census ACS Â· Treasury Â· CBP Â· IRS SOI"
+          Sources: BLS | EIA | FRED | Census ACS | Treasury | CBP | IRS SOI"
             git push
           fi
 
@@ -99,5 +99,5 @@ jobs:
           echo "|--------|------|" >> $GITHUB_STEP_SUMMARY
           for f in data/*.json; do
             name=$(basename "$f" .json)
-            echo "| $name | â |" >> $GITHUB_STEP_SUMMARY
+            echo "| $name | OK |" >> $GITHUB_STEP_SUMMARY
           done
