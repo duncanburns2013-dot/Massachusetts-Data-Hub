@@ -48,12 +48,12 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add immigration-dashboard.html data/cbp-encounters-latest.json
-          git commit -m "ð Auto-update: CBP encounter data $(date +'%B %Y')"
+          git commit -m "Auto-update: CBP encounter data $(date +'%B %Y')"
           git push
 
       - name: No new data
         if: steps.changes.outputs.changed == 'false'
-        run: echo "CBP data unchanged â no commit needed."
+        run: echo "CBP data unchanged - no commit needed."
 
       - name: Job summary
         if: always()
