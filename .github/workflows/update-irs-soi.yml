@@ -46,12 +46,12 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add tax-budget-dashboard.html data/irs-soi-migration-latest.json
-          git commit -m "ð Auto-update: IRS SOI migration data $(date +'%B %Y')"
+          git commit -m "Auto-update: IRS SOI migration data $(date +'%B %Y')"
           git push
 
       - name: No new data
         if: steps.changes.outputs.changed == 'false'
-        run: echo "IRS data unchanged â no commit needed."
+        run: echo "IRS data unchanged - no commit needed."
 
       - name: Job summary
         if: always()
@@ -59,10 +59,10 @@ jobs:
           echo "### IRS SOI Migration Update" >> $GITHUB_STEP_SUMMARY
           if [ -f data/irs-soi-migration-latest.json ]; then
             python -c "
-import json
-d = json.load(open('data/irs-soi-migration-latest.json'))
-print(f'Verified: {d[\"latest_year_verified\"]}')
-new = d.get('new_year_found')
-print(f'New year: {new or \"None yet\"}')
-" >> $GITHUB_STEP_SUMMARY
+          import json
+          d = json.load(open('data/irs-soi-migration-latest.json'))
+          print(f'Verified: {d[\"latest_year_verified\"]}')
+          new = d.get('new_year_found')
+          print(f'New year: {new or \"None yet\"}')
+          " >> $GITHUB_STEP_SUMMARY
           fi
