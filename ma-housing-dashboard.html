@@ -5,14 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Massachusetts Real Estate Market Report | MLS Data Analysis</title>
     <meta property="og:title" content="Massachusetts Housing Report — April 2026">
-    <meta property="og:description" content="13-year MLS analysis (2014–2026 YTD): MA avg $836K (+108%), Newburyport $1.10M, 55 DOM, sales volume -17%. Statewide, Boston, Essex County & Greater Newburyport.">
+    <meta property="og:description" content="Massachusetts Real Estate Report">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/ma-housing-dashboard.html">
+    
+    <!-- SOCIAL MEDIA IMAGE TAGS -->
     <meta property="og:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/massachusetts-real-estate-report.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Massachusetts Real Estate Report">
-<meta name="twitter:card" content="summary_large_image">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Massachusetts Real Estate Report">
+    <meta name="twitter:card" content="summary_large_image">
+
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.49.1/dist/apexcharts.min.js"></script>
     <style>
@@ -933,10 +936,8 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
     function initPTIfNeeded() {
         const sec = document.getElementById('propertytype');
         if (!sec.classList.contains('active')) return;
-        // Ensure container has width before rendering
         const c1 = document.querySelector('#pt-price-chart');
         if (!c1 || c1.clientWidth < 50) {
-            // Section visible but width still 0 (animation in progress) — retry
             requestAnimationFrame(initPTIfNeeded);
             return;
         }
@@ -944,7 +945,6 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
             renderPT();
             ptInited = true;
         } else {
-            // Force redraw to handle layout reset
             renderPT();
         }
     }
