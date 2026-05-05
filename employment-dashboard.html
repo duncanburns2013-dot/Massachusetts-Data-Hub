@@ -222,8 +222,8 @@ footer a:hover{color:var(--gold)}
   <div class="stat-row">
     <div class="stat-card">
       <div class="label">National Openings</div>
-      <div class="value amber" data-field="jolts-openings">7.6M</div>
-      <div class="sub" data-field="jolts-openings-date">Mar 2026 · auto-updated</div>
+      <div class="value amber" data-field="jolts-openings">6.9M</div>
+      <div class="sub" data-field="jolts-openings-date">Mar 2026 · 6,866K</div>
     </div>
     <div class="stat-card">
       <div class="label">Last MA Openings (Dec 2025)</div>
@@ -238,15 +238,15 @@ footer a:hover{color:var(--gold)}
   </div>
 
   <div class="data-card">
-    <h3>JOLTS March 2026 — National Key Metrics</h3>
+    <h3>JOLTS March 2026 — National Key Metrics (Released May 5, 2026)</h3>
     <table class="data-table">
       <thead><tr><th>Metric</th><th data-field="jolts-col-current">Mar 2026</th><th>Mar 2025</th><th>YoY Change</th></tr></thead>
       <tbody>
-        <tr><td>National Job Openings</td><td class="td-amber" data-field="jolts-openings-table">7.6M</td><td>~7.5M</td><td class="td-amber">+100K</td></tr>
-        <tr><td>National Hires</td><td>5.1M</td><td>~5.1M</td><td>flat</td></tr>
-        <tr><td>National Separations</td><td>5.0M</td><td>~5.0M</td><td>flat</td></tr>
-        <tr><td>Quits</td><td>3.3M</td><td>~3.2M</td><td class="td-amber">+100K</td></tr>
-        <tr><td>Layoffs &amp; Discharges</td><td>1.6M</td><td>~1.6M</td><td>flat</td></tr>
+        <tr><td>National Job Openings</td><td class="td-amber" data-field="jolts-openings-table">6.9M</td><td>~7.5M</td><td class="td-amber">+100K</td></tr>
+        <tr><td>National Hires</td><td class="td-green">5.6M</td><td>~5.2M</td><td class="td-green">+400K</td></tr>
+        <tr><td>National Separations</td><td>5.4M</td><td>~5.0M</td><td class="td-amber">+400K</td></tr>
+        <tr><td>Quits</td><td>3.2M</td><td>~3.1M</td><td class="td-amber">+100K</td></tr>
+        <tr><td>Layoffs &amp; Discharges</td><td class="td-red">1.9M</td><td>~1.6M</td><td class="td-red">+300K</td></tr>
       </tbody>
     </table>
     <div class="source">Source: BLS JOLTS Release, April 2026 · National data auto-updated · State JOLTS: last monthly release was Dec 2025 (USDL-26-0579)</div>
@@ -400,13 +400,13 @@ function initCharts(tab){
       sc('c-unemp',{type:'line',data:{
         labels:['2019','2020','2021','2022','2023','2024','2025','Mar 26'],
         datasets:[
-          {label:'Massachusetts',data:[2.9,9.3,5.2,3.5,3.5,4.1,4.8,4.8],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:R,borderWidth:2.5},
-          {label:'National',data:[3.5,8.1,5.4,3.6,3.6,4.0,4.4,4.4],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:B,borderWidth:2,borderDash:[5,3]}
+          {label:'Massachusetts',data:[2.9,9.3,5.2,3.5,3.5,4.1,4.8,4.7],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:R,borderWidth:2.5},
+          {label:'National',data:[3.5,8.1,5.4,3.6,3.6,4.0,4.4,4.3],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:B,borderWidth:2,borderDash:[5,3]}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-jobs',{type:'bar',data:{
         labels:['2021','2022','2023','2024','2025','Mar 26'],
-        datasets:[{data:[176000,123000,62000,-5800,1300,-7200],
+        datasets:[{data:[176000,123000,62000,-5800,1300,6800],
           backgroundColor:function(ctx){return ctx.raw<0?R+'cc':(ctx.raw<5000?Y+'cc':G+'cc')},
           borderColor:function(ctx){return ctx.raw<0?R:(ctx.raw<5000?Y:G)},
           borderWidth:1.5,borderRadius:6}]},
@@ -417,8 +417,8 @@ function initCharts(tab){
       sc('c-unemp2',{type:'line',data:{
         labels:['Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Apr 25','Jul 25','Oct 25','Dec 25','Jan 26','Mar 26'],
         datasets:[
-          {label:'MA',data:[3.8,3.9,4.1,4.3,4.5,4.6,4.7,4.7,4.7,4.7,4.8],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2.5},
-          {label:'National',data:[3.7,3.9,4.2,4.1,4.0,4.2,4.3,4.1,4.4,4.3,4.4],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2,borderDash:[5,3]}
+          {label:'MA',data:[3.8,3.9,4.1,4.3,4.5,4.6,4.7,4.7,4.7,4.7,4.7],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2.5},
+          {label:'National',data:[3.7,3.9,4.2,4.1,4.0,4.2,4.3,4.1,4.4,4.3,4.3],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2,borderDash:[5,3]}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{min:3,max:5.5,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-lfpr',{type:'line',data:{
@@ -446,7 +446,7 @@ function initCharts(tab){
         labels:['Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Apr 25','Jul 25','Oct 25','Dec 25','Mar 26'],
         datasets:[
           {label:'MA Openings Rate (ended Dec 2025)',data:[5.2,4.9,4.7,4.4,4.5,4.3,4.1,4.2,4.0,null],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2,borderDash:[4,3]},
-          {label:'National (auto-updated)',data:[5.3,5.0,4.8,4.6,4.5,4.5,4.4,4.5,3.9,4.3],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2.5}
+          {label:'National (auto-updated)',data:[5.3,5.0,4.8,4.6,4.5,4.5,4.4,4.3,4.0,4.1],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2.5}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{min:3.5,max:6,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-ratio',{type:'line',data:{
@@ -476,7 +476,7 @@ function initCharts(tab){
       sc('c-trend',{type:'line',data:{
         labels:['Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar 26'],
         datasets:[{label:'MA Unemployment Rate',
-          data:[4.5,4.3,4.6,4.6,4.6,4.6,4.7,4.7,4.7,4.7,4.7,4.7,4.7,4.8],
+          data:[4.5,4.3,4.6,4.6,4.6,4.6,4.7,4.7,4.7,4.7,4.7,4.7,4.7,4.8,4.7],
           borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:R,borderWidth:2.5}]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'%'}}}},scales:{y:{min:4,max:5.2,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       break;
