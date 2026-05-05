@@ -78,6 +78,14 @@ function getLatestValue(series) {
 async function updateDashboard(data) {
   let html = await fs.readFile(DASHBOARD_PATH, 'utf-8');
 
+  // Helper: update any element by data-field attribute value
+  function setField(fieldName, value) {
+    html = html.replace(
+      new RegExp(`(data-field="${fieldName}">)[^<]*(<)`, 'g'),
+      `$1${value}$2`
+    );
+  }
+
   // Hero: MA unemployment rate + label date
   if (data.ma_unemployment_rate?.latest) {
     const rate = data.ma_unemployment_rate.latest.value.toFixed(1);
@@ -86,6 +94,21 @@ async function updateDashboard(data) {
       /(<div class="hero-stat"><div class="val[^"]*">)[\d.]+%(<\/div><div class="lbl">MA Unemployment[^<]*<\/div><\/div>)/,
       `$1${rate}%</div><div class="lbl">MA Unemployment (${date})</div></div>`
     );
+  }
+
+  // JOLTS national openings — updates stat cards and table via data-field anchors
+  if (data.us_job_openings?.latest) {
+    const v = data.us_job_openings.latest.value;
+    const openingsM = (v / 1000).toFixed(1) + 'M';
+    const date = data.us_job_openings.latest.date;
+    const unemployed = data.ma_unemployment_level?.latest?.value ?? 186000;
+    const ratio = (v / unemployed).toFixed(2);
+    setField('jolts-openings', openingsM);
+    setField('jolts-openings-date', `${date} · auto-updated`);
+    setField('jolts-openings-table', openingsM);
+    setField('jolts-col-current', date);
+    setField('jolts-ratio', ratio);
+    console.log(`   ✅ JOLTS fields updated: ${openingsM} (${date})`);
   }
 
   // Footer date
