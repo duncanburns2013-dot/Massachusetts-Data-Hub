@@ -111,8 +111,8 @@ footer a:hover{color:var(--gold)}
   <div class="hero-stats">
     <div class="hero-stat"><div class="val bad">4.7%</div><div class="lbl">MA Unemployment (March 2026)</div></div>
     <div class="hero-stat"><div class="val good">+6,800</div><div class="lbl">Jobs Added in Mar 2026</div></div>
-    <div class="hero-stat"><div class="val warn">4.3%</div><div class="lbl">National Rate (Mar 2026)</div></div>
-    <div class="hero-stat"><div class="val bad">−911K</div><div class="lbl">NFP Revision</div></div>
+    <div class="hero-stat"><div class="val warn">4.3%</div><div class="lbl">National Rate (Apr 2026)</div></div>
+    <div class="hero-stat"><div class="val bad">−43K</div><div class="lbl">Mar 2026 Revised Down</div></div>
   </div>
 </div>
 
@@ -130,7 +130,7 @@ footer a:hover{color:var(--gold)}
 <!-- OVERVIEW -->
 <div class="tab-content active" id="overview">
   <div class="section-title">Labor Market Overview</div>
-  <div class="section-desc">Massachusetts added 6,800 jobs in March — rebounding from February's loss. Unemployment steady at 4.7%</div>
+  <div class="section-desc">March: MA +6,800 · 4.7% · National April release: +115K · 4.3% · March revised down −43K</div>
 
   <div class="alert">
     <h4>🔻 Job Growth Streak Broken</h4>
@@ -143,7 +143,7 @@ footer a:hover{color:var(--gold)}
 
   <div class="chart-grid">
     <div class="chart-card"><h3>Unemployment Rate Trajectory — MA vs. National (2019–2026)</h3><div class="chart-area"><canvas id="c-unemp"></canvas></div></div>
-    <div class="chart-card"><h3>Annual Net Job Growth</h3><div class="chart-area"><canvas id="c-jobs"></canvas></div></div>
+    <div class="chart-card"><h3>Annual Net Job Growth (MA)</h3><div class="chart-area"><canvas id="c-jobs"></canvas></div></div>
   </div>
 
   <div class="info-box">
@@ -261,7 +261,7 @@ footer a:hover{color:var(--gold)}
     <div class="stat-card">
       <div class="label">National Openings</div>
       <div class="value amber" data-field="jolts-openings">6.9M</div>
-      <div class="sub" data-field="jolts-openings-date">March 2026 · auto-updated</div>
+      <div class="sub" data-field="jolts-openings-date">Mar 2026 · 6,866K</div>
     </div>
     <div class="stat-card">
       <div class="label">Last MA Openings (Dec 2025)</div>
@@ -270,7 +270,7 @@ footer a:hover{color:var(--gold)}
     </div>
     <div class="stat-card">
       <div class="label">Openings per Unemployed</div>
-      <div class="value amber" data-field="jolts-ratio">0.04</div>
+      <div class="value amber" data-field="jolts-ratio">0.95</div>
       <div class="sub">2022 peak: 2.0 · Healthy: 1.0–1.2</div>
     </div>
   </div>
@@ -278,7 +278,7 @@ footer a:hover{color:var(--gold)}
   <div class="data-card">
     <h3>JOLTS March 2026 — National Key Metrics (Released May 5, 2026)</h3>
     <table class="data-table">
-      <thead><tr><th>Metric</th><th data-field="jolts-col-current">March 2026</th><th>Mar 2025</th><th>YoY Change</th></tr></thead>
+      <thead><tr><th>Metric</th><th data-field="jolts-col-current">Mar 2026</th><th>Mar 2025</th><th>YoY Change</th></tr></thead>
       <tbody>
         <tr><td>National Job Openings</td><td class="td-amber" data-field="jolts-openings-table">6.9M</td><td>~7.5M</td><td class="td-amber">+100K</td></tr>
         <tr><td>National Hires</td><td class="td-green">5.6M</td><td>~5.2M</td><td class="td-green">+400K</td></tr>
@@ -336,7 +336,20 @@ footer a:hover{color:var(--gold)}
 <!-- LATEST DATA -->
 <div class="tab-content" id="latest">
   <div class="section-title">May 2026 Data Releases</div>
-  <div class="section-desc">March 2026 state employment released May 1, 2026 — payrolls rebound after February loss</div>
+  <div class="section-desc">April 2026 national jobs released May 8, 2026 · March national revised down · MA March released May 1</div>
+
+  <div class="alert amber">
+    <h4>🇺🇸 April 2026 National Employment — Released May 8, 2026</h4>
+    <p>Payrolls: <strong>+115,000</strong> | Unemployment: <strong>4.3%</strong> (unchanged) | March revised down: <strong>+228K → +185K (−43K)</strong><br>
+    Household survey: employed persons <strong>−226,000</strong> in April · down <strong>−1.03M since September 2025</strong><br>
+    Government: <strong>−8,000</strong> (12th consecutive decline) · Information: <strong>−13,000</strong> · Ed/Health: <strong>+46,000</strong><br>
+    Source: BLS USDL-26-XXXX, May 8, 2026</p>
+  </div>
+
+  <div class="alert blue">
+    <h4>⚠️ National Household Survey — Same Divergence as MA</h4>
+    <p>The payroll survey (employer-based) shows +115K jobs. The household survey (worker-based) shows employed persons <strong>fell 226,000</strong> in April and <strong>−1,034,000 since September 2025</strong> nationally. National labor force also shrinking: <strong>−92,000 in April</strong>. This mirrors the MA pattern exactly — the 4.3% rate holds not because hiring is strong but because workers are exiting the labor force. National U-6 (true underemployment) hit <strong>8.2%</strong> in April, up from 8.0% in March.</p>
+  </div>
 
   <div class="alert green">
     <h4>✅ March 2026 State Employment — Released May 1, 2026</h4>
@@ -383,25 +396,30 @@ footer a:hover{color:var(--gold)}
       <div class="source">Source: BLS LAUS / CES via Mass.gov EOLWD · May 1, 2026</div>
     </div>
     <div class="data-card" style="margin-bottom:0">
-      <h3>National Context — March 2026</h3>
+      <h3>National Context — April 2026 (Released May 8)</h3>
       <table class="data-table">
-        <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+        <thead><tr><th>Metric</th><th>Apr 2026</th><th>Mar 2026</th></tr></thead>
         <tbody>
-          <tr><td>National Unemployment</td><td class="td-blue">4.3%</td></tr>
-          <tr><td>National Payroll Change (Mar)</td><td class="td-green">+178,000</td></tr>
-          <tr><td>Healthcare jobs added</td><td class="td-green">+76,000</td></tr>
-          <tr><td>Federal govt employment</td><td class="td-red">Continued decline</td></tr>
-          <tr><td>Discouraged workers</td><td class="td-red">510,000 (+144K MoM)</td></tr>
-          <tr><td>Long-term unemployed</td><td class="td-red">1.8M (+322K YoY)</td></tr>
+          <tr><td>National Unemployment (U-3)</td><td class="td-blue">4.3%</td><td>4.3%</td></tr>
+          <tr><td>National U-6 (true underemployment)</td><td class="td-amber">8.2%</td><td>8.0%</td></tr>
+          <tr><td>Payroll Jobs Change</td><td class="td-amber">+115,000</td><td class="td-amber">+185,000 ↓revised</td></tr>
+          <tr><td>Education &amp; Health</td><td class="td-green">+46,000</td><td class="td-green">+46,000</td></tr>
+          <tr><td>Trade/Transport/Utilities</td><td class="td-green">+60,000</td><td class="td-green">+57,000</td></tr>
+          <tr><td>Government</td><td class="td-red">−8,000</td><td class="td-red">−8,000</td></tr>
+          <tr><td>Information</td><td class="td-red">−13,000</td><td class="td-green">+3,000</td></tr>
+          <tr><td>Financial Activities</td><td class="td-red">−11,000</td><td class="td-red">−5,000</td></tr>
+          <tr><td>Household survey — Employed persons</td><td class="td-red">−226,000</td><td class="td-red">−64,000</td></tr>
+          <tr><td>National labor force change</td><td class="td-red">−92,000</td><td class="td-red">−396,000</td></tr>
+          <tr><td>Employed persons since Sep 2025</td><td class="td-red" colspan="2">−1,034,000 cumulative</td></tr>
         </tbody>
       </table>
-      <div class="source">Source: BLS USDL-26-0580, April 4, 2026</div>
+      <div class="source">Source: BLS USDL May 8, 2026 · March revision: +228K originally → +185K (−43K)</div>
     </div>
   </div>
 
   <div class="info-box" style="margin-top:18px">
     <span class="icon">📅</span>
-    <p><strong>Next releases:</strong> National April 2026 → May 8, 2026 &nbsp;·&nbsp; MA April 2026 → June 2026 &nbsp;·&nbsp; State JOLTS Annual → July 2026</p>
+    <p><strong>Next releases:</strong> National May 2026 → June 6, 2026 <strong>Next releases:</strong> National April 2026 → May 8, 2026 &nbsp;·&nbsp; MA April 2026 → June 2026 &nbsp;·&nbsp; State JOLTS Annual → July 2026nbsp;·<strong>Next releases:</strong> National April 2026 → May 8, 2026 &nbsp;·&nbsp; MA April 2026 → June 2026 &nbsp;·&nbsp; State JOLTS Annual → July 2026nbsp; MA April 2026 → May 22, 2026 <strong>Next releases:</strong> National April 2026 → May 8, 2026 &nbsp;·&nbsp; MA April 2026 → June 2026 &nbsp;·&nbsp; State JOLTS Annual → July 2026nbsp;·<strong>Next releases:</strong> National April 2026 → May 8, 2026 &nbsp;·&nbsp; MA April 2026 → June 2026 &nbsp;·&nbsp; State JOLTS Annual → July 2026nbsp; State JOLTS Annual → July 2026</p>
   </div>
 </div>
 
@@ -409,7 +427,7 @@ footer a:hover{color:var(--gold)}
 
 <footer>
   <strong>Sources:</strong> BLS LAUS · BLS CES · BLS JOLTS · Mass.gov EOLWD · Boston Globe<br>
-  <span style="margin-top:6px;display:block">Updated May 8, 2026 · <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">Massachusetts Data Hub</a></span>
+  <span style="margin-top:6px;display:block">Updated May 4, 2026 · <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">Massachusetts Data Hub</a></span>
 </footer>
 
 <script>
@@ -441,8 +459,8 @@ function initCharts(tab){
       sc('c-unemp',{type:'line',data:{
         labels:['2019','2020','2021','2022','2023','2024','2025','Mar 26'],
         datasets:[
-          {label:'Massachusetts',data:[2.9,9.3,5.2,3.5,3.5,4.1,4.8,4.7],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:R,borderWidth:2.5},
-          {label:'National',data:[3.5,8.1,5.4,3.6,3.6,4.0,4.4,4.3],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:B,borderWidth:2,borderDash:[5,3]}
+          {label:'Massachusetts',data:[2.9,9.3,5.2,3.5,3.5,4.1,4.8,4.7,null],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:R,borderWidth:2.5},
+          {label:'National',data:[3.5,8.1,5.4,3.6,3.6,4.0,4.4,4.3,4.3],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:B,borderWidth:2,borderDash:[5,3]}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-jobs',{type:'bar',data:{
@@ -473,10 +491,10 @@ function initCharts(tab){
 
       // MA vs National rate
       sc('c-unemp2',{type:'line',data:{
-        labels:['Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Apr 25','Jul 25','Oct 25','Dec 25','Jan 26','Mar 26'],
+        labels:['Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Apr 25','Jul 25','Oct 25','Dec 25','Jan 26','Mar 26','Apr 26'],
         datasets:[
-          {label:'MA (U-3)',data:[3.8,3.9,4.1,4.3,4.5,4.6,4.7,4.7,4.7,4.7,4.7],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2.5},
-          {label:'National',data:[3.7,3.9,4.2,4.1,4.0,4.2,4.3,4.1,4.4,4.3,4.3],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2,borderDash:[5,3]}
+          {label:'MA (U-3)',data:[3.8,3.9,4.1,4.3,4.5,4.6,4.7,4.7,4.7,4.7,4.7,null],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2.5},
+          {label:'National',data:[3.7,3.9,4.2,4.1,4.0,4.2,4.3,4.1,4.4,4.3,4.3,4.3],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2,borderDash:[5,3]}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{min:3,max:5.5,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
 
@@ -521,10 +539,10 @@ function initCharts(tab){
 
     case 'jolts':
       sc('c-jolts',{type:'line',data:{
-        labels:['Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Apr 25','Jul 25','Oct 25','Dec 25','Mar 26'],
+        labels:['Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Apr 25','Jul 25','Oct 25','Dec 25','Mar 26','Apr 26'],
         datasets:[
-          {label:'MA Openings Rate (ended Dec 2025)',data:[5.2,4.9,4.7,4.4,4.5,4.3,4.1,4.2,4.0,null],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2,borderDash:[4,3]},
-          {label:'National (auto-updated)',data:[5.3,5.0,4.8,4.6,4.5,4.5,4.4,4.3,4.0,4.1],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2.5}
+          {label:'MA Openings Rate (ended Dec 2025)',data:[5.2,4.9,4.7,4.4,4.5,4.3,4.1,4.2,4.0,null,null],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2,borderDash:[4,3]},
+          {label:'National (auto-updated)',data:[5.3,5.0,4.8,4.6,4.5,4.5,4.4,4.3,4.0,4.1,null],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2.5}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{min:3.5,max:6,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-ratio',{type:'line',data:{
