@@ -1,0 +1,60 @@
+# .github/workflows/update-mls.yml
+#
+# Refreshes current-year MLS PIN figures in ma-housing-dashboard.html,
+# haverhill-market-report.html, and MASTER_DATA.md from Bridge API.
+# Historical years (2014..prev_year) are not modified.
+#
+# Requires repository secret BRIDGE_TOKEN (Bridge Interactive server token,
+# scoped to the MLS PIN dataset).
+
+name: Update MLS Figures
+
+on:
+  schedule:
+    # 09:00 UTC daily = ~04:00–05:00 ET, after overnight MLS sync
+    - cron: "0 9 * * *"
+  push:
+    paths:
+      - "update-mls-figures.py"
+      - ".github/workflows/update-mls.yml"
+  workflow_dispatch:
+
+jobs:
+  update-mls:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Refresh MLS figures
+        env:
+          BRIDGE_TOKEN: ${{ secrets.BRIDGE_TOKEN }}
+        run: python update-mls-figures.py
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet -- ma-housing-dashboard.html haverhill-market-report.html MASTER_DATA.md \
+            && echo "changed=false" >> $GITHUB_OUTPUT \
+            || echo "changed=true"  >> $GITHUB_OUTPUT
+
+      - name: Commit updates
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ma-housing-dashboard.html haverhill-market-report.html MASTER_DATA.md
+          git commit -m "Auto-update: MLS PIN figures $(date -u +'%Y-%m-%d')"
+          git push
+
+      - name: No new data
+        if: steps.changes.outputs.changed == 'false'
+        run: echo "MLS figures unchanged - no commit needed."
