@@ -1,6 +1,6 @@
 # Massachusetts Data Hub — Master Data Reference
 
-> **Last Updated:** May 31, 2026
+> **Last Updated:** June 01, 2026
 > **Maintainer:** Duncan Burns
 > **Purpose:** Single source of truth for all verified data points used across dashboards
 
@@ -154,9 +154,9 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 
 | Metric | Value | Source | Verified |
 |--------|-------|--------|----------|
-| Avg DOM | 36 days | MLS PIN | ✅ Feb 2026 |
-| SP/LP Ratio | 101.09% | MLS PIN | ✅ Feb 2026 |
-| Units Sold | 41,239 | MLS PIN | ✅ Feb 2026 |
+| Avg DOM | 37 days | MLS PIN | ✅ Feb 2026 |
+| SP/LP Ratio | 100.93% | MLS PIN | ✅ Feb 2026 |
+| Units Sold | 37,742 | MLS PIN | ✅ Feb 2026 |
 | Units Sold YoY | +1.5% | MLS PIN | ✅ Feb 2026 |
 
 ### Haverhill Specific
@@ -165,8 +165,8 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 |--------|-------|--------|----------|
 | Median household income | $88,326 | Census QuickFacts ACS 2020-2024 | ✅ Feb 2026 |
 | MA median household income | $104,800 | ACS 2020-2024 | ✅ Feb 2026 |
-| Condo median (Haverhill) | $387,962 | MLS | ✅ Feb 2026 |
-| SF median (Haverhill) | $601,000 | MLS | ✅ Feb 2026 |
+| Condo median (Haverhill) | $385,000 | MLS | ✅ Feb 2026 |
+| SF median (Haverhill) | $600,000 | MLS | ✅ Feb 2026 |
 | Income needed for condo | ~$86K | Calc: 6.5%, 20% down, 28% DTI | ✅ Feb 2026 |
 | Income needed for SF | ~$124K | Calc: 6.5%, 20% down, 28% DTI | ✅ Feb 2026 |
 
