@@ -16,6 +16,7 @@ on:
   push:
     paths:
       - "update-mls-figures.py"
+      - "update-price-distribution.js"
       - ".github/workflows/update-mls.yml"
   workflow_dispatch:
 
@@ -34,15 +35,25 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "20"
+
       - name: Refresh MLS figures
         env:
           BRIDGE_TOKEN: ${{ secrets.BRIDGE_TOKEN }}
         run: python update-mls-figures.py
 
+      - name: Refresh price-distribution tab
+        env:
+          BRIDGE_TOKEN: ${{ secrets.BRIDGE_TOKEN }}
+        run: node update-price-distribution.js
+
       - name: Check for changes
         id: changes
         run: |
-          git diff --quiet -- ma-housing-dashboard.html haverhill-market-report.html MASTER_DATA.md \
+          git diff --quiet -- ma-housing-dashboard.html haverhill-market-report.html MASTER_DATA.md data/price-distribution-latest.json \
             && echo "changed=false" >> $GITHUB_OUTPUT \
             || echo "changed=true"  >> $GITHUB_OUTPUT
 
@@ -51,7 +62,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add ma-housing-dashboard.html haverhill-market-report.html MASTER_DATA.md
+          git add ma-housing-dashboard.html haverhill-market-report.html MASTER_DATA.md data/price-distribution-latest.json
           git commit -m "Auto-update: MLS PIN figures $(date -u +'%Y-%m-%d')"
           git push
 

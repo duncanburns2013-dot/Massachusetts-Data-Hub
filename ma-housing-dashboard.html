@@ -408,6 +408,7 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
         <button class="nav-btn" data-tab="greater-newburyport">Greater Newburyport</button>
         <button class="nav-btn" data-tab="newburyport">Newburyport</button>
         <button class="nav-btn" data-tab="propertytype">By Property Type</button>
+        <button class="nav-btn" data-tab="pricedist">Price Distribution</button>
         <button class="nav-btn" data-tab="affordability">Affordability</button>
     </div></nav>
     
@@ -548,6 +549,31 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
     <div class="chart-box"><div class="chart-header"><h3 class="chart-title">2026 Property-Type Breakdown</h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Market</th><th>Property Type</th><th>Avg Price</th><th>$/SqFt</th><th>DOM</th><th>12-Mo Units</th><th>Months Supply</th></tr></thead><tbody id="pt-table"></tbody></table></div></div>
     </div></section>
     
+    <section class="section" id="pricedist"><div class="container">
+        <div class="section-header"><h2 class="section-title">Sales by Price Bracket</h2><p class="section-desc">Share of single-family sales at each price point — past 5 years + current YTD. MLS PIN.</p></div>
+
+        <div style="display:flex;gap:6px;margin:10px 0 18px;flex-wrap:wrap;" id="pd-geo-row">
+            <button class="pd-geo active" data-geo="ma"     style="padding:8px 16px;border:1px solid #0f2942;background:#0f2942;color:#fff;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;letter-spacing:0.05em;text-transform:uppercase;">Massachusetts</button>
+            <button class="pd-geo"        data-geo="boston" style="padding:8px 16px;border:1px solid #ddd8d0;background:#fff;color:#0f2942;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;letter-spacing:0.05em;text-transform:uppercase;">Boston</button>
+            <button class="pd-geo"        data-geo="essex"  style="padding:8px 16px;border:1px solid #ddd8d0;background:#fff;color:#0f2942;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;letter-spacing:0.05em;text-transform:uppercase;">Essex County</button>
+            <button class="pd-geo"        data-geo="gn"     style="padding:8px 16px;border:1px solid #ddd8d0;background:#fff;color:#0f2942;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;letter-spacing:0.05em;text-transform:uppercase;">Greater Newburyport</button>
+            <button class="pd-geo"        data-geo="nbpt"   style="padding:8px 16px;border:1px solid #ddd8d0;background:#fff;color:#0f2942;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;letter-spacing:0.05em;text-transform:uppercase;">Newburyport</button>
+        </div>
+
+        <div class="cards even-4">
+            <div class="card blue-border"><div class="card-label" id="pd-card-1-lbl">Sub-$500K share</div><div class="card-val blue" id="pd-card-1-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">5 yrs ago</div><div class="card-metric-val" id="pd-card-1-then">—</div></div><div class="card-metric"><div class="card-metric-label">Now</div><div class="card-metric-val" id="pd-card-1-now">—</div></div></div></div>
+            <div class="card green-border"><div class="card-label" id="pd-card-2-lbl">$500K–$1M share</div><div class="card-val green" id="pd-card-2-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">5 yrs ago</div><div class="card-metric-val" id="pd-card-2-then">—</div></div><div class="card-metric"><div class="card-metric-label">Now</div><div class="card-metric-val" id="pd-card-2-now">—</div></div></div></div>
+            <div class="card yellow-border"><div class="card-label" id="pd-card-3-lbl">$1M+ share</div><div class="card-val yellow" id="pd-card-3-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">5 yrs ago</div><div class="card-metric-val" id="pd-card-3-then">—</div></div><div class="card-metric"><div class="card-metric-label">Now</div><div class="card-metric-val" id="pd-card-3-now">—</div></div></div></div>
+            <div class="card red-border"><div class="card-label">12-Mo Sales</div><div class="card-val red" id="pd-card-4-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">5 yrs ago</div><div class="card-metric-val" id="pd-card-4-then">—</div></div><div class="card-metric"><div class="card-metric-label">YoY</div><div class="card-metric-val" id="pd-card-4-yoy">—</div></div></div></div>
+        </div>
+
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Share by Price Bracket (100%)</h3></div><div class="chart-area" id="pd-share-chart"></div></div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Sales Volume by Price Bracket</h3></div><div class="chart-area" id="pd-volume-chart"></div></div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">5-Year Distribution Table — Share of Sales (%)</h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Bracket</th><th id="pd-th-0">—</th><th id="pd-th-1">—</th><th id="pd-th-2">—</th><th id="pd-th-3">—</th><th id="pd-th-4">—</th><th id="pd-th-5">—</th><th>Shift</th></tr></thead><tbody id="pd-tbody"></tbody></table></div></div>
+
+        <p style="font-size:0.75rem;color:#777;margin-top:14px;text-align:center;">Single-family residential closings only. Greater Newburyport = Newburyport, Amesbury, Salisbury, Newbury, Rowley, West Newbury. Source: MLS PIN via Bridge Data Output.</p>
+    </div></section>
+
     <section class="section" id="affordability"><div class="container">
         <div class="section-header"><h2 class="section-title">Affordability Analysis</h2><p class="section-desc">Income requirements at standard lending criteria — 30-yr fixed @ 6.5%, 20% down, 28% DTI</p></div>
         <div class="afford-box"><h3 class="summary-title" style="color:#92400e;">Newburyport — Income Requirements</h3><div class="summary-grid"><div class="summary-item"><div class="summary-label">Home Price</div><div class="summary-val blue">$1104K</div></div><div class="summary-item"><div class="summary-label">Down (20%)</div><div class="summary-val yellow">$221K</div></div><div class="summary-item"><div class="summary-label">Monthly @6.5%</div><div class="summary-val green">$5,583</div></div><div class="summary-item"><div class="summary-label">Income Needed</div><div class="summary-val red">$239K</div><div class="summary-note">28% DTI</div></div></div></div>
@@ -1002,7 +1028,7 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
     document.querySelector('[data-tab="propertytype"]').addEventListener('click', () => {
         setTimeout(initPTIfNeeded, 50);
     });
-    
+
     // ── YoY bar chart ──────────────────────────────────────────────────────────
     new ApexCharts(document.querySelector('#yoy-bar-chart'), {
         ...baseOpts,
@@ -1040,6 +1066,157 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
         annotations: { yaxis: [{ y: 0, borderColor: '#333', strokeDashArray: 0, borderWidth: 1 }] }
     }).render();
 
-</script>
+
+    // ============== Price Distribution tab ==============
+    // Data block — regenerated weekly by update-price-distribution.js (Bridge MLS PIN).
+    /* PRICE_DIST_START */const priceDist = {"meta":{"generated":"2026-06-03","source":"MLS PIN via Bridge Data Output","property_type":"Single Family Residence (Residential)","buckets":["<250K","250-500K","500-750K","750K-1M","1-1.5M","1.5-2M","2-3M","3M+"],"year_labels":["2021","2022","2023","2024","2025","2026 YTD"],"years":[2021,2022,2023,2024,2025,2026]},"geos":{"ma":{"label":"Massachusetts","counts":[[3317,20841,16415,6645,3756,1547,910,489],[1939,15536,14815,6475,3919,1607,1033,515],[1218,11432,11752,5803,3373,1429,886,437],[844,10163,12835,6585,4266,1611,1125,568],[689,9467,12909,7316,4624,1819,1336,706],[227,2832,3990,2152,1388,606,461,241]],"totals":[53920,45839,36330,37997,38866,11897]},"boston":{"label":"Boston","counts":[[1,78,446,298,158,46,37,52],[1,55,371,267,158,66,31,42],[0,53,274,216,120,48,22,28],[1,28,282,212,157,51,33,41],[0,14,238,225,188,65,37,46],[0,10,84,70,43,19,17,11]],"totals":[1116,991,761,805,813,254]},"essex":{"label":"Essex County","counts":[[27,1651,2443,1100,492,142,77,32],[13,1049,2204,965,557,171,79,39],[9,619,1652,857,511,164,58,28],[4,406,1866,960,633,199,87,46],[5,330,1812,1138,703,226,118,37],[1,109,509,329,197,75,29,9]],"totals":[5964,5077,3898,4201,4369,1258]},"gn":{"label":"Greater Newburyport","counts":[[3,117,234,155,75,22,6,1],[2,82,193,114,89,29,15,2],[4,47,132,126,75,31,9,0],[0,34,143,130,99,31,19,3],[1,17,129,141,104,41,25,2],[0,9,44,47,27,7,3,0]],"totals":[613,526,424,459,460,137]},"nbpt":{"label":"Newburyport","counts":[[0,9,64,49,45,14,4,0],[0,3,43,38,41,22,8,1],[0,1,30,37,28,22,7,0],[0,1,19,33,48,16,12,2],[0,0,17,41,37,25,20,1],[0,0,6,12,10,2,3,0]],"totals":[185,156,125,131,141,33]}}};/* PRICE_DIST_END */
+
+    const pdBuckets = priceDist.meta.buckets;
+    const pdYears   = priceDist.meta.year_labels;
+    // Gradient: cool (cheap) → warm (expensive). 8 stops.
+    const pdColors = ['#2d6bc4','#3a85b8','#5da06f','#92a04a','#c9a84c','#d68b3a','#c23b22','#7d1d12'];
+    let pdGeo = 'ma';
+    let pdCharts = {};
+
+    function pdPct(n, total) { return total ? (100 * n / total) : 0; }
+    function pdShift(now, then) {
+        const s = now - then;
+        const sign = s > 0 ? '+' : '';
+        const cls = s > 0.5 ? 'up' : (s < -0.5 ? 'down' : '');
+        return { txt: `${sign}${s.toFixed(1)}`, cls };
+    }
+
+    function pdRender() {
+        Object.values(pdCharts).forEach(c => c && c.destroy && c.destroy());
+        pdCharts = {};
+        const g = priceDist.geos[pdGeo];
+        if (!g) return;
+        const yrCount = pdYears.length;
+
+        // Series for the SHARE chart: one series per bucket, value = % per year.
+        const shareSeries = pdBuckets.map((bl, bi) => ({
+            name: bl,
+            data: g.counts.map((row, yi) => +pdPct(row[bi], g.totals[yi]).toFixed(2))
+        }));
+        // Series for the VOLUME chart: one series per bucket, value = count per year.
+        const volSeries = pdBuckets.map((bl, bi) => ({
+            name: bl,
+            data: g.counts.map(row => row[bi])
+        }));
+
+        pdCharts.share = new ApexCharts(document.querySelector('#pd-share-chart'), {
+            ...baseOpts, chart: { ...baseOpts.chart, type: 'bar', height: 380, stacked: true, stackType: '100%' },
+            series: shareSeries, colors: pdColors,
+            plotOptions: { bar: { borderRadius: 4, borderRadiusApplication: 'around', columnWidth: '62%' } },
+            stroke: { width: 1, colors: ['#fff'] },
+            fill: { type: 'gradient', gradient: { shade:'light', type:'vertical', shadeIntensity:0.3, opacityFrom:1, opacityTo:0.85, stops:[0,100] } },
+            xaxis: { categories: pdYears, axisBorder: { show: false }, axisTicks: { show: false } },
+            yaxis: { labels: { formatter: v => v.toFixed(0) + '%' }, max: 100 },
+            legend: { ...baseOpts.legend, position: 'bottom', horizontalAlign: 'center' },
+            tooltip: { ...baseOpts.tooltip, y: { formatter: (v, {seriesIndex, dataPointIndex}) => {
+                const n = g.counts[dataPointIndex][seriesIndex];
+                return `${v.toFixed(1)}%  (${n.toLocaleString()} sales)`;
+            } } }
+        });
+        pdCharts.share.render();
+
+        pdCharts.vol = new ApexCharts(document.querySelector('#pd-volume-chart'), {
+            ...baseOpts, chart: { ...baseOpts.chart, type: 'bar', height: 380, stacked: true },
+            series: volSeries, colors: pdColors,
+            plotOptions: { bar: { borderRadius: 4, borderRadiusApplication: 'around', columnWidth: '62%' } },
+            stroke: { width: 1, colors: ['#fff'] },
+            fill: { type: 'gradient', gradient: { shade:'light', type:'vertical', shadeIntensity:0.3, opacityFrom:1, opacityTo:0.85, stops:[0,100] } },
+            xaxis: { categories: pdYears, axisBorder: { show: false }, axisTicks: { show: false } },
+            yaxis: { labels: { formatter: v => v >= 1000 ? (v/1000).toFixed(1) + 'K' : Math.round(v) } },
+            legend: { ...baseOpts.legend, position: 'bottom', horizontalAlign: 'center' },
+            tooltip: { ...baseOpts.tooltip, y: { formatter: v => v.toLocaleString() + ' sales' } }
+        });
+        pdCharts.vol.render();
+
+        // Headline cards: sub-500K, 500K-1M, $1M+, total
+        const last = yrCount - 1;
+        const first = 0;
+        const sub500Now  = g.counts[last].slice(0, 2).reduce((a,b)=>a+b,0);
+        const sub500Then = g.counts[first].slice(0, 2).reduce((a,b)=>a+b,0);
+        const mid1MNow   = g.counts[last].slice(2, 4).reduce((a,b)=>a+b,0);
+        const mid1MThen  = g.counts[first].slice(2, 4).reduce((a,b)=>a+b,0);
+        const overNow    = g.counts[last].slice(4).reduce((a,b)=>a+b,0);
+        const overThen   = g.counts[first].slice(4).reduce((a,b)=>a+b,0);
+        const totNow  = g.totals[last];
+        const totThen = g.totals[first];
+        const totPrev = g.totals[last - 1] || 0;
+
+        const pNowSub  = pdPct(sub500Now, totNow);
+        const pThenSub = pdPct(sub500Then, totThen);
+        const pNowMid  = pdPct(mid1MNow, totNow);
+        const pThenMid = pdPct(mid1MThen, totThen);
+        const pNowOver = pdPct(overNow, totNow);
+        const pThenOver= pdPct(overThen, totThen);
+
+        document.getElementById('pd-card-1-val').textContent  = pNowSub.toFixed(1) + '%';
+        document.getElementById('pd-card-1-then').textContent = pThenSub.toFixed(1) + '%';
+        document.getElementById('pd-card-1-now').textContent  = pdShift(pNowSub, pThenSub).txt + ' pts';
+        document.getElementById('pd-card-2-val').textContent  = pNowMid.toFixed(1) + '%';
+        document.getElementById('pd-card-2-then').textContent = pThenMid.toFixed(1) + '%';
+        document.getElementById('pd-card-2-now').textContent  = pdShift(pNowMid, pThenMid).txt + ' pts';
+        document.getElementById('pd-card-3-val').textContent  = pNowOver.toFixed(1) + '%';
+        document.getElementById('pd-card-3-then').textContent = pThenOver.toFixed(1) + '%';
+        document.getElementById('pd-card-3-now').textContent  = pdShift(pNowOver, pThenOver).txt + ' pts';
+        document.getElementById('pd-card-4-val').textContent  = totNow.toLocaleString();
+        document.getElementById('pd-card-4-then').textContent = totThen.toLocaleString();
+        const yoyPct = totPrev ? ((totNow - totPrev) / totPrev * 100) : 0;
+        document.getElementById('pd-card-4-yoy').textContent = (yoyPct > 0 ? '+' : '') + yoyPct.toFixed(1) + '%';
+
+        // Year header
+        pdYears.forEach((yl, i) => {
+            const th = document.getElementById('pd-th-' + i);
+            if (th) th.textContent = yl;
+        });
+
+        // Table body: row per bucket, % per year + shift
+        const tbody = document.getElementById('pd-tbody');
+        let html = '';
+        pdBuckets.forEach((bl, bi) => {
+            const cells = pdYears.map((_, yi) => pdPct(g.counts[yi][bi], g.totals[yi]).toFixed(1) + '%').map(v => `<td>${v}</td>`).join('');
+            const pNow  = pdPct(g.counts[last][bi], g.totals[last]);
+            const pThen = pdPct(g.counts[first][bi], g.totals[first]);
+            const sh = pdShift(pNow, pThen);
+            html += `<tr><td>${bl}</td>${cells}<td class="${sh.cls}">${sh.txt} pts</td></tr>`;
+        });
+        // Total row
+        const totCells = pdYears.map((_, yi) => `<td>${g.totals[yi].toLocaleString()}</td>`).join('');
+        html += `<tr style="font-weight:600;background:#faf7f0;"><td>Sales count</td>${totCells}<td>—</td></tr>`;
+        tbody.innerHTML = html;
+    }
+
+    document.querySelectorAll('.pd-geo').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.pd-geo').forEach(b => {
+                b.classList.remove('active');
+                b.style.background = '#fff'; b.style.color = '#0f2942'; b.style.borderColor = '#ddd8d0';
+            });
+            btn.classList.add('active');
+            btn.style.background = '#0f2942'; btn.style.color = '#fff'; btn.style.borderColor = '#0f2942';
+            pdGeo = btn.dataset.geo;
+            pdRender();
+        });
+    });
+
+    let pdInited = false;
+    function initPDIfNeeded() {
+        const sec = document.getElementById('pricedist');
+        if (!sec.classList.contains('active')) return;
+        const c1 = document.querySelector('#pd-share-chart');
+        if (!c1 || c1.clientWidth < 50) {
+            requestAnimationFrame(initPDIfNeeded);
+            return;
+        }
+        pdRender();
+        pdInited = true;
+    }
+    document.querySelector('[data-tab="pricedist"]').addEventListener('click', () => {
+        setTimeout(initPDIfNeeded, 50);
+    });
+    </script>
 </body>
 </html>
