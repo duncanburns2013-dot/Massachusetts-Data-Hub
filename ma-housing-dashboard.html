@@ -314,8 +314,9 @@ body{font-family:'DM Sans',system-ui,sans-serif !important;background:#f8f7f4 !i
 .hs-val.gold{color:#e8a87c !important}
 .hs-note{font-size:0.6rem !important;opacity:0.4 !important}
 nav{background:#fff !important;border-bottom:1px solid #e8e5df !important;position:sticky !important;top:0 !important;z-index:100 !important;box-shadow:0 1px 3px rgba(0,0,0,0.04) !important}
-.nav-inner{justify-content:center !important;max-width:1200px !important;margin:0 auto !important}
-.nav-btn{font-family:'DM Sans',system-ui,sans-serif !important;padding:15px 22px !important;font-size:0.78rem !important;font-weight:600 !important;border:none !important;background:none !important;color:#7a756e !important;border-bottom:2px solid transparent !important;border-radius:0 !important;text-transform:uppercase !important;letter-spacing:0.06em !important;transition:all 0.25s !important}
+.nav-inner{justify-content:flex-start !important;max-width:1200px !important;margin:0 auto !important;flex-wrap:nowrap !important;overflow-x:auto !important}
+@media (min-width: 1240px) { .nav-inner { justify-content: center !important; } }
+.nav-btn{font-family:'DM Sans',system-ui,sans-serif !important;padding:15px 14px !important;font-size:0.78rem !important;font-weight:600 !important;border:none !important;background:none !important;color:#7a756e !important;border-bottom:2px solid transparent !important;border-radius:0 !important;text-transform:uppercase !important;letter-spacing:0.05em !important;transition:all 0.25s !important;flex-shrink:0 !important}
 .nav-btn:hover{color:#1a1a1a !important;background:rgba(0,0,0,0.02) !important}
 .nav-btn.active{color:#0f2942 !important;background:none !important;border-bottom-color:#c9a84c !important}
 .section-title{font-family:'DM Serif Display',Georgia,serif !important;font-size:1.35rem !important;font-weight:400 !important;color:#0f2942 !important}
@@ -407,8 +408,8 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
         <button class="nav-btn" data-tab="essex">Essex County</button>
         <button class="nav-btn" data-tab="greater-newburyport">Greater Newburyport</button>
         <button class="nav-btn" data-tab="newburyport">Newburyport</button>
-        <button class="nav-btn" data-tab="propertytype">By Property Type</button>
-        <button class="nav-btn" data-tab="pricedist">Price Distribution</button>
+        <button class="nav-btn" data-tab="propertytype">Property Type</button>
+        <button class="nav-btn" data-tab="pricedist">Price Tiers</button>
         <button class="nav-btn" data-tab="affordability">Affordability</button>
     </div></nav>
     
