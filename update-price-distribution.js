@@ -75,22 +75,26 @@ function bucketFilter(low, high) {
   return f;
 }
 
-function getTotal(params, maxRetries = 4) {
+function getTotal(params, maxRetries = 8) {
   return new Promise((resolve, reject) => {
     const qs = new URLSearchParams({ ...params, limit: 1, fields: 'ListingId' }).toString();
     const url = `${BASE}?${qs}`;
     const attempt = (n) => {
       const req = https.get(url, {
+        timeout: 30000,
         headers: { Authorization: `Bearer ${TOKEN}`, 'User-Agent': 'MA-Data-Hub/PriceDist/1.0' }
       }, (res) => {
         let body = '';
         res.on('data', c => body += c);
         res.on('end', () => {
           if (res.statusCode >= 400) {
+            // Retry on 429 (rate-limited) and any 5xx. Exponential backoff with jitter so
+            // 8 parallel workers don't all wake up and resend simultaneously.
             if ((res.statusCode === 429 || res.statusCode >= 500) && n < maxRetries) {
-              return setTimeout(() => attempt(n + 1), 1500 * (n + 1));
+              const wait = Math.min(60000, Math.pow(2, n) * 1000) + Math.random() * 1000;
+              return setTimeout(() => attempt(n + 1), wait);
             }
-            return reject(new Error(`HTTP ${res.statusCode} ${url}\n  ${body.slice(0, 200)}`));
+            return reject(new Error(`HTTP ${res.statusCode} after ${n+1} attempts: ${body.slice(0, 200)}`));
           }
           try {
             const data = JSON.parse(body);
@@ -99,16 +103,20 @@ function getTotal(params, maxRetries = 4) {
         });
       });
       req.on('error', (e) => {
-        if (n < maxRetries) setTimeout(() => attempt(n + 1), 1500 * (n + 1));
-        else reject(e);
+        if (n < maxRetries) {
+          const wait = Math.min(60000, Math.pow(2, n) * 1000) + Math.random() * 1000;
+          setTimeout(() => attempt(n + 1), wait);
+        } else reject(e);
       });
+      req.on('timeout', () => { req.destroy(new Error('socket timeout')); });
     };
     attempt(0);
   });
 }
 
-// Simple pool limit so we don't slam Bridge
-async function pool(items, worker, limit = 8) {
+// Simple pool limit so we don't slam Bridge. 4 workers keeps us well clear
+// of Bridge's per-second cap even when the queue is hot.
+async function pool(items, worker, limit = 4) {
   const out = new Array(items.length);
   let i = 0;
   async function next() {
@@ -157,7 +165,7 @@ async function pool(items, worker, limit = 8) {
     if (done % 20 === 0 || done === jobs.length) {
       console.log(`  [${done}/${jobs.length}] ${((Date.now() - t0) / 1000).toFixed(1)}s`);
     }
-  }, 8);
+  }, 4);
   console.log(`[price-dist] all counts fetched in ${((Date.now() - t0) / 1000).toFixed(1)}s\n`);
 
   const bucketLabels = BUCKETS.map(b => b[0]);
