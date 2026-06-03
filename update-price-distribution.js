@@ -207,12 +207,10 @@ async function pool(items, worker, limit = 4) {
     const escRe = s => s.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&');
     const pat = new RegExp(escRe(START) + '[\\s\\S]*?' + escRe(END));
     const newHtml = html.replace(pat, START + jsLit + END);
-    if (newHtml === html) {
-      console.error('[price-dist] marker substitution made no change — aborting write');
-      process.exit(1);
-    }
+    // no-change is a legitimate outcome (same-day re-run). includes() check above
+    // already guarantees the markers exist and the regex matched.
     fs.writeFileSync(dash, newHtml);
-    console.log(`[price-dist] injected data block into ${path.basename(dash)}`);
+    console.log(`[price-dist] injected data block into ${path.basename(dash)} (${newHtml === html ? 'no change' : 'updated'})`);
   } else {
     console.log(`[price-dist] WARN: ${START}/${END} markers not found in ${path.basename(dash)} — JSON only`);
   }

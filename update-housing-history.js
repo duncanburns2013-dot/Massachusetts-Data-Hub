@@ -181,12 +181,12 @@ function decimate(series, every) {
     const escRe = s => s.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&');
     const pat = new RegExp(escRe(START) + '[\\s\\S]*?' + escRe(END));
     const newHtml = html.replace(pat, START + jsLit + END);
-    if (newHtml === html) {
-      console.error('[housing-history] marker substitution made no change — aborting write');
-      process.exit(1);
-    }
+    // newHtml === html is fine — happens when today's FRED pull matches yesterday's
+    // baked-in data byte-for-byte (Case-Shiller is monthly, CPI is monthly, so most
+    // days the data is unchanged). Only the markers' presence matters; the includes()
+    // check above already guarantees the regex matched.
     fs.writeFileSync(dash, newHtml);
-    console.log(`[housing-history] injected into ${path.basename(dash)}`);
+    console.log(`[housing-history] injected into ${path.basename(dash)} (${newHtml === html ? 'no change' : 'updated'})`);
   } else {
     console.log(`[housing-history] WARN: ${START}/${END} markers not in ${path.basename(dash)} — JSON only`);
   }
