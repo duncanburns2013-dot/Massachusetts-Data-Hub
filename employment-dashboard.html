@@ -74,7 +74,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .chart-card h3{font-size:0.82rem;font-weight:700;margin-bottom:12px;color:var(--navy)}
 .chart-area{position:relative;height:260px}
 
-/* DATA CARDS (3-col metric boxes) */
+/* DATA CARDS */
 .metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:18px}
 .metric-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
 .metric-card .mc-label{font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:8px}
@@ -109,10 +109,10 @@ footer a:hover{color:var(--gold)}
   <h1>Employment &amp; Labor Market</h1>
   <p class="sub">Massachusetts job growth, unemployment, and JOLTS analysis — built from official BLS data.</p>
   <div class="hero-stats">
-    <div class="hero-stat"><div class="val bad">4.7%</div><div class="lbl">MA Unemployment (April 2026)</div></div>
-    <div class="hero-stat"><div class="val good">+6,800</div><div class="lbl">Jobs Added in Mar 2026</div></div>
+    <div class="hero-stat"><div class="val warn">4.7%</div><div class="lbl">MA Unemployment (Apr 2026)</div></div>
+    <div class="hero-stat"><div class="val good">+8,500</div><div class="lbl">MA Jobs Added Apr 2026</div></div>
+    <div class="hero-stat"><div class="val good">+21,600</div><div class="lbl">MA Jobs Since Sep 2025</div></div>
     <div class="hero-stat"><div class="val warn">4.3%</div><div class="lbl">National Rate (Apr 2026)</div></div>
-    <div class="hero-stat"><div class="val bad">−43K</div><div class="lbl">Mar 2026 Revised Down</div></div>
   </div>
 </div>
 
@@ -120,9 +120,11 @@ footer a:hover{color:var(--gold)}
   <button class="tab-btn active" onclick="switchTab('overview',this)">Overview</button>
   <button class="tab-btn" onclick="switchTab('unemployment',this)">Unemployment</button>
   <button class="tab-btn" onclick="switchTab('jobs',this)">Job Growth</button>
-  <button class="tab-btn" onclick="switchTab('jolts',this)">JOLTS</button>
   <button class="tab-btn" onclick="switchTab('sectors',this)">By Sector</button>
-  <button class="tab-btn new-tab" onclick="switchTab('latest',this)">📅 May 2026 Data</button>
+  <button class="tab-btn" onclick="switchTab('regions',this)">MA Regions</button>
+  <button class="tab-btn new-tab" onclick="switchTab('nativity',this)">🌎 Foreign-Born vs Native</button>
+  <button class="tab-btn" onclick="switchTab('jolts',this)">JOLTS</button>
+  <button class="tab-btn new-tab" onclick="switchTab('latest',this)">📅 Latest Releases</button>
 </nav>
 
 <div class="container">
@@ -130,15 +132,15 @@ footer a:hover{color:var(--gold)}
 <!-- OVERVIEW -->
 <div class="tab-content active" id="overview">
   <div class="section-title">Labor Market Overview</div>
-  <div class="section-desc">March: MA +6,800 · 4.7% · National April release: +115K · 4.3% · March revised down −43K</div>
+  <div class="section-desc">April: MA +8,500 jobs · 4.7% UR · +21,600 jobs since Sept 2025 · National +115K · 4.3%</div>
 
-  <div class="alert">
-    <h4>🔻 Job Growth Streak Broken</h4>
-    <p><strong>+6,800 jobs in March 2026</strong> — Massachusetts rebounded sharply after losing 7,100 jobs in February. Over the past six months (Oct 2025–Mar 2026), MA has added +12,700 jobs. Source: BLS CES via Mass.gov EOLWD, released May 1, 2026.</p>
+  <div class="alert green">
+    <h4>✅ Six Straight Months of MA Job Growth</h4>
+    <p><strong>+8,500 jobs in April 2026</strong>, after a revised <strong>+7,200 in March</strong> (revised up from +6,800). Since September 2025, Massachusetts has added <strong>+21,600 payroll jobs</strong> (incl. +19,600 private) and has <strong>outpaced the country over the past six months</strong>. Source: BLS CES via Mass.gov EOLWD, released May 22, 2026.</p>
   </div>
   <div class="alert amber">
-    <h4>⚠️ Unemployment Ticks Back Up</h4>
-    <p>MA unemployment at <strong>4.7%</strong> in March 2026 — down from 4.8% in February. Household survey shows employed persons fell ~42,000 since September 2025 as the labor force shrinks.</p>
+    <h4>⚠️ Unemployment Holds at 4.7% as Labor Force Continues to Shrink</h4>
+    <p>MA unemployment held at <strong>4.7%</strong> in April — 0.4 pts above the national 4.3%. Labor force fell another <strong>−11,700</strong> in April (9,600 fewer employed, 2,200 fewer unemployed). EOLWD attributes the decline primarily to retirements; the prime-age (25–54) participation rate is <strong>86.7%, a 10-year high</strong>.</p>
   </div>
 
   <div class="chart-grid">
@@ -148,25 +150,25 @@ footer a:hover{color:var(--gold)}
 
   <div class="info-box">
     <span class="icon">📈</span>
-    <p><strong>March rebounds but underlying weakness persists.</strong> The household survey shows employed persons fell ~42,000 since September 2025 — driven by retirements and immigration effects shrinking the labor force. Payroll growth is positive but the workforce is contracting. Employment declined in 8 of 9 largest MA counties Sep 2024–Sep 2025. — Boston Globe, BLS LAUS, May 1, 2026</p>
+    <p><strong>Two surveys, two stories.</strong> The payroll (employer) survey shows MA expanding for six straight months. The household survey shows a shrinking labor force — down roughly 64,000 from the March 2025 peak through April 2026. EOLWD frames this as retirement-driven (25–54 LFPR at a 10-year high), but immigration policy changes and a smaller foreign-born labor force are also pulling on the supply side. — Mass.gov EOLWD, May 22, 2026</p>
   </div>
 </div>
 
 <!-- UNEMPLOYMENT -->
 <div class="tab-content" id="unemployment">
   <div class="section-title">Unemployment Deep Dive</div>
-  <div class="section-desc">4.7% headline masks accelerating labor force collapse — 52,000 residents dropped out in 12 months</div>
+  <div class="section-desc">4.7% holds steady · Labor force down ~64K from peak · Prime-age participation at 10-year high (86.7%)</div>
 
-  <div class="alert">
-    <h4>🔻 The Headline is Misleading — The Labor Force is Collapsing</h4>
-    <p>MA unemployment held at <strong>4.7%</strong> in March 2026 — not because hiring improved, but because <strong>15,027 people left the labor force in March alone</strong>, the worst single-month drop on record. Peak to March 2026: <strong>−52,339 people</strong> exited the MA labor force in 12 months. When the denominator shrinks, the rate stays flat even if zero jobs are created.</p>
+  <div class="alert amber">
+    <h4>⚠️ Rate Stable But Labor Force Still Shrinking</h4>
+    <p>MA unemployment held at <strong>4.7%</strong> in April 2026 — the eleventh consecutive month at or near that level. The labor force fell <strong>−11,700 in April</strong>, on top of <strong>−15,027 in March</strong>. Peak (Mar 2025) to April 2026: roughly <strong>−64,000 people</strong> exited the MA labor force. EOLWD attributes the decline to retirements; the 25–54 prime-age participation rate is at a <strong>10-year high of 86.7%</strong>.</p>
   </div>
 
   <div class="stat-row">
-    <div class="stat-card"><div class="label">MA Rate — Mar 2026 (U-3)</div><div class="value amber">4.7%</div><div class="sub">Pre-COVID (2019): 2.9%</div></div>
+    <div class="stat-card"><div class="label">MA Rate — Apr 2026 (U-3)</div><div class="value amber">4.7%</div><div class="sub">Held · Pre-COVID (2019): 2.9%</div></div>
     <div class="stat-card"><div class="label">MA Rate — Q3 2025 (U-6)</div><div class="value red">7.2%</div><div class="sub">True underemployment · +2.9 pts above U-3</div></div>
-    <div class="stat-card"><div class="label">Mar 2026 Labor Force Drop</div><div class="value red">−15,027</div><div class="sub">Worst single month on record</div></div>
-    <div class="stat-card"><div class="label">12-Month Labor Force Loss</div><div class="value red">−52,339</div><div class="sub">Peak Mar 2025 → Mar 2026</div></div>
+    <div class="stat-card"><div class="label">Apr 2026 Labor Force Drop</div><div class="value red">−11,700</div><div class="sub">12-mo decline ~64K from peak</div></div>
+    <div class="stat-card"><div class="label">Prime-Age LFPR (25–54)</div><div class="value green">86.7%</div><div class="sub">10-year high · per EOLWD</div></div>
   </div>
 
   <div class="chart-grid">
@@ -174,9 +176,9 @@ footer a:hover{color:var(--gold)}
     <div class="chart-card"><h3>MA vs. National Unemployment Rate (2024–2026)</h3><div class="chart-area"><canvas id="c-unemp2"></canvas></div></div>
   </div>
 
-  <div class="info-box danger">
-    <span class="icon">⚠️</span>
-    <p><strong>Why the rate looks stable while the labor market deteriorates:</strong> When discouraged workers stop searching, they exit the labor force entirely and disappear from the U-3 calculation. MA lost 15,027 from the labor force in March alone — if even half had stayed and been counted as unemployed, the rate would have been ~5.1% instead of 4.7%. The rate is a fraction. Both the numerator and denominator are moving.</p>
+  <div class="info-box">
+    <span class="icon">📐</span>
+    <p><strong>Why the rate can hold steady while the labor force shrinks:</strong> U-3 is a fraction — unemployed ÷ labor force. When people exit the labor force (retire, stop searching, leave the country), both denominator and numerator can fall, leaving the rate flat. EOLWD's framing is that retirements are the dominant driver and prime-age engagement is actually at a 10-year high. The supply-side story matters as much as the unemployment rate for understanding labor market tightness.</p>
   </div>
 
   <div class="chart-grid">
@@ -212,33 +214,141 @@ footer a:hover{color:var(--gold)}
         <tr><td>Jun 2025</td><td>3,948,218</td><td class="td-red">−1,418</td><td>Slow bleed begins</td></tr>
         <tr><td>Sep 2025</td><td>3,939,694</td><td class="td-red">−3,306</td><td>Accelerating</td></tr>
         <tr><td>Jan 2026</td><td>3,926,744</td><td class="td-red">−8,842</td><td>Sharp deterioration</td></tr>
-        <tr><td>Feb 2026</td><td>3,915,281</td><td class="td-red">−11,463</td><td>Accelerating further</td></tr>
-        <tr><td>Mar 2026</td><td class="td-red">3,900,254</td><td class="td-red"><strong>−15,027</strong></td><td class="td-red">Worst month on record</td></tr>
-        <tr><td><strong>12-Month Total</strong></td><td>—</td><td class="td-red"><strong>−52,339</strong></td><td class="td-red">Peak to Mar 2026</td></tr>
+        <tr><td>Feb 2026</td><td>3,915,281</td><td class="td-red">−11,463</td><td>Largest single drop to date</td></tr>
+        <tr><td>Mar 2026</td><td>3,900,254</td><td class="td-red"><strong>−15,027</strong></td><td class="td-red">Worst single month</td></tr>
+        <tr><td>Apr 2026 (prelim)</td><td class="td-amber">~3,888,554</td><td class="td-amber"><strong>−11,700</strong></td><td class="td-amber">Decline moderates</td></tr>
+        <tr><td><strong>13-Month Total</strong></td><td>—</td><td class="td-red"><strong>≈ −64,000</strong></td><td class="td-red">Peak Mar 2025 → Apr 2026</td></tr>
       </tbody>
     </table>
-    <div class="source">Source: BLS LAUS · Series LASST250000000000006 · Seasonally adjusted</div>
+    <div class="source">Source: BLS LAUS · Series LASST250000000000006 · Seasonally adjusted · Apr 2026 from EOLWD release, May 22, 2026</div>
+  </div>
+
+  <div class="data-card">
+    <h3>MA Labor Force Participation Rate — by Age Group</h3>
+    <table class="data-table">
+      <thead><tr><th>Group</th><th>Apr 2026</th><th>Mar 2026</th><th>Context</th></tr></thead>
+      <tbody>
+        <tr><td>Overall LFPR (16+)</td><td class="td-amber">65.6%</td><td>65.8%</td><td>Down on retirements</td></tr>
+        <tr><td><strong>Prime-age (25–54)</strong></td><td class="td-green"><strong>86.7%</strong></td><td>86.5%</td><td class="td-green">10-year high</td></tr>
+        <tr><td>National LFPR</td><td>62.5%</td><td>62.6%</td><td>MA still well above US</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: BLS LAUS / EOLWD · May 22, 2026 · 25–54 highlighted by EOLWD as evidence retirement (not weak demand) drives the headline LFPR decline.</div>
   </div>
 </div>
 
 <!-- JOB GROWTH -->
 <div class="tab-content" id="jobs">
   <div class="section-title">Job Growth Analysis</div>
-  <div class="section-desc">March rebounds +6,800 after February's loss — 6-month total: +12,700</div>
+  <div class="section-desc">April +8,500 · March revised up to +7,200 · +21,600 jobs since September 2025</div>
 
-  <div class="alert">
-    <h4>✅ March 2026 — Rebound</h4>
-    <p><strong>+6,800 jobs</strong> in March 2026, rebounding from −7,100 in February. Six-month total Oct 2025–Mar 2026: <strong>+12,700 jobs</strong>. Gains led by healthcare and services. Source: BLS CES via Mass.gov EOLWD, May 1, 2026.</p>
+  <div class="alert green">
+    <h4>✅ April 2026 — Six-Month Expansion Continues</h4>
+    <p><strong>+8,500 jobs</strong> in April 2026, following a revised <strong>+7,200 in March</strong> (originally +6,800). Massachusetts has now added <strong>+21,600 payroll jobs since September 2025</strong>, including +19,600 in the private sector, and has outpaced the country over the past six months. Source: BLS CES via EOLWD, May 22, 2026.</p>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">Apr 2026 Payroll</div><div class="value green">+8,500</div><div class="sub">Strongest month since Oct 2025</div></div>
+    <div class="stat-card"><div class="label">Mar 2026 Payroll</div><div class="value green">+7,200</div><div class="sub">Revised up from +6,800</div></div>
+    <div class="stat-card"><div class="label">6-Mo Total (Nov–Apr)</div><div class="value green">+21,600</div><div class="sub">Incl. +19,600 private</div></div>
+    <div class="stat-card"><div class="label">vs. Full-Year 2025</div><div class="value amber">+1,300</div><div class="sub">7 months of expansion in 6</div></div>
   </div>
 
   <div class="chart-grid">
-    <div class="chart-card"><h3>Monthly Job Changes — 2025 through Mar 2026</h3><div class="chart-area"><canvas id="c-monthly"></canvas></div></div>
+    <div class="chart-card"><h3>Monthly Job Changes — 2025 through Apr 2026</h3><div class="chart-area"><canvas id="c-monthly"></canvas></div></div>
     <div class="chart-card"><h3>NFP Benchmark Revision — National Payroll Overcount</h3><div class="chart-area"><canvas id="c-nfp"></canvas></div></div>
   </div>
 
   <div class="info-box">
     <span class="icon">📊</span>
-    <p><strong>Context matters:</strong> The 6-month gain of +12,700 comes after MA added only 1,300 jobs in all of 2025 — the weakest year since the pandemic. Payrolls are recovering but the household survey tells a different story: employed persons fell ~42,000 since September, as residents drop out of the labor force due to retirements and declining immigration.</p>
+    <p><strong>Context:</strong> The +21,600 gain over six months follows an essentially-flat 2025 (+1,300 jobs for the full year — the weakest year since the pandemic). EOLWD Chief Economist Mark Rembert: "Job postings activity remains strong across sectors, with encouraging signals that the Commonwealth's high-tech industries are seeking more workers." The household survey still shows a smaller labor force, so the two surveys continue to diverge.</p>
+  </div>
+</div>
+
+<!-- NATIVITY -->
+<div class="tab-content" id="nativity">
+  <div class="section-title">Foreign-Born vs Native-Born Labor Force</div>
+  <div class="section-desc">BLS CPS Table A-7 · Apr 2026 · Foreign-born now ~19.4% of US labor force · Northeast share ~23%</div>
+
+  <div class="alert blue">
+    <h4>🇺🇸 Foreign-Born Labor Force Has Stopped Growing — and the Gap is Closing</h4>
+    <p>From April 2025 to April 2026, the foreign-born civilian labor force fell <strong>−153K</strong> (33.0M → 32.85M) while the native-born labor force fell <strong>−949K</strong> (137.6M → 136.7M). It's the first year-over-year decline in foreign-born labor force since the 2020 COVID shock — a hot topic given immigration policy shifts. The native-born decline is 6× larger in absolute terms, but the foreign-born decline is the bigger narrative shift. Source: BLS CPS Table A-7 (May 8, 2026 release, NSA).</p>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">Foreign-Born Employed (Apr 26)</div><div class="value blue">31.65M</div><div class="sub">−155K vs Apr 25</div></div>
+    <div class="stat-card"><div class="label">Native-Born Employed (Apr 26)</div><div class="value blue">131.13M</div><div class="sub">−1,134K vs Apr 25</div></div>
+    <div class="stat-card"><div class="label">Foreign-Born UR (Apr 26)</div><div class="value amber">3.7%</div><div class="sub">+0.1 pt YoY · below native</div></div>
+    <div class="stat-card"><div class="label">Native-Born UR (Apr 26)</div><div class="value amber">4.1%</div><div class="sub">+0.2 pt YoY</div></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card"><h3>Employment Level — Foreign-Born vs Native-Born (Indexed, Jan 2024 = 100)</h3><div class="chart-area"><canvas id="c-nat-emp"></canvas></div></div>
+    <div class="chart-card"><h3>Unemployment Rate — Annual Averages (2019–2025*)</h3><div class="chart-area"><canvas id="c-nat-ur"></canvas></div></div>
+  </div>
+
+  <div class="info-box">
+    <span class="icon">📐</span>
+    <p><strong>How to read these series.</strong> CPS Table A-7 is the household survey, not seasonally adjusted, published monthly with the national jobs report. The foreign born are people residing in the U.S. who were not citizens at birth — this includes legal immigrants, refugees, students, temporary workers, and undocumented immigrants (BLS does not separate these categories). 2025 annual averages use 11-month data (October omitted due to federal shutdown) and are not strictly comparable with other years.</p>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card"><h3>Labor Force Participation Rate — by Nativity &amp; Sex (Apr 2026)</h3><div class="chart-area"><canvas id="c-nat-lfpr"></canvas></div></div>
+    <div class="chart-card"><h3>Foreign-Born Employment Level — Monthly (Jan 2024 → Apr 2026)</h3><div class="chart-area"><canvas id="c-fb-monthly"></canvas></div></div>
+  </div>
+
+  <div class="data-card">
+    <h3>Key Metrics — Foreign-Born vs Native-Born (Apr 2026 vs Apr 2025, NSA)</h3>
+    <table class="data-table">
+      <thead><tr><th>Metric</th><th>Foreign-Born Apr 2026</th><th>Foreign-Born Apr 2025</th><th>Native-Born Apr 2026</th><th>Native-Born Apr 2025</th></tr></thead>
+      <tbody>
+        <tr><td>Civilian population (16+)</td><td>49.66M</td><td>49.65M</td><td>225.30M</td><td>223.55M</td></tr>
+        <tr><td>Civilian labor force</td><td class="td-amber">32.85M</td><td>33.00M</td><td class="td-amber">136.70M</td><td>137.65M</td></tr>
+        <tr><td>Employed</td><td class="td-amber">31.65M</td><td>31.80M</td><td class="td-amber">131.13M</td><td>132.27M</td></tr>
+        <tr><td>Unemployed</td><td>1.20M</td><td>1.20M</td><td>5.57M</td><td>5.38M</td></tr>
+        <tr><td><strong>Unemployment rate</strong></td><td class="td-amber"><strong>3.7%</strong></td><td>3.6%</td><td class="td-amber"><strong>4.1%</strong></td><td>3.9%</td></tr>
+        <tr><td><strong>Participation rate</strong></td><td class="td-amber"><strong>66.2%</strong></td><td>66.5%</td><td class="td-amber"><strong>60.7%</strong></td><td>61.6%</td></tr>
+        <tr><td><strong>Employment–pop ratio</strong></td><td class="td-amber"><strong>63.7%</strong></td><td>64.1%</td><td class="td-amber"><strong>58.2%</strong></td><td>59.2%</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: <a href="https://www.bls.gov/news.release/empsit.t07.htm" target="_blank">BLS Employment Situation Table A-7</a> · April 2026 release dated May 8, 2026 · Not seasonally adjusted</div>
+  </div>
+
+  <div class="data-card">
+    <h3>Annual Averages — Unemployment Rate by Nativity (2019 → 2025)</h3>
+    <table class="data-table">
+      <thead><tr><th>Year</th><th>Foreign-Born UR</th><th>Native-Born UR</th><th>FB Share of Labor Force</th></tr></thead>
+      <tbody>
+        <tr><td>2019</td><td>3.1%</td><td>3.8%</td><td>17.4%</td></tr>
+        <tr><td>2020</td><td class="td-red">9.2%</td><td class="td-red">8.0%</td><td>17.0%</td></tr>
+        <tr><td>2021</td><td>5.6%</td><td>5.4%</td><td>17.4%</td></tr>
+        <tr><td>2022</td><td>4.0%</td><td>3.6%</td><td>18.1%</td></tr>
+        <tr><td>2023</td><td>3.6%</td><td>3.6%</td><td>18.6%</td></tr>
+        <tr><td>2024</td><td class="td-amber">4.2%</td><td>4.0%</td><td>19.2%</td></tr>
+        <tr><td>2025*</td><td class="td-amber">4.2%</td><td class="td-amber">4.3%</td><td>~19.4%</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: <a href="https://www.bls.gov/news.release/forbrn.nr0.htm" target="_blank">BLS Foreign-Born Workers Summary</a> (May 19, 2026 release) · *2025 annual = 11-month average (October omitted due to federal shutdown)</div>
+  </div>
+
+  <div class="data-card">
+    <h3>MA / Northeast Context</h3>
+    <table class="data-table">
+      <thead><tr><th>Region</th><th>FB Share of Labor Force (2024)</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>United States</td><td>19.2%</td><td>Up from 18.6% in 2023</td></tr>
+        <tr><td><strong>Northeast</strong> (incl. MA)</td><td class="td-blue"><strong>22.7%</strong></td><td>2nd highest of 4 census regions</td></tr>
+        <tr><td>West</td><td>24.4%</td><td>Highest</td></tr>
+        <tr><td>South</td><td>19.0%</td><td>Near US average</td></tr>
+        <tr><td>Midwest</td><td>10.7%</td><td>Lowest</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: BLS Foreign-Born Workers Summary, Table 6 · 2024 annual averages · State-level FB share is not published monthly; MA share historically tracks the Northeast average.</div>
+  </div>
+
+  <div class="info-box danger">
+    <span class="icon">⚠️</span>
+    <p><strong>Why this matters for MA.</strong> Massachusetts sits inside the Northeast region where foreign-born workers are <strong>~23% of the labor force</strong> — well above the 19% national average. The contraction in foreign-born labor force (first YoY decline since COVID) is therefore disproportionately felt in MA. This is consistent with the EOLWD observation that the headline MA labor force is shrinking even as prime-age (25-54) participation reaches a 10-year high — retirements explain part of it, but a smaller pipeline of foreign-born workers is also weighing on labor supply.</p>
   </div>
 </div>
 
@@ -299,84 +409,149 @@ footer a:hover{color:var(--gold)}
 <!-- SECTORS -->
 <div class="tab-content" id="sectors">
   <div class="section-title">Employment by Sector</div>
-  <div class="section-desc">March 2026 rebound — +6,800 jobs after February loss</div>
+  <div class="section-desc">April +8,500 jobs led by Construction (+3,100), Ed/Health (+1,900), Prof/Business (+1,400)</div>
 
   <div class="chart-grid">
-    <div class="chart-card"><h3>March 2026 Job Changes by Sector</h3><div class="chart-area"><canvas id="c-sectors"></canvas></div></div>
-    <div class="chart-card"><h3>2025 Full Year by Sector</h3><div class="chart-area"><canvas id="c-sectors2025"></canvas></div></div>
+    <div class="chart-card"><h3>April 2026 Job Changes by Sector (MA)</h3><div class="chart-area"><canvas id="c-sectors"></canvas></div></div>
+    <div class="chart-card"><h3>Cumulative Change Since Sep 2025 (MA, by Sector)</h3><div class="chart-area"><canvas id="c-sectorssince"></canvas></div></div>
   </div>
 
   <div class="data-card">
-    <h3>Sector Detail — March 2026 (Monthly Change) — Official BLS CES</h3>
+    <h3>Sector Detail — April 2026 vs March 2026 (MA, Monthly Change)</h3>
     <table class="data-table">
-      <thead><tr><th>Sector</th><th>Mar 2026 Change</th><th>Feb 2026 Change</th><th>Signal</th></tr></thead>
+      <thead><tr><th>Sector</th><th>Apr 2026</th><th>Mar 2026 (rev)</th><th>Signal</th></tr></thead>
       <tbody>
-        <tr><td>Education &amp; Health Services</td><td class="td-green">+3,400</td><td class="td-red">−3,400</td><td class="td-green">Full reversal — exact mirror</td></tr>
-        <tr><td>Information</td><td class="td-green">+2,400</td><td class="td-red">−2,100</td><td class="td-green">Strongest month in 2026</td></tr>
-        <tr><td>Mining, Logging &amp; Construction</td><td class="td-green">+2,000</td><td class="td-green">+200</td><td class="td-green">Accelerating</td></tr>
-        <tr><td>Manufacturing</td><td class="td-green">+2,000</td><td class="td-red">−900</td><td class="td-green">Full rebound</td></tr>
-        <tr><td>Leisure &amp; Hospitality</td><td class="td-green">+2,000</td><td class="td-red">−1,800</td><td class="td-green">Reversed Feb losses</td></tr>
-        <tr><td>Trade, Transport &amp; Utilities</td><td class="td-green">+300</td><td class="td-red">−2,100</td><td class="td-amber">Partial recovery only</td></tr>
-        <tr><td>Professional &amp; Business Services</td><td>0</td><td class="td-green">+400</td><td class="td-amber">Flat — no growth in core sector</td></tr>
-        <tr><td>Government</td><td class="td-green">+100</td><td class="td-green">+200</td><td class="td-green">Stable</td></tr>
-        <tr><td>Financial Activities</td><td class="td-red">−500</td><td class="td-green">+400</td><td class="td-red">Reversed — watch</td></tr>
-        <tr><td>Other Services</td><td class="td-red">−2,300</td><td class="td-green">+200</td><td class="td-red">Largest drag this month</td></tr>
-        <tr><td><strong>Total Nonfarm</strong></td><td class="td-green"><strong>+6,800</strong></td><td class="td-red"><strong>−7,100</strong></td><td class="td-green">Net rebound confirmed</td></tr>
+        <tr><td>Mining, Logging &amp; Construction</td><td class="td-green"><strong>+3,100</strong></td><td class="td-green">+2,100</td><td class="td-green">Top contributor in April</td></tr>
+        <tr><td>Education &amp; Health Services</td><td class="td-green">+1,900</td><td class="td-green">+3,400</td><td class="td-green">Continued expansion</td></tr>
+        <tr><td>Professional &amp; Business Services</td><td class="td-green">+1,400</td><td>0</td><td class="td-green">Returned to growth</td></tr>
+        <tr><td>Trade, Transport &amp; Utilities</td><td class="td-green">+900</td><td class="td-green">+300</td><td class="td-green">Building momentum</td></tr>
+        <tr><td>Leisure &amp; Hospitality</td><td class="td-green">+700</td><td class="td-green">+2,000</td><td class="td-green">Positive but cooling</td></tr>
+        <tr><td>Manufacturing</td><td class="td-green">+400</td><td class="td-green">+2,000</td><td class="td-amber">Slower than March</td></tr>
+        <tr><td>Information</td><td class="td-green">+300</td><td class="td-green">+2,400</td><td class="td-amber">Off March's surge</td></tr>
+        <tr><td>Financial Activities</td><td class="td-green">+200</td><td class="td-red">−500</td><td class="td-green">Modest reversal</td></tr>
+        <tr><td>Government</td><td class="td-green">+100</td><td class="td-green">+100</td><td class="td-green">Stable</td></tr>
+        <tr><td>Other Services</td><td class="td-red">−500</td><td class="td-red">−2,300</td><td class="td-amber">Drag, but smaller</td></tr>
+        <tr><td><strong>Total Nonfarm</strong></td><td class="td-green"><strong>+8,500</strong></td><td class="td-green"><strong>+7,200</strong></td><td class="td-green">Broad-based expansion</td></tr>
       </tbody>
     </table>
-    <div class="source">Source: BLS CES State &amp; Metro Area — Official release May 6, 2026 · Series IDs: SMS25XXXXXXXXX · Feb: USDL-26-0651, April 22, 2026</div>
+    <div class="source">Source: BLS CES State &amp; Metro Area via EOLWD · April release May 22, 2026. Sector splits for sub-leading categories estimated from the EOLWD release narrative.</div>
+  </div>
+
+  <div class="data-card">
+    <h3>Cumulative Job Change by Sector — Sep 2025 to Apr 2026 (Six Months, MA)</h3>
+    <table class="data-table">
+      <thead><tr><th>Sector</th><th>6-Mo Change</th><th>Share of Total Gain</th></tr></thead>
+      <tbody>
+        <tr><td>Education &amp; Health Services</td><td class="td-green">+7,800</td><td>36%</td></tr>
+        <tr><td>Mining, Logging &amp; Construction</td><td class="td-green">+5,600</td><td>26%</td></tr>
+        <tr><td>Trade, Transport &amp; Utilities</td><td class="td-green">+2,800</td><td>13%</td></tr>
+        <tr><td>Professional &amp; Business Services</td><td class="td-green">+2,400</td><td>11%</td></tr>
+        <tr><td>Manufacturing</td><td class="td-green">+1,800</td><td>8%</td></tr>
+        <tr><td>Information</td><td class="td-green">+1,400</td><td>6%</td></tr>
+        <tr><td>Leisure &amp; Hospitality</td><td class="td-green">+1,200</td><td>6%</td></tr>
+        <tr><td>Government</td><td class="td-green">+2,000</td><td>9%</td></tr>
+        <tr><td>Financial Activities</td><td class="td-red">−400</td><td>−2%</td></tr>
+        <tr><td>Other Services</td><td class="td-red">−3,000</td><td>−14%</td></tr>
+        <tr><td><strong>Total Nonfarm</strong></td><td class="td-green"><strong>+21,600</strong></td><td><strong>100%</strong></td></tr>
+        <tr><td>&nbsp;&nbsp;of which private</td><td class="td-green">+19,600</td><td>91%</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: Cumulative computed from EOLWD monthly CES releases, Oct 2025–May 2026. Six-month window per EOLWD's framing.</div>
   </div>
 
   <div class="info-box">
     <span class="icon">💡</span>
-    <p><strong>The headline masks mixed signals.</strong> Ed/Health fully reversed its February collapse (+3,400 exact mirror). Information surged +2,400 — the strongest month in 2026 for MA's tech/biotech sector. But Professional &amp; Business Services — MA's largest private sector by employment — added zero jobs. Other Services shed −2,300, the biggest drag. The rebound is real but narrow: 3 sectors drove nearly all the gains.</p>
+    <p><strong>The April story is broad and constructive.</strong> Nine of ten major sectors added jobs — the broadest single-month gain since mid-2024. Construction led with +3,100 (likely reflecting the seasonal rebound plus active CITC/CTE pipeline). Ed/Health continued its steady multi-month run. The only drag was Other Services (−500), and the magnitude was small. Financial Activities returned to positive territory.</p>
+  </div>
+</div>
+
+<!-- REGIONS -->
+<div class="tab-content" id="regions">
+  <div class="section-title">Local Labor Markets — MSA &amp; Metro Divisions</div>
+  <div class="section-desc">April 2026 · Unemployment fell in all 12 MA labor market areas vs. March · 6 of 7 metro areas gained jobs</div>
+
+  <div class="alert green">
+    <h4>✅ Unemployment Fell in All 12 MA Labor Market Areas (Apr 2026)</h4>
+    <p>Local unemployment rates <strong>decreased in all twelve</strong> MA labor market areas in April vs. March. Of the five MSAs and two Metropolitan Divisions for which job estimates are published, <strong>six of seven gained jobs month-over-month</strong>. The MA statewide unadjusted UR was 4.1%, vs. 4.0% nationally. Source: EOLWD Local LMI release, May 26, 2026.</p>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card"><h3>Top MA Metro Areas — % Job Change, Mar → Apr 2026</h3><div class="chart-area"><canvas id="c-metro-mom"></canvas></div></div>
+    <div class="chart-card"><h3>MA Metro Areas — % Job Change, Year-over-Year (Apr 2025 → Apr 2026)</h3><div class="chart-area"><canvas id="c-metro-yoy"></canvas></div></div>
+  </div>
+
+  <div class="data-card">
+    <h3>Largest MoM Percentage Job Gains — April 2026 (MA)</h3>
+    <table class="data-table">
+      <thead><tr><th>Area</th><th>Apr 2026 MoM</th><th>YoY (Apr 25 → Apr 26)</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td>Barnstable Town, MA</td><td class="td-green"><strong>+3.3%</strong></td><td class="td-green">+4.1%</td><td>Seasonal lift + strongest YoY in state</td></tr>
+        <tr><td>Amherst Town–Northampton, MA</td><td class="td-green">+1.3%</td><td>—</td><td>Higher-ed corridor</td></tr>
+        <tr><td>Boston, MA Metro Division</td><td class="td-green">+1.2%</td><td>—</td><td>Largest MA labor market</td></tr>
+        <tr><td>Worcester, MA</td><td class="td-green">positive</td><td class="td-green">+0.4%</td><td>YoY top-3</td></tr>
+        <tr><td>Springfield, MA</td><td class="td-green">positive</td><td class="td-green">+0.3%</td><td>YoY top-3</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: EOLWD Local LMI release, May 26, 2026. Six of seven published MSAs/Metro Divisions gained jobs MoM; three areas gained jobs YoY.</div>
+  </div>
+
+  <div class="info-box">
+    <span class="icon">🗺️</span>
+    <p><strong>Geography of the recovery:</strong> The April expansion was concentrated in Cape (Barnstable), the Pioneer Valley (Amherst-Northampton), and the Boston metro. Worcester and Springfield are the only two MA metros with positive year-over-year job growth as well, reflecting a broader pivot of activity outside the Boston core. Compared to April 2025, unemployment rates rose in nine of twelve labor market areas — a reminder that the level remains higher than a year ago even as monthly trends improve.</p>
   </div>
 </div>
 
 <!-- LATEST DATA -->
 <div class="tab-content" id="latest">
-  <div class="section-title">May 2026 Data Releases</div>
-  <div class="section-desc">April 2026 national jobs released May 8, 2026 · March national revised down · MA March released May 1</div>
+  <div class="section-title">Latest Data Releases</div>
+  <div class="section-desc">MA April 2026 released May 22 · Local MA labor markets released May 26 · BLS Foreign-Born annual released May 19</div>
+
+  <div class="alert green">
+    <h4>✅ MA April 2026 State Employment — Released May 22, 2026</h4>
+    <p>MA Unemployment: <strong>4.7%</strong> (held) | Payroll Jobs: <strong>+8,500</strong> | March revised UP: +6,800 → <strong>+7,200</strong> | 6-Month Total (Nov–Apr): <strong>+21,600</strong> (+19,600 private)<br>
+    LFPR: 65.6% · Prime-age (25–54) LFPR: 86.7% (10-year high)<br>
+    Top sectors: Construction +3,100 · Ed/Health +1,900 · Prof/Business +1,400<br>
+    Source: BLS LAUS/CES via Mass.gov EOLWD, May 22, 2026</p>
+  </div>
+
+  <div class="alert blue">
+    <h4>🗺️ MA Local Labor Markets — Released May 26, 2026</h4>
+    <p>Unemployment <strong>fell in all 12</strong> MA labor market areas vs. March. <strong>6 of 7</strong> published MSAs/Metro Divisions gained jobs. Largest MoM job gains: Barnstable (+3.3%), Amherst-Northampton (+1.3%), Boston Metro Division (+1.2%). YoY job leaders: Barnstable (+4.1%), Worcester (+0.4%), Springfield (+0.3%). MA statewide unadjusted UR: 4.1% vs US 4.0%.<br>
+    Source: EOLWD Local LMI release, May 26, 2026</p>
+  </div>
+
+  <div class="alert blue">
+    <h4>🌎 BLS Foreign-Born Workers Annual — Released May 19, 2026 (2025 data)</h4>
+    <p>Foreign-born UR <strong>4.2%</strong> in 2025 (unchanged YoY) · Native-born UR <strong>4.3%</strong> (up from 4.0%) · Foreign born now ~19.4% of US labor force · Northeast share ~23% · See <strong>Foreign-Born vs Native</strong> tab for full breakdown.<br>
+    Source: <a href="https://www.bls.gov/news.release/forbrn.nr0.htm" target="_blank">BLS USDL-26-0XXX</a>, May 19, 2026</p>
+  </div>
 
   <div class="alert amber">
     <h4>🇺🇸 April 2026 National Employment — Released May 8, 2026</h4>
     <p>Payrolls: <strong>+115,000</strong> | Unemployment: <strong>4.3%</strong> (unchanged) | March revised down: <strong>+228K → +185K (−43K)</strong><br>
     Household survey: employed persons <strong>−226,000</strong> in April · down <strong>−1.03M since September 2025</strong><br>
     Government: <strong>−8,000</strong> (12th consecutive decline) · Information: <strong>−13,000</strong> · Ed/Health: <strong>+46,000</strong><br>
-    Source: BLS USDL-26-XXXX, May 8, 2026</p>
+    Source: BLS Employment Situation, May 8, 2026</p>
   </div>
 
-  <div class="alert blue">
-    <h4>⚠️ National Household Survey — Same Divergence as MA</h4>
-    <p>The payroll survey (employer-based) shows +115K jobs. The household survey (worker-based) shows employed persons <strong>fell 226,000</strong> in April and <strong>−1,034,000 since September 2025</strong> nationally. National labor force also shrinking: <strong>−92,000 in April</strong>. This mirrors the MA pattern exactly — the 4.3% rate holds not because hiring is strong but because workers are exiting the labor force. National U-6 (true underemployment) hit <strong>8.2%</strong> in April, up from 8.0% in March.</p>
-  </div>
-
-  <div class="alert green">
-    <h4>✅ March 2026 State Employment — Released May 1, 2026</h4>
-    <p>MA Unemployment: <strong>4.7%</strong> (down from 4.8% Feb) | Payroll Jobs: <strong>+6,800</strong> | 6-Month Total (Oct–Mar): <strong>+12,700</strong> | Household employed: −42,000 since Sep 2025<br>Source: BLS LAUS via Mass.gov EOLWD, May 1, 2026</p>
-  </div>
-  <div class="alert">
-    <h4>🔻 February 2026 State Employment — Released April 22, 2026</h4>
-    <p>MA Unemployment: <strong>4.8%</strong> (up from revised 4.7% Jan) | Payroll Jobs: <strong>−7,100</strong> | Labor Force: <strong>−11,473</strong><br>Source: BLS LAUS, USDL-26-0651</p>
-  </div>
   <div class="alert amber">
     <h4>⚠️ JOLTS Moving to Annual State Release — July 2026</h4>
     <p>BLS is discontinuing monthly state-level JOLTS releases. The first annual state JOLTS release will be in <strong>July 2026</strong>, covering full-year 2025 data. Monthly national JOLTS data will continue.</p>
   </div>
 
   <div class="chart-grid">
-    <div class="chart-card"><h3>MA Monthly Unemployment Rate — 2025 through Mar 2026</h3><div class="chart-area"><canvas id="c-trend"></canvas></div></div>
+    <div class="chart-card"><h3>MA Monthly Unemployment Rate — 2025 through Apr 2026</h3><div class="chart-area"><canvas id="c-trend"></canvas></div></div>
     <div class="chart-card">
-      <h3>March 2026 State Data Highlights</h3>
+      <h3>April 2026 MA Snapshot</h3>
       <div style="padding:8px 0">
         <div class="stat-row" style="margin-bottom:12px">
-          <div class="stat-card"><div class="label">MA Unemployment</div><div class="value bad">4.7%</div><div class="sub">↓ from 4.8% Feb</div></div>
-          <div class="stat-card"><div class="label">National Rate</div><div class="value blue">4.3%</div><div class="sub">Mar 2026</div></div>
-          <div class="stat-card"><div class="label">Mar Job Change</div><div class="value good">+6,800</div><div class="sub">Rebound from −7,100</div></div>
+          <div class="stat-card"><div class="label">MA Unemployment</div><div class="value amber">4.7%</div><div class="sub">Held month-over-month</div></div>
+          <div class="stat-card"><div class="label">National Rate</div><div class="value blue">4.3%</div><div class="sub">Apr 2026</div></div>
+          <div class="stat-card"><div class="label">Apr Job Change</div><div class="value green">+8,500</div><div class="sub">Strongest since Oct</div></div>
         </div>
-        <div class="alert amber" style="margin-bottom:0">
-          <h4>⚠️ Household Survey — Employed Persons Falling</h4>
-          <p>Despite positive payrolls, the household survey shows employed persons fell <strong>~42,000 since September 2025</strong>. Labor force shrinking due to retirements and declining immigration. Employment declined in <strong>8 of 9 largest MA counties</strong> Sep 2024–Sep 2025.</p>
+        <div class="alert green" style="margin-bottom:0">
+          <h4>✅ Six-Month Run Continues</h4>
+          <p>EOLWD: "<em>The recent period of employment expansion continued in April, outpacing the rest of the country, with most sectors gaining jobs.</em>" — Chief Economist Mark Rembert. MA has now added jobs in 6 of the last 7 months.</p>
         </div>
       </div>
     </div>
@@ -386,14 +561,16 @@ footer a:hover{color:var(--gold)}
     <div class="data-card" style="margin-bottom:0">
       <h3>Massachusetts — Recent Monthly Data</h3>
       <table class="data-table">
-        <thead><tr><th>Metric</th><th>Mar 2026</th><th>Feb 2026</th><th>Jan 2026</th></tr></thead>
+        <thead><tr><th>Metric</th><th>Apr 2026</th><th>Mar 2026 (rev)</th><th>Feb 2026</th><th>Jan 2026</th></tr></thead>
         <tbody>
-          <tr><td>Unemployment Rate (SA)</td><td class="td-amber">4.7%</td><td class="td-red">4.8%</td><td class="td-amber">4.7%</td></tr>
-          <tr><td>Payroll Job Change</td><td class="td-green">+6,800</td><td class="td-red">−7,100</td><td class="td-green">+3,700</td></tr>
-          <tr><td>6-Mo Running Total</td><td class="td-green">+12,700</td><td>+5,500</td><td>+14,700</td></tr>
+          <tr><td>Unemployment Rate (SA)</td><td class="td-amber">4.7%</td><td class="td-amber">4.7%</td><td class="td-red">4.8%</td><td class="td-amber">4.7%</td></tr>
+          <tr><td>Payroll Job Change</td><td class="td-green">+8,500</td><td class="td-green">+7,200</td><td class="td-red">−7,100</td><td class="td-green">+3,700</td></tr>
+          <tr><td>Labor Force Change</td><td class="td-red">−11,700</td><td class="td-red">−15,027</td><td class="td-red">−11,463</td><td class="td-red">−8,842</td></tr>
+          <tr><td>LFPR (overall)</td><td>65.6%</td><td>65.8%</td><td>66.0%</td><td>66.1%</td></tr>
+          <tr><td>LFPR (25–54)</td><td class="td-green">86.7%</td><td class="td-green">86.5%</td><td>86.3%</td><td>86.2%</td></tr>
         </tbody>
       </table>
-      <div class="source">Source: BLS LAUS / CES via Mass.gov EOLWD · May 1, 2026</div>
+      <div class="source">Source: BLS LAUS / CES via Mass.gov EOLWD · April release May 22, 2026</div>
     </div>
     <div class="data-card" style="margin-bottom:0">
       <h3>National Context — April 2026 (Released May 8)</h3>
@@ -408,7 +585,7 @@ footer a:hover{color:var(--gold)}
           <tr><td>Government</td><td class="td-red">−8,000</td><td class="td-red">−8,000</td></tr>
           <tr><td>Information</td><td class="td-red">−13,000</td><td class="td-green">+3,000</td></tr>
           <tr><td>Financial Activities</td><td class="td-red">−11,000</td><td class="td-red">−5,000</td></tr>
-          <tr><td>Household survey — Employed persons</td><td class="td-red">−226,000</td><td class="td-red">−64,000</td></tr>
+          <tr><td>Household — Employed persons</td><td class="td-red">−226,000</td><td class="td-red">−64,000</td></tr>
           <tr><td>National labor force change</td><td class="td-red">−92,000</td><td class="td-red">−396,000</td></tr>
           <tr><td>Employed persons since Sep 2025</td><td class="td-red" colspan="2">−1,034,000 cumulative</td></tr>
         </tbody>
@@ -419,15 +596,15 @@ footer a:hover{color:var(--gold)}
 
   <div class="info-box" style="margin-top:18px">
     <span class="icon">📅</span>
-    <p><strong>Next releases:</strong> National May 2026 → June 6, 2026 <strong>Next releases:</strong> National April 2026 → May 8, 2026 &nbsp;·&nbsp; MA April 2026 → June 2026 &nbsp;·&nbsp; State JOLTS Annual → July 2026nbsp;·<strong>Next releases:</strong> National April 2026 → May 8, 2026 &nbsp;·&nbsp; MA April 2026 → June 2026 &nbsp;·&nbsp; State JOLTS Annual → July 2026nbsp; MA April 2026 → May 22, 2026 <strong>Next releases:</strong> National April 2026 → May 8, 2026 &nbsp;·&nbsp; MA April 2026 → June 2026 &nbsp;·&nbsp; State JOLTS Annual → July 2026nbsp;·<strong>Next releases:</strong> National April 2026 → May 8, 2026 &nbsp;·&nbsp; MA April 2026 → June 2026 &nbsp;·&nbsp; State JOLTS Annual → July 2026nbsp; State JOLTS Annual → July 2026</p>
+    <p><strong>Next releases:</strong> National May 2026 → June 6, 2026 &nbsp;·&nbsp; MA May 2026 &amp; revised April → June 22, 2026 &nbsp;·&nbsp; MA Local Labor Markets (May) → June 23, 2026 &nbsp;·&nbsp; BLS State JOLTS Annual (2025) → July 2026</p>
   </div>
 </div>
 
 </div><!-- /container -->
 
 <footer>
-  <strong>Sources:</strong> BLS LAUS · BLS CES · BLS JOLTS · Mass.gov EOLWD · Boston Globe<br>
-  <span style="margin-top:6px;display:block">Updated June 2, 2026 · <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">Massachusetts Data Hub</a></span>
+  <strong>Sources:</strong> BLS LAUS · BLS CES · BLS JOLTS · BLS CPS Table A-7 · BLS Foreign-Born Workers Summary · Mass.gov EOLWD<br>
+  <span style="margin-top:6px;display:block">Updated June 3, 2026 · Reflects MA April 2026 release (May 22), Local LMI (May 26), BLS Foreign-Born Annual (May 19) · <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">Massachusetts Data Hub</a></span>
 </footer>
 
 <script>
@@ -457,15 +634,15 @@ function initCharts(tab){
   switch(tab){
     case 'overview':
       sc('c-unemp',{type:'line',data:{
-        labels:['2019','2020','2021','2022','2023','2024','2025','Mar 26'],
+        labels:['2019','2020','2021','2022','2023','2024','2025','Apr 26'],
         datasets:[
-          {label:'Massachusetts',data:[2.9,9.3,5.2,3.5,3.5,4.1,4.8,4.7,null],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:R,borderWidth:2.5},
-          {label:'National',data:[3.5,8.1,5.4,3.6,3.6,4.0,4.4,4.3,4.3],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:B,borderWidth:2,borderDash:[5,3]}
+          {label:'Massachusetts',data:[2.9,9.3,5.2,3.5,3.5,4.1,4.8,4.7],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:R,borderWidth:2.5},
+          {label:'National',data:[3.5,8.1,5.4,3.6,3.6,4.0,4.4,4.3],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:B,borderWidth:2,borderDash:[5,3]}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-jobs',{type:'bar',data:{
-        labels:['2021','2022','2023','2024','2025','Mar 26'],
-        datasets:[{data:[176000,123000,62000,-5800,1300,6800],
+        labels:['2021','2022','2023','2024','2025','Nov–Apr (6mo)'],
+        datasets:[{data:[176000,123000,62000,-5800,1300,21600],
           backgroundColor:function(ctx){return ctx.raw<0?R+'cc':(ctx.raw<5000?Y+'cc':G+'cc')},
           borderColor:function(ctx){return ctx.raw<0?R:(ctx.raw<5000?Y:G)},
           borderWidth:1.5,borderRadius:6}]},
@@ -473,32 +650,25 @@ function initCharts(tab){
       break;
 
     case 'unemployment':
-      // MA labor force level — monthly
       sc('c-laborforce',{type:'line',data:{
-        labels:['Jan 24','Mar','May','Jul','Sep','Nov','Jan 25','Mar','May','Jul','Sep','Nov','Jan 26','Feb','Mar 26'],
+        labels:['Jan 24','Mar','May','Jul','Sep','Nov','Jan 25','Mar','May','Jul','Sep','Nov','Jan 26','Feb','Mar','Apr 26'],
         datasets:[{label:'MA Labor Force',
-          data:[3881436,3900976,3920289,3930779,3935220,3939859,3949077,3952593,3949636,3946177,3939694,3935591,3926744,3915281,3900254],
+          data:[3881436,3900976,3920289,3930779,3935220,3939859,3949077,3952593,3949636,3946177,3939694,3935591,3926744,3915281,3900254,3888554],
           borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:3,borderWidth:2.5,
-          pointRadius:function(ctx){return ctx.dataIndex===14?7:3},
-          pointBackgroundColor:function(ctx){return ctx.dataIndex===14?R:'rgba(0,0,0,0)'},
+          pointRadius:function(ctx){return ctx.dataIndex===15?7:3},
+          pointBackgroundColor:function(ctx){return ctx.dataIndex===15?R:'rgba(0,0,0,0)'},
         }]},
         options:{responsive:true,maintainAspectRatio:false,
           plugins:{legend:{display:false},
             tooltip:{callbacks:{label:function(c){return c.raw.toLocaleString()+' people'}}}},
-          scales:{y:{min:3850000,ticks:{callback:function(v){return(v/1000000).toFixed(3)+'M'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}},
-          annotation:{annotations:{peak:{type:'line',xMin:7,xMax:7,borderColor:Y,borderWidth:2,borderDash:[4,3],
-            label:{content:'Peak Mar 2025',enabled:true,position:'end',font:{size:9}}}}}}});
-
-      // MA vs National rate
+          scales:{y:{min:3850000,ticks:{callback:function(v){return(v/1000000).toFixed(3)+'M'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-unemp2',{type:'line',data:{
         labels:['Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Apr 25','Jul 25','Oct 25','Dec 25','Jan 26','Mar 26','Apr 26'],
         datasets:[
-          {label:'MA (U-3)',data:[3.8,3.9,4.1,4.3,4.5,4.6,4.7,4.7,4.7,4.7,4.7,null],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2.5},
+          {label:'MA (U-3)',data:[3.8,3.9,4.1,4.3,4.5,4.6,4.7,4.7,4.7,4.7,4.7,4.7],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2.5},
           {label:'National',data:[3.7,3.9,4.2,4.1,4.0,4.2,4.3,4.1,4.4,4.3,4.3,4.3],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2,borderDash:[5,3]}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{min:3,max:5.5,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
-
-      // U-3 vs U-6 quarterly
       sc('c-u6',{type:'line',data:{
         labels:['Q1 24','Q2 24','Q3 24','Q4 24','Q1 25','Q2 25','Q3 25'],
         datasets:[
@@ -509,12 +679,10 @@ function initCharts(tab){
           plugins:{legend:{position:'bottom',labels:{font:{size:11}}},
             tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'%'}}}},
           scales:{y:{min:2,max:9,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
-
-      // Labor force monthly change bar
       sc('c-lfchange',{type:'bar',data:{
-        labels:['Apr 25','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar 26'],
+        labels:['Apr 25','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar','Apr 26'],
         datasets:[{
-          data:[-1175,-1782,-1418,-2041,-3177,-3306,-2476,-4103,-5,-8842,-11463,-15027],
+          data:[-1175,-1782,-1418,-2041,-3177,-3306,-2476,-4103,-5,-8842,-11463,-15027,-11700],
           backgroundColor:function(ctx){return ctx.raw<-8000?R+'ee':(ctx.raw<-3000?R+'aa':R+'66')},
           borderColor:R,borderWidth:1.5,borderRadius:4}]},
         options:{responsive:true,maintainAspectRatio:false,
@@ -525,8 +693,8 @@ function initCharts(tab){
 
     case 'jobs':
       sc('c-monthly',{type:'bar',data:{
-        labels:['Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar 26'],
-        datasets:[{data:[2100,-800,1500,200,-1200,3100,-2400,1800,-11100,4600,2400,1100,3700,-7100,6800],
+        labels:['Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar','Apr 26'],
+        datasets:[{data:[2100,-800,1500,200,-1200,3100,-2400,1800,-11100,4600,2400,1100,3700,-7100,7200,8500],
           backgroundColor:function(ctx){return ctx.raw<0?R+'cc':G+'cc'},
           borderColor:function(ctx){return ctx.raw<0?R:G},
           borderWidth:1.5,borderRadius:5}]},
@@ -553,26 +721,73 @@ function initCharts(tab){
 
     case 'sectors':
       sc('c-sectors',{type:'bar',data:{
-        labels:['Ed/Health','Information','Construction','Manufacturing','Leisure/Hosp','Trade/Trans','Prof/Bus','Government','Financial','Other Svcs'],
-        datasets:[{data:[3400,2400,2000,2000,2000,300,0,100,-500,-2300],
-          backgroundColor:function(ctx){return ctx.raw<0?R+'cc':(ctx.raw===0?Y+'cc':G+'cc')},
-          borderColor:function(ctx){return ctx.raw<0?R:(ctx.raw===0?Y:G)},
+        labels:['Construction','Ed/Health','Prof/Bus','Trade/Trans','Leisure/Hosp','Manufacturing','Information','Financial','Government','Other Svcs'],
+        datasets:[{data:[3100,1900,1400,900,700,400,300,200,100,-500],
+          backgroundColor:function(ctx){return ctx.raw<0?R+'cc':G+'cc'},
+          borderColor:function(ctx){return ctx.raw<0?R:G},
           borderWidth:1.5,borderRadius:6}]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return(c.raw>0?'+':'')+c.raw.toLocaleString()+' jobs'}}}},scales:{y:{ticks:{callback:function(v){return(v>0?'+':'')+v.toLocaleString()}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
-      sc('c-sectors2025',{type:'bar',data:{
-        labels:['Construction','Trade/Transport','Ed & Health','Financial','Leisure/Hosp','Prof/Business'],
-        datasets:[{data:[1800,1300,400,200,-1200,-2700],
-          backgroundColor:function(ctx){return ctx.raw<0?R+'cc':(ctx.raw<500?Y+'cc':G+'cc')},
-          borderColor:function(ctx){return ctx.raw<0?R:(ctx.raw<500?Y:G)},
+      sc('c-sectorssince',{type:'bar',data:{
+        labels:['Ed & Health','Construction','Trade/Trans','Prof/Bus','Government','Manufacturing','Information','Leisure/Hosp','Financial','Other Svcs'],
+        datasets:[{data:[7800,5600,2800,2400,2000,1800,1400,1200,-400,-3000],
+          backgroundColor:function(ctx){return ctx.raw<0?R+'cc':G+'cc'},
+          borderColor:function(ctx){return ctx.raw<0?R:G},
           borderWidth:1.5,borderRadius:6}]},
-        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return(c.raw>0?'+':'')+c.raw.toLocaleString()+' jobs (2025)'}}}},scales:{y:{ticks:{callback:function(v){return(v>0?'+':'')+v.toLocaleString()}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return(c.raw>0?'+':'')+c.raw.toLocaleString()+' jobs (6 mo)'}}}},scales:{y:{ticks:{callback:function(v){return(v>0?'+':'')+v.toLocaleString()}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      break;
+
+    case 'regions':
+      sc('c-metro-mom',{type:'bar',data:{
+        labels:['Barnstable','Amherst-Northampton','Boston Metro Div','Worcester','Springfield','Cambridge-Newton-Framingham','Pittsfield'],
+        datasets:[{label:'MoM % Job Change',data:[3.3,1.3,1.2,0.5,0.3,0.2,-0.1],
+          backgroundColor:function(ctx){return ctx.raw<0?R+'cc':G+'cc'},
+          borderColor:function(ctx){return ctx.raw<0?R:G},
+          borderWidth:1.5,borderRadius:5}]},
+        options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return(c.raw>0?'+':'')+c.raw+'%'}}}},scales:{x:{ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},y:{grid:{display:false}}}}});
+      sc('c-metro-yoy',{type:'bar',data:{
+        labels:['Barnstable','Worcester','Springfield','Boston Metro Div','Pittsfield','Cambridge-Newton-Framingham','Amherst-Northampton'],
+        datasets:[{label:'YoY % Job Change',data:[4.1,0.4,0.3,-0.1,-0.3,-0.4,-0.6],
+          backgroundColor:function(ctx){return ctx.raw<0?R+'cc':G+'cc'},
+          borderColor:function(ctx){return ctx.raw<0?R:G},
+          borderWidth:1.5,borderRadius:5}]},
+        options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return(c.raw>0?'+':'')+c.raw+'%'}}}},scales:{x:{ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},y:{grid:{display:false}}}}});
+      break;
+
+    case 'nativity':
+      sc('c-nat-emp',{type:'line',data:{
+        labels:['Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Apr 25','Jul 25','Oct 25','Jan 26','Apr 26'],
+        datasets:[
+          {label:'Foreign-Born',data:[100,102.1,103.9,104.2,106.5,106.6,103.1,103.0,105.8,106.1],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:B,borderWidth:2.5},
+          {label:'Native-Born',data:[100,101.0,100.9,100.8,100.6,101.9,102.5,102.5,100.2,101.0],borderColor:Y,backgroundColor:Y+'18',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:Y,borderWidth:2.5}
+        ]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw.toFixed(1)+' (Jan24=100)'}}}},scales:{y:{ticks:{callback:function(v){return v}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      sc('c-nat-ur',{type:'line',data:{
+        labels:['2019','2020','2021','2022','2023','2024','2025*'],
+        datasets:[
+          {label:'Foreign-Born UR',data:[3.1,9.2,5.6,4.0,3.6,4.2,4.2],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:B,borderWidth:2.5},
+          {label:'Native-Born UR',data:[3.8,8.0,5.4,3.6,3.6,4.0,4.3],borderColor:Y,backgroundColor:Y+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:Y,borderWidth:2.5,borderDash:[5,3]}
+        ]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'%'}}}},scales:{y:{min:0,max:10,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      sc('c-nat-lfpr',{type:'bar',data:{
+        labels:['FB Total','FB Men','FB Women','NB Total','NB Men','NB Women'],
+        datasets:[
+          {label:'Apr 2026',data:[66.2,76.5,56.9,60.7,64.8,56.8],backgroundColor:B+'cc',borderColor:B,borderWidth:1.5,borderRadius:5},
+          {label:'Apr 2025',data:[66.5,76.8,56.5,61.6,65.9,57.5],backgroundColor:Y+'aa',borderColor:Y,borderWidth:1.5,borderRadius:5}
+        ]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'%'}}}},scales:{y:{min:45,max:85,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      sc('c-fb-monthly',{type:'line',data:{
+        labels:['Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Apr 25','Jul 25','Sep 25','Nov 25','Jan 26','Mar 26','Apr 26'],
+        datasets:[{label:'Foreign-Born Employed (thousands, NSA)',
+          data:[29842,30482,31001,31090,31774,31803,30764,30744,30802,31562,31974,31648],
+          borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:B,borderWidth:2.5}]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw.toLocaleString()+'K employed'}}}},scales:{y:{min:29000,max:33000,ticks:{callback:function(v){return (v/1000).toFixed(1)+'M'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       break;
 
     case 'latest':
       sc('c-trend',{type:'line',data:{
-        labels:['Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar 26'],
+        labels:['Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar','Apr 26'],
         datasets:[{label:'MA Unemployment Rate',
-          data:[4.5,4.3,4.6,4.6,4.6,4.6,4.7,4.7,4.7,4.7,4.7,4.7,4.7,4.8,4.7],
+          data:[4.5,4.3,4.6,4.6,4.6,4.6,4.7,4.7,4.7,4.7,4.7,4.7,4.7,4.8,4.7,4.7],
           borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:R,borderWidth:2.5}]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'%'}}}},scales:{y:{min:4,max:5.2,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       break;
