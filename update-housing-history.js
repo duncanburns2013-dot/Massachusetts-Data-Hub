@@ -16,8 +16,11 @@ const https = require('https');
 
 const KEY = process.env.FRED_API_KEY;
 if (!KEY) {
-  console.error('FRED_API_KEY env var not set');
-  process.exit(1);
+  // Don't fail the whole workflow over a missing optional secret — the price-
+  // distribution data is the main payload, and the historical panel falls back
+  // to whatever was last baked in.
+  console.warn('[housing-history] FRED_API_KEY not set — skipping refresh, panel keeps prior values');
+  process.exit(0);
 }
 
 const REPO = __dirname;
