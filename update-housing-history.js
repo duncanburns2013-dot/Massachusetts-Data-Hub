@@ -54,10 +54,21 @@ function getJson(url, maxRetries = 4) {
   });
 }
 
+class InvalidKeyError extends Error {}
+
 async function fetchSeries(id, start) {
   const url = `${FRED}?series_id=${id}&api_key=${KEY}&file_type=json&observation_start=${start}`;
-  const j = await getJson(url);
-  // FRED returns "value": "100.5" or "." for missing
+  let j;
+  try {
+    j = await getJson(url);
+  } catch (e) {
+    // FRED returns HTTP 400 with "api_key is not registered" for an invalid/
+    // rotated key. Mark this as recoverable so the caller can skip cleanly.
+    if (/HTTP 400/.test(e.message) && /api_key/i.test(e.message)) {
+      throw new InvalidKeyError(e.message);
+    }
+    throw e;
+  }
   return j.observations
     .filter(o => o.value && o.value !== '.')
     .map(o => ({ d: o.date, v: +o.value }));
@@ -105,11 +116,21 @@ function decimate(series, every) {
 
 (async () => {
   console.log('[housing-history] fetching FRED series…');
-  const [boxrsaRaw, masthpiRaw, cpiRaw] = await Promise.all([
-    fetchSeries(SERIES.boxrsa.id,  SERIES.boxrsa.start),
-    fetchSeries(SERIES.masthpi.id, SERIES.masthpi.start),
-    fetchSeries(SERIES.cpi.id,     SERIES.cpi.start),
-  ]);
+  let boxrsaRaw, masthpiRaw, cpiRaw;
+  try {
+    [boxrsaRaw, masthpiRaw, cpiRaw] = await Promise.all([
+      fetchSeries(SERIES.boxrsa.id,  SERIES.boxrsa.start),
+      fetchSeries(SERIES.masthpi.id, SERIES.masthpi.start),
+      fetchSeries(SERIES.cpi.id,     SERIES.cpi.start),
+    ]);
+  } catch (e) {
+    if (e instanceof InvalidKeyError) {
+      console.warn('[housing-history] FRED rejected api_key — skipping refresh, panel keeps prior values');
+      console.warn('  (rotate FRED_API_KEY repo secret at github.com/<owner>/<repo>/settings/secrets/actions)');
+      process.exit(0);
+    }
+    throw e;
+  }
   console.log(`  BOXRSA:  ${boxrsaRaw.length} monthly obs (${boxrsaRaw[0].d} → ${boxrsaRaw[boxrsaRaw.length-1].d})`);
   console.log(`  MASTHPI: ${masthpiRaw.length} quarterly obs (${masthpiRaw[0].d} → ${masthpiRaw[masthpiRaw.length-1].d})`);
   console.log(`  CPI:     ${cpiRaw.length} monthly obs`);
