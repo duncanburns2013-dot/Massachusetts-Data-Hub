@@ -46,16 +46,37 @@ SCOPES = {
 }
 
 
-def _get(params: dict) -> dict:
+def _get(params: dict, max_retries: int = 5) -> dict:
+    """GET Bridge with backoff on 429/5xx. Bridge rate-limits aggressively when
+    we burst through ~1k monthly-window queries; without retry one stray 429
+    fails the whole nightly cron."""
+    import time as _time
     qs = urllib.parse.urlencode(params)
-    req = urllib.request.Request(
-        f"{BASE}?{qs}", headers={"Authorization": f"Bearer {TOKEN}"}
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=120) as r:
-            return json.loads(r.read())
-    except urllib.error.HTTPError as e:
-        sys.exit(f"Bridge HTTP {e.code}: {e.read().decode('utf-8','replace')[:400]}")
+    url = f"{BASE}?{qs}"
+    last_err = None
+    for attempt in range(max_retries):
+        req = urllib.request.Request(url, headers={"Authorization": f"Bearer {TOKEN}"})
+        try:
+            with urllib.request.urlopen(req, timeout=120) as r:
+                return json.loads(r.read())
+        except urllib.error.HTTPError as e:
+            body = e.read().decode("utf-8", "replace")[:400]
+            last_err = f"HTTP {e.code}: {body}"
+            if e.code in (429, 500, 502, 503, 504) and attempt < max_retries - 1:
+                wait = 2 ** attempt + (0.5 * attempt)
+                print(f"  [retry] {e.code} on Bridge call — sleeping {wait:.1f}s (attempt {attempt+1}/{max_retries})")
+                _time.sleep(wait)
+                continue
+            sys.exit(f"Bridge HTTP {e.code}: {body}")
+        except (urllib.error.URLError, TimeoutError) as e:
+            last_err = str(e)
+            if attempt < max_retries - 1:
+                wait = 2 ** attempt
+                print(f"  [retry] network error — sleeping {wait:.1f}s")
+                _time.sleep(wait)
+                continue
+            sys.exit(f"Bridge network error: {last_err}")
+    sys.exit(f"Bridge unreachable after {max_retries} retries: {last_err}")
 
 
 def fetch_closed_trailing_12mo(scope: dict, pt: tuple) -> list[dict]:
