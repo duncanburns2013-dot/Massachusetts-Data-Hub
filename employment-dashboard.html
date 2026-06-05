@@ -268,7 +268,7 @@ footer a:hover{color:var(--gold)}
 <!-- NATIVITY -->
 <div class="tab-content" id="nativity">
   <div class="section-title">Foreign-Born vs Native-Born Labor Force</div>
-  <div class="section-desc">BLS CPS Table A-7 · Apr 2026 · Foreign-born now ~19.4% of US labor force · Northeast share ~23%</div>
+  <div class="section-desc">BLS CPS Table A-7 (NSA) · <span data-field="nat-fb-month">May 2026</span> · Foreign-born now ~19.4% of US labor force · Northeast share ~23%</div>
 
   <div class="alert blue">
     <h4>🇺🇸 Foreign-Born Labor Force Has Stopped Growing — and the Gap is Closing</h4>
@@ -749,10 +749,10 @@ function initCharts(tab){
 
     case 'nativity':
       sc('c-nat-emp',{type:'line',data:{
-        labels:['Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Apr 25','Jul 25','Oct 25','Jan 26','Apr 26'],
+        labels:[/*@natemp-lab*/'Jan 24','Apr','Jul','Oct','Jan 25','Apr','Jul','Jan 26','Apr','May 26'/*@*/],
         datasets:[
-          {label:'Foreign-Born',data:[100,102.1,103.9,104.2,106.5,106.6,103.1,103.0,105.8,106.1],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:B,borderWidth:2.5},
-          {label:'Native-Born',data:[100,101.0,100.9,100.8,100.6,101.9,102.5,102.5,100.2,101.0],borderColor:Y,backgroundColor:Y+'18',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:Y,borderWidth:2.5}
+          {label:'Foreign-Born',data:[/*@natemp-fb*/100.0,102.1,103.9,104.2,106.5,106.6,103.1,105.8,106.1,105.5/*@*/],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:B,borderWidth:2.5},
+          {label:'Native-Born',data:[/*@natemp-nb*/100.0,101.0,100.9,100.8,100.6,101.9,102.5,100.2,101.0,101.2/*@*/],borderColor:Y,backgroundColor:Y+'18',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:Y,borderWidth:2.5}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw.toFixed(1)+' (Jan24=100)'}}}},scales:{y:{ticks:{callback:function(v){return v}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-nat-ur',{type:'line',data:{
@@ -765,14 +765,14 @@ function initCharts(tab){
       sc('c-nat-lfpr',{type:'bar',data:{
         labels:['FB Total','FB Men','FB Women','NB Total','NB Men','NB Women'],
         datasets:[
-          {label:'Apr 2026',data:[66.2,76.5,56.9,60.7,64.8,56.8],backgroundColor:B+'cc',borderColor:B,borderWidth:1.5,borderRadius:5},
-          {label:'Apr 2025',data:[66.5,76.8,56.5,61.6,65.9,57.5],backgroundColor:Y+'aa',borderColor:Y,borderWidth:1.5,borderRadius:5}
+          {label:/*@lfpr-curlab*/'May 2026'/*@*/,data:[/*@lfpr-cur*/66.5,76.8,57.3,60.7,65.0,56.6/*@*/],backgroundColor:B+'cc',borderColor:B,borderWidth:1.5,borderRadius:5},
+          {label:/*@lfpr-prevlab*/'May 2025'/*@*/,data:[/*@lfpr-prev*/65.9,76.2,56.3,61.4,65.8,57.3/*@*/],backgroundColor:Y+'aa',borderColor:Y,borderWidth:1.5,borderRadius:5}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'%'}}}},scales:{y:{min:45,max:85,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-fb-monthly',{type:'line',data:{
-        labels:['Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Apr 25','Jul 25','Sep 25','Nov 25','Jan 26','Mar 26','Apr 26'],
+        labels:[/*@fbm-lab*/'Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr','May 26'/*@*/],
         datasets:[{label:'Foreign-Born Employed (thousands, NSA)',
-          data:[29842,30482,31001,31090,31774,31803,30764,30744,30802,31562,31974,31648],
+          data:[/*@fbm-data*/31774,31687,32225,31803,31579,31231,30764,30814,30744,30802,31112,31562,31168,31974,31648,31472/*@*/],
           borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:B,borderWidth:2.5}]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw.toLocaleString()+'K employed'}}}},scales:{y:{min:29000,max:33000,ticks:{callback:function(v){return (v/1000).toFixed(1)+'M'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       break;

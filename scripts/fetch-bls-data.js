@@ -28,6 +28,15 @@ const JOLTS_SERIES = {
   US_JOB_OPENINGS: 'JTS000000000000000JOL',
 };
 
+// Foreign-born / native-born (CPS Table A-7). NOT seasonally adjusted — these
+// drive the Foreign-Born vs Native tab. Series verified vs the published A-7.
+const NATIVITY_SERIES = {
+  FB_EMP:    'LNU02073395',  // foreign-born employed (thousands)
+  NB_EMP:    'LNU02073413',  // native-born employed (thousands)
+  FB_LFPR_T: 'LNU01373395', FB_LFPR_M: 'LNU01373396', FB_LFPR_W: 'LNU01373397',
+  NB_LFPR_T: 'LNU01373413', NB_LFPR_M: 'LNU01373414', NB_LFPR_W: 'LNU01373415',
+};
+
 const BLS_API_BASE = 'https://api.bls.gov/publicAPI/v2/timeseries/data/';
 const API_KEY      = process.env.BLS_API_KEY || '';
 const TIMEOUT_MS   = 20000;
@@ -200,6 +209,53 @@ function updateCharts(html, find) {
   return html;
 }
 
+// Foreign-Born vs Native tab — monthly NSA charts (CPS Table A-7).
+function updateNativity(html, find) {
+  const fbEmp = monthsOf(find(NATIVITY_SERIES.FB_EMP));
+  const nbEmp = monthsOf(find(NATIVITY_SERIES.NB_EMP));
+
+  // c-fb-monthly — foreign-born employed (thousands), trailing 16 months
+  if (fbEmp.length) {
+    const w = fbEmp.slice(-16);
+    html = inject(html, 'fbm-lab',  axisLabels(w));
+    html = inject(html, 'fbm-data', w.map(p => Math.round(p.value)).join(','));
+  }
+
+  // c-nat-emp — FB vs NB employment indexed to Jan 2024 = 100, sampled quarterly
+  if (fbEmp.length && nbEmp.length) {
+    const fbBase = fbEmp.find(p => p.year === 2024 && p.mon === 0)?.value;
+    const nbBase = nbEmp.find(p => p.year === 2024 && p.mon === 0)?.value;
+    if (fbBase && nbBase) {
+      const axis = fbEmp.filter(p => p.mon % 3 === 0);            // Jan/Apr/Jul/Oct
+      const last = fbEmp[fbEmp.length - 1];
+      if (!axis.length || mkey(axis[axis.length - 1]) !== mkey(last)) axis.push(last);
+      const fbMap = new Map(fbEmp.map(p => [mkey(p), p.value]));
+      const nbMap = new Map(nbEmp.map(p => [mkey(p), p.value]));
+      const idx = (map, base, k) => map.has(k) ? (map.get(k) / base * 100).toFixed(1) : 'null';
+      html = inject(html, 'natemp-lab', axisLabels(axis));
+      html = inject(html, 'natemp-fb',  axis.map(p => idx(fbMap, fbBase, mkey(p))).join(','));
+      html = inject(html, 'natemp-nb',  axis.map(p => idx(nbMap, nbBase, mkey(p))).join(','));
+    }
+  }
+
+  // c-nat-lfpr — participation rate by nativity & sex, latest month vs year-ago
+  const order = [
+    NATIVITY_SERIES.FB_LFPR_T, NATIVITY_SERIES.FB_LFPR_M, NATIVITY_SERIES.FB_LFPR_W,
+    NATIVITY_SERIES.NB_LFPR_T, NATIVITY_SERIES.NB_LFPR_M, NATIVITY_SERIES.NB_LFPR_W,
+  ].map(id => monthsOf(find(id)));
+  if (order[0].length) {
+    const cur = order[0][order[0].length - 1];
+    const at = (arr, yr, mo) => { const p = arr.find(x => x.year === yr && x.mon === mo); return p ? p.value.toFixed(1) : 'null'; };
+    const label = (yr) => `'${MON[cur.mon]} ${yr}'`;
+    html = inject(html, 'lfpr-curlab',  label(cur.year));
+    html = inject(html, 'lfpr-cur',     order.map(a => at(a, cur.year, cur.mon)).join(','));
+    html = inject(html, 'lfpr-prevlab', label(cur.year - 1));
+    html = inject(html, 'lfpr-prev',    order.map(a => at(a, cur.year - 1, cur.mon)).join(','));
+  }
+
+  return html;
+}
+
 // ── Dashboard updater ─────────────────────────────────────────────────────────
 async function updateDashboard(data, empSeries) {
   let html = await fs.readFile(DASHBOARD_PATH, 'utf-8');
@@ -301,9 +357,17 @@ async function updateDashboard(data, empSeries) {
     console.log(`   ✅ National block updated: ${monLong(cM)} — payrolls ${sgn(payCur)}, UR ${urCur}% ${urChg}`);
   }
 
+  // Foreign-Born tab subtitle month
+  const fbMonths = monthsOf(find(NATIVITY_SERIES.FB_EMP));
+  if (fbMonths.length) {
+    const p = fbMonths[fbMonths.length - 1];
+    setField('nat-fb-month', `${MON[p.mon]} ${p.year}`);
+  }
+
   // Charts — rewrite the auto-updating series arrays from the live BLS series
   if (empSeries?.length) {
     html = updateCharts(html, find);
+    html = updateNativity(html, find);
   }
 
   // Footer date
@@ -375,6 +439,17 @@ async function main() {
   } catch (err) {
     console.warn(`   ⚠️  JOLTS skipped: ${err.message}`);
     data.jolts_error = err.message;
+  }
+
+  // ── 2b. Nativity (non-critical — feeds the Foreign-Born tab charts) ────────
+  console.log('\n🔄 Fetching foreign-born / native-born data (NSA)...');
+  try {
+    const natSeries = await fetchBLSData(Object.values(NATIVITY_SERIES), currentYear - 2, currentYear);
+    empSeries.push(...natSeries);
+    const fb = natSeries.find(s => s.seriesID === NATIVITY_SERIES.FB_EMP);
+    console.log(`   ✅ Nativity series fetched (${natSeries.length}) — FB employed latest ${getLatestValue(fb)?.date}`);
+  } catch (err) {
+    console.warn(`   ⚠️  Nativity skipped: ${err.message}`);
   }
 
   // ── 3. Save snapshot + rotate previous ───────────────────────────────────
