@@ -132,7 +132,7 @@ footer a:hover{color:var(--gold)}
 <!-- OVERVIEW -->
 <div class="tab-content active" id="overview">
   <div class="section-title">Labor Market Overview</div>
-  <div class="section-desc">April: MA +8,500 jobs · 4.7% UR · +21,600 jobs since Sept 2025 · National +115K · 4.3%</div>
+  <div class="section-desc">MA (April): +8,500 jobs · 4.7% UR · +21,600 jobs since Sept 2025 · National <span data-field="ov-nat-pay">+172K</span> · <span data-field="ov-nat-ur">4.3%</span></div>
 
   <div class="alert green">
     <h4>✅ Six Straight Months of MA Job Growth</h4>
@@ -527,11 +527,10 @@ footer a:hover{color:var(--gold)}
   </div>
 
   <div class="alert amber">
-    <h4>🇺🇸 April 2026 National Employment — Released May 8, 2026</h4>
-    <p>Payrolls: <strong>+115,000</strong> | Unemployment: <strong>4.3%</strong> (unchanged) | March revised down: <strong>+228K → +185K (−43K)</strong><br>
-    Household survey: employed persons <strong>−226,000</strong> in April · down <strong>−1.03M since September 2025</strong><br>
-    Government: <strong>−8,000</strong> (12th consecutive decline) · Information: <strong>−13,000</strong> · Ed/Health: <strong>+46,000</strong><br>
-    Source: BLS Employment Situation, May 8, 2026</p>
+    <h4>🇺🇸 <span data-field="nat-emp-month">May 2026</span> National Employment — Released <span data-field="nat-emp-rel">June 5, 2026</span></h4>
+    <p>Payrolls: <strong data-field="nat-payrolls">+172,000</strong> | Unemployment: <strong data-field="nat-ur">4.3%</strong> <span data-field="nat-ur-chg">(unchanged)</span> | U-6: <strong data-field="nat-u6">8.1%</strong><br>
+    Household survey: employed persons <strong data-field="nat-hh">+149,000</strong> · civilian labor force <strong data-field="nat-lf">+83,000</strong><br>
+    Source: BLS Employment Situation, <span data-field="nat-emp-rel2">June 5, 2026</span> · full sector breakdown &amp; revisions in the release</p>
   </div>
 
   <div class="alert amber">
@@ -573,30 +572,25 @@ footer a:hover{color:var(--gold)}
       <div class="source">Source: BLS LAUS / CES via Mass.gov EOLWD · April release May 22, 2026</div>
     </div>
     <div class="data-card" style="margin-bottom:0">
-      <h3>National Context — April 2026 (Released May 8)</h3>
+      <h3>National Context — <span data-field="nat-ctx-month">May 2026</span> (Released <span data-field="nat-ctx-rel">June 5, 2026</span>)</h3>
       <table class="data-table">
-        <thead><tr><th>Metric</th><th>Apr 2026</th><th>Mar 2026</th></tr></thead>
+        <thead><tr><th>Metric</th><th data-field="nat-col-cur">May 2026</th><th data-field="nat-col-prev">Apr 2026</th></tr></thead>
         <tbody>
-          <tr><td>National Unemployment (U-3)</td><td class="td-blue">4.3%</td><td>4.3%</td></tr>
-          <tr><td>National U-6 (true underemployment)</td><td class="td-amber">8.2%</td><td>8.0%</td></tr>
-          <tr><td>Payroll Jobs Change</td><td class="td-amber">+115,000</td><td class="td-amber">+185,000 ↓revised</td></tr>
-          <tr><td>Education &amp; Health</td><td class="td-green">+46,000</td><td class="td-green">+46,000</td></tr>
-          <tr><td>Trade/Transport/Utilities</td><td class="td-green">+60,000</td><td class="td-green">+57,000</td></tr>
-          <tr><td>Government</td><td class="td-red">−8,000</td><td class="td-red">−8,000</td></tr>
-          <tr><td>Information</td><td class="td-red">−13,000</td><td class="td-green">+3,000</td></tr>
-          <tr><td>Financial Activities</td><td class="td-red">−11,000</td><td class="td-red">−5,000</td></tr>
-          <tr><td>Household — Employed persons</td><td class="td-red">−226,000</td><td class="td-red">−64,000</td></tr>
-          <tr><td>National labor force change</td><td class="td-red">−92,000</td><td class="td-red">−396,000</td></tr>
-          <tr><td>Employed persons since Sep 2025</td><td class="td-red" colspan="2">−1,034,000 cumulative</td></tr>
+          <tr><td>National Unemployment (U-3)</td><td class="td-blue" data-field="nat-u3-cur">4.3%</td><td data-field="nat-u3-prev">4.3%</td></tr>
+          <tr><td>National U-6 (true underemployment)</td><td class="td-amber" data-field="nat-u6-cur">8.1%</td><td data-field="nat-u6-prev">8.2%</td></tr>
+          <tr><td>Payroll Jobs Change</td><td class="td-amber" data-field="nat-pay-cur">+172,000</td><td data-field="nat-pay-prev">+179,000</td></tr>
+          <tr><td>Household — Employed persons</td><td class="td-green" data-field="nat-hh-cur">+149,000</td><td data-field="nat-hh-prev">−226,000</td></tr>
+          <tr><td>National labor force change</td><td class="td-green" data-field="nat-lf-cur">+83,000</td><td data-field="nat-lf-prev">−92,000</td></tr>
+          <tr><td>Employed persons since Sep 2025</td><td class="td-red" colspan="2" data-field="nat-cum-sep">−885,000 cumulative</td></tr>
         </tbody>
       </table>
-      <div class="source">Source: BLS USDL May 8, 2026 · March revision: +228K originally → +185K (−43K)</div>
+      <div class="source">Headline aggregates auto-updated <span data-field="nat-src-date">June 5, 2026</span> from BLS CPS/CES. Sector breakdown (Ed/Health, Trade, Gov't, etc.) in the <a href="https://www.bls.gov/news.release/empsit.nr0.htm" target="_blank">full release</a>.</div>
     </div>
   </div>
 
   <div class="info-box" style="margin-top:18px">
     <span class="icon">📅</span>
-    <p><strong>Next releases:</strong> National May 2026 → June 6, 2026 &nbsp;·&nbsp; MA May 2026 &amp; revised April → June 22, 2026 &nbsp;·&nbsp; MA Local Labor Markets (May) → June 23, 2026 &nbsp;·&nbsp; BLS State JOLTS Annual (2025) → July 2026</p>
+    <p><strong>Next releases:</strong> MA May 2026 &amp; revised April → June 22, 2026 &nbsp;·&nbsp; MA Local Labor Markets (May) → June 23, 2026 &nbsp;·&nbsp; National June 2026 → July 2026 &nbsp;·&nbsp; BLS State JOLTS Annual (2025) → July 2026</p>
   </div>
 </div>
 

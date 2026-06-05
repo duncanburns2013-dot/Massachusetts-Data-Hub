@@ -14,6 +14,12 @@ const EMPLOYMENT_SERIES = {
   MA_LABOR_FORCE:        'LASST250000000000006',
   MA_TOTAL_NONFARM:      'SMS25000000000000001',
   US_UNEMPLOYMENT_RATE:  'LNS14000000',
+  // National (Employment Situation) — releases ~3 weeks before the MA state data,
+  // so these carry the newest month and drive the "National" block + table.
+  US_NONFARM:            'CES0000000001',  // total nonfarm, SA, level (thousands)
+  US_HH_EMP:             'LNS12000000',    // household-survey employed, level (thousands)
+  US_LABOR_FORCE:        'LNS11000000',    // civilian labor force, level (thousands)
+  US_U6:                 'LNS13327709',    // U-6 underemployment rate
 };
 
 // National JOLTS only — BLS discontinued monthly state JOLTS (last: Dec 2025).
@@ -197,6 +203,7 @@ function updateCharts(html, find) {
 // ── Dashboard updater ─────────────────────────────────────────────────────────
 async function updateDashboard(data, empSeries) {
   let html = await fs.readFile(DASHBOARD_PATH, 'utf-8');
+  const find = (id) => empSeries?.find(s => s.seriesID === id);
 
   function setField(fieldName, value) {
     html = html.replace(
@@ -230,9 +237,72 @@ async function updateDashboard(data, empSeries) {
     console.log(`   ✅ JOLTS fields updated: ${openingsM} (${date})`);
   }
 
+  // ── National Employment Situation block + table ───────────────────────────
+  // National data leads MA state data by ~3 weeks, so this carries the newest
+  // month. Figures are computed from the same SA series BLS headlines (payrolls,
+  // U-3, U-6, household employment, labor force) — verifiable, no scraping.
+  const nser  = (id) => monthsOf(find(id));
+  const lastOf = (a) => a[a.length - 1];
+  const prevOf = (a) => a[a.length - 2];
+  const FULLMON = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const sgn = (n) => (n < 0 ? '−' : '+') + Math.abs(Math.round(n)).toLocaleString('en-US');
+  const sgnK = (n) => (n < 0 ? '−' : '+') + Math.round(Math.abs(n) / 1000) + 'K';
+
+  const nf = nser(EMPLOYMENT_SERIES.US_NONFARM);
+  if (nf.length >= 3) {
+    const relDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    const cM = lastOf(nf), pM = prevOf(nf);
+    const moK = (a, i) => (a[a.length - i].value - a[a.length - i - 1].value) * 1000; // i=1 newest MoM
+    const ur  = nser(EMPLOYMENT_SERIES.US_UNEMPLOYMENT_RATE);
+    const u6  = nser(EMPLOYMENT_SERIES.US_U6);
+    const hh  = nser(EMPLOYMENT_SERIES.US_HH_EMP);
+    const lf  = nser(EMPLOYMENT_SERIES.US_LABOR_FORCE);
+
+    const payCur = moK(nf, 1), payPrev = moK(nf, 2);
+    const urCur = lastOf(ur).value, urPrev = prevOf(ur).value;
+    const urChg = urCur === urPrev ? '(unchanged)' : urCur > urPrev ? '(up)' : '(down)';
+    const hhCur = moK(hh, 1), hhPrev = moK(hh, 2);
+    const lfCur = moK(lf, 1), lfPrev = moK(lf, 2);
+    const sep25 = hh.find(p => p.year === 2025 && p.mon === 8); // employed since Sep 2025
+    const cumSep = sep25 ? (lastOf(hh).value - sep25.value) * 1000 : null;
+
+    const monShort = (p) => `${MON[p.mon]} ${p.year}`;
+    const monLong  = (p) => `${FULLMON[p.mon]} ${p.year}`;
+
+    // Overview landing subtitle (visible without switching tabs)
+    setField('ov-nat-pay', sgnK(payCur));
+    setField('ov-nat-ur',  urCur.toFixed(1) + '%');
+    // National Employment alert block
+    setField('nat-emp-month', monLong(cM));
+    setField('nat-emp-rel',   relDate);
+    setField('nat-emp-rel2',  relDate);
+    setField('nat-payrolls',  sgn(payCur));
+    setField('nat-ur',        urCur.toFixed(1) + '%');
+    setField('nat-ur-chg',    urChg);
+    setField('nat-u6',        u6.length ? lastOf(u6).value.toFixed(1) + '%' : '—');
+    setField('nat-hh',        sgn(hhCur));
+    setField('nat-lf',        sgn(lfCur));
+    // National Context table
+    setField('nat-ctx-month', monLong(cM));
+    setField('nat-ctx-rel',   relDate);
+    setField('nat-col-cur',   monShort(cM));
+    setField('nat-col-prev',  monShort(pM));
+    setField('nat-u3-cur',    urCur.toFixed(1) + '%');
+    setField('nat-u3-prev',   urPrev.toFixed(1) + '%');
+    if (u6.length >= 2) { setField('nat-u6-cur', lastOf(u6).value.toFixed(1) + '%'); setField('nat-u6-prev', prevOf(u6).value.toFixed(1) + '%'); }
+    setField('nat-pay-cur',   sgn(payCur));
+    setField('nat-pay-prev',  sgn(payPrev));
+    setField('nat-hh-cur',    sgn(hhCur));
+    setField('nat-hh-prev',   sgn(hhPrev));
+    setField('nat-lf-cur',    sgn(lfCur));
+    setField('nat-lf-prev',   sgn(lfPrev));
+    if (cumSep != null) setField('nat-cum-sep', sgn(cumSep) + ' cumulative');
+    setField('nat-src-date',  relDate);
+    console.log(`   ✅ National block updated: ${monLong(cM)} — payrolls ${sgn(payCur)}, UR ${urCur}% ${urChg}`);
+  }
+
   // Charts — rewrite the auto-updating series arrays from the live BLS series
   if (empSeries?.length) {
-    const find = (id) => empSeries.find(s => s.seriesID === id);
     html = updateCharts(html, find);
   }
 
