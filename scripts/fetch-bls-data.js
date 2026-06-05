@@ -102,8 +102,100 @@ async function loadPreviousData() {
   }
 }
 
+// ── Chart-array helpers ─────────────────────────────────────────────────────────
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+// Series → oldest-first list of monthly points. Drops the M13 annual average and
+// any month BLS marks unavailable (value "-", e.g. the 2025 appropriations lapse),
+// so chart lines stay continuous instead of breaking on a fabricated NaN.
+function monthsOf(series) {
+  if (!series?.data?.length) return [];
+  return series.data
+    .filter(d => /^M(0[1-9]|1[0-2])$/.test(d.period))
+    .map(d => ({
+      year:  parseInt(d.year, 10),
+      mon:   parseInt(d.period.slice(1), 10) - 1,
+      value: parseFloat(d.value),
+    }))
+    .filter(p => Number.isFinite(p.value))
+    .reverse();
+}
+
+const mkey = p => p.year * 100 + p.mon;
+
+// Chart.js label literal: "'Mon YY'" at year-starts/endpoints, "'Mon'" otherwise.
+function axisLabels(axis) {
+  return axis
+    .map((p, i) =>
+      (p.mon === 0 || i === 0 || i === axis.length - 1)
+        ? `'${MON[p.mon]} ${String(p.year).slice(2)}'`
+        : `'${MON[p.mon]}'`)
+    .join(',');
+}
+
+// Replace the contents between /*@tag*/ … /*@*/ markers; no-op (with a warning) if absent.
+function inject(html, tag, literal) {
+  const re = new RegExp(`(/\\*@${tag}\\*/)[\\s\\S]*?(/\\*@\\*/)`);
+  if (!re.test(html)) {
+    console.warn(`   ⚠️  chart marker @${tag} not found — skipping`);
+    return html;
+  }
+  return html.replace(re, `$1${literal}$2`);
+}
+
+// Build every auto-chart literal from the fetched series, then inject into the HTML.
+function updateCharts(html, find) {
+  const maUR  = monthsOf(find(EMPLOYMENT_SERIES.MA_UNEMPLOYMENT_RATE));
+  const natUR = monthsOf(find(EMPLOYMENT_SERIES.US_UNEMPLOYMENT_RATE));
+  const maLF  = monthsOf(find(EMPLOYMENT_SERIES.MA_LABOR_FORCE));
+  const maNF  = monthsOf(find(EMPLOYMENT_SERIES.MA_TOTAL_NONFARM));
+
+  // c-trend — MA unemployment rate, trailing 16 months
+  if (maUR.length) {
+    const w = maUR.slice(-16);
+    html = inject(html, 'trend-lab', axisLabels(w));
+    html = inject(html, 'trend-ma',  w.map(p => p.value).join(','));
+  }
+
+  // c-laborforce — MA labor force level, trailing 16 months (last point is highlighted)
+  if (maLF.length) {
+    const w = maLF.slice(-16);
+    html = inject(html, 'lf-lab',  axisLabels(w));
+    html = inject(html, 'lf-data', w.map(p => p.value).join(','));
+  }
+
+  // c-monthly — MA nonfarm month-over-month job change (levels are in thousands)
+  if (maNF.length > 1) {
+    const diffs = [];
+    for (let i = 1; i < maNF.length; i++) {
+      diffs.push({
+        year: maNF[i].year, mon: maNF[i].mon,
+        value: Math.round((maNF[i].value - maNF[i - 1].value) * 1000),
+      });
+    }
+    const w = diffs.slice(-16);
+    html = inject(html, 'mom-lab',  axisLabels(w));
+    html = inject(html, 'mom-data', w.map(p => p.value).join(','));
+  }
+
+  // c-unemp2 — MA vs National UR on a unified axis (trailing 13 months).
+  // National leads MA by a month, so the newest point shows National with MA null.
+  if (maUR.length && natUR.length) {
+    const keys = [...new Set([...maUR, ...natUR].map(mkey))].sort((a, b) => a - b).slice(-13);
+    const axis = keys.map(k => ({ year: Math.floor(k / 100), mon: k % 100 }));
+    const maMap  = new Map(maUR.map(p => [mkey(p), p.value]));
+    const natMap = new Map(natUR.map(p => [mkey(p), p.value]));
+    const col = (map) => keys.map(k => (map.has(k) ? map.get(k) : 'null')).join(',');
+    html = inject(html, 'ur2-lab', axisLabels(axis));
+    html = inject(html, 'ur2-ma',  col(maMap));
+    html = inject(html, 'ur2-nat', col(natMap));
+  }
+
+  return html;
+}
+
 // ── Dashboard updater ─────────────────────────────────────────────────────────
-async function updateDashboard(data) {
+async function updateDashboard(data, empSeries) {
   let html = await fs.readFile(DASHBOARD_PATH, 'utf-8');
 
   function setField(fieldName, value) {
@@ -136,6 +228,12 @@ async function updateDashboard(data) {
     setField('jolts-col-current',    date);
     setField('jolts-ratio',          ratio);
     console.log(`   ✅ JOLTS fields updated: ${openingsM} (${date})`);
+  }
+
+  // Charts — rewrite the auto-updating series arrays from the live BLS series
+  if (empSeries?.length) {
+    const find = (id) => empSeries.find(s => s.seriesID === id);
+    html = updateCharts(html, find);
   }
 
   // Footer date
@@ -220,7 +318,7 @@ async function main() {
   console.log('\n💾 Saved data/employment-latest.json');
 
   // ── 4. Update dashboard HTML ──────────────────────────────────────────────
-  const updatedHtml = await updateDashboard(data);
+  const updatedHtml = await updateDashboard(data, empSeries);
   await fs.writeFile(DASHBOARD_PATH, updatedHtml);
   console.log('📄 Updated employment-dashboard.html');
 

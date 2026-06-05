@@ -651,9 +651,9 @@ function initCharts(tab){
 
     case 'unemployment':
       sc('c-laborforce',{type:'line',data:{
-        labels:['Jan 24','Mar','May','Jul','Sep','Nov','Jan 25','Mar','May','Jul','Sep','Nov','Jan 26','Feb','Mar','Apr 26'],
+        labels:[/*@lf-lab*/'Dec 24','Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr 26'/*@*/],
         datasets:[{label:'MA Labor Force',
-          data:[3881436,3900976,3920289,3930779,3935220,3939859,3949077,3952593,3949636,3946177,3939694,3935591,3926744,3915281,3900254,3888554],
+          data:[/*@lf-data*/3944592,3949077,3951911,3952593,3951418,3949636,3948218,3946177,3943000,3939694,3935591,3935586,3926744,3915281,3900230,3888473/*@*/],
           borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:3,borderWidth:2.5,
           pointRadius:function(ctx){return ctx.dataIndex===15?7:3},
           pointBackgroundColor:function(ctx){return ctx.dataIndex===15?R:'rgba(0,0,0,0)'},
@@ -663,10 +663,10 @@ function initCharts(tab){
             tooltip:{callbacks:{label:function(c){return c.raw.toLocaleString()+' people'}}}},
           scales:{y:{min:3850000,ticks:{callback:function(v){return(v/1000000).toFixed(3)+'M'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-unemp2',{type:'line',data:{
-        labels:['Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Apr 25','Jul 25','Oct 25','Dec 25','Jan 26','Mar 26','Apr 26'],
+        labels:[/*@ur2-lab*/'Apr 25','May','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr','May 26'/*@*/],
         datasets:[
-          {label:'MA (U-3)',data:[3.8,3.9,4.1,4.3,4.5,4.6,4.7,4.7,4.7,4.7,4.7,4.7],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2.5},
-          {label:'National',data:[3.7,3.9,4.2,4.1,4.0,4.2,4.3,4.1,4.4,4.3,4.3,4.3],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2,borderDash:[5,3]}
+          {label:'MA (U-3)',data:[/*@ur2-ma*/4.4,4.4,4.4,4.5,4.5,4.6,4.7,4.7,4.7,4.8,4.7,4.7,null/*@*/],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2.5},
+          {label:'National',data:[/*@ur2-nat*/4.2,4.3,4.1,4.3,4.3,4.4,4.5,4.4,4.3,4.4,4.3,4.3,4.3/*@*/],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2,borderDash:[5,3]}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{min:3,max:5.5,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-u6',{type:'line',data:{
@@ -693,8 +693,8 @@ function initCharts(tab){
 
     case 'jobs':
       sc('c-monthly',{type:'bar',data:{
-        labels:['Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar','Apr 26'],
-        datasets:[{data:[2100,-800,1500,200,-1200,3100,-2400,1800,-11100,4600,2400,1100,3700,-7100,7200,8500],
+        labels:[/*@mom-lab*/'Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar','Apr 26'/*@*/],
+        datasets:[{data:[/*@mom-data*/0,-5500,-2600,-100,-200,-13100,5200,-9000,-3000,6300,400,4300,2000,-7100,7200,8500/*@*/],
           backgroundColor:function(ctx){return ctx.raw<0?R+'cc':G+'cc'},
           borderColor:function(ctx){return ctx.raw<0?R:G},
           borderWidth:1.5,borderRadius:5}]},
@@ -785,9 +785,9 @@ function initCharts(tab){
 
     case 'latest':
       sc('c-trend',{type:'line',data:{
-        labels:['Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar','Apr 26'],
+        labels:[/*@trend-lab*/'Dec 24','Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr 26'/*@*/],
         datasets:[{label:'MA Unemployment Rate',
-          data:[4.5,4.3,4.6,4.6,4.6,4.6,4.7,4.7,4.7,4.7,4.7,4.7,4.7,4.8,4.7,4.7],
+          data:[/*@trend-ma*/4.1,4.2,4.3,4.3,4.4,4.4,4.4,4.5,4.5,4.6,4.7,4.7,4.7,4.8,4.7,4.7/*@*/],
           borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:R,borderWidth:2.5}]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'%'}}}},scales:{y:{min:4,max:5.2,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       break;
