@@ -16,14 +16,6 @@
   --purple:#7c3aed;--cyan:#0891b2;--rose:#e11d48;
 }
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-
-/* Companion banner */
-.companion-bar{background:#0f172a;padding:10px 24px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
-.companion-bar span{font-size:0.7rem;color:#94a3b8;text-transform:uppercase;letter-spacing:0.1em;font-weight:600}
-.companion-bar a{font-size:0.78rem;color:#60a5fa;font-weight:700;text-decoration:none;border:1px solid rgba(96,165,250,0.3);border-radius:6px;padding:4px 12px}
-.companion-bar a:hover{background:rgba(96,165,250,0.1)}
-.companion-bar .note{font-size:0.68rem;color:#475569}
-
 .hero{text-align:center;padding:2.5rem 2rem 1.8rem;
   background:linear-gradient(135deg,#1e3a5f 0%,#0f172a 40%,#1a1a2e 70%,#2d1b3d 100%);color:#fff;position:relative}
 .hero::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:4px;
@@ -113,14 +105,6 @@ tr:hover td{background:var(--surface)}
 </style>
 </head>
 <body>
-
-<!-- Companion banner -->
-<div class="companion-bar">
-  <span>Companion Dashboard</span>
-  <a href="tax-budget-dashboard.html">Tax Burden &amp; State Budget →</a>
-  <span class="note">The people leaving MA earn 29% more than those arriving — see the fiscal impact</span>
-</div>
-
 <div class="hero">
 <h1>Immigration & Massachusetts Population</h1>
 <p class="sub">Official data from Census Bureau, CBP, ICE, IRS, DHS, CBO &bull; Updated February 2026</p>
@@ -215,7 +199,7 @@ tr:hover td{background:var(--surface)}
 </div>
 </div>
 <div class="callout callout-red" style="margin-top:1.2rem"><strong>Biden era:</strong> ~10.8M encountered, ~600K interior removals over 4 years = 13:1 ratio.</div>
-<div class="callout callout-blue" style="margin-top:.4rem"><strong>Trump 2.0 (FY2025):</strong> MPI estimates ~340K ICE deportations — 25% above FY2024's 271K, but below Biden's combined ICE+CBP total of 685K. Interior deportations quadrupled from pre-inauguration levels.</div>
+<div class="callout callout-blue" style="margin-top:.4rem"><strong>Trump 2.0 (FY2025):</strong> MPI estimates ~340K ICE deportations — 25% above FY2024's 271K, but below Biden's combined ICE+CBP total of 685K. Interior deportations quadrupled from pre-inauguration levels. DHS claimed 2M+ "removed or self-deported" — CMS called the self-deportation figure a "self-serving fantasy."</div>
 </div>
 
 <div id="n-census" class="tab" data-section="national">
@@ -257,8 +241,8 @@ tr:hover td{background:var(--surface)}
 <div class="callout callout-red"><strong>137,702</strong> residents left for other states since 2020.</div>
 <div class="callout callout-blue"><strong>296,081</strong> immigrants arrived, covering the exodus <em>twice over</em>.</div>
 <div class="callout callout-yellow"><strong>Without immigration, MA would have LOST ~112,000 people.</strong></div>
-<div class="callout callout-red"><strong>Income quality gap:</strong> IRS data shows people leaving MA earn <strong>29% more on average</strong> than those arriving — meaning the population is technically growing, but the tax base is being diluted. <a href="tax-budget-dashboard.html" style="color:#991b1b;font-weight:700">→ See Tax Dashboard</a></div>
-<div class="callout callout-green"><strong>Shelter collapse:</strong> From 7,600 families (peak Jul 2024) → 2,047 (Nov 2025). Cost/family dropped from $3,496/wk → $1,182/wk.</div>
+<div class="callout callout-green"><strong>Shelter collapse:</strong> From 7,600 families (peak Jul 2024) → 2,047 (Nov 2025). Cost/family dropped from $3,496/wk → $1,182/wk. Legislature passed $425M supplemental with sweeping reforms.</div>
+<p style="font-size:.8rem;color:var(--text2);margin-top:.8rem;line-height:1.6">Immigration is the <em>only</em> reason MA population grew. Now both trends are reversing.</p>
 </div>
 </div>
 </div>
@@ -300,8 +284,7 @@ tr:hover td{background:var(--surface)}
 <tr><td><strong>Deport + No Immig</strong></td><td>-34K</td><td>6.63M</td><td style="color:var(--accent);font-weight:700">❌ Loses</td></tr>
 <tr><td><strong>Deport All + Exodus</strong></td><td>-52K</td><td>6.43M</td><td style="color:var(--accent);font-weight:700">❌ Loses</td></tr>
 </table>
-<div class="callout callout-yellow" style="margin-top:1rem"><strong>H-1B Factor:</strong> MA has ~100K H-1B workers. Peak new approvals: ~21,834/yr, now ~7,550. Each departure also removes dependents, amplifying population impact on biotech, healthcare, and tech sectors.</div>
-<div class="callout callout-red" style="margin-top:.5rem"><strong>The Double Cliff (2027):</strong> If immigration continues falling just as 2023-24 IRS migration data confirms sustained high-earner outflow, Massachusetts could face its first significant absolute population decline — and a 9th Congressional seat loss. <a href="tax-budget-dashboard.html" style="color:#991b1b;font-weight:700">→ See High-Earner Trends tab</a></div>
+<div class="callout callout-yellow" style="margin-top:1rem"><strong>H-1B Factor:</strong> MA has ~100K H-1B workers (3yr visa + 3yr extension). Peak new approvals: ~21,834/yr, now ~7,550. Each departure also removes dependents (H-4 visas), amplifying population impact on biotech, healthcare, and tech sectors.</div>
 </div>
 </div>
 
@@ -323,10 +306,10 @@ tr:hover td{background:var(--surface)}
 </div>
 <div class="card">
 <h3>Essex County Spotlight</h3>
-<div class="callout callout-red"><strong>Lawrence:</strong> 45% foreign-born, 78.5% multilingual, 56% poverty rate for immigrant households</div>
+<div class="callout callout-red"><strong>Lawrence:</strong> 35% foreign-born, 78.5% multilingual, 56% poverty rate for immigrant households</div>
 <div class="callout callout-blue"><strong>Lynn:</strong> 31% foreign-born, largest Central American community north of Boston</div>
-<div class="callout callout-yellow"><strong>Methuen:</strong> 24% foreign-born, fastest-growing immigrant pop in Essex County</div>
-<div class="callout callout-green"><strong>Geographic pattern:</strong> 60-mile radius of Beacon Hill. Inner-ring cities bear disproportionate burden while wealthier suburbs remain largely unaffected — and those suburbs are where most departing high-earners live.</div>
+<div class="callout callout-yellow"><strong>Methuen:</strong> 23% foreign-born, fastest-growing immigrant pop in Essex County</div>
+<div class="callout callout-green"><strong>Geographic pattern:</strong> 60-mile radius of Beacon Hill. Inner-ring cities bear disproportionate burden while wealthier suburbs remain largely unaffected.</div>
 <h3 style="margin-top:1.2rem">Fastest-Growing (2011–2021)</h3>
 <table>
 <tr><th>City</th><th>Change</th></tr>
@@ -351,6 +334,19 @@ tr:hover td{background:var(--surface)}
 </div>
 
 <div id="m-reasons" class="tab" data-section="massachusetts">
+<div class="callout callout-red"><strong>Suffolk/Globe Poll (June 2026):</strong> More than half of Massachusetts voters (53%) have weighed leaving the state in the last year — 25% "seriously considered" it and 28% weigh it "from time to time." Top reasons: cost of living and taxes. Notably, 70%+ of respondents said they currently have enough money to live comfortably — meaning even those who <em>can</em> afford to stay are thinking about leaving. n=500 likely voters.</div>
+<div class="grid grid-2">
+<div class="card">
+<h3>Suffolk/Globe Poll: Have You Considered Leaving MA?</h3>
+<div class="chart-wrap"><canvas id="ch-poll-leave"></canvas></div>
+<p style="font-size:0.72rem;color:#6b7280;margin-top:8px">Source: Suffolk University/Boston Globe, June 16, 2026 (n=500)</p>
+</div>
+<div class="card">
+<h3>ACS 2024: Where They Actually Go</h3>
+<div class="chart-wrap"><canvas id="ch-domestic-outflow"></canvas></div>
+<p style="font-size:0.72rem;color:#6b7280;margin-top:8px">Source: Census ACS State-to-State Migration, 2024. Net domestic: −30,387. Only international migration (+66,158) keeps MA positive.</p>
+</div>
+</div>
 <div class="grid grid-2">
 <div class="card">
 <h3>Why People Leave — BU Study (2024)</h3>
@@ -369,13 +365,12 @@ tr:hover td{background:var(--surface)}
 <h3 style="margin-top:1.2rem">The Vicious Cycle</h3>
 <div class="cycle">
 <span style="background:#fef2f2;color:#991b1b;border:1px solid #fecaca">High taxes</span><span class="arrow">→</span>
-<span style="background:#fef2f2;color:#991b1b;border:1px solid #fecaca">High earners leave<br><small style="font-weight:400;opacity:0.8">(29% richer than arrivals)</small></span><span class="arrow">→</span>
-<span style="background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe">Immigration replaces<br><small style="font-weight:400;opacity:0.8">(lower avg income)</small></span><span class="arrow">→</span>
+<span style="background:#fef2f2;color:#991b1b;border:1px solid #fecaca">Residents leave</span><span class="arrow">→</span>
+<span style="background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe">Immigration replaces</span><span class="arrow">→</span>
 <span style="background:#f5f3ff;color:#5b21b6;border:1px solid #ddd6fe">$1.87B shelters</span><span class="arrow">→</span>
 <span style="background:#fef2f2;color:#991b1b;border:1px solid #fecaca">More taxes</span><span class="arrow">→</span>
 <span style="font-size:1.1rem">🔄</span>
 </div>
-<p style="font-size:.75rem;color:var(--muted);margin-top:.6rem">The 29% income premium for leavers is from IRS SOI 2022-23 migration data. <a href="tax-budget-dashboard.html" style="color:var(--blue);font-weight:600">Full analysis →</a></p>
 </div>
 </div>
 </div>
@@ -440,7 +435,7 @@ tr:hover td{background:var(--surface)}
 <tr><td>Requirements</td><td>None</td><td style="color:var(--green);font-weight:600">MA residency + lawful status + CORI</td></tr>
 <tr><td>Hotels/Motels</td><td>~50% of placements</td><td style="color:var(--green);font-weight:600">Phased out by mid-2025</td></tr>
 <tr><td>Procurement</td><td>Direct contracts</td><td style="color:var(--green);font-weight:600">Competitive bidding required</td></tr>
-<tr><td>Income Cap</td><td>None</td><td style="color:var(--green);font-weight:600">&gt;200% FPL for 3+ months = ineligible</td></tr>
+<tr><td>Income Cap</td><td>None</td><td style="color:var(--green);font-weight:600">>200% FPL for 3+ months = ineligible</td></tr>
 </table>
 </div>
 </div>
@@ -493,6 +488,8 @@ tr:hover td{background:var(--surface)}
 <li>• MassHealth Enrollment</li>
 <li>• MIRA Coalition</li>
 <li>• WBUR / Boston Herald</li>
+<li>• Suffolk/Globe Poll (June 2026, n=500)</li>
+<li>• Census ACS State-to-State Migration (2024)</li>
 <li>• Tax Foundation Rankings</li>
 </ul>
 </div>
@@ -504,8 +501,7 @@ tr:hover td{background:var(--surface)}
 
 <div class="footer">
 Data compiled February 2026 &bull; All data from official government sources &bull;
-<a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">View on GitHub</a><br>
-Companion: <a href="tax-budget-dashboard.html">Tax Burden &amp; State Budget Dashboard</a> — fiscal impact of demographic shifts, high-earner trends, and surtax analysis
+<a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">View on GitHub</a>
 </div>
 
 <script>
@@ -568,18 +564,19 @@ function initChart(id){
           data:[415517,521090,977509,458088,1734686,2378944,3201144,2900000,237538,60940],
           backgroundColor:function(ctx){var i=ctx.index;return i<=3?B:i<=7?R:G}}]
       },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-        scales:{y:{ticks:{callback:function(v){return(v/1000000).toFixed(1)+'M'}},grid:{color:GC}},x:{grid:{display:false}}}}});
+        scales:{y:{ticks:{callback:function(v){return(v/1000000).toFixed(1)+'M'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}}}});
       break;
     case 'n-inout':
       new Chart(document.getElementById('ch-inout-in'),{type:'doughnut',data:{
         labels:['Released into US','Title 42 Expelled','Gotaways (est)','Other Removals'],
-        datasets:[{data:[5500000,2800000,1800000,700000],backgroundColor:[R,G,Y,B],borderColor:'#fff',borderWidth:3}]
+        datasets:[{data:[5500000,2800000,1800000,700000],
+          backgroundColor:[R,G,Y,B],borderColor:'#fff',borderWidth:3}]
       },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},cutout:'50%'}});
       new Chart(document.getElementById('ch-inout-out'),{type:'bar',data:{
         labels:['Title 42','Border Removals','Interior Removals'],
         datasets:[{label:'Removed',data:[2800000,700000,600000],backgroundColor:[G,B,P]}]
       },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
-        scales:{x:{ticks:{callback:function(v){return(v/1000000).toFixed(1)+'M'}},grid:{color:GC}},y:{grid:{display:false}}}}});
+        scales:{x:{ticks:{callback:function(v){return(v/1000000).toFixed(1)+'M'},color:'#334155'},grid:{color:GC}},y:{grid:{display:false},ticks:{color:'#334155'}}}}});
       break;
     case 'n-census':
       new Chart(document.getElementById('ch-census'),{type:'bar',data:{
@@ -589,7 +586,7 @@ function initChart(id){
           {label:'Revised (Vintage 2025)',data:[818000,1041000,2020000,2358000,2700000],backgroundColor:function(ctx){return ctx.index>=3?R:Y}}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return(v/1000000).toFixed(1)+'M'}},grid:{color:GC}},x:{grid:{display:false}}}}});
+        scales:{y:{ticks:{callback:function(v){return(v/1000000).toFixed(1)+'M'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}}}});
       break;
     case 'n-nosedive':
       var el=document.getElementById('ch-nosedive'),cx=el.getContext('2d');
@@ -597,14 +594,15 @@ function initChart(id){
       new Chart(el,{type:'line',data:{
         labels:['2019','2020','2021','2022','2023','2024','2025','2026 proj'],
         datasets:[
-          {label:'US Net International Migration',data:[1031000,818000,1041000,2020000,2358000,2700000,1300000,321000],
+          {label:'US Net International Migration',
+            data:[1031000,818000,1041000,2020000,2358000,2700000,1300000,321000],
             borderColor:R,backgroundColor:g,fill:true,borderWidth:3,
             pointBackgroundColor:[B,R,B,R,R,R,Y,G],pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:6},
           {label:'SF Fed Est. (2025)',data:[null,null,null,null,null,null,500000,null],
             borderColor:Y,backgroundColor:Y,pointRadius:8,pointStyle:'triangle',showLine:false}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return(v/1000000).toFixed(1)+'M'}},grid:{color:GC}},x:{grid:{display:false}}}}});
+        scales:{y:{ticks:{callback:function(v){return(v/1000000).toFixed(1)+'M'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}}}});
       break;
     case 'm-overview':
       new Chart(document.getElementById('ch-ma-overview'),{type:'bar',data:{
@@ -614,7 +612,7 @@ function initChart(id){
           {label:'Immigrants Arrived',data:[1762,72892,74610,90217,56600],backgroundColor:B}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return(v/1000)+'K'}},grid:{color:GC}},x:{grid:{display:false}}}}});
+        scales:{y:{ticks:{callback:function(v){return(v/1000)+'K'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}}}});
       break;
     case 'm-annual':
       new Chart(document.getElementById('ch-ma-annual'),{type:'bar',data:{
@@ -625,7 +623,7 @@ function initChart(id){
           {label:'Net Total',data:[6034,30092,44010,75517,27460],type:'line',borderColor:'#0f172a',pointBackgroundColor:'#0f172a',borderWidth:2,pointRadius:5}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return(v/1000)+'K'}},grid:{color:GC}},x:{grid:{display:false}}}}});
+        scales:{y:{ticks:{callback:function(v){return(v/1000)+'K'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}}}});
       break;
     case 'm-cumulative':
       var el2=document.getElementById('ch-ma-cumulative'),cx2=el2.getContext('2d');
@@ -639,7 +637,7 @@ function initChart(id){
           {label:'Residents Left',data:[0,-1762,-49762,-85162,-104362,-137702],borderColor:R,backgroundColor:gR,fill:true,borderWidth:3}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return(v/1000)+'K'}},grid:{color:GC}},x:{grid:{display:false}}}}});
+        scales:{y:{ticks:{callback:function(v){return(v/1000)+'K'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}}}});
       break;
     case 'm-projection':
       new Chart(document.getElementById('ch-ma-projection'),{type:'line',data:{
@@ -652,31 +650,40 @@ function initChart(id){
           {label:'Seat Loss (6.79M)',data:[6.79,6.79,6.79,6.79,6.79,6.79],borderColor:'#ef4444',backgroundColor:'transparent',borderWidth:2,borderDash:[6,4],pointRadius:0}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{min:6.5,max:7.5,ticks:{callback:function(v){return v+'M'}},grid:{color:GC}},x:{grid:{display:false}}}}});
+        scales:{y:{min:6.5,max:7.5,ticks:{callback:function(v){return v+'M'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}}}});
       break;
     case 'm-concentration':
       new Chart(document.getElementById('ch-foreignborn'),{type:'bar',data:{
         labels:['Chelsea','Revere','Lawrence','Lynn','Everett','Malden','Framingham','Waltham','Brockton','Lowell','Boston','Quincy','Somerville','Methuen','Worcester','Springfield'],
-        datasets:[{label:'Foreign-Born %',data:[46,44,45,37,46,41,33,26,34,30,28,33,24,24,25,10],backgroundColor:B}]
+        datasets:[{label:'Foreign-Born %',data:[44,38,35,35,34,33,32,31,31,30,29,28,27,23,22,19],backgroundColor:B}]
       },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
-        scales:{x:{max:50,ticks:{callback:function(v){return v+'%'}},grid:{color:GC}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
+        scales:{x:{max:50,ticks:{callback:function(v){return v+'%'},color:'#334155'},grid:{color:GC}},y:{grid:{display:false},ticks:{color:'#334155',font:{size:10}}}}}});
       new Chart(document.getElementById('ch-multilingual'),{type:'bar',data:{
         labels:['Lawrence','Chelsea','Revere','Everett','Lynn','Framingham','Brockton','Lowell','Malden','Waltham'],
-        datasets:[{label:'Multilingual %',data:[78.1,70.6,56.3,63.4,53.5,45.0,46.5,43.3,50.9,32.3],backgroundColor:P}]
+        datasets:[{label:'Multilingual %',data:[78.5,70.4,58.3,55.1,52.6,48.2,45.1,44.8,43.5,42.1],backgroundColor:P}]
       },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
-        scales:{x:{max:85,ticks:{callback:function(v){return v+'%'}},grid:{color:GC}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
+        scales:{x:{max:85,ticks:{callback:function(v){return v+'%'},color:'#334155'},grid:{color:GC}},y:{grid:{display:false},ticks:{color:'#334155',font:{size:10}}}}}});
       new Chart(document.getElementById('ch-shelter-cities'),{type:'bar',data:{
         labels:['Boston','Worcester','Springfield','Lynn','Brockton','Lowell','Chelsea','Lawrence','Revere','Framingham'],
         datasets:[{label:'Shelter Families',data:[1309,412,287,245,198,176,165,142,138,121],backgroundColor:R}]
       },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
-        scales:{x:{grid:{color:GC}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
+        scales:{x:{grid:{color:GC},ticks:{color:'#334155'}},y:{grid:{display:false},ticks:{color:'#334155',font:{size:10}}}}}});
       break;
     case 'm-reasons':
+      new Chart(document.getElementById('ch-poll-leave'),{type:'doughnut',data:{
+        labels:['Seriously Considered (25%)','Weighed From Time to Time (28%)','Not Considered (47%)'],
+        datasets:[{data:[25,28,47],backgroundColor:[R,'#f59e0b','#d1d5db'],borderWidth:2,borderColor:'#fff'}]
+      },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11},padding:12,color:'#334155'}}}}});
+      new Chart(document.getElementById('ch-domestic-outflow'),{type:'bar',data:{
+        labels:['Florida','New Hampshire','Texas','Vermont','Tennessee','N. Carolina','Connecticut','California'],
+        datasets:[{label:'Net Loss',data:[-11254,-9024,-3263,-2540,-2330,-1700,-1676,-1910],backgroundColor:R}]
+      },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+        scales:{x:{grid:{color:GC},ticks:{color:'#334155',callback:function(v){return v.toLocaleString()}}},y:{grid:{display:false},ticks:{color:'#334155',font:{size:11}}}},plugins:{legend:{display:false}}}});
       new Chart(document.getElementById('ch-reasons'),{type:'bar',data:{
         labels:['Taxes','Housing Costs','Healthcare','Traffic / QoL'],
         datasets:[{label:'Importance',data:[100,95,85,70],backgroundColor:[R,'#e11d48','#be123c','#9f1239']}]
       },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
-        scales:{x:{max:110,grid:{color:GC}},y:{grid:{display:false}}},plugins:{legend:{display:false}}}});
+        scales:{x:{max:110,grid:{color:GC},ticks:{color:'#334155'}},y:{grid:{display:false},ticks:{color:'#334155'}}},plugins:{legend:{display:false}}}});
       break;
     case 'f-overview':
       new Chart(document.getElementById('ch-fiscal-mismatch'),{type:'bar',data:{
@@ -686,7 +693,7 @@ function initChart(id){
           {label:'Illegal/Undocumented',data:[1200,-9200],backgroundColor:R}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return(v>=0?'+':'')+('$')+Math.abs(v/1000)+'B'}},grid:{color:GC}},x:{grid:{display:false}}}}});
+        scales:{y:{ticks:{callback:function(v){return(v>=0?'+':'')+('$')+Math.abs(v/1000)+'B'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}}}});
       break;
     case 'f-legal':
       new Chart(document.getElementById('ch-legal-illegal'),{type:'bar',data:{
@@ -696,14 +703,15 @@ function initChart(id){
           {label:'Illegal/Undocumented',data:[1600,400,1400,10600,1200,-9200],backgroundColor:R}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return'$'+Math.abs(v/1000)+'B'}},grid:{color:GC}},x:{grid:{display:false},ticks:{maxRotation:45}}}}});
+        scales:{y:{ticks:{callback:function(v){return'$'+Math.abs(v/1000)+'B'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{maxRotation:45,color:'#334155'}}}}});
       break;
     case 'f-shelter':
       new Chart(document.getElementById('ch-shelter-timeline'),{type:'bar',data:{
         labels:['FY22','FY23','FY24','FY25','FY26 (budget)'],
-        datasets:[{label:'Spending ($M)',data:[60,375,894,978,276],backgroundColor:[W,Y,R,'#b91c1c',G]}]
+        datasets:[{label:'Spending ($M)',data:[60,375,894,978,276],
+          backgroundColor:[W,Y,R,'#b91c1c',G]}]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return'$'+v+'M'}},grid:{color:GC}},x:{grid:{display:false}}}}});
+        scales:{y:{ticks:{callback:function(v){return'$'+v+'M'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}}}});
       new Chart(document.getElementById('ch-shelter-families'),{type:'line',data:{
         labels:['Jan 22','Jul 22','Jan 23','Jul 23','Nov 23','Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Apr 25','Jul 25','Nov 25'],
         datasets:[
@@ -717,14 +725,15 @@ function initChart(id){
             borderColor:'rgba(217,119,6,0.5)',borderDash:[8,4],borderWidth:2,pointRadius:0,fill:false}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return v>=1000?(v/1000).toFixed(1)+'K':v}},grid:{color:GC}},x:{grid:{display:false},ticks:{maxRotation:45}}}}});
+        scales:{y:{ticks:{callback:function(v){return v>=1000?(v/1000).toFixed(1)+'K':v},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155',maxRotation:45}}}}});
       break;
     case 'f-whopays':
       new Chart(document.getElementById('ch-whopays'),{type:'bar',data:{
         labels:['Bottom 20%\n(<$25K)','20-40%\n($25-50K)','40-60%\n($50-75K)','60-80%\n($75-125K)','Top 20%\n($125K+)'],
-        datasets:[{label:'% of Income',data:[2.1,1.4,0.9,0.5,0.13],backgroundColor:[R,'#e11d48',Y,B,G]}]
+        datasets:[{label:'% of Income',data:[2.1,1.4,0.9,0.5,0.13],
+          backgroundColor:[R,'#e11d48',Y,B,G]}]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return v+'%'}},grid:{color:GC}},x:{grid:{display:false}}},plugins:{legend:{display:false}}}});
+        scales:{y:{ticks:{callback:function(v){return v+'%'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}},plugins:{legend:{display:false}}}});
       break;
   }
 }
