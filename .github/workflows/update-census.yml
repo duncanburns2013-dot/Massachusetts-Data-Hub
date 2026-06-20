@@ -20,6 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    concurrency:
+      group: push-to-main
+      cancel-in-progress: false
 
     steps:
       - name: Checkout repository
@@ -50,7 +53,16 @@ jobs:
           git add immigration-dashboard.html affordability-dashboard.html
           git add data/census-latest.json
           git commit -m "Auto-update: Census ACS data $(date +'%B %Y')"
-          git push
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt"
+              exit 0
+            fi
+            echo "Push attempt $attempt rejected - pulling latest and rebasing"
+            git pull --rebase origin main
+          done
+          echo "::error::Push failed after 5 attempts"
+          exit 1
 
       - name: No new data
         if: steps.changes.outputs.changed == 'false'
