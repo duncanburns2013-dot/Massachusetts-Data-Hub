@@ -16,6 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    concurrency:
+      group: push-to-main
+      cancel-in-progress: false
 
     steps:
       - uses: actions/checkout@v6
@@ -81,13 +84,22 @@ jobs:
           git add -A
           if git diff --staged --quiet; then
             echo "No changes across any data source."
-          else
-            DATE=$(date -u +'%B %d, %Y')
-            git commit -m "Full data refresh - ${DATE}
+            exit 0
+          fi
+          DATE=$(date -u +'%B %d, %Y')
+          git commit -m "Full data refresh - ${DATE}
 
           Sources: BLS | EIA | FRED | Census ACS | Treasury | CBP | IRS SOI"
-            git push
-          fi
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt"
+              exit 0
+            fi
+            echo "Push attempt $attempt rejected - pulling latest and rebasing"
+            git pull --rebase origin main
+          done
+          echo "::error::Push failed after 5 attempts"
+          exit 1
 
       - name: Job summary
         if: always()
