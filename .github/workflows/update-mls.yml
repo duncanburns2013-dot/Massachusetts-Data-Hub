@@ -11,7 +11,7 @@ name: Update MLS Figures
 
 on:
   schedule:
-    # 09:00 UTC daily = ~04:00–05:00 ET, after overnight MLS sync
+    # 09:00 UTC daily = ~04:00-05:00 ET, after overnight MLS sync
     - cron: "0 9 * * *"
   push:
     paths:
@@ -26,6 +26,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    # Prevent two MLS runs from racing each other
+    concurrency:
+      group: push-to-main
+      cancel-in-progress: false
 
     steps:
       - name: Checkout repository
@@ -70,7 +74,17 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add ma-housing-dashboard.html haverhill-market-report.html MASTER_DATA.md data/price-distribution-latest.json data/housing-history-latest.json
           git commit -m "Auto-update: MLS PIN figures $(date -u +'%Y-%m-%d')"
-          git push
+          # Retry push up to 5 times, rebasing on each rejection (handles concurrent pushes)
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt"
+              exit 0
+            fi
+            echo "Push attempt $attempt rejected - pulling latest and rebasing"
+            git pull --rebase origin main
+          done
+          echo "::error::Push failed after 5 attempts"
+          exit 1
 
       - name: No new data
         if: steps.changes.outputs.changed == 'false'
