@@ -11,25 +11,49 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
+    concurrency:
+      group: push-to-main
+      cancel-in-progress: false
+
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
       - name: Update energy dashboard
         env:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
         run: python update-energy-dashboard.py
+
       - name: Update affordability dashboard
         env:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
         run: python update-affordability-dashboard.py
+
       - name: Update tax-budget dashboard
         env:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
         run: python update-tax-budget-dashboard.py
+
       - name: Commit if changed
         run: |
-          git diff --quiet -- '*.html' && exit 0
+          if git diff --quiet -- '*.html'; then
+            echo "No HTML changes - nothing to commit."
+            exit 0
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add *.html
           git commit -m "data: auto-update EIA + BLS data"
-          git push
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt"
+              exit 0
+            fi
+            echo "Push attempt $attempt rejected - pulling latest and rebasing"
+            git pull --rebase origin main
+          done
+          echo "::error::Push failed after 5 attempts"
+          exit 1
