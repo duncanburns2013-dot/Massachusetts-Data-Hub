@@ -1,6 +1,6 @@
 # Massachusetts Data Hub — Master Data Reference
 
-> **Last Updated:** June 27, 2026
+> **Last Updated:** June 28, 2026
 > **Maintainer:** Duncan Burns
 > **Purpose:** Single source of truth for all verified data points used across dashboards
 
@@ -154,9 +154,9 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 
 | Metric | Value | Source | Verified |
 |--------|-------|--------|----------|
-| Avg DOM | 37 days | MLS PIN | ✅ Feb 2026 |
-| SP/LP Ratio | 101.04% | MLS PIN | ✅ Feb 2026 |
-| Units Sold | 41,340 | MLS PIN | ✅ Feb 2026 |
+| Avg DOM | 36 days | MLS PIN | ✅ Feb 2026 |
+| SP/LP Ratio | 101.05% | MLS PIN | ✅ Feb 2026 |
+| Units Sold | 41,424 | MLS PIN | ✅ Feb 2026 |
 | Units Sold YoY | +1.5% | MLS PIN | ✅ Feb 2026 |
 
 ### Haverhill Specific
