@@ -1,16 +1,22 @@
 name: Deploy to GitHub Pages
 
-# Single, serialized deploy path for the site.
+# Single, serialized, self-healing deploy path for the site.
 #
-# IMPORTANT: the data-refresh workflows commit with the default GITHUB_TOKEN,
-# and GitHub does NOT fire `on: push` workflows for GITHUB_TOKEN commits (anti-
-# recursion rule). So this workflow is triggered primarily by `workflow_run`
-# after each data workflow finishes — that DOES fire regardless of the token —
-# with a 6-hourly `schedule` as a safety net and `push` for human commits.
+# Triggers:
+#   - workflow_run: fires after each data-refresh workflow finishes. This is the
+#     primary trigger, because those workflows commit with the default
+#     GITHUB_TOKEN and GitHub does NOT run `on: push` workflows for GITHUB_TOKEN
+#     commits (anti-recursion rule). workflow_run fires regardless of token.
+#   - schedule: every 3h safety net so any missed/failed deploy self-heals fast.
+#   - push: human commits to main (e.g. content or OG-image edits).
+#   - workflow_dispatch: manual.
 #
-# The `concurrency: pages` group serializes deploys so overlapping data commits
-# no longer collide (the cause of the "Deployment failed, try again later"
-# errors under the old auto-deploy).
+# Resilience:
+#   - concurrency group "pages" serializes deploys so overlapping data commits
+#     never collide (the original cause of "Deployment failed, try again later").
+#   - the deploy step is retried up to 3x, because GitHub's Pages backend
+#     intermittently returns a transient "try again later" even for a lone
+#     deploy; a single failure must not leave a data update unpublished.
 
 on:
   workflow_run:
@@ -24,10 +30,10 @@ on:
       - "Update IRS SOI Migration"
       - "Update MLS Figures"
     types: [completed]
+  schedule:
+    - cron: "0 */3 * * *"
   push:
     branches: [main]
-  schedule:
-    - cron: "0 */6 * * *"
   workflow_dispatch:
 
 permissions:
@@ -43,7 +49,7 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -57,6 +63,26 @@ jobs:
         with:
           path: '.'
 
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - name: Deploy to GitHub Pages (attempt 1)
+        id: deploy1
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+
+      - name: Wait before retry
+        if: steps.deploy1.outcome == 'failure'
+        run: sleep 45
+
+      - name: Deploy to GitHub Pages (attempt 2)
+        id: deploy2
+        if: steps.deploy1.outcome == 'failure'
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+
+      - name: Wait before final retry
+        if: steps.deploy1.outcome == 'failure' && steps.deploy2.outcome == 'failure'
+        run: sleep 90
+
+      - name: Deploy to GitHub Pages (attempt 3)
+        id: deploy3
+        if: steps.deploy1.outcome == 'failure' && steps.deploy2.outcome == 'failure'
         uses: actions/deploy-pages@v4
