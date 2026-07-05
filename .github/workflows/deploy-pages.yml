@@ -1,14 +1,33 @@
 name: Deploy to GitHub Pages
 
-# Single, serialized deploy path for the site. Every data-refresh workflow that
-# commits to main triggers this; the concurrency group ensures only one deploy
-# runs at a time (later ones queue instead of colliding), which fixes the
-# intermittent "Deployment failed, try again later" errors from overlapping
-# auto-deploys.
+# Single, serialized deploy path for the site.
+#
+# IMPORTANT: the data-refresh workflows commit with the default GITHUB_TOKEN,
+# and GitHub does NOT fire `on: push` workflows for GITHUB_TOKEN commits (anti-
+# recursion rule). So this workflow is triggered primarily by `workflow_run`
+# after each data workflow finishes — that DOES fire regardless of the token —
+# with a 6-hourly `schedule` as a safety net and `push` for human commits.
+#
+# The `concurrency: pages` group serializes deploys so overlapping data commits
+# no longer collide (the cause of the "Deployment failed, try again later"
+# errors under the old auto-deploy).
 
 on:
+  workflow_run:
+    workflows:
+      - "Update All Data Sources"
+      - "Update CBP Encounters"
+      - "Update Census Data (ACS)"
+      - "Update Cumulative CPI Data"
+      - "Update Employment Dashboard"
+      - "Update Energy Data"
+      - "Update IRS SOI Migration"
+      - "Update MLS Figures"
+    types: [completed]
   push:
     branches: [main]
+  schedule:
+    - cron: "0 */6 * * *"
   workflow_dispatch:
 
 permissions:
