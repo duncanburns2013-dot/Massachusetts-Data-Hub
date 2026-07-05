@@ -156,7 +156,7 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 |--------|-------|--------|----------|
 | Avg DOM | 37 days | MLS PIN | ✅ Feb 2026 |
 | SP/LP Ratio | 100.92% | MLS PIN | ✅ Feb 2026 |
-| Units Sold | 38,482 | MLS PIN | ✅ Feb 2026 |
+| Units Sold | 38,483 | MLS PIN | ✅ Feb 2026 |
 | Units Sold YoY | +1.5% | MLS PIN | ✅ Feb 2026 |
 
 ### Haverhill Specific
