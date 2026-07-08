@@ -17,6 +17,7 @@ import os
 import re
 import statistics
 import sys
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -46,15 +47,54 @@ SCOPES = {
 }
 
 
-def _get(params: dict, max_retries: int = 5) -> dict:
+# Bridge rate-limits on a ~1-minute rolling window. Space calls out slightly so
+# a big statewide pass doesn't burst straight through the quota in a few seconds.
+_MIN_REQUEST_INTERVAL = 0.25  # seconds
+_last_request_ts = 0.0
+
+
+def _throttle() -> None:
+    global _last_request_ts
+    delta = time.time() - _last_request_ts
+    if delta < _MIN_REQUEST_INTERVAL:
+        time.sleep(_MIN_REQUEST_INTERVAL - delta)
+    _last_request_ts = time.time()
+
+
+def _wait_after_429(e: urllib.error.HTTPError, body: str, attempt: int) -> float:
+    """Seconds to wait after a 429. Prefer Bridge's own reset signal — the
+    Retry-After header or the reset timestamp embedded in the body — over blind
+    exponential backoff, which is far too short to outlast the rolling window
+    (the body says e.g. 'Your limit will reset on Wed Jul 08 2026 10:54:32 GMT+0000')."""
+    retry_after = e.headers.get("Retry-After") if e.headers else None
+    if retry_after:
+        try:
+            return min(float(retry_after) + 1.0, 120.0)
+        except ValueError:
+            pass  # HTTP-date form is rare here; fall through to body parsing
+    m = re.search(r"reset on (.+?)\s*\(", body)
+    if m:
+        try:
+            reset = datetime.datetime.strptime(
+                m.group(1).strip(), "%a %b %d %Y %H:%M:%S GMT%z"
+            )
+            secs = (reset - datetime.datetime.now(datetime.timezone.utc)).total_seconds()
+            if secs > 0:
+                return min(secs + 3.0, 120.0)
+        except ValueError:
+            pass
+    return min(2 ** attempt + 0.5 * attempt, 60.0)
+
+
+def _get(params: dict, max_retries: int = 8) -> dict:
     """GET Bridge with backoff on 429/5xx. Bridge rate-limits aggressively when
-    we burst through ~1k monthly-window queries; without retry one stray 429
-    fails the whole nightly cron."""
-    import time as _time
+    we burst through many queries; on 429 we wait for the window it tells us to,
+    so one stray rate-limit no longer fails the whole nightly cron."""
     qs = urllib.parse.urlencode(params)
     url = f"{BASE}?{qs}"
     last_err = None
     for attempt in range(max_retries):
+        _throttle()
         req = urllib.request.Request(url, headers={"Authorization": f"Bearer {TOKEN}"})
         try:
             with urllib.request.urlopen(req, timeout=120) as r:
@@ -63,35 +103,28 @@ def _get(params: dict, max_retries: int = 5) -> dict:
             body = e.read().decode("utf-8", "replace")[:400]
             last_err = f"HTTP {e.code}: {body}"
             if e.code in (429, 500, 502, 503, 504) and attempt < max_retries - 1:
-                wait = 2 ** attempt + (0.5 * attempt)
+                if e.code == 429:
+                    wait = _wait_after_429(e, body, attempt)
+                else:
+                    wait = min(2 ** attempt + 0.5 * attempt, 60.0)
                 print(f"  [retry] {e.code} on Bridge call — sleeping {wait:.1f}s (attempt {attempt+1}/{max_retries})")
-                _time.sleep(wait)
+                time.sleep(wait)
                 continue
             sys.exit(f"Bridge HTTP {e.code}: {body}")
         except (urllib.error.URLError, TimeoutError) as e:
             last_err = str(e)
             if attempt < max_retries - 1:
-                wait = 2 ** attempt
+                wait = min(2 ** attempt, 60.0)
                 print(f"  [retry] network error — sleeping {wait:.1f}s")
-                _time.sleep(wait)
+                time.sleep(wait)
                 continue
             sys.exit(f"Bridge network error: {last_err}")
     sys.exit(f"Bridge unreachable after {max_retries} retries: {last_err}")
 
 
-def fetch_closed_trailing_12mo(scope: dict, pt: tuple) -> list[dict]:
-    """Trailing 365 days of closed sales. Bridge caps offset at 10000, so we chunk
-    by month if needed — each month-window paginated separately."""
-    base = {
-        "StandardStatus.in": "Closed",
-        "PropertyType.in": pt[0],
-        "fields": "ClosePrice,LivingArea,ListPrice,MLSPIN_MARKET_TIME,CloseDate",
-    }
-    if pt[1]:
-        base["PropertySubType.in"] = pt[1]
-    base.update(scope)
-
-    # Build monthly date windows covering last 365 days (newest first)
+def _monthly_windows() -> list[tuple[str, str]]:
+    """Newest-first monthly [start, end) windows covering the last ~365 days.
+    Only needed for scopes too large to page within Bridge's 10k offset cap."""
     windows: list[tuple[str, str]] = []
     end = TODAY
     for _ in range(13):
@@ -102,35 +135,66 @@ def fetch_closed_trailing_12mo(scope: dict, pt: tuple) -> list[dict]:
         end = start
         if (TODAY - start).days >= 365:
             break
+    return windows
+
+
+def _paginate_window(win_filter: dict, rows: list[dict], seen_keys: set) -> int:
+    """Page one CloseDate window into `rows`, deduped by ListingKey. Returns total."""
+    offset = 0
+    total = 0
+    while True:
+        out = _get({**win_filter, "limit": 200, "offset": offset})
+        total = out.get("total", 0)
+        bundle = out.get("bundle") or []
+        if not bundle:
+            break
+        for r in bundle:
+            k = r.get("ListingKey")
+            if k and k not in seen_keys:
+                seen_keys.add(k)
+                rows.append(r)
+        offset += 200
+        if offset >= total:
+            break
+        if offset > 9800:
+            print(f"  WARN: {win_filter.get('CloseDate.gte')} window hit offset cap "
+                  f"with {total} total — partial")
+            break
+    return total
+
+
+def fetch_closed_trailing_12mo(scope: dict, pt: tuple) -> list[dict]:
+    """Trailing 365 days of closed sales. A single paginated pass covers most
+    scopes; only those exceeding Bridge's 10k offset cap (statewide) are chunked
+    by month. Fetching the whole window in one pass — instead of 13 monthly
+    queries per scope — cuts request volume ~5x and keeps us under the rate limit."""
+    base = {
+        "StandardStatus.in": "Closed",
+        "PropertyType.in": pt[0],
+        "fields": "ClosePrice,LivingArea,ListPrice,MLSPIN_MARKET_TIME,CloseDate,ListingKey",
+    }
+    if pt[1]:
+        base["PropertySubType.in"] = pt[1]
+    base.update(scope)
+
+    whole = {
+        **base,
+        "CloseDate.gte": TRAILING_12MO_START,
+        "CloseDate.lt": TODAY.strftime("%Y-%m-%d"),
+    }
+    total = _get({**whole, "limit": 1}).get("total", 0)
 
     rows: list[dict] = []
-    seen_keys = set()
-    for win_start, win_end in windows:
-        win_filter = {
-            **base,
-            "CloseDate.gte": win_start,
-            "CloseDate.lt": win_end,
-            "fields": base["fields"] + ",ListingKey",
-        }
-        offset = 0
-        while True:
-            out = _get({**win_filter, "limit": 200, "offset": offset})
-            if not out["bundle"]:
-                break
-            for r in out["bundle"]:
-                k = r.get("ListingKey")
-                if k and k not in seen_keys:
-                    seen_keys.add(k)
-                    rows.append(r)
-            offset += 200
-            if offset >= out.get("total", 0):
-                break
-            if offset > 9800:
-                print(
-                    f"  WARN: {scope}/{pt[0]}/{pt[1]} window {win_start}..{win_end} "
-                    f"hit offset cap with {out['total']} total — partial"
-                )
-                break
+    seen_keys: set = set()
+    if total <= 10000:
+        _paginate_window(whole, rows, seen_keys)
+    else:
+        for win_start, win_end in _monthly_windows():
+            _paginate_window(
+                {**base, "CloseDate.gte": win_start, "CloseDate.lt": win_end},
+                rows,
+                seen_keys,
+            )
     return rows
 
 

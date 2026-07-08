@@ -75,6 +75,26 @@ function bucketFilter(low, high) {
   return f;
 }
 
+// On 429, prefer Bridge's own reset signal (Retry-After header, or the reset
+// timestamp it embeds in the body as a JS Date string) over blind exponential
+// backoff. Returns ms to wait, or null to fall back to backoff.
+function rateLimitWaitMs(headers, body) {
+  const ra = headers && headers['retry-after'];
+  if (ra != null) {
+    const s = Number(ra);
+    if (Number.isFinite(s)) return Math.min(120000, s * 1000 + 1000);
+  }
+  const m = /reset on (.+?)\s*\(/.exec(body || '');
+  if (m) {
+    const t = Date.parse(m[1]);
+    if (!Number.isNaN(t)) {
+      const secs = t - Date.now();
+      if (secs > 0) return Math.min(120000, secs + 3000);
+    }
+  }
+  return null;
+}
+
 function getTotal(params, maxRetries = 8) {
   return new Promise((resolve, reject) => {
     const qs = new URLSearchParams({ ...params, limit: 1, fields: 'ListingId' }).toString();
@@ -91,7 +111,10 @@ function getTotal(params, maxRetries = 8) {
             // Retry on 429 (rate-limited) and any 5xx. Exponential backoff with jitter so
             // 8 parallel workers don't all wake up and resend simultaneously.
             if ((res.statusCode === 429 || res.statusCode >= 500) && n < maxRetries) {
-              const wait = Math.min(60000, Math.pow(2, n) * 1000) + Math.random() * 1000;
+              const hinted = res.statusCode === 429 ? rateLimitWaitMs(res.headers, body) : null;
+              const wait = hinted != null
+                ? hinted
+                : Math.min(60000, Math.pow(2, n) * 1000) + Math.random() * 1000;
               return setTimeout(() => attempt(n + 1), wait);
             }
             return reject(new Error(`HTTP ${res.statusCode} after ${n+1} attempts: ${body.slice(0, 200)}`));

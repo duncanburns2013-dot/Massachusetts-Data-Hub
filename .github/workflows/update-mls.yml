@@ -11,8 +11,8 @@ name: Update MLS Figures
 
 on:
   schedule:
-    # 09:00 UTC daily = ~04:00-05:00 ET, after overnight MLS sync
-    - cron: "0 9 * * *"
+    # 07:00 UTC daily = 03:00 ET (EDT) / 02:00 ET (EST) — overnight, low-traffic
+    - cron: "0 7 * * *"
   push:
     paths:
       - "update-mls-figures.py"
