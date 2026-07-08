@@ -782,13 +782,25 @@ def md_replace(text, pattern, repl, label):
     return new_text
 
 
-# MA statewide avg price (current year row in the 5-year table)
-md = md_replace(
-    md,
-    rf"(\| {YEAR} \| )\$[\d,]+( \| \$[\d,]+ \| \$[\d,]+ \| \$[\d,]+ \|)",
-    rf"\g<1>{_money_full(results['ma']['sf']['avg_price'])}\g<2>",
-    f"MASTER_DATA MA {YEAR} avg",
-)
+# MA 5-year appreciation table — current-year row (all four markets: MA,
+# Essex, Boston, Newburyport). The current-year figure is a trailing-12mo proxy
+# for the in-progress year. If the annual rollover hasn't added the row yet
+# (e.g. first run of a new year), insert it after the newest historical row so
+# it is maintained from then on — otherwise the row silently goes stale all year.
+_appr_cells = [
+    _money_full(results[s]["sf"]["avg_price"])
+    for s in ("ma", "essex", "boston", "newburyport")
+]
+if all(_appr_cells):
+    appr_row = f"| {YEAR} | " + " | ".join(_appr_cells) + " |"
+    cur_pat = rf"^\| {YEAR} \| \$[\d,]+ \| \$[\d,]+ \| \$[\d,]+ \| \$[\d,]+ \|$"
+    prev_pat = rf"^\| {YEAR - 1} \| \$[\d,]+ \| \$[\d,]+ \| \$[\d,]+ \| \$[\d,]+ \|$"
+    if re.search(cur_pat, md, flags=re.MULTILINE):
+        md, n = re.subn(cur_pat, lambda m: appr_row, md, count=1, flags=re.MULTILINE)
+        md_changes.append((f"MASTER_DATA MA {YEAR} appreciation row", n > 0))
+    else:
+        md, n = re.subn(prev_pat, lambda m: m.group(0) + "\n" + appr_row, md, count=1, flags=re.MULTILINE)
+        md_changes.append((f"MASTER_DATA MA {YEAR} appreciation row (inserted)", n > 0))
 
 # MA Avg DOM
 if results["ma"]["sf"]["avg_dom"] is not None:
