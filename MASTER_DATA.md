@@ -146,6 +146,7 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 | 2023 | $758,182 | $819,125 | $1,081,007 | $1,122,737 |
 | 2024 | $812,972 | $874,817 | $1,140,443 | $1,218,706 |
 | 2025 | $858,122 | $899,712 | $1,324,123 | $1,327,602 |
+| 2026 | $863,651 | $901,987 | $1,318,655 | $1,255,296 |
 
 - **5-Year Growth:** MA +29.2%, Newburyport +41.1%, Boston +22.6%
 - **Note:** These are AVERAGES (skewed by luxury); Warren Group MEDIANS used for affordability analysis
