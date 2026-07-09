@@ -1,0 +1,63 @@
+# .github/workflows/update-nh.yml
+# Rebuilds data/nh-figures.json (NH single-family aggregates) from PrimeMLS.
+# Requires repo secrets PRIMEMLS_CLIENT_ID / PRIMEMLS_CLIENT_SECRET.
+name: Update NH Figures
+
+on:
+  schedule:
+    - cron: "20 7 * * *"   # 07:20 UTC daily (offset from MLS at 07:00)
+  push:
+    paths:
+      - "update-nh-figures.py"
+      - "primemls.py"
+      - ".github/workflows/update-nh.yml"
+  workflow_dispatch:
+
+jobs:
+  update-nh:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: push-to-main
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Restore PrimeMLS raw cache
+        uses: actions/cache@v4
+        with:
+          path: data/_raw_nh
+          key: nh-raw-${{ github.run_id }}
+          restore-keys: nh-raw-
+      - name: Rebuild NH figures
+        env:
+          PRIMEMLS_CLIENT_ID: ${{ secrets.PRIMEMLS_CLIENT_ID }}
+          PRIMEMLS_CLIENT_SECRET: ${{ secrets.PRIMEMLS_CLIENT_SECRET }}
+        run: python update-nh-figures.py all
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet -- data/nh-figures.json \
+            && echo "changed=false" >> $GITHUB_OUTPUT \
+            || echo "changed=true"  >> $GITHUB_OUTPUT
+      - name: Commit updates
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/nh-figures.json
+          git commit -m "Auto-update: NH PrimeMLS figures $(date -u +'%Y-%m-%d')"
+          for attempt in 1 2 3 4 5; do
+            if git push; then exit 0; fi
+            git pull --rebase origin main
+          done
+          echo "::error::Push failed after 5 attempts"; exit 1
+      - name: Purge jsDelivr cache
+        if: steps.changes.outputs.changed == 'true'
+        run: curl -s "https://purge.jsdelivr.net/gh/duncanburns2013-dot/Massachusetts-Data-Hub@main/data/nh-figures.json" || true
+      - name: No new data
+        if: steps.changes.outputs.changed == 'false'
+        run: echo "NH figures unchanged - no commit needed."

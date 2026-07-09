@@ -1,0 +1,249 @@
+<!-- New Hampshire Housing Market Report — data-driven from PrimeMLS -->
+<!-- Squarespace: paste into a CODE block. For Squarespace, set DATA_URL to the jsDelivr URL (see below). -->
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.49.1/dist/apexcharts.min.js"></script>
+<style>
+#nhr{--bg:#f8f7f4;--navy:#0f2942;--gold:#c9a84c;--peach:#e8a87c;--ink:#1a1a1a;--muted:#7a756e;--border:#e8e5df;--card:#fff;
+  --red:#c23b22;--green:#2d8a56;--blue:#2d6bc4;--amber:#c08c20;--purple:#6b5ce7;
+  font-family:'DM Sans',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;max-width:1200px;margin:0 auto}
+#nhr *{margin:0;padding:0;box-sizing:border-box}
+#nhr .serif{font-family:'DM Serif Display',Georgia,serif;font-weight:400}
+/* HERO */
+#nhr .hero{background:var(--navy);color:#fff;text-align:center;padding:52px 24px 40px;position:relative;overflow:hidden;border-radius:14px 14px 0 0}
+#nhr .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,0.14) 0%,transparent 60%),radial-gradient(ellipse at 80% 85%,rgba(139,26,26,0.12) 0%,transparent 50%);pointer-events:none}
+#nhr .hero-inner{position:relative;z-index:2;max-width:1000px;margin:0 auto}
+#nhr .hero-badge{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.5);font-weight:600;margin-bottom:14px}
+#nhr .hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.7rem,4.5vw,2.7rem);line-height:1.15;margin-bottom:12px}
+#nhr .hero h1 em{font-style:normal;color:var(--gold)}
+#nhr .hero-sub{font-size:0.9rem;opacity:0.6;max-width:640px;margin:0 auto 28px}
+#nhr .hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:900px;margin:0 auto}
+#nhr .hero-stat{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:16px 10px}
+#nhr .hs-label{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;opacity:0.55;margin-bottom:6px}
+#nhr .hs-val{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.2rem,3vw,1.7rem);color:var(--peach);line-height:1}
+#nhr .hs-note{font-size:0.62rem;opacity:0.42;margin-top:5px}
+/* NAV */
+#nhr .nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+#nhr .nav-inner{display:flex;gap:2px;overflow-x:auto;padding:0 12px}
+#nhr .nav-inner::-webkit-scrollbar{display:none}
+#nhr .nav-btn{padding:14px 14px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:inherit;font-size:0.76rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+#nhr .nav-btn:hover{color:var(--ink);background:rgba(0,0,0,0.02)}
+#nhr .nav-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
+/* SECTIONS */
+#nhr .section{padding:36px 20px;display:none}
+#nhr .section.active{display:block;animation:fade 0.4s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#nhr .section-title{font-family:'DM Serif Display',Georgia,serif;font-size:1.4rem;color:var(--navy);margin-bottom:3px}
+#nhr .section-desc{color:var(--muted);font-size:0.88rem;margin-bottom:22px}
+/* CARDS */
+#nhr .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:20px}
+#nhr .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,0.03);transition:all 0.2s}
+#nhr .card:hover{box-shadow:0 8px 22px rgba(0,0,0,0.06);transform:translateY(-2px)}
+#nhr .card-label{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);font-weight:600;margin-bottom:4px}
+#nhr .card-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.7rem;line-height:1.1}
+#nhr .card-sub{font-size:0.75rem;color:var(--muted);margin-top:4px}
+/* CHARTS */
+#nhr .chart-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 18px 6px;margin-bottom:18px;position:relative;overflow:hidden}
+#nhr .chart-box::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:linear-gradient(180deg,var(--gold),var(--navy));opacity:0.7}
+#nhr .chart-title{font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:10px;padding-left:6px}
+#nhr .chart-area{min-height:300px}
+/* TOWNS + TABLE */
+#nhr .towns{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+#nhr .town{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;transition:all 0.2s}
+#nhr .town:hover{border-color:var(--gold);transform:translateY(-2px)}
+#nhr .town-name{font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:5px}
+#nhr .town-price{font-family:'DM Serif Display',Georgia,serif;font-size:1.25rem;color:var(--ink)}
+#nhr .town-meta{font-size:0.68rem;color:var(--muted);margin-top:5px}
+#nhr table{width:100%;border-collapse:collapse;font-size:0.8rem}
+#nhr th,#nhr td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--border)}
+#nhr th{font-size:0.64rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--navy);font-weight:700;border-bottom:2px solid var(--navy)}
+#nhr td:first-child{font-weight:600;color:var(--navy)}
+#nhr .afford-box{background:linear-gradient(135deg,#fefce8,#fef9c3);border:1px solid #fde047;border-radius:14px;padding:22px;margin-bottom:20px}
+/* FOOTER */
+#nhr .footer{background:#fff;border-top:1px solid var(--border);padding:24px;text-align:center;color:var(--muted);border-radius:0 0 14px 14px}
+#nhr .footer strong{color:var(--navy)}
+#nhr .footer .fd{font-size:0.72rem;opacity:0.7;margin-top:4px}
+#nhr .loading{padding:60px 20px;text-align:center;color:var(--muted)}
+@media(max-width:768px){#nhr .hero-stats{grid-template-columns:repeat(2,1fr)}#nhr .section{padding:28px 14px}}
+@media(max-width:480px){#nhr .hero-stats{grid-template-columns:1fr 1fr}}
+</style>
+
+<div id="nhr">
+  <header class="hero"><div class="hero-inner">
+    <div class="hero-badge">Single-Family Residential · PrimeMLS</div>
+    <h1>New Hampshire <em>Housing Market</em> Report</h1>
+    <p class="hero-sub" id="heroSub">Loading live PrimeMLS data…</p>
+    <div class="hero-stats" id="heroStats"></div>
+  </div></header>
+  <nav class="nav"><div class="nav-inner" id="navInner"></div></nav>
+  <main id="sections"><div class="loading">Loading market data…</div></main>
+  <footer class="footer" id="footer"></footer>
+</div>
+
+<script>
+(function(){
+// For Squarespace / production, point this at the published JSON:
+// const DATA_URL = "https://cdn.jsdelivr.net/gh/duncanburns2013-dot/Massachusetts-Data-Hub@main/data/nh-figures.json";
+const DATA_URL = window.NH_DATA_URL || "https://cdn.jsdelivr.net/gh/duncanburns2013-dot/Massachusetts-Data-Hub@main/data/nh-figures.json";
+const NAVY='#0f2942', GOLD='#c9a84c';
+const COLORS={ 'NH Statewide':'#2d6bc4','Portsmouth':'#c23b22','Salem':'#2d8a56','Derry':'#c08c20','Windham':'#6b5ce7' };
+const MARKETS=[
+  {key:'NH Statewide',id:'statewide',label:'NH Statewide'},
+  {key:'Portsmouth',id:'portsmouth',label:'Portsmouth'},
+  {key:'Salem',id:'salem',label:'Salem'},
+  {key:'Derry',id:'derry',label:'Derry'},
+  {key:'Windham',id:'windham',label:'Windham'},
+];
+const $=(h)=>{const t=document.createElement('template');t.innerHTML=h.trim();return t.content.firstChild;};
+const money=(v)=> v==null?'—': v>=1e6? '$'+(v/1e6).toFixed(2).replace(/\.?0+$/,'')+'M' : '$'+Math.round(v/1000)+'K';
+const moneyFull=(v)=> v==null?'—':'$'+Math.round(v).toLocaleString();
+const num=(v)=> v==null?'—':Number(v).toLocaleString();
+
+const baseOpts={
+  chart:{fontFamily:'DM Sans, sans-serif',toolbar:{show:false},parentHeightOffset:0},
+  grid:{borderColor:'#eee7dd',strokeDashArray:4,padding:{left:6,right:6}},
+  dataLabels:{enabled:false},
+  legend:{fontFamily:'DM Sans, sans-serif',fontSize:'12px',markers:{radius:4}},
+  tooltip:{theme:'light'}
+};
+function barChart(el,cats,data,colors,fmt){
+  new ApexCharts(el,{...baseOpts,
+    chart:{...baseOpts.chart,type:'bar',height:320},
+    series:[{name:'',data:data}],
+    colors:['#0f2942'],
+    plotOptions:{bar:{borderRadius:5,distributed:Array.isArray(colors),columnWidth:'62%'}},
+    ...(Array.isArray(colors)?{colors:colors}:{}),
+    legend:{show:false},
+    xaxis:{categories:cats,axisBorder:{show:false},axisTicks:{show:false},labels:{style:{fontSize:'11px'}}},
+    yaxis:{labels:{formatter:fmt||money}},
+    tooltip:{...baseOpts.tooltip,y:{formatter:fmt2=>(fmt?fmt(fmt2):moneyFull(fmt2))}}
+  }).render();
+}
+function areaChart(el,cats,series){
+  new ApexCharts(el,{...baseOpts,
+    chart:{...baseOpts.chart,type:'area',height:320},
+    series:series,
+    colors:series.map(s=>s.color||NAVY),
+    stroke:{curve:'smooth',width:3},
+    fill:{type:'gradient',gradient:{shade:'light',type:'vertical',shadeIntensity:0.4,opacityFrom:0.5,opacityTo:0.02,stops:[0,95]}},
+    markers:{size:0,hover:{size:6}},
+    xaxis:{categories:cats,axisBorder:{show:false},axisTicks:{show:false}},
+    yaxis:{labels:{formatter:money}},
+    tooltip:{...baseOpts.tooltip,y:{formatter:moneyFull}}
+  }).render();
+}
+
+function statCard(label,val,sub){
+  return `<div class="card"><div class="card-label">${label}</div><div class="card-val">${val}</div>${sub?`<div class="card-sub">${sub}</div>`:''}</div>`;
+}
+
+function marketSection(m,md){
+  const sec=$(`<section class="section" id="sec-${m.id}"></section>`);
+  const active=md.by_year||{};
+  sec.innerHTML=`
+    <div class="section-title">${m.label}</div>
+    <div class="section-desc">${num(md.volume)} single-family sales since 2020 · ${num(md.active_count)} active listings</div>
+    <div class="cards">
+      ${statCard('Median Sale',money(md.median_sale),'Avg '+money(md.avg_sale))}
+      ${statCard('Days on Market',md.avg_dom+' days','Sale-to-list '+md.splp_pct+'%')}
+      ${statCard('Active Listings',num(md.active_count),'Median list '+money(md.active_median_list))}
+      ${statCard('Sales Volume',num(md.volume),'2020–present')}
+    </div>
+    <div class="chart-box"><div class="chart-title">Median Sale Price by Year</div><div class="chart-area" id="yr-${m.id}"></div></div>
+    <div class="chart-box"><div class="chart-title">Average Price by Bedroom Count</div><div class="chart-area" id="bd-${m.id}"></div></div>
+    <div class="chart-box"><div class="chart-title">Price Distribution</div><div class="chart-area" id="ds-${m.id}"></div></div>`;
+  return sec;
+}
+function renderMarketCharts(m,md){
+  const yrs=Object.keys(md.by_year||{}).sort();
+  areaChart(document.getElementById('yr-'+m.id),yrs,[{name:'Median',data:yrs.map(y=>md.by_year[y].median),color:COLORS[m.key]}]);
+  const bd=md.by_bedroom||{};const bk=Object.keys(bd).sort();
+  barChart(document.getElementById('bd-'+m.id),bk.map(b=>b+' BR'),bk.map(b=>bd[b].avg),null,money);
+  const ds=md.distribution||[];
+  barChart(document.getElementById('ds-'+m.id),ds.map(d=>d.band),ds.map(d=>d.count),ds.map(()=>NAVY),v=>num(v)+' homes');
+}
+
+function overviewSection(data){
+  const sec=$(`<section class="section active" id="sec-overview"></section>`);
+  const towns=MARKETS.map(m=>({m,md:data.markets[m.key]})).filter(x=>x.md);
+  sec.innerHTML=`
+    <div class="section-title">Market Overview</div>
+    <div class="section-desc">Five-market comparison · single-family · 2020–present</div>
+    <div class="towns">${towns.map(({m,md})=>`
+      <div class="town"><div class="town-name">${m.label}</div>
+      <div class="town-price">${money(md.median_sale)}</div>
+      <div class="town-meta">${md.avg_dom} DOM · ${md.splp_pct}% SP/LP</div></div>`).join('')}</div>
+    <div class="chart-box"><div class="chart-title">Median Sale Price Comparison</div><div class="chart-area" id="ov-median"></div></div>
+    <div class="chart-box"><div class="chart-title">Days on Market</div><div class="chart-area" id="ov-dom"></div></div>
+    <div class="chart-box"><div class="chart-title">5-Year Median Price Trend</div><div class="chart-area" id="ov-trend"></div></div>`;
+  return sec;
+}
+function renderOverviewCharts(data){
+  const towns=MARKETS.map(m=>({m,md:data.markets[m.key]})).filter(x=>x.md);
+  barChart(document.getElementById('ov-median'),towns.map(t=>t.m.label),towns.map(t=>t.md.median_sale),towns.map(t=>COLORS[t.m.key]),money);
+  barChart(document.getElementById('ov-dom'),towns.map(t=>t.m.label),towns.map(t=>t.md.avg_dom),towns.map(t=>COLORS[t.m.key]),v=>v+' days');
+  const yrs=[...new Set(towns.flatMap(t=>Object.keys(t.md.by_year||{})))].sort();
+  areaChart(document.getElementById('ov-trend'),yrs,towns.map(t=>({name:t.m.label,color:COLORS[t.m.key],data:yrs.map(y=>t.md.by_year[y]?t.md.by_year[y].median:null)})));
+}
+
+function affordSection(data){
+  const sec=$(`<section class="section" id="sec-afford"></section>`);
+  const NHMI=111800,r=0.0675/12,n=360,tax=0.0209,ins=2400;
+  const inc=(p)=>{const l=p*0.8;const pi=l*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1);const tot=pi+p*tax/12+ins/12;return tot*12/0.30;};
+  const rows=MARKETS.map(m=>({m,md:data.markets[m.key]})).filter(x=>x.md).map(({m,md})=>{
+    const need=inc(md.median_sale);const gap=NHMI-need;
+    return `<tr><td>${m.label}</td><td>${money(md.median_sale)}</td><td>${money(md.median_sale*0.2)}</td><td>${moneyFull(need)}</td>
+      <td style="color:${gap>=0?'#2d8a56':'#c23b22'};font-weight:600">${gap>=0?'✓ within reach':'−'+money(Math.abs(gap))+' short'}</td></tr>`;
+  }).join('');
+  sec.innerHTML=`
+    <div class="section-title">Affordability</div>
+    <div class="section-desc">Income required at 30yr @ 6.75%, 20% down, 30% DTI, ${(tax*100).toFixed(2)}% NH property tax</div>
+    <div class="afford-box"><table><thead><tr><th>Market</th><th>Median</th><th>Down (20%)</th><th>Income Needed</th><th>vs NH Median Income ($111.8K)</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="section-desc" style="font-size:0.75rem">NH median household income ≈ $111,800. High property taxes (~2.09%) offset the no-income-tax advantage for owners.</div>`;
+  return sec;
+}
+
+function nav(id,label,active){const b=$(`<button class="nav-btn${active?' active':''}" data-t="${id}">${label}</button>`);return b;}
+
+fetch(DATA_URL).then(r=>r.json()).then(data=>{
+  const sd=data.markets['NH Statewide']||{};
+  document.getElementById('heroSub').textContent=`Median sale price, days on market, inventory and affordability across New Hampshire and its top southern markets — ${num(sd.volume)} single-family sales analyzed.`;
+  // fastest market
+  const towns=['Portsmouth','Salem','Derry','Windham'].map(k=>({k,md:data.markets[k]})).filter(x=>x.md);
+  const fastest=towns.reduce((a,b)=>b.md.avg_dom<a.md.avg_dom?b:a,towns[0]);
+  document.getElementById('heroStats').innerHTML=
+    heroStat('NH Median',money(sd.median_sale),num(sd.volume)+' sold')+
+    heroStat('Portsmouth',money((data.markets['Portsmouth']||{}).median_sale),'Seacoast premium')+
+    heroStat('Fastest Market',fastest?fastest.k:'—',fastest?fastest.md.avg_dom+' days on market':'')+
+    heroStat('Active Listings',num(sd.active_count),'Statewide inventory');
+
+  const ni=document.getElementById('navInner');
+  ni.appendChild(nav('overview','Overview',true));
+  MARKETS.forEach(m=>{if(data.markets[m.key])ni.appendChild(nav(m.id,m.label,false));});
+  ni.appendChild(nav('afford','Affordability',false));
+
+  const secs=document.getElementById('sections');secs.innerHTML='';
+  secs.appendChild(overviewSection(data));
+  MARKETS.forEach(m=>{if(data.markets[m.key])secs.appendChild(marketSection(m,data.markets[m.key]));});
+  secs.appendChild(affordSection(data));
+
+  const upd=new Date(data.updated+'T00:00:00').toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('footer').innerHTML=`<div><strong>Data compiled by Duncan Burns</strong> · Source: PrimeMLS</div><div class="fd">Single-Family Residential · Updated ${upd}</div>`;
+
+  // render charts for the active (overview) section immediately; others on first show
+  const rendered={};
+  renderOverviewCharts(data);rendered.overview=true;
+  function show(id){
+    document.querySelectorAll('#nhr .nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.t===id));
+    document.querySelectorAll('#nhr .section').forEach(s=>s.classList.remove('active'));
+    const map={overview:'sec-overview',afford:'sec-afford'};MARKETS.forEach(m=>map[m.id]='sec-'+m.id);
+    const el=document.getElementById(map[id]);if(el)el.classList.add('active');
+    if(!rendered[id]){const m=MARKETS.find(x=>x.id===id);if(m)renderMarketCharts(m,data.markets[m.key]);rendered[id]=true;}
+    window.dispatchEvent(new Event('resize'));
+  }
+  document.getElementById('navInner').addEventListener('click',e=>{const b=e.target.closest('.nav-btn');if(b)show(b.dataset.t);});
+}).catch(e=>{document.getElementById('sections').innerHTML='<div class="loading">Could not load market data.<br><small>'+e+'</small></div>';});
+
+function heroStat(l,v,n){return `<div class="hero-stat"><div class="hs-label">${l}</div><div class="hs-val">${v}</div><div class="hs-note">${n||''}</div></div>`;}
+})();
+</script>
