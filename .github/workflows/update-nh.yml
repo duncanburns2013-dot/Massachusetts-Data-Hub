@@ -1,11 +1,12 @@
 # .github/workflows/update-nh.yml
-# Rebuilds data/nh-figures.json (NH single-family aggregates) from PrimeMLS.
-# Requires repo secrets PRIMEMLS_CLIENT_ID / PRIMEMLS_CLIENT_SECRET.
+# Low-volume daily refresh of NH single-family aggregates from PrimeMLS.
+# Statewide history lives in data/nh-state-monthly.json (committed derived aggregates);
+# each run only re-pulls recent months + towns + active. Secrets: PRIMEMLS_CLIENT_ID/SECRET.
 name: Update NH Figures
 
 on:
   schedule:
-    - cron: "20 7 * * *"   # 07:20 UTC daily (offset from MLS at 07:00)
+    - cron: "20 7 * * *"
   push:
     paths:
       - "update-nh-figures.py"
@@ -26,13 +27,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - name: Restore PrimeMLS raw cache
-        uses: actions/cache@v4
-        with:
-          path: data/_raw_nh
-          key: nh-raw-${{ github.run_id }}
-          restore-keys: nh-raw-
-      - name: Rebuild NH figures
+      - name: Rebuild NH figures (recent months + towns + active; history from committed aggregates)
         env:
           PRIMEMLS_CLIENT_ID: ${{ secrets.PRIMEMLS_CLIENT_ID }}
           PRIMEMLS_CLIENT_SECRET: ${{ secrets.PRIMEMLS_CLIENT_SECRET }}
@@ -40,7 +35,7 @@ jobs:
       - name: Check for changes
         id: changes
         run: |
-          git diff --quiet -- data/nh-figures.json \
+          git diff --quiet -- data/nh-figures.json data/nh-state-monthly.json \
             && echo "changed=false" >> $GITHUB_OUTPUT \
             || echo "changed=true"  >> $GITHUB_OUTPUT
       - name: Commit updates
@@ -48,7 +43,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/nh-figures.json
+          git add data/nh-figures.json data/nh-state-monthly.json
           git commit -m "Auto-update: NH PrimeMLS figures $(date -u +'%Y-%m-%d')"
           for attempt in 1 2 3 4 5; do
             if git push; then exit 0; fi

@@ -31,6 +31,9 @@ from pathlib import Path
 TOKEN_URL = "https://primemls.paragonrels.com/OData/primemls/identity/connect/token"
 DATA_URL = "https://primemls.paragonrels.com/OData/primemls/DD1.7/Property"
 SCOPE = "OData"
+# A real browser UA — Cloudflare 403s the default python-urllib UA from datacenter (CI) IPs.
+UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+      "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
 
 
 def _load_dotenv():
@@ -59,7 +62,8 @@ def get_token():
     req = urllib.request.Request(
         os.environ.get("PRIMEMLS_TOKEN_URL", TOKEN_URL),
         data=data,
-        headers={"Authorization": f"Basic {auth}", "Content-Type": "application/x-www-form-urlencoded"},
+        headers={"Authorization": f"Basic {auth}", "Content-Type": "application/x-www-form-urlencoded",
+                 "User-Agent": UA},
     )
     with urllib.request.urlopen(req, timeout=60) as r:
         t = json.loads(r.read())
@@ -73,17 +77,20 @@ def _get(params, max_retries=6):
     last = None
     for attempt in range(max_retries):
         req = urllib.request.Request(
-            url, headers={"Authorization": f"Bearer {get_token()}", "Accept": "application/json"}
+            url, headers={"Authorization": f"Bearer {get_token()}", "Accept": "application/json",
+                          "User-Agent": UA}
         )
         try:
             with urllib.request.urlopen(req, timeout=120) as r:
                 return json.loads(r.read())
         except urllib.error.HTTPError as e:
             last = f"HTTP {e.code}: {e.read().decode('utf-8', 'replace')[:120]}"
-            if e.code in (429, 500, 502, 503, 504) and attempt < max_retries - 1:
+            # 403 = Cloudflare bot/rate block (needs a longer cooldown); 429/5xx = transient.
+            if e.code in (403, 429, 500, 502, 503, 504) and attempt < max_retries - 1:
                 ra = e.headers.get("Retry-After")
-                wait = float(ra) if (ra and ra.isdigit()) else (2 ** attempt + 1.0)
-                time.sleep(min(wait, 60))
+                base = 12.0 if e.code == 403 else (2 ** attempt + 1.0)
+                wait = float(ra) if (ra and ra.isdigit()) else base * (attempt + 1)
+                time.sleep(min(wait, 90))
                 continue
             raise RuntimeError(f"PrimeMLS {last}")
         except (urllib.error.URLError, TimeoutError) as e:
