@@ -29,6 +29,7 @@ on:
       - "Update Energy Data"
       - "Update IRS SOI Migration"
       - "Update MLS Figures"
+      - "Update NH Figures"
     types: [completed]
   schedule:
     - cron: "0 */3 * * *"
