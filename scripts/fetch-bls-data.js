@@ -56,14 +56,36 @@ const GENDER_RACE_SERIES = {
 };
 
 // Massachusetts industry employment (BLS CES, state, SA, level in thousands).
-// Drives the MA white-collar & tech block. Fetched from 2022 so the chart can
-// index to the Jan-2022 pre-cooldown baseline.
+// Full supersector spectrum — drives both the white-collar/tech block and the
+// full By-Sector breakdown. Fetched from 2019 so charts can index to Jan-2022
+// and compare to the Feb-2020 pre-pandemic baseline.
 const MA_SECTOR_SERIES = {
-  PROF_BUS:    'SMS25000006000000001', // Professional & Business Services (white-collar)
-  INFO:        'SMS25000005000000001', // Information (tech / media)
-  FINANCIAL:   'SMS25000005500000001', // Financial Activities
-  EDUC_HEALTH: 'SMS25000006500000001', // Education & Health Services
+  TOTAL:        'SMS25000000000000001', // Total Nonfarm
+  CONSTRUCTION: 'SMS25000002000000001', // Construction
+  MANUFACTURING:'SMS25000003000000001', // Manufacturing
+  TRADE:        'SMS25000004000000001', // Trade, Transportation & Utilities
+  INFO:         'SMS25000005000000001', // Information (tech / media)
+  FINANCIAL:    'SMS25000005500000001', // Financial Activities
+  PROF_BUS:     'SMS25000006000000001', // Professional & Business Services (white-collar)
+  EDUC_HEALTH:  'SMS25000006500000001', // Education & Health Services
+  LEISURE:      'SMS25000007000000001', // Leisure & Hospitality
+  OTHER_SVC:    'SMS25000008000000001', // Other Services
+  GOVERNMENT:   'SMS25000009000000001', // Government
 };
+
+// Display names + fixed order (largest-to-smallest-ish) for the By-Sector views.
+const MA_SECTOR_META = [
+  ['EDUC_HEALTH',  'Education & Health'],
+  ['TRADE',        'Trade/Transport/Util'],
+  ['GOVERNMENT',   'Government'],
+  ['PROF_BUS',     'Prof & Business'],
+  ['LEISURE',      'Leisure & Hospitality'],
+  ['MANUFACTURING','Manufacturing'],
+  ['FINANCIAL',    'Financial Activities'],
+  ['CONSTRUCTION', 'Construction'],
+  ['OTHER_SVC',    'Other Services'],
+  ['INFO',         'Information (tech)'],
+];
 
 const BLS_API_BASE = 'https://api.bls.gov/publicAPI/v2/timeseries/data/';
 const API_KEY      = process.env.BLS_API_KEY || '';
@@ -359,6 +381,62 @@ function maSectorStat(find, id) {
   return { last, peak, delta: last.value - peak.value };
 }
 
+// Replace raw HTML between <!--@tag--> … <!--@--> markers (for generated table rows).
+function injectHTMLBlock(html, tag, raw) {
+  const re = new RegExp(`(<!--@${tag}-->)[\\s\\S]*?(<!--@-->)`);
+  if (!re.test(html)) { console.warn(`   ⚠️  html marker @${tag} not found — skipping`); return html; }
+  return html.replace(re, `$1${raw}$2`);
+}
+
+// Full MA sector spectrum (By-Sector tab): YoY % + vs-Feb-2020 % sorted bars + a
+// complete table (level, MoM, 1-yr, since-2020, share). All BLS CES state, SA.
+function updateMASectorSpectrum(html, find) {
+  const S = MA_SECTOR_SERIES;
+  const total = monthsOf(find(S.TOTAL));
+  if (!total.length) return html;
+  const at = (arr, yr, mo) => { const p = arr.find(x => x.year === yr && x.mon === mo); return p ? p.value : null; };
+
+  const rows = MA_SECTOR_META.map(([key, name]) => {
+    const arr = monthsOf(find(S[key]));
+    if (arr.length < 2) return null;
+    const last = arr[arr.length - 1], prev = arr[arr.length - 2];
+    const yearAgo = at(arr, last.year - 1, last.mon);
+    const feb20   = at(arr, 2020, 1);
+    return {
+      name,
+      level:  last.value,
+      mom:    last.value - prev.value,
+      yoyN:   yearAgo != null ? last.value - yearAgo : null,
+      yoyPct: yearAgo ? (last.value - yearAgo) / yearAgo * 100 : null,
+      panPct: feb20   ? (last.value - feb20)   / feb20   * 100 : null,
+    };
+  }).filter(Boolean);
+  if (!rows.length) return html;
+  const totLevel = total[total.length - 1].value;
+
+  // Sorted bars — YoY % and vs-Feb-2020 %
+  const byYoy = rows.filter(r => r.yoyPct != null).sort((a, b) => b.yoyPct - a.yoyPct);
+  html = inject(html, 'msp-yoy-lab',  byYoy.map(r => `'${r.name}'`).join(','));
+  html = inject(html, 'msp-yoy-data', byYoy.map(r => r.yoyPct.toFixed(1)).join(','));
+  const byPan = rows.filter(r => r.panPct != null).sort((a, b) => b.panPct - a.panPct);
+  html = inject(html, 'msp-pan-lab',  byPan.map(r => `'${r.name}'`).join(','));
+  html = inject(html, 'msp-pan-data', byPan.map(r => r.panPct.toFixed(1)).join(','));
+
+  // Full table body
+  const jobs = (k) => (k == null ? '—' : (k < 0 ? '−' : '+') + Math.abs(Math.round(k * 1000)).toLocaleString('en-US'));
+  const pctS = (n) => (n == null ? '—' : (n < 0 ? '−' : '+') + Math.abs(n).toFixed(1) + '%');
+  const cls  = (n) => (n == null ? '' : n < 0 ? ' class="td-red"' : ' class="td-green"');
+  const tr = (r) => `<tr><td>${r.name}</td><td>${r.level.toFixed(1)}K</td>`
+    + `<td${cls(r.mom)}>${jobs(r.mom)}</td><td${cls(r.yoyN)}>${jobs(r.yoyN)}</td>`
+    + `<td${cls(r.yoyPct)}>${pctS(r.yoyPct)}</td><td${cls(r.panPct)}>${pctS(r.panPct)}</td>`
+    + `<td>${(r.level / totLevel * 100).toFixed(1)}%</td></tr>`;
+  const body = rows.map(tr).join('')
+    + `<tr><td><strong>Total Nonfarm</strong></td><td><strong>${totLevel.toFixed(1)}K</strong></td>`
+    + `<td></td><td></td><td></td><td></td><td>100%</td></tr>`;
+  html = injectHTMLBlock(html, 'msp-table', body);
+  return html;
+}
+
 // ── Dashboard updater ─────────────────────────────────────────────────────────
 async function updateDashboard(data, empSeries) {
   let html = await fs.readFile(DASHBOARD_PATH, 'utf-8');
@@ -505,6 +583,7 @@ async function updateDashboard(data, empSeries) {
     const peakK = (s) => s.peak.value.toFixed(1);
     setField('ma-month',   `${MON[pb.last.mon]} ${pb.last.year}`);
     setField('ma-tbl-now', `${MON[pb.last.mon]} ${pb.last.year}`);
+    setField('sec-month',  `${MON[pb.last.mon]} ${pb.last.year}`);
     setField('ma-pb-val',  pb.last.value.toFixed(1) + 'K');
     setField('ma-pb-sub',  sub(pb));
     setField('ma-pb-peak', peakK(pb)); setField('ma-pb-now', pb.last.value.toFixed(1)); setField('ma-pb-chg', pct(pb));
@@ -522,6 +601,7 @@ async function updateDashboard(data, empSeries) {
     html = updateNativity(html, find);
     html = updateGenderRace(html, find);
     html = updateMASectors(html, find);
+    html = updateMASectorSpectrum(html, find);
   }
 
   // Footer date
@@ -617,11 +697,11 @@ async function main() {
     console.warn(`   ⚠️  Gender/race skipped: ${err.message}`);
   }
 
-  // ── 2d. MA industry employment (non-critical — feeds the MA white-collar block) ─
-  // Fetched from 2022 so the chart can index to the Jan-2022 baseline.
-  console.log('\n🔄 Fetching MA industry employment (CES, SA, from 2022)...');
+  // ── 2d. MA industry employment (non-critical — feeds the MA sector views) ──
+  // Fetched from 2019 for the Jan-2022 index baseline + Feb-2020 pre-pandemic compare.
+  console.log('\n🔄 Fetching MA industry employment (CES, SA, from 2019)...');
   try {
-    const maSectors = await fetchBLSData(Object.values(MA_SECTOR_SERIES), 2022, currentYear);
+    const maSectors = await fetchBLSData(Object.values(MA_SECTOR_SERIES), 2019, currentYear);
     empSeries.push(...maSectors);
     const info = maSectors.find(s => s.seriesID === MA_SECTOR_SERIES.INFO);
     console.log(`   ✅ MA sectors fetched (${maSectors.length}) — Information latest ${getLatestValue(info)?.value}K (${getLatestValue(info)?.date})`);
@@ -647,7 +727,12 @@ async function main() {
   console.log('\n✨ Done!');
 }
 
-main().catch(e => {
-  console.error('❌ Fatal error:', e.message);
-  process.exit(1);
-});
+// Run unless imported for testing (BLS_SKIP_MAIN=1).
+if (process.env.BLS_SKIP_MAIN !== '1') {
+  main().catch(e => {
+    console.error('❌ Fatal error:', e.message);
+    process.exit(1);
+  });
+}
+
+export { monthsOf, inject, injectHTMLBlock, updateMASectorSpectrum, MA_SECTOR_SERIES, MA_SECTOR_META };

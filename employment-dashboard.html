@@ -554,60 +554,38 @@ footer a:hover{color:var(--gold)}
 
 <!-- SECTORS -->
 <div class="tab-content" id="sectors">
-  <div class="section-title">Employment by Sector</div>
-  <div class="section-desc">May −2,900 (prelim) · April revised +7,400 led by Construction (+3,100), Ed/Health (+1,900)</div>
+  <div class="section-title">Massachusetts Jobs by Sector</div>
+  <div class="section-desc">Full BLS CES supersector breakdown, seasonally adjusted · latest <span data-field="sec-month">May 2026</span> · levels in thousands, auto-updated monthly</div>
 
   <div class="chart-grid">
-    <div class="chart-card"><h3>May 2026 Job Changes by Sector (MA) — Pending Sector Detail</h3><div class="chart-area"><canvas id="c-sectors"></canvas></div></div>
-    <div class="chart-card"><h3>Cumulative Change Since Sep 2025 (MA, by Sector)</h3><div class="chart-area"><canvas id="c-sectorssince"></canvas></div></div>
+    <div class="chart-card"><h3>1-Year Job Change by Sector (%, SA)</h3><div class="chart-area"><canvas id="c-msp-yoy"></canvas></div></div>
+    <div class="chart-card"><h3>vs. Pre-Pandemic — Change Since Feb 2020 (%, SA)</h3><div class="chart-area"><canvas id="c-msp-pan"></canvas></div></div>
   </div>
 
   <div class="data-card">
-    <h3>Sector Detail — April 2026 (Revised) vs March 2026 (MA, Monthly Change)</h3>
+    <h3>MA Employment by Sector — Full Breakdown (SA)</h3>
     <table class="data-table">
-      <thead><tr><th>Sector</th><th>Apr 2026 (rev)</th><th>Mar 2026</th><th>Signal</th></tr></thead>
-      <tbody>
-        <tr><td>Mining, Logging &amp; Construction</td><td class="td-green"><strong>+3,100</strong></td><td class="td-green">+2,100</td><td class="td-green">Top contributor in April</td></tr>
-        <tr><td>Education &amp; Health Services</td><td class="td-green">+1,900</td><td class="td-green">+3,400</td><td class="td-green">Continued expansion</td></tr>
-        <tr><td>Professional &amp; Business Services</td><td class="td-green">+1,400</td><td>0</td><td class="td-green">Returned to growth</td></tr>
-        <tr><td>Trade, Transport &amp; Utilities</td><td class="td-green">+900</td><td class="td-green">+300</td><td class="td-green">Building momentum</td></tr>
-        <tr><td>Leisure &amp; Hospitality</td><td class="td-green">+700</td><td class="td-green">+2,000</td><td class="td-green">Positive but cooling</td></tr>
-        <tr><td>Manufacturing</td><td class="td-green">+400</td><td class="td-green">+2,000</td><td class="td-amber">Slower than March</td></tr>
-        <tr><td>Information</td><td class="td-green">+300</td><td class="td-green">+2,400</td><td class="td-amber">Off March's surge</td></tr>
-        <tr><td>Financial Activities</td><td class="td-green">+200</td><td class="td-red">−500</td><td class="td-green">Modest reversal</td></tr>
-        <tr><td>Government</td><td class="td-green">+100</td><td class="td-green">+100</td><td class="td-green">Stable</td></tr>
-        <tr><td>Other Services</td><td class="td-red">−500</td><td class="td-red">−2,300</td><td class="td-amber">Drag, but smaller</td></tr>
-        <tr><td><strong>Total Nonfarm</strong></td><td class="td-green"><strong>+7,400</strong></td><td class="td-green"><strong>+7,200</strong></td><td class="td-green">Revised from +8,500</td></tr>
-      </tbody>
+      <thead><tr><th>Sector</th><th>Jobs</th><th>1-mo</th><th>1-yr</th><th>1-yr %</th><th>vs Feb &rsquo;20</th><th>Share</th></tr></thead>
+      <tbody><!--@msp-table-->
+        <tr><td>Education &amp; Health</td><td>855.8K</td><td class="td-green">+1,800</td><td class="td-green">+14,000</td><td class="td-green">+1.7%</td><td class="td-green">+7.0%</td><td>23.1%</td></tr>
+        <tr><td>Trade/Transport/Util</td><td>560.0K</td><td class="td-green">+500</td><td class="td-green">+2,000</td><td class="td-green">+0.4%</td><td class="td-red">−1.5%</td><td>15.1%</td></tr>
+        <tr><td>Government</td><td>462.0K</td><td class="td-green">+200</td><td class="td-green">+5,000</td><td class="td-green">+1.1%</td><td class="td-green">+0.5%</td><td>12.4%</td></tr>
+        <tr><td>Prof &amp; Business</td><td>608.4K</td><td class="td-green">+200</td><td class="td-red">−5,000</td><td class="td-red">−0.8%</td><td class="td-green">+1.0%</td><td>16.4%</td></tr>
+        <tr><td>Leisure &amp; Hospitality</td><td>352.0K</td><td class="td-green">+700</td><td class="td-green">+3,000</td><td class="td-green">+0.9%</td><td class="td-red">−3.0%</td><td>9.5%</td></tr>
+        <tr><td>Manufacturing</td><td>230.0K</td><td class="td-green">+100</td><td class="td-red">−1,000</td><td class="td-red">−0.4%</td><td class="td-red">−2.0%</td><td>6.2%</td></tr>
+        <tr><td>Financial Activities</td><td>222.0K</td><td class="td-red">−100</td><td class="td-red">−3,000</td><td class="td-red">−1.3%</td><td class="td-red">−1.0%</td><td>6.0%</td></tr>
+        <tr><td>Construction</td><td>172.0K</td><td class="td-green">+400</td><td class="td-green">+4,000</td><td class="td-green">+2.4%</td><td class="td-green">+5.0%</td><td>4.6%</td></tr>
+        <tr><td>Other Services</td><td>135.0K</td><td class="td-red">−200</td><td class="td-red">−2,000</td><td class="td-red">−1.5%</td><td class="td-red">−4.0%</td><td>3.6%</td></tr>
+        <tr><td>Information (tech)</td><td>90.0K</td><td class="td-green">+1,000</td><td class="td-red">−400</td><td class="td-red">−0.4%</td><td class="td-red">−5.3%</td><td>2.4%</td></tr>
+        <tr><td><strong>Total Nonfarm</strong></td><td><strong>3712.3K</strong></td><td></td><td></td><td></td><td></td><td>100%</td></tr>
+      <!--@--></tbody>
     </table>
-    <div class="source">Source: BLS CES State &amp; Metro Area via EOLWD · April revised figure from BLS, June 23, 2026. Sector splits estimated; May 2026 sector breakdown pending EOLWD detail release.</div>
-  </div>
-
-  <div class="data-card">
-    <h3>Cumulative Job Change by Sector — Sep 2025 to Apr 2026 (MA)</h3>
-    <table class="data-table">
-      <thead><tr><th>Sector</th><th>6-Mo Change</th><th>Share of Total Gain</th></tr></thead>
-      <tbody>
-        <tr><td>Education &amp; Health Services</td><td class="td-green">+7,800</td><td>36%</td></tr>
-        <tr><td>Mining, Logging &amp; Construction</td><td class="td-green">+5,600</td><td>26%</td></tr>
-        <tr><td>Trade, Transport &amp; Utilities</td><td class="td-green">+2,800</td><td>13%</td></tr>
-        <tr><td>Professional &amp; Business Services</td><td class="td-green">+2,400</td><td>11%</td></tr>
-        <tr><td>Manufacturing</td><td class="td-green">+1,800</td><td>8%</td></tr>
-        <tr><td>Information</td><td class="td-green">+1,400</td><td>6%</td></tr>
-        <tr><td>Leisure &amp; Hospitality</td><td class="td-green">+1,200</td><td>6%</td></tr>
-        <tr><td>Government</td><td class="td-green">+2,000</td><td>9%</td></tr>
-        <tr><td>Financial Activities</td><td class="td-red">−400</td><td>−2%</td></tr>
-        <tr><td>Other Services</td><td class="td-red">−3,000</td><td>−14%</td></tr>
-        <tr><td><strong>Total Nonfarm</strong></td><td class="td-green"><strong>+21,600</strong></td><td><strong>100%</strong></td></tr>
-        <tr><td>&nbsp;&nbsp;of which private</td><td class="td-green">+19,600</td><td>91%</td></tr>
-      </tbody>
-    </table>
-    <div class="source">Source: Cumulative computed from EOLWD monthly CES releases, Oct 2025–May 2026. Six-month window per EOLWD's framing.</div>
+    <div class="source">Source: BLS CES, Massachusetts, seasonally adjusted. Auto-updates monthly with the state jobs report. &ldquo;vs Feb &rsquo;20&rdquo; compares to the pre-pandemic level; share = % of total nonfarm jobs.</div>
   </div>
 
   <div class="info-box">
     <span class="icon">💡</span>
-    <p><strong>The April story is broad and constructive.</strong> Nine of ten major sectors added jobs — the broadest single-month gain since mid-2024. Construction led with +3,100 (likely reflecting the seasonal rebound plus active CITC/CTE pipeline). Ed/Health continued its steady multi-month run. The only drag was Other Services (−500), and the magnitude was small. Financial Activities returned to positive territory.</p>
+    <p><strong>MA&rsquo;s job market across the whole spectrum.</strong> Education &amp; Health is the growth engine — and, as you note, heavily subsidized. Information/tech is the clearest soft spot (still well below its 2022 and pre-pandemic highs), with professional services and finance also off their peaks. Construction and health care are carrying most of the recent gains. Every figure here updates automatically from the monthly BLS state release.</p>
   </div>
 </div>
 
@@ -860,20 +838,20 @@ function initCharts(tab){
       break;
 
     case 'sectors':
-      sc('c-sectors',{type:'bar',data:{
-        labels:['Construction','Ed/Health','Prof/Bus','Trade/Trans','Leisure/Hosp','Manufacturing','Information','Financial','Government','Other Svcs'],
-        datasets:[{data:[3100,1900,1400,900,700,400,300,200,100,-500],
+      sc('c-msp-yoy',{type:'bar',data:{
+        labels:[/*@msp-yoy-lab*/'Construction','Education & Health','Government','Leisure & Hospitality','Trade/Transport/Util','Information (tech)','Manufacturing','Prof & Business','Financial Activities','Other Services'/*@*/],
+        datasets:[{data:[/*@msp-yoy-data*/2.4,1.7,1.1,0.9,0.4,-0.4,-0.4,-0.8,-1.3,-1.5/*@*/],
           backgroundColor:function(ctx){return ctx.raw<0?R+'cc':G+'cc'},
           borderColor:function(ctx){return ctx.raw<0?R:G},
-          borderWidth:1.5,borderRadius:6}]},
-        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return(c.raw>0?'+':'')+c.raw.toLocaleString()+' jobs'}}}},scales:{y:{ticks:{callback:function(v){return(v>0?'+':'')+v.toLocaleString()}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
-      sc('c-sectorssince',{type:'bar',data:{
-        labels:['Ed & Health','Construction','Trade/Trans','Prof/Bus','Government','Manufacturing','Information','Leisure/Hosp','Financial','Other Svcs'],
-        datasets:[{data:[7800,5600,2800,2400,2000,1800,1400,1200,-400,-3000],
-          backgroundColor:function(ctx){return ctx.raw<0?R+'cc':G+'cc'},
-          borderColor:function(ctx){return ctx.raw<0?R:G},
-          borderWidth:1.5,borderRadius:6}]},
-        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return(c.raw>0?'+':'')+c.raw.toLocaleString()+' jobs (6 mo)'}}}},scales:{y:{ticks:{callback:function(v){return(v>0?'+':'')+v.toLocaleString()}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+          borderWidth:1.5,borderRadius:5}]},
+        options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return(c.raw>0?'+':'')+c.raw+'%'}}}},scales:{x:{ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},y:{grid:{display:false}}}}});
+      sc('c-msp-pan',{type:'bar',data:{
+        labels:[/*@msp-pan-lab*/'Education & Health','Construction','Prof & Business','Government','Financial Activities','Trade/Transport/Util','Manufacturing','Leisure & Hospitality','Other Services','Information (tech)'/*@*/],
+        datasets:[{data:[/*@msp-pan-data*/7.0,5.0,1.0,0.5,-1.0,-1.5,-2.0,-3.0,-4.0,-5.3/*@*/],
+          backgroundColor:function(ctx){return ctx.raw<0?R+'cc':B+'cc'},
+          borderColor:function(ctx){return ctx.raw<0?R:B},
+          borderWidth:1.5,borderRadius:5}]},
+        options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return(c.raw>0?'+':'')+c.raw+'% vs Feb 2020'}}}},scales:{x:{ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},y:{grid:{display:false}}}}});
       break;
 
     case 'regions':
