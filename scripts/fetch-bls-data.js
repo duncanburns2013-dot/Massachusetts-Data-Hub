@@ -55,6 +55,16 @@ const GENDER_RACE_SERIES = {
   UR_HS:          'LNS14027659',  // high school, no college, 25+
 };
 
+// Massachusetts industry employment (BLS CES, state, SA, level in thousands).
+// Drives the MA white-collar & tech block. Fetched from 2022 so the chart can
+// index to the Jan-2022 pre-cooldown baseline.
+const MA_SECTOR_SERIES = {
+  PROF_BUS:    'SMS25000006000000001', // Professional & Business Services (white-collar)
+  INFO:        'SMS25000005000000001', // Information (tech / media)
+  FINANCIAL:   'SMS25000005500000001', // Financial Activities
+  EDUC_HEALTH: 'SMS25000006500000001', // Education & Health Services
+};
+
 const BLS_API_BASE = 'https://api.bls.gov/publicAPI/v2/timeseries/data/';
 const API_KEY      = process.env.BLS_API_KEY || '';
 const TIMEOUT_MS   = 20000;
@@ -312,6 +322,43 @@ function updateGenderRace(html, find) {
   return html;
 }
 
+// Massachusetts white-collar & tech tab block — sector employment indexed to
+// Jan 2022 = 100, sampled quarterly (BLS CES state, SA). Shows the professional /
+// tech / finance cooldown against still-growing education & health.
+function updateMASectors(html, find) {
+  const S = MA_SECTOR_SERIES;
+  const series = [S.PROF_BUS, S.INFO, S.FINANCIAL, S.EDUC_HEALTH].map(id => monthsOf(find(id)));
+  if (!series[0].length) return html;
+  const bases = series.map(arr => arr.find(p => p.year === 2022 && p.mon === 0)?.value);
+  if (bases.some(b => !b)) return html;
+
+  // Quarterly axis (Jan/Apr/Jul/Oct), plus the latest month if it isn't a quarter-start.
+  const axis = series[0].filter(p => p.mon % 3 === 0);
+  const last = series[0][series[0].length - 1];
+  if (!axis.length || mkey(axis[axis.length - 1]) !== mkey(last)) axis.push(last);
+
+  const idx = (arr, base) => {
+    const m = new Map(arr.map(p => [mkey(p), p.value]));
+    return axis.map(p => (m.has(mkey(p)) ? (m.get(mkey(p)) / base * 100).toFixed(1) : 'null')).join(',');
+  };
+  html = inject(html, 'ma-sec-lab',  axisLabels(axis));
+  html = inject(html, 'ma-sec-pb',   idx(series[0], bases[0]));
+  html = inject(html, 'ma-sec-info', idx(series[1], bases[1]));
+  html = inject(html, 'ma-sec-fin',  idx(series[2], bases[2]));
+  html = inject(html, 'ma-sec-eh',   idx(series[3], bases[3]));
+  return html;
+}
+
+// Latest value + drop-from-peak for one MA sector series.
+function maSectorStat(find, id) {
+  const a = monthsOf(find(id));
+  if (!a.length) return null;
+  const last = a[a.length - 1];
+  let peak = a[0];
+  for (const p of a) if (p.value > peak.value) peak = p;
+  return { last, peak, delta: last.value - peak.value };
+}
+
 // ── Dashboard updater ─────────────────────────────────────────────────────────
 async function updateDashboard(data, empSeries) {
   let html = await fs.readFile(DASHBOARD_PATH, 'utf-8');
@@ -446,11 +493,35 @@ async function updateDashboard(data, empSeries) {
     console.log(`   ✅ Gender/race/education fields updated (${md}) — White men ${wm?.value}%, college ${col?.value}%`);
   }
 
+  // Massachusetts white-collar & tech stat cards (BLS CES, thousands, SA)
+  const pb = maSectorStat(find, MA_SECTOR_SERIES.PROF_BUS);
+  if (pb) {
+    const peakLbl = (s) => `${MON[s.peak.mon]} ${String(s.peak.year).slice(2)}`;
+    const sub = (s) => `${s.delta < 0 ? '−' : '+'}${Math.abs(s.delta).toFixed(1)}K vs ${peakLbl(s)} peak`;
+    const info = maSectorStat(find, MA_SECTOR_SERIES.INFO);
+    const fin  = maSectorStat(find, MA_SECTOR_SERIES.FINANCIAL);
+    const eh   = maSectorStat(find, MA_SECTOR_SERIES.EDUC_HEALTH);
+    const pct = (s) => `${s.delta < 0 ? '−' : '+'}${Math.abs(s.delta / s.peak.value * 100).toFixed(1)}%`;
+    const peakK = (s) => s.peak.value.toFixed(1);
+    setField('ma-month',   `${MON[pb.last.mon]} ${pb.last.year}`);
+    setField('ma-tbl-now', `${MON[pb.last.mon]} ${pb.last.year}`);
+    setField('ma-pb-val',  pb.last.value.toFixed(1) + 'K');
+    setField('ma-pb-sub',  sub(pb));
+    setField('ma-pb-peak', peakK(pb)); setField('ma-pb-now', pb.last.value.toFixed(1)); setField('ma-pb-chg', pct(pb));
+    if (info) { setField('ma-info-val', info.last.value.toFixed(1) + 'K'); setField('ma-info-sub', sub(info));
+                setField('ma-info-peak', peakK(info)); setField('ma-info-now', info.last.value.toFixed(1)); setField('ma-info-chg', pct(info)); }
+    if (fin)  { setField('ma-fin-val',  fin.last.value.toFixed(1) + 'K');  setField('ma-fin-sub',  sub(fin));
+                setField('ma-fin-peak', peakK(fin)); setField('ma-fin-now', fin.last.value.toFixed(1)); setField('ma-fin-chg', pct(fin)); }
+    if (eh)   { setField('ma-eh-val', eh.last.value.toFixed(1) + 'K'); setField('ma-eh-now', eh.last.value.toFixed(1)); }
+    console.log(`   ✅ MA sectors updated (${MON[pb.last.mon]} ${pb.last.year}) — Prof/Bus ${pb.last.value}K, Info ${info?.last.value}K`);
+  }
+
   // Charts — rewrite the auto-updating series arrays from the live BLS series
   if (empSeries?.length) {
     html = updateCharts(html, find);
     html = updateNativity(html, find);
     html = updateGenderRace(html, find);
+    html = updateMASectors(html, find);
   }
 
   // Footer date
@@ -544,6 +615,18 @@ async function main() {
     console.log(`   ✅ Gender/race series fetched (${grSeries.length}) — White men UR latest ${getLatestValue(wm)?.value}% (${getLatestValue(wm)?.date})`);
   } catch (err) {
     console.warn(`   ⚠️  Gender/race skipped: ${err.message}`);
+  }
+
+  // ── 2d. MA industry employment (non-critical — feeds the MA white-collar block) ─
+  // Fetched from 2022 so the chart can index to the Jan-2022 baseline.
+  console.log('\n🔄 Fetching MA industry employment (CES, SA, from 2022)...');
+  try {
+    const maSectors = await fetchBLSData(Object.values(MA_SECTOR_SERIES), 2022, currentYear);
+    empSeries.push(...maSectors);
+    const info = maSectors.find(s => s.seriesID === MA_SECTOR_SERIES.INFO);
+    console.log(`   ✅ MA sectors fetched (${maSectors.length}) — Information latest ${getLatestValue(info)?.value}K (${getLatestValue(info)?.date})`);
+  } catch (err) {
+    console.warn(`   ⚠️  MA sectors skipped: ${err.message}`);
   }
 
   // ── 3. Save snapshot + rotate previous ───────────────────────────────────
