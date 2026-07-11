@@ -37,6 +37,24 @@ const NATIVITY_SERIES = {
   NB_LFPR_T: 'LNU01373413', NB_LFPR_M: 'LNU01373414', NB_LFPR_W: 'LNU01373415',
 };
 
+// Gender / race / education (CPS, seasonally adjusted). Drives the
+// "Men, Women & White-Collar" tab. Race×sex is national-only (state CPS
+// samples can't split it monthly). "White" per BLS includes Hispanic-white.
+const GENDER_RACE_SERIES = {
+  UR_ALL:         'LNS14000000',  // unemployment rate, 16+ (national benchmark)
+  UR_MEN:         'LNS14000001',  // men 16+
+  UR_WOMEN:       'LNS14000002',  // women 16+
+  UR_WHITEMEN:    'LNS14000028',  // White men 20+
+  UR_WHITEWOMEN:  'LNS14000029',  // White women 20+
+  UR_BLACK:       'LNS14000006',  // Black or African American 16+
+  UR_HISP:        'LNS14000009',  // Hispanic or Latino 16+
+  LFPR_MEN2554:   'LNS11300061',  // prime-age men participation
+  LFPR_WOMEN2554: 'LNS11300062',  // prime-age women participation
+  UR_COLLEGE:     'LNS14027662',  // bachelor's degree & higher, 25+
+  UR_SOMECOLL:    'LNS14027689',  // some college / associate, 25+
+  UR_HS:          'LNS14027659',  // high school, no college, 25+
+};
+
 const BLS_API_BASE = 'https://api.bls.gov/publicAPI/v2/timeseries/data/';
 const API_KEY      = process.env.BLS_API_KEY || '';
 const TIMEOUT_MS   = 20000;
@@ -256,6 +274,44 @@ function updateNativity(html, find) {
   return html;
 }
 
+// Men, Women & White-Collar tab — monthly SA charts (CPS race×sex + education).
+function updateGenderRace(html, find) {
+  const G = GENDER_RACE_SERIES;
+
+  // Shared: overlay N series on a unified trailing-`n`-month axis, filling gaps with null.
+  const overlay = (ids, tags, n = 18) => {
+    const arrs = ids.map(id => monthsOf(find(id)));
+    if (!arrs[0].length) return;
+    const keys = [...new Set(arrs.flat().map(mkey))].sort((a, b) => a - b).slice(-n);
+    const axis = keys.map(k => ({ year: Math.floor(k / 100), mon: k % 100 }));
+    html = inject(html, tags[0], axisLabels(axis));
+    arrs.forEach((arr, i) => {
+      const m = new Map(arr.map(p => [mkey(p), p.value]));
+      html = inject(html, tags[i + 1], keys.map(k => (m.has(k) ? m.get(k) : 'null')).join(','));
+    });
+  };
+
+  // c-gr-ur — unemployment rate: men vs women vs White men (trailing 18 mo)
+  overlay([G.UR_MEN, G.UR_WOMEN, G.UR_WHITEMEN], ['gr-ur-lab', 'gr-ur-men', 'gr-ur-women', 'gr-ur-wm']);
+
+  // c-gr-edu — unemployment rate by education (trailing 18 mo)
+  overlay([G.UR_COLLEGE, G.UR_SOMECOLL, G.UR_HS], ['gr-edu-lab', 'gr-edu-col', 'gr-edu-sc', 'gr-edu-hs']);
+
+  // c-gr-bar — UR by race & sex, latest month vs year-ago
+  const order = [G.UR_WHITEMEN, G.UR_WHITEWOMEN, G.UR_ALL, G.UR_BLACK, G.UR_HISP].map(id => monthsOf(find(id)));
+  if (order[0].length) {
+    const cur = order[0][order[0].length - 1];
+    const at = (arr, yr, mo) => { const p = arr.find(x => x.year === yr && x.mon === mo); return p ? p.value.toFixed(1) : 'null'; };
+    const label = (yr) => `'${MON[cur.mon]} ${yr}'`;
+    html = inject(html, 'gr-bar-curlab',  label(cur.year));
+    html = inject(html, 'gr-bar-cur',     order.map(a => at(a, cur.year, cur.mon)).join(','));
+    html = inject(html, 'gr-bar-prevlab', label(cur.year - 1));
+    html = inject(html, 'gr-bar-prev',    order.map(a => at(a, cur.year - 1, cur.mon)).join(','));
+  }
+
+  return html;
+}
+
 // ── Dashboard updater ─────────────────────────────────────────────────────────
 async function updateDashboard(data, empSeries) {
   let html = await fs.readFile(DASHBOARD_PATH, 'utf-8');
@@ -364,10 +420,37 @@ async function updateDashboard(data, empSeries) {
     setField('nat-fb-month', `${MON[p.mon]} ${p.year}`);
   }
 
+  // Men, Women & White-Collar tab — subtitle month + stat cards + table headers
+  const grLast = (id) => { const a = monthsOf(find(id)); return a.length ? a[a.length - 1] : null; };
+  const grMen = grLast(GENDER_RACE_SERIES.UR_MEN);
+  if (grMen) {
+    const p = grMen; const md = `${MON[p.mon]} ${p.year}`;
+    const wm = grLast(GENDER_RACE_SERIES.UR_WHITEMEN);
+    const wo = grLast(GENDER_RACE_SERIES.UR_WOMEN);
+    const col = grLast(GENDER_RACE_SERIES.UR_COLLEGE);
+    const all = grLast(GENDER_RACE_SERIES.UR_ALL);
+    setField('gr-month',    md);
+    setField('gr-tbl-cur',  md);
+    setField('gr-tbl-prev', `${MON[p.mon]} ${p.year - 1}`);
+    setField('gr-edu-cur',  md);
+    setField('gr-men-ur',   grMen.value.toFixed(1) + '%');
+    if (wo)  setField('gr-women-ur', wo.value.toFixed(1) + '%');
+    if (col) setField('gr-col-ur',   col.value.toFixed(1) + '%');
+    if (wm) {
+      setField('gr-wm-ur', wm.value.toFixed(1) + '%');
+      if (all) {
+        const gap = (all.value - wm.value).toFixed(1);
+        setField('gr-wm-sub', `${gap} pt below national`);
+      }
+    }
+    console.log(`   ✅ Gender/race/education fields updated (${md}) — White men ${wm?.value}%, college ${col?.value}%`);
+  }
+
   // Charts — rewrite the auto-updating series arrays from the live BLS series
   if (empSeries?.length) {
     html = updateCharts(html, find);
     html = updateNativity(html, find);
+    html = updateGenderRace(html, find);
   }
 
   // Footer date
@@ -450,6 +533,17 @@ async function main() {
     console.log(`   ✅ Nativity series fetched (${natSeries.length}) — FB employed latest ${getLatestValue(fb)?.date}`);
   } catch (err) {
     console.warn(`   ⚠️  Nativity skipped: ${err.message}`);
+  }
+
+  // ── 2c. Gender / race / education (non-critical — feeds the White-Collar tab) ─
+  console.log('\n🔄 Fetching gender / race / education data (SA)...');
+  try {
+    const grSeries = await fetchBLSData(Object.values(GENDER_RACE_SERIES), currentYear - 2, currentYear);
+    empSeries.push(...grSeries);
+    const wm = grSeries.find(s => s.seriesID === GENDER_RACE_SERIES.UR_WHITEMEN);
+    console.log(`   ✅ Gender/race series fetched (${grSeries.length}) — White men UR latest ${getLatestValue(wm)?.value}% (${getLatestValue(wm)?.date})`);
+  } catch (err) {
+    console.warn(`   ⚠️  Gender/race skipped: ${err.message}`);
   }
 
   // ── 3. Save snapshot + rotate previous ───────────────────────────────────

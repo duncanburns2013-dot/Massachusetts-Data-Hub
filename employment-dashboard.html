@@ -137,6 +137,7 @@ footer a:hover{color:var(--gold)}
   <button class="tab-btn" onclick="switchTab('sectors',this)">By Sector</button>
   <button class="tab-btn" onclick="switchTab('regions',this)">MA Regions</button>
   <button class="tab-btn new-tab" onclick="switchTab('nativity',this)">🌎 Foreign-Born vs Native</button>
+  <button class="tab-btn new-tab" onclick="switchTab('demographics',this)">⚖️ Men, Women &amp; White-Collar</button>
   <button class="tab-btn" onclick="switchTab('jolts',this)">JOLTS</button>
   <button class="tab-btn new-tab" onclick="switchTab('latest',this)">📅 Latest Releases</button>
 </nav>
@@ -367,6 +368,98 @@ footer a:hover{color:var(--gold)}
   </div>
 </div>
 
+<!-- MEN, WOMEN & WHITE-COLLAR -->
+<div class="tab-content" id="demographics">
+  <div class="section-title">Men, Women &amp; White-Collar Work</div>
+  <div class="section-desc">BLS Current Population Survey, seasonally adjusted · latest <span data-field="gr-month">Jun 2026</span> · national figures (state samples can&rsquo;t split race&times;sex monthly)</div>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">White Men UR (20+)</div><div class="value green" data-field="gr-wm-ur">3.5%</div><div class="sub"><span data-field="gr-wm-sub">0.7 pt below national</span></div></div>
+    <div class="stat-card"><div class="label">Men UR (16+)</div><div class="value amber" data-field="gr-men-ur">4.3%</div><div class="sub">women <span data-field="gr-women-ur">4.0%</span></div></div>
+    <div class="stat-card"><div class="label">College Grads UR (25+)</div><div class="value green" data-field="gr-col-ur">2.7%</div><div class="sub">lowest of any group</div></div>
+    <div class="stat-card"><div class="label">Recent Grads UR (22–27)</div><div class="value red">5.7%</div><div class="sub">NY Fed · above national</div></div>
+    <div class="stat-card"><div class="label">Prime-Age LFPR</div><div class="value blue">89.2 / 77.6</div><div class="sub">men / women · 11.6 pt gap</div></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card"><h3>Unemployment Rate — Men vs Women vs White Men (Monthly, SA)</h3><div class="chart-area"><canvas id="c-gr-ur"></canvas></div></div>
+    <div class="chart-card"><h3>Unemployment Rate by Race &amp; Sex — Latest vs Year-Ago</h3><div class="chart-area"><canvas id="c-gr-bar"></canvas></div></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card"><h3>Prime-Age (25–54) Participation — Men vs Women, 2000→2026</h3><div class="chart-area"><canvas id="c-gr-lfpr"></canvas></div></div>
+    <div class="chart-card"><h3>Unemployment Rate by Education (25+, Monthly, SA)</h3><div class="chart-area"><canvas id="c-gr-edu"></canvas></div></div>
+  </div>
+
+  <div class="data-card">
+    <h3>Unemployment Rate by Race &amp; Sex — Latest vs Year-Ago (SA)</h3>
+    <table class="data-table">
+      <thead><tr><th>Group</th><th><span data-field="gr-tbl-cur">Jun 2026</span></th><th><span data-field="gr-tbl-prev">Jun 2025</span></th></tr></thead>
+      <tbody>
+        <tr><td>White men (20+)</td><td class="td-green">3.5%</td><td>3.4%</td></tr>
+        <tr><td>White women (20+)</td><td class="td-green">3.1%</td><td>3.1%</td></tr>
+        <tr><td>Men (16+)</td><td class="td-amber">4.3%</td><td>4.3%</td></tr>
+        <tr><td>Women (16+)</td><td>4.0%</td><td>3.9%</td></tr>
+        <tr><td>All workers (16+)</td><td>4.2%</td><td>4.1%</td></tr>
+        <tr><td>Black (16+)</td><td class="td-red">6.6%</td><td>6.9%</td></tr>
+        <tr><td>Hispanic (16+)</td><td class="td-red">5.2%</td><td>4.8%</td></tr>
+      </tbody>
+    </table>
+    <div class="source">BLS Employment Situation Table A-2. Auto-updates with each national jobs report. &ldquo;White&rdquo; includes Hispanic-identifying whites.</div>
+  </div>
+
+  <div class="data-card">
+    <h3>Prime-Age (25–54) Labor Force Participation — Men vs Women</h3>
+    <table class="data-table">
+      <thead><tr><th>Year</th><th>Men</th><th>Women</th><th>Gap (pts)</th></tr></thead>
+      <tbody>
+        <tr><td>2000</td><td>91.6%</td><td>76.7%</td><td>14.9</td></tr>
+        <tr><td>2015</td><td class="td-amber">88.3%</td><td>73.7%</td><td>14.6</td></tr>
+        <tr><td>2019</td><td>89.1%</td><td>76.0%</td><td>13.1</td></tr>
+        <tr><td>2024</td><td>89.3%</td><td class="td-green">77.9%</td><td>11.4</td></tr>
+        <tr><td>2026 (Jun)</td><td>89.2%</td><td class="td-green">77.6%</td><td>11.6</td></tr>
+      </tbody>
+    </table>
+    <div class="source">BLS CPS LNS11300061 (men 25–54) &amp; LNS11300062 (women 25–54), SA annual averages; 2026 = June.</div>
+  </div>
+
+  <div class="data-card">
+    <h3>Unemployment Rate by Education (25+)</h3>
+    <table class="data-table">
+      <thead><tr><th>Education</th><th><span data-field="gr-edu-cur">Jun 2026</span></th></tr></thead>
+      <tbody>
+        <tr><td>Bachelor&rsquo;s degree &amp; higher</td><td class="td-green">2.7%</td></tr>
+        <tr><td>Some college / associate</td><td>3.6%</td></tr>
+        <tr><td>High school, no college</td><td class="td-amber">5.5%</td></tr>
+        <tr><td>Less than high school</td><td>4.2%</td></tr>
+        <tr><td class="td-red">Recent grads (22–27)</td><td class="td-red">~5.7%</td></tr>
+      </tbody>
+    </table>
+    <div class="source">BLS Employment Situation Table A-4 (25+ rows auto-update). Recent-grad rate: <a href="https://www.newyorkfed.org/research/college-labor-market" target="_blank">NY Fed</a> (Q1 2026 · 41.5% underemployment).</div>
+  </div>
+
+  <div class="data-card">
+    <h3>White Share of US Employment</h3>
+    <table class="data-table">
+      <thead><tr><th>Year</th><th>White share of employed</th></tr></thead>
+      <tbody>
+        <tr><td>2006</td><td>82.3%</td></tr>
+        <tr><td>2010</td><td>82.1%</td></tr>
+        <tr><td>2015</td><td>79.2%</td></tr>
+        <tr><td>2019</td><td>77.7%</td></tr>
+        <tr><td>2024</td><td>76.3%</td></tr>
+        <tr><td>2025</td><td class="td-blue">75.7%</td></tr>
+      </tbody>
+    </table>
+    <div class="source">BLS CPS LNS12000003 ÷ LNS12000000, annual averages. Falls with an aging white cohort and faster Hispanic/Asian population growth. 2026 population-control break omitted; &ldquo;White&rdquo; includes Hispanic-identifying whites.</div>
+  </div>
+
+  <div class="info-box">
+    <span class="icon">📍</span>
+    <p>MA is the most college-educated state — roughly <strong>47%</strong> of adults hold a bachelor&rsquo;s degree vs ~35% nationally — so a white-collar hiring slowdown lands harder here. Race&times;sex isn&rsquo;t published monthly at the state level, so these are national figures with MA context.</p>
+  </div>
+</div>
+
 <!-- JOLTS -->
 <div class="tab-content" id="jolts">
   <div class="section-title">JOLTS — National Job Openings</div>
@@ -542,10 +635,10 @@ footer a:hover{color:var(--gold)}
   </div>
 
   <div class="alert amber">
-    <h4>🇺🇸 <span data-field="nat-emp-month">June 2026</span> National Employment — Released <span data-field="nat-emp-rel">July 10, 2026</span></h4>
+    <h4>🇺🇸 <span data-field="nat-emp-month">June 2026</span> National Employment — Released <span data-field="nat-emp-rel">July 11, 2026</span></h4>
     <p>Payrolls: <strong data-field="nat-payrolls">+57,000</strong> | Unemployment: <strong data-field="nat-ur">4.2%</strong> <span data-field="nat-ur-chg">(down)</span> | U-6: <strong data-field="nat-u6">7.9%</strong><br>
     Household survey: employed persons <strong data-field="nat-hh">−507,000</strong> · civilian labor force <strong data-field="nat-lf">−720,000</strong><br>
-    Source: BLS Employment Situation, <span data-field="nat-emp-rel2">July 10, 2026</span> · full sector breakdown &amp; revisions in the release</p>
+    Source: BLS Employment Situation, <span data-field="nat-emp-rel2">July 11, 2026</span> · full sector breakdown &amp; revisions in the release</p>
   </div>
 
   <div class="alert amber">
@@ -587,7 +680,7 @@ footer a:hover{color:var(--gold)}
       <div class="source">Source: BLS LAUS / CES via Mass.gov EOLWD · April release May 22, 2026</div>
     </div>
     <div class="data-card" style="margin-bottom:0">
-      <h3>National Context — <span data-field="nat-ctx-month">June 2026</span> (Released <span data-field="nat-ctx-rel">July 10, 2026</span>)</h3>
+      <h3>National Context — <span data-field="nat-ctx-month">June 2026</span> (Released <span data-field="nat-ctx-rel">July 11, 2026</span>)</h3>
       <table class="data-table">
         <thead><tr><th>Metric</th><th data-field="nat-col-cur">Jun 2026</th><th data-field="nat-col-prev">May 2026</th></tr></thead>
         <tbody>
@@ -599,7 +692,7 @@ footer a:hover{color:var(--gold)}
           <tr><td>Employed persons since Sep 2025</td><td class="td-red" colspan="2" data-field="nat-cum-sep">−1,392,000 cumulative</td></tr>
         </tbody>
       </table>
-      <div class="source">Headline aggregates auto-updated <span data-field="nat-src-date">July 10, 2026</span> from BLS CPS/CES. Sector breakdown (Ed/Health, Trade, Gov't, etc.) in the <a href="https://www.bls.gov/news.release/empsit.nr0.htm" target="_blank">full release</a>.</div>
+      <div class="source">Headline aggregates auto-updated <span data-field="nat-src-date">July 11, 2026</span> from BLS CPS/CES. Sector breakdown (Ed/Health, Trade, Gov't, etc.) in the <a href="https://www.bls.gov/news.release/empsit.nr0.htm" target="_blank">full release</a>.</div>
     </div>
   </div>
 
@@ -613,7 +706,7 @@ footer a:hover{color:var(--gold)}
 
 <footer>
   <strong>Sources:</strong> BLS LAUS · BLS CES · BLS JOLTS · BLS CPS Table A-7 · BLS Foreign-Born Workers Summary · Mass.gov EOLWD<br>
-  <span style="margin-top:6px;display:block">Updated July 10, 2026 · Reflects MA April 2026 release (May 22), Local LMI (May 26), BLS Foreign-Born Annual (May 19) · <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">Massachusetts Data Hub</a></span>
+  <span style="margin-top:6px;display:block">Updated July 11, 2026 · Reflects MA April 2026 release (May 22), Local LMI (May 26), BLS Foreign-Born Annual (May 19) · <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">Massachusetts Data Hub</a></span>
 </footer>
 
 <script>
@@ -790,6 +883,39 @@ function initCharts(tab){
           data:[/*@fbm-data*/31687,32225,31803,31579,31231,30764,30814,30744,30802,31112,31562,31168,31974,31648,31472,30725/*@*/],
           borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:B,borderWidth:2.5}]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw.toLocaleString()+'K employed'}}}},scales:{y:{min:29000,max:33000,ticks:{callback:function(v){return (v/1000).toFixed(1)+'M'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      break;
+
+    case 'demographics':
+      sc('c-gr-ur',{type:'line',data:{
+        labels:[/*@gr-ur-lab*/'Dec 24','Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr','May','Jun 26'/*@*/],
+        datasets:[
+          {label:'Men (16+)',data:[/*@gr-ur-men*/4.2,4.1,4.2,4.3,4.4,4.3,4.3,4.4,4.4,4.4,4.5,4.4,4.3,4.4,4.2,4.4,4.4,4.3/*@*/],borderColor:R,backgroundColor:R+'12',fill:false,tension:.3,pointRadius:3,borderWidth:2.5},
+          {label:'Women (16+)',data:[/*@gr-ur-women*/4.1,4,4.1,4.1,4,4.2,3.9,4.1,4.3,4.4,4.5,4.4,4.3,4.5,4.3,4.2,4.1,4/*@*/],borderColor:P,backgroundColor:P+'12',fill:false,tension:.3,pointRadius:3,borderWidth:2},
+          {label:'White Men (20+)',data:[/*@gr-ur-wm*/3.3,3.1,3.5,3.4,3.7,3.6,3.4,3.5,3.6,3.5,3.6,3.4,3.3,3.4,3.2,3.5,3.6,3.5/*@*/],borderColor:G,backgroundColor:G+'18',fill:true,tension:.3,pointRadius:3,borderWidth:2.5}
+        ]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'%'}}}},scales:{y:{min:2.5,max:5,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      sc('c-gr-bar',{type:'bar',data:{
+        labels:['White Men','White Women','All','Black','Hispanic'],
+        datasets:[
+          {label:/*@gr-bar-curlab*/'Jun 2026'/*@*/,data:[/*@gr-bar-cur*/3.5,3.1,4.2,6.6,5.2/*@*/],backgroundColor:B+'cc',borderColor:B,borderWidth:1.5,borderRadius:5},
+          {label:/*@gr-bar-prevlab*/'Jun 2025'/*@*/,data:[/*@gr-bar-prev*/3.4,3.1,4.1,6.9,4.8/*@*/],backgroundColor:Y+'aa',borderColor:Y,borderWidth:1.5,borderRadius:5}
+        ]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'%'}}}},scales:{y:{min:0,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      sc('c-gr-lfpr',{type:'line',data:{
+        labels:['2000','01','02','03','04','05','06','07','08','09','2010','11','12','13','14','15','2016','17','18','19','2020','21','22','23','24','25','Jun 26'],
+        datasets:[
+          {label:'Men 25–54',data:[91.6,91.3,91.0,90.6,90.4,90.5,90.6,90.8,90.6,89.8,89.2,88.7,88.7,88.4,88.2,88.3,88.5,88.6,89.0,89.1,87.9,88.0,88.6,89.1,89.3,89.4,89.2],borderColor:B,backgroundColor:B+'12',fill:false,tension:.25,pointRadius:2,borderWidth:2.5},
+          {label:'Women 25–54',data:[76.7,76.4,75.9,75.6,75.3,75.2,75.5,75.4,75.8,75.6,75.2,74.6,74.5,73.9,73.9,73.7,74.3,75.0,75.3,76.0,75.1,75.3,76.4,77.4,77.9,77.8,77.6],borderColor:Y,backgroundColor:Y+'18',fill:true,tension:.25,pointRadius:2,borderWidth:2.5}
+        ]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'%'}}}},scales:{y:{min:72,max:93,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      sc('c-gr-edu',{type:'line',data:{
+        labels:[/*@gr-edu-lab*/'Dec 24','Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr','May','Jun 26'/*@*/],
+        datasets:[
+          {label:'Bachelor’s+ (25+)',data:[/*@gr-edu-col*/2.5,2.3,2.5,2.6,2.5,2.6,2.5,2.7,2.7,2.8,2.9,2.8,3,3,2.8,2.8,2.7,2.7/*@*/],borderColor:G,backgroundColor:G+'18',fill:true,tension:.3,pointRadius:3,borderWidth:2.5},
+          {label:'Some college / assoc.',data:[/*@gr-edu-sc*/3.4,3.5,3.5,3.5,3.6,3.3,3.2,3,3.2,3.4,3.5,3.8,3.6,3.5,3.6,3.2,3.6,3.6/*@*/],borderColor:B,backgroundColor:B+'12',fill:false,tension:.3,pointRadius:3,borderWidth:2,borderDash:[5,3]},
+          {label:'High school only',data:[/*@gr-edu-hs*/5.7,5.2,6,5.8,6.2,5.6,5.8,5.6,6.7,6.8,6.8,5.6,5.3,5.6,5.9,6.4,6,5.5/*@*/],borderColor:R,backgroundColor:R+'12',fill:false,tension:.3,pointRadius:3,borderWidth:2}
+        ]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'%'}}}},scales:{y:{min:2,max:7.5,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       break;
 
     case 'latest':
