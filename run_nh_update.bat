@@ -24,7 +24,7 @@ if errorlevel 1 (
 git add data/nh-figures.json data/nh-state-monthly.json
 git diff --cached --quiet && (echo No changes to commit. & exit /b 0)
 
-git commit -m "Auto-update: NH PrimeMLS figures (local, %date%)"
+git commit -m "Auto-update: NH PrimeMLS figures"
 git push
 curl -s "https://purge.jsdelivr.net/gh/duncanburns2013-dot/Massachusetts-Data-Hub@main/data/nh-figures.json" >nul 2>&1
 echo Done.
