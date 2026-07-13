@@ -1,17 +1,10 @@
 # .github/workflows/update-nh.yml
-# Low-volume daily refresh of NH single-family aggregates from PrimeMLS.
-# Statewide history lives in data/nh-state-monthly.json (committed derived aggregates);
-# each run only re-pulls recent months + towns + active. Secrets: PRIMEMLS_CLIENT_ID/SECRET.
+# MANUAL fallback only. PrimeMLS/Cloudflare rate-limits GitHub's datacenter IPs and
+# returns truncated data, so the DAILY refresh runs on Duncan's PC (Task Scheduler ->
+# run_nh_update.bat) from a residential IP. This workflow_dispatch is a manual backup.
 name: Update NH Figures
 
 on:
-  schedule:
-    - cron: "20 7 * * *"
-  push:
-    paths:
-      - "update-nh-figures.py"
-      - "primemls.py"
-      - ".github/workflows/update-nh.yml"
   workflow_dispatch:
 
 jobs:

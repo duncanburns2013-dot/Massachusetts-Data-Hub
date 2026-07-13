@@ -5,20 +5,19 @@ Build data/nh-figures.json from PrimeMLS for the NH housing report.
 Markets: NH statewide + Portsmouth, Salem, Derry, Windham. Single-family
 residential, closed since 2020, plus current active inventory.
 
-LOW-VOLUME DAILY DESIGN (so CI doesn't trip PrimeMLS/Cloudflare):
-  * Statewide history is stored as committed MONTHLY sufficient-statistics in
-    data/nh-state-monthly.json — derived aggregates (sums/counts + a $5k price
-    histogram), NOT raw records, so it is license-safe to commit. Statewide
-    figures are RECONSTRUCTED from these (median/distribution via the histogram).
-  * Each daily run only re-pulls the CURRENT + PREVIOUS month statewide, the 4
-    towns, and active inventory (~50 requests) — never the full 90k backfill.
-  * Sold filter uses the STRING status (StandardStatus eq 'Closed'); NEVER $count.
+LOW-VOLUME DAILY DESIGN (see README): statewide history lives in
+data/nh-state-monthly.json as committed monthly sufficient-statistics
+(sums/counts + a $5k price histogram — derived, license-safe). Each run
+re-pulls only the current+previous month statewide, the 4 towns, and active,
+then reconstructs statewide from the histogram.
 
-Usage:
-  python update-nh-figures.py seed     # build nh-state-monthly.json from data/_raw_nh/ (local, no API)
-  python update-nh-figures.py cities   # 4 towns + active
-  python update-nh-figures.py state    # statewide (recent months fresh + committed history)
-  python update-nh-figures.py all      # cities + state  (what CI runs)
+SAFE-WRITE: every market is validated (never None/empty; volume can't drop vs
+the last published figures — sold counts only grow). If ANY market fails the
+check the run ABORTS and writes nothing, so a truncated / rate-limited pull can
+never overwrite good data. Meant to run on a residential IP (PrimeMLS/Cloudflare
+throttles datacenter/CI IPs and returns truncated results).
+
+Usage: seed | cities | state | all
 """
 import datetime
 import glob
@@ -53,7 +52,7 @@ DIST_BANDS = [
 ]
 
 
-# ---- sufficient statistics (statewide, per month) -------------------------
+# ---- statewide monthly sufficient statistics ------------------------------
 def month_stats(rows):
     cp = [r["ClosePrice"] for r in rows if r.get("ClosePrice")]
     pairs = [(r["ClosePrice"], r["ListPrice"]) for r in rows if r.get("ClosePrice") and r.get("ListPrice")]
@@ -68,13 +67,10 @@ def month_stats(rows):
     for p in cp:
         k = str(int(p // BIN) * BIN)
         hist[k] = hist.get(k, 0) + 1
-    return {
-        "count": len(cp), "sum_cp": sum(cp),
-        "sum_cp_pair": sum(c for c, _ in pairs), "sum_lp_pair": sum(l for _, l in pairs),
-        "dom_sum": sum(dom), "dom_count": len(dom),
-        "beds": {k: {"sum": v[0], "n": v[1]} for k, v in beds.items()},
-        "hist": hist,
-    }
+    return {"count": len(cp), "sum_cp": sum(cp),
+            "sum_cp_pair": sum(c for c, _ in pairs), "sum_lp_pair": sum(l for _, l in pairs),
+            "dom_sum": sum(dom), "dom_count": len(dom),
+            "beds": {k: {"sum": v[0], "n": v[1]} for k, v in beds.items()}, "hist": hist}
 
 
 def _median_from_hist(hist):
@@ -110,15 +106,14 @@ def statewide_from_monthly(monthly, active):
     by_year = {}
     for ym, m in monthly.items():
         by_year.setdefault(ym[:4], []).append(m)
-    act_list = [r["ListPrice"] for r in active if r.get("ListPrice")]
     by_year_out = {}
     for y, ms in sorted(by_year.items()):
         ya, _, yh = _combine(ms)
         by_year_out[y] = {"n": ya["count"], "median": _median_from_hist(yh),
                           "avg": round(ya["sum_cp"] / max(1, ya["count"]))}
+    act_list = [r["ListPrice"] for r in active if r.get("ListPrice")]
     return {
-        "volume": agg["count"],
-        "median_sale": _median_from_hist(hist),
+        "volume": agg["count"], "median_sale": _median_from_hist(hist),
         "avg_sale": round(agg["sum_cp"] / agg["count"]),
         "avg_dom": round(agg["dom_sum"] / agg["dom_count"]) if agg["dom_count"] else None,
         "splp_pct": round(agg["sum_cp_pair"] / agg["sum_lp_pair"] * 100, 2) if agg["sum_lp_pair"] else None,
@@ -163,6 +158,18 @@ def aggregate(sold, active):
     }
 
 
+# ---- safety check ----------------------------------------------------------
+def _check(name, entry, prior):
+    """Abort the whole run if a market looks truncated (empty, or volume dropped
+    vs the last published figures — sold counts only ever grow)."""
+    if not entry or not entry.get("volume"):
+        raise SystemExit(f"ABORT: '{name}' returned no data (truncated / rate-limited pull) — nothing written.")
+    pv = (prior.get("markets", {}).get(name) or {}).get("volume")
+    if pv and entry["volume"] < pv * 0.98:
+        raise SystemExit(f"ABORT: '{name}' volume {entry['volume']} << previous {pv} "
+                         f"(truncated pull) — nothing written.")
+
+
 # ---- io + drivers ----------------------------------------------------------
 def load_out():
     if OUT.exists():
@@ -178,16 +185,6 @@ def write_out(data):
     print(f"  wrote {OUT} ({len(data['markets'])} markets)")
 
 
-def do_cities(data):
-    for city in CITIES:
-        print(f"[{city}] pulling sold + active ...")
-        sold = fetch_all(f"{SF} and City eq '{city}' and CloseDate ge {START_YEAR}-01-01", SELECT)
-        active = fetch_all(f"{ACT} and City eq '{city}'", "ListingId,ListPrice,BedroomsTotal", order=None)
-        data["markets"][city] = aggregate(sold, active)
-        print(f"  {city}: {data['markets'][city]['volume']} sold, median ${data['markets'][city]['median_sale']:,}")
-        write_out(data)
-
-
 def _months():
     y, m = START_YEAR, 1
     while (y, m) <= (TODAY.year, TODAY.month):
@@ -195,12 +192,23 @@ def _months():
         y, m = (y + 1, 1) if m == 12 else (y, m + 1)
 
 
-def do_state(data):
+def do_cities(data, prior):
+    for city in CITIES:
+        print(f"[{city}] pulling sold + active ...")
+        sold = fetch_all(f"{SF} and City eq '{city}' and CloseDate ge {START_YEAR}-01-01", SELECT)
+        active = fetch_all(f"{ACT} and City eq '{city}'", "ListingId,ListPrice,BedroomsTotal", order=None)
+        entry = aggregate(sold, active)
+        _check(city, entry, prior)
+        data["markets"][city] = entry
+        print(f"  {city}: {entry['volume']} sold, median ${entry['median_sale']:,}")
+
+
+def do_state(data, prior):
+    """Returns the updated monthly dict; the CALLER persists it only after full success."""
     monthly = json.loads(MONTHLY.read_text()) if MONTHLY.exists() else {}
     cur = TODAY.year * 12 + TODAY.month
     for y, m in _months():
         ym = f"{y}-{m:02d}"
-        # Re-pull only the current + previous month (late-recorded sales); trust committed history for the rest.
         if ym in monthly and (y * 12 + m) < cur - 1:
             continue
         ny, nm = (y + 1, 1) if m == 12 else (y, m + 1)
@@ -208,12 +216,12 @@ def do_state(data):
                          f"and CloseDate lt {ny}-{nm:02d}-01", SELECT, pace=0.6)
         monthly[ym] = month_stats(rows)
         print(f"    {ym}: {monthly[ym]['count']} sold (fresh)")
-    MONTHLY.write_text(json.dumps(monthly))
     active = fetch_all(f"{ACT} and StateOrProvince eq 'NH'", "ListingId,ListPrice,BedroomsTotal", order=None)
-    data["markets"]["NH Statewide"] = statewide_from_monthly(monthly, active)
-    print(f"  NH Statewide: {data['markets']['NH Statewide']['volume']} sold, "
-          f"median ${data['markets']['NH Statewide']['median_sale']:,}")
-    write_out(data)
+    entry = statewide_from_monthly(monthly, active)
+    _check("NH Statewide", entry, prior)
+    data["markets"]["NH Statewide"] = entry
+    print(f"  NH Statewide: {entry['volume']} sold, median ${entry['median_sale']:,}")
+    return monthly
 
 
 def do_seed():
@@ -231,10 +239,17 @@ if __name__ == "__main__":
     mode = sys.argv[1] if len(sys.argv) > 1 else "all"
     if mode == "seed":
         do_seed()
-    else:
-        data = load_out()
-        if mode in ("cities", "all"):
-            do_cities(data)
-        if mode in ("state", "all"):
-            do_state(data)
+        print("done: seed")
+        sys.exit(0)
+    prior = load_out()
+    data = load_out()
+    monthly = None
+    if mode in ("cities", "all"):
+        do_cities(data, prior)
+    if mode in ("state", "all"):
+        monthly = do_state(data, prior)
+    # Every market validated -> persist atomically (nothing written before here).
+    if monthly is not None:
+        MONTHLY.write_text(json.dumps(monthly))
+    write_out(data)
     print("done:", mode)
