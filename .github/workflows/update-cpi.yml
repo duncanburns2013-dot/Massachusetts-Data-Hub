@@ -1,7 +1,11 @@
 # .github/workflows/update-cpi.yml
 #
-# Runs the cumulative inflation updater on the 12th of each month
-# (BLS typically releases the prior month's CPI data around the 10th-12th).
+# Runs the cumulative inflation updater daily across the 10th-16th of each month.
+# BLS releases the prior month's CPI between the 10th and the 14th - the exact day
+# moves every month (see https://www.bls.gov/schedule/news_release/cpi.htm), so a
+# single fixed day misses roughly one release in three. Running the whole window is
+# safe: the "Check for changes" step below skips the commit when the data is
+# unchanged, so this commits exactly once, on whichever day the release lands.
 # Also runs whenever you push changes to the updater script itself,
 # and can be triggered manually from the Actions tab.
 
@@ -9,9 +13,9 @@ name: Update Cumulative CPI Data
 
 on:
   schedule:
-    # 14:00 UTC on the 12th of every month
-    # (adjust if BLS releases earlier - check https://www.bls.gov/schedule/news_release/cpi.htm)
-    - cron: "0 14 12 * *"
+    # 14:00 UTC each day from the 10th to the 16th.
+    # Release is 08:30 ET (12:30 UTC), so 14:00 UTC clears it with margin to spare.
+    - cron: "0 14 10-16 * *"
 
   # Re-run automatically if you edit the updater script
   push:
