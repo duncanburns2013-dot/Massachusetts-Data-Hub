@@ -1,14 +1,19 @@
 #!/usr/bin/env python3
 """update-energy-dashboard.py — refresh EIA electricity data in energy-dashboard.html.
 
-Pulls live data from the EIA Electric Power Monthly API and rewrites every
-electricity-rate figure on the dashboard so the page never drifts out of sync:
+Pulls live data from the EIA Electric Power Monthly API and rewrites the figures
+listed in `subs` below — NOT, despite what this docstring used to claim, "every
+electricity-rate figure on the dashboard". It writes:
 
   * Latest monthly residential rates (hero stats, overview cards, the New England
     rate table, the overview bar chart, and the rate figures woven into the
     H.5151 / Boston / lifecycle prose).
   * The 2010-2025 annual history series (ELEC_MA / ELEC_US) and the closed-year
     annual-average comparison card.
+
+Everything else on the page is either derived in-browser from the rate table this
+script writes (see the "Derived figures" block in the HTML — that is the
+preferred home for any new figure) or is a deliberately frozen vintage.
 
 Why this script looks different from a naive find-and-replace:
 
@@ -21,6 +26,14 @@ Why this script looks different from a naive find-and-replace:
   If any anchor is missing (the surrounding HTML changed), the script exits
   non-zero so the GitHub Action FAILS LOUDLY instead of committing nothing and
   looking healthy.
+
+  That anchor check only ever caught the *loud* failure mode. The quiet one --
+  a figure with no anchor at all, which no pattern claims and nothing checks --
+  is what actually rotted the page: the S.3143 card sat at 30.21c/$819 and two
+  charts plotted $765's predecessor $922 for months while every anchored figure
+  moved on. The staleness guard at the bottom closes that hole: after
+  substitution it re-reads the file and fails if any live region still carries a
+  rate or per-year figure this run did not produce.
 
 Requires the EIA_API_KEY environment variable (set as a repo secret).
 """
@@ -275,8 +288,11 @@ subs = [
      r'(Annual MA Overpayment</div><div class="value red">\$)[\d,]+(</div><div class="sub">)[\d.]+(&#x00A2; vs )[\d.]+(&#x00A2; &#x00D7; 600 kWh/mo)',
      rf'\g<1>{dollars(overpay)}\g<2>{cents(ma)}\g<3>{cents(us)}\g<4>', F),
 
+    # The rank that used to sit here ("Still #2 most expensive") is now derived
+    # in-page from this table's own rows -- see the "Derived figures" block in
+    # the HTML. Only the dollar figure is written from here.
     ("H.5151 gap-closed card",
-     r'(\$150 of \$)[\d,]+(\. Still #2)',
+     r'(\$150 of \$)[\d,]+(\. <span id="gapClosedRank">)',
      rf'\g<1>{dollars(overpay)}\g<2>', F),
 
     ("H.5151 state-comparison source",
@@ -284,7 +300,8 @@ subs = [
      rf'\g<1>{mon_abbr}\g<2>', F),
 
     ("lifecycle — YOUR BILL rate + overpayment",
-     r'(<div class="lc-name">)[\d.]+(&#x00A2;/kWh &#x2014; #1 in continental US</div><div class="lc-year">\$)[\d,]+(/yr above national avg)',
+     r'(<div class="lc-name">)[\d.]+(&#x00A2;/kWh &#x2014; <span id="lcRank">.*?</span></div>'
+     r'<div class="lc-year">\$)[\d,]+(/yr above national avg)',
      rf'\g<1>{cents(ma)}\g<2>{dollars(overpay)}\g<3>', F),
 
     ("lifecycle source — period",
@@ -326,7 +343,7 @@ subs = [
      rf'\g<1>{cents(ma)}\g<2>', F),
 
     ("Boston chain — RATES HIT + premium",
-     r'(RATES HIT )[\d.]+(&#x00A2;</div><div class="sd">Highest in continental US\. \+)\d+(% above national avg)',
+     r'(RATES HIT )[\d.]+(&#x00A2;</div><div class="sd"><span id="chainRank">.*?</span>\. \+)\d+(% above national avg)',
      rf'\g<1>{cents(ma)}\g<2>{prem}\g<3>', F),
 
     ("Boston chain — BCCE problem",
@@ -363,6 +380,76 @@ for label, pattern, repl, flags in subs:
 if missing:
     sys.exit(f"\nERROR: {len(missing)} anchor(s) not found — the HTML structure "
              f"changed. Fix the patterns in this script before relying on it. "
+             f"Nothing was written.")
+
+
+# --------------------------------------------------------------------------
+# Staleness guard
+# --------------------------------------------------------------------------
+# The `missing` check above fires only when a KNOWN anchor disappears. It says
+# nothing about a figure that never had an anchor -- and that is exactly how this
+# page rotted: the S.3143 card sat at 30.21c/$819 and two charts plotted $922
+# for months, because no pattern above had ever claimed them.
+#
+# So: re-read the substituted HTML and assert that every rate and per-year figure
+# in the LIVE regions is one this run actually produced. An unrecognised literal
+# fails the build instead of shipping.
+#
+# Adding a genuinely new figure to the page WILL trip this. That is the point --
+# it forces a decision about which state the figure is in (derived in-browser,
+# anchored to a past moment, or a named constant) rather than letting an unowned
+# number quietly drift.
+
+# Regions allowed to carry a vintage other than the latest monthly EIA reading.
+FROZEN_REGIONS = (
+    # The by-sector table and the industrial-rate alert above it are pinned to
+    # their Oct-2025 vintage and labelled as such on the page.
+    r'<!-- NEW: Industrial rate premium -->.*?(?=<!-- ===== H\.5151)',
+    # Annual history: every past year's rate legitimately lives here.
+    r'const ELEC_(?:MA|US) = \[[^\]]*\]',
+    # The Equivalence tab is a separate hand-built model (see the note above).
+    r'<div id="equivalence" class="tab-content">.*?(?=<!-- ===== BOSTON)',
+)
+
+live = html
+for _pat in FROZEN_REGIONS:
+    live, _n = re.subn(_pat, "", live, flags=re.S)
+    if _n == 0:
+        sys.exit(f"\nERROR: frozen-region marker not found: {_pat!r}\nThe "
+                 f"staleness guard cannot tell live copy from a pinned vintage, "
+                 f"so it would raise false alarms. Fix the marker. Nothing was "
+                 f"written.")
+
+# Rates this run wrote: the monthly state/US figures, plus the two closed-year
+# annual averages on the annual-average card.
+allowed_cents = {cents(v) for v in rate.values()} | {cents(ann_ma), cents(ann_us)}
+
+# Per-year dollar figures that are analysis constants rather than EIA output.
+# Each is documented where it appears on the page.
+allowed_per_yr = {
+    dollars(overpay),  # MA overpayment vs the US average -- written by this run
+    "150",   # realistic H.5151 relief (Mass Save 80 + ACP 40 + net metering 30)
+    "200",   # Boston BCCE supply-only savings, per city program data
+    "377",   # untouched policy charges, Cut-vs-Kept tab
+    "493",   # S.3143's own claim: $14.3B / 2.9M households / 10 yrs
+}
+
+stale = set()
+for m in re.finditer(r'(\d+\.\d+)&#x00A2;', live):
+    if m.group(1) not in allowed_cents:
+        stale.add(f"{m.group(1)}¢")
+for m in re.finditer(r'\$([\d,]+)/yr', live):
+    if m.group(1) not in allowed_per_yr:
+        stale.add(f"${m.group(1)}/yr")
+
+if stale:
+    sys.exit(f"\nERROR: stale figure(s) survived the update: "
+             f"{', '.join(sorted(stale))}\n"
+             f"This run wrote MA {cents(ma)}¢ / US {cents(us)}¢ / "
+             f"${dollars(overpay)}/yr ({mon_abbr}). Each figure above sits in a "
+             f"live region but is not one this run produced, so no anchor owns "
+             f"it. Either add a substitution for it, derive it in-browser from "
+             f"the rate table, or move it into a labelled frozen region. "
              f"Nothing was written.")
 
 if html == original:

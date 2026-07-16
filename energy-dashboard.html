@@ -172,7 +172,7 @@ footer a:hover{color:var(--gold)}
 <body>
 <div class="hero">
 <h1>Energy Policy &amp; Costs</h1>
-<p class="sub">How green mandates, offshore wind failures, and policy decisions gave Massachusetts the highest electricity rates in the continental U.S. &#x2014; and why H.5151 closes just 15% of the gap, and S.3143's $14.3B claim is mostly accounting.</p>
+<p class="sub">How green mandates, offshore wind failures, and policy decisions pushed Massachusetts electricity to <span id="heroRate">&#x2014;</span> &#x2014; <span id="heroRank">&#x2014;</span>. Why H.5151 closes just <span id="heroGap">&#x2014;</span> of the gap, and why S.3143's $14.3B claim is mostly accounting.</p>
 <div class="hero-stats">
 <div class="hero-stat"><div class="val bad">29.45&#x00A2;</div><div class="lbl">Per kWh (EIA Apr 2026)</div></div>
 <div class="hero-stat"><div class="val bad">+56%</div><div class="lbl">Above National Avg</div></div>
@@ -200,8 +200,9 @@ footer a:hover{color:var(--gold)}
 
 <!-- ===== OVERVIEW ===== -->
 <div id="overview" class="tab-content active">
-<div class="alert"><h4>&#x26A0;&#xFE0F; The Most Expensive Electricity in the Continental U.S.</h4><div class="alert-grid">
+<div class="alert"><h4>&#x26A0;&#xFE0F; Among the Most Expensive Electricity in the Continental U.S.</h4><div class="alert-grid">
 <div class="alert-item">MA residential rate: <strong>29.45&#x00A2;/kWh</strong> &#x2014; national average: 18.83&#x00A2; (EIA Apr 2026)</div>
+<div class="alert-item">Where that ranks: <strong><span id="alertRank">&#x2014;</span></strong></div>
 <div class="alert-item">Your bill includes hidden costs: <strong>$1.36B RGGI carbon tax, RPS compliance, offshore wind contracts</strong></div>
 <div class="alert-item">H.5151 passed House 128-27 on Feb 26, 2026 &#x2014; <strong>107 pages, 48hr vote, zero public hearings</strong></div>
 <div class="alert-item">Vineyard Wind blade failure (July 2024) &#x2014; debris across <strong>Nantucket beaches</strong>, $10.5M settlement</div>
@@ -213,13 +214,13 @@ footer a:hover{color:var(--gold)}
 <div class="stat-card"><div class="label">MA Residential Rate</div><div class="value red">29.45&#x00A2;</div><div class="sub">Per kWh (EIA Apr 2026)</div></div>
 <div class="stat-card"><div class="label">National Average</div><div class="value green">18.83&#x00A2;</div><div class="sub">Per kWh</div></div>
 <div class="stat-card"><div class="label">Annual Overpayment</div><div class="value red">$765</div><div class="sub">Per household vs US avg</div></div>
-<div class="stat-card"><div class="label">H.5151 Relief</div><div class="value amber">~$150</div><div class="sub">Per year &#x2014; 15% of gap</div></div>
+<div class="stat-card"><div class="label">H.5151 Relief</div><div class="value amber">~$150</div><div class="sub">Per year &#x2014; <span id="reliefGapPct">&#x2014;</span> of gap</div></div>
 <div class="stat-card"><div class="label">FL Rate</div><div class="value green">15.38&#x00A2;</div><div class="sub">Per kWh &#x2014; half of MA</div></div>
 <div class="stat-card"><div class="label">2025 Annual Avg Premium</div><div class="value red">+76%</div><div class="sub">30.48&#x00A2; MA vs 17.30&#x00A2; US &#x2014; full-year EIA</div></div>
 </div>
 <div class="chart-grid">
 <div class="chart-card"><h3>Residential Electricity Rates &#x2014; MA vs. Selected States (&#x00A2;/kWh)</h3><div class="chart-area"><canvas id="chartRatesOverview"></canvas></div><div class="source">Source: EIA Electric Power Monthly Table 5.6.A, April 2026</div></div>
-<div class="chart-card"><h3>MA Rate Premium Over National Average &#x2014; Historical</h3><div class="chart-area"><canvas id="chartRateHistory"></canvas></div><div class="source">Source: EIA, annual residential average rates 2015&#x2013;2025</div></div>
+<div class="chart-card"><h3>MA Rate Premium Over National Average &#x2014; Historical</h3><div class="chart-area"><canvas id="chartRateHistory"></canvas></div><div class="source">Source: EIA, annual residential average rates <span id="yrRangeHist">&#x2014;</span></div></div>
 </div>
 <div class="info-box"><h4>&#x1F4CB; Why Is Massachusetts Electricity So Expensive?</h4><p>Massachusetts electricity costs are driven by a combination of policy decisions: the Renewable Portfolio Standard (RPS) mandating 35%+ renewable sources by 2030, RGGI &#x2014; a cap-and-trade carbon tax that has extracted $1.36 billion from MA ratepayers since 2008, legally guaranteed "full cost recovery" for offshore wind contracts meaning ratepayers absorb all costs, blocking natural gas pipeline capacity (constraining supply), and building electrification mandates that increase demand while constraining supply. Each adds layers of cost that appear as line items on your bill.</p></div>
 </div>
@@ -237,7 +238,7 @@ footer a:hover{color:var(--gold)}
 </div></div>
 <div class="chart-grid">
 <div class="chart-card"><h3>MA Electricity Bill Breakdown (Typical Residential)</h3><div class="chart-area"><canvas id="chartBillBreak"></canvas></div><div class="source">Source: Eversource/National Grid rate schedules; DPU filings</div></div>
-<div class="chart-card"><h3>MA vs. National Rate Gap Over Time</h3><div class="chart-area"><canvas id="chartGapTime"></canvas></div><div class="source">Source: EIA Electric Power Monthly, 2015&#x2013;2025</div></div>
+<div class="chart-card"><h3>MA vs. National Rate Gap Over Time</h3><div class="chart-area"><canvas id="chartGapTime"></canvas></div><div class="source">Source: EIA Electric Power Monthly, <span id="yrRangeGap">&#x2014;</span></div></div>
 </div>
 <div class="data-card"><h3>New England Electricity Rates &#x2014; All Among the Highest (EIA Apr 2026)</h3>
 <table class="data-table"><thead><tr><th>State</th><th>Rate (&#x00A2;/kWh)</th><th>vs. National</th><th>Annual Cost (600 kWh/mo)</th><th>Extra vs. US Avg</th></tr></thead><tbody>
@@ -259,7 +260,7 @@ footer a:hover{color:var(--gold)}
 </div></div>
 <div class="data-card"><h3>MA Electricity Rates by Sector vs. National Average (EIA Oct 2025)</h3>
 <table class="data-table"><thead><tr><th>Sector</th><th>MA Rate (&#x00A2;/kWh)</th><th>US Average (&#x00A2;/kWh)</th><th>MA Premium</th><th>Impact</th></tr></thead><tbody>
-<tr><td>Residential</td><td class="highlight">31.37</td><td>17.98</td><td class="highlight">+74%</td><td>$922/yr per household extra</td></tr>
+<tr id="sectorResRow"><td>Residential</td><td class="highlight">31.37</td><td>17.98</td><td class="highlight">+74%</td><td><span id="sectorResExtra">&#x2014;</span>/yr per household extra</td></tr>
 <tr><td>Commercial</td><td class="highlight">21.98</td><td>13.41</td><td class="highlight">+64%</td><td>Higher operating costs for small businesses</td></tr>
 <tr><td class="highlight">Industrial</td><td class="highlight">18.34</td><td>8.65</td><td class="highlight">+112%</td><td class="highlight">Double national avg — drives manufacturing exodus</td></tr>
 <tr><td>All Sectors</td><td>24.82</td><td>13.63</td><td>+82%</td><td>Broadest measure of MA's mandate premium</td></tr>
@@ -272,7 +273,7 @@ footer a:hover{color:var(--gold)}
 <div class="alert"><h4>&#x26A0;&#xFE0F; Passed House 128-27 on Feb 26, 2026 &#x2014; Published as H.5175</h4><div class="alert-grid">
 <div class="alert-item"><strong>107 pages</strong> released Tuesday. Ways &amp; Means got 45 minutes to review.</div>
 <div class="alert-item"><strong>126 amendments</strong> filed by 5pm Wednesday. Floor vote Thursday past 10pm.</div>
-<div class="alert-item">Claims <strong>$9B in savings</strong> over 10 years. Reality: ~$150/yr per household (15% of gap).</div>
+<div class="alert-item">Claims <strong>$9B in savings</strong> over 10 years. Reality: ~$150/yr per household (<span id="alertGapPct">&#x2014;</span> of gap).</div>
 <div class="alert-item"><strong>Mass Save cuts backloaded to 2027</strong> &#x2014; zero relief this winter.</div>
 <div class="alert-item">Adds <strong>10 GW offshore wind + 10 GW solar mandates</strong> with 30-year contract authority.</div>
 <div class="alert-item">Lobbying cost recovery ban <strong>stripped</strong>. GSEP pipe spending <strong>untouched</strong>.</div>
@@ -285,7 +286,7 @@ footer a:hover{color:var(--gold)}
 <div class="stat-card"><div class="label">Annual MA Overpayment</div><div class="value red">$765</div><div class="sub">29.45&#x00A2; vs 18.83&#x00A2; &#x00D7; 600 kWh/mo</div></div>
 <div class="stat-card"><div class="label">Their Claim / HH / Year</div><div class="value blue">$310</div><div class="sub">$9B &#x00F7; 2.9M &#x00F7; 10 yrs</div></div>
 <div class="stat-card"><div class="label">Realistic Relief</div><div class="value green">~$150</div><div class="sub">Mass Save + ACP + net metering</div></div>
-<div class="stat-card"><div class="label">Gap Closed</div><div class="value red">15%</div><div class="sub">$150 of $765. Still #2 most expensive.</div></div>
+<div class="stat-card"><div class="label">Gap Closed</div><div class="value red"><span id="gapClosedPct">&#x2014;</span></div><div class="sub">$150 of $765. <span id="gapClosedRank">&#x2014;</span></div></div>
 </div>
 <div class="donut-grid">
 <div class="chart-card" style="text-align:center"><h3>Current Bill &#x2014; $185/mo</h3><div class="chart-area"><canvas id="c4a"></canvas></div></div>
@@ -408,7 +409,7 @@ footer a:hover{color:var(--gold)}
 <div class="lc-step" style="background:#1a3a5c"><div class="lc-cite">M.G.L. c. 25A, &#x00A7;11F</div><div class="lc-name">Renewable Portfolio Standard &#x2014; 35%+ mandate</div><div class="lc-year">Drives RPS compliance charges</div></div>
 <div class="lc-step" style="background:#1a4060"><div class="lc-cite">Ch. 169, Acts of 2008 &#x00A7;83C</div><div class="lc-name">Green Communities Act &#x2014; offshore wind procurement</div><div class="lc-year">Amended Ch. 188/2016 &amp; Ch. 179/2022</div></div>
 <div class="lc-step" style="background:#8b1a1a"><div class="lc-cite">St. 2024, c. 239, &#x00A7;83E</div><div class="lc-name">"Protecting Ratepayers" Act &#x2014; storage mandate</div><div class="lc-year">House: 125&#x2013;17 &#x00B7; Senate: 38&#x2013;2</div></div>
-<div class="lc-step" style="background:var(--red)"><div class="lc-cite">YOUR BILL</div><div class="lc-name">29.45&#x00A2;/kWh &#x2014; #1 in continental US</div><div class="lc-year">$765/yr above national avg</div></div>
+<div class="lc-step" style="background:var(--red)"><div class="lc-cite">YOUR BILL</div><div class="lc-name">29.45&#x00A2;/kWh &#x2014; <span id="lcRank">&#x2014;</span></div><div class="lc-year">$765/yr above national avg</div></div>
 </div>
 <div class="source">Source: MA General Laws; Acts of the Legislature; EIA Apr 2026</div>
 </div>
@@ -670,7 +671,7 @@ footer a:hover{color:var(--gold)}
 <!-- ===== BOSTON 2030 CLIMATE ACTION PLAN ===== -->
 <div id="boston" class="tab-content">
 <h2 class="section-title">&#x1F3D9;&#xFE0F; Boston's 2030 Climate Action Plan &#x2014; The City-Level Mandate Machine</h2>
-<p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">Released April 27, 2026, Wu's 110-page plan adds a new layer of mandates on top of the state policies already driving MA's highest-in-the-nation electricity rates. The same political party that created the cost crisis now claims to be solving it.</p>
+<p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">Released April 27, 2026, Wu's 110-page plan adds a new layer of mandates on top of the state policies already driving MA electricity to <span id="bosIntroRate">&#x2014;</span> &#x2014; <span id="bosIntroRank">&#x2014;</span>. The same political party that created the cost crisis now claims to be solving it.</p>
 <div class="alert"><h4>&#x26A0;&#xFE0F; The Core Contradiction</h4><div class="alert-grid">
 <div class="alert-item">Wu claims plan will <strong>"lower energy costs"</strong> &#x2014; while mandating building electrification that Eversource projects will <strong>increase electricity demand 33% by 2033</strong></div>
 <div class="alert-item">BCCE "saves $200/yr" &#x2014; but only on <strong>supply (~40% of bill)</strong>. The $765/yr mandate premium is untouched.</div>
@@ -729,7 +730,7 @@ footer a:hover{color:var(--gold)}
 </div>
 
 <div class="expose-grid" style="margin-top:16px">
-<div class="expose-card hl-red"><h4>The 33% Demand Increase Nobody Discusses</h4><div class="num red">+33%</div><p>Eversource's own Electric Sector Modernization Plan projects Boston electricity demand rising 33% by 2033 &#x2014; driven by the building electrification mandates in Wu's plan and Healey's state policies. More demand on the most expensive grid in the continental US. Who pays for the substation upgrades, new transmission, and distribution capacity? <strong>Ratepayers.</strong></p></div>
+<div class="expose-card hl-red"><h4>The 33% Demand Increase Nobody Discusses</h4><div class="num red">+33%</div><p>Eversource's own Electric Sector Modernization Plan projects Boston electricity demand rising 33% by 2033 &#x2014; driven by the building electrification mandates in Wu's plan and Healey's state policies. More demand on a grid already at <span id="bosGridRate">&#x2014;</span> &#x2014; <span id="bosGridRank">&#x2014;</span>. Who pays for the substation upgrades, new transmission, and distribution capacity? <strong>Ratepayers.</strong></p></div>
 <div class="expose-card hl-red"><h4>BERDO: The Hidden Rent Increase</h4><div class="num red">~3,500</div><p>Large buildings (15+ units residential, 20K+ sq ft commercial) covered by BERDO must reach net-zero by 2050. Just 5% of Boston's buildings &#x2014; but 40% of its emissions. Compliance requires heat pump conversions, envelope upgrades, and electrification costing owners hundreds of thousands per property. Fines: up to $1,000/day for non-compliance. These costs get passed to tenants through rent increases and CAM charges. Wu's plan acknowledges "financing challenges" (p.191) but offers no cost protection for tenants.</p></div>
 <div class="expose-card"><h4>Gas System Decommissioning</h4><div class="num amber">&#x1F6AB;&#x26FD;</div><p>Wu's plan explicitly advocates for "strategic decommissioning of the gas system" (p.137). Natural gas is currently cheaper than electricity for heating. Eliminating it forces households onto the electric grid &#x2014; at 29.45&#x00A2;/kWh. National Grid's GSEP pipe replacement costs are already on your bill; now they want to abandon the pipes entirely.</p></div>
 <div class="expose-card"><h4>Congestion Pricing: A New Tax</h4><div class="num blue">$$</div><p>The plan calls for studying "parking fees, tolls, and congestion-related fees" to discourage driving. Councilor Ed Flynn: <em>"The economy of Boston is struggling. Now is not the time for an expensive expansion of city regulations."</em> This hits working families who commute by car because the MBTA is unreliable.</p></div>
@@ -756,7 +757,7 @@ footer a:hover{color:var(--gold)}
 <div class="hyp-chain" style="margin-top:6px">
 <div class="hyp-step r"><div class="st">WU (MAYOR)</div><div class="sd">BERDO mandate. Gas decommission.</div></div>
 <div class="hyp-arrow">&#x2192;</div>
-<div class="hyp-step r"><div class="st">RATES HIT 29.45&#x00A2;</div><div class="sd">Highest in continental US. +56% above national avg.</div></div>
+<div class="hyp-step r"><div class="st">RATES HIT 29.45&#x00A2;</div><div class="sd"><span id="chainRank">&#x2014;</span>. +56% above national avg.</div></div>
 <div class="hyp-arrow">&#x2192;</div>
 <div class="hyp-step b"><div class="st">SAME PEOPLE: "WE'LL FIX IT"</div><div class="sd">BCCE saves $200/yr on a $765/yr problem.</div></div>
 </div>
@@ -769,8 +770,8 @@ footer a:hover{color:var(--gold)}
 <div id="s3143" class="tab-content">
 <h2 class="section-title">S.3143 &#x2014; The Senate's $14.3 Billion Claim, Audited</h2>
 
-<div class="alert"><h4>&#x26A0;&#xFE0F; Released June 24, 2026 &#x2014; Senate Floor Vote Scheduled July 1, 2026</h4><div class="alert-grid">
-<div class="alert-item">Senate claims <strong>$14.3B in ratepayer savings</strong> over 10 years &#x2014; while MA rates sit at 30.21&#x00A2;/kWh, 60% above national average</div>
+<div class="alert"><h4>&#x26A0;&#xFE0F; Released June 24, 2026 &#x2014; Senate floor vote was scheduled for July 1, 2026</h4><div class="alert-grid">
+<div class="alert-item">Senate claims <strong>$14.3B in ratepayer savings</strong> over 10 years &#x2014; while MA rates sit at <span id="s3143Rate">&#x2014;</span>, <span id="s3143Prem">&#x2014;</span> above national average</div>
 <div class="alert-item">The DPU already <strong>approved 25&#x2013;30% Eversource + 11&#x2013;13% National Grid hikes</strong> in late 2024 &#x2014; none of the $14.3B directly offsets these</div>
 <div class="alert-item">The bill's largest single claim &#x2014; <strong>$7.1B securitization</strong> &#x2014; restructures utility debt, it does not eliminate it. Ratepayers still pay every dollar.</div>
 <div class="alert-item">S.3143 reduces RPS from 3%/yr to 1%/yr for 2027&#x2013;29 and calls a mandate rollback a <strong>"$213M savings"</strong> &#x2014; they created the cost; they are trimming it and claiming credit</div>
@@ -782,9 +783,9 @@ footer a:hover{color:var(--gold)}
 <div class="stat-card"><div class="label">Total Claimed Savings</div><div class="value red">$14.3B</div><div class="sub">Over 10 years &#x2014; all categories</div></div>
 <div class="stat-card"><div class="label">Verified / Documented</div><div class="value green">$2.1B</div><div class="sub">Competitive supplier + GSEP reform</div></div>
 <div class="stat-card"><div class="label">Speculative / Accounting</div><div class="value amber">$9.4B</div><div class="sub">Securitization, investigations, mandate trims</div></div>
-<div class="stat-card"><div class="label">Gap Closed vs US Avg</div><div class="value red">~18%</div><div class="sub">Realistic ~$150/yr of $819/yr overpayment</div></div>
-<div class="stat-card"><div class="label">MA Rate Right Now</div><div class="value red">30.21&#x00A2;</div><div class="sub">EIA Mar 2026 &#x2014; #1 most expensive continental US</div></div>
-<div class="stat-card"><div class="label">Floor Vote</div><div class="value amber">Jul 1</div><div class="sub">Ways &amp; Means polled out June 24, 2026</div></div>
+<div class="stat-card"><div class="label">Gap Closed vs US Avg</div><div class="value red">~<span id="s3143GapPct">&#x2014;</span></div><div class="sub">Realistic ~$150/yr of <span id="s3143Overpay">&#x2014;</span>/yr overpayment</div></div>
+<div class="stat-card"><div class="label">MA Rate Right Now</div><div class="value red"><span id="s3143CardRate">&#x2014;</span></div><div class="sub">EIA <span id="s3143CardPeriod">&#x2014;</span> &#x2014; <span id="s3143CardRank">&#x2014;</span></div></div>
+<div class="stat-card"><div class="label">Floor Vote Scheduled</div><div class="value amber">Jul 1</div><div class="sub">2026 &#x2014; Ways &amp; Means polled out June 24, 2026</div></div>
 </div>
 
 <div class="chart-grid">
@@ -793,7 +794,7 @@ footer a:hover{color:var(--gold)}
 </div>
 
 <div class="chart-grid">
-<div class="chart-card"><h3>Annual Per-Household Reality Check</h3><div class="chart-area"><canvas id="cS3143hh"></canvas></div><div class="source">Source: EIA Mar 2026; S.3143 $14.3B &divide; 2.9M households &divide; 10 yrs = $493/yr claimed; realistic per analysis = ~$150/yr. MA still #1 most expensive continental US even accepting the full claim.</div></div>
+<div class="chart-card"><h3>Annual Per-Household Reality Check</h3><div class="chart-area"><canvas id="cS3143hh"></canvas></div><div class="source">Source: EIA <span id="s3143SrcPeriod">&#x2014;</span>; S.3143 $14.3B &divide; 2.9M households &divide; 10 yrs = $493/yr claimed; realistic per analysis = ~$150/yr. Even accepting the full claim, MA remains <span id="s3143SrcRank">&#x2014;</span>.</div></div>
 <div class="chart-card"><h3>What S.3143 Doesn't Touch &#x2014; The Structural Cost Drivers</h3><div class="chart-area"><canvas id="cS3143gaps"></canvas></div><div class="source">Source: EIA; RGGI Inc.; DPU rate orders; ISO-NE. These policy-driven costs persist regardless of S.3143 passage.</div></div>
 </div>
 
@@ -828,7 +829,7 @@ footer a:hover{color:var(--gold)}
 
 <div class="verdict amber"><h3>The Honest Version: "We're Trying to Slow the Growth of Bills We Helped Make This Expensive"</h3><p>Two provisions &#x2014; competitive supplier reform ($650M) and GSEP gas line reform ($1.46B) &#x2014; are real, documented, and overdue. The rest is a mix of DPU reform authority they already had, debt restructuring framed as savings, mandate rollbacks they're calling consumer relief, and investigation authorizations counted as projected outcomes. S.3143 is better than H.5151. But the $14.3B headline is not a bill reduction. It's a press release.</p></div>
 
-<div class="source" style="margin-top:12px">Sources: S.3143 Senate fact sheet (June 24, 2026); EIA Electric Power Monthly (Mar 2026); AGO Competitive Electric Supply Annual Report (March 2026); DPU; RGGI Inc.; WBUR; Commonwealth Beacon; Fall River Reporter; WWLP (June 24, 2026).</div>
+<div class="source" style="margin-top:12px">Sources: S.3143 Senate fact sheet (June 24, 2026); EIA Electric Power Monthly (<span id="s3143FootPeriod">&#x2014;</span>); AGO Competitive Electric Supply Annual Report (March 2026); DPU; RGGI Inc.; WBUR; Commonwealth Beacon; Fall River Reporter; WWLP (June 24, 2026).</div>
 </div>
 <!-- ===== END S.3143 ===== -->
 
@@ -837,7 +838,7 @@ footer a:hover{color:var(--gold)}
 <a href="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/index.html">&#x2190; Back to Massachusetts Data Hub</a><br>
 <strong>Bills:</strong> <a href="https://malegislature.gov/Bills/194/H5151">H.5151</a> &#x2192; <a href="https://malegislature.gov/Bills/194/H5175">H.5175 (as amended)</a> &#x00B7; <a href="https://malegislature.gov/Bills/194/H5151/Amendments/House">126 House Amendments</a><br>
 <strong>Sources:</strong> EIA &#x00B7; ISO-NE &#x00B7; MA DOER &#x00B7; DPU &#x00B7; BOEM &#x00B7; RGGI Inc. &#x00B7; OCPF &#x00B7; ProPublica &#x00B7; MA Sec. of State Lobbying DB &#x00B7; DPU 25-200 &#x00B7; ISO-NE Market Monitor Primer (May 2025)<br>
-<a href="https://x.com/DuncanBurnsMA">@DuncanBurnsMA</a> &#x00B7; <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">GitHub</a> &#x00B7; Data compiled May 2026 &#x00B7; #mapoli
+<a href="https://x.com/DuncanBurnsMA">@DuncanBurnsMA</a> &#x00B7; <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">GitHub</a> &#x00B7; EIA data through <span id="footPeriod">&#x2014;</span> &#x00B7; #mapoli
 </footer>
 
 <script>
@@ -864,6 +865,127 @@ const DIESEL_NE = [3.156,3.986,4.100,4.059,3.988,2.838,2.424,2.787,3.349,3.219,2
 const ELEC_MA = [14.59,14.67,14.91,15.83,17.39,19.83,19.0,20.06,21.61,21.92,21.97,22.89,25.97,29.61,29.35,30.48];
 const ELEC_US = [11.54,11.72,11.88,12.13,12.52,12.65,12.55,12.89,12.87,13.01,13.15,13.66,15.04,16.0,16.48,17.3];
 
+// ── Derived figures ─────────────────────────────────────────────────────────
+// update-energy-dashboard.py rewrites the New England rate table's <tbody> from
+// the EIA API every month. That table is the single source of truth for current
+// rates on this page: everything below READS it at render time instead of
+// restating its numbers, so no figure and no ranking can drift away from it.
+//
+// This exists because they did drift. The page asserted "#1 in the continental
+// US" in eight places while its own table showed Connecticut above Massachusetts
+// — and that was already true at the previous vintage too (CT 30.47 vs MA
+// 30.21). A hard-coded rank is a claim nothing checks; a derived one cannot
+// outlive its data.
+function parseRateTable(){
+  let tbl=null;
+  document.querySelectorAll('.data-card').forEach(c=>{
+    const h=c.querySelector('h3');
+    if(h&&/New England Electricity Rates/.test(h.textContent)) tbl=c.querySelector('table tbody');
+  });
+  if(!tbl) return [];
+  const out=[];
+  tbl.querySelectorAll('tr').forEach(tr=>{
+    const td=tr.querySelectorAll('td');
+    if(td.length<2) return;
+    const name=td[0].textContent.trim(), v=parseFloat(td[1].textContent);
+    if(name&&!isNaN(v)) out.push({name,rate:v});
+  });
+  return out;
+}
+const RATE_ROWS=parseRateTable();
+const rateOf=n=>{const r=RATE_ROWS.find(x=>x.name===n);return r?r.rate:NaN;};
+const MA_RATE=rateOf('Massachusetts');
+const US_RATE=rateOf('US Average');
+
+// "US Average" is not a state — it must never occupy a rank.
+const RANKED=RATE_ROWS.filter(r=>r.name!=='US Average').sort((a,b)=>b.rate-a.rate);
+// Competition ranking: a tie shares the better rank. MA and NY both at 29.45
+// makes each 2nd, not 2nd and 3rd.
+const MA_RANK=RANKED.findIndex(r=>r.rate===MA_RATE)+1;
+const MA_TIED=RANKED.some(r=>r.rate===MA_RATE&&r.name!=='Massachusetts');
+const TOP_STATE=RANKED[0];
+
+function ordinal(n){const s=['th','st','nd','rd'],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0]);}
+
+// The table lists a chosen handful of states, not all 50, so the only honest
+// claim is a rank WITHIN it — stated as such. Anything stronger would invent a
+// national ranking this page holds no data for. That is exactly the trap the
+// old "#1 in the continental US" copy fell into.
+function rankPhrase(short){
+  if(!MA_RANK||!TOP_STATE) return '';
+  const scope=short?` of ${RANKED.length} tracked states`:` of the ${RANKED.length} states tracked here`;
+  if(MA_RANK===1) return (MA_TIED?'tied for the highest':'the highest')+scope;
+  const lead=(MA_TIED?'tied for the ':'the ')+ordinal(MA_RANK)+'-highest';
+  return lead+scope+(short?'':`, behind ${TOP_STATE.name} (${TOP_STATE.rate.toFixed(2)}¢)`);
+}
+
+// The EIA vintage label is written by the updater into the hero strip. Read it
+// back rather than retyping it, so no card can name a month the data isn't from.
+const EIA_PERIOD=(()=>{
+  let el=null;
+  document.querySelectorAll('.hero-stat .lbl').forEach(e=>{if(/Per kWh \(EIA /.test(e.textContent)) el=e;});
+  const m=el&&el.textContent.match(/\(EIA ([A-Za-z]+ \d{4})\)/);
+  return m?m[1]:'';
+})();
+
+const KWH_YR=7200;      // the page's 600 kWh/mo billing convention, annualized
+const OVERPAY=Math.round((MA_RATE-US_RATE)/100*KWH_YR);
+// Realistic H.5151 relief, from the bill-text analysis plotted in c1b
+// (Mass Save cut $80 + ACP rebates $40 + net metering $30). Named once here so
+// every "gap closed" percentage derives from the same number.
+const RELIEF_HH=150;
+const BCCE_SAVINGS=200; // Boston BCCE supply-only savings, per city program data
+const GAP_PCT=Math.round(RELIEF_HH/OVERPAY*100);
+
+// A blank leaves the '—' placeholder standing, so a parse failure shows up as a
+// visibly empty page rather than a confidently wrong number.
+const setTxt=(id,t)=>{const e=document.getElementById(id);if(e&&t)e.textContent=t;};
+const rateTxt=v=>isNaN(v)?'':v.toFixed(2)+'¢';
+const pctTxt=v=>isNaN(v)?'':v+'%';
+const capFirst=s=>s?s.charAt(0).toUpperCase()+s.slice(1):'';
+const yrRange=YEARS[0]+'–'+YEARS[YEARS.length-1];
+
+setTxt('heroRate',rateTxt(MA_RATE)&&rateTxt(MA_RATE)+'/kWh');
+setTxt('heroRank',rankPhrase(false));
+setTxt('heroGap',pctTxt(GAP_PCT));
+setTxt('alertRank',rankPhrase(false));
+setTxt('alertGapPct',pctTxt(GAP_PCT));
+setTxt('reliefGapPct',pctTxt(GAP_PCT));
+setTxt('gapClosedPct',pctTxt(GAP_PCT));
+setTxt('gapClosedRank',rankPhrase(true)&&'Still '+rankPhrase(true)+'.');
+setTxt('lcRank',rankPhrase(true));
+setTxt('bosIntroRate',rateTxt(MA_RATE)&&rateTxt(MA_RATE)+'/kWh');
+setTxt('bosIntroRank',rankPhrase(false));
+setTxt('bosGridRate',rateTxt(MA_RATE)&&rateTxt(MA_RATE)+'/kWh');
+setTxt('bosGridRank',rankPhrase(true));
+setTxt('chainRank',capFirst(rankPhrase(true)));
+setTxt('s3143Rate',rateTxt(MA_RATE)&&rateTxt(MA_RATE)+'/kWh');
+setTxt('s3143Prem',pctTxt(Math.round((MA_RATE-US_RATE)/US_RATE*100)));
+setTxt('s3143GapPct',pctTxt(GAP_PCT));
+setTxt('s3143Overpay',isNaN(OVERPAY)?'':'$'+OVERPAY.toLocaleString());
+setTxt('s3143CardRate',rateTxt(MA_RATE));
+setTxt('s3143CardPeriod',EIA_PERIOD);
+setTxt('s3143CardRank',rankPhrase(true));
+setTxt('s3143SrcPeriod',EIA_PERIOD);
+setTxt('s3143SrcRank',rankPhrase(true));
+setTxt('s3143FootPeriod',EIA_PERIOD);
+setTxt('footPeriod',EIA_PERIOD);
+setTxt('yrRangeHist',yrRange);
+setTxt('yrRangeGap',yrRange);
+
+// The sector table is deliberately frozen at its Oct-2025 vintage (see its
+// source line), but its "extra per household" cell was hand-typed as $922 and
+// never agreed with the rates in its own row: (31.37-17.98) x 7200/100 = $964.
+// Derive it from those cells so the row cannot contradict itself again.
+(()=>{
+  const tr=document.getElementById('sectorResRow');
+  if(!tr) return;
+  const td=tr.querySelectorAll('td');
+  const maR=parseFloat(td[1].textContent), usR=parseFloat(td[2].textContent);
+  if(isNaN(maR)||isNaN(usR)) return;
+  setTxt('sectorResExtra','$'+Math.round((maR-usR)/100*KWH_YR).toLocaleString());
+})();
+
 function tinyOpts(){ return {plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:9},color:C.muted},grid:{display:false}},y:{ticks:{font:{size:9},color:C.muted},grid:{color:'rgba(0,0,0,0.04)'}}},responsive:true,maintainAspectRatio:false}; }
 
 function initCharts(tab){
@@ -876,7 +998,9 @@ function initCharts(tab){
     safeChart('chartGapTime',{type:'line',data:{labels:YEARS,datasets:[{label:'MA (¢/kWh)',data:ELEC_MA,borderColor:C.red,backgroundColor:'rgba(192,57,43,0.08)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:3},{label:'US Avg (¢/kWh)',data:ELEC_US,borderColor:C.green,borderWidth:2,tension:0.4,pointRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:true,labels:{font:{size:9}}}}}});
   }
   if(tab==='h5151'){
-    safeChart('c1a',{type:'bar',data:{labels:['Annual Overpayment','Their Claim','Realistic Relief'],datasets:[{data:[922,310,150],backgroundColor:[C.red,C.blue,C.green],borderRadius:5}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/yr'}}}}});
+    // Bar 1 reads OVERPAY rather than a literal: this chart plotted a frozen $922
+    // while its own caption and the card beside it said $765.
+    safeChart('c1a',{type:'bar',data:{labels:['Annual Overpayment','Their Claim','Realistic Relief'],datasets:[{data:[OVERPAY,310,RELIEF_HH],backgroundColor:[C.red,C.blue,C.green],borderRadius:5}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/yr'}}}}});
     safeChart('c1b',{type:'bar',data:{labels:['Mass Save Cut','ACP Rebates','Net Metering','New Wind Cost','New Solar Cost','Procurement Fund'],datasets:[{label:'Savings',data:[80,40,30,0,0,0],backgroundColor:C.green,borderRadius:4},{label:'Added Cost',data:[0,0,0,-120,-80,-60],backgroundColor:C.red,borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:true,labels:{font:{size:9}}}}}});
     const billBase={labels:['Supply','Distribution','Renewable','Energy Eff.','Transition','RGGI'],vals:[74,55.5,18.5,12.95,14.8,9.25]};
     safeChart('c4a',{type:'doughnut',data:{labels:billBase.labels,datasets:[{data:billBase.vals,backgroundColor:[C.blue,C.navy,C.red,C.amber,'#7e22ce','#374151'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:8}}}}});
@@ -920,7 +1044,9 @@ function initCharts(tab){
   }
   if(tab==='boston'){
     safeChart('chartBCCE',{type:'doughnut',data:{labels:['BCCE Covers (Supply ~40%)','Untouched by BCCE (60%)'],datasets:[{data:[40,60],backgroundColor:[C.green,'rgba(192,57,43,0.25)'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},boxWidth:12}}}}});
-    safeChart('chartBCCEvMandate',{type:'bar',data:{labels:['BCCE Supply Savings','Mandate Premium Untouched'],datasets:[{data:[200,922],backgroundColor:[C.green,C.red],borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/yr'}}}}});
+    // Same defect as c1a: the mandate-premium bar was frozen at $922 while every
+    // "$765/yr mandate premium" caption on this tab had moved on.
+    safeChart('chartBCCEvMandate',{type:'bar',data:{labels:['BCCE Supply Savings','Mandate Premium Untouched'],datasets:[{data:[BCCE_SAVINGS,OVERPAY],backgroundColor:[C.green,C.red],borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/yr'}}}}});
     safeChart('chartBostonEmissions',{type:'doughnut',data:{labels:['Buildings (Large, BERDO)','Buildings (Small)','Transportation','Other'],datasets:[{data:[40,20,30,10],backgroundColor:[C.red,C.amber,C.blue,C.muted],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:10}}}}});
     safeChart('chartMandateStack',{type:'bar',data:{labels:['RGGI ($200M/yr)','RPS Compliance','Offshore Wind','Net-Zero Infra.','BCCE Savings'],datasets:[{data:[200,97,85,75,-200],backgroundColor:(ctx)=>ctx.parsed.y>0?C.red:C.green,borderRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.parsed.y>0?'Cost: ':'Savings: ')+'$'+Math.abs(c.parsed.y)+'/yr HH'}}}}});
   }
