@@ -401,14 +401,15 @@ if missing:
 # number quietly drift.
 
 # Regions allowed to carry a vintage other than the latest monthly EIA reading.
+# The Equivalence tab used to be listed here. It no longer is: every figure on it
+# now derives in-browser from the rate table, so it is live copy and the guard
+# below holds it to the same standard as everything else.
 FROZEN_REGIONS = (
     # The by-sector table and the industrial-rate alert above it are pinned to
     # their Oct-2025 vintage and labelled as such on the page.
     r'<!-- NEW: Industrial rate premium -->.*?(?=<!-- ===== H\.5151)',
     # Annual history: every past year's rate legitimately lives here.
     r'const ELEC_(?:MA|US) = \[[^\]]*\]',
-    # The Equivalence tab is a separate hand-built model (see the note above).
-    r'<div id="equivalence" class="tab-content">.*?(?=<!-- ===== BOSTON)',
 )
 
 live = html
@@ -419,6 +420,13 @@ for _pat in FROZEN_REGIONS:
                  f"staleness guard cannot tell live copy from a pinned vintage, "
                  f"so it would raise false alarms. Fix the marker. Nothing was "
                  f"written.")
+
+# Strip comments before scanning. The page's own code comments cite the stale
+# values they exist to warn about ("the caption read $922/yr extra ..."), and the
+# guard must not trip over its own documentation. Frozen regions come off first,
+# above, because their markers are themselves HTML comments.
+live = re.sub(r'<!--.*?-->', "", live, flags=re.S)   # HTML comments
+live = re.sub(r'^\s*//.*$', "", live, flags=re.M)    # whole-line JS comments
 
 # Rates this run wrote: the monthly state/US figures, plus the two closed-year
 # annual averages on the annual-average card.
@@ -432,6 +440,17 @@ allowed_per_yr = {
     "200",   # Boston BCCE supply-only savings, per city program data
     "377",   # untouched policy charges, Cut-vs-Kept tab
     "493",   # S.3143's own claim: $14.3B / 2.9M households / 10 yrs
+    "537",   # Equivalence timeline, anchored to 2010 -- a fact about a past year
+}
+
+# Values that must never reappear anywhere live, in any context. These are the
+# frozen figures the Equivalence tab was built on: $922 (the mislabelled caption)
+# and $987 (the number the rest of its maths silently implied). Both are gone,
+# both are derived now, and neither should ever be retyped -- so ban the literals
+# outright rather than waiting for them to rot again.
+BANNED_LITERALS = {
+    "922": "the old mislabelled electricity premium -- derive from OVERPAY",
+    "987": "the premium the old Equivalence maths implied -- derive from OVERPAY",
 }
 
 stale = set()
@@ -441,6 +460,10 @@ for m in re.finditer(r'(\d+\.\d+)&#x00A2;', live):
 for m in re.finditer(r'\$([\d,]+)/yr', live):
     if m.group(1) not in allowed_per_yr:
         stale.add(f"${m.group(1)}/yr")
+for _lit, _why in BANNED_LITERALS.items():
+    # Not part of a longer number: bare 922, not 1922 or 922.5.
+    if re.search(rf'(?<![\d.]){_lit}(?![\d.])', live):
+        stale.add(f"{_lit} (banned: {_why})")
 
 if stale:
     sys.exit(f"\nERROR: stale figure(s) survived the update: "

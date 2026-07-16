@@ -178,7 +178,7 @@ footer a:hover{color:var(--gold)}
 <div class="hero-stat"><div class="val bad">+56%</div><div class="lbl">Above National Avg</div></div>
 <div class="hero-stat"><div class="val bad">128-27</div><div class="lbl">H.5151 House Vote</div></div>
 <div class="hero-stat"><div class="val bad">$1.36B</div><div class="lbl">RGGI Carbon Tax Total</div></div>
-<div class="hero-stat"><div class="val bad">$6.83</div><div class="lbl">Gas/Gal Equivalence</div></div>
+<div class="hero-stat"><div class="val bad"><span id="equivHeroStat">&#x2014;</span></div><div class="lbl">Gas/Gal Equivalence</div></div>
 <div class="hero-stat"><div class="val bad">$534K</div><div class="lbl">To Hide Non-Compliance</div></div>
 </div>
 </div>
@@ -612,47 +612,47 @@ footer a:hover{color:var(--gold)}
 <div class="equiv-hero">
 <div>
 <div style="font-size:0.72rem;letter-spacing:3px;opacity:0.6;text-transform:uppercase;margin-bottom:10px;font-weight:600">The Gasoline Equivalence</div>
-<div style="font-size:0.95rem;opacity:0.85;margin-bottom:20px;line-height:1.65;max-width:380px">MA utility mandates cost the average household <strong style="color:#fca5a5">$1,932/yr</strong> more than the US average. To generate that same extra burden through gasoline alone (500 gal/yr), prices would need to reach:</div>
-<div class="big-price">$6.83</div>
+<div style="font-size:0.95rem;opacity:0.85;margin-bottom:20px;line-height:1.65;max-width:380px">MA utility mandates cost the average household <strong style="color:#fca5a5"><span id="equivTotalPremium">&#x2014;</span>/yr</strong> more than the US average. To generate that same extra burden through gasoline alone (<span id="equivGallonsYr">&#x2014;</span> gal/yr), prices would need to reach:</div>
+<div class="big-price"><span id="equivBigPrice">&#x2014;</span></div>
 <div class="sub-price">per gallon</div>
-<div style="margin-top:16px;font-size:0.8rem;opacity:0.7;line-height:1.6">130% above today's MA price of $2.97<br>$1.82 above the <strong style="color:#fbbf24">all-time US record</strong> of $5.01 (June 2022)</div>
+<div style="margin-top:16px;font-size:0.8rem;opacity:0.7;line-height:1.6"><span id="equivPctAbove">&#x2014;</span> above today's MA price of <span id="equivGasToday">&#x2014;</span><br><span id="equivVsRecord">&#x2014;</span> the <strong style="color:#fbbf24">all-time US record</strong> of <span id="equivRecord">&#x2014;</span> (June 2022)</div>
 </div>
 <div>
-<div style="font-size:0.65rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;font-family:monospace">PRICE GAUGE &#x2014; $/GALLON &#x00B7; SCALE: $0&#x2013;$8</div>
+<div style="font-size:0.65rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;font-family:monospace">PRICE GAUGE &#x2014; $/GALLON &#x00B7; SCALE: $0&#x2013;<span id="equivScaleHi2">&#x2014;</span></div>
 <div class="equiv-gauge" id="gaugeContainer"></div>
 </div>
 </div>
 <div class="data-card">
 <h3>Price Comparison &#x2014; What's Real vs. What Would Be Needed</h3>
-<p style="font-size:0.72rem;color:var(--muted);margin-bottom:18px">Scale: $0&#x2013;$8.00/gal &#x00B7; Vertical line marks the 2022 all-time record ($5.01)</p>
+<p style="font-size:0.72rem;color:var(--muted);margin-bottom:18px">Scale: $0&#x2013;<span id="equivScaleHi">&#x2014;</span>/gal &#x00B7; Vertical line marks the 2022 all-time record (<span id="equivRecord2">&#x2014;</span>)</p>
 <div id="equivBars"></div>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
 <div class="data-card" style="margin-bottom:0">
-<h3>The $3.86/Gal Breakdown</h3>
+<h3>The <span id="equivBreakdownTotal">&#x2014;</span>/Gal Breakdown</h3>
 <p style="font-size:0.72rem;color:var(--muted);margin-bottom:16px">Where each cent of the equivalence comes from</p>
-<div class="breakdown-item elec"><div style="display:flex;justify-content:space-between"><div style="font-size:0.78rem;font-weight:600">&#x26A1; Electricity mandate premium</div><div style="font-family:monospace;color:var(--red);font-weight:700;font-size:1rem">+$1.97/gal</div></div><div style="font-size:0.68rem;color:var(--muted);margin-top:4px">$922/yr extra &#x00F7; 500 gal/yr</div><div class="equiv-prog"><div class="equiv-prog-fill" style="width:50.7%;background:var(--red)"></div></div></div>
-<div class="breakdown-item gas"><div style="display:flex;justify-content:space-between"><div style="font-size:0.78rem;font-weight:600">&#x1F525; Natural gas pipeline/mandate premium</div><div style="font-family:monospace;color:var(--amber);font-weight:700;font-size:1rem">+$1.89/gal</div></div><div style="font-size:0.68rem;color:var(--muted);margin-top:4px">$945/yr extra &#x00F7; 500 gal/yr</div><div class="equiv-prog"><div class="equiv-prog-fill" style="width:48.6%;background:var(--amber)"></div></div></div>
-<div style="border-top:2px solid var(--navy);padding-top:12px;margin-top:8px;display:flex;justify-content:space-between;align-items:center"><div style="font-size:0.78rem;color:var(--muted)">Total rise needed from today's $2.97</div><div style="font-family:monospace;color:var(--red);font-weight:700;font-size:1.2rem">+$3.86 &#x2192; $6.83</div></div>
+<div class="breakdown-item elec"><div style="display:flex;justify-content:space-between"><div style="font-size:0.78rem;font-weight:600">&#x26A1; Electricity mandate premium</div><div style="font-family:monospace;color:var(--red);font-weight:700;font-size:1rem"><span id="equivElecPerGal">&#x2014;</span></div></div><div style="font-size:0.68rem;color:var(--muted);margin-top:4px"><span id="equivElecSrc">&#x2014;</span></div><div class="equiv-prog"><div class="equiv-prog-fill" id="equivElecBar" style="background:var(--red)"></div></div></div>
+<div class="breakdown-item gas"><div style="display:flex;justify-content:space-between"><div style="font-size:0.78rem;font-weight:600">&#x1F525; Natural gas pipeline/mandate premium</div><div style="font-family:monospace;color:var(--amber);font-weight:700;font-size:1rem"><span id="equivNgPerGal">&#x2014;</span></div></div><div style="font-size:0.68rem;color:var(--muted);margin-top:4px"><span id="equivNgSrc">&#x2014;</span></div><div class="equiv-prog"><div class="equiv-prog-fill" id="equivNgBar" style="background:var(--amber)"></div></div></div>
+<div style="border-top:2px solid var(--navy);padding-top:12px;margin-top:8px;display:flex;justify-content:space-between;align-items:center"><div style="font-size:0.78rem;color:var(--muted)">Total rise needed from today's <span id="equivRiseFrom">&#x2014;</span></div><div style="font-family:monospace;color:var(--red);font-weight:700;font-size:1.2rem"><span id="equivRise">&#x2014;</span></div></div>
 </div>
 <div class="data-card" style="margin-bottom:0">
 <h3>Monthly Hidden Burden</h3>
-<p style="font-size:0.72rem;color:var(--muted);margin-bottom:14px">$161/mo extra &#x2014; what it looks like in everyday terms</p>
+<p style="font-size:0.72rem;color:var(--muted);margin-bottom:14px"><span id="equivMonthly">&#x2014;</span>/mo extra &#x2014; what it looks like in everyday terms</p>
 <div class="metric-trio">
-<div class="metric-card"><div class="mv red">$161</div><div class="ml">extra per month vs US avg</div></div>
-<div class="metric-card"><div class="mv amber">54 gal</div><div class="ml">equivalent gallons at $2.97</div></div>
-<div class="metric-card"><div class="mv blue">1,512 mi</div><div class="ml">worth of driving at 28 MPG</div></div>
+<div class="metric-card"><div class="mv red"><span id="equivMonthly2">&#x2014;</span></div><div class="ml">extra per month vs US avg</div></div>
+<div class="metric-card"><div class="mv amber"><span id="equivGallonsEquiv">&#x2014;</span></div><div class="ml">equivalent gallons at <span id="equivGallonsAt">&#x2014;</span></div></div>
+<div class="metric-card"><div class="mv blue"><span id="equivMiles">&#x2014;</span></div><div class="ml">worth of driving at <span id="equivMpg">&#x2014;</span></div></div>
 </div>
 <div class="chart-area" style="height:160px;margin-top:8px"><canvas id="chartMonthlyBurden"></canvas></div>
 </div>
 </div>
 <div class="data-card">
 <h3>The Outrage Asymmetry</h3>
-<p style="font-size:0.78rem;color:var(--muted);margin-bottom:20px">A 50&#x00A2;/gal gasoline spike dominates headlines. The utility mandate premium is 8&#x00D7; larger &#x2014; and generates almost no public reaction at all.</p>
+<p style="font-size:0.78rem;color:var(--muted);margin-bottom:20px">A 50&#x00A2;/gal gasoline spike dominates headlines. The utility mandate premium is <span id="outrageMult">&#x2014;</span> the size of it &#x2014; and generates almost no public reaction at all.</p>
 <div class="outrage-grid">
 <div>
-<div class="outrage-bar-wrap"><div class="outrage-bar-label"><span>50&#x00A2; gas spike (gets headlines)</span><span style="color:var(--amber);font-weight:700">$250/yr</span></div><div class="outrage-bar-track"><div class="outrage-bar-fill" style="width:12.8%;background:var(--amber)">$250</div></div></div>
-<div class="outrage-bar-wrap"><div class="outrage-bar-label"><span>MA utility mandate premium (silent)</span><span style="color:var(--red);font-weight:700">$1,932/yr</span></div><div class="outrage-bar-track"><div class="outrage-bar-fill" style="width:100%;background:var(--red)">$1,932</div></div></div>
+<div class="outrage-bar-wrap"><div class="outrage-bar-label"><span>50&#x00A2; gas spike (gets headlines)</span><span style="color:var(--amber);font-weight:700"><span id="equivSpikeCost">&#x2014;</span></span></div><div class="outrage-bar-track"><div class="outrage-bar-fill" id="equivSpikeBar" style="background:var(--amber)"></div></div></div>
+<div class="outrage-bar-wrap"><div class="outrage-bar-label"><span>MA utility mandate premium (silent)</span><span style="color:var(--red);font-weight:700"><span id="equivPremiumCost">&#x2014;</span></span></div><div class="outrage-bar-track"><div class="outrage-bar-fill" id="equivPremiumBar" style="background:var(--red)"></div></div></div>
 </div>
 <div><div class="chart-area" style="height:200px"><canvas id="chartOutrage"></canvas></div></div>
 </div>
@@ -665,7 +665,7 @@ footer a:hover{color:var(--gold)}
 <div class="tl-i"><div class="tl-date">2022</div><div class="tl-ev r">Record gas prices &#x2014; still can't match utility premium</div><div class="tl-desc">MA gasoline hit $3.98/gal. Yet the utility mandate premium was already larger.</div></div>
 <div class="tl-i pos"><div class="tl-date">2025</div><div class="tl-ev g">Gasoline below national average &#x2014; utilities at record high</div><div class="tl-desc">MA gasoline is $0.13 cheaper than the US average. MA electricity is 79% more expensive. The market delivered relief. Policy did not.</div></div>
 </div>
-<div class="verdict amber"><h3>Gasoline would need to reach $6.83/gal &#x2014; a price never seen in US history &#x2014; to impose the burden MA utility mandates already impose today.</h3><p>The market delivered affordable gasoline. Policy blocked affordable electricity.</p></div>
+<div class="verdict amber"><h3>Gasoline would need to reach <span id="equivVerdictPrice">&#x2014;</span>/gal<span id="equivVerdictRecord"> </span>to impose the burden MA utility mandates already impose today.</h3><p>The market delivered affordable gasoline. Policy blocked affordable electricity.</p></div>
 </div>
 
 <!-- ===== BOSTON 2030 CLIMATE ACTION PLAN ===== -->
@@ -864,6 +864,18 @@ const DIESEL_US = [3.083,3.842,3.971,3.923,3.830,2.710,2.296,2.647,3.179,3.055,2
 const DIESEL_NE = [3.156,3.986,4.100,4.059,3.988,2.838,2.424,2.787,3.349,3.219,2.712,3.504,5.28,4.46,4.05,3.77];
 const ELEC_MA = [14.59,14.67,14.91,15.83,17.39,19.83,19.0,20.06,21.61,21.92,21.97,22.89,25.97,29.61,29.35,30.48];
 const ELEC_US = [11.54,11.72,11.88,12.13,12.52,12.65,12.55,12.89,12.87,13.01,13.15,13.66,15.04,16.0,16.48,17.3];
+// Residential natural gas, $/therm, annual averages aligned to YEARS. Hoisted to
+// module scope (they used to be local to the gas-vs-utility tab) because the
+// Equivalence model now derives its natural-gas premium from these rather than
+// repeating a hand-typed $945.
+const MA_NG = [1.45,1.58,1.35,1.32,1.42,1.28,1.22,1.29,1.38,1.36,1.26,1.68,2.28,2.54,2.58,2.60];
+const US_NG = [1.00,1.10,1.02,1.06,1.13,1.00,0.97,1.06,1.14,1.10,0.97,1.30,1.74,1.84,1.90,1.25];
+
+// The household consumption conventions this page bills against.
+const KWH_YR=7200;      // 600 kWh/mo, annualized
+const THERMS_YR=700;
+const GALLONS_YR=500;
+const MPG=28;
 
 // ── Derived figures ─────────────────────────────────────────────────────────
 // update-energy-dashboard.py rewrites the New England rate table's <tbody> from
@@ -928,7 +940,6 @@ const EIA_PERIOD=(()=>{
   return m?m[1]:'';
 })();
 
-const KWH_YR=7200;      // the page's 600 kWh/mo billing convention, annualized
 const OVERPAY=Math.round((MA_RATE-US_RATE)/100*KWH_YR);
 // Realistic H.5151 relief, from the bill-text analysis plotted in c1b
 // (Mass Save cut $80 + ACP rebates $40 + net metering $30). Named once here so
@@ -972,6 +983,97 @@ setTxt('s3143FootPeriod',EIA_PERIOD);
 setTxt('footPeriod',EIA_PERIOD);
 setTxt('yrRangeHist',yrRange);
 setTxt('yrRangeGap',yrRange);
+
+// ── The Equivalence model ───────────────────────────────────────────────────
+// "What would gasoline have to cost to hurt as much as MA's utility mandates?"
+// Every figure on that tab is downstream of two annual premiums, so both are
+// derived here and the whole chain computes from them at render time.
+//
+// It used to be hand-typed, and the chain had two different frozen numbers in
+// it: the caption read "$922/yr extra" while the per-gallon maths, the $1,932
+// total and the $6.83 headline all implied $987 — and neither was the live
+// figure. Relabelling to $987 would only have re-frozen the same bug one number
+// to the left, so the electricity leg now reads the same OVERPAY the rest of
+// the page uses.
+//
+// The natural-gas leg is NOT a constant either: it falls out of the MA_NG/US_NG
+// series above at the page's 700-therm convention —
+// (2.60 − 1.25) × 700 = $945, exactly the figure that was hand-typed here.
+const NG_PREMIUM=Math.round((MA_NG[MA_NG.length-1]-US_NG[US_NG.length-1])*THERMS_YR);
+const TOTAL_PREMIUM=OVERPAY+NG_PREMIUM;
+const ELEC_PER_GAL=OVERPAY/GALLONS_YR;
+const NG_PER_GAL=NG_PREMIUM/GALLONS_YR;
+const TOTAL_PER_GAL=ELEC_PER_GAL+NG_PER_GAL;
+const MA_GAS_TODAY=GAS_MA[GAS_MA.length-1];
+const REQUIRED_PRICE=MA_GAS_TODAY+TOTAL_PER_GAL;
+// All-time US retail gasoline record: $5.01/gal, June 2022 (AAA national
+// average). A fact about a past moment, so it is a constant — not a live
+// superlative that could quietly go stale.
+const GAS_RECORD=5.01;
+// Gauge/bar scale. Grows if the required price ever exceeds it, so a bar can
+// never overflow its track.
+const MAX_SCALE=Math.max(8,Math.ceil(REQUIRED_PRICE));
+const SPIKE_PER_GAL=0.50;                        // the "50¢ spike" that makes headlines
+const SPIKE_COST=Math.round(GALLONS_YR*SPIKE_PER_GAL);
+const MONTHLY_EXTRA=TOTAL_PREMIUM/12;
+const GALLONS_EQUIV=Math.round(MONTHLY_EXTRA/MA_GAS_TODAY);
+
+const money=v=>isNaN(v)?'':'$'+Math.round(v).toLocaleString();
+const perGal=v=>isNaN(v)?'':'$'+v.toFixed(2);
+
+setTxt('equivTotalPremium',money(TOTAL_PREMIUM));
+setTxt('equivGallonsYr',GALLONS_YR.toLocaleString());
+setTxt('equivBigPrice',perGal(REQUIRED_PRICE));
+setTxt('equivPctAbove',isNaN(REQUIRED_PRICE)?'':Math.round((REQUIRED_PRICE-MA_GAS_TODAY)/MA_GAS_TODAY*100)+'%');
+setTxt('equivGasToday',perGal(MA_GAS_TODAY));
+// Sign-aware so the sentence follows the data instead of asserting a direction
+// that could one day be false.
+setTxt('equivVsRecord',isNaN(REQUIRED_PRICE)?'':perGal(Math.abs(REQUIRED_PRICE-GAS_RECORD))+(REQUIRED_PRICE>=GAS_RECORD?' above':' below'));
+setTxt('equivRecord',perGal(GAS_RECORD));
+setTxt('equivScaleHi',perGal(MAX_SCALE));
+setTxt('equivScaleHi2','$'+MAX_SCALE);
+setTxt('equivRecord2',perGal(GAS_RECORD));
+setTxt('equivBreakdownTotal',perGal(TOTAL_PER_GAL));
+setTxt('equivElecPerGal',isNaN(ELEC_PER_GAL)?'':'+'+perGal(ELEC_PER_GAL)+'/gal');
+setTxt('equivElecSrc',money(OVERPAY)+'/yr extra ÷ '+GALLONS_YR+' gal/yr');
+setTxt('equivNgPerGal',isNaN(NG_PER_GAL)?'':'+'+perGal(NG_PER_GAL)+'/gal');
+setTxt('equivNgSrc',money(NG_PREMIUM)+'/yr extra ÷ '+GALLONS_YR+' gal/yr');
+setTxt('equivRiseFrom',perGal(MA_GAS_TODAY));
+setTxt('equivRise',isNaN(TOTAL_PER_GAL)?'':'+'+perGal(TOTAL_PER_GAL)+' → '+perGal(REQUIRED_PRICE));
+setTxt('equivMonthly',money(MONTHLY_EXTRA));
+setTxt('equivMonthly2',money(MONTHLY_EXTRA));
+setTxt('equivGallonsEquiv',isNaN(GALLONS_EQUIV)?'':GALLONS_EQUIV+' gal');
+setTxt('equivGallonsAt',perGal(MA_GAS_TODAY));
+// Miles derive from the DISPLAYED gallons so a reader checking 48 x 28 lands on
+// the number actually shown.
+setTxt('equivMiles',isNaN(GALLONS_EQUIV)?'':(GALLONS_EQUIV*MPG).toLocaleString()+' mi');
+setTxt('equivMpg',MPG+' MPG');
+setTxt('equivSpikeCost',money(SPIKE_COST)+'/yr');
+setTxt('equivPremiumCost',money(TOTAL_PREMIUM)+'/yr');
+// "N× the size of it" rather than "N× larger": stays grammatical whatever the
+// ratio does, so it can never assert a direction the data has reversed.
+setTxt('outrageMult',isNaN(TOTAL_PREMIUM)?'':(TOTAL_PREMIUM/SPIKE_COST).toFixed(1)+'×');
+setTxt('equivVerdictPrice',perGal(REQUIRED_PRICE));
+setTxt('equivHeroStat',perGal(REQUIRED_PRICE));
+
+// Progress-bar widths as each leg's share of the per-gallon total.
+const setW=(id,pct)=>{const e=document.getElementById(id);if(e&&!isNaN(pct))e.style.width=pct.toFixed(1)+'%';};
+setW('equivElecBar',ELEC_PER_GAL/TOTAL_PER_GAL*100);
+setW('equivNgBar',NG_PER_GAL/TOTAL_PER_GAL*100);
+setW('equivSpikeBar',SPIKE_COST/TOTAL_PREMIUM*100);
+setW('equivPremiumBar',100);
+// The bar fills carry their own value as inner text.
+setTxt('equivSpikeBar',money(SPIKE_COST));
+setTxt('equivPremiumBar',money(TOTAL_PREMIUM));
+
+// The "never seen in US history" clause renders only while it is actually true.
+// If MA's premium ever fell far enough that gasoline HAS been this expensive,
+// the clause disappears rather than becoming a lie. Empty is a legitimate value
+// here, so this bypasses setTxt's placeholder guard.
+(()=>{
+  const e=document.getElementById('equivVerdictRecord');
+  if(e) e.textContent=(REQUIRED_PRICE>GAS_RECORD)?' — a price never seen in US history — ':' ';
+})();
 
 // The sector table is deliberately frozen at its Oct-2025 vintage (see its
 // source line), but its "extra per household" cell was hand-typed as $922 and
@@ -1030,16 +1132,20 @@ function initCharts(tab){
     safeChart('chartDiesel',{type:'line',data:{labels:YEARS,datasets:[{label:'NE Diesel',data:DIESEL_NE,borderColor:C.red,backgroundColor:'rgba(192,57,43,0.06)',fill:true,tension:0.4,borderWidth:2,pointRadius:3},{label:'US Diesel',data:DIESEL_US,borderColor:C.blue,borderWidth:2,tension:0.4,pointRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:true,labels:{font:{size:9}}}}}});
     const tbody=document.getElementById('priceTableBody');
     if(tbody){tbody.innerHTML=YEARS.map((y,i)=>{const gd=((GAS_MA[i]/GAS_US[i]-1)*100).toFixed(1);const dd=((DIESEL_NE[i]/DIESEL_US[i]-1)*100).toFixed(1);const ed=((ELEC_MA[i]/ELEC_US[i]-1)*100).toFixed(1);const ec=parseFloat(ed)>40?'highlight':'';return`<tr><td>${y}</td><td>$${GAS_US[i].toFixed(2)}</td><td>$${GAS_MA[i].toFixed(2)}</td><td class="${parseFloat(gd)>5?'highlight':parseFloat(gd)<-5?'good':''}">${gd>0?'+':''}${gd}%</td><td>$${DIESEL_US[i].toFixed(2)}</td><td>$${DIESEL_NE[i].toFixed(2)}</td><td>${dd>0?'+':''}${dd}%</td><td class="${ec}">${ELEC_MA[i].toFixed(1)}¢</td><td>${ELEC_US[i].toFixed(1)}¢</td><td class="${ec}">${ed>0?'+':''}${ed}%</td></tr>`;}).join('');}
-    const MA_NG=[1.45,1.58,1.35,1.32,1.42,1.28,1.22,1.29,1.38,1.36,1.26,1.68,2.28,2.54,2.58,2.60];
-    const US_NG=[1.00,1.10,1.02,1.06,1.13,1.00,0.97,1.06,1.14,1.10,0.97,1.30,1.74,1.84,1.90,1.25];
-    const THERMS=700;const KWH=7200;const GALS=500;
-    const maTotal=YEARS.map((_,i)=>+(ELEC_MA[i]/100*KWH+MA_NG[i]*THERMS+GAS_MA[i]*GALS).toFixed(0));
-    const usTotal=YEARS.map((_,i)=>+(ELEC_US[i]/100*KWH+US_NG[i]*THERMS+GAS_US[i]*GALS).toFixed(0));
+    // MA_NG / US_NG and the consumption conventions are now module-scope — the
+    // Equivalence tab derives from the same arrays, so they can't disagree.
+    const maTotal=YEARS.map((_,i)=>+(ELEC_MA[i]/100*KWH_YR+MA_NG[i]*THERMS_YR+GAS_MA[i]*GALLONS_YR).toFixed(0));
+    const usTotal=YEARS.map((_,i)=>+(ELEC_US[i]/100*KWH_YR+US_NG[i]*THERMS_YR+GAS_US[i]*GALLONS_YR).toFixed(0));
     safeChart('chartBurden',{type:'bar',data:{labels:YEARS,datasets:[{label:'MA Total',data:maTotal,backgroundColor:C.red,borderRadius:3},{label:'US Total',data:usTotal,backgroundColor:C.green,borderRadius:3}]},options:Object.assign({},tinyOpts(),{plugins:{legend:{display:true,labels:{font:{size:9}}},tooltip:{callbacks:{label:function(c){return '$'+c.parsed.y.toLocaleString()+'/yr';}}}}})});
   }
   if(tab==='equivalence'){
-    safeChart('chartMonthlyBurden',{type:'bar',data:{labels:['Elec Extra','Gas Extra','Total Extra','US Baseline'],datasets:[{data:[77,79,161,104],backgroundColor:[C.red,C.amber,C.red,C.green],borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/mo'}}}}});
-    safeChart('chartOutrage',{type:'bar',data:{labels:['50¢ Gas Spike','Utility Mandate Premium'],datasets:[{data:[250,1932],backgroundColor:[C.amber,C.red],borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/yr'}}}}});
+    // Every bar derives. "US Baseline" is the US-average electricity bill at the
+    // page's 600 kWh/mo convention -- it used to be hard-coded 104, which is the
+    // 2025 ANNUAL average rate (17.3c x 600), while the Elec Extra beside it came
+    // from the latest MONTHLY rate. Same vintage for both now, so Elec Extra +
+    // US Baseline is actually MA's monthly bill.
+    safeChart('chartMonthlyBurden',{type:'bar',data:{labels:['Elec Extra','Gas Extra','Total Extra','US Baseline'],datasets:[{data:[Math.round(OVERPAY/12),Math.round(NG_PREMIUM/12),Math.round(MONTHLY_EXTRA),Math.round(US_RATE/100*(KWH_YR/12))],backgroundColor:[C.red,C.amber,C.red,C.green],borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/mo'}}}}});
+    safeChart('chartOutrage',{type:'bar',data:{labels:[(SPIKE_PER_GAL*100)+'¢ Gas Spike','Utility Mandate Premium'],datasets:[{data:[SPIKE_COST,TOTAL_PREMIUM],backgroundColor:[C.amber,C.red],borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/yr'}}}}});
     buildGauge();buildEquivBars();
   }
   if(tab==='boston'){
@@ -1056,22 +1162,25 @@ function buildGauge(){
   const gc=document.getElementById('gaugeContainer');
   if(!gc)return;
   gc.innerHTML='';
-  const prices=[{label:'MA Gas Today',val:2.97,color:'#7fd8a6'},{label:'All-Time US Record (Jun 2022)',val:5.01,color:'#fbbf24'},{label:'Required to Match MA Mandate Premium',val:6.83,color:'#fca5a5'}];
-  const maxV=8;
+  const prices=[{label:'MA Gas Today',val:MA_GAS_TODAY,color:'#7fd8a6'},{label:'All-Time US Record (Jun 2022)',val:GAS_RECORD,color:'#fbbf24'},{label:'Required to Match MA Mandate Premium',val:REQUIRED_PRICE,color:'#fca5a5'}];
+  const maxV=MAX_SCALE;
   prices.forEach(p=>{
     const pct=(p.val/maxV)*100;
     const row=document.createElement('div');row.className='equiv-bar-row';
     row.innerHTML=`<div class="equiv-bar-label">${p.label}</div><div class="equiv-bar-track"><div class="equiv-bar-fill" style="width:${pct}%;background:${p.color};color:#0f2942"><div class="equiv-price-tag" style="color:${p.color}">$${p.val.toFixed(2)}</div></div></div>`;
     gc.appendChild(row);
   });
-  const refLine=document.createElement('div');refLine.style.cssText='margin-top:8px;padding:8px 0;border-top:2px dashed rgba(255,255,255,0.3);font-size:0.68rem;color:rgba(255,255,255,0.5);text-align:center';refLine.textContent='Scale: $0 – $8.00/gallon';gc.appendChild(refLine);
+  const refLine=document.createElement('div');refLine.style.cssText='margin-top:8px;padding:8px 0;border-top:2px dashed rgba(255,255,255,0.3);font-size:0.68rem;color:rgba(255,255,255,0.5);text-align:center';refLine.textContent='Scale: $0 – $'+MAX_SCALE.toFixed(2)+'/gallon';gc.appendChild(refLine);
 }
 
 function buildEquivBars(){
   const eb=document.getElementById('equivBars');
   if(!eb)return;
-  const items=[{label:'MA Gas Today — $2.97/gal',val:2.97,color:C.green,pct:37.1},{label:'All-Time US Record — $5.01/gal (Jun 2022)',val:5.01,color:C.amber,pct:62.6},{label:'Required to Match MA Utility Mandate Premium — $6.83/gal',val:6.83,color:C.red,pct:85.4}];
-  const refPct=5.01/8*100;
+  // Labels and widths both derive from the values, so a bar's caption can never
+  // disagree with the bar itself.
+  const items=[{label:'MA Gas Today',val:MA_GAS_TODAY,color:C.green},{label:'All-Time US Record',val:GAS_RECORD,color:C.amber,note:' (Jun 2022)'},{label:'Required to Match MA Utility Mandate Premium',val:REQUIRED_PRICE,color:C.red}]
+    .map(it=>Object.assign(it,{pct:it.val/MAX_SCALE*100,label:it.label+' — $'+it.val.toFixed(2)+'/gal'+(it.note||'')}));
+  const refPct=GAS_RECORD/MAX_SCALE*100;
   eb.innerHTML=items.map(it=>`<div class="equiv-bar-row"><div class="equiv-bar-label">${it.label}</div><div class="equiv-bar-track" style="position:relative"><div class="equiv-bar-fill" style="width:${it.pct}%;background:${it.color};color:#fff"><span style="margin-left:6px">$${it.val.toFixed(2)}</span></div><div style="position:absolute;left:${refPct}%;top:0;bottom:0;width:2px;background:${C.amber};opacity:0.6"></div></div></div>`).join('');
 }
 
