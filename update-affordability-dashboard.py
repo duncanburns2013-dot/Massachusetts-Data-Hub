@@ -72,6 +72,12 @@ def do_replace(html, old, new, label=""):
         print(f"  {label}: '{old}' -> '{new}' ({count}x)")
     return html, count
 
+# Counts how many DATA figures actually moved. The "Last Updated" stamp below is
+# gated on this: stamping the run date unconditionally rewrote the file on every
+# run, so `html != original` was always true and the page committed daily -- looking
+# freshly maintained while most of the replacements below silently matched nothing.
+data_changes = 0
+
 # Unemployment updates
 if ma_unemp.get("value"):
     new_ma = ma_unemp["value"]
@@ -79,13 +85,19 @@ if ma_unemp.get("value"):
     if unemp_match:
         old_val = unemp_match.group(1)
         if old_val != new_ma:
-            html, _ = do_replace(html, f"{old_val}%", f"{new_ma}%", "MA Unemployment")
+            html, n = do_replace(html, f"{old_val}%", f"{new_ma}%", "MA Unemployment")
+            data_changes += n
+    else:
+        print("  !! MA Unemployment: anchor not found in html[:3000] -- NOT updated")
     if us_unemp.get("value"):
         new_delta = round(float(new_ma) - float(us_unemp["value"]), 1)
         sign = "+" if new_delta >= 0 else ""
         delta_match = re.search(r'vs National.*?([+\-]\d+\.\d+)%', html[:3000])
         if delta_match:
-            html, _ = do_replace(html, f"{delta_match.group(1)}%", f"{sign}{new_delta}%", "Unemp Delta")
+            html, n = do_replace(html, f"{delta_match.group(1)}%", f"{sign}{new_delta}%", "Unemp Delta")
+            data_changes += n
+        else:
+            print("  !! Unemp Delta: 'vs National' anchor not found -- NOT updated")
 
 # Electricity updates
 if ma_elec and us_elec:
@@ -101,26 +113,43 @@ if ma_elec and us_elec:
         us_rates = [(v, c) for v, c in counts.items() if 15 < float(v) < 25]
         if ma_rates:
             old_ma = max(ma_rates, key=lambda x: x[1])[0]
-            html, _ = do_replace(html, f"{old_ma}¢", f"{ma_elec:.2f}¢", "MA Elec")
+            html, n = do_replace(html, f"{old_ma}¢", f"{ma_elec:.2f}¢", "MA Elec")
+            data_changes += n
         if us_rates:
             old_us = max(us_rates, key=lambda x: x[1])[0]
-            html, _ = do_replace(html, f"{old_us}¢", f"{us_elec:.2f}¢", "US Elec")
+            html, n = do_replace(html, f"{old_us}¢", f"{us_elec:.2f}¢", "US Elec")
+            data_changes += n
 
     if elec_period:
         y, m = elec_period.split("-")
         months = ["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
         new_label = f"{months[int(m)]} {y}"
-        html, _ = do_replace(html, "Jan 2026", new_label, "EIA Period")
+        # Anchored on a literal month, so the first successful run ate its own anchor
+        # and the label has been frozen ever since while the rates beside it kept
+        # moving. Match whatever month label is actually there instead.
+        period_match = re.search(r'\b((?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) 20\d{2})\b', html)
+        if period_match and period_match.group(1) != new_label:
+            html, n = do_replace(html, period_match.group(1), new_label, "EIA Period")
+            data_changes += n
+        elif not period_match:
+            print("  !! EIA Period: no month label found -- NOT updated")
 
-# Update date
-today = datetime.now().strftime("%B %d, %Y")
-date_match = re.search(r'Last Updated:.*?(\w+ \d+, \d{4})', html)
-if date_match:
-    html, _ = do_replace(html, date_match.group(1), today, "Last Updated")
+# Only stamp the date if real data moved. A run that changed nothing must leave the
+# file untouched so it does not advertise a freshness it does not have, and so a
+# dead anchor shows up as an absent commit instead of a daily green one.
+if data_changes > 0:
+    today = datetime.now().strftime("%B %d, %Y")
+    date_match = re.search(r'Last Updated:.*?(\w+ \d+, \d{4})', html)
+    if date_match:
+        html, _ = do_replace(html, date_match.group(1), today, "Last Updated")
+else:
+    print("\n!! No data figures changed -- leaving the date stamp alone.")
+    print("   If this repeats every run, an anchor has gone stale: the page is")
+    print("   frozen, not current. Check the '!!' lines above.")
 
 if html != original:
     with open(HTML_FILE, "w", encoding="utf-8") as f:
         f.write(html)
-    print(f"\n✓ Updated {HTML_FILE}")
+    print(f"\n✓ Updated {HTML_FILE} ({data_changes} data figure(s) changed)")
 else:
     print("\nNo changes needed.")
