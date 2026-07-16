@@ -34,9 +34,46 @@ MULTILINGUAL_CITIES = [
     "Framingham", "Brockton", "Lowell", "Malden", "Waltham"
 ]
 
-# Current hardcoded baselines (for safe fallback if a city can't be fetched)
-OLD_FB = [44, 38, 35, 35, 34, 33, 32, 31, 31, 30, 29, 28, 27, 23, 22, 19]
-OLD_ML = [78.5, 70.4, 58.3, 55.1, 52.6, 48.2, 45.1, 44.8, 43.5, 42.1]
+# NOTE: there used to be OLD_FB / OLD_ML baselines here, hardcoding the values as
+# they stood when this script was written. They served double duty: fallback for an
+# unfetchable city, AND the search key for the replacement. That second use made the
+# script single-shot -- it searched for `data:[44,38,35,...]`, and its own first
+# successful run replaced that array with `data:[46,44,45,...]`, after which the
+# search never matched again and every later run silently did nothing.
+#
+# Both charts are now located by their Chart.js dataset label, which does not change
+# when the data does, and the fallback is read out of the file itself. The script can
+# therefore run any number of times, and a missing city keeps whatever is currently
+# published rather than reverting to a 2-year-old constant.
+
+
+def find_chart_data(html, label):
+    """Return (match, [current values]) for the dataset labelled `label`.
+
+    Anchors on `label:'...'` and takes the first data:[...] after it. Bounded to a
+    short window so it cannot wander into the next dataset if markup shifts.
+    """
+    m = re.search(
+        r"(label:\s*'" + re.escape(label) + r"'\s*,\s*data:\s*\[)([^\]]*)(\])", html
+    )
+    if not m:
+        return None, None
+    vals = [v.strip() for v in m.group(2).split(",") if v.strip()]
+    return m, vals
+
+
+def replace_chart_data(html, label, new_values, what):
+    """Rewrite the data array of the dataset labelled `label`. Returns (html, ok)."""
+    m, current = find_chart_data(html, label)
+    if not m:
+        print(f"  !! {what}: no dataset labelled '{label}' found -- NOT updated")
+        return html, False
+    new_arr = ",".join(str(x) for x in new_values)
+    if new_arr == m.group(2):
+        return html, False
+    html = html[: m.start()] + m.group(1) + new_arr + m.group(3) + html[m.end():]
+    print(f"  {what}: updated ({len(new_values)} values)")
+    return html, True
 
 # ACS vintage to try (newest first)
 ACS_YEARS = [2024, 2023]
@@ -145,46 +182,52 @@ def update_immigration(fb_data, lang_data):
 
     # ââ Foreign-born chart ââ
     if fb_data:
+        _m, cur_fb = find_chart_data(html, "Foreign-Born %")
         new_fb = []
         for i, city in enumerate(FOREIGN_BORN_CITIES):
             val = fb_data.get(city)
             if val is not None:
                 new_fb.append(val)
-            else:
-                new_fb.append(OLD_FB[i])
-                print(f"  WARN: No Census data for {city}, keeping {OLD_FB[i]}%")
-
-        old_arr = ",".join(str(x) for x in OLD_FB)
-        new_arr = ",".join(str(x) for x in new_fb)
-        if old_arr != new_arr:
-            html, ok = replace_once(html, f"data:[{old_arr}]", f"data:[{new_arr}]",
-                                    "Foreign-born chart")
+            elif cur_fb and i < len(cur_fb):
+                # Keep what is currently published, not a constant from 2 years ago.
+                new_fb.append(cur_fb[i])
+                print(f"  WARN: No Census data for {city}, keeping {cur_fb[i]}%")
+        if len(new_fb) == len(FOREIGN_BORN_CITIES):
+            html, _ok = replace_chart_data(html, "Foreign-Born %", new_fb,
+                                           "Foreign-born chart")
+        else:
+            print("  !! Foreign-born: incomplete data -- NOT updated")
 
         # Update callout text
-        for city, old_pct_str in [("Lawrence", "35%"), ("Methuen", "23%")]:
+        for city in ("Lawrence", "Methuen"):
             new_pct = fb_data.get(city)
-            if new_pct is not None and f"{new_pct}%" != old_pct_str:
-                html = html.replace(
-                    f"{city}:</strong> {old_pct_str} foreign-born",
-                    f"{city}:</strong> {new_pct}% foreign-born"
-                )
+            old_pct_str = None
+            _cre = re.compile(r"(" + re.escape(city) + r":</strong>\s*)(\d+(?:\.\d+)?)(% foreign-born)")
+            _cm = _cre.search(html)
+            if _cm:
+                old_pct_str = _cm.group(2) + "%"
+            else:
+                print(f"  !! {city} callout: anchor not found -- NOT updated")
+            if new_pct is not None and _cm and f"{new_pct}%" != old_pct_str:
+                html = _cre.sub(lambda m: f"{m.group(1)}{new_pct}{m.group(3)}", html, count=1)
                 print(f"  {city} callout: {old_pct_str} â {new_pct}%")
 
     # ââ Multilingual chart ââ
     if lang_data:
+        _m, cur_ml = find_chart_data(html, "Multilingual %")
         new_ml = []
         for i, city in enumerate(MULTILINGUAL_CITIES):
             val = lang_data.get(city)
             if val is not None:
                 new_ml.append(val)
-            else:
-                new_ml.append(OLD_ML[i])
-
-        old_arr = ",".join(str(x) for x in OLD_ML)
-        new_arr = ",".join(str(x) for x in new_ml)
-        if old_arr != new_arr:
-            html, ok = replace_once(html, f"data:[{old_arr}]", f"data:[{new_arr}]",
-                                    "Multilingual chart")
+            elif cur_ml and i < len(cur_ml):
+                new_ml.append(cur_ml[i])
+                print(f"  WARN: No Census data for {city}, keeping {cur_ml[i]}%")
+        if len(new_ml) == len(MULTILINGUAL_CITIES):
+            html, _ok = replace_chart_data(html, "Multilingual %", new_ml,
+                                           "Multilingual chart")
+        else:
+            print("  !! Multilingual: incomplete data -- NOT updated")
 
     if html != orig:
         with open(IMMIGRATION_HTML, "w", encoding="utf-8") as f:
@@ -201,13 +244,40 @@ def update_affordability(med_income):
         html = f.read()
     orig = html
 
-    old_income = "$104,800"
+    # Read the income currently published rather than searching for a hardcoded
+    # "$104,800". That literal was this script's own search key, and its first
+    # successful run replaced it with $103,960 -- after which the anchor matched
+    # nothing and the figure could never update again.
+    _im = re.search(r'Median HH Income</td><td>\$([\d,]+)</td>', html)
+    if not _im:
+        print("  !! MA Median HH Income: anchor not found -- NOT updated")
+        old_income = None
+    else:
+        old_income = "$" + _im.group(1)
     new_income = f"${med_income:,}"
-    if old_income != new_income:
+    if old_income and old_income != new_income:
         n = html.count(old_income)
         if n > 0:
             html = html.replace(old_income, new_income)
             print(f"  MA Median HH Income: {old_income} â {new_income} ({n}x)")
+
+    # The Gap row is (income needed - median income). It is derived, so recompute it
+    # here instead of leaving it pinned to whatever the income was when it was last
+    # hand-typed. It had drifted to -$66,457, which is exactly 171,257 - 104,800 --
+    # the value of the dead anchor above, fossilised in an arithmetic result.
+    _nm = re.search(r'Income Needed</td><td>\$([\d,]+)</td>', html)
+    _gm = re.search(r'(Gap</td><td class="highlight">)([^\d$]*)(\$)([\d,]+)(\s*\()(\d+)(% short\))', html)
+    if _nm and _gm:
+        _needed = int(_nm.group(1).replace(",", ""))
+        _gap = _needed - med_income
+        _pct = round((1 - med_income / _needed) * 100)
+        _repl = f"{_gm.group(1)}{_gm.group(2)}{_gm.group(3)}{_gap:,}{_gm.group(5)}{_pct}{_gm.group(7)}"
+        if _repl != _gm.group(0):
+            html = html[:_gm.start()] + _repl + html[_gm.end():]
+            print(f"  Gap row: {_gm.group(3)}{_gm.group(4)} ({_gm.group(6)}% short)"
+                  f" -> {_gm.group(3)}{_gap:,} ({_pct}% short)")
+    elif not _gm:
+        print("  !! Gap row: anchor not found -- NOT updated")
 
     if html != orig:
         with open(AFFORDABILITY_HTML, "w", encoding="utf-8") as f:
