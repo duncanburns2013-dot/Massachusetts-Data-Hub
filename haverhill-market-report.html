@@ -168,12 +168,12 @@ td{border-bottom:1px solid #e8e5df !important}
 <p class="hero-sub">13-year analysis across Single Family, Condominium & Multi-Family — benchmarked against Massachusetts and Essex County.</p>
 <div class="hero-line"></div>
 <div class="hero-stats">
-<div class="hs"><div class="hs-l">SF Avg Sale</div><div class="hs-v blue">$624K</div><div class="hs-n">+145% since '14</div></div>
-<div class="hs"><div class="hs-l">Condo Avg</div><div class="hs-v green">$390K</div><div class="hs-n">+136% since '14</div></div>
-<div class="hs"><div class="hs-l">Multi-Family</div><div class="hs-v orange">$852K</div><div class="hs-n">+252% since '14</div></div>
-<div class="hs"><div class="hs-l">SF DOM</div><div class="hs-v">31</div><div class="hs-n">Was 109 in '14</div></div>
-<div class="hs"><div class="hs-l">SF Supply</div><div class="hs-v">1.45</div><div class="hs-n">Was 2.25 in '14</div></div>
-<div class="hs"><div class="hs-l">MA Statewide</div><div class="hs-v red">$866K</div><div class="hs-n">Haverhill 27% less</div></div>
+<div class="hs"><div class="hs-l">SF Avg Sale</div><div class="hs-v blue" id="h-sf-val">—</div><div class="hs-n"><span id="h-sf-chg">—</span> since <span class="yr-first">—</span></div></div>
+<div class="hs"><div class="hs-l">Condo Avg</div><div class="hs-v green" id="h-co-val">—</div><div class="hs-n"><span id="h-co-chg">—</span> since <span class="yr-first">—</span></div></div>
+<div class="hs"><div class="hs-l">Multi-Family</div><div class="hs-v orange" id="h-mf-val">—</div><div class="hs-n"><span id="h-mf-chg">—</span> since <span class="yr-first">—</span></div></div>
+<div class="hs"><div class="hs-l">SF DOM</div><div class="hs-v" id="h-sf-dom">—</div><div class="hs-n">Was <span id="h-sf-dom-first">—</span> in <span class="yr-first">—</span></div></div>
+<div class="hs"><div class="hs-l">SF Supply</div><div class="hs-v" id="h-sf-supply">—</div><div class="hs-n">Was <span id="h-sf-supply-first">—</span> in <span class="yr-first">—</span></div></div>
+<div class="hs"><div class="hs-l">MA Statewide</div><div class="hs-v red" id="h-ma-val">—</div><div class="hs-n">Haverhill <span id="h-vs-ma">—</span></div></div>
 </div>
 </div></header>
 
@@ -188,12 +188,12 @@ td{border-bottom:1px solid #e8e5df !important}
 <!-- SINGLE FAMILY -->
 <div class="panel active" id="p-sf"><div class="container">
 <div class="sec-t">Single Family</div>
-<p class="sec-d">Haverhill vs. Essex County vs. Massachusetts • YTD Sold • 2014–2026</p>
+<p class="sec-d">Haverhill vs. Essex County vs. Massachusetts • Trailing 12-Month Sold • 2014–2026</p>
 <div class="cards">
-<div class="card bl"><div class="cl">Avg Sale Price</div><div class="cv blue">$624,174</div><div class="cg"><div class="cm"><div class="cm-l">2014</div><div class="cm-v">$249K</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v up">+142%</div></div></div></div>
-<div class="card gl"><div class="cl">$/SqFt</div><div class="cv green">$338</div><div class="cg"><div class="cm"><div class="cm-l">2014</div><div class="cm-v">$146</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v up">+137%</div></div></div></div>
-<div class="card al"><div class="cl">Days on Market</div><div class="cv amber">31</div><div class="cg"><div class="cm"><div class="cm-l">2014</div><div class="cm-v">109</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v dn">-56%</div></div></div></div>
-<div class="card pl"><div class="cl">Months Supply</div><div class="cv purple">1.45</div><div class="cg"><div class="cm"><div class="cm-l">2014</div><div class="cm-v">2.25</div></div><div class="cm"><div class="cm-l">Balanced</div><div class="cm-v">4-6 mo</div></div></div></div>
+<div class="card bl"><div class="cl">Avg Sale Price</div><div class="cv blue" id="c-sf-price-val">—</div><div class="cg"><div class="cm"><div class="cm-l yr-first">—</div><div class="cm-v" id="c-sf-price-first">—</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v" id="c-sf-price-chg">—</div></div></div></div>
+<div class="card gl"><div class="cl">$/SqFt</div><div class="cv green" id="c-sf-sqft-val">—</div><div class="cg"><div class="cm"><div class="cm-l yr-first">—</div><div class="cm-v" id="c-sf-sqft-first">—</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v" id="c-sf-sqft-chg">—</div></div></div></div>
+<div class="card al"><div class="cl">Days on Market</div><div class="cv amber" id="c-sf-dom-val">—</div><div class="cg"><div class="cm"><div class="cm-l yr-first">—</div><div class="cm-v" id="c-sf-dom-first">—</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v" id="c-sf-dom-chg">—</div></div></div></div>
+<div class="card pl"><div class="cl">Months Supply</div><div class="cv purple" id="c-sf-supply-val">—</div><div class="cg"><div class="cm"><div class="cm-l yr-first">—</div><div class="cm-v" id="c-sf-supply-first">—</div></div><div class="cm"><div class="cm-l">Balanced</div><div class="cm-v">4-6 mo</div></div></div></div>
 </div>
 <div class="cb"><div class="ch"><div class="ct">Average Sale Price — 13 Year Trend</div><div class="cleg"><div class="li"><span class="ld" style="background:#1d4ed8"></span>Haverhill</div><div class="li"><span class="ld" style="background:#7c3aed"></span>Essex County</div><div class="li"><span class="ld" style="background:#dc2626"></span>Massachusetts</div></div></div><div class="ca"><canvas id="c-sf-price"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">$/SqFt Comparison</div></div><div class="ca"><canvas id="c-sf-sqft"></canvas></div></div>
@@ -201,63 +201,45 @@ td{border-bottom:1px solid #e8e5df !important}
 <div class="cb"><div class="ch"><div class="ct">12-Month Sales Volume</div></div><div class="ca"><canvas id="c-sf-vol"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">Inventory & Months Supply</div></div><div class="ca"><canvas id="c-sf-inv"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">Single Family — Full Data</div></div><div class="tw"><table>
-<thead><tr><th>Metric</th><th>'14</th><th>'15</th><th>'16</th><th>'17</th><th>'18</th><th>'19</th><th>'20</th><th>'21</th><th>'22</th><th>'23</th><th>'24</th><th>'25</th><th>'26</th></tr></thead>
-<tbody>
-<tr><td>Avg Price</td><td>$249K</td><td>$282K</td><td>$284K</td><td>$311K</td><td>$324K</td><td>$337K</td><td>$407K</td><td>$433K</td><td>$518K</td><td>$532K</td><td>$537K</td><td>$582K</td><td>$603K</td></tr>
-<tr><td>$/SqFt</td><td>$146</td><td>$166</td><td>$153</td><td>$176</td><td>$170</td><td>$191</td><td>$193</td><td>$251</td><td>$299</td><td>$275</td><td>$300</td><td>$326</td><td>$346</td></tr>
-<tr><td>DOM</td><td>109</td><td>93</td><td>104</td><td>49</td><td>68</td><td>63</td><td>44</td><td>25</td><td>26</td><td>43</td><td>27</td><td>37</td><td>48</td></tr>
-<tr><td>12mo Sold</td><td>384</td><td>403</td><td>471</td><td>496</td><td>456</td><td>507</td><td>448</td><td>469</td><td>487</td><td>353</td><td>280</td><td>308</td><td>358</td></tr>
-<tr><td>Inventory</td><td>72</td><td>76</td><td>62</td><td>38</td><td>42</td><td>43</td><td>38</td><td>9</td><td>8</td><td>22</td><td>15</td><td>21</td><td>25</td></tr>
-<tr><td>Mo Supply</td><td>2.25</td><td>2.26</td><td>1.58</td><td>0.92</td><td>1.11</td><td>1.02</td><td>1.02</td><td>0.23</td><td>0.20</td><td>0.75</td><td>0.64</td><td>0.82</td><td>0.84</td></tr>
-<tr><td>SP/LP %</td><td>96.5</td><td>97.8</td><td>97.0</td><td>98.8</td><td>97.5</td><td>100.1</td><td>98.8</td><td>105.6</td><td>104.3</td><td>99.8</td><td>104.8</td><td>101.1</td><td>100.2</td></tr>
-</tbody></table></div></div>
+<thead id="t-sf-head"></thead>
+<tbody id="t-sf-body"></tbody></table></div></div>
 </div></div>
 
 <!-- CONDO -->
 <div class="panel" id="p-condo"><div class="container">
 <div class="sec-t">Condominium</div>
-<p class="sec-d">Haverhill YTD Sold • 2014–2026</p>
+<p class="sec-d">Haverhill Trailing 12-Month Sold • 2014–2026</p>
 <div class="cards">
-<div class="card gl"><div class="cl">Avg Sale Price</div><div class="cv green">$390,317</div><div class="cg"><div class="cm"><div class="cm-l">2014</div><div class="cm-v">$166K</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v up">+133%</div></div></div></div>
-<div class="card bl"><div class="cl">$/SqFt</div><div class="cv blue">$314</div><div class="cg"><div class="cm"><div class="cm-l">2014</div><div class="cm-v">$117</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v up">+181%</div></div></div></div>
-<div class="card al"><div class="cl">Days on Market</div><div class="cv amber">34</div><div class="cg"><div class="cm"><div class="cm-l">2014</div><div class="cm-v">109</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v dn">-43%</div></div></div></div>
-<div class="card pl"><div class="cl">Months Supply</div><div class="cv purple">1.36</div><div class="cg"><div class="cm"><div class="cm-l">2014</div><div class="cm-v">2.79</div></div><div class="cm"><div class="cm-l">Balanced</div><div class="cm-v">4-6 mo</div></div></div></div>
+<div class="card gl"><div class="cl">Avg Sale Price</div><div class="cv green" id="c-co-price-val">—</div><div class="cg"><div class="cm"><div class="cm-l yr-first">—</div><div class="cm-v" id="c-co-price-first">—</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v" id="c-co-price-chg">—</div></div></div></div>
+<div class="card bl"><div class="cl">$/SqFt</div><div class="cv blue" id="c-co-sqft-val">—</div><div class="cg"><div class="cm"><div class="cm-l yr-first">—</div><div class="cm-v" id="c-co-sqft-first">—</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v" id="c-co-sqft-chg">—</div></div></div></div>
+<div class="card al"><div class="cl">Days on Market</div><div class="cv amber" id="c-co-dom-val">—</div><div class="cg"><div class="cm"><div class="cm-l yr-first">—</div><div class="cm-v" id="c-co-dom-first">—</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v" id="c-co-dom-chg">—</div></div></div></div>
+<div class="card pl"><div class="cl">Months Supply</div><div class="cv purple" id="c-co-supply-val">—</div><div class="cg"><div class="cm"><div class="cm-l">Source</div><div class="cm-v">Live MLS</div></div><div class="cm"><div class="cm-l">Balanced</div><div class="cm-v">4-6 mo</div></div></div></div>
 </div>
 <div class="cb"><div class="ch"><div class="ct">Average Sale Price — 13 Year Trend</div></div><div class="ca"><canvas id="c-co-price"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">$/SqFt Trend</div></div><div class="ca"><canvas id="c-co-sqft"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">Days on Market</div></div><div class="ca"><canvas id="c-co-dom"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">12-Month Sales Volume</div></div><div class="ca"><canvas id="c-co-vol"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">Condominium — Full Data</div></div><div class="tw"><table>
-<thead><tr><th>Metric</th><th>'14</th><th>'15</th><th>'16</th><th>'17</th><th>'18</th><th>'19</th><th>'20</th><th>'21</th><th>'22</th><th>'23</th><th>'24</th><th>'25</th><th>'26</th></tr></thead>
-<tbody>
-<tr><td>Avg Price</td><td>$166K</td><td>$160K</td><td>$184K</td><td>$218K</td><td>$234K</td><td>$250K</td><td>$272K</td><td>$275K</td><td>$336K</td><td>$360K</td><td>$359K</td><td>$399K</td><td>$386K</td></tr>
-<tr><td>$/SqFt</td><td>$117</td><td>$132</td><td>$141</td><td>$154</td><td>$173</td><td>$175</td><td>$198</td><td>$227</td><td>$256</td><td>$271</td><td>$303</td><td>$327</td><td>$329</td></tr>
-<tr><td>DOM</td><td>109</td><td>98</td><td>99</td><td>60</td><td>48</td><td>45</td><td>39</td><td>26</td><td>23</td><td>24</td><td>23</td><td>38</td><td>62</td></tr>
-<tr><td>12mo Sold</td><td>232</td><td>284</td><td>349</td><td>360</td><td>389</td><td>396</td><td>418</td><td>352</td><td>360</td><td>263</td><td>239</td><td>251</td><td>291</td></tr>
-</tbody></table></div></div>
+<thead id="t-co-head"></thead>
+<tbody id="t-co-body"></tbody></table></div></div>
 </div></div>
 
 <!-- MULTI-FAMILY -->
 <div class="panel" id="p-mf"><div class="container">
 <div class="sec-t">Multi-Family</div>
-<p class="sec-d">Haverhill YTD Sold • 2014–2026</p>
+<p class="sec-d">Haverhill Trailing 12-Month Sold • 2014–2026</p>
 <div class="cards">
-<div class="card rl"><div class="cl">Avg Sale Price</div><div class="cv red">$851,925</div><div class="cg"><div class="cm"><div class="cm-l">2014</div><div class="cm-v">$272K</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v up">+258%</div></div></div></div>
-<div class="card gl"><div class="cl">$/SqFt</div><div class="cv green">$283</div><div class="cg"><div class="cm"><div class="cm-l">2014</div><div class="cm-v">$85</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v up">+260%</div></div></div></div>
-<div class="card al"><div class="cl">Days on Market</div><div class="cv amber">32</div><div class="cg"><div class="cm"><div class="cm-l">2014</div><div class="cm-v">93</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v dn">-49%</div></div></div></div>
-<div class="card pl"><div class="cl">12mo Sold</div><div class="cv purple">106</div><div class="cg"><div class="cm"><div class="cm-l">2014</div><div class="cm-v">124</div></div><div class="cm"><div class="cm-l">Inventory</div><div class="cm-v">11 units</div></div></div></div>
+<div class="card rl"><div class="cl">Avg Sale Price</div><div class="cv red" id="c-mf-price-val">—</div><div class="cg"><div class="cm"><div class="cm-l yr-first">—</div><div class="cm-v" id="c-mf-price-first">—</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v" id="c-mf-price-chg">—</div></div></div></div>
+<div class="card gl"><div class="cl">$/SqFt</div><div class="cv green" id="c-mf-sqft-val">—</div><div class="cg"><div class="cm"><div class="cm-l yr-first">—</div><div class="cm-v" id="c-mf-sqft-first">—</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v" id="c-mf-sqft-chg">—</div></div></div></div>
+<div class="card al"><div class="cl">Days on Market</div><div class="cv amber" id="c-mf-dom-val">—</div><div class="cg"><div class="cm"><div class="cm-l yr-first">—</div><div class="cm-v" id="c-mf-dom-first">—</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v" id="c-mf-dom-chg">—</div></div></div></div>
+<div class="card pl"><div class="cl">12mo Sold</div><div class="cv purple" id="c-mf-sold-val">—</div><div class="cg"><div class="cm"><div class="cm-l yr-first">—</div><div class="cm-v" id="c-mf-sold-first">—</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v" id="c-mf-sold-chg">—</div></div></div></div>
 </div>
 <div class="cb"><div class="ch"><div class="ct">Average Sale Price</div></div><div class="ca"><canvas id="c-mf-price"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">$/SqFt Trend</div></div><div class="ca"><canvas id="c-mf-sqft"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">Days on Market</div></div><div class="ca"><canvas id="c-mf-dom"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">Multi-Family — Full Data</div></div><div class="tw"><table>
-<thead><tr><th>Metric</th><th>'14</th><th>'15</th><th>'16</th><th>'17</th><th>'18</th><th>'19</th><th>'20</th><th>'21</th><th>'22</th><th>'23</th><th>'24</th><th>'25</th><th>'26</th></tr></thead>
-<tbody>
-<tr><td>Avg Price</td><td>$272K</td><td>$260K</td><td>$302K</td><td>$287K</td><td>$348K</td><td>$381K</td><td>$408K</td><td>$476K</td><td>$590K</td><td>$610K</td><td>$560K</td><td>$849K</td><td>$975K</td></tr>
-<tr><td>$/SqFt</td><td>$85</td><td>$108</td><td>$128</td><td>$110</td><td>$129</td><td>$140</td><td>$168</td><td>$172</td><td>$212</td><td>$232</td><td>$232</td><td>$268</td><td>$306</td></tr>
-<tr><td>DOM</td><td>93</td><td>111</td><td>69</td><td>65</td><td>59</td><td>62</td><td>36</td><td>18</td><td>22</td><td>46</td><td>23</td><td>14</td><td>47</td></tr>
-<tr><td>12mo Sold</td><td>124</td><td>103</td><td>111</td><td>120</td><td>155</td><td>167</td><td>131</td><td>145</td><td>154</td><td>124</td><td>82</td><td>91</td><td>105</td></tr>
-</tbody></table></div></div>
+<thead id="t-mf-head"></thead>
+<tbody id="t-mf-body"></tbody></table></div></div>
 </div></div>
 
 <!-- COMPARE ALL -->
@@ -267,12 +249,7 @@ td{border-bottom:1px solid #e8e5df !important}
 <div class="cb"><div class="ch"><div class="ct">Sale Price — All Markets (13 Years)</div><div class="cleg"><div class="li"><span class="ld" style="background:#dc2626"></span>MA SF</div><div class="li"><span class="ld" style="background:#7c3aed"></span>Essex SF</div><div class="li"><span class="ld" style="background:#1d4ed8"></span>Haverhill SF</div><div class="li"><span class="ld" style="background:#059669"></span>Haverhill Condo</div><div class="li"><span class="ld" style="background:#ea580c"></span>Haverhill MF</div></div></div><div class="ca"><canvas id="c-all-price"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">$/SqFt — All Markets</div></div><div class="ca"><canvas id="c-all-sqft"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">Days on Market — SF Comparison</div></div><div class="ca"><canvas id="c-all-dom"></canvas></div></div>
-<div class="comp"><div class="comp-t">2026 YTD Snapshot</div><div class="comp-g">
-<div class="comp-i"><div class="comp-il">MA Statewide SF</div><div class="comp-iv" style="color:var(--neon-red)">$833K</div><div class="comp-in">$383/sqft • 56 DOM</div></div>
-<div class="comp-i"><div class="comp-il">Essex County SF</div><div class="comp-iv" style="color:var(--neon-purple)">$844K</div><div class="comp-in">$409/sqft • 49 DOM</div></div>
-<div class="comp-i"><div class="comp-il">Haverhill SF</div><div class="comp-iv" style="color:#1d4ed8">$610K</div><div class="comp-in">$348/sqft • 45 DOM</div></div>
-<div class="comp-i"><div class="comp-il">Haverhill Condo</div><div class="comp-iv" style="color:var(--neon-green)">$391K</div><div class="comp-in">$330/sqft • 56 DOM</div></div>
-<div class="comp-i"><div class="comp-il">Haverhill MF</div><div class="comp-iv" style="color:#ea580c">$959K</div><div class="comp-in">$301/sqft • 43 DOM</div></div>
+<div class="comp"><div class="comp-t">Trailing 12-Month Snapshot — ending <span class="data-window">—</span></div><div class="comp-g" id="snap-grid"></div></div>
 </div></div>
 </div></div>
 
@@ -281,36 +258,34 @@ td{border-bottom:1px solid #e8e5df !important}
 <div class="sec-t">Affordability Analysis</div>
 <p class="sec-d">30yr @ 6.5%, 20% down, 28% DTI</p>
 <div class="afford"><div class="comp-t">Haverhill — The Affordability Advantage</div><div class="comp-g">
-<div class="comp-i"><div class="comp-il">Local Median Income</div><div class="comp-iv" style="color:#1d4ed8">$88,326</div><div class="comp-in">ACS 2020-2024</div></div>
+<div class="comp-i"><div class="comp-il">Local Median Income</div><div class="comp-iv" style="color:#1d4ed8" id="af-local">—</div><div class="comp-in" id="af-local-src">—</div></div>
+<div class="comp-i"><div class="comp-il">MA Median Income</div><div class="comp-iv" style="color:var(--neon-red)" id="af-ma-median">—</div><div class="comp-in" id="af-ma-median-src">—</div></div>
+<div class="comp-i"><div class="comp-il">SF Income Needed</div><div class="comp-iv" style="color:#ca8a04" id="af-sf-income">—</div><div class="comp-in">For a <span id="af-sf-price">—</span> home</div></div>
+<div class="comp-i"><div class="comp-il">Condo Income</div><div class="comp-iv" style="color:var(--neon-green)" id="af-co-income">—</div><div class="comp-in">For a <span id="af-co-price">—</span> condo</div></div>
+</div></div>
 <div class="comp-i"><div class="comp-il">MA Median Income</div><div class="comp-iv" style="color:var(--neon-red)">$104,800</div><div class="comp-in">ACS 2020-2024</div></div>
 <div class="comp-i"><div class="comp-il">SF Income Needed</div><div class="comp-iv" style="color:#ca8a04">$131K</div><div class="comp-in">For $603K home</div></div>
 <div class="comp-i"><div class="comp-il">Condo Income</div><div class="comp-iv" style="color:var(--neon-green)">$84K</div><div class="comp-in">Affordable ✓</div></div>
 </div></div>
 <div class="cards">
-<div class="card w2 bl"><div class="cl">Single Family — $610,171</div><div class="cv blue">$133K income needed</div><div class="cg"><div class="cm"><div class="cm-l">Down Payment</div><div class="cm-v">$122,034</div></div><div class="cm"><div class="cm-l">Monthly</div><div class="cm-v">$3,087</div></div><div class="cm"><div class="cm-l">Gap (Local)</div><div class="cm-v up">-$43K</div></div><div class="cm"><div class="cm-l">Gap (MA)</div><div class="cm-v up">-$26K</div></div></div></div>
-<div class="card w2 gl"><div class="cl">Condominium — $391,293</div><div class="cv green">$85K income needed ✓</div><div class="cg"><div class="cm"><div class="cm-l">Down Payment</div><div class="cm-v">$78,259</div></div><div class="cm"><div class="cm-l">Monthly</div><div class="cm-v">$1,979</div></div><div class="cm"><div class="cm-l">vs Local</div><div class="cm-v dn">Affordable ✓</div></div><div class="cm"><div class="cm-l">vs MA</div><div class="cm-v dn">Affordable ✓</div></div></div></div>
+<div class="card w2 bl"><div class="cl">Single Family — <span id="af-c-sf-price">—</span></div><div class="cv blue"><span id="af-c-sf-income">—</span> income needed</div><div class="cg"><div class="cm"><div class="cm-l">Down Payment</div><div class="cm-v" id="af-c-sf-down">—</div></div><div class="cm"><div class="cm-l">Monthly</div><div class="cm-v" id="af-c-sf-monthly">—</div></div><div class="cm"><div class="cm-l">Gap (Local)</div><div class="cm-v" id="af-c-sf-gap-local">—</div></div><div class="cm"><div class="cm-l">Gap (MA)</div><div class="cm-v" id="af-c-sf-gap-ma">—</div></div></div></div>
+<div class="card w2 gl"><div class="cl">Condominium — <span id="af-c-co-price">—</span></div><div class="cv green"><span id="af-c-co-income">—</span> income needed</div><div class="cg"><div class="cm"><div class="cm-l">Down Payment</div><div class="cm-v" id="af-c-co-down">—</div></div><div class="cm"><div class="cm-l">Monthly</div><div class="cm-v" id="af-c-co-monthly">—</div></div><div class="cm"><div class="cm-l">Gap (Local)</div><div class="cm-v" id="af-c-co-gap-local">—</div></div><div class="cm"><div class="cm-l">Gap (MA)</div><div class="cm-v" id="af-c-co-gap-ma">—</div></div></div></div>
 </div>
 <div class="cb"><div class="ch"><div class="ct">Income Required vs. Median</div></div><div class="ca"><canvas id="c-income"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">Full Breakdown</div></div><div class="tw"><table>
-<thead><tr><th>Market</th><th>Price</th><th>Down</th><th>Monthly</th><th>Income</th><th>vs $88K</th><th>vs $105K</th></tr></thead>
-<tbody>
-<tr><td style="color:var(--neon-red)">MA Statewide</td><td>$833K</td><td>$167K</td><td>$4,214</td><td>$181K</td><td class="up">-$92K</td><td class="up">-$76K</td></tr>
-<tr><td style="color:var(--neon-purple)">Essex County</td><td>$844K</td><td>$169K</td><td>$4,266</td><td>$183K</td><td class="up">-$95K</td><td class="up">-$78K</td></tr>
-<tr><td>Haverhill SF</td><td>$610K</td><td>$122K</td><td>$3,087</td><td>$133K</td><td class="up">-$44K</td><td class="up">-$28K</td></tr>
-<tr><td style="color:var(--neon-green)">Haverhill Condo</td><td>$386K</td><td>$77K</td><td>$1,949</td><td>$84K</td><td class="dn">Affordable ✓</td><td class="dn">Affordable ✓</td></tr>
-<tr><td style="color:var(--neon-orange)">Haverhill MF</td><td>$975K</td><td>$195K</td><td>$4,930</td><td>$211K</td><td class="up">-$123K</td><td class="up">-$106K</td></tr>
-</tbody></table></div></div>
+<thead id="af-head"></thead>
+<tbody id="af-body"></tbody></table></div></div>
 <div class="cards">
-<div class="card gl"><div class="cl">Key Takeaway</div><div class="cv green">Condos remain affordable</div><p style="color:var(--mid);font-size:0.74rem;margin-top:4px;">At $386K, Haverhill condos are within reach of the local median income — one of the few markets in Essex County.</p></div>
-<div class="card rl"><div class="cl">MF Surge</div><div class="cv red">+258% since 2014</div><p style="color:var(--mid);font-size:0.74rem;margin-top:4px;">Multi-family nearly quadrupled — now $975K requiring $211K income. Investor-driven market.</p></div>
-<div class="card bl"><div class="cl">vs. Essex County</div><div class="cv blue">27% less</div><p style="color:var(--mid);font-size:0.74rem;margin-top:4px;">Haverhill SF $603K vs. Essex $827K — significant discount within the same county.</p></div>
-<div class="card al"><div class="cl">13-Year Growth</div><div class="cv amber">$249K → $603K</div><p style="color:var(--mid);font-size:0.74rem;margin-top:4px;">SF prices more than doubled. Steepest jump: 2019→2022 during the pandemic boom.</p></div>
+<div class="card gl"><div class="cl">Condo vs. Local Median</div><div class="cv green" id="k-condo-head">—</div><p style="color:var(--mid);font-size:0.74rem;margin-top:4px;">At <span id="k-condo-price">—</span>, a Haverhill condo needs <span id="k-condo-income">—</span> against a local median of <span id="k-local-median">—</span>.</p></div>
+<div class="card rl"><div class="cl">Multi-Family Growth</div><div class="cv red" id="k-mf-chg">—</div><p style="color:var(--mid);font-size:0.74rem;margin-top:4px;">Multi-family is <span id="k-mf-mult">—</span> its <span class="yr-first">—</span> level — now <span id="k-mf-price">—</span>, requiring <span id="k-mf-income">—</span> income. Investor-driven market.</p></div>
+<div class="card bl"><div class="cl">vs. Essex County</div><div class="cv blue" id="k-vs-essex">—</div><p style="color:var(--mid);font-size:0.74rem;margin-top:4px;">Haverhill SF <span id="k-sf-price">—</span> vs. Essex <span id="k-es-price">—</span> — a discount within the same county.</p></div>
+<div class="card al"><div class="cl">13-Year Growth</div><div class="cv amber"><span id="k-sf-first">—</span> → <span id="k-sf-last">—</span></div><p style="color:var(--mid);font-size:0.74rem;margin-top:4px;">SF prices are <span id="k-sf-mult">—</span> their <span class="yr-first">—</span> level. Steepest jump: 2019→2022 during the pandemic boom.</p></div>
 </div>
 </div></div>
 
 <footer class="footer">
 <p><strong>Data:</strong> MLS PIN • Haverhill, MA Area Market Review • Essex County & Massachusetts Statewide</p>
-<p>Prepared July 16, 2026 • YTD Sold Data • Single Family, Condominium & Multi-Family</p>
+<p class="footer-date">—</p>
 </footer>
 
 <script>
@@ -320,7 +295,17 @@ Chart.defaults.color='#8e95a2';Chart.defaults.borderColor='#e8e4dd';Chart.defaul
 var kF=function(v){return'$'+(v/1000)+'K'};
 
 // HAVERHILL DATA
-var sf={price:[249274,281758,284298,310602,323593,337194,406549,433198,528248,524401,537093,595207,624174.11],sqft:[146,166,153,176,170,191,193,251,299,285,301,333,338.10],dom:[109,93,104,49,68,63,44,25,23,42,25,33,31.40],sold:[384,403,471,496,456,507,448,469,492,345,277,313,365],inv:[72,76,62,38,42,43,38,9,16,11,15,24,44],supply:[2.25,2.26,1.58,0.92,1.11,1.02,1.02,0.23,0.39,0.38,0.65,0.92,1.45]};
+// `splp` (sale-price / list-price %) is new here. update-mls-figures.py already
+// computed sp_lp_pct for every scope but only ever wrote it to MASTER_DATA.md, so the
+// SP/LP row of the table below had no live backing and its '26 cell was frozen at the
+// April value. The series is now part of the updater's injection surface; the tail
+// stays at 100.2 until the next bot run fills it, and self-heals from then on.
+var sf={price:[249274,281758,284298,310602,323593,337194,406549,433198,528248,524401,537093,595207,624174.11],sqft:[146,166,153,176,170,191,193,251,299,285,301,333,338.10],dom:[109,93,104,49,68,63,44,25,23,42,25,33,31.40],sold:[384,403,471,496,456,507,448,469,492,345,277,313,365],inv:[72,76,62,38,42,43,38,9,16,11,15,24,44],supply:[2.25,2.26,1.58,0.92,1.11,1.02,1.02,0.23,0.39,0.38,0.65,0.92,1.45],splp:[96.5,97.8,97.0,98.8,97.5,100.1,98.8,105.6,104.3,99.8,104.8,101.1,100.2]};
+
+// Haverhill condo months supply. No historical series exists for it — the updater
+// derives it live from active condo listings over trailing-12mo closings, so it is a
+// single value rather than an array.
+var CO_SUPPLY=1.36;
 var co={price:[165593,160365,183939,218203,234165,249764,271743,275383,334207,367418,364132,393158,390317.03],sqft:[117,132,141,154,173,175,198,227,256,269,303,328,313.55],dom:[109,98,99,60,48,45,39,26,20,25,25,36,34.10],sold:[232,284,349,360,389,396,418,352,282,238,179,267,229]};
 var mf={price:[272490,260400,302308,287497,348257,381158,407537,475750,596750,588602,651679,825442,851924.53],sqft:[85,108,128,110,129,140,168,172,211,220,224,262,283.37],dom:[93,111,69,65,59,62,36,18,23,45,28,17,31.70],sold:[124,103,111,120,155,167,131,145,155,124,78,95,106]};
 
@@ -394,15 +379,270 @@ new Chart(document.getElementById('c-all-dom'),{type:'bar',data:{labels:Y,datase
 {label:'Haverhill',data:sf.dom,backgroundColor:BL+'aa',borderRadius:3}
 ]},options:mkOpts(function(v){return v+'d'})});
 
-// AFFORDABILITY
-new Chart(document.getElementById('c-income'),{type:'bar',data:{labels:['MA SF','Essex SF','Hav SF','Hav Condo','Hav MF'],datasets:[
-{label:'Income Needed',data:[175000,179000,131000,84000,211000],backgroundColor:[RD,PR,BL,GR,OR],borderRadius:5},
-{label:'Local Median ($88K)',data:[88326,88326,88326,88326,88326],type:'line',borderColor:AM,borderWidth:3,borderDash:[8,4],pointRadius:0},
-{label:'MA Median ($105K)',data:[104800,104800,104800,104800,104800],type:'line',borderColor:'#fff',borderWidth:2,borderDash:[4,4],pointRadius:0}
-]},options:mkOpts(kF)});
+
 
 // NAV
 document.querySelectorAll('.tog').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.tog').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});b.classList.add('active');document.getElementById('p-'+b.getAttribute('data-t')).classList.add('active');});});
+
+// ══════════════════════════════════════════════════════════════════════════════
+// PROSE DERIVATION
+//
+// Every figure outside a chart is written from here, out of the sf/co/mf/es/ma arrays
+// above. Nothing below this line is a number typed by hand.
+//
+// update-mls-figures.py used to patch each card headline with its own regex and had no
+// pattern for anything else, so the '26 column of all three Full Data tables, every
+// "Change" cell, the 2026 YTD Snapshot and the entire affordability panel kept the
+// April 25 2026 values while the headline beside them moved daily. That is how one
+// panel came to show $603K, $610,171 and a live $624,174 for the same quantity.
+// ══════════════════════════════════════════════════════════════════════════════
+
+// The one vintage stamp; update-mls-figures.py rewrites it each run. Not new Date():
+// the browser's today would keep advancing if the bot ever stopped.
+var DATA_ASOF = 'July 16, 2026';
+
+// Lending terms quoted in the Affordability panel header. Named once, everything on
+// that panel computed from them.
+var AFF_RATE = 0.065, AFF_TERM_YRS = 30, AFF_DOWN = 0.20, AFF_DTI = 0.28;
+
+// Haverhill median household income. Census ACS 2024 5-year estimate.
+var LOCAL_MEDIAN = 88326;
+// MA median household income, ACS 2024 5-year -- the figure data/census-latest.json
+// publishes and affordability-dashboard.html / healthcare-dashboard.html both show.
+// This file carried $104,800 (as did ma-housing-dashboard.html, which labelled the same
+// number "ACS 2023 baseline"). Neither matched the repo's own fetched value.
+var MA_MEDIAN = 103960;
+var MEDIAN_SRC = 'ACS 2024 (5-yr)';
+
+(function deriveHav() {
+  var $ = function (id) { return document.getElementById(id); };
+  var setTxt = function (id, t) { var e = $(id); if (e) e.textContent = t; };
+  var setAll = function (cls, t) {
+    Array.prototype.forEach.call(document.querySelectorAll('.' + cls), function (e) { e.textContent = t; });
+  };
+
+  var iCur = sf.price.length - 1, iFirst = 0;
+  var yrFirst = '20' + Y[iFirst].replace("'", ''), yrCur = '20' + Y[iCur].replace("'", '');
+
+  var money = function (v) { return v == null ? '—' : '$' + Math.round(v / 1000) + 'K'; };
+  var moneyFull = function (v) { return v == null ? '—' : '$' + Math.round(v).toLocaleString(); };
+  var dollars = function (v) { return v == null ? '—' : '$' + Math.round(v); };
+  var num = function (v) { return v == null ? '—' : Math.round(v).toLocaleString(); };
+  var dom = function (v) { return v == null ? '—' : String(Math.round(v)); };
+  var sup = function (v) { return v == null ? '—' : v.toFixed(2); };
+  var pct = function (now, then) { return (now == null || then == null || !then) ? null : (now / then - 1) * 100; };
+  var fmtPct = function (v, dp) {
+    return v == null ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(dp == null ? 0 : dp) + '%';
+  };
+  // `.up` is red and `.dn` is green in this stylesheet. Sign-based throughout, which is
+  // what the tables already did.
+  var cls = function (v) { return v == null ? '' : (v > 0 ? 'up' : v < 0 ? 'dn' : ''); };
+  var setChg = function (id, v, dp) {
+    var e = $(id); if (!e) return;
+    e.textContent = fmtPct(v, dp);
+    e.className = e.className.replace(/\b(up|dn)\b/g, '').replace(/\s+/g, ' ').trim() + ' ' + cls(v);
+  };
+
+  setAll('yr-first', yrFirst);
+  setAll('yr-cur', yrCur);
+  setAll('data-window', DATA_ASOF);
+  var hd = document.querySelector('.hero-date'); if (hd) hd.textContent = DATA_ASOF;
+  var fd = document.querySelector('.footer-date');
+  if (fd) fd.textContent = 'Prepared ' + DATA_ASOF + ' • Trailing 12-month sold data • Single Family, Condominium & Multi-Family';
+
+  // ── Hero ────────────────────────────────────────────────────────────────────
+  setTxt('h-sf-val', money(sf.price[iCur]));
+  setTxt('h-co-val', money(co.price[iCur]));
+  setTxt('h-mf-val', money(mf.price[iCur]));
+  // Was "+252%" in the hero, "+258%" on the card and "+258%" again in the takeaway --
+  // three figures for one quantity, none of them the array's +212.6%.
+  setChg('h-sf-chg', pct(sf.price[iCur], sf.price[iFirst]));
+  setChg('h-co-chg', pct(co.price[iCur], co.price[iFirst]));
+  setChg('h-mf-chg', pct(mf.price[iCur], mf.price[iFirst]));
+  setTxt('h-sf-dom', dom(sf.dom[iCur]));
+  setTxt('h-sf-dom-first', dom(sf.dom[iFirst]));
+  setTxt('h-sf-supply', sup(sf.supply[iCur]));
+  setTxt('h-sf-supply-first', sup(sf.supply[iFirst]));
+  setTxt('h-ma-val', money(ma.price[iCur]));
+  setTxt('h-vs-ma', fmtPct(pct(sf.price[iCur], ma.price[iCur]), 1));
+
+  // ── Panel snapshot cards ────────────────────────────────────────────────────
+  var PANELS = [
+    { k: 'sf', src: sf }, { k: 'co', src: co }, { k: 'mf', src: mf }
+  ];
+  PANELS.forEach(function (p) {
+    var a = p.src;
+    setTxt('c-' + p.k + '-price-val', moneyFull(a.price[iCur]));
+    setTxt('c-' + p.k + '-price-first', money(a.price[iFirst]));
+    setChg('c-' + p.k + '-price-chg', pct(a.price[iCur], a.price[iFirst]));
+    setTxt('c-' + p.k + '-sqft-val', dollars(a.sqft[iCur]));
+    setTxt('c-' + p.k + '-sqft-first', dollars(a.sqft[iFirst]));
+    setChg('c-' + p.k + '-sqft-chg', pct(a.sqft[iCur], a.sqft[iFirst]));
+    setTxt('c-' + p.k + '-dom-val', dom(a.dom[iCur]));
+    setTxt('c-' + p.k + '-dom-first', dom(a.dom[iFirst]));
+    setChg('c-' + p.k + '-dom-chg', pct(a.dom[iCur], a.dom[iFirst]));
+  });
+  setTxt('c-sf-supply-val', sup(sf.supply[iCur]));
+  setTxt('c-sf-supply-first', sup(sf.supply[iFirst]));
+  // Haverhill condo months-supply has no historical series -- the updater computes it
+  // live from active condo listings, so it is written straight into the card.
+  setTxt('c-co-supply-val', sup(CO_SUPPLY));
+  setTxt('c-mf-sold-val', num(mf.sold[iCur]));
+  setTxt('c-mf-sold-first', num(mf.sold[iFirst]));
+  setChg('c-mf-sold-chg', pct(mf.sold[iCur], mf.sold[iFirst]));
+
+  // ── Full Data tables ────────────────────────────────────────────────────────
+  var TABLES = {
+    sf: [
+      { label: 'Avg Price', a: sf.price, fmt: money },
+      { label: '$/SqFt', a: sf.sqft, fmt: dollars },
+      { label: 'DOM', a: sf.dom, fmt: dom },
+      { label: '12mo Sold', a: sf.sold, fmt: num },
+      { label: 'Inventory', a: sf.inv, fmt: num },
+      { label: 'Mo Supply', a: sf.supply, fmt: sup },
+      { label: 'SP/LP %', a: sf.splp, fmt: function (v) { return v == null ? '—' : v.toFixed(1); } }
+    ],
+    co: [
+      { label: 'Avg Price', a: co.price, fmt: money },
+      { label: '$/SqFt', a: co.sqft, fmt: dollars },
+      { label: 'DOM', a: co.dom, fmt: dom },
+      { label: '12mo Sold', a: co.sold, fmt: num }
+    ],
+    mf: [
+      { label: 'Avg Price', a: mf.price, fmt: money },
+      { label: '$/SqFt', a: mf.sqft, fmt: dollars },
+      { label: 'DOM', a: mf.dom, fmt: dom },
+      { label: '12mo Sold', a: mf.sold, fmt: num }
+    ]
+  };
+  Object.keys(TABLES).forEach(function (k) {
+    var head = $('t-' + k + '-head');
+    if (head) head.innerHTML = '<tr><th>Metric</th>' + Y.map(function (y) { return '<th>' + y + '</th>'; }).join('') + '</tr>';
+    var body = $('t-' + k + '-body');
+    if (!body) return;
+    body.innerHTML = TABLES[k].map(function (r) {
+      return '<tr><td>' + r.label + '</td>' + r.a.map(function (v) { return '<td>' + r.fmt(v) + '</td>'; }).join('') + '</tr>';
+    }).join('');
+  });
+
+  // ── Trailing 12-month snapshot ──────────────────────────────────────────────
+  // Every cell here was stale, and two of them ($833K MA, $844K Essex) disagreed with
+  // this file's own arrays -- $844K is es.price[10], the 2024 value, shown as current.
+  var SNAP = [
+    { label: 'MA Statewide SF', color: 'var(--neon-red)', a: ma },
+    { label: 'Essex County SF', color: 'var(--neon-purple)', a: es },
+    { label: 'Haverhill SF', color: '#1d4ed8', a: sf },
+    { label: 'Haverhill Condo', color: 'var(--neon-green)', a: co },
+    { label: 'Haverhill MF', color: '#ea580c', a: mf }
+  ];
+  var sg = $('snap-grid');
+  if (sg) sg.innerHTML = SNAP.map(function (s) {
+    return '<div class="comp-i"><div class="comp-il">' + s.label + '</div>' +
+      '<div class="comp-iv" style="color:' + s.color + '">' + money(s.a.price[iCur]) + '</div>' +
+      '<div class="comp-in">' + dollars(s.a.sqft[iCur]) + '/sqft • ' + dom(s.a.dom[iCur]) + ' DOM</div></div>';
+  }).join('');
+
+  // ── Affordability ───────────────────────────────────────────────────────────
+  function mortgagePmt(price) {
+    var principal = price * (1 - AFF_DOWN);
+    var r = AFF_RATE / 12, n = AFF_TERM_YRS * 12;
+    return principal * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
+  }
+  var AFF = [
+    { key: 'ma', label: 'MA Statewide', chartLabel: 'MA SF', color: 'var(--neon-red)', price: ma.price[iCur] },
+    { key: 'es', label: 'Essex County', chartLabel: 'Essex SF', color: 'var(--neon-purple)', price: es.price[iCur] },
+    { key: 'sf', label: 'Haverhill SF', chartLabel: 'Hav SF', color: '', price: sf.price[iCur] },
+    { key: 'co', label: 'Haverhill Condo', chartLabel: 'Hav Condo', color: 'var(--neon-green)', price: co.price[iCur] },
+    { key: 'mf', label: 'Haverhill MF', chartLabel: 'Hav MF', color: 'var(--neon-orange)', price: mf.price[iCur] }
+  ].map(function (r) {
+    r.down = r.price * AFF_DOWN;
+    r.monthly = mortgagePmt(r.price);
+    r.income = r.monthly * 12 / AFF_DTI;
+    return r;
+  });
+  var byKey = {};
+  AFF.forEach(function (r) { byKey[r.key] = r; });
+
+  setTxt('af-local', moneyFull(LOCAL_MEDIAN));
+  setTxt('af-local-src', MEDIAN_SRC);
+  setTxt('af-ma-median', moneyFull(MA_MEDIAN));
+  setTxt('af-ma-median-src', MEDIAN_SRC);
+  setTxt('af-sf-income', money(byKey.sf.income));
+  setTxt('af-sf-price', money(byKey.sf.price));
+  setTxt('af-co-income', money(byKey.co.income));
+  setTxt('af-co-price', money(byKey.co.price));
+
+  [['sf', 'sf'], ['co', 'co']].forEach(function (pair) {
+    var r = byKey[pair[1]], id = 'af-c-' + pair[0] + '-';
+    setTxt(id + 'price', moneyFull(r.price));
+    setTxt(id + 'income', money(r.income));
+    setTxt(id + 'down', moneyFull(r.down));
+    setTxt(id + 'monthly', '$' + Math.round(r.monthly).toLocaleString());
+    var gl = LOCAL_MEDIAN - r.income, gm = MA_MEDIAN - r.income;
+    var put = function (sfx, gap) {
+      var e = $(id + 'gap-' + sfx); if (!e) return;
+      e.textContent = (gap >= 0 ? '+' : '−') + money(Math.abs(gap));
+      e.className = 'cm-v ' + (gap >= 0 ? 'dn' : 'up');
+    };
+    put('local', gl); put('ma', gm);
+  });
+
+  var ah = $('af-head');
+  if (ah) ah.innerHTML = '<tr><th>Market</th><th>Price</th><th>Down</th><th>Monthly</th><th>Income</th>' +
+    '<th>vs ' + money(LOCAL_MEDIAN) + '</th><th>vs ' + money(MA_MEDIAN) + '</th></tr>';
+  var ab = $('af-body');
+  if (ab) ab.innerHTML = AFF.map(function (r) {
+    var gl = LOCAL_MEDIAN - r.income, gm = MA_MEDIAN - r.income;
+    var cell = function (g) {
+      return '<td class="' + (g >= 0 ? 'dn' : 'up') + '">' + (g >= 0 ? '+' : '−') + money(Math.abs(g)) + '</td>';
+    };
+    return '<tr><td' + (r.color ? ' style="color:' + r.color + '"' : '') + '>' + r.label + '</td>' +
+      '<td>' + money(r.price) + '</td><td>' + money(r.down) + '</td>' +
+      '<td>$' + Math.round(r.monthly).toLocaleString() + '</td><td>' + money(r.income) + '</td>' +
+      cell(gl) + cell(gm) + '</tr>';
+  }).join('');
+
+  // The income chart read [175000,179000,131000,84000,211000] against a table that said
+  // $181K/$183K/$133K/$84K/$211K -- three of five disagreed, and neither matched the
+  // arrays. Both now come from AFF.
+  new Chart(document.getElementById('c-income'), {
+    type: 'bar',
+    data: {
+      labels: AFF.map(function (r) { return r.chartLabel; }),
+      datasets: [
+        { label: 'Income Needed', data: AFF.map(function (r) { return Math.round(r.income); }), backgroundColor: [RD, PR, BL, GR, OR], borderRadius: 5 },
+        { label: 'Local Median (' + money(LOCAL_MEDIAN) + ')', data: AFF.map(function () { return LOCAL_MEDIAN; }), type: 'line', borderColor: AM, borderWidth: 3, borderDash: [8, 4], pointRadius: 0 },
+        { label: 'MA Median (' + money(MA_MEDIAN) + ')', data: AFF.map(function () { return MA_MEDIAN; }), type: 'line', borderColor: '#fff', borderWidth: 2, borderDash: [4, 4], pointRadius: 0 }
+      ]
+    },
+    options: mkOpts(kF)
+  });
+
+  // ── Key takeaway cards ──────────────────────────────────────────────────────
+  // "Condos remain affordable" and "nearly quadrupled" are live superlatives that go
+  // false without anyone touching the file. Both are now stated as the figures they
+  // were summarising, so they cannot invert.
+  setTxt('k-condo-head', money(byKey.co.income) + ' needed vs ' + money(LOCAL_MEDIAN) + ' median');
+  setTxt('k-condo-price', moneyFull(byKey.co.price));
+  setTxt('k-condo-income', money(byKey.co.income));
+  setTxt('k-local-median', moneyFull(LOCAL_MEDIAN));
+
+  setChg('k-mf-chg', pct(mf.price[iCur], mf.price[iFirst]));
+  $('k-mf-chg').textContent = fmtPct(pct(mf.price[iCur], mf.price[iFirst])) + ' since ' + yrFirst;
+  setTxt('k-mf-mult', (mf.price[iCur] / mf.price[iFirst]).toFixed(2) + '×');
+  setTxt('k-mf-price', money(byKey.mf.price));
+  setTxt('k-mf-income', money(byKey.mf.income));
+
+  // "$827K" for Essex appeared nowhere in this file's es.price -- no year is near it.
+  // Reading the array removes the number and the claim built on top of it.
+  setTxt('k-vs-essex', fmtPct(pct(sf.price[iCur], es.price[iCur]), 1) + ' vs Essex');
+  setTxt('k-sf-price', money(sf.price[iCur]));
+  setTxt('k-es-price', money(es.price[iCur]));
+
+  setTxt('k-sf-first', money(sf.price[iFirst]));
+  setTxt('k-sf-last', money(sf.price[iCur]));
+  setTxt('k-sf-mult', (sf.price[iCur] / sf.price[iFirst]).toFixed(2) + '×');
+})();
 </script>
 </body>
 </html>
