@@ -921,7 +921,7 @@ footer a:hover{color:var(--gold)}
       <div class="alert-item">In 2022-23, the average person <strong>leaving</strong> Massachusetts earned <strong>$116,360</strong>. The average person <strong>moving in</strong> earned only <strong>$90,440</strong>. That's a gap of nearly $26,000 per household.</div>
       <div class="alert-item">That <strong>$26,000 gap is the biggest we've ever seen</strong> — and it showed up in the very first year the new 4% surtax was in effect. Earners over $200K drove an estimated <strong>70% of the $4.2B net income lost</strong> in 2022-23 (Pioneer Institute analysis of IRS data).</div>
       <div class="alert-item">For the 10 years before the surtax, the people leaving and arriving earned <strong>roughly the same amount</strong>. Migration was basically income-neutral.</div>
-      <div class="alert-item">The number of Massachusetts residents who are in the top 1% of earners grew steadily from <strong>29,951 in 2013 to 32,795 in 2022</strong> — but we don't yet have the 2023 numbers to see if that changed.</div>
+      <div class="alert-item">The number of Massachusetts residents in the top 1% of earners: <strong id="erCntFirst">—</strong> in <span id="erCntFirstYr">—</span>, <strong id="erCntPeak">—</strong> at its highest in <span id="erCntPeakYr">—</span>, and <strong id="erCntLast">—</strong> in <span id="erCntLastYr">—</span>. Note the count is a fixed 1% of all filers, so it tracks the size of the filing population. The 2023 numbers are not out yet.</div>
       <div class="alert-item">To be in the top 1% of Massachusetts earners in 2022, you needed to make at least <strong>$891,100 a year</strong> — up from $579,500 in 2013.</div>
       <div class="alert-item"><strong>Important:</strong> We're still waiting on two key data releases from the IRS before we can say for certain what's happening. See the note at the bottom of this page.</div>
     </div>
@@ -931,7 +931,7 @@ footer a:hover{color:var(--gold)}
     <div class="stat-card"><div class="label">Avg Income — People Leaving MA (2022-23)</div><div class="value red">$116,360</div><div class="sub">Per household that moved out</div></div>
     <div class="stat-card"><div class="label">Avg Income — People Moving Into MA (2022-23)</div><div class="value green">$90,440</div><div class="sub">Per household that moved in</div></div>
     <div class="stat-card"><div class="label">How Much Richer Are the Leavers?</div><div class="value red">29% more</div><div class="sub">Biggest gap in 10 years — first year of new surtax</div></div>
-    <div class="stat-card"><div class="label">Top 1% Earners Still in MA (2022)</div><div class="value blue">32,795</div><div class="sub">Growing steadily — but 2023 data not yet out</div></div>
+    <div class="stat-card"><div class="label">Top 1% Earners Still in MA (2022)</div><div class="value blue" id="erCntLast2">—</div><div class="sub">Highest was <span id="erCntPeak2">—</span> in <span id="erCntPeakYr2">—</span> — 2023 data not yet out</div></div>
   </div>
 
   <!-- ===== GAP VISUAL ===== -->
@@ -995,16 +995,16 @@ footer a:hover{color:var(--gold)}
     <div class="chart-card">
       <h3>How Many Top-1% Earners Live in Massachusetts? (2013–2022)</h3>
       <div class="chart-area"><canvas id="chartTop1Count"></canvas></div>
-      <div class="source">This counts the number of Massachusetts tax filers in the top 1% of earners each year. The number has been growing — but the 2023 data hasn't been released yet. That's the key number to watch. Source: IRS resident income data.</div>
+      <div class="source">This counts the Massachusetts tax filers in the top 1% of earners each year. Because the top 1% is by definition 1% of all filers, this line tracks the total filing population rather than any decision by high earners — it peaked in 2020 and has not returned to that level. The 2023 data has not been released yet. Source: IRS resident income data.</div>
     </div>
     <div class="chart-card">
       <h3>How Much Do You Need to Earn to Be in the MA Top 1%? (2013–2022)</h3>
       <div class="chart-area"><canvas id="chartTop1Floor"></canvas></div>
-      <div class="source">This is the minimum income needed to crack the top 1% of Massachusetts earners. It's been rising because high earners' incomes have grown — not because top earners are disappearing. Again, 2023 data not yet available. Source: IRS resident income data.</div>
+      <div class="source">The minimum income needed to crack the top 1% of Massachusetts earners. It is not a one-way climb: the floor fell from <span id="erFloor21">—</span> in 2021 to <span id="erFloor22">—</span> in 2022, a drop of <span id="erFloorDrop">—</span>, after the 2021 capital-gains surge faded. A floor moves when incomes at the top change or when the filer pool changes, and this series on its own cannot separate the two. 2023 data not yet available. Source: IRS resident income data.</div>
     </div>
   </div>
 
-  <p style="font-size:0.8rem;color:var(--muted);text-align:center;margin:-18px 0 20px;font-style:italic">We'll get a clearer picture when the IRS releases resident income data for 2023 (later this year) and migration data for 2023–2024 (likely around March 2027). Check back then for updates.</p>
+  <p style="font-size:0.8rem;color:var(--muted);text-align:center;margin:-18px 0 20px;font-style:italic">We'll get a clearer picture when the IRS releases resident income data for 2023 and migration data for 2023–2024 (the IRS has indicated around March 2027). As of July 2026 the 2023 resident data has still not appeared; IRS Historic Table 2 remains at tax year 2022. Check back for updates.</p>
 
   <div class="data-card">
     <h3>Every Year Side by Side: Income of People Leaving vs. Arriving</h3>
@@ -1046,7 +1046,7 @@ footer a:hover{color:var(--gold)}
         <tr style="background:rgba(184,134,11,0.06);font-style:italic"><td>2023 — not yet released</td><td colspan="4" style="color:var(--amber)">The IRS hasn't published this yet. This is the number that will tell us whether top earners actually started leaving after the surtax hit.</td></tr>
       </tbody>
     </table>
-    <div class="source">Source: IRS resident income data, 2013–2022. The "top 1%" just means the highest-earning 1% of all Massachusetts tax filers that year — about 30,000–33,000 people. They collectively earn roughly 21–23% of all income reported in the state.</div>
+    <div class="source">Source: IRS resident income data, 2013–2022. The "top 1%" just means the highest-earning 1% of all Massachusetts tax filers that year — about 30,000–33,000 people. Across the years in this table they earn between <span id="erShareMin">—</span> and <span id="erShareMax">—</span> of all income reported in the state; the high point is 2021, a year of exceptional capital-gains realisations.</div>
   </div>
 
   <!-- ===== THREE RISKS ===== -->
@@ -1057,23 +1057,23 @@ footer a:hover{color:var(--gold)}
       <div style="flex:1;min-width:260px">
         <h3 style="font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:10px">⚖️ Risk 1 — The State Is Putting More Weight on Fewer Shoulders</h3>
         <p style="font-size:0.84rem;color:var(--text);line-height:1.7;margin-bottom:10px">About <strong>32,800 people</strong> — the top 1% of Massachusetts earners — collectively earn 23% of all income in the state. The new surtax depends heavily on this same small group. That makes the state budget unusually sensitive to their decisions about where to live.</p>
-        <p style="font-size:0.84rem;color:var(--text);line-height:1.7">If just <strong>5% of them leave</strong> (roughly 1,600 people), Massachusetts could lose an estimated <strong>$367 million</strong> in annual income tax revenue. If 10% leave, that rises to <strong>$735 million</strong> — more than a quarter of the entire surtax the state collected in FY2025.</p>
+        <p style="font-size:0.84rem;color:var(--text);line-height:1.7">If just <strong>5% of them leave</strong> (roughly <span id="cnLoss5n">—</span> people), Massachusetts could lose an estimated <strong id="cnLoss5">—</strong> in annual income tax revenue. If 10% leave, that rises to <strong id="cnLoss10">—</strong> — <span id="cnLoss10Pct">—</span> of the <span id="cnSurtaxFy25">—</span> surtax the state collected in FY2025.</p>
       </div>
       <div style="flex-shrink:0;min-width:200px">
         <div style="background:var(--bg);border-radius:10px;padding:20px;text-align:center;border:1px solid var(--border)">
           <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:14px">Revenue at risk if top-1% leave</div>
           <div style="display:flex;gap:12px;justify-content:center">
             <div style="text-align:center">
-              <div style="font-family:'DM Serif Display',Georgia,serif;font-size:1.5rem;color:var(--amber)">$367M</div>
-              <div style="font-size:0.62rem;color:var(--muted);margin-top:3px">if 5% leave<br>(~1,600 people)</div>
+              <div style="font-family:'DM Serif Display',Georgia,serif;font-size:1.5rem;color:var(--amber)" id="cnCard5">—</div>
+              <div style="font-size:0.62rem;color:var(--muted);margin-top:3px">if 5% leave<br>(~<span id="cnCard5n">—</span> people)</div>
             </div>
             <div style="width:1px;background:var(--border)"></div>
             <div style="text-align:center">
-              <div style="font-family:'DM Serif Display',Georgia,serif;font-size:1.5rem;color:var(--red)">$735M</div>
-              <div style="font-size:0.62rem;color:var(--muted);margin-top:3px">if 10% leave<br>(~3,300 people)</div>
+              <div style="font-family:'DM Serif Display',Georgia,serif;font-size:1.5rem;color:var(--red)" id="cnCard10">—</div>
+              <div style="font-size:0.62rem;color:var(--muted);margin-top:3px">if 10% leave<br>(~<span id="cnCard10n">—</span> people)</div>
             </div>
           </div>
-          <div style="margin-top:12px;font-size:0.65rem;color:var(--muted);line-height:1.5">Based on avg top-1% income of $2.97M and current MA tax rates. 2022 IRS data.</div>
+          <div style="margin-top:12px;font-size:0.65rem;color:var(--muted);line-height:1.5">Based on avg top-1% income of <span id="cnCardAgi">—</span> and the MA rates stated on this page (5% + 4% surtax over <span id="cnCardFloor">—</span>). 2022 IRS data. Assumes leavers are average for the band and are not replaced.</div>
         </div>
       </div>
     </div>
@@ -1119,7 +1119,7 @@ footer a:hover{color:var(--gold)}
     <h4 style="color:var(--amber)">⚠️ What We Know, What We Don't, and What We're Still Waiting For</h4>
     <p><strong>What we know:</strong> In the first year of the surtax (2022-23), people leaving Massachusetts earned 29% more on average than people arriving — the biggest gap in a decade of records. That's a real and unusual signal.<br><br>
     <strong>What we don't know yet:</strong> We don't have the 2023 resident data, so we can't confirm that the number of wealthy people <em>living</em> in Massachusetts actually went down. It's possible they left and were replaced. The migration data tells us about movement — not about whether the total pool shrank.<br><br>
-    <strong>Think of it this way:</strong> Imagine your neighborhood's block party budget. If the families with the biggest contributions keep moving away — taking their paychecks with them — things get tighter for everyone, even if the total number of houses stays about the same. That's what the data is hinting at for Massachusetts right now.<br><br><strong>What to watch for:</strong> Two IRS datasets will answer this definitively. The <strong>2023 in-state income data</strong> (expected sometime in 2025 or 2026) will show if fewer top earners filed from a Massachusetts address. The <strong>2023-24 migration data</strong> (likely released around March 2027) will show if the trend continued into a second year. Until then, the 29% gap is the strongest evidence we have — suggestive, but not yet conclusive.</p>
+    <strong>Think of it this way:</strong> Imagine your neighborhood's block party budget. If the families with the biggest contributions keep moving away — taking their paychecks with them — things get tighter for everyone, even if the total number of houses stays about the same. That's what the data is hinting at for Massachusetts right now.<br><br><strong>What to watch for:</strong> Two IRS datasets will answer this definitively. The <strong>2023 in-state income data</strong> will show if fewer top earners filed from a Massachusetts address; it had been expected by 2026 but has not been published as of July 2026. The <strong>2023-24 migration data</strong> (the IRS has indicated around March 2027) will show if the trend continued into a second year. Until then, the 29% gap is the strongest evidence we have — suggestive, but not yet conclusive.</p>
   </div>
 
 </div><!-- end earners tab -->
@@ -1127,7 +1127,8 @@ footer a:hover{color:var(--gold)}
 <div id="concentration" class="tab-content">
   <h2 class="section-title">Who Actually Funds Massachusetts?</h2>
   <p style="font-size:0.85rem;color:var(--muted);margin-bottom:6px">A breakdown of income taxes, capital gains, and economic activity by earnings percentile. Source: IRS SOI In-State AGI Shares, tax year 2022.</p>
-  <p style="font-size:1rem;color:var(--red);font-weight:600;margin-bottom:20px;font-family:'DM Serif Display',Georgia,serif">The top 1% of MA earners — about 32,800 people — pay more in state income taxes than the bottom 75% combined.</p>
+  <p style="font-size:1rem;color:var(--red);font-weight:600;margin-bottom:20px;font-family:'DM Serif Display',Georgia,serif">The top 1% of MA earners — about 32,800 people — pay more federal income tax than the bottom 75% of MA filers combined.</p>
+  <p style="font-size:0.78rem;color:var(--muted);margin-bottom:20px;line-height:1.6"><strong>Read this before the numbers below.</strong> IRS SOI publishes <em>federal</em> tax paid by Massachusetts filers; it does not publish Massachusetts income tax. Every share and effective rate on this tab is therefore federal. They are a fair guide to how concentrated income and tax capacity are in Massachusetts, but they are not MA collections: taken as state tax the table would imply about $70B of MA income tax against actual collections in the low $20B range.</p>
 
   <h2 class="section-title" style="margin-top:8px">Which Group Is Hit Hardest?</h2>
   <p style="font-size:0.85rem;color:var(--muted);margin-bottom:20px">The answer depends on what kind of impact you mean. Each income group faces a different squeeze — and they compound on each other.</p>
@@ -1135,9 +1136,9 @@ footer a:hover{color:var(--gold)}
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:26px">
     <div style="background:#fff;border:1px solid var(--border);border-left:5px solid var(--red);border-radius:14px;padding:22px;box-shadow:0 1px 3px rgba(0,0,0,0.03)">
       <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--red);margin-bottom:6px">Most squeezed overall</div>
-      <div style="font-family:'DM Serif Display',Georgia,serif;font-size:1.2rem;color:var(--navy);margin-bottom:10px">Upper Middle Class<br><span style="font-size:0.85rem;font-style:italic">$104K – $233K</span></div>
+      <div style="font-family:'DM Serif Display',Georgia,serif;font-size:1.2rem;color:var(--navy);margin-bottom:10px">Upper Middle Class<br><span style="font-size:0.85rem;font-style:italic" id="cnSqBand">—</span></div>
       <ul style="font-size:0.82rem;color:var(--text);line-height:1.8;list-style:none;padding:0">
-        <li style="padding:4px 0;border-bottom:1px solid var(--border)">📊 Pays the <strong>highest effective tax rate</strong> of any group — 10% all-in, more than millionaires</li>
+        <li style="padding:4px 0;border-bottom:1px solid var(--border)">📊 Pays the <strong>highest effective tax rate</strong> of any ITEP band — <span id="cnSqRate">—</span> all-in, more than millionaires (<span id="cnSqTop">—</span>)</li>
         <li style="padding:4px 0;border-bottom:1px solid var(--border)">🚫 Not hit by the surtax — but gets <strong>no low-income credits</strong> either</li>
         <li style="padding:4px 0;border-bottom:1px solid var(--border)">🏠 Fully exposed to the <strong>5.8% cost-of-living premium</strong> with no cushion</li>
         <li style="padding:4px 0;border-bottom:1px solid var(--border)">📦 If top earners leave, <strong>this group is next in line</strong> to absorb the fiscal gap</li>
@@ -1159,10 +1160,10 @@ footer a:hover{color:var(--gold)}
       <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--amber);margin-bottom:6px">Most in absolute dollars — but most mobile</div>
       <div style="font-family:'DM Serif Display',Georgia,serif;font-size:1.2rem;color:var(--navy);margin-bottom:10px">Top 1%<br><span style="font-size:0.85rem;font-style:italic">Over $891K</span></div>
       <ul style="font-size:0.82rem;color:var(--text);line-height:1.8;list-style:none;padding:0">
-        <li style="padding:4px 0;border-bottom:1px solid var(--border)">💰 Average <strong>$225,000+</strong> in MA state income taxes per year — per person</li>
+        <li style="padding:4px 0;border-bottom:1px solid var(--border)">💰 Average <strong id="cnCardStateTax">—</strong> in MA state income taxes per year — per person</li>
         <li style="padding:4px 0;border-bottom:1px solid var(--border)">➕ New surtax adds <strong>4% on every dollar over $1.08M</strong></li>
         <li style="padding:4px 0;border-bottom:1px solid var(--border)">✈️ Unlike other groups, they <strong>can leave — and the data shows they are</strong></li>
-        <li style="padding:4px 0;border-bottom:1px solid var(--border)">📊 Pays 27% effective state income tax rate — nearly <strong>3× the median filer</strong></li>
+        <li style="padding:4px 0;border-bottom:1px solid var(--border)">📊 <span id="cnCardStateRate">—</span> effective MA rate, vs 5% for filers under the surtax threshold (the 27.3% in the table below is <strong>federal</strong>)</li>
         <li style="padding:4px 0">🔄 Their departure <strong>transfers the burden downward</strong> to the groups above</li>
       </ul>
     </div>
@@ -1183,7 +1184,7 @@ footer a:hover{color:var(--gold)}
     <p style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);margin-bottom:18px">The cascade effect — what happens when top earners leave</p>
     <div style="max-width:580px;margin:0 auto">
       <div style="display:flex;align-items:center;gap:0;margin-bottom:2px">
-        <div style="flex:1;background:#8b1a1a;color:#fff;padding:12px 16px;border-radius:8px 8px 0 0;font-size:0.8rem;font-weight:600">Top 1% leaves → $367–735M revenue gap opens up</div>
+        <div style="flex:1;background:#8b1a1a;color:#fff;padding:12px 16px;border-radius:8px 8px 0 0;font-size:0.8rem;font-weight:600">Top 1% leaves → <span id="cnCascade">—</span> revenue gap opens up</div>
       </div>
       <div style="display:flex;align-items:center;gap:0;margin-bottom:2px;padding-left:24px">
         <div style="width:20px;flex-shrink:0;text-align:center;color:var(--muted);font-size:1.2rem">↓</div>
@@ -1209,24 +1210,24 @@ footer a:hover{color:var(--gold)}
     <div class="chart-card">
       <h3>Effective Tax Rate by Income Group — Who Actually Pays the Most? (2022)</h3>
       <div class="chart-area"><canvas id="chartImpactRate"></canvas></div>
-      <div class="source">Source: ITEP "Who Pays?" 2024 (all state+local taxes) and IRS SOI (income tax only). The upper middle class pays more as a share of income than millionaires — a quirk of the flat income tax combined with regressive property and sales taxes.</div>
+      <div class="source">Source: ITEP "Who Pays?" 2024 (bars: all MA state+local taxes) and IRS SOI 2022 (line: <strong>federal</strong> income tax). The two series are not comparable and are shown together only for scale: the federal line rises above the ITEP bars at the top because it is a different tax, not because income tax exceeds all taxes. The IRS figures are percentile bands mapped approximately onto ITEP's dollar bands. On the ITEP bars alone, the upper middle class pays more of its income in MA state+local tax than millionaires do — a quirk of the near-flat income tax combined with regressive property and sales taxes.</div>
     </div>
     <div class="chart-card">
       <h3>Immigration Cost Burden vs. Income Tax Share — The Double Squeeze</h3>
       <div class="chart-area"><canvas id="chartDoubleSqueeze"></canvas></div>
-      <div class="source">Source: ITEP / BU Study (immigration cost burden); IRS SOI (income tax share). The working class bears a disproportionate share of immigration costs while the upper middle class bears the heaviest income tax burden relative to income.</div>
+      <div class="source">Source: ITEP / BU Study (immigration cost burden); IRS SOI (federal income tax share). The working class bears a disproportionate share of immigration costs, while on ITEP's figures the upper middle class bears the heaviest MA state+local burden relative to income.</div>
     </div>
   </div>
 
   <div class="stat-row">
-    <div class="stat-card"><div class="label">Top 1% share of MA income taxes</div><div class="value red">38.2%</div><div class="sub">~32,800 people paying more than 2.46M people combined</div></div>
-    <div class="stat-card"><div class="label">Top 5% share of MA income taxes</div><div class="value red">58.8%</div><div class="sub">~164,000 people</div></div>
-    <div class="stat-card"><div class="label">Bottom 50% share of MA income taxes</div><div class="value green">3.9%</div><div class="sub">~1.64 million filers, avg income $32,188</div></div>
+    <div class="stat-card"><div class="label">Top 1% share of federal income tax paid by MA filers</div><div class="value red">38.2%</div><div class="sub">~32,800 people paying more than 2.46M people combined</div></div>
+    <div class="stat-card"><div class="label">Top 5% share of federal income tax paid by MA filers</div><div class="value red">58.8%</div><div class="sub">~164,000 people</div></div>
+    <div class="stat-card"><div class="label">Bottom 50% share of federal income tax paid by MA filers</div><div class="value green">3.9%</div><div class="sub">~1.64 million filers, avg income $32,188</div></div>
     <div class="stat-card"><div class="label">Top 1% share of all capital gains</div><div class="value red">76.0%</div><div class="sub">Investment & wealth activity is even more concentrated</div></div>
   </div>
 
   <div style="background:#fff;border:1px solid var(--border);border-radius:14px;padding:32px 28px;margin-bottom:26px;box-shadow:0 1px 3px rgba(0,0,0,0.03)">
-    <p style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);margin-bottom:22px">Share of all Massachusetts income tax paid · 2022 · Each bar = one group of filers</p>
+    <p style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);margin-bottom:22px">Share of federal income tax paid by Massachusetts filers · 2022 · Each bar = one group of filers</p>
     <div style="max-width:680px;margin:0 auto">
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px">
         <div style="width:130px;text-align:right;flex-shrink:0"><div style="font-size:0.72rem;font-weight:700;color:var(--red)">Top 1%</div><div style="font-size:0.62rem;color:var(--muted)">32,800 people</div></div>
@@ -1263,18 +1264,18 @@ footer a:hover{color:var(--gold)}
         <div style="flex:1;height:38px;background:#f5f5f2;border-radius:4px;overflow:hidden"><div style="height:100%;width:0.4%;background:#1a7a45;border-radius:4px;min-width:4px"></div></div>
         <div style="width:56px;flex-shrink:0;font-size:0.68rem;color:var(--muted)">0.4% · avg $16K</div>
       </div>
-      <p style="font-size:0.82rem;color:var(--text);line-height:1.65;border-top:1px solid var(--border);padding-top:16px">The top 5% of earners — about 164,000 people — pay <strong style="color:var(--red)">58.8% of all Massachusetts income taxes</strong>. The bottom half of all filers — 1.64 million people — pay just <strong>3.9%</strong> combined. This isn't unusual nationally, but it makes Massachusetts unusually exposed: a tiny group of mobile, high-income residents is carrying most of the fiscal load.</p>
+      <p style="font-size:0.82rem;color:var(--text);line-height:1.65;border-top:1px solid var(--border);padding-top:16px">The top 5% of earners — about 164,000 people — pay <strong style="color:var(--red)">58.8% of the federal income tax paid by Massachusetts filers</strong>. The bottom half of all filers — 1.64 million people — pay just <strong>3.9%</strong> combined. This isn't unusual nationally, but it makes Massachusetts unusually exposed: a tiny group of mobile, high-income residents is carrying most of the fiscal load. Massachusetts' own income tax is close to flat, so the state-tax concentration is real but less extreme than these federal shares.</p>
     </div>
   </div>
 
   <div class="chart-grid">
     <div class="chart-card">
-      <h3>Share of MA Income Taxes by Percentile Band (2022)</h3>
+      <h3>Share of Federal Income Tax Paid by MA Filers, by Percentile Band (2022)</h3>
       <div class="chart-area"><canvas id="chartTaxConc"></canvas></div>
-      <div class="source">Source: IRS SOI In-State AGI Shares, 2022. "Effective rate" = income taxes paid ÷ AGI.</div>
+      <div class="source">Source: IRS SOI In-State AGI Shares, 2022. Shares are of <strong>federal</strong> income tax paid by MA filers — IRS SOI does not publish state income tax. "Effective rate" = federal income tax paid ÷ AGI.</div>
     </div>
     <div class="chart-card">
-      <h3>Top 1% Share of MA Income Taxes — Trend 2013–2022</h3>
+      <h3>Top 1% Share of Federal Income Tax Paid by MA Filers — Trend 2013–2022</h3>
       <div class="chart-area"><canvas id="chartTaxTrend"></canvas></div>
       <div class="source">Source: IRS SOI In-State AGI Shares, 2013–2022. The 2021 spike reflects extraordinary capital gains realizations in a bull market year.</div>
     </div>
@@ -1287,9 +1288,9 @@ footer a:hover{color:var(--gold)}
       <div class="source">Source: IRS SOI In-State AGI Shares. Capital gains = actual sales of stocks/property/business. S-corp = business ownership income. Dividends = investment portfolio income.</div>
     </div>
     <div class="chart-card">
-      <h3>Effective Tax Rate by Band — What % of Income Goes to MA Taxes? (2022)</h3>
+      <h3>Effective Federal Tax Rate by Band — What % of Income Goes to Federal Income Tax? (2022)</h3>
       <div class="chart-area"><canvas id="chartEffRate"></canvas></div>
-      <div class="source">Source: IRS SOI In-State AGI Shares. State income tax only — does not include property tax, sales tax, or federal taxes. The top 1% effective rate jumped post-surtax (2023+).</div>
+      <div class="source">Source: IRS SOI In-State AGI Shares, tax year 2022. <strong>Federal</strong> income tax only — it does not include Massachusetts income tax, property tax or sales tax. This caption previously said the reverse.</div>
     </div>
   </div>
 
@@ -1297,7 +1298,7 @@ footer a:hover{color:var(--gold)}
     <h3>Complete Breakdown — Every Percentile Band (Tax Year 2022)</h3>
     <table class="data-table">
       <thead>
-        <tr><th>Who</th><th>How Many</th><th>Avg Income</th><th>% of All MA Income</th><th>% of All MA Taxes</th><th>Effective Tax Rate</th></tr>
+        <tr><th>Who</th><th>How Many</th><th>Avg Income</th><th>% of All MA Income</th><th>% of Federal Income Tax Paid by MA Filers</th><th>Effective Federal Tax Rate</th></tr>
       </thead>
       <tbody>
         <tr style="background:rgba(139,26,26,0.04)"><td style="font-weight:700;color:var(--red)">Top 1%</td><td>32,795</td><td>$2,972,000</td><td>23.1%</td><td style="font-weight:700;color:var(--red)">38.2%</td><td>27.3%</td></tr>
@@ -1310,7 +1311,7 @@ footer a:hover{color:var(--gold)}
         <tr style="font-weight:700;border-top:2px solid var(--navy)"><td>All MA Filers</td><td>3,279,466</td><td>$128,000 avg</td><td>100%</td><td>100%</td><td>—</td></tr>
       </tbody>
     </table>
-    <div class="source">Source: IRS SOI In-State AGI Shares, tax year 2022. State income tax only. Effective rate = taxes paid ÷ AGI.</div>
+    <div class="source">Source: IRS SOI In-State AGI Shares, tax year 2022. Effective rate = <strong>federal</strong> income tax paid ÷ AGI. IRS SOI reports federal liability and does not publish state income tax, so this column is not a Massachusetts rate: the top-1% figure of 27.3% exceeds Massachusetts' 9% top statutory rate, and the share column beside it is a share of federal tax paid by MA filers, not of MA collections. For MA state tax at the rates on this page, the top 1% averages <span id="cnStateTax">—</span> — an effective <span id="cnStateRate">—</span>.</div>
   </div>
 
   <div class="data-card">
@@ -1335,7 +1336,7 @@ footer a:hover{color:var(--gold)}
     <h3>What Income Level Puts You in Each Group? — Massachusetts 2022</h3>
     <table class="data-table">
       <thead>
-        <tr><th>Percentile Group</th><th>Income Range</th><th>Average Income</th><th>% of MA Taxes</th><th>Plain English</th></tr>
+        <tr><th>Percentile Group</th><th>Income Range</th><th>Average Income</th><th>% of Federal Income Tax Paid by MA Filers</th><th>Plain English</th></tr>
       </thead>
       <tbody>
         <tr style="background:rgba(139,26,26,0.04)"><td style="font-weight:700;color:var(--red)">Top 1%</td><td><strong>Over $891,118</strong></td><td>$2,972,000</td><td style="font-weight:700;color:var(--red)">38.2%</td><td>~32,800 people. Mostly business owners, investors, senior executives, high-paid professionals.</td></tr>
@@ -1388,8 +1389,8 @@ footer a:hover{color:var(--gold)}
 
   <div class="info-box">
     <h4>📋 What This Actually Means — And What It Doesn't</h4>
-    <p>The top 1% paying 38% of taxes isn't unique to Massachusetts — this pattern exists in most high-income states. What makes Massachusetts unusual is the combination: an <strong>unusually mobile top-1%</strong> (many work in finance, tech, and biotech — sectors with location flexibility), an <strong>unusually high new surtax</strong> that directly targets them, and an <strong>unusually volatile revenue base</strong> (76% of capital gains concentrated in 33,000 people whose investment portfolios swing with markets).<br><br>
-    The bottom 50% aren't "doing nothing" — they contribute enormously through sales taxes, property taxes (via rent), payroll taxes, and as workers. But for <em>state income tax specifically</em>, the fiscal math is stark: lose 1,600 of those 32,800 top earners, and Massachusetts loses as much income tax revenue as gaining 200,000 average-income filers.</p>
+    <p>The top 1% paying 38% of the federal income tax collected from MA filers isn't unique to Massachusetts — this pattern exists in most high-income states. What makes Massachusetts unusual is the combination: an <strong>unusually mobile top-1%</strong> (many work in finance, tech, and biotech — sectors with location flexibility), an <strong>unusually high new surtax</strong> that directly targets them, and an <strong>unusually volatile revenue base</strong> (76% of capital gains concentrated in 33,000 people whose investment portfolios swing with markets).<br><br>
+    The bottom 50% aren't "doing nothing" — they contribute enormously through sales taxes, property taxes (via rent), payroll taxes, and as workers. But for <em>state income tax specifically</em>, the fiscal math is stark: lose <span id="cnEqLeavers">—</span> of those 32,800 top earners, and Massachusetts loses as much income tax revenue as it would gain from about <span id="cnEqFilers">—</span> average-income filers — at the file's own $128,000 average and 5% flat rate. (This previously read 200,000, which would be <span id="cnEqWrong">—</span> of tax, roughly 3.5× the figure it was equated to.)</p>
   </div>
 
 </div><!-- end concentration tab -->
@@ -2140,32 +2141,126 @@ function initCharts(tab) {
         },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { title: { display: true, text: '% premium of avg outflow AGI over avg inflow AGI' } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => (ctx.parsed.y > 0 ? '+' : '') + ctx.parsed.y + '%' } } } }
       });
+      // -- Top-1% count and floor --
+      // "Grew steadily from 29,951 in 2013 to 32,795 in 2022" was contradicted by the
+      // table printed directly beneath it: the count PEAKED at 33,466 in 2020 and is
+      // lower now. The stat card's "Growing steadily" sub-label asserted the opposite
+      // of its own data -- on the exact metric this tab exists to interrogate.
+      // Both now read the series: first / peak / last, with no direction asserted.
+      var t1Years = ['2013','2014','2015','2016','2017','2018','2019','2020','2021','2022'];
+      var t1Count = [29951,30369,30831,30963,31409,31744,31695,33466,32598,32795];
+      var t1Floor = [579.5,632.5,649.8,655.7,698.3,740.0,765.8,777.1,988.3,891.1];  // $K
+      var t1Share = [21.0,22.8,22.7,21.6,23.7,23.3,22.3,23.5,30.0,23.1];            // % of all MA income
+      var iPeak = t1Count.indexOf(Math.max.apply(null, t1Count)), iLast = t1Count.length - 1;
+      var nfmt = function(n){ return n.toLocaleString('en-US'); };
+      putTxt('erCntFirst',   nfmt(t1Count[0]));      putTxt('erCntFirstYr', t1Years[0]);
+      putTxt('erCntPeak',    nfmt(t1Count[iPeak]));  putTxt('erCntPeakYr',  t1Years[iPeak]);
+      putTxt('erCntLast',    nfmt(t1Count[iLast]));  putTxt('erCntLastYr',  t1Years[iLast]);
+      putTxt('erCntLast2',   nfmt(t1Count[iLast]));
+      putTxt('erCntPeak2',   nfmt(t1Count[iPeak]));  putTxt('erCntPeakYr2', t1Years[iPeak]);
+
+      // The floor's final move is DOWN (-9.8%), which is why the old caption's causal
+      // claim -- "rising because high earners' incomes have grown" -- could not stand.
+      var iF21 = t1Years.indexOf('2021'), iF22 = t1Years.indexOf('2022');
+      var fmtK = function(v){ return '$' + Math.round(v * 1000).toLocaleString('en-US'); };
+      putTxt('erFloor21', fmtK(t1Floor[iF21]));
+      putTxt('erFloor22', fmtK(t1Floor[iF22]));
+      putTxt('erFloorDrop', ((t1Floor[iF22] / t1Floor[iF21] - 1) * 100).toFixed(1) + '%');
+
+      // "Roughly 21-23%" excluded the table's own 30.0% in 2021.
+      putTxt('erShareMin', Math.min.apply(null, t1Share).toFixed(1) + '%');
+      putTxt('erShareMax', Math.max.apply(null, t1Share).toFixed(1) + '%');
+
+      // -- Revenue at risk (Risk 1) --
+      // $367M / $735M were computed as (5% or 10% of 32,795 filers) x the MA tax on
+      // the band's $2.972M average AGI -- maTax() reproduces both to the dollar, so
+      // they are derived here rather than restated. NB this is MA state tax at the
+      // rates stated on this page (7.5% effective), NOT the 27.3% "effective rate"
+      // in the concentration table, which is federal. See that tab's note.
+      var top1Tax = maTax(TOP1_AVG_AGI);                       // $224,160 = 7.5% of AGI
+      var loss = function(share){ return TOP1_COUNT * share * top1Tax; };
+      var mfmt = function(v){ return '$' + Math.round(v / 1e6).toLocaleString('en-US') + ' million'; };
+      putTxt('cnLoss5',   mfmt(loss(0.05)));
+      putTxt('cnLoss10',  mfmt(loss(0.10)));
+      putTxt('cnLoss5n',  (Math.round(TOP1_COUNT * 0.05 / 10) * 10).toLocaleString('en-US'));
+      putTxt('cnCard5',   '$' + Math.round(loss(0.05) / 1e6) + 'M');
+      putTxt('cnCard10',  '$' + Math.round(loss(0.10) / 1e6) + 'M');
+      putTxt('cnCard5n',  (Math.round(TOP1_COUNT * 0.05 / 10) * 10).toLocaleString('en-US'));
+      putTxt('cnCard10n', (Math.round(TOP1_COUNT * 0.10 / 10) * 10).toLocaleString('en-US'));
+      putTxt('cnCardAgi', '$' + (TOP1_AVG_AGI / 1e6).toFixed(2) + 'M');
+      putTxt('cnCardFloor', '$' + (MA_SURTAX_FLOOR / 1e6).toFixed(2) + 'M');
+
+      // "$735M -- more than a quarter of the surtax" was the wrong side of the line:
+      // against this file's own FY2025 surtax ($3.0B) it is 24.5%, just under a quarter.
+      var lossPct = loss(0.10) / (SURTAX_FY25_ACTUAL * 1e9) * 100;
+      putTxt('cnLoss10Pct', lossPct.toFixed(1) + '% (just under a quarter)');
+      putTxt('cnSurtaxFy25', '$' + SURTAX_FY25_ACTUAL.toFixed(1) + 'B');
+
       safeChart('chartTop1Count', {
         type: 'bar',
         data: {
-          labels: ['2013','2014','2015','2016','2017','2018','2019','2020','2021','2022'],
-          datasets: [{ label: 'MA Top-1% Filer Count', data: [29951,30369,30831,30963,31409,31744,31695,33466,32598,32795], backgroundColor: '#1a4480', borderRadius: 5 }]
+          labels: t1Years,
+          datasets: [{ label: 'MA Top-1% Filer Count', data: t1Count, backgroundColor: '#1a4480', borderRadius: 5 }]
         },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: false, min: 28000, title: { display: true, text: 'Number of MA top-1% filers' } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.parsed.y.toLocaleString() + ' filers' } } } }
       });
       safeChart('chartTop1Floor', {
         type: 'line',
         data: {
-          labels: ['2013','2014','2015','2016','2017','2018','2019','2020','2021','2022'],
-          datasets: [{ label: 'MA Top-1% AGI Floor ($K)', data: [579.5,632.5,649.8,655.7,698.3,740.0,765.8,777.1,988.3,891.1], borderColor: '#c0392b', backgroundColor: 'rgba(192,57,43,0.08)', fill: true, tension: 0.3, pointRadius: 5, pointBackgroundColor: '#c0392b' }]
+          labels: t1Years,
+          datasets: [{ label: 'MA Top-1% AGI Floor ($K)', data: t1Floor, borderColor: '#c0392b', backgroundColor: 'rgba(192,57,43,0.08)', fill: true, tension: 0.3, pointRadius: 5, pointBackgroundColor: '#c0392b' }]
         },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: false, min: 400, title: { display: true, text: 'Min AGI to enter MA top 1% ($K)' } } }, plugins: { legend: { display: false } } }
       });
       break;
 
     case 'concentration':
+      // -- The "effective tax rate" column is FEDERAL, not state --
+      // The table gives the top 1% (avg AGI $2,972,000) a 27.3% "effective tax rate"
+      // while the card above says they average $225,000 of MA state income tax --
+      // which is 7.5%. Both cannot describe the same tax. 27.3% is impossible for
+      // Massachusetts: the top statutory rate is 9%. Three further checks agree:
+      //   * chartImpactRate plots this 27.3% ABOVE ITEP's 8.9% "all state+local
+      //     taxes" bar for >$1M -- a subset cannot exceed the whole;
+      //   * carried across every band the column implies ~$69.7B of tax against MA
+      //     collections in the low $20B range, while maTax() over the same bands
+      //     gives ~$23.5B -- the right order of magnitude;
+      //   * IRS SOI publishes federal liability only; it has no state tax data.
+      // The share column is internally consistent WITH the rate column (the top-1%
+      // 38.2% reproduces from it exactly), so it is a federal share too. Per the
+      // brief the data is left untouched and only the labels are corrected.
+      var top1StateTax = maTax(TOP1_AVG_AGI);
+      putTxt('cnStateTax',      '$' + Math.round(top1StateTax).toLocaleString('en-US'));
+      putTxt('cnStateRate',     (top1StateTax / TOP1_AVG_AGI * 100).toFixed(1) + '%');
+      putTxt('cnCardStateTax',  '$' + (Math.round(top1StateTax / 1000) * 1000).toLocaleString('en-US') + '+');
+      putTxt('cnCardStateRate', (top1StateTax / TOP1_AVG_AGI * 100).toFixed(1) + '%');
+      putTxt('cnCascade', '$' + Math.round(TOP1_COUNT * 0.05 * top1StateTax / 1e6)
+                        + '–' + Math.round(TOP1_COUNT * 0.10 * top1StateTax / 1e6) + 'M');
+
+      // The highest-burden band and its rate both read off the ITEP series. The card
+      // said "$104K - $233K ... 10%", but that band is a hybrid: $104K is ITEP's
+      // $103,500 edge and $233K is the IRS top-10% floor ($232,957). ITEP's 10% band
+      // ends at $160,000; $160K-$391K is 9.0%, so the 10% claim did not reach $233K.
+      var iSq = ITEP_RATES.indexOf(Math.max.apply(null, ITEP_RATES));
+      putTxt('cnSqBand', ITEP_BANDS[iSq]);
+      putTxt('cnSqRate', ITEP_RATES[iSq].toFixed(1) + '%');
+      putTxt('cnSqTop',  'the >$1M band pays ' + ITEP_RATES[ITEP_BANDS.length - 1].toFixed(1) + '%');
+
+      // "Lose 1,600 top earners = gaining 200,000 average filers" was 3.5x off:
+      // 200,000 x $128,000 x 5% = $1.28B, against the $367M it was equated to.
+      var eqLeavers = Math.round(TOP1_COUNT * 0.05 / 10) * 10;
+      var eqFilers = eqLeavers * top1StateTax / maTax(ALL_FILER_AVG_AGI);
+      putTxt('cnEqLeavers', eqLeavers.toLocaleString('en-US'));
+      putTxt('cnEqFilers',  (Math.round(eqFilers / 100) * 100).toLocaleString('en-US'));
+      putTxt('cnEqWrong',   '$' + (200000 * maTax(ALL_FILER_AVG_AGI) / 1e9).toFixed(2) + 'B');
+
       safeChart('chartImpactRate', {
         type: 'bar',
         data: {
-          labels: ['<$27K', '$27K–$104K', '$104K–$160K', '$160K–$391K', '$391K–$1M', '>$1M'],
+          labels: ITEP_BANDS,
           datasets: [
-            { label: 'All state+local taxes (ITEP)', data: [8.2, 9.4, 10.0, 9.0, 7.9, 8.9], backgroundColor: ['#6b7280','#1a4480','#8b1a1a','#b8860b','#1a7a45','#c0392b'], borderRadius: 5 },
-            { label: 'Income tax only (IRS)', data: [2.0, 6.2, 9.9, 13.1, 21.6, 27.3], backgroundColor: 'transparent', type: 'line', borderColor: '#0f172a', pointRadius: 5, pointBackgroundColor: '#0f172a', borderWidth: 2 }
+            { label: 'MA state+local taxes, all types (ITEP)', data: ITEP_RATES, backgroundColor: ['#6b7280','#1a4480','#8b1a1a','#b8860b','#1a7a45','#c0392b'], borderRadius: 5 },
+            { label: 'Federal income tax only (IRS SOI, approx. band match)', data: [2.0, 6.2, 9.9, 13.1, 21.6, 27.3], backgroundColor: 'transparent', type: 'line', borderColor: '#0f172a', pointRadius: 5, pointBackgroundColor: '#0f172a', borderWidth: 2 }
           ]
         },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 30, title: { display: true, text: '% of income' } } }, plugins: { legend: { position: 'top', labels: { font: { size: 10 } } } } }
