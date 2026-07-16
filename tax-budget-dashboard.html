@@ -480,10 +480,10 @@ footer a:hover{color:var(--gold)}
   <div class="alert"><h4>⚠️ The Double Squeeze — Inflation on Top of an Already-Expensive State</h4><div class="alert-grid">
     <div class="alert-item">National cumulative CPI: <strong id="dsNat">—</strong> <span id="dsNatMo"></span> (BLS). Boston: <strong id="dsBos">—</strong> — BLS publishes Boston CPI bimonthly, so it trails the national series</div>
     <div class="alert-item">Boston headline looks lower because MA avoided the worst energy spikes. <strong>Shelter numbers:</strong> Boston <strong id="dsBosSh">—</strong> cumulative vs. <strong id="dsNatSh">—</strong> national</div>
-    <div class="alert-item">Boston tuition &amp; childcare rose <strong>6.7% YoY</strong> (Jan 2026) — the highest since BLS started tracking the series in 2018</div>
+    <div class="alert-item">Boston tuition &amp; childcare rose <strong>6.7% YoY</strong> in Jan 2026 — at the time the steepest rise since BLS began the series in 2018</div>
     <div class="alert-item">All of this sits <strong>on top of</strong> MA's 5.8% cost-of-living premium (BEA RPP 2024) — you were already paying 8% more <em>before</em> inflation hit</div>
-    <div class="alert-item">A $100 grocery run in Jan 2021 now costs <strong>~$126 nationally</strong> — and more like <strong>~$134 in MA</strong> when the RPP premium is included</div>
-    <div class="alert-item">March 2026: national CPI jumped <strong>0.9% in a single month</strong> — gasoline surged 21.2%. Boston March data not yet released</div>
+    <div class="alert-item">A $100 grocery run in Jan 2021 now costs <strong id="dsBask">—</strong> nationally — and more like <strong id="dsBaskMa">—</strong> in MA when the RPP premium is included</div>
+    <div class="alert-item">In March 2026, national CPI jumped <strong>0.9% in a single month</strong> as gasoline surged 21.2% — a reminder of how fast a single energy spike moves the headline number</div>
   </div></div>
 
   <div class="chart-grid">
@@ -1618,6 +1618,16 @@ function initCharts(tab) {
       showLatest(cumBos,'dsBos',null);
       showLatest(cumNatSh,'dsNatSh',null);
       showLatest(cumBosSh,'dsBosSh',null);
+
+      // $100 basket, same source as the national line above. RPP premium is the
+      // BEA figure cited two items up; it is annual, so it is a constant here.
+      var RPP_PREMIUM=0.058;
+      var iNat=lastIdx(cumNat);
+      if(iNat>=0){
+        var basket=100*(1+cumNat[iNat]/100);
+        setTxt('dsBask','~$'+basket.toFixed(0));
+        setTxt('dsBaskMa','~$'+(basket*(1+RPP_PREMIUM)).toFixed(0));
+      }
 
       safeChart('chartCumNatVsBos',{type:'line',data:{labels:cumL,datasets:[{label:'National CPI-U',data:cumNat,borderColor:'#c0392b',backgroundColor:'rgba(192,57,43,0.06)',fill:true,tension:.35,pointRadius:2,pointHoverRadius:6,borderWidth:2.5},{label:'Boston CPI-U',data:cumBos,borderColor:'#b8860b',borderWidth:2.5,tension:.35,pointRadius:2,pointHoverRadius:6,spanGaps:false},{label:'National Core CPI',data:cumNatCore,borderColor:'#1a7a4c',borderWidth:1.5,borderDash:[6,3],tension:.35,pointRadius:0,pointHoverRadius:5}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{font:{size:11}}},tooltip:{callbacks:{label:pTip}}},scales:{y:{beginAtZero:true,max:30,ticks:{callback:function(v){return v+'%'}},title:{display:true,text:'Cumulative Change (%)'}},x:{grid:{display:false}}}}});
 
