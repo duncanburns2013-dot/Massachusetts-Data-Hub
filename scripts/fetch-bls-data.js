@@ -177,6 +177,19 @@ const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','
 // Series → oldest-first list of monthly points. Drops the M13 annual average and
 // any month BLS marks unavailable (value "-", e.g. the 2025 appropriations lapse),
 // so chart lines stay continuous instead of breaking on a fabricated NaN.
+// Map a series to { "2026-M05": 7307, ... } so a value can be pulled for a specific
+// month rather than just the newest one. Needed wherever two series are combined:
+// they publish on different schedules, so "latest of each" can silently straddle
+// two different months.
+function periodMap(series) {
+  const out = {};
+  (series?.data || []).forEach(d => {
+    const v = parseFloat(d.value);
+    if (!Number.isNaN(v)) out[`${d.year}-${d.period}`] = v;
+  });
+  return out;
+}
+
 function monthsOf(series) {
   if (!series?.data?.length) return [];
   return series.data
@@ -473,7 +486,12 @@ async function updateDashboard(data, empSeries) {
     // thousands-vs-persons, understating the ratio ~24x (rendered 0.04 against a card
     // subtitle reading "Healthy: 1.0-1.2"). LNS13000000 is national unemployed in
     // thousands, so the ratio comes out unitless and comparable to that subtitle.
-    const unemployed = data.us_unemployment_level?.latest?.value;
+    //
+    // Pull the SAME month rather than each series' newest: JOLTS lags the Employment
+    // Situation by a month, so "latest of each" pairs May openings with June
+    // unemployment and quietly reports a ratio for a month that never existed.
+    const period     = `${data.us_job_openings.latest.year}-${data.us_job_openings.latest.period}`;
+    const unemployed = data.us_unemployment_level?.byPeriod?.[period];
     const ratio      = unemployed ? (v / unemployed).toFixed(2) : null;
     setField('jolts-openings',       openingsM);
     setField('jolts-openings-date',  `${date} · auto-updated`);
@@ -482,9 +500,9 @@ async function updateDashboard(data, empSeries) {
     if (ratio) {
       setField('jolts-ratio', ratio);
     } else {
-      console.warn('   ⚠️  JOLTS ratio skipped: no US unemployment level fetched');
+      console.warn(`   ⚠️  JOLTS ratio skipped: no US unemployment level for ${period}`);
     }
-    console.log(`   ✅ JOLTS fields updated: ${openingsM} (${date}), ratio ${ratio ?? 'n/a'}`);
+    console.log(`   ✅ JOLTS fields updated: ${openingsM} (${date}), ratio ${ratio ?? 'n/a'} (both ${period})`);
   }
 
   // ── National Employment Situation block + table ───────────────────────────
@@ -663,7 +681,10 @@ async function main() {
     ma_labor_force:        { latest: getLatestValue(findSeries(EMPLOYMENT_SERIES.MA_LABOR_FORCE)) },
     ma_total_nonfarm:      { latest: getLatestValue(findSeries(EMPLOYMENT_SERIES.MA_TOTAL_NONFARM)) },
     us_unemployment_rate:  { latest: getLatestValue(findSeries(EMPLOYMENT_SERIES.US_UNEMPLOYMENT_RATE)) },
-    us_unemployment_level: { latest: getLatestValue(findSeries(EMPLOYMENT_SERIES.US_UNEMPLOYMENT_LEVEL)) },
+    us_unemployment_level: {
+      latest:   getLatestValue(findSeries(EMPLOYMENT_SERIES.US_UNEMPLOYMENT_LEVEL)),
+      byPeriod: periodMap(findSeries(EMPLOYMENT_SERIES.US_UNEMPLOYMENT_LEVEL)),
+    },
     us_job_openings:       null,
     jolts_note: 'BLS discontinued monthly state JOLTS in 2026. National JOLTS still monthly. First annual state release: July 2026.',
   };
