@@ -120,10 +120,10 @@ footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1p
   <h1>Massachusetts is Unaffordable</h1>
   <p class="sub">A data-driven analysis of the state's employment, housing, and cost-of-living crisis — built exclusively from official government sources.</p>
   <div class="hero-stats">
-    <div class="hero-stat"><div class="val bad">#44</div><div class="lbl">Unemployment Rank</div></div>
+    <div class="hero-stat"><div class="val bad"><span id="heroUnemp">—</span></div><div class="lbl">Unemployment <span id="heroUnempMo"></span></div></div>
     <div class="hero-stat"><div class="val bad">#2</div><div class="lbl">Cost of Living</div></div>
     <div class="hero-stat"><div class="val bad">$638K</div><div class="lbl">Median Home</div></div>
-    <div class="hero-stat"><div class="val bad">+79%</div><div class="lbl">Electricity vs Nat'l</div></div>
+    <div class="hero-stat"><div class="val bad"><span id="heroElecPrem">—</span></div><div class="lbl">Electricity vs Nat'l</div></div>
     <div class="hero-stat"><div class="val bad">55%</div><div class="lbl">Short of "Comfortable"</div></div>
   </div>
 </div>
@@ -164,10 +164,22 @@ footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1p
 <!-- EMPLOYMENT -->
 <div id="employment" class="tab-content">
   <h2 class="section-title">Employment Crisis</h2>
-  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">Massachusetts ranks 44th in unemployment — worse than 86% of states.</p>
+  <!-- ANCHORED to May of 2026 (BLS LAUS, state series via FRED). This page holds
+       no 50-state series, so a live rank cannot be derived here -- it is stated as
+       a fact about a month instead, and the counts are given rather than a "worse
+       than N% of states" superlative that inverts the moment the data moves.
+       It replaces "ranks 44th -- worse than 86% of states", which was false: MA
+       was 4.5% and 32 of the other 50 states + DC were LOWER, not higher.
+       "In May of 2026" is deliberate, NOT a typo -- do not tidy it to the usual
+       abbreviated form. update-affordability-dashboard.py rewrites the FIRST
+       /Mmm 20NN/ literal it finds in this file to the latest EIA period, and the
+       short form of this date would match it. -->
+  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">In May of 2026, Massachusetts unemployment was 4.5%. Of the 50 other states and DC, 32 were lower, 15 were higher and 2 were level.</p>
   <div class="stat-row">
-    <div class="stat-card"><div class="label">Unemployment</div><div class="value red">4.8%</div><div class="sub">December 2025</div></div>
-    <div class="stat-card"><div class="label">National Rank</div><div class="value red">#44</div><div class="sub">of 51 (50 + DC)</div></div>
+    <!-- The updater rewrites this card's rate AND its month label together; keep the
+         markup shape (label / value / sub) exactly as-is or its anchor stops matching. -->
+    <div class="stat-card"><div class="label">Unemployment</div><div class="value red">4.5%</div><div class="sub">May 2026</div></div>
+    <div class="stat-card"><div class="label">States Below MA</div><div class="value red">32 of 50</div><div class="sub">+ DC · lower rate · May of 2026</div></div>
     <div class="stat-card"><div class="label">Net Jobs 2025</div><div class="value red">−4,500</div><div class="sub">Declining employment</div></div>
     <div class="stat-card"><div class="label">Layoffs YTD</div><div class="value amber">323K</div><div class="sub">+13.7% vs 2024</div></div>
   </div>
@@ -178,7 +190,7 @@ footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1p
     <div class="alert-item">Insured unemployment: <strong>2.7%</strong> (5th highest nationally)</div>
   </div></div>
   <div class="chart-grid">
-    <div class="chart-card"><h3>State Unemployment Rankings</h3><div class="chart-area"><canvas id="c3"></canvas></div><div class="source">Source: BLS LAUS, December 2025</div></div>
+    <div class="chart-card"><h3>State Unemployment Rankings</h3><div class="chart-area"><canvas id="c3"></canvas></div><div class="source">Source: BLS LAUS, May of 2026</div></div>
     <div class="chart-card"><h3>MA vs US Historical Trend</h3><div class="chart-area"><canvas id="c4"></canvas></div><div class="source">Source: BLS LAUS, 2019–2025</div></div>
   </div>
 </div>
@@ -212,39 +224,37 @@ footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1p
 <!-- ELECTRICITY -->
 <div id="electricity" class="tab-content">
   <h2 class="section-title">⚡ Electricity Crisis</h2>
-  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">Massachusetts has the 2nd highest electricity rates in the nation. Residents pay 79% more than the national average.</p>
+  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">Massachusetts residential electricity runs <span id="elecPremProse">—</span> above the national average: <span id="elecMaProse">—</span> vs <span id="elecUsProse">—</span> per kWh.</p>
   <div class="mega-card" style="background:linear-gradient(135deg,#78350f,var(--navy))">
     <div>
       <div class="mega-label">Massachusetts Electricity Rate</div>
-      <div class="big-val">29.45¢</div>
-      <div class="mega-desc">Per kilowatt-hour — <strong>79% higher</strong> than the national average of 18.83¢/kWh. Only Hawaii is more expensive.</div>
+      <div class="big-val"><span id="elecMaBig">—</span></div>
+      <div class="mega-desc">Per kilowatt-hour — <strong><span id="elecPremMega">—</span> higher</strong> than the national average of <span id="elecUsMega">—</span>/kWh. <span id="elecRankMega">—</span></div>
     </div>
     <div class="mega-box">
       <div class="mega-label" style="color:rgba(255,255,255,0.5)">National Average</div>
-      <div class="box-val green">18.83¢</div>
+      <div class="box-val green"><span id="elecUsBox">—</span></div>
       <hr>
       <div class="mega-label" style="color:rgba(255,255,255,0.5)">MA Premium</div>
-      <div class="box-val red">+79%</div>
-      <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:6px">Extra $101/month for typical household</div>
+      <div class="box-val red"><span id="elecPremBox">—</span></div>
+      <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:6px">Extra <span id="elecExtraMo">—</span>/month for typical household</div>
     </div>
   </div>
   <div class="stat-row">
-    <div class="stat-card"><div class="label">Residential Rate</div><div class="value red">29.45¢</div><div class="sub">per kWh (Feb 2026)</div></div>
-    <div class="stat-card"><div class="label">Industrial Rate</div><div class="value red">21.71¢</div><div class="sub">+134% vs US</div></div>
-    <div class="stat-card"><div class="label">Rate Growth</div><div class="value red">+81%</div><div class="sub">Since 2014 · 2x faster than US</div></div>
-    <div class="stat-card"><div class="label">Annual Extra Cost</div><div class="value amber">$1,216</div><div class="sub">vs national avg</div></div>
+    <!-- "Feb 2026" here is the updater's EIA period anchor: it rewrites this label to
+         whatever month EIA last published, alongside the rate. Keep it abbreviated.
+         Every OTHER month label on this tab is deliberately spelled out in full
+         ("February 2026") so the updater's /Mmm 20NN/ search cannot re-date data it
+         does not actually refresh. -->
+    <div class="stat-card"><div class="label">Residential Rate</div><div class="value red"><span id="elecMaCard">—</span></div><div class="sub">per kWh (Feb 2026)</div></div>
+    <div class="stat-card"><div class="label">Industrial Rate</div><div class="value red"><span id="elecIndCard">—</span></div><div class="sub">+134% vs US</div></div>
+    <div class="stat-card"><div class="label">Rate Growth</div><div class="value red"><span id="elecGrowth">—</span></div><div class="sub">Since 2014 · US <span id="elecGrowthUs">—</span></div></div>
+    <div class="stat-card"><div class="label">Annual Extra Cost</div><div class="value amber"><span id="elecExtraYr">—</span></div><div class="sub">vs national avg</div></div>
   </div>
-  <div class="alert amber"><h4>🏆 State Electricity Rankings — Residential (Feb 2026)</h4><div class="alert-grid">
-    <div class="alert-item"><strong>#1 Hawaii:</strong> 39.79¢/kWh</div>
-    <div class="alert-item"><strong>#2 Massachusetts:</strong> 29.45¢/kWh ⬆ Moves up</div>
-    <div class="alert-item"><strong>#3 Maine:</strong> 30.73¢/kWh</div>
-    <div class="alert-item"><strong>#4 California:</strong> 30.29¢/kWh</div>
-    <div class="alert-item"><strong>#5 Rhode Island:</strong> 30.14¢/kWh</div>
-    <div class="alert-item"><strong>#6 New York:</strong> 28.37¢/kWh</div>
-  </div><div class="source">5 of the 6 priciest states (excl. Hawaii) are in New England</div></div>
+  <div class="alert amber"><h4>🏆 Highest Residential Rates — Massachusetts vs Peer States</h4><div class="alert-grid" id="elecRankList"></div><div class="source"><span id="elecNeNote">—</span> · Peer-state rates: EIA Table 5.6.A, February 2026; Massachusetts tracks the latest EIA release.</div></div>
   <div class="chart-grid">
-    <div class="chart-card"><h3>MA vs US Rates (2014–2026)</h3><div class="chart-area"><canvas id="cElec1"></canvas></div><div class="source">Source: EIA Electric Power Monthly</div></div>
-    <div class="chart-card"><h3>State Comparison (Feb 2026)</h3><div class="chart-area"><canvas id="cElec2"></canvas></div><div class="source">Source: EIA Table 5.6.A</div></div>
+    <div class="chart-card"><h3>MA vs US Rates (2014–latest)</h3><div class="chart-area"><canvas id="cElec1"></canvas></div><div class="source">Source: EIA Electric Power Monthly · final point is the latest EIA release</div></div>
+    <div class="chart-card"><h3>Massachusetts vs Peer States</h3><div class="chart-area"><canvas id="cElec2"></canvas></div><div class="source">Source: EIA Table 5.6.A · peer states as of February 2026</div></div>
   </div>
   <div class="chart-grid">
     <div class="chart-card"><h3>Monthly Bill Breakdown</h3><div class="chart-area"><canvas id="cElec3"></canvas></div><div class="source">Source: Eversource rate schedules</div></div>
@@ -270,9 +280,9 @@ footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1p
   <h2 class="section-title">Inflation Squeeze</h2>
   <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">Northeast inflation consistently outpaces national averages. Real wages have declined.</p>
   <div class="stat-row">
-    <div class="stat-card"><div class="label">Northeast CPI</div><div class="value red">2.8%</div><div class="sub">January 2026</div></div>
+    <div class="stat-card"><div class="label">Northeast CPI</div><div class="value red"><span id="neCpiYoY">—</span></div><div class="sub"><span id="neCpiYoYMo">—</span></div></div>
     <div class="stat-card"><div class="label">Core Inflation</div><div class="value amber">2.5%</div><div class="sub">Ex food & energy</div></div>
-    <div class="stat-card"><div class="label">Cumulative</div><div class="value red">+21.6%</div><div class="sub">Since Jan 2020</div></div>
+    <div class="stat-card"><div class="label">Cumulative</div><div class="value red"><span id="neCpiCum">—</span></div><div class="sub">Since <span id="neCpiCumBase">—</span></div></div>
     <div class="stat-card"><div class="label">Electricity</div><div class="value amber">+6.3%</div><div class="sub">YoY increase</div></div>
   </div>
   <div class="chart-grid">
@@ -341,28 +351,148 @@ function switchTab(tabId,btn){document.querySelectorAll('.tab-content').forEach(
 
 const R='#c0392b',G='#1a7a4c',B='#1a4480',A='#b8860b',P='#7e22ce',M='#d4d0ca';
 
+const setTxt=(id,t)=>{const e=document.getElementById(id);if(e)e.textContent=t};
+const pct1=n=>(n>=0?'+':'−')+Math.abs(n).toFixed(1)+'%';
+
+// ── Electricity: one source of truth ─────────────────────────────────────────
+// MA_ELEC / US_ELEC are the live EIA residential rates and the ONLY ¢-literals
+// left in this file. update-affordability-dashboard.py string-replaces every
+// "NN.NN¢" it finds with the latest EIA release, so the ¢ must stay INSIDE the
+// quotes for these to keep tracking — parseFloat stops at it. Do not "clean up"
+// the quotes or the rates silently freeze.
+//
+// Every electricity figure on this tab now derives from these two numbers. They
+// were previously retyped by hand in six places plus two chart arrays the updater
+// never touched, which is how the page came to shout "+79% higher than national"
+// directly beside a rate pair that works out to +56.4%. The 79% was the chart's
+// orphaned 31.16/17.45 vintage, stranded when the bot moved the prose and could
+// not reach the arrays.
+//
+// NB: never write a bare "NN.NN" followed by a cent sign anywhere else in this
+// file — comments included. The updater matches that shape, and a stray literal
+// either gets silently rewritten or competes with the two seeds below.
+const MA_ELEC=parseFloat('29.45¢'), US_ELEC=parseFloat('18.83¢');
+const elecPrem=(MA_ELEC-US_ELEC)/US_ELEC*100;
+
+// EIA industrial price, February 2026. Deliberately NOT written with a cent sign:
+// at 21.71 it sits inside the updater's 15-to-25 "US residential rate" detection
+// band, and it only escaped being overwritten because the US rate happened to
+// appear more often than it did. Had those counts ever tied, the bot would have
+// pasted the US residential rate over the MA industrial one. Rendering the sign
+// from JS keeps this number out of that contest entirely.
+const MA_INDUSTRIAL=21.71;
+
+// A typical MA household at 600 kWh/month — the same basis update-affordability-
+// dashboard.py uses for its own extra-cost formulas, so the page and the script
+// cannot disagree. The old "$1,216/yr · $101/month" pair was self-consistent with
+// itself but implied an MA-vs-US gap of nearly 17 cents/kWh — a spread that
+// matched no figure anywhere on the page.
+const KWH_MO=600, KWH_YR=7200;
+const extraMo=(MA_ELEC-US_ELEC)/100*KWH_MO, extraYr=(MA_ELEC-US_ELEC)/100*KWH_YR;
+
+// EIA Electric Power Monthly Table 5.6.A, residential, February 2026 snapshot.
+// The updater tracks only Massachusetts and the US average, so these peers are a
+// frozen constant — which is why every month label near them is spelled out in
+// full ("February 2026"). The abbreviated form would be rewritten to the latest
+// EIA period by the updater's /Mmm 20NN/ search, silently re-dating a snapshot
+// these values are not from.
+const PEER_RATES=[{n:'Hawaii',v:39.79},{n:'Maine',v:30.73},{n:'California',v:30.29},
+                  {n:'Rhode Island',v:30.14},{n:'New York',v:28.37},{n:'Connecticut',v:28.30}];
+const LOUISIANA=12.46;   // cheapest state; chart comparator only, not ranked
+const NEW_ENGLAND={'Maine':1,'New Hampshire':1,'Vermont':1,'Massachusetts':1,'Rhode Island':1,'Connecticut':1};
+
+// MA's position is computed from the list the page actually shows, so it cannot
+// contradict it again. It previously read "#2 Massachusetts … Only Hawaii is more
+// expensive" while the same six rows listed Maine, California and Rhode Island all
+// above MA. The bot moved MA 30.21→29.45 and the hand-typed "#2" stayed put — and
+// even at 30.21 it was already below Maine.
+const ranked=PEER_RATES.concat([{n:'Massachusetts',v:MA_ELEC,ma:true}]).sort((a,b)=>b.v-a.v);
+const maRank=ranked.findIndex(s=>s.ma)+1;
+
+// EIA annual average residential price, 2014–2024. The final point is the live
+// rate above, so the chart tracks the headline instead of drifting away from it.
+const ELEC_YRS=['2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'];
+const MA_HIST=[18.8,19.8,21.5,21.8,24.7,25.5,24.5,24.5,30.7,29.2,35.3];
+const US_HIST=[12.5,12.7,12.6,12.9,13.0,13.0,13.2,13.7,15.1,16.2,16.8];
+const elecLbls=ELEC_YRS.concat(['Latest']);
+const maSeries=MA_HIST.concat([MA_ELEC]);
+const usSeries=US_HIST.concat([US_ELEC]);
+
+// Growth since 2014, both sides derived from the series above and shown side by
+// side rather than as a ratio. "+81% · 2x faster than US" was stale in both halves
+// at once: the ratio only worked *because* the numerator was wrong, so correcting
+// one half alone would have left the other lying. On the live rates MA is +56.6%
+// and the US +50.6% — close enough that any "Nx faster" phrasing would flip with
+// the next EIA release.
+const maGrowth=(MA_ELEC/MA_HIST[0]-1)*100, usGrowth=(US_ELEC/US_HIST[0]-1)*100;
+
+// Extra annual cost, derived from the same two series rather than retyped.
+const extraSeries=maSeries.map((v,i)=>Math.round((v-usSeries[i])/100*KWH_YR));
+
+// ── Northeast CPI: verified constants ────────────────────────────────────────
+// BLS CPI-U, Northeast urban, all items, NSA (series CUUR0100SA0) — index levels,
+// not percentages, so every claim below is one division away from the source and
+// they cannot disagree with each other. Nothing auto-updates this page's CPI
+// (scripts/update_cumulative_inflation.py writes tax-budget-dashboard.html only),
+// so refresh these three by hand when BLS publishes.
+//   Old page: "+21.6% since January 2020" (live: +28.4%) sat beside "CPI +22.7%
+//   over 4 years" — arithmetically impossible, since a 4-year rise cannot exceed
+//   the 6.5-year rise that contains it.
+// Month labels are spelled out in full on purpose: the abbreviated form would
+// match the updater's /Mmm 20NN/ EIA-period search and be rewritten.
+const NE_CPI={base:{lbl:'January 2020',v:272.316},prior:{lbl:'June 2025',v:335.078},latest:{lbl:'June 2026',v:349.552}};
+const US_CPI={prior:{lbl:'June 2025',v:322.561},latest:{lbl:'June 2026',v:333.952}};   // CPIAUCNS
+const neCpiYoY=(NE_CPI.latest.v/NE_CPI.prior.v-1)*100;
+const neCpiCum=(NE_CPI.latest.v/NE_CPI.base.v-1)*100;
+const usCpiYoY=(US_CPI.latest.v/US_CPI.prior.v-1)*100;
+
+// ── BLS LAUS annual averages (FRED MAUR / UNRATE), mean of monthly SA values ──
+// 2025 is an 11-month mean: BLS published no October 2025 household survey during
+// the shutdown. The old series carried MA 2025 = 4.8, which was December's monthly
+// reading standing in for the year (the true annual average is 4.45) — and 2020's
+// 8.9 understated the COVID spike by nearly half a point.
+const UE_YRS=['2019','2020','2021','2022','2023','2024','2025'];
+const UE_MA=[3.05,9.34,5.32,3.64,3.47,3.98,4.45];
+const UE_US=[3.68,8.10,5.35,3.65,3.62,4.02,4.26];
+
 function initCharts(tab){
   switch(tab){
     case 'overview':
-      safeChart('c1',{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'Massachusetts',data:[3,8.9,5.4,3.7,3.5,4.1,4.8],borderColor:R,backgroundColor:'rgba(192,57,43,0.08)',borderWidth:2.5,fill:true,tension:.4,pointRadius:5},{label:'US Average',data:[3.7,8.1,5.4,3.6,3.6,4,4.4],borderColor:M,borderWidth:2,borderDash:[5,3],fill:false,tension:.4,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11}}}},scales:{y:{beginAtZero:true}}}});
+      safeChart('c1',{type:'line',data:{labels:UE_YRS,datasets:[{label:'Massachusetts',data:UE_MA,borderColor:R,backgroundColor:'rgba(192,57,43,0.08)',borderWidth:2.5,fill:true,tension:.4,pointRadius:5},{label:'US Average',data:UE_US,borderColor:M,borderWidth:2,borderDash:[5,3],fill:false,tension:.4,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11}}}},scales:{y:{beginAtZero:true}}}});
       safeChart('c2',{type:'bar',data:{labels:['Utilities','Healthcare','Housing','Overall','Food','Transport'],datasets:[{data:[166,131,130,108,105,102],backgroundColor:[R,R,A,B,G,G],borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'Index: '+c.raw+' (US = 100)'}}},scales:{x:{min:80,max:180}}}});
       break;
     case 'employment':
-      safeChart('c3',{type:'bar',data:{labels:['S. Dakota','N. Dakota','New Hampshire','US Average','Massachusetts','California','DC'],datasets:[{data:[1.9,2.5,3,4.4,4.8,5.5,6],backgroundColor:[G,G,G,B,R,A,A],borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{min:0,max:7}}}});
-      safeChart('c4',{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024','2025'],datasets:[{label:'MA',data:[3,8.9,5.4,3.7,3.5,4.1,4.8],borderColor:R,borderWidth:2.5,fill:false,tension:.4,pointRadius:5},{label:'US',data:[3.7,8.1,5.4,3.6,3.6,4,4.4],borderColor:M,backgroundColor:'rgba(0,0,0,0.02)',borderWidth:2,fill:true,tension:.4,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11}}}}}});
+      // BLS LAUS, May of 2026 — the same month the tab's anchored rank sentence
+      // cites. Previously December 2025 values, which put MA at 4.8% next to a card
+      // the updater keeps at the current rate.
+      safeChart('c3',{type:'bar',data:{labels:['S. Dakota','N. Dakota','New Hampshire','US Average','Massachusetts','California','DC'],datasets:[{data:[2.1,2.4,3.0,4.3,4.5,5.3,6.1],backgroundColor:[G,G,G,B,R,A,A],borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{min:0,max:7}}}});
+      safeChart('c4',{type:'line',data:{labels:UE_YRS,datasets:[{label:'MA',data:UE_MA,borderColor:R,borderWidth:2.5,fill:false,tension:.4,pointRadius:5},{label:'US',data:UE_US,borderColor:M,backgroundColor:'rgba(0,0,0,0.02)',borderWidth:2,fill:true,tension:.4,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11}}}}}});
       break;
     case 'housing':
       safeChart('c5',{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024','2025'],datasets:[{data:[410,450,550,550,570,615,638],borderColor:B,backgroundColor:'rgba(26,68,128,0.08)',borderWidth:2.5,fill:true,tension:.4,pointRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'$'+v+'K'}}}}});
       safeChart('c6',{type:'bar',data:{labels:['Springfield','Worcester','Statewide','Essex','Boston','Newburyport'],datasets:[{data:[288,450,638,699,800,1328],backgroundColor:[G,B,A,P,R,'#5a3e28'],borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>'$'+v+'K'}}}}});
       break;
     case 'electricity':
-      safeChart('cElec1',{type:'line',data:{labels:['2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2026'],datasets:[{label:'Massachusetts',data:[18.8,19.8,21.5,21.8,24.7,25.5,24.5,24.5,30.7,29.2,35.3,31.16],borderColor:A,backgroundColor:'rgba(184,134,11,0.08)',borderWidth:2.5,fill:true,tension:.4,pointRadius:4},{label:'US Average',data:[12.5,12.7,12.6,12.9,13.0,13.0,13.2,13.7,15.1,16.2,16.8,17.45],borderColor:G,borderWidth:2,borderDash:[5,5],fill:false,tension:.4,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11}}}},scales:{y:{ticks:{callback:v=>v+'¢'}}}}});
-      safeChart('cElec2',{type:'bar',data:{labels:['Hawaii','Massachusetts','Maine','California','Rhode Island','New York','Connecticut','US Average','Louisiana'],datasets:[{data:[39.79,31.16,30.73,30.29,30.14,28.37,28.30,17.45,12.46],backgroundColor:['#94a3b8',A,'#94a3b8','#94a3b8','#94a3b8','#94a3b8','#94a3b8',G,G],borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>v+'¢'}}}}});
+      safeChart('cElec1',{type:'line',data:{labels:elecLbls,datasets:[{label:'Massachusetts',data:maSeries,borderColor:A,backgroundColor:'rgba(184,134,11,0.08)',borderWidth:2.5,fill:true,tension:.4,pointRadius:4},{label:'US Average',data:usSeries,borderColor:G,borderWidth:2,borderDash:[5,5],fill:false,tension:.4,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11}}}},scales:{y:{ticks:{callback:v=>v+'¢'}}}}});
+      // Ranked bars, MA and the US average live, drawn from the same array the
+      // ranking list reads — so the chart's ordering and the list's "#N" cannot
+      // disagree with each other or with the headline.
+      (function(){
+        const bars=ranked.concat([{n:'US Average',v:US_ELEC,us:true},{n:'Louisiana',v:LOUISIANA,us:true}]);
+        safeChart('cElec2',{type:'bar',data:{labels:bars.map(s=>s.n),datasets:[{data:bars.map(s=>s.v),backgroundColor:bars.map(s=>s.ma?A:(s.us?G:'#94a3b8')),borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>v+'¢'}}}}});
+      })();
       safeChart('cElec3',{type:'doughnut',data:{labels:['Supply (40%)','Distribution (30%)','Public Benefits (17%)','Transmission (13%)'],datasets:[{data:[40,30,17,13],backgroundColor:[B,P,R,A],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});
-      safeChart('cElec4',{type:'bar',data:{labels:['2014','2016','2018','2020','2022','2024','2026'],datasets:[{data:[456,636,840,816,1116,1332,1216],backgroundColor:'rgba(192,57,43,0.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'$'+v}}}}});
+      safeChart('cElec4',{type:'bar',data:{labels:elecLbls,datasets:[{data:extraSeries,backgroundColor:'rgba(192,57,43,0.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'$'+v}}}}});
       break;
     case 'inflation':
-      safeChart('c7',{type:'bar',data:{labels:['2020','2021','2022','2023','2024','2025','2026'],datasets:[{label:'Northeast',data:[1.4,4.9,7.1,3.9,3.5,3.3,2.8],backgroundColor:R,borderRadius:4},{label:'National',data:[1.2,4.7,8,4.1,2.9,2.7,2.4],backgroundColor:M,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11}}}},scales:{y:{ticks:{callback:v=>v+'%'}}}}});
+      // The trailing point is the latest YoY derived from the index constants above,
+      // so this chart and the "Northeast CPI" card read the same month. It used to
+      // end at 2.8 / 2.4 — January 2026 readings left in place while the card beside
+      // it claimed to be current.
+      (function(){
+        const yrs=['2020','2021','2022','2023','2024','2025'];
+        safeChart('c7',{type:'bar',data:{labels:yrs.concat(['Latest']),datasets:[{label:'Northeast',data:[1.4,4.9,7.1,3.9,3.5,3.3].concat([+neCpiYoY.toFixed(1)]),backgroundColor:R,borderRadius:4},{label:'National',data:[1.2,4.7,8,4.1,2.9,2.7].concat([+usCpiYoY.toFixed(1)]),backgroundColor:M,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11}}}},scales:{y:{ticks:{callback:v=>v+'%'}}}}});
+      })();
       break;
     case 'afford':
       safeChart('c8',{type:'bar',data:{labels:['Need to be\nComfortable','Median Family\nIncome'],datasets:[{data:[313747,140309],backgroundColor:[R,G],borderRadius:8,barThickness:60}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{max:350000,ticks:{callback:v=>'$'+(v/1000)+'K'}}}}});
@@ -378,6 +508,62 @@ document.getElementById('salaryBars').innerHTML=jobs.map(j=>{
   const pct=(j.s/maxS)*100,below=j.s<thresh;
   return`<div class="bar-item"><div class="bar-head"><span class="bar-label">${j.n}</span><span class="bar-val ${below?'red':'green'}">$${j.s.toLocaleString()}</span></div><div class="bar-track"><div class="bar-fill ${below?'red':'green'}" style="width:${pct}%"></div><div class="bar-threshold" style="left:${threshPct}%"></div></div></div>`;
 }).join('');
+
+// ── Prose reads the data, the data is never retyped into the prose ───────────
+const cents=v=>v.toFixed(2)+'¢';
+
+// Electricity
+setTxt('elecMaBig',   cents(MA_ELEC));
+setTxt('elecMaCard',  cents(MA_ELEC));
+setTxt('elecMaProse', cents(MA_ELEC));
+setTxt('elecUsBox',   cents(US_ELEC));
+setTxt('elecUsMega',  cents(US_ELEC));
+setTxt('elecUsProse', cents(US_ELEC));
+setTxt('elecIndCard', cents(MA_INDUSTRIAL));
+setTxt('elecPremBox',   pct1(elecPrem));
+setTxt('elecPremMega',  pct1(elecPrem));
+setTxt('elecPremProse', pct1(elecPrem));
+setTxt('heroElecPrem',  pct1(elecPrem));
+setTxt('elecExtraMo', '$'+Math.round(extraMo));
+setTxt('elecExtraYr', '$'+Math.round(extraYr).toLocaleString());
+setTxt('elecGrowth',   pct1(maGrowth));
+setTxt('elecGrowthUs', pct1(usGrowth));
+
+// Ranking list + MA's position, both read off `ranked`
+const rl=document.getElementById('elecRankList');
+if(rl) rl.innerHTML=ranked.map((s,i)=>
+  `<div class="alert-item"><strong>#${i+1} ${s.n}:</strong> ${cents(s.v)}/kWh${s.ma?' ←':''}</div>`).join('');
+setTxt('elecRankMega', `Among the ${ranked.length} states shown below, Massachusetts ranks #${maRank}.`);
+
+// "5 of the 6 priciest states (excl. Hawaii) are in New England" was wrong by the
+// page's own list — Maine, Rhode Island, Connecticut and MA are New England, but
+// California and New York are not, making it 4 of 6. Counted from the data now.
+const exHawaii=ranked.filter(s=>s.n!=='Hawaii');
+setTxt('elecNeNote', `${exHawaii.filter(s=>NEW_ENGLAND[s.n]).length} of the ${exHawaii.length} priciest states listed (excluding Hawaii) are in New England`);
+
+// Northeast CPI
+setTxt('neCpiYoY',    neCpiYoY.toFixed(1)+'%');
+setTxt('neCpiYoYMo',  NE_CPI.latest.lbl);
+setTxt('neCpiCum',    pct1(neCpiCum));
+setTxt('neCpiCumBase',NE_CPI.base.lbl);
+
+// The hero mirrors the Unemployment stat card rather than carrying its own copy.
+// That card is the updater's injection surface — it rewrites the rate and its month
+// label together — so a hero derived from it cannot go stale. The hero previously
+// read "#44 Unemployment Rank", which was false and unfixable-in-place: no 50-state
+// series exists on this page to derive a rank from, so the ranking claim now lives
+// in the Employment tab as a sentence anchored to a named month.
+(function(){
+  let card=null;
+  document.querySelectorAll('#employment .stat-card').forEach(c=>{
+    const l=c.querySelector('.label');
+    if(l&&l.textContent.trim()==='Unemployment') card=c;
+  });
+  if(!card) return;
+  const v=card.querySelector('.value'), s=card.querySelector('.sub');
+  if(v) setTxt('heroUnemp', v.textContent.trim());
+  if(s) setTxt('heroUnempMo', '· '+s.textContent.trim());
+})();
 
 initCharts('overview');
 </script>
