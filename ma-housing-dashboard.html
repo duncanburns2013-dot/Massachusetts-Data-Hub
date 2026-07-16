@@ -378,28 +378,28 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
             <div class="hero-headline">
                 <h1>Massachusetts<br>Real Estate <em>Report</em></h1>
             </div>
-            <p class="hero-sub">Comprehensive MLS data for Massachusetts, Boston, Essex County, and Greater Newburyport — tracking 13 years of market shifts from 2014 to present (YTD as of April 25).</p>
+            <p class="hero-sub">Comprehensive MLS data for Massachusetts, Boston, Essex County, and Greater Newburyport — tracking 13 years of market shifts from 2014 to the trailing 12 months ending <span id="hero-window">—</span>.</p>
             <div class="hero-divider"></div>
             <div class="hero-stats">
                 <div class="hero-stat">
                     <div class="hs-label">MA Average</div>
-                    <div class="hs-val gold">$866K</div>
-                    <div class="hs-note"><span class="chg-up">+7.6%</span> YoY (2025→2026)</div>
+                    <div class="hs-val gold" id="hs-ma-val">—</div>
+                    <div class="hs-note"><span id="hs-ma-yoy">—</span> YoY (<span class="yr-prev">—</span>→<span class="yr-cur">—</span>)</div>
                 </div>
                 <div class="hero-stat">
                     <div class="hs-label">Newburyport</div>
-                    <div class="hs-val gold">$1.27M</div>
-                    <div class="hs-note"><span class="chg-up">+13.1%</span> YoY (2025→2026)</div>
+                    <div class="hs-val gold" id="hs-nbpt-val">—</div>
+                    <div class="hs-note"><span id="hs-nbpt-yoy">—</span> YoY (<span class="yr-prev">—</span>→<span class="yr-cur">—</span>)</div>
                 </div>
                 <div class="hero-stat">
                     <div class="hs-label">Days on Market</div>
-                    <div class="hs-val">37</div>
-                    <div class="hs-note">Was 47 in 2025 · <span class="chg-down">−21%</span> YoY</div>
+                    <div class="hs-val" id="hs-ma-dom">—</div>
+                    <div class="hs-note">Was <span id="hs-ma-dom-prev">—</span> in <span class="yr-prev">—</span> · <span id="hs-ma-dom-yoy">—</span> YoY</div>
                 </div>
                 <div class="hero-stat">
                     <div class="hs-label">Sales Volume</div>
-                    <div class="hs-val" style="color:var(--signal-red);">-17%</div>
-                    <div class="hs-note"><span class="chg-down">−0.4%</span> YoY volume</div>
+                    <div class="hs-val" id="hs-vol-chg">—</div>
+                    <div class="hs-note"><span id="hs-vol-yoy">—</span> YoY volume</div>
                 </div>
             </div>
         </div>
@@ -418,14 +418,19 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
     </div></nav>
     
     <section class="section active" id="overview"><div class="container">
-                <div class="section-header"><h2 class="section-title">Market Overview</h2><p class="section-desc">Year-over-year changes (2025→2026) with 5-year trend · Data as of April 25, 2026</p></div>
+                <div class="section-header"><h2 class="section-title">Market Overview</h2><p class="section-desc">Year-over-year changes (<span class="yr-prev">—</span>→<span class="yr-cur">—</span>) with 5-year trend · Trailing 12 months ending <span class="data-window">—</span></p></div>
         
         <!-- POLICY CONTEXT EXPLAINER - non-partisan overview of price drivers -->
 <div class="summary-box" style="margin-top: 32px;">
     <h3 class="summary-title">What’s Driving Massachusetts Home Prices?</h3>
 
+    <!-- "even as higher interest rates have reduced overall market activity" used to
+         close this sentence. It rested on the statewide volume figure, which had
+         inverted: closings are running +4.6% YoY, not −0.4%. Rather than assert the
+         opposite direction — which would invert again the next time the market turns —
+         the sentence now reports the volume figures and lets them speak. -->
     <p style="text-align:center; font-size:0.85rem; color:#666; max-width:720px; margin:0 auto 18px;">
-        Massachusetts home prices remain elevated not because demand is exceptionally strong, but because supply remains constrained—even as higher interest rates have reduced overall market activity.
+        Massachusetts home prices remain elevated not because demand is exceptionally strong, but because supply remains constrained. Statewide closings are <span id="pc-vol-yoy">—</span> year over year and <span id="pc-vol-14">—</span> against 2014, with months of supply at <span id="pc-supply">—</span> against the 4–6 months a balanced market implies.
     </p>
 
     <div class="summary-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; text-align: left;">
@@ -450,28 +455,41 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
             </p>
         </div>
 
+        <!-- Was: "Modest cooling in select markets" / "Slightly higher inventory and
+             longer market times". Inventory was half right; "longer market times" had
+             inverted — Essex DOM went 41→33.6 and Newburyport 56→32.6, i.e. both
+             markets got materially faster, not slower. Supply and market times both
+             flip regularly, so the numbers are derived and the prose names no
+             direction of its own. -->
         <div class="summary-item">
-            <div class="summary-label">Recent Trends (2026 YTD)</div>
+            <div class="summary-label">Recent Trends (trailing 12 months)</div>
             <div class="summary-val" style="font-size:1.1rem; line-height:1.4;">
-                Modest cooling in select markets
+                Supply and market times, year over year
             </div>
             <p style="font-size:0.82rem; color:#555; margin-top:8px;">
-                Slightly higher inventory and longer market times have begun to moderate price growth in Essex County and Greater Newburyport, even as statewide prices remain resilient. At the same time, many homeowners remain locked into ultra-low mortgage rates, limiting new listings and preventing a meaningful supply rebound.
+                Essex County months of supply moved <span id="rt-essex-supply">—</span> and days on market <span id="rt-essex-dom">—</span>; Newburyport moved <span id="rt-nbpt-supply">—</span> and <span id="rt-nbpt-dom">—</span>. Statewide, supply moved <span id="rt-ma-supply">—</span>. Many homeowners remain locked into ultra-low mortgage rates, limiting new listings and preventing a meaningful supply rebound.
             </p>
         </div>
 
     </div>
 
+    <!-- "+108%" was the April figure; live is +115.8%. "More than doubled" is a live
+         superlative that would silently go false the moment growth slips under 100%,
+         so the multiple is stated instead and both come from the same array. -->
     <p style="font-size:0.78rem; color:#777; margin-top:20px; text-align:center;">
-        Home prices have more than doubled (+108%) since 2014, driven primarily by structural supply constraints, amplified by policy-driven demand, and sustained by limited inventory even in a higher-rate environment.
+        Home prices are <span id="pc-ma-mult">—</span> their 2014 level (<span id="pc-ma-14">—</span>), driven primarily by structural supply constraints, amplified by policy-driven demand, and sustained by limited inventory even in a higher-rate environment.
     </p>
 </div>
         
+        <!-- These four cards used to be rewritten in place by update-mls-figures.py's
+             patch_overview_card() regex. They now read the same arrays the charts and
+             tables below them read, so "same quantity, different number, same page"
+             ($864,918 here vs $865,741 in the Massachusetts tab) cannot recur. -->
         <div class="cards even-4">
-            <div class="card blue-border"><div class="card-label">Massachusetts</div><div class="card-val blue">$865,741</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">$/SqFt</div><div class="card-metric-val">$395</div></div><div class="card-metric"><div class="card-metric-label">Days on Market</div><div class="card-metric-val">37</div></div><div class="card-metric"><div class="card-metric-label">Units (12mo)</div><div class="card-metric-val">39,969</div></div><div class="card-metric"><div class="card-metric-label">Months Supply</div><div class="card-metric-val">2.14</div></div></div></div>
-            <div class="card red-border"><div class="card-label">Boston</div><div class="card-val red">$1.31M</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">$/SqFt</div><div class="card-metric-val">$583</div></div><div class="card-metric"><div class="card-metric-label">DOM</div><div class="card-metric-val">38</div></div></div></div>
-            <div class="card green-border"><div class="card-label">Essex County</div><div class="card-val green">$902,140</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">$/SqFt</div><div class="card-metric-val">$415</div></div><div class="card-metric"><div class="card-metric-label">DOM</div><div class="card-metric-val">34</div></div></div></div>
-            <div class="card yellow-border"><div class="card-label">Newburyport</div><div class="card-val yellow">$1.27M</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">$/SqFt</div><div class="card-metric-val">$578</div></div><div class="card-metric"><div class="card-metric-label">DOM</div><div class="card-metric-val">33</div></div></div></div>
+            <div class="card blue-border"><div class="card-label">Massachusetts</div><div class="card-val blue" id="ov-ma-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">$/SqFt</div><div class="card-metric-val" id="ov-ma-sqft">—</div></div><div class="card-metric"><div class="card-metric-label">Days on Market</div><div class="card-metric-val" id="ov-ma-dom">—</div></div><div class="card-metric"><div class="card-metric-label">Units (12mo)</div><div class="card-metric-val" id="ov-ma-units">—</div></div><div class="card-metric"><div class="card-metric-label">Months Supply</div><div class="card-metric-val" id="ov-ma-supply">—</div></div></div></div>
+            <div class="card red-border"><div class="card-label">Boston</div><div class="card-val red" id="ov-boston-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">$/SqFt</div><div class="card-metric-val" id="ov-boston-sqft">—</div></div><div class="card-metric"><div class="card-metric-label">DOM</div><div class="card-metric-val" id="ov-boston-dom">—</div></div></div></div>
+            <div class="card green-border"><div class="card-label">Essex County</div><div class="card-val green" id="ov-essex-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">$/SqFt</div><div class="card-metric-val" id="ov-essex-sqft">—</div></div><div class="card-metric"><div class="card-metric-label">DOM</div><div class="card-metric-val" id="ov-essex-dom">—</div></div></div></div>
+            <div class="card yellow-border"><div class="card-label">Newburyport</div><div class="card-val yellow" id="ov-nbpt-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">$/SqFt</div><div class="card-metric-val" id="ov-nbpt-sqft">—</div></div><div class="card-metric"><div class="card-metric-label">DOM</div><div class="card-metric-val" id="ov-nbpt-dom">—</div></div></div></div>
         </div>
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Average Sale Price — 5-Year Trend (2022–2026)</h3></div><div class="chart-area" id="price-chart"></div></div>
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Days on Market</h3></div><div class="chart-area" id="dom-chart"></div></div>
@@ -484,74 +502,72 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
     <section class="section" id="massachusetts"><div class="container">
         <div class="section-header"><h2 class="section-title">Massachusetts Statewide</h2><p class="section-desc">Single-family residential · YoY + 5-year view</p></div>
         <div class="cards">
-            <div class="card blue-border"><div class="card-label">Average Sale Price</div><div class="card-val blue">$864,918</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2025</div><div class="card-metric-val">$803,731</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val up">+7.6%</div></div></div></div>
-            <div class="card green-border"><div class="card-label">$/SqFt</div><div class="card-val green">$384</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2014</div><div class="card-metric-val">$198</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val up">+94.1%</div></div></div></div>
-            <div class="card red-border"><div class="card-label">Volume (12mo)</div><div class="card-val">38,057</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2025</div><div class="card-metric-val">38,214</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val down">−0.4%</div></div></div></div>
-            <div class="card yellow-border"><div class="card-label">Days on Market</div><div class="card-val">37</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2025</div><div class="card-metric-val">47 days</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val up">−21.1%</div></div></div></div>
+            <div class="card blue-border"><div class="card-label">Average Sale Price</div><div class="card-val blue" id="ma-price-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label yr-prev">—</div><div class="card-metric-val" id="ma-price-prev">—</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val" id="ma-price-yoy">—</div></div></div></div>
+            <div class="card green-border"><div class="card-label">$/SqFt</div><div class="card-val green" id="ma-sqft-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label yr-first">—</div><div class="card-metric-val" id="ma-sqft-first">—</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val" id="ma-sqft-chg">—</div></div></div></div>
+            <div class="card red-border"><div class="card-label">Volume (12mo)</div><div class="card-val" id="ma-units-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label yr-prev">—</div><div class="card-metric-val" id="ma-units-prev">—</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val" id="ma-units-yoy">—</div></div></div></div>
+            <div class="card yellow-border"><div class="card-label">Days on Market</div><div class="card-val" id="ma-dom-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label yr-prev">—</div><div class="card-metric-val" id="ma-dom-prev">—</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val" id="ma-dom-yoy">—</div></div></div></div>
         </div>
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Statewide Price &amp; $/SqFt Trajectory</h3></div><div class="chart-area" id="ma-combo-chart"></div></div>
-        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">13-Year Data (2014–2026)</h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>2014</th><th>2015</th><th>2016</th><th>2017</th><th>2018</th><th>2019</th><th>2020</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th><th>Chg</th></tr></thead><tbody><tr><td>Avg Price</td><td>$401K</td><td>$421K</td><td>$418K</td><td>$446K</td><td>$469K</td><td>$487K</td><td>$521K</td><td>$615K</td><td>$677K</td><td>$701K</td><td>$763K</td><td>$804K</td><td>$836K</td><td class="up">+108%</td></tr><tr><td>$/SqFt</td><td>$198</td><td>$202</td><td>$207</td><td>$218</td><td>$232</td><td>$241</td><td>$252</td><td>$294</td><td>$331</td><td>$337</td><td>$363</td><td>$380</td><td>$384</td><td class="up">+94%</td></tr><tr><td>Units (12mo)</td><td>46,099</td><td>45,317</td><td>51,733</td><td>53,495</td><td>53,352</td><td>53,135</td><td>53,393</td><td>54,613</td><td>52,859</td><td>43,815</td><td>36,656</td><td>38,214</td><td>38,149</td><td class="down">-17%</td></tr><tr><td>DOM</td><td>117</td><td>125</td><td>113</td><td>86</td><td>74</td><td>76</td><td>70</td><td>43</td><td>34</td><td>47</td><td>42</td><td>47</td><td>55</td><td class="down">-53%</td></tr><tr><td>Supply</td><td>4.19</td><td>3.80</td><td>3.01</td><td>2.29</td><td>2.04</td><td>2.33</td><td>1.58</td><td>0.67</td><td>0.62</td><td>0.82</td><td>1.24</td><td>1.52</td><td>1.61</td><td class="down">-62%</td></tr></tbody></table></div></div></div></section><section class="section" id="boston"><div class="container">
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">13-Year Data (<span class="yr-first">—</span>–<span class="yr-cur">—</span>)</h3></div><div class="table-wrap"><table class="data-table"><thead id="ma-table-head"></thead><tbody id="ma-table"></tbody></table></div></div></div></section><section class="section" id="boston"><div class="container">
         <div class="section-header"><h2 class="section-title">Boston</h2><p class="section-desc">Urban core · YoY + 5-year view</p></div>
         <div class="cards">
-            <div class="card red-border"><div class="card-label">Average Sale Price</div><div class="card-val red">$1,294,562</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2025</div><div class="card-metric-val">$1,293,101</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val up">+0.1%</div></div></div></div>
-            <div class="card blue-border"><div class="card-label">$/SqFt</div><div class="card-val blue">$570</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2014</div><div class="card-metric-val">$326</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val up">+74.9%</div></div></div></div>
-            <div class="card green-border"><div class="card-label">Volume (12mo)</div><div class="card-val">819</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2025</div><div class="card-metric-val">797</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val up">+2.8%</div></div></div></div>
-            <div class="card yellow-border"><div class="card-label">Days on Market</div><div class="card-val">37</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2025</div><div class="card-metric-val">52 days</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val up">−29.0%</div></div></div></div>
+            <div class="card red-border"><div class="card-label">Average Sale Price</div><div class="card-val red" id="boston-price-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label yr-prev">—</div><div class="card-metric-val" id="boston-price-prev">—</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val" id="boston-price-yoy">—</div></div></div></div>
+            <div class="card blue-border"><div class="card-label">$/SqFt</div><div class="card-val blue" id="boston-sqft-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label yr-first">—</div><div class="card-metric-val" id="boston-sqft-first">—</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val" id="boston-sqft-chg">—</div></div></div></div>
+            <div class="card green-border"><div class="card-label">Volume (12mo)</div><div class="card-val" id="boston-units-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label yr-prev">—</div><div class="card-metric-val" id="boston-units-prev">—</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val" id="boston-units-yoy">—</div></div></div></div>
+            <div class="card yellow-border"><div class="card-label">Days on Market</div><div class="card-val" id="boston-dom-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label yr-prev">—</div><div class="card-metric-val" id="boston-dom-prev">—</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val" id="boston-dom-yoy">—</div></div></div></div>
         </div>
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Boston vs Statewide — Avg Sale Price</h3></div><div class="chart-area" id="boston-price-chart"></div></div>
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">$/SqFt Trends</h3></div><div class="chart-area" id="boston-sqft-chart"></div></div>
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Volume vs Days on Market</h3></div><div class="chart-area" id="boston-domvol-chart"></div></div>
-        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">13-Year Data (2014–2026)</h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>2014</th><th>2015</th><th>2016</th><th>2017</th><th>2018</th><th>2019</th><th>2020</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th><th>Chg</th></tr></thead><tbody><tr><td>Avg Price</td><td>$823K</td><td>$643K</td><td>$722K</td><td>$774K</td><td>$820K</td><td>$848K</td><td>$1068K</td><td>$1092K</td><td>$1117K</td><td>$1005K</td><td>$1061K</td><td>$1293K</td><td>$1320K</td><td class="up">+60%</td></tr><tr><td>$/SqFt</td><td>$326</td><td>$305</td><td>$362</td><td>$376</td><td>$414</td><td>$412</td><td>$449</td><td>$502</td><td>$524</td><td>$487</td><td>$507</td><td>$581</td><td>$570</td><td class="up">+75%</td></tr><tr><td>Units (12mo)</td><td>1,034</td><td>977</td><td>1,018</td><td>1,028</td><td>991</td><td>1,038</td><td>952</td><td>942</td><td>1,101</td><td>955</td><td>755</td><td>797</td><td>805</td><td class="down">-22%</td></tr><tr><td>DOM</td><td>81</td><td>82</td><td>73</td><td>55</td><td>52</td><td>53</td><td>49</td><td>49</td><td>44</td><td>51</td><td>46</td><td>52</td><td>51</td><td class="down">-37%</td></tr><tr><td>Supply</td><td>2.09</td><td>1.58</td><td>1.82</td><td>1.45</td><td>1.67</td><td>1.72</td><td>1.16</td><td>1.50</td><td>1.12</td><td>1.28</td><td>1.99</td><td>2.18</td><td>2.24</td><td class="up">+7%</td></tr></tbody></table></div></div></div></section><section class="section" id="essex"><div class="container">
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">13-Year Data (<span class="yr-first">—</span>–<span class="yr-cur">—</span>)</h3></div><div class="table-wrap"><table class="data-table"><thead id="boston-table-head"></thead><tbody id="boston-table"></tbody></table></div></div></div></section><section class="section" id="essex"><div class="container">
         <div class="section-header"><h2 class="section-title">Essex County</h2><p class="section-desc">North Shore · YoY + 5-year view</p></div>
         <div class="cards">
-            <div class="card green-border"><div class="card-label">Average Sale Price</div><div class="card-val green">$897,901</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2025</div><div class="card-metric-val">$857,795</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val up">+4.7%</div></div></div></div>
-            <div class="card blue-border"><div class="card-label">$/SqFt</div><div class="card-val blue">$409</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2014</div><div class="card-metric-val">$204</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val up">+100.6%</div></div></div></div>
-            <div class="card red-border"><div class="card-label">Volume (12mo)</div><div class="card-val">4,261</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2025</div><div class="card-metric-val">4,315</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val down">−1.3%</div></div></div></div>
-            <div class="card yellow-border"><div class="card-label">Days on Market</div><div class="card-val">33</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2025</div><div class="card-metric-val">41 days</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val up">−19.3%</div></div></div></div>
+            <div class="card green-border"><div class="card-label">Average Sale Price</div><div class="card-val green" id="essex-price-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label yr-prev">—</div><div class="card-metric-val" id="essex-price-prev">—</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val" id="essex-price-yoy">—</div></div></div></div>
+            <div class="card blue-border"><div class="card-label">$/SqFt</div><div class="card-val blue" id="essex-sqft-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label yr-first">—</div><div class="card-metric-val" id="essex-sqft-first">—</div></div><div class="card-metric"><div class="card-metric-label">Change</div><div class="card-metric-val" id="essex-sqft-chg">—</div></div></div></div>
+            <div class="card red-border"><div class="card-label">Volume (12mo)</div><div class="card-val" id="essex-units-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label yr-prev">—</div><div class="card-metric-val" id="essex-units-prev">—</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val" id="essex-units-yoy">—</div></div></div></div>
+            <div class="card yellow-border"><div class="card-label">Days on Market</div><div class="card-val" id="essex-dom-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label yr-prev">—</div><div class="card-metric-val" id="essex-dom-prev">—</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val" id="essex-dom-yoy">—</div></div></div></div>
         </div>
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Essex County vs Statewide — Avg Sale Price</h3></div><div class="chart-area" id="essex-price-chart"></div></div>
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">$/SqFt Trends</h3></div><div class="chart-area" id="essex-sqft-chart"></div></div>
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Volume vs Days on Market</h3></div><div class="chart-area" id="essex-domvol-chart"></div></div>
-        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">13-Year Data (2014–2026)</h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Metric</th><th>2014</th><th>2015</th><th>2016</th><th>2017</th><th>2018</th><th>2019</th><th>2020</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th><th>Chg</th></tr></thead><tbody><tr><td>Avg Price</td><td>$437K</td><td>$430K</td><td>$439K</td><td>$472K</td><td>$515K</td><td>$507K</td><td>$558K</td><td>$666K</td><td>$688K</td><td>$758K</td><td>$844K</td><td>$858K</td><td>$837K</td><td class="up">+92%</td></tr><tr><td>$/SqFt</td><td>$204</td><td>$210</td><td>$218</td><td>$232</td><td>$250</td><td>$259</td><td>$275</td><td>$315</td><td>$351</td><td>$366</td><td>$384</td><td>$406</td><td>$409</td><td class="up">+101%</td></tr><tr><td>Units (12mo)</td><td>5,648</td><td>5,560</td><td>6,373</td><td>6,358</td><td>6,222</td><td>6,143</td><td>6,299</td><td>6,080</td><td>5,849</td><td>4,864</td><td>3,891</td><td>4,315</td><td>4,278</td><td class="down">-24%</td></tr><tr><td>DOM</td><td>108</td><td>119</td><td>104</td><td>68</td><td>68</td><td>67</td><td>58</td><td>36</td><td>29</td><td>41</td><td>40</td><td>41</td><td>47</td><td class="down">-56%</td></tr><tr><td>Supply</td><td>3.55</td><td>2.89</td><td>2.23</td><td>1.79</td><td>1.60</td><td>1.95</td><td>1.18</td><td>0.54</td><td>0.53</td><td>0.66</td><td>1.08</td><td>1.19</td><td>1.14</td><td class="down">-68%</td></tr></tbody></table></div></div></div></section><section class="section" id="greater-newburyport"><div class="container">
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">13-Year Data (<span class="yr-first">—</span>–<span class="yr-cur">—</span>)</h3></div><div class="table-wrap"><table class="data-table"><thead id="essex-table-head"></thead><tbody id="essex-table"></tbody></table></div></div></div></section><section class="section" id="greater-newburyport"><div class="container">
         <div class="section-header"><h2 class="section-title">Greater Newburyport</h2><p class="section-desc">Newburyport, West Newbury, Newbury, Rowley, Salisbury, Amesbury</p></div>
-        <div class="summary-box"><h3 class="summary-title">Regional Summary (2026 YTD)</h3><div class="summary-grid"><div class="summary-item"><div class="summary-label">Avg Price</div><div class="summary-val blue">$852K</div><div class="summary-note">Weighted</div></div><div class="summary-item"><div class="summary-label">12-Mo Sales</div><div class="summary-val green">442</div><div class="summary-note">All towns</div></div><div class="summary-item"><div class="summary-label">$/SqFt</div><div class="summary-val red">$427</div><div class="summary-note">Weighted</div></div><div class="summary-item"><div class="summary-label">Days on Market</div><div class="summary-val yellow">42</div><div class="summary-note">Weighted</div></div></div></div>
+        <div class="summary-box"><h3 class="summary-title">Regional Summary — Trailing 12 Months</h3><div class="summary-grid"><div class="summary-item"><div class="summary-label">Avg Price</div><div class="summary-val blue" id="gn-sum-price">—</div><div class="summary-note">Weighted</div></div><div class="summary-item"><div class="summary-label">12-Mo Sales</div><div class="summary-val green" id="gn-sum-units">—</div><div class="summary-note">All towns</div></div><div class="summary-item"><div class="summary-label">$/SqFt</div><div class="summary-val red" id="gn-sum-sqft">—</div><div class="summary-note">Weighted</div></div><div class="summary-item"><div class="summary-label">Days on Market</div><div class="summary-val yellow" id="gn-sum-dom">—</div><div class="summary-note">Weighted</div></div></div></div></div>
         <h3 style="margin-bottom:14px;font-weight:600;">Town Breakdown</h3>
-        <div class="towns"><div class="town"><div class="town-name">Newburyport</div><div class="town-price">$1104K</div><span class="town-badge down">-6% YoY</span><div class="town-meta">$554/sqft • 36 DOM</div></div><div class="town"><div class="town-name">West Newbury</div><div class="town-price">$922K</div><span class="town-badge down">-22% YoY</span><div class="town-meta">$344/sqft • 57 DOM</div></div><div class="town"><div class="town-name">Newbury</div><div class="town-price">$958K</div><span class="town-badge down">-24% YoY</span><div class="town-meta">$395/sqft • 52 DOM</div></div><div class="town"><div class="town-name">Rowley</div><div class="town-price">$745K</div><span class="town-badge down">-14% YoY</span><div class="town-meta">$378/sqft • 27 DOM</div></div><div class="town"><div class="town-name">Salisbury</div><div class="town-price">$569K</div><span class="town-badge down">-23% YoY</span><div class="town-meta">$391/sqft • 61 DOM</div></div><div class="town"><div class="town-name">Amesbury</div><div class="town-price">$642K</div><span class="town-badge down">-12% YoY</span><div class="town-meta">$359/sqft • 38 DOM</div></div>
-        </div>
-        <div class="chart-box" style="margin-top:28px;"><div class="chart-header"><h3 class="chart-title">Town Comparison — Avg Sale Price (2026 YTD)</h3></div><div class="chart-area" id="gnbpt-chart"></div></div>
-        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Town YoY Price Change (2025 → 2026)</h3></div><div class="chart-area" id="gnbpt-yoy-chart"></div></div>
-        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Town Price Trajectory (2022–2026)</h3></div><div class="chart-area" id="gnbpt-trend-chart"></div></div>
-        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">12-Month Activity (April 2026)</h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Town</th><th>Sale Price</th><th>$/SqFt</th><th>DOM</th><th>Units (12mo)</th><th>Months Supply</th><th>YoY %</th></tr></thead><tbody><tr><td>Newburyport</td><td>$1104K</td><td>$554</td><td>36</td><td>131</td><td>1.47</td><td class="down">-5.7%</td></tr><tr><td>West Newbury</td><td>$922K</td><td>$344</td><td>57</td><td>32</td><td>1.12</td><td class="down">-22.1%</td></tr><tr><td>Newbury</td><td>$958K</td><td>$395</td><td>52</td><td>74</td><td>2.59</td><td class="down">-24.2%</td></tr><tr><td>Rowley</td><td>$745K</td><td>$378</td><td>27</td><td>34</td><td>2.12</td><td class="down">-14.5%</td></tr><tr><td>Salisbury</td><td>$569K</td><td>$391</td><td>61</td><td>46</td><td>2.09</td><td class="down">-22.6%</td></tr><tr><td>Amesbury</td><td>$642K</td><td>$359</td><td>38</td><td>125</td><td>0.96</td><td class="down">-11.6%</td></tr>
-        </tbody></table></div></div>
+        <div class="towns" id="gn-towns"></div>
+        <div class="chart-box" style="margin-top:28px;"><div class="chart-header"><h3 class="chart-title">Town Comparison — Avg Sale Price (Trailing 12 Months)</h3></div><div class="chart-area" id="gnbpt-chart"></div></div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Town YoY Price Change (<span class="yr-prev">—</span> → <span class="yr-cur">—</span>)</h3></div><div class="chart-area" id="gnbpt-yoy-chart"></div></div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Town Price Trajectory (Last 5 Years)</h3></div><div class="chart-area" id="gnbpt-trend-chart"></div></div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">12-Month Activity — Trailing 12 Months ending <span class="data-window">—</span></h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Town</th><th>Sale Price</th><th>$/SqFt</th><th>DOM</th><th>Units (12mo)</th><th>Months Supply</th><th>YoY %</th></tr></thead><tbody id="gn-table"></tbody></table><p style="margin-top:12px;font-size:0.75rem;color:var(--text-muted);">Newburyport is refreshed daily from MLS PIN. The other five towns are not in the updater's scope: their figures are a hand-kept snapshot as of <span class="gn-vintage">—</span> and are marked <em>as of</em> in the table.</p></div></div>
     </div></section>
     
     <section class="section" id="newburyport"><div class="container">
         <div class="section-header"><h2 class="section-title">Newburyport</h2><p class="section-desc">Historic coastal community · YoY + 5-year view</p></div>
         <div class="cards even-4">
-            <div class="card yellow-border"><div class="card-label">Avg Sale Price</div><div class="card-val yellow">$1,324K</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2025</div><div class="card-metric-val">$1,171K</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val up">+13.1%</div></div></div></div>
-            <div class="card red-border"><div class="card-label">$/SqFt</div><div class="card-val red">$554</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2014</div><div class="card-metric-val">$280</div></div><div class="card-metric"><div class="card-metric-label">vs 2014</div><div class="card-metric-val up">+98%</div></div></div></div>
-            <div class="card green-border"><div class="card-label">Days on Market</div><div class="card-val green">32 d</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2025</div><div class="card-metric-val">56 days</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val up">−43.8%</div></div></div></div>
-            <div class="card blue-border"><div class="card-label">12-Mo Volume</div><div class="card-val blue">125</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">2025</div><div class="card-metric-val">129</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val down">−3.1%</div></div></div></div>
+            <div class="card yellow-border"><div class="card-label">Avg Sale Price</div><div class="card-val yellow" id="nbpt-price-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label yr-prev">—</div><div class="card-metric-val" id="nbpt-price-prev">—</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val" id="nbpt-price-yoy">—</div></div></div></div>
+            <div class="card red-border"><div class="card-label">$/SqFt</div><div class="card-val red" id="nbpt-sqft-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label yr-first">—</div><div class="card-metric-val" id="nbpt-sqft-first">—</div></div><div class="card-metric"><div class="card-metric-label">vs <span class="yr-first">—</span></div><div class="card-metric-val" id="nbpt-sqft-chg">—</div></div></div></div>
+            <div class="card green-border"><div class="card-label">Days on Market</div><div class="card-val green" id="nbpt-dom-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label yr-prev">—</div><div class="card-metric-val" id="nbpt-dom-prev">—</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val" id="nbpt-dom-yoy">—</div></div></div></div>
+            <div class="card blue-border"><div class="card-label">12-Mo Volume</div><div class="card-val blue" id="nbpt-units-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label yr-prev">—</div><div class="card-metric-val" id="nbpt-units-prev">—</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val" id="nbpt-units-yoy">—</div></div></div></div>
         </div>
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Newburyport — Price &amp; $/SqFt (2022–2026)</h3></div><div class="chart-area" id="nbpt-chart"></div></div>
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Newburyport — Volume &amp; Months Supply</h3></div><div class="chart-area" id="nbpt-vol-chart"></div></div>
     </div></section>
     
-    <section class="section" id="propertytype"><div class="container"><div class="section-header"><h2 class="section-title">By Property Type</h2><p class="section-desc">Single Family vs. Condominium vs. Multi-Family — MLS PIN, YTD April 25, 2026. 5-year view across MA, Boston, Essex County, Newburyport.</p></div><div class="cards">
-        <div class="card blue-border"><div class="card-label">Massachusetts</div><div class="card-val blue" id="pt-ma-val">$866K SF</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">Condo 2026</div><div class="card-metric-val">$721K</div></div><div class="card-metric"><div class="card-metric-label">Multi 2026</div><div class="card-metric-val">$884K</div></div></div></div>
-        <div class="card red-border"><div class="card-label">Boston</div><div class="card-val red" id="pt-boston-val">$1.31M SF</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">Condo 2026</div><div class="card-metric-val">$1.13M</div></div><div class="card-metric"><div class="card-metric-label">Multi 2026</div><div class="card-metric-val">$1.43M</div></div></div></div>
-        <div class="card green-border"><div class="card-label">Essex County</div><div class="card-val green" id="pt-essex-val">$902K SF</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">Condo 2026</div><div class="card-metric-val">$546K</div></div><div class="card-metric"><div class="card-metric-label">Multi 2026</div><div class="card-metric-val">$973K</div></div></div></div>
-        <div class="card yellow-border"><div class="card-label">Newburyport</div><div class="card-val yellow" id="pt-nbpt-val">$1.27M SF</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">Condo 2026</div><div class="card-metric-val">$793K</div></div><div class="card-metric"><div class="card-metric-label">Multi 2026</div><div class="card-metric-val">$1.16M</div></div></div></div>
+    <section class="section" id="propertytype"><div class="container"><div class="section-header"><h2 class="section-title">By Property Type</h2><p class="section-desc">Single Family vs. Condominium vs. Multi-Family — MLS PIN, trailing 12 months ending <span class="data-window">—</span>. 5-year view across MA, Boston, Essex County, Newburyport.</p></div><div class="cards">
+        <div class="card blue-border"><div class="card-label">Massachusetts</div><div class="card-val blue" id="pt-ma-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">Condo (12mo)</div><div class="card-metric-val" id="pt-ma-co">—</div></div><div class="card-metric"><div class="card-metric-label">Multi (12mo)</div><div class="card-metric-val" id="pt-ma-mf">—</div></div></div></div>
+        <div class="card red-border"><div class="card-label">Boston</div><div class="card-val red" id="pt-boston-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">Condo (12mo)</div><div class="card-metric-val" id="pt-boston-co">—</div></div><div class="card-metric"><div class="card-metric-label">Multi (12mo)</div><div class="card-metric-val" id="pt-boston-mf">—</div></div></div></div>
+        <div class="card green-border"><div class="card-label">Essex County</div><div class="card-val green" id="pt-essex-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">Condo (12mo)</div><div class="card-metric-val" id="pt-essex-co">—</div></div><div class="card-metric"><div class="card-metric-label">Multi (12mo)</div><div class="card-metric-val" id="pt-essex-mf">—</div></div></div></div>
+        <div class="card yellow-border"><div class="card-label">Newburyport</div><div class="card-val yellow" id="pt-nbpt-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label">Condo (12mo)</div><div class="card-metric-val" id="pt-nbpt-co">—</div></div><div class="card-metric"><div class="card-metric-label">Multi (12mo)</div><div class="card-metric-val" id="pt-nbpt-mf">—</div></div></div></div></div>
     </div>
     <div style="display:flex;gap:6px;margin:10px 0 18px;flex-wrap:wrap;">
         <button class="pt-tog active" data-pt="sf" style="padding:8px 16px;border:1px solid #0f2942;background:#0f2942;color:#fff;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;letter-spacing:0.05em;text-transform:uppercase;">Single Family</button>
         <button class="pt-tog" data-pt="co" style="padding:8px 16px;border:1px solid #ddd8d0;background:#fff;color:#0f2942;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;letter-spacing:0.05em;text-transform:uppercase;">Condominium</button>
         <button class="pt-tog" data-pt="mf" style="padding:8px 16px;border:1px solid #ddd8d0;background:#fff;color:#0f2942;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;letter-spacing:0.05em;text-transform:uppercase;">Multi-Family</button>
     </div>
-    <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Average Sale Price — 2022–2026 YTD</h3></div><div class="chart-area" id="pt-price-chart"></div></div>
+    <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Average Sale Price — Last 5 Years</h3></div><div class="chart-area" id="pt-price-chart"></div></div>
     <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Units Sold (12-Month Rolling)</h3></div><div class="chart-area" id="pt-vol-chart"></div></div>
     <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Days on Market</h3></div><div class="chart-area" id="pt-dom-chart"></div></div>
-    <div class="chart-box"><div class="chart-header"><h3 class="chart-title">2026 Property-Type Breakdown</h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Market</th><th>Property Type</th><th>Avg Price</th><th>$/SqFt</th><th>DOM</th><th>12-Mo Units</th><th>Months Supply</th></tr></thead><tbody id="pt-table"></tbody></table></div></div>
+    <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Property-Type Breakdown — Trailing 12 Months</h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Market</th><th>Property Type</th><th>Avg Price</th><th>$/SqFt</th><th>DOM</th><th>12-Mo Units</th><th>Months Supply</th></tr></thead><tbody id="pt-table"></tbody></table></div></div>
     </div></section>
     
     <section class="section" id="pricedist"><div class="container">
@@ -605,22 +621,22 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
 
     <section class="section" id="affordability"><div class="container">
         <div class="section-header"><h2 class="section-title">Affordability Analysis</h2><p class="section-desc">Income requirements at standard lending criteria — 30-yr fixed @ 6.5%, 20% down, 28% DTI</p></div>
-        <div class="afford-box"><h3 class="summary-title" style="color:#92400e;">Newburyport — Income Requirements</h3><div class="summary-grid"><div class="summary-item"><div class="summary-label">Home Price</div><div class="summary-val blue">$1104K</div></div><div class="summary-item"><div class="summary-label">Down (20%)</div><div class="summary-val yellow">$221K</div></div><div class="summary-item"><div class="summary-label">Monthly @6.5%</div><div class="summary-val green">$5,583</div></div><div class="summary-item"><div class="summary-label">Income Needed</div><div class="summary-val red">$239K</div><div class="summary-note">28% DTI</div></div></div></div>
+        <div class="afford-box"><h3 class="summary-title" style="color:#92400e;">Newburyport — Income Requirements</h3><div class="summary-grid"><div class="summary-item"><div class="summary-label">Home Price</div><div class="summary-val blue" id="af-nbpt-price">—</div></div><div class="summary-item"><div class="summary-label">Down (20%)</div><div class="summary-val yellow" id="af-nbpt-down">—</div></div><div class="summary-item"><div class="summary-label">Monthly @6.5%</div><div class="summary-val green" id="af-nbpt-monthly">—</div></div><div class="summary-item"><div class="summary-label">Income Needed</div><div class="summary-val red" id="af-nbpt-income">—</div><div class="summary-note">28% DTI</div></div></div></div><div class="summary-item"><div class="summary-label">Down (20%)</div><div class="summary-val yellow">$221K</div></div><div class="summary-item"><div class="summary-label">Monthly @6.5%</div><div class="summary-val green">$5,583</div></div><div class="summary-item"><div class="summary-label">Income Needed</div><div class="summary-val red">$239K</div><div class="summary-note">28% DTI</div></div></div></div>
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Income Required vs. MA Median</h3></div><div class="chart-area" id="income-chart"></div></div>
         <div class="afford-compare">
-            <div class="afford-stat"><div class="afford-stat-label">MA Median Income</div><div class="afford-stat-val">$104,800</div><div class="afford-stat-sub">ACS 2023 baseline</div></div>
-            <div class="afford-stat"><div class="afford-stat-label">Statewide Gap</div><div class="afford-stat-val gap-up">1.73×</div><div class="afford-stat-sub">$76,332 above median</div></div>
-            <div class="afford-stat"><div class="afford-stat-label">Boston Gap</div><div class="afford-stat-val gap-up">2.73×</div><div class="afford-stat-sub">$181,338 above median</div></div>
-            <div class="afford-stat"><div class="afford-stat-label">Newburyport Gap</div><div class="afford-stat-val gap-up">2.28×</div><div class="afford-stat-sub">$134,459 above median</div></div>
+            <div class="afford-stat"><div class="afford-stat-label">MA Median Income</div><div class="afford-stat-val" id="af-median">—</div><div class="afford-stat-sub" id="af-median-src">—</div></div>
+            <div class="afford-stat"><div class="afford-stat-label">Statewide Gap</div><div class="afford-stat-val gap-up" id="af-gap-ma">—</div><div class="afford-stat-sub" id="af-gap-ma-sub">—</div></div>
+            <div class="afford-stat"><div class="afford-stat-label">Boston Gap</div><div class="afford-stat-val gap-up" id="af-gap-boston">—</div><div class="afford-stat-sub" id="af-gap-boston-sub">—</div></div>
+            <div class="afford-stat"><div class="afford-stat-label">Newburyport Gap</div><div class="afford-stat-val gap-up" id="af-gap-nbpt">—</div><div class="afford-stat-sub" id="af-gap-nbpt-sub">—</div></div>
         </div>
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Affordability Gap (income needed ÷ MA median)</h3></div><div class="chart-area" id="gap-chart"></div></div>
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Monthly Mortgage Payment by Market</h3></div><div class="chart-area" id="monthly-chart"></div></div>
-        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Comparison Table</h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Market</th><th>Price</th><th>Down</th><th>Monthly</th><th>Income</th><th>Median</th><th>Gap</th></tr></thead><tbody><tr><td>Massachusetts</td><td>$836K</td><td>$167K</td><td>$4,226</td><td>$181K</td><td>$105K</td><td class="up">-$76K</td></tr><tr><td>Boston</td><td>$1320K</td><td>$264K</td><td>$6,677</td><td>$286K</td><td>$105K</td><td class="up">-$181K</td></tr><tr><td>Essex County</td><td>$837K</td><td>$167K</td><td>$4,234</td><td>$181K</td><td>$105K</td><td class="up">-$77K</td></tr><tr><td>Newburyport</td><td>$1104K</td><td>$221K</td><td>$5,583</td><td>$239K</td><td>$105K</td><td class="up">-$134K</td></tr></tbody></table><p style="margin-top:12px;font-size:0.75rem;color:var(--text-muted);">30-yr @ 6.5%, 20% down, 28% DTI. MA Median: $105K (ACS 2023)</p></div></div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Comparison Table</h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Market</th><th>Price</th><th>Down</th><th>Monthly</th><th>Income</th><th>Median</th><th>Gap</th></tr></thead><tbody id="af-table"></tbody></table><p style="margin-top:12px;font-size:0.75rem;color:var(--text-muted);"><span id="af-terms">—</span>. MA Median: <span id="af-median-note">—</span></p></div></div>
         <div class="cards">
-            <div class="card red-border"><div class="card-label">Income Gap</div><div class="card-val red">73–173%</div><p style="color:var(--text-mid);font-size:0.8rem;margin-top:6px;">Above median income required.</p></div>
-            <div class="card yellow-border"><div class="card-label">Down Payment</div><div class="card-val yellow">$167K–$264K</div><p style="color:var(--text-mid);font-size:0.8rem;margin-top:6px;">1.6–2.5× median annual income.</p></div>
-            <div class="card blue-border"><div class="card-label">Newburyport Premium</div><div class="card-val blue">+32%</div><p style="color:var(--text-mid);font-size:0.8rem;margin-top:6px;">Above state average.</p></div>
-            <div class="card green-border"><div class="card-label">MA Inventory</div><div class="card-val green">1.61 mo</div><p style="color:var(--text-mid);font-size:0.8rem;margin-top:6px;">Balanced market = 4–6 months.</p></div>
+            <div class="card red-border"><div class="card-label">Income Gap</div><div class="card-val red" id="af-card-gap">—</div><p style="color:var(--text-mid);font-size:0.8rem;margin-top:6px;">Above median income required.</p></div>
+            <div class="card yellow-border"><div class="card-label">Down Payment</div><div class="card-val yellow" id="af-card-down">—</div><p style="color:var(--text-mid);font-size:0.8rem;margin-top:6px;"><span id="af-card-down-sub">—</span>× median annual income.</p></div>
+            <div class="card blue-border"><div class="card-label">Newburyport Premium</div><div class="card-val blue" id="af-card-prem">—</div><p style="color:var(--text-mid);font-size:0.8rem;margin-top:6px;">Above state average.</p></div>
+            <div class="card green-border"><div class="card-label">MA Inventory</div><div class="card-val green" id="af-card-inv">—</div><p style="color:var(--text-mid);font-size:0.8rem;margin-top:6px;">Balanced market = 4–6 months.</p></div>
         </div>
     </div></section>
     
@@ -820,8 +836,33 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
     }).render();
     
     // Greater Newburyport — town breakdown
-    const gnPrices = [1104055,921875,958384,744975,568718,641529];
-    const gnNames = ["Newburyport", "West Newbury", "Newbury", "Rowley", "Salisbury", "Amesbury"];
+    //
+    // Newburyport's price series IS d.nbpt.price — it used to be typed out a second
+    // time here (in townTrends) and a third time as gnPrices[0], and only `d` was
+    // ever updated. The three had drifted to $1104K / $1104K / $1266K for the same
+    // quantity on the same page. townTrends now points at the live array, and
+    // gnPrices/gnYoy are computed from townTrends rather than restated.
+    //
+    // The other five towns are not in the updater's scope list (see SCOPES in
+    // update-mls-figures.py), so their series are hand-kept and stop at the vintage
+    // named in GN_SNAPSHOT — stated as a fact about a moment rather than as current.
+    const GN_SNAPSHOT = 'April 2026';
+    const townTrends = {"newburyport": d.nbpt.price, "westnewbury": [505300.0, 521978.5, 482999.92, 541938.46, 468050.0, 570980.0, 758615.0, 846124.77, 696357.14, 729296.17, 1251640.0, 1183168.75, 921875.0], "newbury": [472760.71, 465068.18, 418750.0, 521526.67, 578000.0, 626909.09, 830810.0, 827593.75, 881100.0, 924410.71, 1076377.78, 1264700.0, 958384.62], "rowley": [462980.0, 482833.33, 410857.14, 531571.43, 507453.85, 564094.12, 559575.0, 631750.0, 767692.21, 901261.54, 802990.0, 871140.0, 744975.0], "salisbury": [372683.61, 361020.0, 341061.11, 307926.67, 334661.11, 388869.23, 421736.84, 524644.44, 557064.29, 559475.0, 605797.44, 735000.0, 568718.75], "amesbury": [301480.0, 362469.57, 334977.0, 347729.07, 457045.0, 482413.89666666667, 507782.79333333333, 533151.69, 603291.67, 644189.5533333333, 685087.4366666666, 725985.32, 641529.55]};
+
+    // Per-town detail. Newburyport reads from `d`; the rest carry the GN_SNAPSHOT
+    // figures, for which no live series exists.
+    const gnTowns = [
+        { key:'newburyport', name:'Newburyport', live:true },
+        { key:'westnewbury', name:'West Newbury', sqft:344, dom:57, units:32,  supply:1.12 },
+        { key:'newbury',     name:'Newbury',      sqft:395, dom:52, units:74,  supply:2.59 },
+        { key:'rowley',      name:'Rowley',       sqft:378, dom:27, units:34,  supply:2.12 },
+        { key:'salisbury',   name:'Salisbury',    sqft:391, dom:61, units:46,  supply:2.09 },
+        { key:'amesbury',    name:'Amesbury',     sqft:359, dom:38, units:125, supply:0.96 }
+    ];
+    const gnLast = k => { const a = townTrends[k]; return a[a.length-1]; };
+    const gnPrev = k => { const a = townTrends[k]; return a[a.length-2]; };
+    const gnPrices = gnTowns.map(t => gnLast(t.key));
+    const gnNames = gnTowns.map(t => t.name);
     const gnColors = ["#c08c20", "#6b5ce7", "#2d6bc4", "#2d8a56", "#d46a2e", "#14b8a6"];
     new ApexCharts(document.querySelector('#gnbpt-chart'), {
         ...baseOpts, chart: { ...baseOpts.chart, type: 'bar', height: 340 },
@@ -836,7 +877,9 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
         tooltip: { ...baseOpts.tooltip, y: { formatter: fmtMoneyFull } }
     }).render();
     
-    const gnYoy = [-5.7,-22.1,-24.2,-14.5,-22.6,-11.6];
+    // Computed, never typed. Newburyport was published as "-6% YoY" in red while the
+    // live series had it rising: 1,266,003 vs 1,170,515 is +8.2%, not -5.7%.
+    const gnYoy = gnTowns.map(t => +(((gnLast(t.key)/gnPrev(t.key))-1)*100).toFixed(1));
     new ApexCharts(document.querySelector('#gnbpt-yoy-chart'), {
         ...baseOpts, chart: { ...baseOpts.chart, type: 'bar', height: 340 },
         series: [{ name: 'YoY %', data: gnYoy }],
@@ -849,11 +892,12 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
         tooltip: { ...baseOpts.tooltip, y: { formatter: v => v.toFixed(1) + '%' } }
     }).render();
     
-    // Town trend lines (13-year)
-    const townTrends = {"newburyport": [469029.8, 461433.74, 567868.75, 621925.64, 669088.43, 715330.42, 755705.0, 929286.78, 876733.33, 1109578.95, 1019306.63, 1170514.64, 1104055.56], "westnewbury": [505300.0, 521978.5, 482999.92, 541938.46, 468050.0, 570980.0, 758615.0, 846124.77, 696357.14, 729296.17, 1251640.0, 1183168.75, 921875.0], "newbury": [472760.71, 465068.18, 418750.0, 521526.67, 578000.0, 626909.09, 830810.0, 827593.75, 881100.0, 924410.71, 1076377.78, 1264700.0, 958384.62], "rowley": [462980.0, 482833.33, 410857.14, 531571.43, 507453.85, 564094.12, 559575.0, 631750.0, 767692.21, 901261.54, 802990.0, 871140.0, 744975.0], "salisbury": [372683.61, 361020.0, 341061.11, 307926.67, 334661.11, 388869.23, 421736.84, 524644.44, 557064.29, 559475.0, 605797.44, 735000.0, 568718.75], "amesbury": [301480.0, 362469.57, 334977.0, 347729.07, 457045.0, 482413.89666666667, 507782.79333333333, 533151.69, 603291.67, 644189.5533333333, 685087.4366666666, 725985.32, 641529.55]};
+    // Town trend lines. Sliced to the last 5 points to match the 5 category labels —
+    // the full 13-year series was being handed to a chart captioned "2022–2026", so
+    // 13 points were plotted against 5 axis labels and every year was mislabelled.
     new ApexCharts(document.querySelector('#gnbpt-trend-chart'), {
         ...baseOpts, chart: { ...baseOpts.chart, type: 'line', height: 380 },
-        series: gnNames.map((n, i) => ({ name: n, data: townTrends[Object.keys(townTrends)[i]] })),
+        series: gnTowns.map(t => ({ name: t.name, data: townTrends[t.key].slice(-5) })),
         colors: gnColors,
         stroke: { curve: 'smooth', width: 3 },
         markers: { size: 4, hover: { size: 8 }, strokeColors: '#fff', strokeWidth: 2 },
@@ -893,8 +937,35 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
         tooltip: { ...baseOpts.tooltip, y: [{ formatter: fmtNum }, { formatter: v => v == null ? '—' : v.toFixed(2) + ' mo' }] }
     }).render();
     
-    const incomeNeeded = [181132,286138,181446,239259];
-    const median = 104800;
+    // ── Affordability ─────────────────────────────────────────────────────────
+    // Lending terms quoted in the section header. Named once; every price, down
+    // payment, monthly and income figure on the tab is computed from these and from
+    // `d`, so the whole block moves together when the bot moves a price.
+    //
+    // It previously did not: incomeNeeded/monthlyPmts were a hardcoded snapshot taken
+    // at the April vintage, internally consistent but built on $1,104K for Newburyport
+    // — a price the live series had already left behind by $162K.
+    const AFF_RATE = 0.065, AFF_TERM_YRS = 30, AFF_DOWN = 0.20, AFF_DTI = 0.28;
+
+    // MA median household income. Census ACS 2024 5-year estimate, the same figure
+    // data/census-latest.json publishes and affordability-dashboard.html and
+    // healthcare-dashboard.html both show. This page and haverhill-market-report.html
+    // carried $104,800 instead, and labelled it "ACS 2023 baseline" here and
+    // "ACS 2020-2024" there — two vintages for one number, neither matching the
+    // repo's own fetched value.
+    const median = 103960;
+    const MEDIAN_SRC = 'ACS 2024 (5-yr)';
+
+    function mortgagePmt(price) {
+        const principal = price * (1 - AFF_DOWN);
+        const r = AFF_RATE / 12, n = AFF_TERM_YRS * 12;
+        return principal * r * Math.pow(1+r, n) / (Math.pow(1+r, n) - 1);
+    }
+    const AFF_GEOS = ['ma','boston','essex','nbpt'];
+    const affPrice   = AFF_GEOS.map(g => d[g].price[d[g].price.length-1]);
+    const monthlyPmts  = affPrice.map(p => Math.round(mortgagePmt(p)));
+    const incomeNeeded = affPrice.map(p => Math.round(mortgagePmt(p) * 12 / AFF_DTI));
+    const affDown      = affPrice.map(p => p * AFF_DOWN);
     new ApexCharts(document.querySelector('#income-chart'), {
         ...baseOpts, chart: { ...baseOpts.chart, type: 'bar', height: 340 },
         series: [{ name: 'Income Needed', data: incomeNeeded }, { name: 'MA Median', data: [median, median, median, median] }],
@@ -928,7 +999,6 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
     }).render();
     
     // Monthly payment chart
-    const monthlyPmts = [4226,6677,4234,5583];
     const medianMonthly = Math.round(median/12);
     new ApexCharts(document.querySelector('#monthly-chart'), {
         ...baseOpts, chart: { ...baseOpts.chart, type: 'bar', height: 320 },
@@ -957,7 +1027,29 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
     
     // Property Type
     const years5 = [2022,2023,2024,2025,2026];
-    const pt = {"ma": {"sf": {"price": [676696.44, 701487.11, 763446.08, 803731.19, 835831.99], "sqft": [331.37, 336.59, 362.71, 379.57, 384.46], "dom": [34.0, 47.0, 42.0, 47.0, 55.0], "units": [52859.0, 43815.0, 36656.0, 38214.0, 38149.0], "supply": [0.62, 0.82, 1.24, 1.52, 1.61]}, "co": {"price": [637326.0, 656850.26, 698455.72, 717151.21, 748586.46], "sqft": [489.78, 497.84, 521.69, 537.1, 546.02], "dom": [43.0, 48.0, 45.0, 52.0, 62.0], "units": [24282.0, 19026.0, 16613.0, 16787.0, 16778.0], "supply": [0.93, 1.31, 1.79, 2.35, 2.8]}, "mf": {"price": [693573.77, 670587.74, 766036.67, 830138.87, 889830.91], "sqft": [249.25, 234.59, 264.46, 279.74, 286.86], "dom": [42.0, 48.0, 39.0, 40.0, 50.0], "units": [8684.0, 6448.0, 5251.0, 5507.0, 5451.0], "supply": [1.09, 1.19, 1.62, 1.99, 2.72]}}, "boston": {"sf": {"price": [1117397.02, 1004513.11, 1061217.89, 1293101.22, 1320379.38], "sqft": [523.55, 487.41, 506.61, 581.39, 569.95], "dom": [44.0, 51.0, 46.0, 52.0, 51.0], "units": [1101.0, 955.0, 755.0, 797.0, 805.0], "supply": [1.12, 1.28, 1.99, 2.18, 2.24]}, "co": {"price": [1010348.38, 1054711.67, 1109259.77, 1149064.45, 1253657.93], "sqft": [832.87, 866.99, 884.33, 901.98, 937.18], "dom": [60.0, 60.0, 61.0, 66.0, 71.0], "units": [5787.0, 4161.0, 3523.0, 3615.0, 3433.0], "supply": [1.64, 2.46, 3.43, 4.2, 4.99]}, "mf": {"price": [1238105.65, 1161356.43, 1257495.51, 1389104.52, 1420567.18], "sqft": [393.35, 371.22, 399.52, 421.84, 421.06], "dom": [55.0, 53.0, 54.0, 52.0, 55.0], "units": [772.0, 653.0, 577.0, 599.0, 583.0], "supply": [2.44, 3.01, 2.68, 3.19, 4.51]}}, "essex": {"sf": {"price": [687858.97, 758025.38, 843511.96, 857795.05, 837280.16], "sqft": [350.68, 366.36, 384.35, 405.88, 408.81], "dom": [29.0, 41.0, 40.0, 41.0, 47.0], "units": [5849.0, 4864.0, 3891.0, 4315.0, 4278.0], "supply": [0.53, 0.66, 1.08, 1.19, 1.14]}, "co": {"price": [450390.79, 486428.71, 501087.55, 547261.62, 526844.21], "sqft": [346.72, 354.79, 392.25, 410.39, 404.09], "dom": [33.0, 43.0, 34.0, 41.0, 54.0], "units": [2840.0, 2256.0, 1989.0, 2008.0, 2009.0], "supply": [0.52, 0.68, 0.98, 1.28, 1.82]}, "mf": {"price": [812485.11, 692634.91, 844031.55, 880317.5, 1078448.72], "sqft": [261.26, 253.07, 288.86, 319.47, 313.95], "dom": [32.0, 49.0, 40.0, 30.0, 40.0], "units": [1071.0, 769.0, 583.0, 619.0, 595.0], "supply": [0.9, 0.8, 1.21, 1.4, 2.08]}}, "nbpt": {"sf": {"price": [876733.33, 1109578.95, 1019306.63, 1170514.64, 1104055.56], "sqft": [422.68, 507.74, 533.88, 571.64, 554.38], "dom": [36.0, 27.0, 31.0, 56.0, 36.0], "units": [166.0, 154.0, 136.0, 129.0, 131.0], "supply": [0.51, 1.09, 1.5, 1.86, 1.47]}, "co": {"price": [638349.72, 640560.0, 645835.48, 838443.75, 824934.78], "sqft": [512.09, 542.12, 503.21, 547.41, 589.51], "dom": [31.0, 39.0, 38.0, 58.0, 64.0], "units": [159.0, 145.0, 116.0, 145.0, 114.0], "supply": [0.3, 0.74, 1.97, 1.57, 1.68]}, "mf": {"price": [1700000.0, null, 760000.0, 1475000.0, 1011250.0], "sqft": [331.38, null, 381.53, 562.76, 374.06], "dom": [15.0, null, 126.0, 26.0, 17.0], "units": [9.0, 10.0, 6.0, 6.0, 6.0], "supply": [2.67, null, null, 6.0, 4.0]}}};
+
+    // Condominium and multi-family only, 2022→current. Single-family is deliberately
+    // NOT stored here — it is read out of `d` below.
+    //
+    // This object used to carry an `sf` block too, and that second copy was never
+    // updated: the updater's array anchor is /\b(ma|essex|…)\s*[:=]\s*\{/, which
+    // cannot match a quoted key like "ma": {, so every substitution landed in `d`
+    // and none landed here. Nothing logged a MISS, because the script never tried.
+    // The stale copy then leaked on interaction — clicking a property-type toggle
+    // ran updateVal(), which read pt.ma.sf.price[4] and overwrote the statewide card
+    // the bot had just written correctly ($866K → $836K, Newburyport $1.27M → $1104K).
+    // One source per series now, so a toggle click cannot disagree with page load.
+    const dpt = {"ma": {"co": {"price": [637326.0, 656850.26, 698455.72, 717151.21, 748586.46], "sqft": [489.78, 497.84, 521.69, 537.1, 546.02], "dom": [43.0, 48.0, 45.0, 52.0, 62.0], "units": [24282.0, 19026.0, 16613.0, 16787.0, 16778.0], "supply": [0.93, 1.31, 1.79, 2.35, 2.8]}, "mf": {"price": [693573.77, 670587.74, 766036.67, 830138.87, 889830.91], "sqft": [249.25, 234.59, 264.46, 279.74, 286.86], "dom": [42.0, 48.0, 39.0, 40.0, 50.0], "units": [8684.0, 6448.0, 5251.0, 5507.0, 5451.0], "supply": [1.09, 1.19, 1.62, 1.99, 2.72]}}, "boston": {"co": {"price": [1010348.38, 1054711.67, 1109259.77, 1149064.45, 1253657.93], "sqft": [832.87, 866.99, 884.33, 901.98, 937.18], "dom": [60.0, 60.0, 61.0, 66.0, 71.0], "units": [5787.0, 4161.0, 3523.0, 3615.0, 3433.0], "supply": [1.64, 2.46, 3.43, 4.2, 4.99]}, "mf": {"price": [1238105.65, 1161356.43, 1257495.51, 1389104.52, 1420567.18], "sqft": [393.35, 371.22, 399.52, 421.84, 421.06], "dom": [55.0, 53.0, 54.0, 52.0, 55.0], "units": [772.0, 653.0, 577.0, 599.0, 583.0], "supply": [2.44, 3.01, 2.68, 3.19, 4.51]}}, "essex": {"co": {"price": [450390.79, 486428.71, 501087.55, 547261.62, 526844.21], "sqft": [346.72, 354.79, 392.25, 410.39, 404.09], "dom": [33.0, 43.0, 34.0, 41.0, 54.0], "units": [2840.0, 2256.0, 1989.0, 2008.0, 2009.0], "supply": [0.52, 0.68, 0.98, 1.28, 1.82]}, "mf": {"price": [812485.11, 692634.91, 844031.55, 880317.5, 1078448.72], "sqft": [261.26, 253.07, 288.86, 319.47, 313.95], "dom": [32.0, 49.0, 40.0, 30.0, 40.0], "units": [1071.0, 769.0, 583.0, 619.0, 595.0], "supply": [0.9, 0.8, 1.21, 1.4, 2.08]}}, "nbpt": {"co": {"price": [638349.72, 640560.0, 645835.48, 838443.75, 824934.78], "sqft": [512.09, 542.12, 503.21, 547.41, 589.51], "dom": [31.0, 39.0, 38.0, 58.0, 64.0], "units": [159.0, 145.0, 116.0, 145.0, 114.0], "supply": [0.3, 0.74, 1.97, 1.57, 1.68]}, "mf": {"price": [1700000.0, null, 760000.0, 1475000.0, 1011250.0], "sqft": [331.38, null, 381.53, 562.76, 374.06], "dom": [15.0, null, 126.0, 26.0, 17.0], "units": [9.0, 10.0, 6.0, 6.0, 6.0], "supply": [2.67, null, null, 6.0, 4.0]}}};
+
+    // `pt` is now assembled, not stored: SF is a view onto the tail of `d` (same
+    // series the Overview cards and every SF chart read), condo/multi come from `dpt`.
+    const PT_METRICS = ['price','sqft','dom','units','supply'];
+    const pt = {};
+    for (const g of ['ma','boston','essex','nbpt']) {
+        const sf = {};
+        for (const m of PT_METRICS) sf[m] = d[g][m].slice(-years5.length);
+        pt[g] = { sf: sf, co: dpt[g].co, mf: dpt[g].mf };
+    }
     const ptColors = { ma: '#2d6bc4', boston: '#c23b22', essex: '#2d8a56', nbpt: '#c08c20' };
     const ptLabels = { ma: 'Massachusetts', boston: 'Boston', essex: 'Essex County', nbpt: 'Newburyport' };
     let currentPT = 'sf';
@@ -1026,13 +1118,11 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
             btn.classList.add('active');
             btn.style.background = '#0f2942'; btn.style.color = '#fff'; btn.style.borderColor = '#0f2942';
             currentPT = btn.dataset.pt;
-            const sfx = currentPT === 'sf' ? ' SF' : currentPT === 'co' ? ' Condo' : ' MF';
-            const updateVal = (id, g) => {
-                const el = document.getElementById(id); if (!el) return;
-                const p = pt[g][currentPT].price[4];
-                el.textContent = (p == null || !p) ? '— ' + sfx : '$' + Math.round(p/1000) + 'K' + sfx;
-            };
-            updateVal('pt-ma-val','ma'); updateVal('pt-boston-val','boston'); updateVal('pt-essex-val','essex'); updateVal('pt-nbpt-val','nbpt');
+            // Was four inline updateVal() calls reading pt[g][currentPT].price[4] out
+            // of the never-updated `pt` literal — which is how a toggle click used to
+            // overwrite the bot's correct card with an April number. Same renderer as
+            // page load now, over the same arrays.
+            if (window.renderPTCards) window.renderPTCards();
             renderPT();
         });
     });
@@ -1364,6 +1454,235 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
     document.querySelector('[data-tab="pricedist"]').addEventListener('click', () => {
         setTimeout(hhRender, 80);
     });
+
+    // ══════════════════════════════════════════════════════════════════════════
+    // PROSE DERIVATION
+    //
+    // Every figure rendered outside a chart is written from here, out of the same
+    // arrays the charts plot. Nothing below this line is a number typed by hand.
+    //
+    // Why: update-mls-figures.py used to reach into the markup with a regex per card
+    // (patch_overview_card / patch_pt_card / patch_ma_hero) and rewrite the text in
+    // place. Anything it had no pattern for — table columns, YoY cells, prose,
+    // affordability — silently kept whatever was typed at the last hand-edit, which
+    // was the April 25 2026 vintage. The data is trailing-365-days and moves daily, so
+    // by mid-July the page contradicted itself in ~40 places: three different live
+    // Newburyport prices, a "-6% YoY" badge on a market that was up 8.2%, "longer
+    // market times" on markets that had got materially faster.
+    //
+    // The updater now writes the arrays and nothing else. The page derives the rest.
+    // ══════════════════════════════════════════════════════════════════════════
+
+    // The one vintage stamp. Written by update-mls-figures.py on each run; the hero,
+    // the footer and every "trailing 12 months ending …" label read it, so the page
+    // cannot advertise a freshness it doesn't have. Deliberately NOT new Date():
+    // the browser's today would keep marching forward if the bot ever stopped.
+    const DATA_ASOF = 'July 16, 2026';
+
+    (function deriveProse() {
+        const $ = id => document.getElementById(id);
+        const setTxt = (id, t) => { const e = $(id); if (e) e.textContent = t; };
+        const setAll = (cls, t) => document.querySelectorAll('.' + cls).forEach(e => { e.textContent = t; });
+
+        const iCur = years.length - 1, iPrev = years.length - 2, iFirst = 0;
+        const yrCur = years[iCur], yrPrev = years[iPrev], yrFirst = years[iFirst];
+
+        const fmtK = v => v == null ? '—' : (v >= 1e6 ? '$' + (v / 1e6).toFixed(2) + 'M' : '$' + Math.round(v / 1000) + 'K');
+        const pct = (now, then) => (now == null || then == null || !then) ? null : (now / then - 1) * 100;
+        const fmtPct = (v, dp) => v == null ? '—' : (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(dp == null ? 1 : dp) + '%';
+        // Sign-based, matching what all three 13-year tables already did for every
+        // metric. `.up` is red and `.down` is green in this stylesheet, so a rise
+        // reads red. The cards used to mix conventions — a −21.1% DOM cell was tagged
+        // `up` (red) two panels away from a −53% DOM cell tagged `down` (green).
+        const cls = v => v == null ? '' : (v > 0 ? 'up' : v < 0 ? 'down' : '');
+        const setPct = (id, v, dp) => {
+            const e = $(id); if (!e) return;
+            e.textContent = fmtPct(v, dp);
+            e.className = e.className.replace(/\b(up|down)\b/g, '').replace(/\s+/g, ' ').trim() + ' ' + cls(v);
+        };
+
+        setAll('yr-cur', yrCur); setAll('yr-prev', yrPrev); setAll('yr-first', yrFirst);
+        setAll('data-window', DATA_ASOF); setAll('gn-vintage', GN_SNAPSHOT);
+        setTxt('hero-window', DATA_ASOF);
+        const heroDate = document.querySelector('.hero-date');
+        if (heroDate) heroDate.textContent = DATA_ASOF;
+        const footDate = document.querySelector('.footer-date');
+        if (footDate) footDate.textContent = 'Updated ' + DATA_ASOF + ' • Trailing 12 months • Year-over-Year Analysis (' + yrPrev + '→' + yrCur + ')';
+
+        const tail = (g, m) => d[g][m][iCur];
+        const prev = (g, m) => d[g][m][iPrev];
+
+        // ── Hero ──────────────────────────────────────────────────────────────
+        setTxt('hs-ma-val', fmtK(tail('ma', 'price')));
+        setTxt('hs-nbpt-val', fmtK(tail('nbpt', 'price')));
+        setTxt('hs-ma-dom', String(Math.round(tail('ma', 'dom'))));
+        setTxt('hs-ma-dom-prev', String(Math.round(prev('ma', 'dom'))));
+        // .chg-down had no CSS rule — the stylesheet defines .chg-up / .chg-dn, so the
+        // hero's YoY notes had been rendering uncoloured.
+        const heroPct = (id, v) => {
+            const e = $(id); if (!e) return;
+            e.textContent = fmtPct(v);
+            e.className = 'chg-' + (v > 0 ? 'up' : 'dn');
+        };
+        heroPct('hs-ma-yoy', pct(tail('ma', 'price'), prev('ma', 'price')));
+        heroPct('hs-nbpt-yoy', pct(tail('nbpt', 'price'), prev('nbpt', 'price')));
+        heroPct('hs-ma-dom-yoy', pct(tail('ma', 'dom'), prev('ma', 'dom')));
+        heroPct('hs-vol-yoy', pct(tail('ma', 'units'), prev('ma', 'units')));
+        const volChg = pct(tail('ma', 'units'), d.ma.units[iFirst]);
+        const volEl = $('hs-vol-chg');
+        if (volEl) {
+            volEl.textContent = fmtPct(volChg, 0);
+            volEl.style.color = volChg > 0 ? 'var(--signal-green)' : 'var(--signal-red)';
+        }
+
+        // ── Policy explainer ──────────────────────────────────────────────────
+        setTxt('pc-vol-yoy', fmtPct(pct(tail('ma', 'units'), prev('ma', 'units'))));
+        setTxt('pc-vol-14', fmtPct(volChg));
+        setTxt('pc-supply', tail('ma', 'supply').toFixed(2) + ' months');
+        setTxt('pc-ma-mult', (tail('ma', 'price') / d.ma.price[iFirst]).toFixed(2) + '×');
+        setTxt('pc-ma-14', fmtPct(pct(tail('ma', 'price'), d.ma.price[iFirst])) + ' since ' + yrFirst);
+        const movedBy = (g, m, dp) => {
+            const a = prev(g, m), b = tail(g, m);
+            if (a == null || b == null) return '—';
+            return a.toFixed(dp) + ' → ' + b.toFixed(dp);
+        };
+        setTxt('rt-essex-supply', movedBy('essex', 'supply', 2));
+        setTxt('rt-essex-dom', movedBy('essex', 'dom', 1) + ' days');
+        setTxt('rt-nbpt-supply', movedBy('nbpt', 'supply', 2));
+        setTxt('rt-nbpt-dom', movedBy('nbpt', 'dom', 1) + ' days');
+        setTxt('rt-ma-supply', movedBy('ma', 'supply', 2));
+
+        // ── Overview cards ────────────────────────────────────────────────────
+        setTxt('ov-ma-val', fmtMoneyFull(tail('ma', 'price')));
+        setTxt('ov-ma-sqft', fmtSqft(tail('ma', 'sqft')));
+        setTxt('ov-ma-dom', String(Math.round(tail('ma', 'dom'))));
+        setTxt('ov-ma-units', fmtNum(tail('ma', 'units')));
+        setTxt('ov-ma-supply', tail('ma', 'supply').toFixed(2));
+        setTxt('ov-boston-val', fmtK(tail('boston', 'price')));
+        setTxt('ov-boston-sqft', fmtSqft(tail('boston', 'sqft')));
+        setTxt('ov-boston-dom', String(Math.round(tail('boston', 'dom'))));
+        setTxt('ov-essex-val', fmtMoneyFull(tail('essex', 'price')));
+        setTxt('ov-essex-sqft', fmtSqft(tail('essex', 'sqft')));
+        setTxt('ov-essex-dom', String(Math.round(tail('essex', 'dom'))));
+        setTxt('ov-nbpt-val', fmtK(tail('nbpt', 'price')));
+        setTxt('ov-nbpt-sqft', fmtSqft(tail('nbpt', 'sqft')));
+        setTxt('ov-nbpt-dom', String(Math.round(tail('nbpt', 'dom'))));
+
+        // ── Per-market panels: 4 cards + the 13-year table ────────────────────
+        const MKT_VAL = { ma: fmtMoneyFull, boston: fmtK, essex: fmtMoneyFull, nbpt: fmtK };
+        for (const g of ['ma', 'boston', 'essex', 'nbpt']) {
+            const money = MKT_VAL[g];
+            setTxt(g + '-price-val', money(tail(g, 'price')));
+            setTxt(g + '-price-prev', money(prev(g, 'price')));
+            setPct(g + '-price-yoy', pct(tail(g, 'price'), prev(g, 'price')));
+            setTxt(g + '-sqft-val', fmtSqft(tail(g, 'sqft')));
+            setTxt(g + '-sqft-first', fmtSqft(d[g].sqft[iFirst]));
+            setPct(g + '-sqft-chg', pct(tail(g, 'sqft'), d[g].sqft[iFirst]));
+            setTxt(g + '-units-val', fmtNum(tail(g, 'units')));
+            setTxt(g + '-units-prev', fmtNum(prev(g, 'units')));
+            setPct(g + '-units-yoy', pct(tail(g, 'units'), prev(g, 'units')));
+            setTxt(g + '-dom-val', Math.round(tail(g, 'dom')) + (g === 'nbpt' ? ' d' : ''));
+            setTxt(g + '-dom-prev', Math.round(prev(g, 'dom')) + ' days');
+            setPct(g + '-dom-yoy', pct(tail(g, 'dom'), prev(g, 'dom')));
+        }
+
+        // The "2026" column of these tables was the only one that had drifted — every
+        // earlier year still matched `d` exactly, because only the current year moves.
+        // Rendering the whole table from the array removes the column that could rot,
+        // and makes each Chg cell a computation rather than a copy.
+        const TABLE_ROWS = [
+            { label: 'Avg Price', metric: 'price', fmt: fmtMoney },
+            { label: '$/SqFt', metric: 'sqft', fmt: fmtSqft },
+            { label: 'Units (12mo)', metric: 'units', fmt: fmtNum },
+            { label: 'DOM', metric: 'dom', fmt: v => v == null ? '—' : String(Math.round(v)) },
+            { label: 'Supply', metric: 'supply', fmt: v => v == null ? '—' : v.toFixed(2) }
+        ];
+        for (const g of ['ma', 'boston', 'essex']) {
+            const head = $(g + '-table-head');
+            if (head) head.innerHTML = '<tr><th>Metric</th>' + years.map(y => '<th>' + y + '</th>').join('') + '<th>Chg</th></tr>';
+            const body = $(g + '-table');
+            if (!body) continue;
+            body.innerHTML = TABLE_ROWS.map(r => {
+                const a = d[g][r.metric];
+                const chg = pct(a[iCur], a[iFirst]);
+                return '<tr><td>' + r.label + '</td>' + a.map(v => '<td>' + r.fmt(v) + '</td>').join('') +
+                    '<td class="' + cls(chg) + '">' + (chg == null ? '—' : (chg > 0 ? '+' : '−') + Math.abs(chg).toFixed(0) + '%') + '</td></tr>';
+            }).join('');
+        }
+
+        // ── Greater Newburyport ───────────────────────────────────────────────
+        const townRow = t => t.live
+            ? { sqft: tail('nbpt', 'sqft'), dom: tail('nbpt', 'dom'), units: tail('nbpt', 'units'), supply: tail('nbpt', 'supply') }
+            : { sqft: t.sqft, dom: t.dom, units: t.units, supply: t.supply };
+        const rows = gnTowns.map((t, i) => Object.assign({ t: t, price: gnPrices[i], yoy: gnYoy[i] }, townRow(t)));
+
+        const towns = $('gn-towns');
+        if (towns) towns.innerHTML = rows.map(r =>
+            '<div class="town"><div class="town-name">' + r.t.name + (r.t.live ? '' : ' †') + '</div>' +
+            '<div class="town-price">' + fmtMoney(r.price) + '</div>' +
+            '<span class="town-badge ' + cls(r.yoy) + '">' + fmtPct(r.yoy, 0) + ' YoY</span>' +
+            '<div class="town-meta">' + fmtSqft(r.sqft) + '/sqft • ' + Math.round(r.dom) + ' DOM</div></div>').join('');
+
+        const gnTbl = $('gn-table');
+        if (gnTbl) gnTbl.innerHTML = rows.map(r =>
+            '<tr><td>' + r.t.name + (r.t.live ? '' : ' †') + '</td><td>' + fmtMoney(r.price) + '</td><td>' + fmtSqft(r.sqft) + '</td>' +
+            '<td>' + Math.round(r.dom) + '</td><td>' + fmtNum(r.units) + '</td><td>' + r.supply.toFixed(2) + '</td>' +
+            '<td class="' + cls(r.yoy) + '">' + fmtPct(r.yoy) + '</td></tr>').join('');
+
+        // Weighted by units — the same aggregate the four summary cards always were,
+        // now computed from the town rows instead of restated beside them.
+        const totUnits = rows.reduce((s, r) => s + r.units, 0);
+        const wavg = sel => rows.reduce((s, r) => s + sel(r) * r.units, 0) / totUnits;
+        setTxt('gn-sum-price', fmtMoney(wavg(r => r.price)));
+        setTxt('gn-sum-units', fmtNum(totUnits));
+        setTxt('gn-sum-sqft', fmtSqft(wavg(r => r.sqft)));
+        setTxt('gn-sum-dom', String(Math.round(wavg(r => r.dom))));
+
+        // ── Property-type cards ───────────────────────────────────────────────
+        window.renderPTCards = function () {
+            const sfx = currentPT === 'sf' ? ' SF' : currentPT === 'co' ? ' Condo' : ' MF';
+            for (const g of ['ma', 'boston', 'essex', 'nbpt']) {
+                const p = pt[g][currentPT].price[years5.length - 1];
+                setTxt('pt-' + g + '-val', (p == null ? '—' : fmtK(p)) + sfx);
+                const co = dpt[g].co.price[years5.length - 1];
+                const mf = dpt[g].mf.price[years5.length - 1];
+                setTxt('pt-' + g + '-co', co == null ? '—' : fmtK(co));
+                setTxt('pt-' + g + '-mf', mf == null ? '—' : fmtK(mf));
+            }
+        };
+        window.renderPTCards();
+
+        // ── Affordability ─────────────────────────────────────────────────────
+        const AFF_LABEL = ['Massachusetts', 'Boston', 'Essex County', 'Newburyport'];
+        const iN = AFF_GEOS.indexOf('nbpt');
+        setTxt('af-nbpt-price', fmtMoney(affPrice[iN]));
+        setTxt('af-nbpt-down', fmtMoney(affDown[iN]));
+        setTxt('af-nbpt-monthly', '$' + monthlyPmts[iN].toLocaleString());
+        setTxt('af-nbpt-income', fmtMoney(incomeNeeded[iN]));
+
+        setTxt('af-median', '$' + median.toLocaleString());
+        setTxt('af-median-src', MEDIAN_SRC);
+        setTxt('af-median-note', fmtMoney(median) + ' (' + MEDIAN_SRC + ')');
+        setTxt('af-terms', AFF_TERM_YRS + '-yr @ ' + (AFF_RATE * 100).toFixed(1) + '%, ' + (AFF_DOWN * 100) + '% down, ' + (AFF_DTI * 100) + '% DTI');
+        [['ma', 0], ['boston', 1], ['nbpt', 3]].forEach(function (pair) {
+            const key = pair[0], i = pair[1];
+            setTxt('af-gap-' + key, (incomeNeeded[i] / median).toFixed(2) + '×');
+            setTxt('af-gap-' + key + '-sub', '$' + Math.round(incomeNeeded[i] - median).toLocaleString() + ' above median');
+        });
+        const afTbl = $('af-table');
+        if (afTbl) afTbl.innerHTML = AFF_GEOS.map((g, i) =>
+            '<tr><td>' + AFF_LABEL[i] + '</td><td>' + fmtMoney(affPrice[i]) + '</td><td>' + fmtMoney(affDown[i]) + '</td>' +
+            '<td>$' + monthlyPmts[i].toLocaleString() + '</td><td>' + fmtMoney(incomeNeeded[i]) + '</td><td>' + fmtMoney(median) + '</td>' +
+            '<td class="up">−' + fmtMoney(incomeNeeded[i] - median) + '</td></tr>').join('');
+
+        const gapPcts = incomeNeeded.map(v => (v / median - 1) * 100);
+        setTxt('af-card-gap', Math.round(Math.min.apply(null, gapPcts)) + '–' + Math.round(Math.max.apply(null, gapPcts)) + '%');
+        const dMin = Math.min.apply(null, affDown), dMax = Math.max.apply(null, affDown);
+        setTxt('af-card-down', fmtMoney(dMin) + '–' + fmtMoney(dMax));
+        setTxt('af-card-down-sub', (dMin / median).toFixed(1) + '–' + (dMax / median).toFixed(1));
+        setTxt('af-card-prem', fmtPct(pct(tail('nbpt', 'price'), tail('ma', 'price')), 0));
+        setTxt('af-card-inv', tail('ma', 'supply').toFixed(2) + ' mo');
+    })();
     </script>
 </body>
 </html>
