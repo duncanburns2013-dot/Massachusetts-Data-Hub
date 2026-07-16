@@ -145,15 +145,28 @@ if ma_elec and us_elec:
         y, m = elec_period.split("-")
         months = ["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
         new_label = f"{months[int(m)]} {y}"
-        # Anchored on a literal month, so the first successful run ate its own anchor
-        # and the label has been frozen ever since while the rates beside it kept
-        # moving. Match whatever month label is actually there instead.
-        period_match = re.search(r'\b((?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) 20\d{2})\b', html)
-        if period_match and period_match.group(1) != new_label:
-            html, n = do_replace(html, period_match.group(1), new_label, "EIA Period")
-            data_changes += n
-        elif not period_match:
-            print("  !! EIA Period: no month label found -- NOT updated")
+        # Was anchored on the literal "Jan 2026", so the first successful run ate its
+        # own anchor and the label froze while the rates beside it kept moving.
+        #
+        # Do NOT relax this to 'first /Mmm 20NN/ in the file'. Other abbreviated month
+        # labels live here -- the unemployment card's subtitle (written from the BLS
+        # periodName, which for May is literally "May") and the BLS OES source line
+        # ("May 2024") -- and the unemployment card sits EARLIER in the file. A
+        # first-match search plus do_replace's GLOBAL replace would stamp the EIA
+        # period onto the unemployment card, which card_re would then set back on the
+        # next run: two updaters fighting over one label forever.
+        #
+        # Anchor on the electricity card's own markup; rewrite only that match.
+        period_re = re.compile(
+            r'(per kWh \()((?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) 20\d{2})(\))'
+        )
+        pm = period_re.search(html)
+        if not pm:
+            print("  !! EIA Period: 'per kWh (Mmm YYYY)' anchor not found -- NOT updated")
+        elif pm.group(2) != new_label:
+            html = period_re.sub(lambda mm: mm.group(1) + new_label + mm.group(3), html, count=1)
+            print(f"  EIA Period: '{pm.group(2)}' -> '{new_label}'")
+            data_changes += 1
 
 # Only stamp the date if real data moved. A run that changed nothing must leave the
 # file untouched so it does not advertise a freshness it does not have, and so a
