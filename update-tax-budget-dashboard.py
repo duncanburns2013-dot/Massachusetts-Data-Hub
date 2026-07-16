@@ -102,8 +102,22 @@ def bls_cpi(series_ids, start_yr, end_yr):
         if data.get("status") != "REQUEST_SUCCEEDED":
             fail(f"BLS: {data.get('status')} {'; '.join(data.get('message', []))}")
             return {}
-        return {s["seriesID"]: [(int(d["year"]), d["period"], float(d["value"]))
-                                for d in s.get("data", [])]
+        # BLS returns "-" (and occasionally "") for a month it never published --
+        # October 2025 is one, lost to the shutdown. float("-") raises, which took the
+        # whole run down and, because the chart writes happen earlier, discarded work
+        # that had already succeeded. Skip non-numeric observations instead: a missing
+        # month is normal data, not a failure.
+        def _obs(series):
+            out = []
+            for d in series.get("data", []):
+                try:
+                    out.append((int(d["year"]), d["period"], float(d["value"])))
+                except (ValueError, TypeError, KeyError):
+                    print(f"  note: {series.get('seriesID','?')} "
+                          f"{d.get('year','?')}-{d.get('period','?')} "
+                          f"not published ({d.get('value','?')!r}) -- skipped")
+            return out
+        return {s["seriesID"]: _obs(s)
                 for s in data.get("Results", {}).get("series", [])}
     except Exception as e:
         fail(f"BLS fetch failed: {e}")
