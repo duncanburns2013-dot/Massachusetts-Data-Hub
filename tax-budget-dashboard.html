@@ -156,7 +156,7 @@ footer a:hover{color:var(--gold)}
       <div class="alert-item">State spending grew <strong id="ovSpend">—</strong> since FY2018 (signed budgets, through FY2026) — income growth <strong id="ovIncome">—</strong></div>
       <div class="alert-item">FY2025 actual spending was <strong id="ovOverrun">—</strong> over the signed budget</div>
       <div class="alert-item">Middle class (<span id="ovItepBand">—</span>) pays the <strong>highest effective rate</strong> at <span id="ovItepRate">—</span> (ITEP, all state+local)</div>
-      <div class="alert-item">Only <strong>13% of voters</strong> say they get good value for their tax dollars (MOA 2025)</div>
+      <div class="alert-item">Inflation over the same window was <strong id="ovCpi">—</strong> (CPI-U, fiscal-year averages) — spending grew faster than prices and than incomes</div>
     </div>
   </div>
   <h2 class="section-title">Tax Foundation Competitiveness Sub-Rankings</h2>
@@ -338,80 +338,65 @@ footer a:hover{color:var(--gold)}
     <div class="stat-card"><div class="label">FY2025 Actual Spending</div><div class="value red" id="bgFy25Act">—</div><div class="sub"><span id="bgOverrun">—</span> over signed budget</div></div>
     <div class="stat-card"><div class="label">FY2026 Signed Budget</div><div class="value amber" id="bgFy26">—</div><div class="sub">Before supplementals</div></div>
     <div class="stat-card"><div class="label">Growth Since FY2018</div><div class="value red" id="bgGrowth">—</div><div class="sub">Signed budgets: <span id="bgGrowthBasis">—</span></div></div>
-    <div class="stat-card"><div class="label">Spending as % of Income</div><div class="value red">~9%</div><div class="sub">vs FL 6.9%, NC 4.5%</div></div>
+    <div class="stat-card"><div class="label">Income Growth Since FY2018</div><div class="value amber" id="bgIncome">—</div><div class="sub">BEA personal income, <span id="bgIncomeBasis">—</span></div></div>
   </div>
   <div class="alert">
-    <h4>⚠️ Spending Outpaces Everything</h4>
+    <h4>⚠️ Spending Outpaces Income and Inflation</h4>
     <div class="alert-grid">
-      <div class="alert-item">State spending: <strong id="bgTrioSpend">—</strong> since FY2018 (signed budgets, through FY2026). Taxpayer income growth: <strong id="bgTrioIncome">—</strong>. Inflation: <strong id="bgTrioCpi">—</strong> (CPI-U, fiscal-year averages)</div>
+      <div class="alert-item">State spending: <strong id="bgTrioSpend">—</strong> since FY2018 (signed budgets, through FY2026). Taxpayer income growth: <strong id="bgTrioIncome">—</strong> (BEA). Inflation: <strong id="bgTrioCpi">—</strong> (CPI-U, fiscal-year averages)</div>
       <div class="alert-item">FY2025: signed at <span id="bgTrioFy25Sign">—</span>, actual spending hit <strong id="bgTrioFy25Act">—</strong> with supplementals — expect FY2026 to follow same pattern</div>
-      <div class="alert-item">Education spending up <strong>76%</strong> since 2018 — while enrollment <strong>declined 4%</strong></div>
-      <div class="alert-item">Health & Human Services spending up <strong>48%</strong> ($10.3B) — MassHealth enrollment up only <strong>10%</strong></div>
-      <div class="alert-item">Since surtax: spending growth <strong>20%</strong> vs. revenue growth <strong>6%</strong></div>
-      <div class="alert-item">Technology Services budget up <strong>337%</strong>, Energy/Environment up <strong>113%</strong>, Labor up <strong>108%</strong></div>
+      <div class="alert-item">Spending has outrun income by <strong id="bgGapIncome">—</strong> and inflation by <strong id="bgGapCpi">—</strong> since FY2018 — every figure here from the GAA, BEA and BLS directly</div>
     </div>
   </div>
   <div class="chart-grid">
     <div class="chart-card">
       <h3>State Budget Growth: FY2018 – FY2026</h3>
       <div class="chart-area"><canvas id="chartBudget"></canvas></div>
-      <div class="source">Source: MA General Appropriations Act (GAA); Mass Opportunity Alliance; MA Taxpayers Foundation</div>
+      <div class="source">Source: MA General Appropriations Act — the signed budget for each fiscal year, plus FY2025 actual spending including supplementals (House Ways &amp; Means)</div>
     </div>
     <div class="chart-card">
       <h3>Growth Comparison Since FY2018</h3>
       <div class="chart-area"><canvas id="chartGrowth"></canvas></div>
-      <div class="source">Source: MA General Appropriations Act (signed budgets, FY2018→FY2026); BEA MA personal income; BLS CPI-U, US city average (CUSR0000SA0), averaged over the fiscal year (Jul–Jun) to match the budget's clock.</div>
+      <div class="source">Sources, all primary: MA General Appropriations Act (signed budgets, FY2018→FY2026); BEA Total Personal Income in Massachusetts (FRED MAOTOT, quarterly SAAR); BLS CPI-U, US city average (CUSR0000SA0). Income and CPI are averaged over the fiscal year (Jul–Jun) to match the budget's clock. FY2026 income is the mean of 3 published quarters — BEA has not released 2026Q2 — which if anything understates income growth.</div>
     </div>
   </div>
-  <div class="data-card">
-    <h3>Major Spending Categories — Growth Since FY2018</h3>
-    <table class="data-table">
-      <tr><th>Category</th><th>Growth</th><th>Context</th></tr>
-      <tr><td class="highlight">Technology Services & Security</td><td class="highlight">+337%</td><td>Fastest-growing department</td></tr>
-      <tr><td class="highlight">Energy & Environmental Affairs</td><td class="highlight">+113%</td><td>More than doubled</td></tr>
-      <tr><td class="highlight">Labor & Workforce Development</td><td class="highlight">+108%</td><td>More than doubled</td></tr>
-      <tr><td>Education (Executive Office)</td><td class="highlight">+76%</td><td>Enrollment declined 4%</td></tr>
-      <tr><td>Health & Human Services</td><td class="highlight">+48%</td><td>2x medical care inflation (17%)</td></tr>
-      <tr><td>Legislature, Judiciary, Admin & Finance</td><td>+30–40%</td><td>~$3B in total increases</td></tr>
-    </table>
-    <div class="source">Source: Mass Opportunity Alliance analysis of GAA budgets, August 2025</div>
-  </div>
+  <!-- A "Major Spending Categories — Growth Since FY2018" table sat here: growth by
+       department (Technology Services, Energy & Environment, Labor, Education, HHS) with
+       enrollment and medical-inflation counterpoints. Its own source line read "Mass
+       Opportunity Alliance analysis of GAA budgets, August 2025", and the enrollment
+       figures beside it came from the same advocacy blog post. Removed under the
+       official-sources-only rule, and not restated here even as "what was removed" —
+       repeating the numbers under a disclaimer would still be publishing them.
+       The GAA underneath is official, but the analysis was not, and this page holds no
+       FY2018 line-item data to reproduce it — LINE_ITEMS is FY2027 (H.5555) only. To
+       rebuild: parse the FY2018 and FY2026 appropriations acts by department from
+       mass.gov and derive the growth, as SPEND_GROWTH_FY26 is derived from GAA_SIGNED. -->
 </div>
 
 <!-- ===== STATE RANKINGS ===== -->
 <div id="rankings" class="tab-content">
   <h2 class="section-title">How MA Compares to Competitor States</h2>
-  <div class="stat-row">
-    <div class="stat-card"><div class="label">MA Spending / Income</div><div class="value red">~9.0%</div><div class="sub">Highest of competitors</div></div>
-    <div class="stat-card"><div class="label">FL Spending / Income</div><div class="value green">6.9%</div><div class="sub">No income tax</div></div>
-    <div class="stat-card"><div class="label">NH Spending / Income</div><div class="value green">6.9%</div><div class="sub">No income tax, no sales tax</div></div>
-    <div class="stat-card"><div class="label">NC Spending / Income</div><div class="value green">4.5%</div><div class="sub">Flat 4.5% income tax, declining</div></div>
-  </div>
-  <div class="chart-grid">
-    <div class="chart-card">
-      <h3>State Spending as % of Taxpayer Income</h3>
-      <div class="chart-area"><canvas id="chartCompare"></canvas></div>
-      <div class="source">Source: Mass Opportunity Alliance (Aug 2025), BEA Personal Income 2025</div>
-    </div>
-    <div class="chart-card">
-      <h3>Budget Growth Since FY2018 — Competitor States</h3>
-      <div class="chart-area"><canvas id="chartCompGrowth"></canvas></div>
-      <div class="source">Source: Mass Opportunity Alliance, "Massachusetts Has a Spending Problem" (Aug 2025) — spending growth standardized against residents' total income, FY2018→FY2026 enacted. MOA basis, not the signed-GAA basis used on the Budget tab (which gives <span id="rkGaaNote">—</span> for MA over the same window).</div>
-    </div>
-  </div>
   <div class="data-card">
     <h3>Tax Structure Comparison — MA vs. Key Competitors</h3>
     <table class="data-table">
-      <tr><th>State</th><th>Income Tax</th><th>Sales Tax</th><th>Tax Foundation Rank</th><th>Budget Growth (FY18–26, MOA basis)</th></tr>
-      <tr><td class="highlight">Massachusetts</td><td class="highlight">5% + 4% surtax (9%)</td><td>6.25%</td><td class="highlight">#43 (8th worst)</td><td class="highlight" id="rkGrowthMA">—</td></tr>
-      <tr><td>New Hampshire</td><td class="good">None</td><td class="good">None</td><td class="good">#6</td><td id="rkGrowthNH">—</td></tr>
-      <tr><td>Florida</td><td class="good">None</td><td>6.0%</td><td class="good">#4</td><td id="rkGrowthFL">—</td></tr>
-      <tr><td>North Carolina</td><td class="good">4.5% flat (declining)</td><td>4.75%</td><td class="good">#11</td><td id="rkGrowthNC">—</td></tr>
-      <tr><td>Texas</td><td class="good">None</td><td>6.25%</td><td class="good">#13</td><td style="color:#6b7280">not in source</td></tr>
-      <tr><td>Tennessee</td><td class="good">None</td><td>7.0%</td><td class="good">#8</td><td style="color:#6b7280">not in source</td></tr>
+      <tr><th>State</th><th>Income Tax</th><th>Sales Tax</th><th>Tax Foundation Rank</th></tr>
+      <tr><td class="highlight">Massachusetts</td><td class="highlight">5% + 4% surtax (9%)</td><td>6.25%</td><td class="highlight">#43 (8th worst)</td></tr>
+      <tr><td>New Hampshire</td><td class="good">None</td><td class="good">None</td><td class="good">#6</td></tr>
+      <tr><td>Florida</td><td class="good">None</td><td>6.0%</td><td class="good">#4</td></tr>
+      <tr><td>North Carolina</td><td class="good">4.5% flat (declining)</td><td>4.75%</td><td class="good">#11</td></tr>
+      <tr><td>Texas</td><td class="good">None</td><td>6.25%</td><td class="good">#13</td></tr>
+      <tr><td>Tennessee</td><td class="good">None</td><td>7.0%</td><td class="good">#8</td></tr>
     </table>
-    <div class="source">Sources: Tax Foundation 2026 State Tax Competitiveness Index (tax structure and rank); Mass Opportunity Alliance, Aug 2025 (budget growth). MOA's competitor analysis covers only MA, FL, NC and NH — Texas and Tennessee are marked "not in source" rather than carry a growth figure no published source supports.</div>
+    <div class="source">Source: Tax Foundation 2026 State Tax Competitiveness Index</div>
   </div>
+  <!-- Two charts (chartCompare, chartCompGrowth), four stat cards and a budget-growth
+       column in the table above compared MA's spending to these states'. Every figure in
+       all of them came from one advocacy blog post while being credited to NASBO. See the
+       block where MOA's constants used to live, in the script below, for the full account
+       and for why neither NASBO nor Census can rebuild the comparison. The reader-facing
+       note below says only what a reader needs: this tab compares tax structure, not
+       spending, and MA's own spending growth is on the Budget tab on official data. -->
+  <div class="source" style="margin-top:18px">This tab compares <strong>tax structure</strong>. It carried a cross-state <em>spending-growth</em> comparison until July 2026, when the figures turned out to rest on an advocacy group's analysis rather than the official source they were credited to. No government series — NASBO or Census — publishes comparable state budget growth through FY2026, so the comparison is not restated on a weaker basis. Massachusetts' own spending growth, <strong id="rkMaGaa">—</strong> since FY2018, is derived from the Commonwealth's signed appropriations acts on the State Budget tab.</div>
   <div class="alert">
     <h4>⚠️ The Exodus Connection</h4>
     <div class="alert-grid">
@@ -857,7 +842,7 @@ footer a:hover{color:var(--gold)}
       <div class="alert-item">FY2025 signed budget: <strong id="mgFy25Sign">—</strong> — actual spending hit <strong id="mgFy25Act">—</strong> (<span id="mgOverrun">—</span> over budget)</div>
       <div class="alert-item">FY2024 non-surtax revenue <strong>missed benchmarks by $233M</strong> — the surtax papered over the gap</div>
       <div class="alert-item">Surtax collected <strong id="mgSurtaxCum">—</strong> cumulative (FY24–FY25) — but net AGI outflow was <strong>$8.2B</strong> in those same migration years</div>
-      <div class="alert-item">State spending grew <strong id="mgSpend">—</strong> since FY2018 (signed budgets, through FY2026) while base tax revenue growth <strong>stalled at ~6%</strong> post-surtax</div>
+      <div class="alert-item">State spending grew <strong id="mgSpend">—</strong> since FY2018 (signed budgets, through FY2026)</div>
       <div class="alert-item">The 2022-2023 IRS migration data is <strong>now released</strong> — first full year with surtax in effect</div>
       <div class="alert-item">2022-23 confirms the pattern: net AGI loss of <strong>$4.18B</strong> — surtax collecting from a <strong>shrinking base</strong></div>
     </div>
@@ -1400,7 +1385,7 @@ footer a:hover{color:var(--gold)}
 <footer>
   <p style="margin-bottom:8px;font-weight:600;color:#1a4480">Tracked series refresh automatically as each source publishes; each chart's final point shows the month it runs through, and the headline figures are derived from those series rather than typed alongside them. Hand-maintained figures carry their own vintage where they appear.</p>
   <a href="index.html">← Back to Massachusetts Data Hub</a><br>
-  <span>Sources: BEA (Regional Price Parities, Real Personal Income), BLS (CPI-U Boston), Census Bureau (ACS), EIA (Electric Power Monthly), Tax Foundation, MA DOR, MA DLS, ITEP, Mass Opportunity Alliance, EPI, DOL, MA State Auditor BSI, USDA-FNS, GAO, LexisNexis, IRS Statistics of Income (SOI State-to-State Migration Data 2011–2023)</span><br>
+  <span>Sources: BEA (Regional Price Parities, Real Personal Income), BLS (CPI-U Boston), Census Bureau (ACS), EIA (Electric Power Monthly), Tax Foundation, MA DOR, MA DLS, ITEP, EPI, DOL, MA State Auditor BSI, USDA-FNS, GAO, LexisNexis, IRS Statistics of Income (SOI State-to-State Migration Data 2011–2023)</span><br>
   <span>Sources update on their own schedules — see each chart and table for its vintage. Most recent additions: H.5555 FY2027 line items (parsed July 2026); IRS 2022-23 migration data (released March 2026). All data from official government sources.</span><br><span>Companion: <a href="immigration-dashboard.html" style="color:var(--navy);font-weight:600;border-bottom:1px solid var(--gold)">Immigration &amp; Massachusetts Population Dashboard</a> — demographic context for these tax trends</span>
 </footer>
 
@@ -1451,44 +1436,61 @@ const CPI_GROWTH_FY18_26 = (CPI_FY2026 / CPI_FY2018 - 1) * 100;  // +32.0%
 const FY25_OVERRUN = GAA_FY25_ACTUAL - gaaAt('FY25');        // $6.2B
 const SURTAX_CUM_ACTUAL = SURTAX_FY24_ACTUAL + SURTAX_FY25_ACTUAL;  // $5.4B (FY24+FY25)
 
-// Taxpayer income growth since FY2018. NOT derived: no personal-income series is
-// published anywhere on this page, so there is nothing to read it from. Kept as a
-// named constant with its basis so it can be checked and refreshed, rather than
-// retyped into three tabs. Source: Mass Opportunity Alliance analysis of BEA MA
-// personal income, FY2018→FY2026 — the same basis chartGrowth was built on.
-const INCOME_GROWTH_FY18_26 = 42;
+// BEA Total Personal Income in Massachusetts (FRED MAOTOT), quarterly, seasonally
+// adjusted annual rate, $M. Averaged over the Massachusetts fiscal year (Jul–Jun) so
+// income is measured on the same clock as the budget it is compared against — the same
+// method CPI_FY2018/CPI_FY2026 use above, for the same reason.
+//   FY2018 = 2017Q3–2018Q2 = $472.3B (4 quarters)
+//   FY2026 = 2025Q3–2026Q1 = $703.3B (3 quarters — BEA had not published 2026Q2 at
+//            retrieval, so the mean is over the 3 it had, exactly as the FY2026 CPI mean
+//            is over the 11 months BLS published. Income is still rising quarter on
+//            quarter, so the missing quarter would lift FY2026: this understates income
+//            growth, and so overstates how far spending outpaces it.)
+// Retrieved from FRED 2026-07-16 ⇒ +48.9% FY2018→FY2026. A fiscal-year mean only moves
+// when the FY closes; refresh annually, and re-check once 2026Q2 posts.
+//
+// This replaces a hand-typed 42% taken from Mass Opportunity Alliance, an advocacy
+// organization, whose own source line called it "MOA analysis of BEA MA personal income".
+// Going to BEA directly rather than trusting an advocacy group's arithmetic on it moved
+// the number ~7 points. The page's claim survives on official data but by a smaller
+// margin than it asserted: spending +54.6% (GAA) against income +48.9% (BEA) is a
+// 5.7-point gap, where 42% implied 12.6. chartGrowth plots both and names each basis.
+const INC_FY2018 = 472310.9;   // $M, mean of 2017Q3–2018Q2
+const INC_FY2026 = 703330.1;   // $M, mean of 2025Q3–2026Q1 (3 of 4 quarters)
+const INCOME_GROWTH_FY18_26 = (INC_FY2026 / INC_FY2018 - 1) * 100;  // +48.9%
 
-// Cross-state spending growth, FY2018→FY2026. NOT derived, and NOT NASBO.
-// Source: Mass Opportunity Alliance, "Massachusetts Has a Spending Problem"
-// (2025-08-15) — the same post INCOME_GROWTH_FY18_26 comes from. Its method, in its
-// own words: "we standardized each state's spending growth as a percentage of the
-// total income of its residents." It states "Massachusetts' state spending grew 51.5%
-// from Fiscal Year 2018 to the present," against Florida 42.5%, North Carolina 41.7%
-// and New Hampshire 39.0% — the competitor set MOA takes from the Mass Taxpayers
-// Foundation. "To the present" is that post's date, i.e. the enacted FY2026 budgets.
+// ── Why there is no cross-state spending comparison on the rankings tab ─────
+// There were two charts here (chartCompGrowth, budget growth FY2018→FY2026 for six
+// states; chartCompare, spending as a share of residents' income for four) plus a growth
+// column in the rankings table and four stat cards. Every figure in all of them came
+// from one Mass Opportunity Alliance blog post, "Massachusetts Has a Spending Problem"
+// (2025-08-15) — MA 51.5%, FL 42.5%, NC 41.7%, NH 39.0%, and the 9.0/6.9/6.9/4.5 income
+// shares. They are gone, and this note exists so they are not helpfully restored.
 //
-// The NASBO attribution these figures used to carry was wrong twice over. The MOA post
-// never mentions NASBO. And NASBO's State Expenditure Report runs a rolling three-year
-// window — the 2025 edition covers FY2023 and FY2024 actual plus FY2025 estimated — so
-// no single edition spans FY2018 to FY2026, and none reports FY2026 at all. MOA's
-// underlying spending measure is undocumented (it never says general fund vs. total),
-// which is exactly why the basis is named here instead of implied by a source line.
+// They were sourced on the page to NASBO. That was wrong twice: the MOA post never
+// mentions NASBO, and NASBO's State Expenditure Report runs a rolling three-year window
+// (the 2025 edition covers FY2023 and FY2024 actual plus FY2025 estimated), so no single
+// edition spans FY2018→FY2026 and none reports FY2026 at all. The Texas +40% and
+// Tennessee +38% bars traced to nothing whatsoever: MOA covers four states and names
+// neither. MOA's own method was its own construction — "we standardized each state's
+// spending growth as a percentage of the total income of its residents" — on a spending
+// measure it never defines (general fund? total? federal funds in or out?).
 //
-// This is NOT the GAA basis. MA's own signed budgets give SPEND_GROWTH_FY26 = +54.6%
-// over the same window (GAA_SIGNED, above). Both numbers are on this page; each is
-// labelled with its basis so the pair reads as two measures, not a contradiction.
-// Recomputing only Massachusetts from GAA_SIGNED and leaving the other three on MOA's
-// basis would be the compose error this dashboard warns about elsewhere, so the set is
-// kept whole on the one basis every state in it was measured on.
-//
-// Texas and Tennessee are absent because MOA's analysis is absent on them: it covers
-// only these four states. Their +40% / +38% predecessors traced to no source at all and
-// are gone rather than replaced with invented NASBO figures. The rankings table still
-// carries both states for the tax-structure columns, which are Tax Foundation-sourced.
-const MOA_VINTAGE = 'Mass Opportunity Alliance, Aug 2025';
-const MOA_GROWTH_STATES = ['Massachusetts', 'Florida', 'North Carolina', 'New Hampshire'];
-const MOA_GROWTH_FY18_26 = [51.5, 42.5, 41.7, 39.0];
-const moaGrowth = st => MOA_GROWTH_FY18_26[MOA_GROWTH_STATES.indexOf(st)];
+// No official source can rebuild this. The candidates and why each fails:
+//   • NASBO — rolling three-year window, as above. Cannot span FY2018→FY2026.
+//   • Census Annual Survey of State Government Finances — official and genuinely
+//     comparable across states, but it reaches only FY2024 (released 2026-03-05, a
+//     ~16-month lag), so it cannot reach FY2026 until roughly 2028. It also measures
+//     total state expenditure including federal funds, which is a different concept from
+//     the enacted-budget growth this chart claimed; over a FY2018→FY2024 window that
+//     measure is dominated by federal COVID transfers, which vary hugely by state and
+//     reflect Congress, not state policy. A chart on that basis would answer a question
+//     nobody asked, and choosing how to net the federal money out would be one more
+//     undocumented construction of exactly the kind that got MOA removed.
+// So the comparison is not rebuilt on a shorter official window either. MA's own growth
+// is still on the page and still official: SPEND_GROWTH_FY26 (+54.6%) is derived from
+// GAA_SIGNED, the Commonwealth's own signed appropriations acts. What is gone is the
+// claim that it is faster than other states' — which no official data now supports here.
 
 // Massachusetts personal income tax at the rates this page states (:184, :251):
 // 5% flat, plus the 4% surtax on income above the threshold. This is the basis the
@@ -1584,8 +1586,8 @@ function initCharts(tab) {
       putTxt('h5Total2', '$' + FY27_H5555.toFixed(1) + 'B');
       pctTxt('h5Growth',  SPEND_GROWTH_FY27);
       pctTxt('h5Growth2', SPEND_GROWTH_FY27);
-      pctTxt('h5Income',  INCOME_GROWTH_FY18_26, 0);
-      pctTxt('h5Income2', INCOME_GROWTH_FY18_26, 0);
+      pctTxt('h5Income',  INCOME_GROWTH_FY18_26);
+      pctTxt('h5Income2', INCOME_GROWTH_FY18_26);
       pctTxt('h5Cpi',  CPI_GROWTH_FY18_26);
       pctTxt('h5Cpi2', CPI_GROWTH_FY18_26);
       h5Charts();
@@ -1612,7 +1614,8 @@ function initCharts(tab) {
       putTxt('ovRankNow',   '#' + rankData[iNow]    + ' (' + rankYears[iNow]    + ')');
 
       pctTxt('ovSpend',   SPEND_GROWTH_FY26);
-      pctTxt('ovIncome',  INCOME_GROWTH_FY18_26, 0);
+      pctTxt('ovIncome',  INCOME_GROWTH_FY18_26);
+      pctTxt('ovCpi',     CPI_GROWTH_FY18_26);
       putTxt('ovOverrun', '$' + FY25_OVERRUN.toFixed(1) + 'B');
 
       // Highest-burden band read out of the ITEP series itself, so the band and the
@@ -1697,9 +1700,17 @@ function initCharts(tab) {
       putTxt('bgOverrun', '$' + FY25_OVERRUN.toFixed(1) + 'B');
       pctTxt('bgGrowth',  SPEND_GROWTH_FY26);
       putTxt('bgGrowthBasis', '$' + gaaAt('FY18').toFixed(1) + 'B → $' + gaaAt('FY26').toFixed(1) + 'B');
+      // The income card states its own basis the way the spending card beside it does,
+      // so the two are visibly measured over the same fiscal-year window.
+      pctTxt('bgIncome', INCOME_GROWTH_FY18_26);
+      putTxt('bgIncomeBasis', '$' + (INC_FY2018 / 1000).toFixed(1) + 'B → $' + (INC_FY2026 / 1000).toFixed(1) + 'B');
       pctTxt('bgTrioSpend',  SPEND_GROWTH_FY26);
-      pctTxt('bgTrioIncome', INCOME_GROWTH_FY18_26, 0);
+      pctTxt('bgTrioIncome', INCOME_GROWTH_FY18_26);
       pctTxt('bgTrioCpi',    CPI_GROWTH_FY18_26);
+      // Stated as gaps rather than left for the reader to subtract. Both shrank when the
+      // advocacy-group income figure was replaced with BEA's own series.
+      putTxt('bgGapIncome', (SPEND_GROWTH_FY26 - INCOME_GROWTH_FY18_26).toFixed(1) + ' points');
+      putTxt('bgGapCpi',    (SPEND_GROWTH_FY26 - CPI_GROWTH_FY18_26).toFixed(1) + ' points');
       putTxt('bgTrioFy25Sign', '$' + gaaAt('FY25').toFixed(1) + 'B');
       putTxt('bgTrioFy25Act',  '$' + GAA_FY25_ACTUAL.toFixed(1) + 'B');
 
@@ -1711,48 +1722,31 @@ function initCharts(tab) {
         },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: false, min: 35, title: { display: true, text: 'Billions ($)' }, stacked: false } }, plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } } }
       });
-      // The inflation bar read 26, which is not the FY2018 number at all — it is the
-      // costliving tab's cumulative-since-Jan-2021 CPI (cumNat's last value, 26.6),
-      // i.e. the auto-updated series' figure wearing the hand-written one's label.
-      // On the tab's own FY2018 basis, CPI-U is up 32.0%, so the spending-vs-inflation
-      // gap is 22.5pp, not the 25pp the old trio implied.
+      // All three bars are now primary-source and measured over the same FY2018→FY2026
+      // window: GAA signed budgets, BEA MAOTOT, BLS CPI-U. None of the original trio
+      // survived contact with its own source. The inflation bar read 26, which was the
+      // costliving tab's cumulative-since-Jan-2021 CPI (cumNat's last value, 26.6)
+      // wearing the FY2018 label — on the FY2018 basis CPI-U is up 32.0%. The income bar
+      // read 42, which was an advocacy group's rendering of BEA's series — BEA itself
+      // gives 48.9%. Both corrections narrow the gaps this chart draws: spending leads
+      // inflation by 22.5pp (not 25) and income by 5.7pp (not 12.6). The bars are drawn
+      // from the constants, so the chart states whatever the sources state.
       safeChart('chartGrowth', {
         type: 'bar',
         data: {
           labels: ['State Spending', 'Taxpayer Income', 'Inflation (CPI-U)'],
-          datasets: [{ label: 'Growth Since FY2018', data: [+SPEND_GROWTH_FY26.toFixed(1), INCOME_GROWTH_FY18_26, +CPI_GROWTH_FY18_26.toFixed(1)], backgroundColor: ['#c0392b','#1a4480','#6b7280'], borderRadius: 8 }]
+          datasets: [{ label: 'Growth Since FY2018', data: [+SPEND_GROWTH_FY26.toFixed(1), +INCOME_GROWTH_FY18_26.toFixed(1), +CPI_GROWTH_FY18_26.toFixed(1)], backgroundColor: ['#c0392b','#1a4480','#6b7280'], borderRadius: 8 }]
         },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, title: { display: true, text: '% Growth' } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `+${ctx.parsed.y.toFixed(1)}% since FY2018` } } } }
       });
       break;
 
     case 'rankings':
-      safeChart('chartCompare', {
-        type: 'bar',
-        data: {
-          labels: ['Massachusetts','Florida','New Hampshire','North Carolina'],
-          datasets: [{ label: 'State Spending as % of Income', data: [9.0,6.9,6.9,4.5], backgroundColor: ['#c0392b','#1a7a4c','#1a7a4c','#1a7a4c'], borderRadius: 8 }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 12, title: { display: true, text: '% of Personal Income' } } }, plugins: { legend: { display: false } } }
-      });
-      // The growth table and this chart both read MOA_GROWTH_*, so the four states
-      // cannot drift apart the way the hand-typed cells did. The MA cell is the same
-      // 51.5% the chart plots, not a second copy of it.
-      pctTxt('rkGrowthMA', moaGrowth('Massachusetts'));
-      pctTxt('rkGrowthNH', moaGrowth('New Hampshire'));
-      pctTxt('rkGrowthFL', moaGrowth('Florida'));
-      pctTxt('rkGrowthNC', moaGrowth('North Carolina'));
-      // Names the GAA basis next to the MOA basis so the +54.6% on the Budget tab and
-      // the +51.5% here are visibly two measures rather than a discrepancy.
-      pctTxt('rkGaaNote', SPEND_GROWTH_FY26);
-      safeChart('chartCompGrowth', {
-        type: 'bar',
-        data: {
-          labels: MOA_GROWTH_STATES,
-          datasets: [{ label: 'Budget Growth FY2018–FY2026 (' + MOA_VINTAGE + ')', data: MOA_GROWTH_FY18_26, backgroundColor: MOA_GROWTH_STATES.map(s => s === 'Massachusetts' ? '#c0392b' : '#5a8fba'), borderRadius: 6 }]
-        },
-        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, title: { display: true, text: '% Growth' } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `+${ctx.parsed.y.toFixed(1)}% FY2018→FY2026 · ${MOA_VINTAGE}` } } } }
-      });
+      // chartCompare and chartCompGrowth used to build here. Both were entirely Mass
+      // Opportunity Alliance figures credited to NASBO; see the note at MOA's old
+      // constants block for why no official source replaces them. This tab is now the
+      // Tax Foundation table plus the standing MA-only GAA figure below.
+      pctTxt('rkMaGaa', SPEND_GROWTH_FY26);
       break;
 
     case 'costliving':
