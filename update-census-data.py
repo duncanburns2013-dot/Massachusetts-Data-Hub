@@ -340,6 +340,22 @@ def main():
     }
     json_path = os.path.join(BASE_DIR, "data", "census-latest.json")
     os.makedirs(os.path.dirname(json_path), exist_ok=True)
+    # Only rewrite if the DATA changed. fetched_at moves every run, so writing
+    # unconditionally guaranteed a diff, which guaranteed a commit -- the workflow
+    # then looked productive on every run even when the ACS vintage had not moved
+    # for a month. Same failure mode the HTML date stamp had.
+    _payload = {k: v for k, v in out.items() if k != "fetched_at"}
+    _prev = {}
+    if os.path.exists(json_path):
+        try:
+            with open(json_path) as f:
+                _prev = {k: v for k, v in json.load(f).items() if k != "fetched_at"}
+        except Exception:
+            _prev = {}
+    if _payload == _prev:
+        print("Raw data unchanged -- leaving census-latest.json alone.")
+        print("Census update complete (no new ACS data).")
+        return
     with open(json_path, "w") as f:
         json.dump(out, f, indent=2)
     print(f"\nRaw data â {json_path}")
