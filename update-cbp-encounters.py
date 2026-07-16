@@ -1,257 +1,282 @@
 #!/usr/bin/env python3
 """
 update-cbp-encounters.py
-Downloads CBP encounter CSVs and updates immigration-dashboard.html.
+Refreshes the U.S. Border Patrol Southwest-border series on immigration-dashboard.html
+from CBP's published monthly tables.
 
-CBP doesn't have a stable REST API, but publishes CSV files at their
-Public Data Portal (cbp.gov/newsroom/stats/cbp-public-data-portal).
+WHAT THIS SCRIPT MAY AND MAY NOT TOUCH
+--------------------------------------
+The "Southwest Land Border Encounters by Fiscal Year" chart carries two DIFFERENT
+measures as two separate series. They must never be merged:
 
-Strategy:
-  1. Try known CSV URL patterns for current FY
-  2. Try OHSS (DHS Office of Homeland Security Statistics) mirror
-  3. Fall back to a local CSV the user can drop at data/cbp-encounters-latest.csv
+  1. 'Total SW Border encounters (USBP + OFO)'
+     Border Patrol apprehensions between ports of entry PLUS Office of Field
+     Operations inadmissibles at ports of entry. Source: DHS OHSS KHSM
+     (https://ohss.dhs.gov/khsm/cbp-encounters), Southwest Land Border row.
+     OHSS last updated this in Feb 2025 and it currently ends at FY2024, because
+     CBP's FY2025+ releases no longer publish the OFO component at all.
+     >> This script does NOT touch that series. It is a frozen historical series
+        from a different publisher on a different basis. If OHSS ever extends it
+        past FY2024, extend it from OHSS -- never from the CBP URLs below, which
+        do not contain the OFO component.
+
+  2. 'USBP SW Border encounters (Border Patrol only)'
+     The Border Patrol component alone -- a strict SUBSET of measure 1.
+     Source for FY2024 onward: the CBP pages fetched below, "Southwest Border
+     Total Apprehensions" row, summed across the fiscal year's months.
+     >> This script updates ONLY the FY2024+ tail of this series.
+
+This is the resolution of the metric mismatch that previously guarded this file.
+The old version fetched CBP *nationwide* encounter URLs and wrote them into a
+series labelled 'SW Border Encounters'. Nationwide != Southwest, and encounters
+(USBP+OFO) != apprehensions (USBP only); doing that silently mixed three bases
+into one labelled series. It is fixed by construction now: the scraped row is
+"Southwest Border Total Apprehensions" and the target series is the USBP-only
+Southwest series, so the source and the label describe the same thing. Verified
+against OHSS at the overlap: OHSS puts FY2024 USBP SW at 1,530,520 (rounded to
+the nearest 10); these CBP months sum to 1,530,523.
+
+DO NOT repoint these URLs at a nationwide table, and do not aim this script at
+series 1, without re-doing that reconciliation.
 
 No API key needed.
-
-Updates:
-  - Encounter bar chart data  â  immigration-dashboard.html
-  - FY callout text           â  immigration-dashboard.html
-  - data/cbp-encounters-latest.json
 """
-import csv
-import os, io, json, os, re, sys
+import json
+import os
+import re
+import sys
+from datetime import datetime, timezone
+from html import unescape
 from urllib.request import urlopen, Request
-from datetime import datetime
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 IMMIGRATION_HTML = os.path.join(BASE_DIR, "immigration-dashboard.html")
-LOCAL_CSV = os.path.join(BASE_DIR, "data", "cbp-encounters-latest.csv")
 
-# Current chart data from immigration-dashboard.html
-CHART_LABELS = ["FY17", "FY18", "FY19", "FY20", "FY21", "FY22", "FY23", "FY24", "FY25", "FY26*"]
-BASELINE = {
-    "FY17": 415517, "FY18": 521090, "FY19": 977509, "FY20": 458088,
-    "FY21": 1734686, "FY22": 2378944, "FY23": 3201144, "FY24": 2900000,
-    "FY25": 237538, "FY26*": 60940,
+# The dataset label to write into. Must stay in sync with the chart.
+USBP_LABEL = "USBP SW Border encounters (Border Patrol only)"
+# The row on CBP's pages that this series is defined as.
+CBP_ROW = "Southwest Border Total Apprehensions"
+CBP_NATIONWIDE_ROW = "Nationwide Total Apprehensions"
+
+# Fiscal year -> CBP page. The bare /nationwide-encounters page always carries the
+# current fiscal year; closed years get a -fyNNNN archive page. (Despite the page
+# slug saying "encounters", these tables are Border Patrol apprehensions only --
+# that is precisely why they feed the USBP series and not the total series.)
+FY_PAGES = {
+    2025: "https://www.cbp.gov/newsroom/stats/nationwide-encounters-fy2025",
+    2026: "https://www.cbp.gov/newsroom/stats/nationwide-encounters",
 }
 
-# URLs to try (CBP shifts these with each monthly release)
-CANDIDATE_URLS = [
-    # FY2026 data pages
-    "https://www.cbp.gov/sites/default/files/assets/documents/nationwide-encounters-fy26-td.csv",
-    "https://www.cbp.gov/sites/default/files/assets/documents/2026-Apr/nationwide-encounters.csv",
-    "https://www.cbp.gov/sites/default/files/assets/documents/2026-Mar/nationwide-encounters.csv",
-    # FY2025 final
-    "https://www.cbp.gov/sites/default/files/assets/documents/2025-Dec/nationwide-encounters-fy2025-data.csv",
-    "https://www.cbp.gov/sites/default/files/assets/documents/2025-Nov/nationwide-encounters.csv",
-    # OHSS mirror
-    "https://ohss.dhs.gov/sites/default/files/2026-04/cbp_encounters.csv",
-    "https://ohss.dhs.gov/sites/default/files/2026-03/cbp_encounters.csv",
-]
+MONTHS = {m: i for i, m in enumerate(
+    ["oct", "nov", "dec", "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep"], 1)}
+MONTH_FULL = {1: "Oct", 2: "Nov", 3: "Dec", 4: "Jan", 5: "Feb", 6: "Mar",
+              7: "Apr", 8: "May", 9: "Jun", 10: "Jul", 11: "Aug", 12: "Sep"}
 
 
-def fetch_csv_url(url):
-    """Download CSV, return list of dicts or None."""
+def fetch(url):
     req = Request(url, headers={"User-Agent": "MA-Data-Hub/1.0"})
-    try:
-        with urlopen(req, timeout=30) as r:
-            text = r.read().decode("utf-8-sig")
-        if not text.strip() or "<html" in text[:200].lower():
-            return None  # Got an error page, not CSV
-        reader = csv.DictReader(io.StringIO(text))
-        rows = list(reader)
-        return rows if rows else None
-    except Exception:
+    with urlopen(req, timeout=45) as r:
+        return r.read().decode("utf-8", "replace")
+
+
+def parse_month_header(cell):
+    """'Oct-24' / 'June-25' -> (fy_month_index, calendar_year). None if not a month."""
+    m = re.match(r"([A-Za-z]+)[-\s]*(\d{2,4})$", cell.strip())
+    if not m:
         return None
-
-
-def parse_fy_totals(rows):
-    """
-    Parse rows into {FY_label: total_encounters}.
-    CBP CSV formats vary, so we try multiple column-name patterns.
-    """
-    fy_col = None
-    count_cols = []
-
-    # Discover columns
-    headers = list(rows[0].keys()) if rows else []
-    for h in headers:
-        hl = h.lower().strip()
-        if "fiscal" in hl and "year" in hl:
-            fy_col = h
-        elif hl in ("encounter count", "encounters", "encounter_count", "total"):
-            count_cols.append(h)
-    # If no specific count col found, look for any numeric-ish column
-    if not count_cols:
-        for h in headers:
-            hl = h.lower().strip()
-            if any(k in hl for k in ("count", "apprehension", "inadmissible")):
-                count_cols.append(h)
-
-    if not fy_col:
-        print("  WARN: No 'Fiscal Year' column found. Headers:", headers[:10])
+    key = m.group(1).lower()[:3]
+    if key not in MONTHS:
         return None
+    yr = int(m.group(2))
+    return MONTHS[key], (2000 + yr if yr < 100 else yr)
 
-    totals = {}
+
+def parse_cbp_table(html, row_name):
+    """Pull `row_name` out of the first table. Returns [(fy_month, cal_year, value)]."""
+    tables = re.findall(r"<table.*?</table>", html, re.S)
+    if not tables:
+        return None
+    rows = re.findall(r"<tr.*?</tr>", tables[0], re.S)
+    header, target = None, None
     for row in rows:
-        fy_raw = row.get(fy_col, "").strip()
-        if not fy_raw:
+        cells = [unescape(re.sub(r"<[^>]+>", "", c)).strip()
+                 for c in re.findall(r"<t[hd].*?</t[hd]>", row, re.S)]
+        if not cells:
             continue
-        # Normalize to "FYXX" format
+        if header is None and any(parse_month_header(c) for c in cells[1:]):
+            header = cells
+        elif cells[0].strip().lower() == row_name.lower():
+            target = cells
+    if not header or not target:
+        return None
+
+    out = []
+    for i, h in enumerate(header[1:], 1):
+        parsed = parse_month_header(h)
+        if not parsed or i >= len(target):
+            continue
+        raw = target[i].strip().replace(",", "")
+        if not raw or not raw.lstrip("-").isdigit():
+            continue  # '-' = month not yet published
+        out.append((parsed[0], parsed[1], int(raw)))
+    return out or None
+
+
+def fy_total(url, row=CBP_ROW):
+    """(total, months_reported, first(mi,yr), last(mi,yr), monthly) for a CBP FY page."""
+    months = parse_cbp_table(fetch(url), row)
+    if not months:
+        return None
+    months.sort(key=lambda t: t[0])
+    return (sum(m[2] for m in months), len(months), months[0][:2], months[-1][:2], months)
+
+
+def find_chart_data(html, label):
+    """(match, [current values]) for the dataset labelled `label`.
+
+    Anchored on the label, which does not change when the data does. The current
+    values are read out of the file -- never a constant baked into this script.
+    A constant would go stale the first time the script succeeded and then
+    silently stop matching (the bug fixed in update-census-data.py).
+    """
+    m = re.search(r"(label:\s*'" + re.escape(label) + r"'\s*,\s*data:\s*\[)([^\]]*)(\])", html)
+    if not m:
+        return None, None
+    return m, [v.strip() for v in m.group(2).split(",") if v.strip()]
+
+
+def fmt_month(mi, yr):
+    return f"{MONTH_FULL[mi]} {yr}"
+
+
+def main():
+    print("=== CBP Border Patrol SW-border update ===\n")
+
+    fetched = {}
+    for fy, url in sorted(FY_PAGES.items()):
+        print(f"  FY{fy}: {url}")
         try:
-            fy_num = int(fy_raw)
-            fy_label = f"FY{str(fy_num)[-2:]}"
-        except ValueError:
-            fy_label = fy_raw
+            got = fy_total(url)
+        except Exception as e:
+            print(f"    !! fetch/parse failed: {e}")
+            got = None
+        if not got:
+            print(f"    !! could not read '{CBP_ROW}' -- FY{fy} left as published")
+            continue
+        total, n, first, last, _ = got
+        print(f"    {total:,} across {n} month(s): {fmt_month(*first)} - {fmt_month(*last)}")
+        fetched[fy] = got
 
-        count = 0
-        for cc in count_cols:
-            try:
-                count += int(row[cc].strip().replace(",", ""))
-            except (ValueError, AttributeError, KeyError):
-                pass
-        if count > 0:
-            totals[fy_label] = totals.get(fy_label, 0) + count
-
-    return totals if totals else None
-
-
-def try_auto_fetch():
-    """Try candidate URLs one by one."""
-    for url in CANDIDATE_URLS:
-        print(f"  Trying {url.split('/')[-1]}...")
-        rows = fetch_csv_url(url)
-        if rows:
-            totals = parse_fy_totals(rows)
-            if totals:
-                print(f"  â Got data from: {url}")
-                return totals
-    return None
-
-
-def update_dashboard(fy_data):
-    """Merge new data into immigration-dashboard.html."""
-    if not os.path.exists(IMMIGRATION_HTML):
-        print(f"  SKIP: {IMMIGRATION_HTML} not found.")
-        return
+    if not fetched:
+        print("\nNothing fetched. Dashboard left untouched.")
+        return 1
 
     with open(IMMIGRATION_HTML, "r", encoding="utf-8") as f:
         html = f.read()
     orig = html
 
-    updated = dict(BASELINE)
-    for fy, val in fy_data.items():
-        if fy in updated and val != updated[fy]:
-            print(f"  {fy}: {updated[fy]:,} â {val:,}")
-            updated[fy] = val
+    m, current = find_chart_data(html, USBP_LABEL)
+    if not m:
+        print(f"\n  !! no dataset labelled '{USBP_LABEL}' -- NOT updated")
+        return 1
 
-    # ------------------------------------------------------------------
-    # STOP. Do not remove this guard without resolving the mismatch below.
-    #
-    # CANDIDATE_URLS all point at CBP "nationwide-encounters" files. The chart
-    # this writes into is titled "Southwest Border Encounters by Fiscal Year"
-    # and its dataset label is 'SW Border Encounters'. Nationwide encounters
-    # and Southwest-Border encounters are different measures -- nationwide is
-    # materially larger -- so this script, if it ever succeeded, would silently
-    # write the wrong metric under the right-sounding label.
-    #
-    # That has already happened by hand. The published array currently mixes
-    # three bases: FY17-22 are SWB encounters (matching the label), FY23-24 are
-    # nationwide, FY25 is USBP SWB apprehensions only, FY26* is nationwide. The
-    # page states the same 237,538 as "SWB encounters" in one place and "SWB
-    # USBP apprehensions" in another, so at least one of those is wrong.
-    #
-    # Resolve it one way or the other before enabling this:
-    #   (a) relabel the chart "Nationwide Encounters" to match these URLs, or
-    #   (b) point CANDIDATE_URLS at southwest-land-border-encounters data to
-    #       match the existing label.
-    # Either is defensible. Writing nationwide numbers under a SWB label is not.
-    #
-    # Note this script has never actually succeeded -- data/cbp-encounters-latest
-    # .json still reads auto_fetched: false -- so no automated run has yet made
-    # the mixing worse. Keep it that way until the metric question is settled.
-    # ------------------------------------------------------------------
-    if not os.environ.get("CBP_METRIC_RESOLVED"):
-        print("  !! REFUSING to write: this script fetches NATIONWIDE encounters")
-        print("     but the target chart is labelled 'SW Border Encounters'.")
-        print("     See the comment above. Set CBP_METRIC_RESOLVED=1 once the")
-        print("     chart label and the data source have been reconciled.")
-        return
+    # Chart labels tell us which slot each FY occupies; never assume a position.
+    lm = re.search(r"labels:\s*\[([^\]]*)\]", html[max(0, m.start() - 600):m.start()])
+    if not lm:
+        print("  !! chart labels not found -- NOT updated")
+        return 1
+    labels = [x.strip().strip("'\"") for x in lm.group(1).split(",")]
+    if len(labels) != len(current):
+        print(f"  !! {len(labels)} labels vs {len(current)} values -- NOT updated")
+        return 1
 
-    old_vals = [BASELINE[l] for l in CHART_LABELS]
-    new_vals = [updated[l] for l in CHART_LABELS]
+    vals = list(current)
+    for fy, (total, n, first, last, _) in sorted(fetched.items()):
+        want = {f"FY{str(fy)[-2:]}", f"FY{str(fy)[-2:]}*"}
+        idx = next((i for i, l in enumerate(labels) if l in want), None)
+        if idx is None:
+            print(f"  !! FY{fy} has no bar on this chart -- skipped")
+            continue
+        if str(total) != vals[idx]:
+            print(f"  {labels[idx]}: {vals[idx]} -> {total:,}")
+            vals[idx] = str(total)
 
-    old_arr = ",".join(str(x) for x in old_vals)
-    new_arr = ",".join(str(x) for x in new_vals)
+    if vals != current:
+        html = html[:m.start()] + m.group(1) + ",".join(vals) + m.group(3) + html[m.end():]
+        print("  USBP series updated.")
+    else:
+        print("  USBP series already current.")
 
-    if old_arr != new_arr and old_arr in html:
-        html = html.replace(f"data:[{old_arr}]", f"data:[{new_arr}]", 1)
-        print("  Chart data array updated.")
+    # Prose is derived from what was just fetched, not retyped by hand.
+    cur_fy = max(fetched)
+    total, n, first, last, months = fetched[cur_fy]
+    try:
+        nat = fy_total(FY_PAGES[cur_fy], CBP_NATIONWIDE_ROW)
+    except Exception:
+        nat = None
 
-    # Update callout numbers
-    for label, key, formatted in [
-        ("FY25", "FY25", f"{updated['FY25']:,}"),
-        ("FY26", "FY26*", f"{updated['FY26*']:,}"),
-    ]:
-        old_formatted = f"{BASELINE[key]:,}"
-        if old_formatted != formatted:
-            n = html.count(old_formatted)
-            if n > 0:
-                html = html.replace(old_formatted, formatted)
-                print(f"  {label} callout: {old_formatted} â {formatted} ({n}x)")
+    span = f"{fmt_month(*first)}–{fmt_month(*last)}"
+    nat_txt = f" ({nat[0]:,} nationwide)" if nat else ""
+    if n >= 12:
+        period, tail = f"Full year, {span} =", ""
+    else:
+        period = f"{span} ="
+        tail = f" over the fiscal year's first {n} month{'s' if n != 1 else ''}"
+    direction = "risen" if months[-1][2] > months[0][2] else "fallen"
+    trend = (f" Within that span the monthly Southwest total has {direction} from "
+             f"{months[0][2]:,} in {fmt_month(*first)} to {months[-1][2]:,} in "
+             f"{fmt_month(*last)}." if n >= 2 else "")
+    callout = (f'<div class="callout callout-green"><strong>FY{cur_fy} so far:</strong> '
+               f'{period} <strong>{total:,}</strong> Border Patrol apprehensions at the '
+               f'Southwest border{nat_txt}{tail}.{trend} CBP has not published the OFO '
+               f'port-of-entry component for FY{cur_fy}, so no total-encounter figure '
+               f'exists for the year (CBP monthly tables, summed).</div>')
+    cm = re.search(r'<div class="callout callout-green"><strong>FY\d{4} so far:.*?</div>', html, re.S)
+    if cm:
+        if cm.group(0) != callout:
+            html = html[:cm.start()] + callout + html[cm.end():]
+            print(f"  FY{cur_fy} callout: rewritten from fetched data.")
+    else:
+        print("  !! FY callout anchor not found -- NOT updated")
+
+    # Keep the chart's footnote honest about how much of the year is in the bar.
+    nm = re.search(r"FY\d{4}\* = [^,]*, \d+ of 12 months", html)
+    if nm:
+        new_note = f"FY{cur_fy}* = {span} only, {n} of 12 months"
+        if nm.group(0) != new_note:
+            html = html[:nm.start()] + new_note + html[nm.end():]
+            print("  Chart footnote month-count updated.")
+    else:
+        print("  !! chart footnote anchor not found -- NOT updated")
 
     if html != orig:
         with open(IMMIGRATION_HTML, "w", encoding="utf-8") as f:
             f.write(html)
-        print(f"  â {IMMIGRATION_HTML} updated.")
+        print(f"\n  -> {os.path.basename(IMMIGRATION_HTML)} written.")
     else:
-        print("  No dashboard changes needed.")
+        print("\n  No changes needed.")
 
-
-def main():
-    print("=== CBP Encounter Data Update ===\n")
-
-    # Try auto-fetch first
-    print("Attempting auto-fetch from CBP / OHSS...")
-    fy_data = try_auto_fetch()
-
-    # Fall back to local CSV
-    if not fy_data and os.path.exists(LOCAL_CSV):
-        print(f"\n  Auto-fetch failed. Trying local CSV: {LOCAL_CSV}")
-        with open(LOCAL_CSV, "r", encoding="utf-8-sig") as f:
-            rows = list(csv.DictReader(f))
-        fy_data = parse_fy_totals(rows)
-
-    if fy_data:
-        print(f"\nEncounter data ({len(fy_data)} fiscal years):")
-        for fy in sorted(fy_data.keys()):
-            marker = " â" if BASELINE.get(fy) and fy_data[fy] != BASELINE.get(fy) else ""
-            print(f"  {fy}: {fy_data[fy]:,}{marker}")
-        update_dashboard(fy_data)
-    else:
-        print("\nâ ï¸  Could not fetch CBP data automatically.")
-        print("    CBP changes their CSV download URLs each month.")
-        print("    To update manually:")
-        print("    1. Go to https://www.cbp.gov/newsroom/stats/cbp-public-data-portal")
-        print("    2. Download the latest Nationwide Encounters CSV")
-        print(f"    3. Save it to: data/cbp-encounters-latest.csv")
-        print("    4. Re-run this script")
-
-    # Save JSON regardless
     out = {
-        "fetched_at": datetime.utcnow().isoformat() + "Z",
-        "source": "CBP Public Data Portal",
-        "auto_fetched": fy_data is not None,
-        "fy_totals": fy_data or BASELINE,
-        "baseline": BASELINE,
+        "fetched_at": datetime.now(timezone.utc).isoformat(),
+        "measure": "USBP Southwest land border encounters (Border Patrol only)",
+        "source_row": CBP_ROW,
+        "sources": FY_PAGES,
+        "note": ("Border Patrol component only. CBP does not publish the OFO "
+                 "port-of-entry component for FY2025+, so no total-encounters "
+                 "figure exists for those years. The total (USBP+OFO) series on "
+                 "the chart comes from OHSS KHSM and ends at FY2024."),
+        "fy_totals": {f"FY{fy}": {"total": v[0], "months_reported": v[1],
+                                  "first_month": fmt_month(*v[2]),
+                                  "last_month": fmt_month(*v[3])}
+                      for fy, v in sorted(fetched.items())},
     }
     json_path = os.path.join(BASE_DIR, "data", "cbp-encounters-latest.json")
     os.makedirs(os.path.dirname(json_path), exist_ok=True)
     with open(json_path, "w") as f:
         json.dump(out, f, indent=2)
-    print(f"\nData â {json_path}")
-    print("â¨ CBP update complete.\n")
+    print(f"Data -> {json_path}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

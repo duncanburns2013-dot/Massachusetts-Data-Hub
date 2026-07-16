@@ -125,7 +125,7 @@ tr:hover td{background:var(--surface)}
 <div class="stat-row">
 <div class="stat-box"><div class="num" style="color:#f87171">10.8M</div><div class="lbl">Biden Encounters</div></div>
 <div class="stat-box"><div class="num" style="color:#60a5fa">7.4M</div><div class="lbl">Net Stayed (est)</div></div>
-<div class="stat-box"><div class="num" style="color:#34d399">-79%</div><div class="lbl">Trump 2.0 Drop</div></div>
+<div class="stat-box"><div class="num" style="color:#34d399">-84%</div><div class="lbl">SW Border Patrol, FY25 v FY24</div></div>
 <div class="stat-box"><div class="num" style="color:#fbbf24">137K</div><div class="lbl">MA Residents Left</div></div>
 <div class="stat-box"><div class="num" style="color:#c084fc">$1.83B</div><div class="lbl">MA Shelter Cost</div></div>
 </div>
@@ -173,30 +173,34 @@ tr:hover td{background:var(--surface)}
 <h3>Administration Comparison</h3>
 <table>
 <tr><th></th><th>Obama (8yr)</th><th>Trump 1.0 (4yr)</th><th>Biden (4yr)</th><th>Trump 2.0</th></tr>
-<tr><td><strong>Encounters</strong></td><td>~4.5M</td><td>~3.0M</td><td style="color:var(--accent);font-weight:700">~10.8M</td><td>↓79%</td></tr>
+<tr><td><strong>Encounters</strong></td><td>~4.5M</td><td>~3.0M</td><td style="color:var(--accent);font-weight:700">~10.8M</td><td>↓84% (USBP only)†</td></tr>
 <tr><td><strong>Interior Removals</strong></td><td>~1.8M</td><td>~0.5M</td><td>~0.6M</td><td>~340K (MPI est.)</td></tr>
 <tr><td><strong>Net Stayed</strong></td><td>~-0.3M</td><td>~0.9M</td><td style="color:var(--accent);font-weight:700">~7.4M</td><td>TBD</td></tr>
 <tr><td><strong>Ratio In:Out</strong></td><td>0.9:1</td><td>2.8:1</td><td style="color:var(--accent);font-weight:700">13:1</td><td>TBD</td></tr>
 <tr><td><strong>NIM (Census)</strong></td><td>~1.0M/yr</td><td>~1.0M/yr</td><td style="color:var(--accent);font-weight:700">Peak 2.7M</td><td>1.3M→321K proj</td></tr>
 <tr><td><strong>USBP Releases</strong></td><td>Low</td><td>Low</td><td style="color:var(--accent);font-weight:700">62K+/mo</td><td style="color:var(--green);font-weight:700">0/mo (7 mos)</td></tr>
 </table>
-<p class="src">*Obama includes "returns" (voluntary). Interior-only: Obama ~1.5-2M | Trump ~0.5M | Biden ~0.15-0.6M. Trump 2.0 ICE est. from MPI FY2025.</p>
+<p class="src">*Obama includes "returns" (voluntary). Interior-only: Obama ~1.5-2M | Trump ~0.5M | Biden ~0.15-0.6M. Trump 2.0 ICE est. from MPI FY2025.<br>
+†The first three encounter columns are multi-year totals on a <em>total</em> (USBP + OFO) basis; the Trump 2.0 cell is not the same quantity. CBP's FY2025 and FY2026 releases publish Border Patrol apprehensions only and omit the OFO port-of-entry component, so no total-encounters figure has been published for FY2025 and no like-for-like total comparison can be made. The 84% is Border Patrol apprehensions at the Southwest border, FY2025 (237,538) against FY2024 (1,530,523) — a fall of 84.5% on that narrower basis. A comparison on the total basis would not necessarily give the same number.</p>
 </div>
 <div class="card">
 <h3>The Math</h3>
 <div class="callout callout-red"><strong>Under Biden:</strong> ~10.8M encountered nationwide. ~600K interior removals. = ~7.4M net stayed in the US.</div>
 <div class="callout callout-blue"><strong>Census Vintage 2025 (Jan 2026):</strong> NIM peaked at 2.7M in 2024, then plunged to 1.3M in 2025. Projected ~321K for 2026. US pop growth slowed to 0.5%.</div>
 <div class="callout callout-yellow"><strong>Trump 2.0:</strong> FY2025 Southwest Border apprehensions fell to 237,538 — <strong>lowest since 1970</strong> — down 84% from 1,530,523 in FY2024 (CBP). USBP recorded zero releases for eight consecutive months as of DHS's January 2026 statement.</div>
-<div class="callout callout-green"><strong>FY2026 start:</strong> Oct+Nov 2025 = 60,940 total encounters nationwide — <strong>28% below the previous record-low FY start</strong> (FY2012). Nov 2025 alone: 30,375 (↓92% from Biden peak of 370,883).</div>
+<div class="callout callout-green"><strong>FY2026 so far:</strong> Oct 2025–May 2026 = <strong>61,726</strong> Border Patrol apprehensions at the Southwest border (76,533 nationwide) over the fiscal year's first 8 months. Within that span the monthly Southwest total has risen from 7,991 in Oct 2025 to 9,998 in May 2026. CBP has not published the OFO port-of-entry component for FY2026, so no total-encounter figure exists for the year (CBP monthly tables, summed).</div>
 </div>
 </div>
 </div>
 
 <div id="n-encounters" class="tab" data-section="national">
 <div class="card full">
-<h3>Southwest Border Encounters by Fiscal Year</h3>
+<h3>Southwest Land Border Encounters by Fiscal Year</h3>
 <div class="chart-wrap tall"><canvas id="ch-encounters"></canvas></div>
-<p class="src">Source: U.S. Customs and Border Protection. FY2025 = full year (Oct 2024–Sep 2025). FY2026* = Oct–Nov 2025 only.</p>
+<p class="src"><strong>Two different measures — read them separately.</strong> <em>Total encounters</em> = Border Patrol apprehensions between ports of entry <em>plus</em> Office of Field Operations (OFO) inadmissibles at ports of entry. <em>USBP encounters</em> counts the Border Patrol component only, and is therefore always the smaller of the two. Comparing a USBP bar to a total bar is not like-for-like.<br>
+<strong>Why the total series stops at FY2024:</strong> CBP's monthly releases for FY2025 and FY2026 publish Border Patrol apprehensions only and no longer report the OFO component, so no total-encounter figure has been published for FY2025 onward. The gap is left empty rather than filled with the USBP number.<br>
+<strong>Sources:</strong> FY2017–FY2024 totals and FY2017–FY2023 USBP — DHS Office of Homeland Security Statistics, KHSM CBP Encounters (<a href="https://ohss.dhs.gov/khsm/cbp-encounters">ohss.dhs.gov/khsm/cbp-encounters</a>), Southwest Land Border series, rounded by OHSS to the nearest 10; last updated Feb 2025 and currently ending at FY2024. FY2024–FY2026 USBP — CBP monthly tables, summed (<a href="https://www.cbp.gov/newsroom/stats/nationwide-encounters-fy2025">FY2025</a>, <a href="https://www.cbp.gov/newsroom/stats/nationwide-encounters">FY2026</a>). The two sources agree where they overlap: OHSS puts FY2024 USBP at 1,530,520, CBP's own months sum to 1,530,523.<br>
+<strong>Caveats:</strong> FY2020–FY2023 encounters include Title 42 expulsions (Mar 2020–May 2023); a person expelled and re-crossing was counted each time, which inflates those years relative to FY2024 onward. FY2025 = full year (Oct 2024–Sep 2025). FY2026* = Oct 2025–May 2026 only, 8 of 12 months, so its bar is a partial year and not comparable to the full years beside it.</p>
 </div>
 <div class="callout callout-green" style="margin-top:.6rem"><strong>FY2025 Final:</strong> Southwest Border total apprehensions of 237,538 — lowest since 1970, and 84% below FY2024's 1,530,523 (CBP monthly totals, summed). Zero releases by USBP across May–Nov 2025, the seven months DHS reported at the time.</div>
 </div>
@@ -572,12 +576,29 @@ function showTab(id,btn){
 function initChart(id){
   switch(id){
     case 'n-encounters':
+      // Two DIFFERENT measures, deliberately kept as two series. Never merge them.
+      //  - Total encounters = USBP apprehensions + OFO port-of-entry inadmissibles
+      //    (+ Title 42 expulsions Mar 2020-May 2023). CBP/OHSS publish it only to FY2024.
+      //  - USBP encounters  = the Border Patrol component alone. Published every year.
+      // CBP stopped publishing the OFO component with FY2025, so the total series ends
+      // at FY24 (null, not zero). Do NOT extend it with the USBP-only numbers: USBP is a
+      // strict subset, and splicing them exaggerates the FY24->FY25 fall.
+      // Sources: total + USBP FY17-FY23 = OHSS KHSM (rounded to nearest 10);
+      // USBP FY24-FY26 = CBP monthly tables (exact). See the note under the chart.
       new Chart(document.getElementById('ch-encounters'),{type:'bar',data:{
         labels:['FY17','FY18','FY19','FY20','FY21','FY22','FY23','FY24','FY25','FY26*'],
-        datasets:[{label:'SW Border Encounters',
-          data:[415517,521090,977509,458088,1734686,2378944,3201144,2900000,237538,60940],
-          backgroundColor:function(ctx){var i=ctx.index;return i<=3?B:i<=7?R:G}}]
-      },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+        datasets:[
+          {label:'Total SW Border encounters (USBP + OFO)',
+           data:[415200,519940,977230,458080,1734680,2378940,2475670,2135000,null,null],
+           backgroundColor:W},
+          {label:'USBP SW Border encounters (Border Patrol only)',
+           data:[303920,396580,851510,400650,1659210,2206440,2045840,1530523,237538,61726],
+           backgroundColor:B}
+        ]
+      },options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{position:'bottom',labels:{boxWidth:12,color:'#334155'}},
+          tooltip:{callbacks:{label:function(c){
+            return c.dataset.label+': '+(c.parsed.y===null?'not published':c.parsed.y.toLocaleString())}}}},
         scales:{y:{ticks:{callback:function(v){return(v/1000000).toFixed(1)+'M'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}}}});
       break;
     case 'n-inout':
