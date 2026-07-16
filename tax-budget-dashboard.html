@@ -519,7 +519,7 @@ footer a:hover{color:var(--gold)}
     <div class="alert-item">MA started from a <strong>higher base</strong>: BEA RPP = <strong id="rppLvl3">—</strong> (<span id="rppPrem3">—</span> above the national average for all goods/services)</div>
     <div class="alert-item">A <span id="cavBos">—</span> increase <em>on top of</em> an elevated base means a MA family pays <strong>more in absolute dollars</strong> for the same inflation rate</div>
     <div class="alert-item">But the two <strong>don't multiply</strong>: RPP covers Massachusetts statewide, while Boston's CPI covers the Boston-Cambridge-Newton metro — which reaches into New Hampshire. Carrying RPP forward by CPI misses BEA's own published level by 1–4 points, so read the premium and the inflation rate as two separate facts, not one dollar figure</div>
-    <div class="alert-item">Shelter RPP is even worse: Boston housing component is <strong>24.4% above national</strong> (BEA) — and shelter inflation has been higher too</div>
+    <div class="alert-item">Shelter is where the gap really shows: MA rents run <strong id="rppRent">—</strong> above national (BEA RPP 2024) — against just <span id="rppPrem5">—</span> for all items</div>
     <div class="alert-item">Wages have grown <strong id="cavWage">—</strong> since Jan 2021 — prices are up <strong id="cavNat">—</strong> nationally. Real purchasing power has <strong>fallen</strong>, by <span id="cavGap">—</span></div>
   </div></div>
 
@@ -1640,6 +1640,15 @@ function initCharts(tab) {
       setTxt('rppLvl3',  RPP_MA.toFixed(1));
       setTxt('rppPrem3', rppPremium.toFixed(1)+'%');
       setTxt('rppLoss',  rppLoss.toFixed(1)+'%');
+
+      // BEA RPP, Services: Rents, Massachusetts, 2024 (FRED: MARPPSERVERENT).
+      // Statewide, to match RPP_MA above. The Boston-Cambridge-Newton metro series
+      // (RPPSERVERENT14460) reads 148.4, but that is a different geography -- it
+      // reaches into NH -- so mixing it with the statewide all-items figure would
+      // repeat the compose error this callout warns about.
+      var RPP_MA_RENT=128.068;
+      setTxt('rppRent',  '+'+(RPP_MA_RENT-100).toFixed(1)+'%');
+      setTxt('rppPrem5', rppPremium.toFixed(1)+'%');
 
       // $100 basket, national only. Deliberately NOT lifted by the RPP premium:
       // RPP is a Massachusetts-wide price *level*, CPI is Boston-metro price *change*,
