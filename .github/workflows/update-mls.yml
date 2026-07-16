@@ -1,11 +1,24 @@
 # .github/workflows/update-mls.yml
 #
-# Refreshes current-year MLS PIN figures in ma-housing-dashboard.html,
-# haverhill-market-report.html, and MASTER_DATA.md from Bridge API.
-# Historical years (2014..prev_year) are not modified.
+# Refreshes MLS PIN figures in ma-housing-dashboard.html,
+# haverhill-market-report.html, and MASTER_DATA.md from the Bridge API.
 #
-# Requires repository secret BRIDGE_TOKEN (Bridge Interactive server token,
-# scoped to the MLS PIN dataset).
+# Two windows, one source (see update-mls-figures.py's docstring):
+#   - the TRAILING-12-MONTH tail is refetched on every run (~29 queries, seconds);
+#   - per-CALENDAR-YEAR history lives in data/mls-history.json and is fetched only
+#     when the backfill_history input is set. A full pass is ~1M rows / ~5,000
+#     requests / ~20-40min, so it must not run nightly: it would burn the Bridge
+#     rate limit rewriting identical digits for years that have already closed.
+#
+# To have MLS take ownership of the historical years (and after each January
+# rollover, to add the year that just completed):
+#     gh workflow run update-mls.yml -f backfill_history=true
+# It is incremental — only (market, type, year) cells missing from the cache are
+# fetched — so a re-run after a timeout resumes instead of restarting.
+#
+# Requires repository secret BRIDGE_TOKEN (Bridge Interactive server token, scoped
+# to the MLS PIN dataset). NOT PrimeMLS — that is the separate NH feed, driven by
+# update-nh.yml.
 
 name: Update MLS Figures
 
@@ -20,6 +33,11 @@ on:
       - "update-housing-history.js"
       - ".github/workflows/update-mls.yml"
   workflow_dispatch:
+    inputs:
+      backfill_history:
+        description: "Also fetch missing per-calendar-year history into data/mls-history.json (slow: ~20-40min)"
+        type: boolean
+        default: false
 
 jobs:
   update-mls:
@@ -48,7 +66,15 @@ jobs:
       - name: Refresh MLS figures
         env:
           BRIDGE_TOKEN: ${{ secrets.BRIDGE_TOKEN }}
-        run: python update-mls-figures.py
+        # --backfill-history only when explicitly asked for. The push trigger above
+        # fires this workflow on every edit to the script, so defaulting it on would
+        # mean a ~5,000-request pass every time someone fixes a comment.
+        run: |
+          if [ "${{ inputs.backfill_history }}" = "true" ]; then
+            python update-mls-figures.py --backfill-history
+          else
+            python update-mls-figures.py
+          fi
 
       - name: Refresh price-distribution tab
         env:
@@ -63,7 +89,7 @@ jobs:
       - name: Check for changes
         id: changes
         run: |
-          git diff --quiet -- ma-housing-dashboard.html haverhill-market-report.html MASTER_DATA.md data/price-distribution-latest.json data/housing-history-latest.json \
+          git diff --quiet -- ma-housing-dashboard.html haverhill-market-report.html MASTER_DATA.md data/mls-history.json data/price-distribution-latest.json data/housing-history-latest.json \
             && echo "changed=false" >> $GITHUB_OUTPUT \
             || echo "changed=true"  >> $GITHUB_OUTPUT
 
@@ -72,7 +98,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add ma-housing-dashboard.html haverhill-market-report.html MASTER_DATA.md data/price-distribution-latest.json data/housing-history-latest.json
+          git add ma-housing-dashboard.html haverhill-market-report.html MASTER_DATA.md data/mls-history.json data/price-distribution-latest.json data/housing-history-latest.json
           git commit -m "Auto-update: MLS PIN figures $(date -u +'%Y-%m-%d')"
           # Retry push up to 5 times, rebasing on each rejection (handles concurrent pushes)
           for attempt in 1 2 3 4 5; do

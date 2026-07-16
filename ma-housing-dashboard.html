@@ -640,31 +640,34 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
         </div>
     </div></section>
     
-    <footer class="footer"><p class="footer-text"><strong>Data:</strong> MLS PIN • Census ACS • Bankrate</p><p class="footer-text" style="font-size:0.75rem;color:var(--text-muted);max-width:760px;margin:10px auto 0;line-height:1.5;">The 2026 column of every single-family series is the live MLS PIN trailing-12-month window, refreshed daily. Historical years (2014–2025) are a fixed extraction of MLS PIN records whose vintage predates this repository and has not been re-verified against the source. The <a href="haverhill-market-report.html" style="color:inherit;">Haverhill report</a> draws its Massachusetts and Essex County benchmarks from this same series — one source, so the two pages cannot disagree.</p><p class="footer-date">Updated July 16, 2026 • Year-over-Year Analysis (2025→2026)</p></footer>
+    <footer class="footer"><p class="footer-text"><strong>Data:</strong> MLS PIN • Census ACS • Bankrate</p><p class="footer-text" style="font-size:0.75rem;color:var(--text-muted);max-width:760px;margin:10px auto 0;line-height:1.5;"><span id="hist-prov">—</span> The 2026 column of every series is the live MLS PIN trailing-12-month window, refreshed daily. Months supply is current-period only: MLS records a listing's status now, not its status on a past date, so prior years are shown empty rather than estimated. The <a href="haverhill-market-report.html" style="color:inherit;">Haverhill report</a> draws its Massachusetts and Essex County benchmarks from this same series — one source, so the two pages cannot disagree.</p><p class="footer-date">Updated July 16, 2026 • Year-over-Year Analysis (2025→2026)</p></footer>
 
     <script>
     const years = ["2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026"];
 
     // ══════════════════════════════════════════════════════════════════════════
-    // `d` — the 13-year single-family series, and now the ONLY copy of it on the site.
+    // `d` / `dpt` — the 13-year series, and the only copy of them on the site.
     //
-    // Provenance, stated plainly because it used to be stated nowhere:
-    //   2014-2025  inherited. These values entered the repo in its root commit, having
-    //              been migrated from duncanburns2013-dot/Housing-Market-Data. No
-    //              script here has ever written a historical value, the source extracts
-    //              were never committed, and the vintage/method behind them could not be
-    //              re-established. Treat them as a fixed MLS PIN extraction of unverified
-    //              vintage — not as figures this repo can reproduce on demand.
-    //   2026       live. The trailing-12-month window, rewritten daily by
-    //              update-mls-figures.py from one Bridge/MLS PIN query.
+    // Every value is written by update-mls-figures.py from MLS PIN:
+    //   2014-2025  closed-sale aggregates per CALENDAR YEAR, cached in
+    //              data/mls-history.json and fetched by --backfill-history.
+    //   2026       the live TRAILING-12-MONTH window, rewritten daily.
+    //   supply     current period only. Active inventory is point-in-time — MLS holds a
+    //              listing's status now, not its status on 2018-12-31 — so no past year
+    //              is queryable and those slots are null. The gap is deliberate; see
+    //              NO_HISTORY in the updater.
     //
-    // haverhill-market-report.html carries `ma` and `es` benchmark lines that used to be
-    // a SECOND, independently transcribed copy of d.ma / d.essex. The two disagreed on
+    // Do not hand-edit a number here. If one looks wrong, fix the query or the cache,
+    // not the digit. That rule is the whole lesson of this block: its history used to be
+    // untraceable — it entered the repo in the root commit, migrated from
+    // duncanburns2013-dot/Housing-Market-Data, source extracts never committed — and
+    // haverhill-market-report.html carried a SECOND transcription that disagreed on
     // every historical year (MA '18: 459,802 there vs 469,326.80 here) while agreeing
-    // exactly on the '26 tail — because the updater writes that tail into both files
-    // from the same query, which masked the split for the life of both files. That page
-    // now carries these values. update-mls-figures.py asserts the two agree on every
-    // run and fails if they diverge. Do not edit one copy without the other.
+    // exactly on the '26 tail, because the updater wrote only that tail into both files
+    // from one query. The one number anyone would compare always matched, which is what
+    // kept twelve mismatched ones invisible. Rather than adjudicate two unverifiable
+    // copies, MLS was re-queried and now owns both. update-mls-figures.py reads the two
+    // pages' shared series back on every run and fails if they diverge.
     // ══════════════════════════════════════════════════════════════════════════
     const d = {
         ma:    { price:[401127.83,421080.95,418366.91,445794.96,469326.8,487015.71,521186.08,615027.48,676696.44,701487.11,763446.08,803731.19,865729.99],   sqft:[198.05,202.0,206.72,218.48,232.27,241.34,251.81,293.68,331.37,336.59,362.71,379.57,395.31],   dom:[117.0,125.0,113.0,86.0,74.0,76.0,70.0,43.0,34.0,47.0,42.0,47.0,37.10],   units:[46099.0,45317.0,51733.0,53495.0,53352.0,53135.0,53393.0,54613.0,52859.0,43815.0,36656.0,38214.0,40063.00],   supply:[4.19,3.8,3.01,2.29,2.04,2.33,1.58,0.67,0.62,0.82,1.24,1.52,2.16] },
@@ -1501,6 +1504,12 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
     // the browser's today would keep marching forward if the bot ever stopped.
     const DATA_ASOF = 'July 16, 2026';
 
+    // What the historical years actually are, written by the same script that writes
+    // them — so the claim and the data cannot drift apart. A hand-typed note would have
+    // to be edited in lockstep to stay true, and this repo has already proved it won't
+    // be: `d`'s history spent the file's whole life with no stated provenance at all.
+    const HIST_PROV = 'Historical years are inherited from the pre-migration dataset and their vintage has not been re-verified against MLS.';
+
     (function deriveProse() {
         const $ = id => document.getElementById(id);
         const setTxt = (id, t) => { const e = $(id); if (e) e.textContent = t; };
@@ -1525,6 +1534,7 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
 
         setAll('yr-cur', yrCur); setAll('yr-prev', yrPrev); setAll('yr-first', yrFirst);
         setAll('data-window', DATA_ASOF); setAll('gn-vintage', GN_SNAPSHOT);
+        setTxt('hist-prov', HIST_PROV);
         setTxt('hero-window', DATA_ASOF);
         const heroDate = document.querySelector('.hero-date');
         if (heroDate) heroDate.textContent = DATA_ASOF;

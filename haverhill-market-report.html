@@ -199,7 +199,7 @@ td{border-bottom:1px solid #e8e5df !important}
 <div class="cb"><div class="ch"><div class="ct">$/SqFt Comparison</div></div><div class="ca"><canvas id="c-sf-sqft"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">Days on Market</div></div><div class="ca"><canvas id="c-sf-dom"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">12-Month Sales Volume</div></div><div class="ca"><canvas id="c-sf-vol"></canvas></div></div>
-<div class="cb"><div class="ch"><div class="ct">Inventory & Months Supply</div></div><div class="ca"><canvas id="c-sf-inv"></canvas></div></div>
+<div class="cb"><div class="ch"><div class="ct">Inventory & Months Supply</div></div><div class="ca"><canvas id="c-sf-inv"></canvas></div><p style="font-size:0.72rem;color:#8e95a2;margin:8px 4px 0;line-height:1.45;">Current period only. Active inventory is a point-in-time count — MLS records a listing's status now, not its status on a date in 2018 — so there is no query that returns a past year's inventory or the months supply derived from it. Prior years are shown empty rather than estimated.</p></div>
 <div class="cb"><div class="ch"><div class="ct">Single Family — Full Data</div></div><div class="tw"><table>
 <thead id="t-sf-head"></thead>
 <tbody id="t-sf-body"></tbody></table></div></div>
@@ -285,7 +285,7 @@ td{border-bottom:1px solid #e8e5df !important}
 
 <footer class="footer">
 <p><strong>Data:</strong> MLS PIN • Haverhill, MA Area Market Review • Essex County & Massachusetts Statewide</p>
-<p style="font-size:0.75rem;color:#8e95a2;max-width:760px;margin:10px auto 0;line-height:1.5;">The '26 column of every series is the live MLS PIN trailing-12-month window, refreshed daily. Historical years (2014–'25) are a fixed extraction of MLS PIN records whose vintage predates this repository and has not been re-verified against the source. The Essex County and Massachusetts benchmark lines are the same series published on the <a href="ma-housing-dashboard.html" style="color:inherit;">MA Housing dashboard</a> — one source, so the two pages cannot disagree.</p>
+<p style="font-size:0.75rem;color:#8e95a2;max-width:760px;margin:10px auto 0;line-height:1.5;"><span id="hist-prov">—</span> The '26 column of every series is the live MLS PIN trailing-12-month window, refreshed daily. Active inventory and months supply are current-period only: MLS records a listing's status now, not its status on a past date, so prior years are shown empty rather than estimated. The Essex County and Massachusetts benchmark lines are the same series published on the <a href="ma-housing-dashboard.html" style="color:inherit;">MA Housing dashboard</a> — one source, so the two pages cannot disagree.</p>
 <p class="footer-date">—</p>
 </footer>
 
@@ -313,35 +313,27 @@ var mf={price:[272490,260400,302308,287497,348257,381158,407537,475750,596750,58
 // ══════════════════════════════════════════════════════════════════════════════
 // BENCHMARK SERIES — Essex County and Massachusetts single-family.
 //
-// These two arrays are benchmark lines only: they place Haverhill against its county
-// and its state. They are not this page's subject. They now hold the SAME NUMBERS as
-// ma-housing-dashboard.html's `d.essex` / `d.ma`, where those series ARE the subject.
+// Every value in every array on this page is written by update-mls-figures.py from
+// MLS PIN: historical years as closed-sale aggregates per calendar year (cached in
+// data/mls-history.json), the last slot as the live trailing-12mo window. Do not hand-
+// edit a number here. If one looks wrong, fix the query or the cache, not the digit.
 //
-// They used to be a second, independently transcribed copy, and the two copies
-// disagreed on every historical year while agreeing exactly on the '26 tail — because
-// update-mls-figures.py writes that tail into both files from one query and has never
-// owned a single historical value. That is what kept the split invisible: the number
-// that moved daily matched, so nothing looked broken.
+// These two arrays are benchmark lines: they place Haverhill against its county and
+// its state. They hold the same values as ma-housing-dashboard.html's `d.essex`/`d.ma`
+// because both are rendered from the same cache; update-mls-figures.py reads them back
+// and fails the run if they ever disagree.
 //
-// Worse, MA 2019-2021 here were not measurements. They were 480000 / 525000 / 610000,
-// "estimated from trend" per the note that used to sit on this line, and the chart
-// drew them in the same unbroken stroke as the real years — so a reader was shown an
-// estimate as a measurement. They are gone.
-//
-// Which transcription was the true extraction could NOT be established: both series
-// entered this repo in its root commit (migrated from duncanburns2013-dot/
-// Housing-Market-Data) and the "uploaded PDFs" they cited were never committed. On the
-// non-estimated years the two differed by ~1% in BOTH directions — two extraction
-// vintages of one quantity, not one real and one invented. Adopting the sibling's
-// series is therefore a CONSOLIDATION, not a verdict that these digits are the more
-// accurate ones. It collapses two drifting copies into one that a single edit can
-// correct, and it removes the three invented points.
-//
-// Provenance: 2014-2025 inherited, extraction vintage unverifiable. 2026 = live MLS
-// PIN trailing-12mo, rewritten daily by the updater.
-//
-// update-mls-figures.py now asserts these arrays equal ma-housing's on every run and
-// fails if they ever diverge again. Do not edit one copy without the other.
+// The history they used to hold was hand-transcribed, and the two pages' copies
+// disagreed on every historical year (MA '18: 459,802 here vs 469,326.80 there) while
+// agreeing exactly on the '26 tail — because the updater wrote only that tail, from
+// one query, into both files. The one number anyone would think to compare always
+// matched, which is what kept twelve mismatched ones invisible. MA 2019-2021 here were
+// not measurements at all but round "estimated from trend" placeholders drawn in the
+// same unbroken stroke as the real years. Neither transcription was recoverable or
+// verifiable — both entered the repo in its root commit, migrated from
+// duncanburns2013-dot/Housing-Market-Data, and the PDFs they cited were never
+// committed — so rather than adjudicate between them, MLS was re-queried and now owns
+// the whole series.
 // ══════════════════════════════════════════════════════════════════════════════
 var es={price:[436550.39,429872.35,438899.66,471640.17,514554.43,507006.32,557642.41,666066.39,687858.97,758025.38,843511.96,857795.05,902270.27],sqft:[203.77,209.95,218.01,231.70,250.35,259.03,274.74,315.47,350.68,366.36,384.35,405.88,415.25],dom:[108,119,104,68,68,67,58,36,29,41,40,41,33.60]};
 
@@ -433,6 +425,13 @@ document.querySelectorAll('.tog').forEach(function(b){b.addEventListener('click'
 // the browser's today would keep advancing if the bot ever stopped.
 var DATA_ASOF = 'July 16, 2026';
 
+// What the historical years actually are, written by the same script that writes them.
+// A hand-typed note would have to be edited in lockstep with the data to stay true, and
+// this repo has already proved it won't be: the arrays above spent the file's whole life
+// carrying a comment that said "from uploaded PDFs" over numbers nobody could trace.
+// The script sets this to match whatever it just wrote, so the page cannot overclaim.
+var HIST_PROV = 'Historical years are inherited from the pre-migration dataset and their vintage has not been re-verified against MLS.';
+
 // Lending terms quoted in the Affordability panel header. Named once, everything on
 // that panel computed from them.
 var AFF_RATE = 0.065, AFF_TERM_YRS = 30, AFF_DOWN = 0.20, AFF_DTI = 0.28;
@@ -478,6 +477,7 @@ var MEDIAN_SRC = 'ACS 2024 (5-yr)';
   setAll('yr-first', yrFirst);
   setAll('yr-cur', yrCur);
   setAll('data-window', DATA_ASOF);
+  setTxt('hist-prov', HIST_PROV);
   var hd = document.querySelector('.hero-date'); if (hd) hd.textContent = DATA_ASOF;
   var fd = document.querySelector('.footer-date');
   if (fd) fd.textContent = 'Prepared ' + DATA_ASOF + ' • Trailing 12-month sold data • Single Family, Condominium & Multi-Family';

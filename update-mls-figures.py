@@ -1,26 +1,54 @@
 #!/usr/bin/env python3
 """
-Refresh current-period MLS PIN figures in the MA Data Hub dashboards.
+Refresh MLS PIN figures in the MA Data Hub dashboards — history AND current period.
 
-Pulls TRAILING-12-MONTH closed-sale aggregates from Bridge MLS PIN and writes them into
-the data arrays of ma-housing-dashboard.html, haverhill-market-report.html, and
-MASTER_DATA.md. Historical years (2014..prev_year) are not modified.
+MLS owns every number these pages plot. Two windows, one source:
+
+  history  per CALENDAR YEAR, 2014..prev_year, cached in data/mls-history.json and
+           fetched only by --backfill-history.
+  tail     the TRAILING-12-MONTH window ending today, refetched on every run.
+
+The two are composed into one series per (market, property type, metric) and written
+into the data arrays of ma-housing-dashboard.html and haverhill-market-report.html as
+COMPLETE arrays. Nothing on either page is a hand-typed number any more.
 
 Note "trailing 12 months", not YTD: fetch_closed_trailing_12mo() queries
 CloseDate >= TRAILING_12MO_START, i.e. a rolling 365-day window ending today. The
 docstring used to say YTD and the dashboards inherited the error, labelling a
 Jul-2025→Jul-2026 window "2026 YTD" and a 12-month closing count "YTD Sold".
 
-This script writes DATA ARRAYS ONLY. The pages derive every displayed figure from
-those arrays at render time — see the PROSE DERIVATION block at the foot of each. Do
-not add regex patches for individual cards here; that is the defect this structure
-exists to prevent (see the note above replace_array_tail).
+WHY HISTORY IS CACHED RATHER THAN REFETCHED NIGHTLY
+A full pass is ~1M closed-sale rows -> ~5,000 paginated requests -> ~20-40min and a
+serious dent in the Bridge rate limit. The nightly job needs ~29 queries. Closed
+calendar years are also effectively immutable (late restatements are rare and tiny),
+so refetching them every night would burn the quota to rewrite identical digits.
+data/mls-history.json is therefore THE source: one file, fetched deliberately, from
+which both pages' arrays are rendered. Same shape as update-price-distribution.js,
+which already writes data/price-distribution-latest.json and injects the same payload.
+
+    python update-mls-figures.py                     # nightly: tail only (cheap)
+    python update-mls-figures.py --backfill-history  # fetch missing years (expensive)
+
+--backfill-history is incremental: it fetches only (market, type, year) cells absent
+from the cache, so a run that dies partway resumes where it stopped, and January's
+rollover costs one year rather than twelve. Nothing is written to the pages unless
+every cell for the displayed window is present.
+
+WHAT MLS CANNOT RETURN
+Active inventory (`inv`) and months supply (`supply`) are POINT-IN-TIME quantities.
+The feed carries a listing's status now, not its status on 2018-12-31, so there is no
+query that returns "active listings in 2018" — and reconstructing it from listing
+dates would systematically undercount listings that expired and were purged. Those two
+series are therefore current-period only; historical slots are null and the pages
+render the gap. A short exact series beats a long partly-invented one — inventing them
+is precisely the defect this file spent a day undoing.
 
 Requires: BRIDGE_TOKEN env var. No third-party deps (urllib only).
 """
 
 from __future__ import annotations
 
+import argparse
 import datetime
 import json
 import os
@@ -33,6 +61,28 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
+_ap = argparse.ArgumentParser(description="Refresh MLS PIN figures in the MA dashboards.")
+_ap.add_argument(
+    "--backfill-history",
+    action="store_true",
+    help="Fetch per-calendar-year history for cells missing from data/mls-history.json. "
+         "Expensive (~1M rows, ~20-40min). Off by default so the nightly cron stays cheap.",
+)
+_ap.add_argument(
+    "--refetch-year",
+    type=int,
+    action="append",
+    default=[],
+    help="Force a re-fetch of this calendar year even if cached. Repeatable.",
+)
+_ap.add_argument(
+    "--history-start",
+    type=int,
+    default=2014,
+    help="First calendar year to carry (default 2014, matching the pages' 13-year window).",
+)
+ARGS = _ap.parse_args()
+
 TOKEN = os.environ.get("BRIDGE_TOKEN")
 if not TOKEN:
     sys.exit("BRIDGE_TOKEN env var not set")
@@ -43,6 +93,13 @@ TODAY = datetime.date.today()
 YEAR = TODAY.year
 MONTHS_ELAPSED = max(TODAY.month, 1)
 TRAILING_12MO_START = (TODAY - datetime.timedelta(days=365)).strftime("%Y-%m-%d")
+
+HISTORY_PATH = REPO / "data" / "mls-history.json"
+HIST_START = ARGS.history_start
+HIST_END = YEAR - 1  # last COMPLETE calendar year; the current year is the tail
+HIST_YEARS = list(range(HIST_START, HIST_END + 1))
+# The full x-axis both pages plot: complete calendar years, then the trailing-12mo tail.
+SERIES_YEARS = HIST_YEARS + [YEAR]
 
 PT_SF = ("Residential", "Single Family Residence")
 PT_CONDO = ("Residential", "Condominium")
@@ -178,14 +235,7 @@ def fetch_closed_trailing_12mo(scope: dict, pt: tuple) -> list[dict]:
     scopes; only those exceeding Bridge's 10k offset cap (statewide) are chunked
     by month. Fetching the whole window in one pass — instead of 13 monthly
     queries per scope — cuts request volume ~5x and keeps us under the rate limit."""
-    base = {
-        "StandardStatus.in": "Closed",
-        "PropertyType.in": pt[0],
-        "fields": "ClosePrice,LivingArea,ListPrice,MLSPIN_MARKET_TIME,CloseDate,ListingKey",
-    }
-    if pt[1]:
-        base["PropertySubType.in"] = pt[1]
-    base.update(scope)
+    base = _base_filter(scope, pt)
 
     whole = {
         **base,
@@ -205,6 +255,93 @@ def fetch_closed_trailing_12mo(scope: dict, pt: tuple) -> list[dict]:
                 rows,
                 seen_keys,
             )
+    return rows
+
+
+def _base_filter(scope: dict, pt: tuple) -> dict:
+    """The one closed-sale filter definition. Every window — trailing-12mo tail and
+    each historical calendar year — is this same filter with different CloseDate
+    bounds, so the history cannot drift away from the tail by definition. It matches
+    update-price-distribution.js field-for-field (StandardStatus=Closed,
+    PropertyType/PropertySubType, CloseDate.gte/.lt), which is what lets that file's
+    per-year counts act as an independent check on this one's."""
+    base = {
+        "StandardStatus.in": "Closed",
+        "PropertyType.in": pt[0],
+        "fields": "ClosePrice,LivingArea,ListPrice,MLSPIN_MARKET_TIME,CloseDate,ListingKey",
+    }
+    if pt[1]:
+        base["PropertySubType.in"] = pt[1]
+    base.update(scope)
+    return base
+
+
+def _year_bounds(yr: int) -> tuple[str, str]:
+    """[Jan 1, Jan 1 next) for `yr`, clamped to tomorrow — the same calendar-year window
+    update-price-distribution.js uses. CloseDate, not list date: a sale belongs to the
+    year it CLOSED, which is the convention the tail already uses."""
+    start = datetime.date(yr, 1, 1)
+    end = datetime.date(yr + 1, 1, 1)
+    tomorrow = TODAY + datetime.timedelta(days=1)
+    if end > tomorrow:
+        end = tomorrow
+    return start.strftime("%Y-%m-%d"), end.strftime("%Y-%m-%d")
+
+
+def _months_in(yr: int) -> list[tuple[str, str]]:
+    """Monthly [start, end) windows inside `yr`, for scopes past Bridge's 10k offset cap."""
+    out = []
+    for m in range(1, 13):
+        start = datetime.date(yr, m, 1)
+        end = datetime.date(yr + 1, 1, 1) if m == 12 else datetime.date(yr, m + 1, 1)
+        tomorrow = TODAY + datetime.timedelta(days=1)
+        if start >= tomorrow:
+            break
+        if end > tomorrow:
+            end = tomorrow
+        out.append((start.strftime("%Y-%m-%d"), end.strftime("%Y-%m-%d")))
+    return out
+
+
+def fetch_closed_year(scope: dict, pt: tuple, yr: int) -> list[dict]:
+    """Every closed sale in calendar year `yr`. Chunks by month past the 10k offset cap.
+
+    Fails rather than returns short. _paginate_window's offset-cap escape hatch prints a
+    WARN and returns partial rows, which is survivable for a headline count but NOT for
+    a mean: a truncated page set yields an average silently computed over whichever
+    sales happened to sort first, and that number would look completely normal on the
+    chart. A short fetch raises; the run writes nothing.
+    """
+    base = _base_filter(scope, pt)
+    start, end = _year_bounds(yr)
+    whole = {**base, "CloseDate.gte": start, "CloseDate.lt": end}
+    total = _get({**whole, "limit": 1}).get("total", 0)
+    if total == 0:
+        return []
+
+    rows: list[dict] = []
+    seen_keys: set = set()
+    if total <= 10000:
+        _paginate_window(whole, rows, seen_keys)
+        expected = total
+    else:
+        expected = 0
+        for win_start, win_end in _months_in(yr):
+            win = {**base, "CloseDate.gte": win_start, "CloseDate.lt": win_end}
+            win_total = _get({**win, "limit": 1}).get("total", 0)
+            if win_total > 10000:
+                raise RuntimeError(
+                    f"{yr} {win_start}: {win_total} rows in one month exceeds the 10k "
+                    "offset cap — this window needs finer chunking before it can be trusted"
+                )
+            expected += win_total
+            _paginate_window(win, rows, seen_keys)
+
+    if len(rows) < expected:
+        raise RuntimeError(
+            f"{yr}: fetched {len(rows)} of {expected} rows — refusing to average a "
+            "partial year"
+        )
     return rows
 
 
@@ -248,6 +385,201 @@ def aggregate(rows: list[dict]) -> dict:
     }
 
 
+# ---------- HISTORY CACHE ----------
+#
+# data/mls-history.json is the source both pages are rendered from. Shape:
+#
+#   {"meta": {...}, "cells": {"<scope>|<pt>|<year>": {aggregate(), ...}}}
+#
+# Flat string keys because the cache is addressed one (market, type, year) cell at a
+# time and JSON has no tuple keys. A cell is only ever written after its year fetched
+# whole, so a present cell is a complete cell — which is what makes resuming safe.
+#
+# AGGREGATES ONLY — never the rows they were computed from. This file is committed and
+# published with the site, and record-level MLS data is licensed, not ours to publish
+# (cf. .gitignore's data/_raw_nh/ carve-out for the NH feed's raw cache). Every number
+# here is a mean/median/count already displayed on the public pages; the listings behind
+# them are fetched, reduced, and dropped. Do not cache rows here to save requests.
+
+PT_BY_LABEL = {"sf": PT_SF, "co": PT_CONDO, "mf": PT_MULTI}
+
+
+def _cell_key(scope_name: str, pt_label: str, yr: int) -> str:
+    return f"{scope_name}|{pt_label}|{yr}"
+
+
+def load_history() -> dict:
+    if not HISTORY_PATH.exists():
+        return {"meta": {}, "cells": {}}
+    try:
+        h = json.loads(HISTORY_PATH.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as e:
+        sys.exit(f"[mls-update] data/mls-history.json is corrupt ({e}) — refusing to guess")
+    h.setdefault("cells", {})
+    h.setdefault("meta", {})
+    return h
+
+
+def backfill_history(history: dict) -> dict:
+    """Fetch every (scope, pt, year) cell missing from the cache.
+
+    Incremental by design. A full pass is ~1M rows / ~5k requests / ~20-40min, which is
+    survivable once but not nightly, and not something to restart from zero because
+    request 4,900 hit a 429. Cells already cached are skipped, so a re-run resumes and
+    the annual rollover costs one year instead of twelve.
+
+    Writes the cache after EACH cell rather than at the end: a cell is a complete
+    fetched year, so persisting it immediately is what makes the resume real. This is
+    separate from the all-or-nothing rule for the PAGES — the cache may be partial and
+    still be correct; the pages may not, and are written only when every cell is in.
+    """
+    todo = [
+        (s, p, y)
+        for y in HIST_YEARS
+        for s in SCOPES
+        for p in PT_BY_LABEL
+        if _cell_key(s, p, y) not in history["cells"] or y in ARGS.refetch_year
+    ]
+    if not todo:
+        print("[mls-update] history cache complete — nothing to backfill")
+        return history
+
+    print(f"[mls-update] backfilling {len(todo)} cell(s) — this is the expensive path")
+    for n, (scope_name, pt_label, yr) in enumerate(todo, 1):
+        try:
+            rows = fetch_closed_year(SCOPES[scope_name], PT_BY_LABEL[pt_label], yr)
+        except RuntimeError as e:
+            sys.exit(f"[mls-update] history fetch failed for {scope_name}/{pt_label}/{yr}: {e}")
+        a = aggregate(rows)
+        # A year with no closings is a fact, not a hole to fill. It is cached as an
+        # honest zero/None and the page renders the gap. Nothing is interpolated.
+        history["cells"][_cell_key(scope_name, pt_label, yr)] = a
+        history["meta"] = {
+            "generated": TODAY.strftime("%Y-%m-%d"),
+            "source": "MLS PIN via Bridge Data Output",
+            "window": "closed sales per calendar year, by CloseDate",
+            "property_types": {
+                "sf": "Residential / Single Family Residence",
+                "co": "Residential / Condominium",
+                "mf": "Residential Income",
+            },
+            "years": HIST_YEARS,
+            "unavailable": {
+                "inv": "active listing counts are point-in-time; MLS cannot return a past year",
+                "supply": "derived from active inventory, so likewise current-period only",
+            },
+        }
+        HISTORY_PATH.parent.mkdir(parents=True, exist_ok=True)
+        HISTORY_PATH.write_text(json.dumps(history, indent=1), encoding="utf-8")
+        print(f"  [{n}/{len(todo)}] {scope_name:<11} {pt_label} {yr}: "
+              f"n={a['count']:>5}" + (f" avg=${a['avg_price']:>10,.0f}" if a["avg_price"] else " (no closings)"))
+    return history
+
+
+def history_series(history: dict, scope_name: str, pt_label: str, agg_key: str) -> list | None:
+    """The historical values for one metric, oldest-first. None if any year is missing —
+    the caller must then leave the page alone rather than publish a series with a hole
+    where MLS simply hasn't been asked yet."""
+    out = []
+    for yr in HIST_YEARS:
+        cell = history["cells"].get(_cell_key(scope_name, pt_label, yr))
+        if cell is None:
+            return None
+        out.append(cell.get(agg_key))
+    return out
+
+
+def fhfa_crosscheck(history: dict) -> list[str]:
+    """Check the fetched history's SHAPE against an independent house-price index.
+
+    This exists because of a near-miss. Auditing the inherited series, the per-year unit
+    counts matched update-price-distribution.js far better when shifted a year (mean
+    error 8.5-12.1% -> 1.6-2.3%, consistently across four geographies). It looked
+    exactly like an off-by-one. It wasn't: cross-checking the PRICE series against FHFA's
+    MA index showed both were correctly labelled (r=+0.79 as-labelled vs ~0.0 shifted),
+    and the count "shift" was an autocorrelation artifact — smooth monotone series fit
+    well under a shift by coincidence. Acting on it would have corrupted both pages.
+
+    So: unit counts cannot adjudicate alignment; an independent index can. FHFA MASTHPI
+    comes from FRED via update-housing-history.js and owes nothing to MLS, so if our
+    query window or date field were wrong (calendar-year vs trailing-12mo, list date vs
+    close date) the fetched YoY would stop tracking it — and would track it better
+    shifted. That is the failure this asserts against.
+
+    Levels aren't comparable (average sale price vs repeat-sales index) but turning
+    points are, which is all this needs.
+    """
+    fred = REPO / "data" / "housing-history-latest.json"
+    if not fred.exists():
+        return ["FHFA cross-check skipped: data/housing-history-latest.json absent"]
+    try:
+        obs = json.loads(fred.read_text(encoding="utf-8"))["nominal"]["masthpi"]
+    except (json.JSONDecodeError, KeyError) as e:
+        return [f"FHFA cross-check skipped: {fred.name} unreadable ({e})"]
+
+    by_year: dict[int, list[float]] = {}
+    for o in obs:
+        by_year.setdefault(int(o["d"][:4]), []).append(o["v"])
+    idx = {y: statistics.mean(v) for y, v in by_year.items()}
+    idx_yoy = {y: (idx[y] / idx[y - 1] - 1) * 100 for y in sorted(idx) if y - 1 in idx}
+
+    prices = history_series(history, "ma", "sf", "avg_price")
+    if not prices or any(p is None for p in prices):
+        return ["FHFA cross-check skipped: MA SF price history incomplete"]
+    ours = {
+        HIST_YEARS[i]: (prices[i] / prices[i - 1] - 1) * 100
+        for i in range(1, len(prices))
+        if prices[i - 1]
+    }
+
+    def _r(series: dict) -> float | None:
+        ks = [k for k in series if k in idx_yoy]
+        if len(ks) < 3:
+            return None
+        a = [series[k] for k in ks]
+        b = [idx_yoy[k] for k in ks]
+        if len(set(a)) < 2 or len(set(b)) < 2:
+            return None
+        return statistics.correlation(a, b)
+
+    # Test BOTH directions. Checking only one is a real trap: a series carrying the
+    # NEXT year's value (label 2018 holding 2019's sales) scores an unremarkable
+    # r=+0.445 as-labelled -- comfortably past any absolute floor -- and is only
+    # exposed by the forward shift, which fits it at r=+1.0. A one-sided check waves
+    # that straight through. Caught by the stub's STUB_SHIFT_YEARS negative test.
+    cands = {
+        0: _r(ours),
+        -1: _r({y - 1: v for y, v in ours.items()}),
+        +1: _r({y + 1: v for y, v in ours.items()}),
+    }
+    aligned = cands[0]
+    if aligned is None:
+        return ["FHFA cross-check skipped: not enough overlapping years"]
+
+    def _s(v):
+        return "n/a" if v is None else f"{v:+.3f}"
+
+    print(f"[mls-update] FHFA cross-check (MA SF price YoY vs FHFA MA HPI YoY): "
+          f"as-labelled r={_s(cands[0])}, back-1yr r={_s(cands[-1])}, fwd-1yr r={_s(cands[+1])}")
+
+    fails = []
+    for shift in (-1, +1):
+        r = cands[shift]
+        if r is not None and r > aligned + 0.15:
+            direction = "back" if shift == -1 else "forward"
+            fails.append(
+                f"fetched MA SF history tracks FHFA BETTER shifted {direction} a year "
+                f"(r={r:+.3f}) than as-labelled (r={aligned:+.3f}) — the calendar-year "
+                "window or date field is probably wrong. Check _year_bounds/CloseDate."
+            )
+    if aligned < 0.30:
+        fails.append(
+            f"fetched MA SF history barely tracks FHFA's MA index (r={aligned:+.3f}). "
+            "Expected ~+0.8. The query window is suspect — do not publish this."
+        )
+    return fails
+
+
 def months_supply(active: int, closed_12mo: int) -> float | None:
     if not active or not closed_12mo:
         return None
@@ -258,6 +590,34 @@ def months_supply(active: int, closed_12mo: int) -> float | None:
 # ---------- DATA COLLECTION ----------
 
 print(f"[mls-update] year={YEAR}, trailing-12mo from {TRAILING_12MO_START}")
+
+# History first: if it is going to fail, fail before spending the tail's quota.
+HISTORY = load_history()
+if ARGS.backfill_history:
+    HISTORY = backfill_history(HISTORY)
+
+HIST_READY = all(
+    history_series(HISTORY, s, p, "avg_price") is not None
+    for s in SCOPES
+    for p in PT_BY_LABEL
+)
+if HIST_READY:
+    print(f"[mls-update] history cache covers {HIST_START}-{HIST_END} — writing FULL series")
+    # Validate the shape before spending the tail's quota, and before touching a page.
+    _fhfa_fails = fhfa_crosscheck(HISTORY)
+    for _f in _fhfa_fails:
+        print(f"  [FHFA] {_f}")
+    if any("skipped" not in f for f in _fhfa_fails):
+        sys.exit(
+            "[mls-update] fetched history failed the independent FHFA shape check — "
+            "refusing to publish. This is the off-by-one guard; see fhfa_crosscheck()."
+        )
+else:
+    print(
+        f"[mls-update] NOTE: data/mls-history.json does not yet cover {HIST_START}-{HIST_END}. "
+        "Writing the trailing-12mo tail only and leaving the inherited historical values "
+        "in place. Run with --backfill-history to have MLS take ownership of them."
+    )
 
 results: dict[str, dict[str, dict]] = {}
 for scope_name, scope in SCOPES.items():
@@ -414,6 +774,37 @@ def replace_array_tail(html: str, path: str, metric: str, new_value, is_float: b
     return html[: m.start(1)] + repl + html[m.end(1):], True
 
 
+def _fmt_num(v, is_float: bool) -> str:
+    if v is None:
+        return "null"
+    return f"{v:.2f}" if is_float else str(int(round(v)))
+
+
+def replace_array_full(html: str, path: str, metric: str, values: list, is_float: bool) -> tuple[str, bool]:
+    """Replace the WHOLE array literal at `path.metric`, not just its last element.
+
+    This is what "MLS owns the series" means mechanically. replace_array_tail below
+    writes one number and leaves twelve alone, which is exactly how two pages came to
+    carry different histories of the same metric while agreeing on the only value
+    anyone would think to compare. When the history cache is populated, every element
+    is written from it and nothing inherited survives.
+
+    A None inside `values` is written as `null` and rendered as a gap. That is load-
+    bearing: months supply has no historical value MLS can return, and a gap is the
+    honest rendering of "not measured". Do not backfill it with anything.
+    """
+    span = _resolve_path(html, path)
+    if not span:
+        return html, False
+    lo, hi = span
+    pat = re.compile(r"(" + _key_re(metric) + r"\s*:\s*)\[[^\]]*\]")
+    m = pat.search(html, lo, hi)
+    if not m:
+        return html, False
+    body = ",".join(_fmt_num(v, is_float) for v in values)
+    return html[: m.start()] + m.group(1) + "[" + body + "]" + html[m.end():], True
+
+
 def replace_scalar(html: str, name: str, new_value, is_float: bool) -> tuple[str, bool]:
     """Replace a bare `var name=<number>;` / `const name = <number>;` declaration."""
     if new_value is None:
@@ -424,6 +815,27 @@ def replace_scalar(html: str, name: str, new_value, is_float: bool) -> tuple[str
     if not m:
         return html, False
     return html[: m.start(2)] + repl + html[m.end(2):], True
+
+
+def replace_string_const(html: str, name: str, value: str) -> tuple[str, bool]:
+    """Rewrite a single-quoted `var/const NAME = '...'` string declaration.
+
+    Used for HIST_PROV, the sentence each page shows about what its historical years
+    ARE. The script writes it because the script is what makes it true or false: a
+    hand-typed provenance note has to be edited in lockstep with the data to stay
+    honest, and this repo has already demonstrated that it won't be — the arrays spent
+    the files' whole lives under a comment reading "from uploaded PDFs" above numbers
+    nobody could trace to any PDF. Tying the claim to the writer means the page cannot
+    advertise a provenance the data doesn't have.
+
+    `value` must not contain a single quote; callers pass fixed English, so this
+    asserts rather than escaping and pretending to be general.
+    """
+    if "'" in value:
+        raise ValueError(f"{name}: apostrophes would break the JS string literal — rephrase")
+    pat = re.compile(rf"(\b(?:var|const|let)\s+{re.escape(name)}\s*=\s*')[^']*(')")
+    new_html, n = pat.subn(lambda m: m.group(1) + value + m.group(2), html, count=1)
+    return new_html, n > 0
 
 
 def replace_asof(html: str, stamp: str) -> tuple[str, bool]:
@@ -452,15 +864,48 @@ md = MD.read_text(encoding="utf-8")
 
 footer_date = TODAY.strftime("%B %d, %Y")
 
+# The sentence each page shows about its own historical years. It tracks what this run
+# actually wrote, so during the transition — script deployed, --backfill-history not yet
+# run — the pages keep saying "inherited" instead of claiming an MLS lineage they do not
+# have yet. It flips by itself on the run that populates the cache.
+# No apostrophes: these are written into single-quoted JS literals (replace_string_const).
+HIST_PROV_TEXT = (
+    f"Historical years ({HIST_START}-{HIST_END}) are closed-sale aggregates queried from "
+    f"MLS PIN per calendar year, cached and refetched only on demand."
+    if HIST_READY else
+    "Historical years are inherited from the pre-migration dataset and their vintage has "
+    "not been re-verified against MLS."
+)
+
 
 # ---------- MA DASHBOARD ----------
 
 ma_changes: list[tuple[str, bool]] = []
 
 
-def _arr(html, changes, label, path, metric, value, is_float=True):
-    html, ok = replace_array_tail(html, path, metric, value, is_float=is_float)
-    changes.append((f"{label} {path}.{metric}", ok))
+# Sentinel: the quantity exists for the current period but MLS cannot return it for a
+# past calendar year (see the module docstring — active inventory is point-in-time).
+# Its historical slots are written as null, NOT left holding whatever was inherited.
+# That distinction is the whole point: "we did not measure this" must not be silently
+# represented by someone's old transcription of it.
+NO_HISTORY = object()
+
+
+def _hist_for(scope_name, pt_label, agg_key):
+    if agg_key is NO_HISTORY:
+        return [None] * len(HIST_YEARS)
+    return history_series(HISTORY, scope_name, pt_label, agg_key)
+
+
+def _arr(html, changes, label, path, metric, value, is_float=True, hist_vals=None):
+    """Write `path.metric`. Full series once the history cache is populated; tail-only
+    until then, so the nightly cron keeps working through the transition."""
+    if HIST_READY and hist_vals is not None:
+        html, ok = replace_array_full(html, path, metric, list(hist_vals) + [value], is_float)
+        changes.append((f"{label} {path}.{metric} [full]", ok))
+    else:
+        html, ok = replace_array_tail(html, path, metric, value, is_float=is_float)
+        changes.append((f"{label} {path}.{metric}", ok))
     return html
 
 
@@ -469,17 +914,22 @@ def _arr(html, changes, label, path, metric, value, is_float=True):
 # whole affordability tab, the Greater Newburyport Newburyport row) is derived from
 # these five arrays, so this loop is the entire single-family surface.
 MA_MARKET_KEY = {"ma": "ma", "boston": "boston", "essex": "essex", "newburyport": "nbpt"}
+MA_METRICS = [
+    ("price", "avg_price", True),
+    ("sqft", "avg_sqft", True),
+    ("dom", "avg_dom", True),
+    ("units", "count", False),
+    ("supply", NO_HISTORY, True),
+]
 for scope_name, ma_key in MA_MARKET_KEY.items():
     a = results[scope_name]["sf"]
-    pairs = [
-        ("price", a["avg_price"]),
-        ("sqft", a["avg_sqft"]),
-        ("dom", a["avg_dom"]),
-        ("units", a["count"]),
-        ("supply", ms[scope_name]),
-    ]
-    for metric, val in pairs:
-        ma = _arr(ma, ma_changes, "ma-dash", f"d.{ma_key}", metric, val)
+    tails = {
+        "price": a["avg_price"], "sqft": a["avg_sqft"], "dom": a["avg_dom"],
+        "units": a["count"], "supply": ms[scope_name],
+    }
+    for metric, agg_key, is_float in MA_METRICS:
+        ma = _arr(ma, ma_changes, "ma-dash", f"d.{ma_key}", metric, tails[metric],
+                  is_float=is_float, hist_vals=_hist_for(scope_name, "sf", agg_key))
 
 # dpt.<market>.<co|mf> — the 5-year condominium and multi-family series.
 #
@@ -491,18 +941,20 @@ for scope_name, ma_key in MA_MARKET_KEY.items():
 for scope_name, ma_key in MA_MARKET_KEY.items():
     for pt_label in ("co", "mf"):
         a = results[scope_name][pt_label]
-        pairs = [
-            ("price", a["avg_price"]),
-            ("sqft", a["avg_sqft"]),
-            ("dom", a["avg_dom"]),
-            ("units", a["count"]),
-            ("supply", ms_pt[scope_name][pt_label]),
-        ]
-        for metric, val in pairs:
-            ma = _arr(ma, ma_changes, "ma-dash", f"dpt.{ma_key}.{pt_label}", metric, val)
+        tails = {
+            "price": a["avg_price"], "sqft": a["avg_sqft"], "dom": a["avg_dom"],
+            "units": a["count"], "supply": ms_pt[scope_name][pt_label],
+        }
+        for metric, agg_key, is_float in MA_METRICS:
+            ma = _arr(ma, ma_changes, "ma-dash", f"dpt.{ma_key}.{pt_label}", metric,
+                      tails[metric], is_float=is_float,
+                      hist_vals=_hist_for(scope_name, pt_label, agg_key))
 
 ma, ok = replace_asof(ma, footer_date)
 ma_changes.append(("ma-dash DATA_ASOF", ok))
+
+ma, ok = replace_string_const(ma, "HIST_PROV", HIST_PROV_TEXT)
+ma_changes.append(("ma-dash HIST_PROV", ok))
 
 
 # ---------- HAVERHILL DASHBOARD ----------
@@ -547,10 +999,16 @@ HAV_ARRS = [
 for var, scope, pt_label, fields in HAV_ARRS:
     for arr_key, agg_key, is_float in fields:
         val = results[scope][pt_label].get(agg_key)
-        hav = _arr(hav, hav_changes, "hav-dash", var, arr_key, val, is_float=is_float)
+        hav = _arr(hav, hav_changes, "hav-dash", var, arr_key, val, is_float=is_float,
+                   hist_vals=_hist_for(scope, pt_label, agg_key))
 
-hav = _arr(hav, hav_changes, "hav-dash", "sf", "inv", active_sf["haverhill"], is_float=False)
-hav = _arr(hav, hav_changes, "hav-dash", "sf", "supply", ms["haverhill"], is_float=True)
+# inv/supply: current period only. See NO_HISTORY — MLS has no answer for "how many
+# listings were active in 2018", so those slots go null rather than keep the inherited
+# numbers that used to sit there.
+hav = _arr(hav, hav_changes, "hav-dash", "sf", "inv", active_sf["haverhill"], is_float=False,
+           hist_vals=_hist_for("haverhill", "sf", NO_HISTORY))
+hav = _arr(hav, hav_changes, "hav-dash", "sf", "supply", ms["haverhill"], is_float=True,
+           hist_vals=_hist_for("haverhill", "sf", NO_HISTORY))
 
 # Haverhill condo months supply has no historical series — a scalar, not an array tail.
 hav, ok = replace_scalar(hav, "CO_SUPPLY", ms_hav_co, is_float=True)
@@ -558,6 +1016,9 @@ hav_changes.append(("hav-dash CO_SUPPLY", ok))
 
 hav, ok = replace_asof(hav, footer_date)
 hav_changes.append(("hav-dash DATA_ASOF", ok))
+
+hav, ok = replace_string_const(hav, "HIST_PROV", HIST_PROV_TEXT)
+hav_changes.append(("hav-dash HIST_PROV", ok))
 
 
 # ---------- MASTER_DATA.md ----------
