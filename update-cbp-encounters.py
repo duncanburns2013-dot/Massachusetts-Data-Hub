@@ -18,7 +18,8 @@ Updates:
   - FY callout text           â  immigration-dashboard.html
   - data/cbp-encounters-latest.json
 """
-import csv, io, json, os, re, sys
+import csv
+import os, io, json, os, re, sys
 from urllib.request import urlopen, Request
 from datetime import datetime
 
@@ -143,6 +144,39 @@ def update_dashboard(fy_data):
         if fy in updated and val != updated[fy]:
             print(f"  {fy}: {updated[fy]:,} â {val:,}")
             updated[fy] = val
+
+    # ------------------------------------------------------------------
+    # STOP. Do not remove this guard without resolving the mismatch below.
+    #
+    # CANDIDATE_URLS all point at CBP "nationwide-encounters" files. The chart
+    # this writes into is titled "Southwest Border Encounters by Fiscal Year"
+    # and its dataset label is 'SW Border Encounters'. Nationwide encounters
+    # and Southwest-Border encounters are different measures -- nationwide is
+    # materially larger -- so this script, if it ever succeeded, would silently
+    # write the wrong metric under the right-sounding label.
+    #
+    # That has already happened by hand. The published array currently mixes
+    # three bases: FY17-22 are SWB encounters (matching the label), FY23-24 are
+    # nationwide, FY25 is USBP SWB apprehensions only, FY26* is nationwide. The
+    # page states the same 237,538 as "SWB encounters" in one place and "SWB
+    # USBP apprehensions" in another, so at least one of those is wrong.
+    #
+    # Resolve it one way or the other before enabling this:
+    #   (a) relabel the chart "Nationwide Encounters" to match these URLs, or
+    #   (b) point CANDIDATE_URLS at southwest-land-border-encounters data to
+    #       match the existing label.
+    # Either is defensible. Writing nationwide numbers under a SWB label is not.
+    #
+    # Note this script has never actually succeeded -- data/cbp-encounters-latest
+    # .json still reads auto_fetched: false -- so no automated run has yet made
+    # the mixing worse. Keep it that way until the metric question is settled.
+    # ------------------------------------------------------------------
+    if not os.environ.get("CBP_METRIC_RESOLVED"):
+        print("  !! REFUSING to write: this script fetches NATIONWIDE encounters")
+        print("     but the target chart is labelled 'SW Border Encounters'.")
+        print("     See the comment above. Set CBP_METRIC_RESOLVED=1 once the")
+        print("     chart label and the data source have been reconciled.")
+        return
 
     old_vals = [BASELINE[l] for l in CHART_LABELS]
     new_vals = [updated[l] for l in CHART_LABELS]
