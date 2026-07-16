@@ -391,26 +391,26 @@ footer a:hover{color:var(--gold)}
     <div class="chart-card">
       <h3>State Spending as % of Taxpayer Income</h3>
       <div class="chart-area"><canvas id="chartCompare"></canvas></div>
-      <div class="source">Source: Mass Opportunity Alliance, NASBO, BEA Personal Income 2025</div>
+      <div class="source">Source: Mass Opportunity Alliance (Aug 2025), BEA Personal Income 2025</div>
     </div>
     <div class="chart-card">
       <h3>Budget Growth Since FY2018 — Competitor States</h3>
       <div class="chart-area"><canvas id="chartCompGrowth"></canvas></div>
-      <div class="source">Source: NASBO State Budget Reports; Mass Opportunity Alliance</div>
+      <div class="source">Source: Mass Opportunity Alliance, "Massachusetts Has a Spending Problem" (Aug 2025) — spending growth standardized against residents' total income, FY2018→FY2026 enacted. MOA basis, not the signed-GAA basis used on the Budget tab (which gives <span id="rkGaaNote">—</span> for MA over the same window).</div>
     </div>
   </div>
   <div class="data-card">
     <h3>Tax Structure Comparison — MA vs. Key Competitors</h3>
     <table class="data-table">
-      <tr><th>State</th><th>Income Tax</th><th>Sales Tax</th><th>Tax Foundation Rank</th><th>Budget Growth (FY18–26)</th></tr>
-      <tr><td class="highlight">Massachusetts</td><td class="highlight">5% + 4% surtax (9%)</td><td>6.25%</td><td class="highlight">#43 (8th worst)</td><td class="highlight">+51.5%</td></tr>
-      <tr><td>New Hampshire</td><td class="good">None</td><td class="good">None</td><td class="good">#6</td><td>+39.0%</td></tr>
-      <tr><td>Florida</td><td class="good">None</td><td>6.0%</td><td class="good">#4</td><td>+42.5%</td></tr>
-      <tr><td>North Carolina</td><td class="good">4.5% flat (declining)</td><td>4.75%</td><td class="good">#11</td><td>+41.7%</td></tr>
-      <tr><td>Texas</td><td class="good">None</td><td>6.25%</td><td class="good">#13</td><td>+40%</td></tr>
-      <tr><td>Tennessee</td><td class="good">None</td><td>7.0%</td><td class="good">#8</td><td>+38%</td></tr>
+      <tr><th>State</th><th>Income Tax</th><th>Sales Tax</th><th>Tax Foundation Rank</th><th>Budget Growth (FY18–26, MOA basis)</th></tr>
+      <tr><td class="highlight">Massachusetts</td><td class="highlight">5% + 4% surtax (9%)</td><td>6.25%</td><td class="highlight">#43 (8th worst)</td><td class="highlight" id="rkGrowthMA">—</td></tr>
+      <tr><td>New Hampshire</td><td class="good">None</td><td class="good">None</td><td class="good">#6</td><td id="rkGrowthNH">—</td></tr>
+      <tr><td>Florida</td><td class="good">None</td><td>6.0%</td><td class="good">#4</td><td id="rkGrowthFL">—</td></tr>
+      <tr><td>North Carolina</td><td class="good">4.5% flat (declining)</td><td>4.75%</td><td class="good">#11</td><td id="rkGrowthNC">—</td></tr>
+      <tr><td>Texas</td><td class="good">None</td><td>6.25%</td><td class="good">#13</td><td style="color:#6b7280">not in source</td></tr>
+      <tr><td>Tennessee</td><td class="good">None</td><td>7.0%</td><td class="good">#8</td><td style="color:#6b7280">not in source</td></tr>
     </table>
-    <div class="source">Source: Tax Foundation 2026 State Tax Competitiveness Index; NASBO</div>
+    <div class="source">Sources: Tax Foundation 2026 State Tax Competitiveness Index (tax structure and rank); Mass Opportunity Alliance, Aug 2025 (budget growth). MOA's competitor analysis covers only MA, FL, NC and NH — Texas and Tennessee are marked "not in source" rather than carry a growth figure no published source supports.</div>
   </div>
   <div class="alert">
     <h4>⚠️ The Exodus Connection</h4>
@@ -1458,6 +1458,38 @@ const SURTAX_CUM_ACTUAL = SURTAX_FY24_ACTUAL + SURTAX_FY25_ACTUAL;  // $5.4B (FY
 // personal income, FY2018→FY2026 — the same basis chartGrowth was built on.
 const INCOME_GROWTH_FY18_26 = 42;
 
+// Cross-state spending growth, FY2018→FY2026. NOT derived, and NOT NASBO.
+// Source: Mass Opportunity Alliance, "Massachusetts Has a Spending Problem"
+// (2025-08-15) — the same post INCOME_GROWTH_FY18_26 comes from. Its method, in its
+// own words: "we standardized each state's spending growth as a percentage of the
+// total income of its residents." It states "Massachusetts' state spending grew 51.5%
+// from Fiscal Year 2018 to the present," against Florida 42.5%, North Carolina 41.7%
+// and New Hampshire 39.0% — the competitor set MOA takes from the Mass Taxpayers
+// Foundation. "To the present" is that post's date, i.e. the enacted FY2026 budgets.
+//
+// The NASBO attribution these figures used to carry was wrong twice over. The MOA post
+// never mentions NASBO. And NASBO's State Expenditure Report runs a rolling three-year
+// window — the 2025 edition covers FY2023 and FY2024 actual plus FY2025 estimated — so
+// no single edition spans FY2018 to FY2026, and none reports FY2026 at all. MOA's
+// underlying spending measure is undocumented (it never says general fund vs. total),
+// which is exactly why the basis is named here instead of implied by a source line.
+//
+// This is NOT the GAA basis. MA's own signed budgets give SPEND_GROWTH_FY26 = +54.6%
+// over the same window (GAA_SIGNED, above). Both numbers are on this page; each is
+// labelled with its basis so the pair reads as two measures, not a contradiction.
+// Recomputing only Massachusetts from GAA_SIGNED and leaving the other three on MOA's
+// basis would be the compose error this dashboard warns about elsewhere, so the set is
+// kept whole on the one basis every state in it was measured on.
+//
+// Texas and Tennessee are absent because MOA's analysis is absent on them: it covers
+// only these four states. Their +40% / +38% predecessors traced to no source at all and
+// are gone rather than replaced with invented NASBO figures. The rankings table still
+// carries both states for the tax-structure columns, which are Tax Foundation-sourced.
+const MOA_VINTAGE = 'Mass Opportunity Alliance, Aug 2025';
+const MOA_GROWTH_STATES = ['Massachusetts', 'Florida', 'North Carolina', 'New Hampshire'];
+const MOA_GROWTH_FY18_26 = [51.5, 42.5, 41.7, 39.0];
+const moaGrowth = st => MOA_GROWTH_FY18_26[MOA_GROWTH_STATES.indexOf(st)];
+
 // Massachusetts personal income tax at the rates this page states (:184, :251):
 // 5% flat, plus the 4% surtax on income above the threshold. This is the basis the
 // $367M / $735M revenue-at-risk figures were computed on, so deriving them from it
@@ -1703,13 +1735,23 @@ function initCharts(tab) {
         },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 12, title: { display: true, text: '% of Personal Income' } } }, plugins: { legend: { display: false } } }
       });
+      // The growth table and this chart both read MOA_GROWTH_*, so the four states
+      // cannot drift apart the way the hand-typed cells did. The MA cell is the same
+      // 51.5% the chart plots, not a second copy of it.
+      pctTxt('rkGrowthMA', moaGrowth('Massachusetts'));
+      pctTxt('rkGrowthNH', moaGrowth('New Hampshire'));
+      pctTxt('rkGrowthFL', moaGrowth('Florida'));
+      pctTxt('rkGrowthNC', moaGrowth('North Carolina'));
+      // Names the GAA basis next to the MOA basis so the +54.6% on the Budget tab and
+      // the +51.5% here are visibly two measures rather than a discrepancy.
+      pctTxt('rkGaaNote', SPEND_GROWTH_FY26);
       safeChart('chartCompGrowth', {
         type: 'bar',
         data: {
-          labels: ['Massachusetts','Florida','North Carolina','New Hampshire','Tennessee','Texas'],
-          datasets: [{ label: 'Budget Growth FY2018–FY2026', data: [51.5,42.5,41.7,39.0,38.0,40.0], backgroundColor: ['#c0392b','#5a8fba','#5a8fba','#5a8fba','#5a8fba','#5a8fba'], borderRadius: 6 }]
+          labels: MOA_GROWTH_STATES,
+          datasets: [{ label: 'Budget Growth FY2018–FY2026 (' + MOA_VINTAGE + ')', data: MOA_GROWTH_FY18_26, backgroundColor: MOA_GROWTH_STATES.map(s => s === 'Massachusetts' ? '#c0392b' : '#5a8fba'), borderRadius: 6 }]
         },
-        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, title: { display: true, text: '% Growth' } } }, plugins: { legend: { display: false } } }
+        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, title: { display: true, text: '% Growth' } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `+${ctx.parsed.y.toFixed(1)}% FY2018→FY2026 · ${MOA_VINTAGE}` } } } }
       });
       break;
 
