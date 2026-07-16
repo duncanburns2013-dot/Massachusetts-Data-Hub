@@ -28,8 +28,20 @@ const EMPLOYMENT_SERIES = {
 
 // National JOLTS only — BLS discontinued monthly state JOLTS (last: Dec 2025).
 // First annual state JOLTS release: July 2026.
+//
+// Hires/separations/quits/layoffs are fetched (not just openings) because the
+// JOLTS table publishes all five. They used to be hardcoded, and had drifted
+// badly — the page showed 5.6M hires against an actual 5.2M, and its "YoY"
+// column compared a live current month to a frozen Mar-2025 one, so the span
+// silently stretched to 14 months. All five now come from the series, and the
+// year-ago column is pulled for the SAME calendar month (see periodMap).
 const JOLTS_SERIES = {
-  US_JOB_OPENINGS: 'JTS000000000000000JOL',
+  US_JOB_OPENINGS:  'JTS000000000000000JOL',
+  US_OPENINGS_RATE: 'JTS000000000000000JOR',
+  US_HIRES:         'JTS000000000000000HIL',
+  US_SEPARATIONS:   'JTS000000000000000TSL',
+  US_QUITS:         'JTS000000000000000QUL',
+  US_LAYOFFS:       'JTS000000000000000LDL',
 };
 
 // Foreign-born / native-born (CPS Table A-7). NOT seasonally adjusted — these
@@ -37,6 +49,8 @@ const JOLTS_SERIES = {
 const NATIVITY_SERIES = {
   FB_EMP:    'LNU02073395',  // foreign-born employed (thousands)
   NB_EMP:    'LNU02073413',  // native-born employed (thousands)
+  FB_UR:     'LNU04073395',  // foreign-born unemployment rate
+  NB_UR:     'LNU04073413',  // native-born unemployment rate
   FB_LFPR_T: 'LNU01373395', FB_LFPR_M: 'LNU01373396', FB_LFPR_W: 'LNU01373397',
   NB_LFPR_T: 'LNU01373413', NB_LFPR_M: 'LNU01373414', NB_LFPR_W: 'LNU01373415',
 };
@@ -57,6 +71,7 @@ const GENDER_RACE_SERIES = {
   UR_COLLEGE:     'LNS14027662',  // bachelor's degree & higher, 25+
   UR_SOMECOLL:    'LNS14027689',  // some college / associate, 25+
   UR_HS:          'LNS14027659',  // high school, no college, 25+
+  UR_LESSHS:      'LNS14027660',  // less than high school, 25+
 };
 
 // Massachusetts industry employment (BLS CES, state, SA, level in thousands).
@@ -205,6 +220,10 @@ function monthsOf(series) {
 
 const mkey = p => p.year * 100 + p.mon;
 
+// Monotonic month ordinal — unlike mkey, consecutive months always differ by 1,
+// so it can test whether two points are genuinely adjacent across a year end.
+const ordOf = p => p.year * 12 + p.mon;
+
 // Chart.js label literal: "'Mon YY'" at year-starts/endpoints, "'Mon'" otherwise.
 function axisLabels(axis) {
   return axis
@@ -226,7 +245,7 @@ function inject(html, tag, literal) {
 }
 
 // Build every auto-chart literal from the fetched series, then inject into the HTML.
-function updateCharts(html, find) {
+function updateCharts(html, find, findLong) {
   const maUR  = monthsOf(find(EMPLOYMENT_SERIES.MA_UNEMPLOYMENT_RATE));
   const natUR = monthsOf(find(EMPLOYMENT_SERIES.US_UNEMPLOYMENT_RATE));
   const maLF  = monthsOf(find(EMPLOYMENT_SERIES.MA_LABOR_FORCE));
@@ -246,18 +265,31 @@ function updateCharts(html, find) {
     html = inject(html, 'lf-data', w.map(p => p.value).join(','));
   }
 
-  // c-monthly — MA nonfarm month-over-month job change (levels are in thousands)
-  if (maNF.length > 1) {
+  // c-monthly, plus every payroll figure in the prose — MA nonfarm month-over-month
+  // job change (levels are in thousands).
+  //
+  // Injected as the FULL history, not the chart's trailing 16-month window: the
+  // page derives full-year and since-a-given-month totals from this array, and a
+  // sliding window silently turns those into partial sums as its start month
+  // falls off the end. The chart slices to 16 client-side.
+  //
+  // Only emit a change where the two months are genuinely adjacent. Where BLS
+  // published no value (the Oct-2025 appropriations lapse), monthsOf drops the
+  // month, and differencing straight across the hole would fabricate a one-month
+  // "change" that is really two months of movement.
+  const nfLong = monthsOf(findLong(MA_SECTOR_SERIES.TOTAL));
+  const nfSrc  = nfLong.length >= maNF.length ? nfLong : maNF;
+  if (nfSrc.length > 1) {
     const diffs = [];
-    for (let i = 1; i < maNF.length; i++) {
+    for (let i = 1; i < nfSrc.length; i++) {
+      if (ordOf(nfSrc[i]) - ordOf(nfSrc[i - 1]) !== 1) continue;
       diffs.push({
-        year: maNF[i].year, mon: maNF[i].mon,
-        value: Math.round((maNF[i].value - maNF[i - 1].value) * 1000),
+        year: nfSrc[i].year, mon: nfSrc[i].mon,
+        value: Math.round((nfSrc[i].value - nfSrc[i - 1].value) * 1000),
       });
     }
-    const w = diffs.slice(-16);
-    html = inject(html, 'mom-lab',  axisLabels(w));
-    html = inject(html, 'mom-data', w.map(p => p.value).join(','));
+    html = inject(html, 'mom-lab',  axisLabels(diffs));
+    html = inject(html, 'mom-data', diffs.map(p => p.value).join(','));
   }
 
   // c-unemp2 — MA vs National UR on a unified axis (trailing 13 months).
@@ -273,6 +305,40 @@ function updateCharts(html, find) {
     html = inject(html, 'ur2-nat', col(natMap));
   }
 
+  return html;
+}
+
+// c-jobs — MA annual net job growth, measured December-to-December (BLS CES).
+//
+// These bars were hardcoded and were a pre-benchmark-revision vintage throughout:
+// the page shipped +1,300 for full-year 2025 when the revised series says −17,300
+// — not a flat year but a contraction, and the wrong sign. Every annual revision
+// would silently re-break them, so they are computed from the series now. Needs
+// the 2019-start CES history (findLong), since the employment batch only fetches
+// three years and each bar needs the prior December.
+function updateJobsAnnual(html, findLong) {
+  const nf = monthsOf(findLong(MA_SECTOR_SERIES.TOTAL));
+  if (nf.length < 13) return html;
+
+  const dec = new Map(nf.filter(p => p.mon === 11).map(p => [p.year, p.value]));
+  const years = [...dec.keys()].sort((a, b) => a - b).filter(y => dec.has(y - 1)).slice(-5);
+  if (!years.length) return html;
+
+  html = inject(html, 'jobs-lab',  years.map(y => `'${y}'`).join(','));
+  html = inject(html, 'jobs-data', years.map(y => Math.round((dec.get(y) - dec.get(y - 1)) * 1000)).join(','));
+  console.log(`   ✅ Annual job growth updated: ${years.map(y => `${y} ${Math.round((dec.get(y) - dec.get(y - 1)) * 1000)}`).join(', ')}`);
+  return html;
+}
+
+// c-jolts — national job openings RATE, monthly (JOLTS JOR).
+// Was hardcoded under a dataset labelled "National (auto-updated)" while in fact
+// updating never — it had drifted to 4.1 for Mar 2026 against an actual 4.2 and
+// stopped two months short of the published data.
+function updateJoltsChart(html, find) {
+  const jor = monthsOf(find(JOLTS_SERIES.US_OPENINGS_RATE)).filter(p => p.year >= 2024);
+  if (!jor.length) return html;
+  html = inject(html, 'jolts-lab', axisLabels(jor));
+  html = inject(html, 'jolts-nat', jor.map(p => p.value.toFixed(1)).join(','));
   return html;
 }
 
@@ -459,6 +525,16 @@ async function updateDashboard(data, empSeries) {
   let html = await fs.readFile(DASHBOARD_PATH, 'utf-8');
   const find = (id) => empSeries?.find(s => s.seriesID === id);
 
+  // MA total nonfarm (SMS25000000000000001) is fetched twice — once in the
+  // employment batch (3 years) and once in the sector batch (from 2019) — so
+  // find() returns whichever landed first, which is the short one. Anything that
+  // needs real history (annual Dec-to-Dec bars, full-year sums) must ask for the
+  // longest copy explicitly.
+  const findLong = (id) =>
+    (empSeries || [])
+      .filter(s => s.seriesID === id)
+      .reduce((a, b) => ((b.data?.length || 0) > (a?.data?.length || 0) ? b : a), null);
+
   function setField(fieldName, value) {
     html = html.replace(
       new RegExp(`(data-field="${fieldName}">)[^<]*(<)`, 'g'),
@@ -474,6 +550,14 @@ async function updateDashboard(data, empSeries) {
       /(<div class="hero-stat"><div class="val[^"]*">)[\d.]+%(<\/div><div class="lbl">MA Unemployment[^<]*<\/div><\/div>)/,
       `$1${rate}%</div><div class="lbl">MA Unemployment (${date})</div></div>`
     );
+  }
+
+  // Hero: national unemployment rate + its month. The hero replace above only
+  // ever matched the MA card, so this stat stayed hardcoded at "4.3% (May 2026)"
+  // while the auto values further down the page had already moved to 4.2% (Jun).
+  if (data.us_unemployment_rate?.latest) {
+    setField('hero-nat-ur', data.us_unemployment_rate.latest.value.toFixed(1) + '%');
+    setField('hero-nat-mo', data.us_unemployment_rate.latest.date);
   }
 
   // JOLTS national openings
@@ -495,7 +579,6 @@ async function updateDashboard(data, empSeries) {
     const ratio      = unemployed ? (v / unemployed).toFixed(2) : null;
     setField('jolts-openings',       openingsM);
     setField('jolts-openings-date',  `${date} · auto-updated`);
-    setField('jolts-openings-table', openingsM);
     setField('jolts-col-current',    date);
     if (ratio) {
       setField('jolts-ratio', ratio);
@@ -503,6 +586,32 @@ async function updateDashboard(data, empSeries) {
       console.warn(`   ⚠️  JOLTS ratio skipped: no US unemployment level for ${period}`);
     }
     console.log(`   ✅ JOLTS fields updated: ${openingsM} (${date}), ratio ${ratio ?? 'n/a'} (both ${period})`);
+
+    // ── JOLTS table — all five metrics, current month vs the SAME month a year
+    // earlier. The year-ago column was a frozen "Mar 2025" while the current
+    // column auto-advanced, so the "YoY Change" header above it had quietly come
+    // to span 14 months; the four non-openings rows were hardcoded and had drifted
+    // outright (5.6M hires against an actual 5.2M). Same-month pairing via
+    // periodMap is the same fix the openings-per-unemployed ratio needed.
+    const prevYear    = Number(data.us_job_openings.latest.year) - 1;
+    const yrAgoPeriod = `${prevYear}-${data.us_job_openings.latest.period}`;
+    const kFmt = (n) => (n < 0 ? '−' : '+') + Math.abs(Math.round(n)).toLocaleString('en-US') + 'K';
+    setField('jolts-tbl-month', date);
+    setField('jolts-col-prev',  `${data.us_job_openings.latest.periodName} ${prevYear}`);
+
+    for (const [key, tag] of [
+      ['US_JOB_OPENINGS', 'open'], ['US_HIRES', 'hire'], ['US_SEPARATIONS', 'sep'],
+      ['US_QUITS', 'quit'], ['US_LAYOFFS', 'layoff'],
+    ]) {
+      const m    = periodMap(find(JOLTS_SERIES[key]));
+      const cur  = m[period];
+      const prev = m[yrAgoPeriod];
+      if (cur == null) { console.warn(`   ⚠️  JOLTS ${key}: no value for ${period} — fields left as-is`); continue; }
+      setField(`jolts-${tag}-cur`,  (cur / 1000).toFixed(1) + 'M');
+      setField(`jolts-${tag}-prev`, prev == null ? '—' : (prev / 1000).toFixed(1) + 'M');
+      setField(`jolts-${tag}-yoy`,  prev == null ? '—' : kFmt(cur - prev));
+    }
+    console.log(`   ✅ JOLTS table updated: ${period} vs ${yrAgoPeriod} (same calendar month)`);
   }
 
   // ── National Employment Situation block + table ───────────────────────────
@@ -576,6 +685,33 @@ async function updateDashboard(data, empSeries) {
     setField('nat-fb-month', `${MON[p.mon]} ${p.year}`);
   }
 
+  // Foreign-Born tab stat cards. These were hardcoded to April 2026 while the
+  // tab's own auto subtitle already read Jun 2026 — the foreign-born employed
+  // card asserted 31.65M against a series that had moved to 30.73M (~920K out),
+  // and native-born UR read 4.1% against an actual 4.6%. Levels and rates now
+  // come from the series, and each year-ago figure is the SAME calendar month
+  // rather than whatever each series' own latest happens to be.
+  const natLbl  = (yr, mo) => `${MON[mo]} ${String(yr).slice(2)}`;
+  const natStat = (id, tag, fmtVal, fmtDelta) => {
+    const a = monthsOf(find(id));
+    if (!a.length) { console.warn(`   ⚠️  nativity ${tag}: no data — fields left as-is`); return; }
+    const cur  = a[a.length - 1];
+    const prev = a.find(x => x.year === cur.year - 1 && x.mon === cur.mon);
+    setField(`${tag}-mo`,  natLbl(cur.year, cur.mon));
+    setField(`${tag}-val`, fmtVal(cur.value));
+    setField(`${tag}-sub`, prev == null
+      ? `no ${natLbl(cur.year - 1, cur.mon)} comparison published`
+      : `${fmtDelta(cur.value - prev.value)} vs ${natLbl(cur.year - 1, cur.mon)}`);
+  };
+  const mFmt  = (v) => (v / 1000).toFixed(2) + 'M';
+  const kDelt = (n) => (n < 0 ? '−' : '+') + Math.abs(Math.round(n)).toLocaleString('en-US') + 'K';
+  const pFmt  = (v) => v.toFixed(1) + '%';
+  const pDelt = (n) => (n < 0 ? '−' : '+') + Math.abs(n).toFixed(1) + ' pt';
+  natStat(NATIVITY_SERIES.FB_EMP, 'nat-fbemp', mFmt, kDelt);
+  natStat(NATIVITY_SERIES.NB_EMP, 'nat-nbemp', mFmt, kDelt);
+  natStat(NATIVITY_SERIES.FB_UR,  'nat-fbur',  pFmt, pDelt);
+  natStat(NATIVITY_SERIES.NB_UR,  'nat-nbur',  pFmt, pDelt);
+
   // Men, Women & White-Collar tab — subtitle month + stat cards + table headers
   const grLast = (id) => { const a = monthsOf(find(id)); return a.length ? a[a.length - 1] : null; };
   const grMen = grLast(GENDER_RACE_SERIES.UR_MEN);
@@ -592,11 +728,34 @@ async function updateDashboard(data, empSeries) {
     setField('gr-men-ur',   grMen.value.toFixed(1) + '%');
     if (wo)  setField('gr-women-ur', wo.value.toFixed(1) + '%');
     if (col) setField('gr-col-ur',   col.value.toFixed(1) + '%');
+    // Less-than-high-school completes the education table. Its three sibling rows
+    // read from the c-gr-edu arrays client-side; this one has no chart line, so it
+    // needs its own field — otherwise the table's "auto-update" caption is a lie
+    // for a quarter of its rows.
+    const lhs = grLast(GENDER_RACE_SERIES.UR_LESSHS);
+    if (lhs) setField('gr-lhs-ur', lhs.value.toFixed(1) + '%');
+
+    // c-gr-lfpr's trailing point. LFPR_MEN2554/LFPR_WOMEN2554 were fetched every
+    // run and then dropped on the floor: the chart, the stat card and the table's
+    // last row were all hardcoded, so the one row that actually moves was the one
+    // nothing updated. Earlier points are settled annual averages and stay put.
+    const pm = grLast(GENDER_RACE_SERIES.LFPR_MEN2554);
+    const pw = grLast(GENDER_RACE_SERIES.LFPR_WOMEN2554);
+    if (pm && pw) {
+      html = inject(html, 'grlfpr-lab',   `'${MON[pm.mon]} ${String(pm.year).slice(2)}'`);
+      html = inject(html, 'grlfpr-men',   pm.value.toFixed(1));
+      html = inject(html, 'grlfpr-women', pw.value.toFixed(1));
+    }
     if (wm) {
       setField('gr-wm-ur', wm.value.toFixed(1) + '%');
       if (all) {
-        const gap = (all.value - wm.value).toFixed(1);
-        setField('gr-wm-sub', `${gap} pt below national`);
+        // Direction is derived, not baked in. This read `${gap} pt below national`
+        // with "below" hardcoded, so the day White men's rate crossed the national
+        // one it would have rendered "−0.2 pt below national" — a negative distance
+        // in the wrong direction. Currently 0.7 pt below, but that is not a
+        // property of the sentence.
+        const gap = all.value - wm.value;
+        setField('gr-wm-sub', `${Math.abs(gap).toFixed(1)} pt ${gap >= 0 ? 'below' : 'above'} national`);
       }
     }
     console.log(`   ✅ Gender/race/education fields updated (${md}) — White men ${wm?.value}%, college ${col?.value}%`);
@@ -628,18 +787,25 @@ async function updateDashboard(data, empSeries) {
 
   // Charts — rewrite the auto-updating series arrays from the live BLS series
   if (empSeries?.length) {
-    html = updateCharts(html, find);
+    html = updateCharts(html, find, findLong);
+    html = updateJobsAnnual(html, findLong);
+    html = updateJoltsChart(html, find);
     html = updateNativity(html, find);
     html = updateGenderRace(html, find);
     html = updateMASectors(html, find);
     html = updateMASectorSpectrum(html, find);
   }
 
-  // Footer date
+  // Footer provenance. Only the date used to be auto; the rest was hand-written
+  // and had gone stale claiming the page "Reflects MA April 2026 release" long
+  // after MA had moved to May and national to June — the footer contradicted the
+  // very date stamped beside it. Both vintages are now read from the series.
   const today = new Date().toLocaleDateString('en-US', {
     year: 'numeric', month: 'long', day: 'numeric',
   });
-  html = html.replace(/Updated [^·]+·/, `Updated ${today} ·`);
+  setField('foot-updated', today);
+  if (data.ma_unemployment_rate?.latest) setField('foot-ma-mo',  data.ma_unemployment_rate.latest.date);
+  if (data.us_unemployment_rate?.latest) setField('foot-nat-mo', data.us_unemployment_rate.latest.date);
 
   return html;
 }
@@ -697,11 +863,15 @@ async function main() {
   // ── 2. JOLTS (non-critical — one retry, skip gracefully) ──────────────────
   console.log('\n🔄 Fetching JOLTS data (national only)...');
   try {
+    // Two years back, not one: the table's year-ago column needs the same
+    // calendar month a year before the latest JOLTS month, and early in a year
+    // that month falls into the year before last.
     const joltsSeries = await fetchBLSData(
       Object.values(JOLTS_SERIES),
-      currentYear - 1,
+      currentYear - 2,
       currentYear
     );
+    empSeries.push(...joltsSeries);
     const jolts = joltsSeries.find(s => s.seriesID === JOLTS_SERIES.US_JOB_OPENINGS);
     data.us_job_openings = { latest: getLatestValue(jolts) };
     console.log(`   ✅ US Job Openings: ${(data.us_job_openings.latest?.value / 1000).toFixed(1)}M (${data.us_job_openings.latest?.date})`);
