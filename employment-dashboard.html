@@ -105,6 +105,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .data-table td{padding:9px 12px;border-bottom:1px solid var(--border)}
 .data-table tr:hover{background:rgba(15,41,66,0.02)}
 .td-red{color:var(--red);font-weight:700}.td-green{color:var(--green);font-weight:700}.td-amber{color:var(--amber);font-weight:700}
+.td-blue{color:var(--blue);font-weight:700}
 .source{font-size:0.65rem;color:var(--muted);margin-top:8px;font-style:italic}
 
 /* FOOTER */
@@ -124,9 +125,9 @@ footer a:hover{color:var(--gold)}
   <p class="sub">Massachusetts job growth, unemployment, and JOLTS analysis — built from official BLS data.</p>
   <div class="hero-stats">
     <div class="hero-stat"><div class="val warn">4.5%</div><div class="lbl">MA Unemployment (May 2026)</div></div>
-    <div class="hero-stat"><div class="val warn">−2,900</div><div class="lbl">MA Jobs Added May 2026</div></div>
-    <div class="hero-stat"><div class="val good">+17,600</div><div class="lbl">MA Jobs Since Sep 2025</div></div>
-    <div class="hero-stat"><div class="val warn">4.3%</div><div class="lbl">National Rate (May 2026)</div></div>
+    <div class="hero-stat"><div class="val warn" id="heroPayVal">−2,900</div><div class="lbl">MA Payroll Change (<span id="heroPayMo">May 2026</span>)</div></div>
+    <div class="hero-stat"><div class="val good" id="heroSepVal">+17,600</div><div class="lbl">MA Jobs Since <span id="heroSepMo">Sep 2025</span></div></div>
+    <div class="hero-stat"><div class="val warn" data-field="hero-nat-ur">4.2%</div><div class="lbl">National Rate (<span data-field="hero-nat-mo">June 2026</span>)</div></div>
   </div>
 </div>
 
@@ -147,15 +148,26 @@ footer a:hover{color:var(--gold)}
 <!-- OVERVIEW -->
 <div class="tab-content active" id="overview">
   <div class="section-title">Labor Market Overview</div>
-  <div class="section-desc">MA (May): −2,900 jobs · 4.5% UR · +17,600 jobs since Sep 2025 · National <span data-field="ov-nat-pay">+57K</span> · <span data-field="ov-nat-ur">4.2%</span></div>
+  <div class="section-desc">MA (<span id="ovMo">May</span>): <span id="ovPayDesc">−2,900</span> jobs · 4.5% UR · <span id="ovSepDesc">+17,600</span> jobs since <span id="ovSepMoDesc">Sep 2025</span> · National <span data-field="ov-nat-pay">+57K</span> · <span data-field="ov-nat-ur">4.2%</span></div>
 
-  <div class="alert green">
-    <h4>✅ Six Straight Months of MA Job Growth</h4>
-    <p><strong>−2,900 jobs in May 2026</strong> (preliminary), following a revised <strong>+7,400 in April</strong> (revised from +8,500) and <strong>+7,200 in March</strong>. Since September 2025, Massachusetts has added <strong>+17,600 payroll jobs</strong> (net through May). Source: BLS CES, released June 23, 2026.</p>
+  <!-- Heading, colour and figures all derive from the payroll series below. This
+       box previously read "✅ Six Straight Months of MA Job Growth" directly above
+       a paragraph opening "−2,900 jobs in May 2026" — a green success box whose
+       own body disproved its headline. The streak claim is gone rather than
+       restated with a corrected count: the count changes every month, so any
+       hand-written number is only ever waiting to be wrong again. -->
+  <div class="alert green" id="ovPayAlert">
+    <h4><span id="ovPayIcon">📉</span> MA Payrolls — <span id="ovPayHead">May 2026: −2,900 jobs</span></h4>
+    <p>Latest three months: <strong id="ovPay3">May 2026 −2,900 · Apr +7,400 · Mar +7,200</strong>. April was revised down from the +8,500 first reported on May 22. Since <span id="ovSepMo">Sep 2025</span>, Massachusetts payrolls are net <strong id="ovSepVal">+17,600</strong>. Source: BLS CES, seasonally adjusted; May released June 23, 2026.</p>
   </div>
+  <!-- The two rates are quoted for the same month and both read from the series.
+       This used to say "0.2 pts above the national 4.3%" by hand — a live
+       comparison written as a direction, which is the shape that inverts and then
+       reads backwards. (It had already narrowed from 0.4 to 0.2.) Stating both
+       figures and letting the reader see the difference is what stays true. -->
   <div class="alert amber">
-    <h4>⚠️ Unemployment Eases to 4.5% — Labor Force Shrinkage Continues</h4>
-    <p>MA unemployment fell to <strong>4.5%</strong> in May — 0.2 pts above the national 4.3%. The rate eased because unemployment levels dropped by 4,771 — but the labor force also contracted another <strong>−8,965 in May</strong>. Peak-to-May 2026: roughly <strong>−73,000 people</strong> have exited the MA labor force since March 2025. Source: BLS LAUS, June 23, 2026.</p>
+    <h4>⚠️ MA Unemployment <span id="ovUrHead">4.5% (May 2026)</span> — Labor Force Shrinkage Continues</h4>
+    <p>MA unemployment was <strong id="ovUrMa">4.5%</strong> in <span id="ovUrMo">May 2026</span>; the national rate for the same month was <span id="ovUrNat">4.3%</span>. The rate eased because unemployment levels dropped by 4,771 — but the labor force also contracted another <strong id="ovLfChg">−8,965</strong> in <span id="ovLfMo">May 2026</span>. Peak to <span id="ovLfMo2">May 2026</span>: roughly <strong>−73,000 people</strong> have exited the MA labor force since March 2025. Source: BLS LAUS, June 23, 2026.</p>
   </div>
 
   <div class="chart-grid">
@@ -181,7 +193,7 @@ footer a:hover{color:var(--gold)}
 
   <div class="stat-row">
     <div class="stat-card"><div class="label">MA Rate — May 2026 (U-3)</div><div class="value amber">4.5%</div><div class="sub">↓ from 4.7% · Pre-COVID (2019): 2.9%</div></div>
-    <div class="stat-card"><div class="label">MA Rate — Q3 2025 (U-6)</div><div class="value red">7.2%</div><div class="sub">True underemployment · +2.9 pts above U-3</div></div>
+    <div class="stat-card"><div class="label">MA Rate — <span id="u6CardLab">Q3 2025</span> (U-6)</div><div class="value red" id="u6CardVal">7.2%</div><div class="sub">True underemployment · <span id="u6CardSub">+2.9 pts above U-3 (same quarter)</span></div></div>
     <div class="stat-card"><div class="label">May 2026 Labor Force Drop</div><div class="value red">−8,965</div><div class="sub">14-mo decline ~73K from peak</div></div>
     <div class="stat-card"><div class="label">Prime-Age LFPR (25–54)</div><div class="value green">86.7%</div><div class="sub">10-year high · per EOLWD</div></div>
   </div>
@@ -203,7 +215,14 @@ footer a:hover{color:var(--gold)}
 
   <div class="info-box">
     <span class="icon">📊</span>
-    <p><strong>U-3 vs U-6 — what each measures:</strong> U-3 (4.7%) counts only people actively job-searching. U-4 adds discouraged workers. U-5 adds all marginally attached. U-6 (7.2%) adds involuntary part-time workers — people who want full-time work but can only find part-time. The 2.9-point gap between U-3 and U-6 represents roughly <strong>114,000 additional MA residents</strong> who are underemployed or have given up. Note: state U-6 is published quarterly by BLS as 4-quarter moving averages. Latest available: Q3 2025.</p>
+    <!-- Both rates and the gap read from the c-u6 arrays, and both are the SAME
+         quarter. This paragraph used to pair a current-month U-3 (4.7%) with a
+         Q3-2025 U-6 (7.2%) and then quote the Q3-2025 gap (2.9) as the difference
+         between them — 7.2 − 4.7 is 2.5, and the headline U-3 has since moved to
+         4.5%, so the page carried three mutually inconsistent gaps at once. The
+         headcount is anchored to the quarter it belongs to, with its denominator
+         named, rather than floating against whatever the labor force is today. -->
+    <p><strong>U-3 vs U-6 — what each measures:</strong> U-3 (<span id="u3q">4.3%</span>) counts only people actively job-searching. U-4 adds discouraged workers. U-5 adds all marginally attached. U-6 (<span id="u6q">7.2%</span>) adds involuntary part-time workers — people who want full-time work but can only find part-time. In <span id="u6qLab">Q3 2025</span> the gap between the two was <strong id="u6gap">2.9 points</strong>, or roughly <strong>114,000 MA residents</strong> measured against that quarter's labor force of about 3.94M. Note: state U-6 is published quarterly by BLS as 4-quarter moving averages, and <span id="u6qLab2">Q3 2025</span> is the latest available — so both rates quoted here are that quarter's, not the current month's headline rate.</p>
   </div>
 
   <div class="data-card">
@@ -217,7 +236,7 @@ footer a:hover{color:var(--gold)}
         <tr><td><strong>U-6</strong></td><td>+ Involuntary part-time</td><td>7.2%</td><td>7.3%</td><td class="td-red">7.2%</td><td>National: 7.7%</td></tr>
       </tbody>
     </table>
-    <div class="source">Source: BLS Alternative Measures of Labor Underutilization for States (FRED: U1–U6UNEM6MA) · Quarterly 4-quarter moving averages · Latest: Q3 2025 · Next release: May 2026 (covering 12 months ending Mar 2026)</div>
+    <div class="source">Source: BLS Alternative Measures of Labor Underutilization for States (FRED: U1–U6UNEM6MA) · Quarterly 4-quarter moving averages · Latest: <span id="u6qLab3">Q3 2025</span> · Released on the BLS <a href="https://www.bls.gov/lau/stalt.htm" target="_blank">state alternative-measures schedule</a></div>
   </div>
 
   <div class="data-card">
@@ -256,18 +275,23 @@ footer a:hover{color:var(--gold)}
 <!-- JOB GROWTH -->
 <div class="tab-content" id="jobs">
   <div class="section-title">Job Growth Analysis</div>
-  <div class="section-desc">May −2,900 (prelim) · April revised to +7,400 · +17,600 jobs since September 2025</div>
+  <div class="section-desc"><span id="jgDesc">May 2026 −2,900 (prelim) · April revised to +7,400</span> · <span id="jgSepDesc">+17,600</span> jobs since <span id="jgSepMoDesc">September 2025</span></div>
 
-  <div class="alert green">
-    <h4>⚠️ May 2026 — Payroll Reversal After Six Months of Gains</h4>
-    <p><strong>−2,900 jobs</strong> in May 2026 (preliminary), the first monthly loss since August 2025. April was revised to <strong>+7,400</strong> (from +8,500 originally reported) and March held at <strong>+7,200</strong>. Net since September 2025: <strong>+17,600 payroll jobs</strong>. Source: BLS CES State &amp; Metro Area, released June 23, 2026.</p>
+  <!-- Colour and heading derive from the sign of the latest print. This shipped as
+       an `alert green` success box whose own heading opened "⚠️ Payroll Reversal". -->
+  <div class="alert green" id="jgAlert">
+    <h4><span id="jgIcon">⚠️</span> <span id="jgHead">May 2026 — Payroll Reversal</span></h4>
+    <p><strong id="jgVal">−2,900</strong> jobs in <span id="jgMo">May 2026</span> (preliminary). Most recent decline before that: <strong id="jgPrevDip">−7,100 in Feb 2026</strong>. April was revised to <strong id="jgApr">+7,400</strong> (from the +8,500 first reported) and March held at <strong id="jgMar">+7,200</strong>. Net since <span id="jgSepMo">September 2025</span>: <strong id="jgSepVal">+17,600</strong> payroll jobs. Source: BLS CES State &amp; Metro Area, released June 23, 2026.</p>
   </div>
 
   <div class="stat-row">
-    <div class="stat-card"><div class="label">May 2026 Payroll</div><div class="value red">−2,900</div><div class="sub">Prelim · First loss since Aug 2025</div></div>
-    <div class="stat-card"><div class="label">Apr 2026 Payroll</div><div class="value green">+7,400</div><div class="sub">Revised (was +8,500)</div></div>
-    <div class="stat-card"><div class="label">Sep 2025–May 2026</div><div class="value green">+17,600</div><div class="sub">Net 9-month total</div></div>
-    <div class="stat-card"><div class="label">vs. Full-Year 2025</div><div class="value amber">+1,300</div><div class="sub">7 months of expansion in 6</div></div>
+    <div class="stat-card"><div class="label"><span id="jgC1Lab">May 2026</span> Payroll</div><div class="value red" id="jgC1Val">−2,900</div><div class="sub">Prelim · prior decline <span id="jgC1Sub">Feb 2026</span></div></div>
+    <div class="stat-card"><div class="label"><span id="jgC2Lab">Apr 2026</span> Payroll</div><div class="value green" id="jgC2Val">+7,400</div><div class="sub">Revised (first reported +8,500)</div></div>
+    <div class="stat-card"><div class="label"><span id="jgC3Lab">Sep 2025–May 2026</span></div><div class="value green" id="jgC3Val">+17,600</div><div class="sub"><span id="jgC3Sub">Net over 8 months</span></div></div>
+    <!-- Was hardcoded "+1,300 · 7 months of expansion in 6". The +1,300 was a
+         pre-benchmark-revision vintage of the wrong sign — 2025 was a contraction
+         of −17,300, which the page's own month-by-month chart already summed to. -->
+    <div class="stat-card"><div class="label">Full-Year 2025</div><div class="value amber" id="jgC4Val">−17,300</div><div class="sub">Dec 2024 → Dec 2025, post-revision</div></div>
   </div>
 
   <div class="chart-grid">
@@ -277,7 +301,11 @@ footer a:hover{color:var(--gold)}
 
   <div class="info-box">
     <span class="icon">📊</span>
-    <p><strong>Context:</strong> The +21,600 gain over six months follows an essentially-flat 2025 (+1,300 jobs for the full year — the weakest year since the pandemic). EOLWD Chief Economist Mark Rembert: "Job postings activity remains strong across sectors, with encouraging signals that the Commonwealth's high-tech industries are seeking more workers." The household survey still shows a smaller labor force, so the two surveys continue to diverge.</p>
+    <!-- "+21,600 over six months" was a real EOLWD figure from the pre-revision
+         April release, restated here as if current. In the revised series no
+         six-month window reaches it — the best is +14,200 — so both figures now
+         derive from the payroll series and move with it. -->
+    <p><strong>Context:</strong> The trailing six months (<span id="jg6Lab">Dec 2025–May 2026</span>) are net <strong id="jg6Val">+10,900</strong>, against <strong id="jgFY25">−17,300</strong> for full-year 2025 measured December to December. EOLWD Chief Economist Mark Rembert: "Job postings activity remains strong across sectors, with encouraging signals that the Commonwealth's high-tech industries are seeking more workers." The household survey still shows a smaller labor force, so the two surveys continue to diverge.</p>
   </div>
 </div>
 
@@ -292,10 +320,17 @@ footer a:hover{color:var(--gold)}
   </div>
 
   <div class="stat-row">
-    <div class="stat-card"><div class="label">Foreign-Born Employed (Apr 26)</div><div class="value blue">31.65M</div><div class="sub">−155K vs Apr 25</div></div>
-    <div class="stat-card"><div class="label">Native-Born Employed (Apr 26)</div><div class="value blue">131.13M</div><div class="sub">−1,134K vs Apr 25</div></div>
-    <div class="stat-card"><div class="label">Foreign-Born UR (Apr 26)</div><div class="value amber">3.7%</div><div class="sub">+0.1 pt YoY · below native</div></div>
-    <div class="stat-card"><div class="label">Native-Born UR (Apr 26)</div><div class="value amber">4.1%</div><div class="sub">+0.2 pt YoY</div></div>
+    <!-- All four cards were hardcoded at April 2026 while the subtitle above them
+         auto-injected Jun 2026: foreign-born employed read 31.65M against a series
+         already at 30.73M, and native-born UR read 4.1% against an actual 4.6%.
+         Each card's month, value and year-ago comparison now come from the series,
+         and the comparison is the same calendar month a year back. The old
+         "below native" note is gone — that gap is a live comparison and stating a
+         direction by hand only guarantees it inverts later. -->
+    <div class="stat-card"><div class="label">Foreign-Born Employed (<span data-field="nat-fbemp-mo">Jun 26</span>)</div><div class="value blue" data-field="nat-fbemp-val">30.73M</div><div class="sub" data-field="nat-fbemp-sub">−506K vs Jun 25</div></div>
+    <div class="stat-card"><div class="label">Native-Born Employed (<span data-field="nat-nbemp-mo">Jun 26</span>)</div><div class="value blue" data-field="nat-nbemp-val">132.00M</div><div class="sub" data-field="nat-nbemp-sub">−655K vs Jun 25</div></div>
+    <div class="stat-card"><div class="label">Foreign-Born UR (<span data-field="nat-fbur-mo">Jun 26</span>)</div><div class="value amber" data-field="nat-fbur-val">3.6%</div><div class="sub" data-field="nat-fbur-sub">−0.5 pt vs Jun 25</div></div>
+    <div class="stat-card"><div class="label">Native-Born UR (<span data-field="nat-nbur-mo">Jun 26</span>)</div><div class="value amber" data-field="nat-nbur-val">4.6%</div><div class="sub" data-field="nat-nbur-sub">+0.2 pt vs Jun 25</div></div>
   </div>
 
   <div class="chart-grid">
@@ -309,8 +344,10 @@ footer a:hover{color:var(--gold)}
   </div>
 
   <div class="chart-grid">
-    <div class="chart-card"><h3>Labor Force Participation Rate — by Nativity &amp; Sex (Apr 2026)</h3><div class="chart-area"><canvas id="c-nat-lfpr"></canvas></div></div>
-    <div class="chart-card"><h3>Foreign-Born Employment Level — Monthly (Jan 2024 → Apr 2026)</h3><div class="chart-area"><canvas id="c-fb-monthly"></canvas></div></div>
+    <!-- Titles read their month range off the arrays they describe; both were
+         hardcoded to "Apr 2026" while the arrays below already ran to Jun 2026. -->
+    <div class="chart-card"><h3>Labor Force Participation Rate — by Nativity &amp; Sex (<span id="natLfprMo">Jun 2026</span>)</h3><div class="chart-area"><canvas id="c-nat-lfpr"></canvas></div></div>
+    <div class="chart-card"><h3>Foreign-Born Employment Level — Monthly (<span id="fbmRange">Feb 2025 → Jun 2026</span>)</h3><div class="chart-area"><canvas id="c-fb-monthly"></canvas></div></div>
   </div>
 
   <div class="data-card">
@@ -375,7 +412,9 @@ footer a:hover{color:var(--gold)}
 
   <div class="alert amber">
     <h4>💼 Massachusetts — the white-collar &amp; tech cooldown</h4>
-    <p>MA&rsquo;s degree-heavy sectors have stalled since 2022 while health care keeps growing. <strong>Information (tech/media) is down about 10% from its 2022 peak</strong>; professional &amp; business services and finance are each off 3–4%. Massachusetts is the most college-educated state (~47% hold a bachelor&rsquo;s), so a national white-collar slowdown lands hard here.</p>
+    <!-- "about 10%" was a restatement that had drifted past the auto value it
+         paraphrases (−9.0%); it now reads that field directly. -->
+    <p>MA&rsquo;s degree-heavy sectors have stalled since 2022 while health care keeps growing. <strong>Information (tech/media) is down <span id="infoChg1">9.0%</span> from its 2022 peak</strong>; professional &amp; business services and finance are each off 3–4%. Massachusetts is the most college-educated state (~47% hold a bachelor&rsquo;s), so a national white-collar slowdown lands hard here.</p>
   </div>
 
   <div class="stat-row">
@@ -392,7 +431,7 @@ footer a:hover{color:var(--gold)}
 
   <div class="info-box danger">
     <span class="icon">🎓</span>
-    <p><strong>College grads &amp; tech — what the data shows.</strong> Degree-holders 25+ still have the lowest unemployment nationally (2.7%), but <strong>recent grads (22–27) sit near 5.7%</strong> — above the overall rate for five straight years (NY Fed), and entry-level, degree-hungry industries have shed jobs since 2023. In Massachusetts the tech/information sector has lost roughly <strong>1 in 10 jobs since 2022</strong>. The degree still pays — but its old job-security head-start has thinned, especially at the entry door and in tech.</p>
+    <p><strong>College grads &amp; tech — what the data shows.</strong> Degree-holders 25+ still have the lowest unemployment nationally (2.7%), but <strong>recent grads (22–27) sit near 5.7%</strong> — above the overall rate for five straight years (NY Fed), and entry-level, degree-hungry industries have shed jobs since 2023. In Massachusetts the tech/information sector is down <strong><span id="infoChg2">9.0%</span> from its 2022 peak</strong>. The degree still pays — but its old job-security head-start has thinned, especially at the entry door and in tech.</p>
   </div>
 
   <div class="data-card">
@@ -417,7 +456,7 @@ footer a:hover{color:var(--gold)}
     <div class="stat-card"><div class="label">Men UR (16+)</div><div class="value amber" data-field="gr-men-ur">4.3%</div><div class="sub">women <span data-field="gr-women-ur">4.0%</span></div></div>
     <div class="stat-card"><div class="label">College Grads UR (25+)</div><div class="value green" data-field="gr-col-ur">2.7%</div><div class="sub">lowest of any group</div></div>
     <div class="stat-card"><div class="label">Recent Grads UR (22–27)</div><div class="value red">5.7%</div><div class="sub">NY Fed · above national</div></div>
-    <div class="stat-card"><div class="label">Prime-Age LFPR</div><div class="value blue">89.2 / 77.6</div><div class="sub">men / women · 11.6 pt gap</div></div>
+    <div class="stat-card"><div class="label">Prime-Age LFPR</div><div class="value blue" id="plfprVal">89.2 / 77.6</div><div class="sub">men / women · <span id="plfprGap">11.6 pt gap</span></div></div>
   </div>
 
   <div class="chart-grid">
@@ -434,13 +473,18 @@ footer a:hover{color:var(--gold)}
     <table class="data-table">
       <thead><tr><th>Group</th><th><span data-field="gr-tbl-cur">Jun 2026</span></th><th><span data-field="gr-tbl-prev">Jun 2025</span></th></tr></thead>
       <tbody>
-        <tr><td>White men (20+)</td><td class="td-green">3.5%</td><td>3.4%</td></tr>
-        <tr><td>White women (20+)</td><td class="td-green">3.1%</td><td>3.1%</td></tr>
-        <tr><td>Men (16+)</td><td class="td-amber">4.3%</td><td>4.3%</td></tr>
-        <tr><td>Women (16+)</td><td>4.0%</td><td>3.9%</td></tr>
-        <tr><td>All workers (16+)</td><td>4.2%</td><td>4.1%</td></tr>
-        <tr><td>Black (16+)</td><td class="td-red">6.6%</td><td>6.9%</td></tr>
-        <tr><td>Hispanic (16+)</td><td class="td-red">5.2%</td><td>4.8%</td></tr>
+        <!-- The caption below promised these cells auto-update; none of them had a
+             data-field, so they were hardcoded and would have drifted silently while
+             saying otherwise. They now read from the c-gr-bar and c-gr-ur arrays,
+             which the updater does rewrite — so the caption is true and the table
+             cannot disagree with the charts above it. -->
+        <tr><td>White men (20+)</td><td class="td-green" id="rsWmCur">3.5%</td><td id="rsWmPrev">3.4%</td></tr>
+        <tr><td>White women (20+)</td><td class="td-green" id="rsWwCur">3.1%</td><td id="rsWwPrev">3.1%</td></tr>
+        <tr><td>Men (16+)</td><td class="td-amber" id="rsMenCur">4.3%</td><td id="rsMenPrev">4.3%</td></tr>
+        <tr><td>Women (16+)</td><td id="rsWomenCur">4.0%</td><td id="rsWomenPrev">3.9%</td></tr>
+        <tr><td>All workers (16+)</td><td id="rsAllCur">4.2%</td><td id="rsAllPrev">4.1%</td></tr>
+        <tr><td>Black (16+)</td><td class="td-red" id="rsBlackCur">6.6%</td><td id="rsBlackPrev">6.9%</td></tr>
+        <tr><td>Hispanic (16+)</td><td class="td-red" id="rsHispCur">5.2%</td><td id="rsHispPrev">4.8%</td></tr>
       </tbody>
     </table>
     <div class="source">BLS Employment Situation Table A-2. Auto-updates with each national jobs report. &ldquo;White&rdquo; includes Hispanic-identifying whites.</div>
@@ -455,10 +499,14 @@ footer a:hover{color:var(--gold)}
         <tr><td>2015</td><td class="td-amber">88.3%</td><td>73.7%</td><td>14.6</td></tr>
         <tr><td>2019</td><td>89.1%</td><td>76.0%</td><td>13.1</td></tr>
         <tr><td>2024</td><td>89.3%</td><td class="td-green">77.9%</td><td>11.4</td></tr>
-        <tr><td>2026 (Jun)</td><td>89.2%</td><td class="td-green">77.6%</td><td>11.6</td></tr>
+        <!-- The prior years are settled annual averages. Only this row moves, and
+             LNS11300061/62 were already being fetched and then thrown away — the
+             chart's last point (and this row, and the stat card above) were
+             hardcoded and drifting for want of three injected values. -->
+        <tr><td id="plfprRowLab">2026 (Jun)</td><td id="plfprMen">89.2%</td><td class="td-green" id="plfprWomen">77.6%</td><td id="plfprRowGap">11.6</td></tr>
       </tbody>
     </table>
-    <div class="source">BLS CPS LNS11300061 (men 25–54) &amp; LNS11300062 (women 25–54), SA annual averages; 2026 = June.</div>
+    <div class="source">BLS CPS LNS11300061 (men 25–54) &amp; LNS11300062 (women 25–54), SA. Earlier rows are annual averages; the final row is the latest month and auto-updates.</div>
   </div>
 
   <div class="data-card">
@@ -466,14 +514,18 @@ footer a:hover{color:var(--gold)}
     <table class="data-table">
       <thead><tr><th>Education</th><th><span data-field="gr-edu-cur">Jun 2026</span></th></tr></thead>
       <tbody>
-        <tr><td>Bachelor&rsquo;s degree &amp; higher</td><td class="td-green">2.7%</td></tr>
-        <tr><td>Some college / associate</td><td>3.6%</td></tr>
-        <tr><td>High school, no college</td><td class="td-amber">5.5%</td></tr>
-        <tr><td>Less than high school</td><td>4.2%</td></tr>
+        <!-- "25+ rows auto-update" was false: every value here was hardcoded. The
+             first three now read from the c-gr-edu arrays; less-than-high-school has
+             no chart line, so it got its own fetched field (LNS14027660) rather than
+             being left as the one static row under an auto caption. -->
+        <tr><td>Bachelor&rsquo;s degree &amp; higher</td><td class="td-green" id="eduCol">2.7%</td></tr>
+        <tr><td>Some college / associate</td><td id="eduSc">3.6%</td></tr>
+        <tr><td>High school, no college</td><td class="td-amber" id="eduHs">5.5%</td></tr>
+        <tr><td>Less than high school</td><td data-field="gr-lhs-ur">4.2%</td></tr>
         <tr><td class="td-red">Recent grads (22–27)</td><td class="td-red">~5.7%</td></tr>
       </tbody>
     </table>
-    <div class="source">BLS Employment Situation Table A-4 (25+ rows auto-update). Recent-grad rate: <a href="https://www.newyorkfed.org/research/college-labor-market" target="_blank">NY Fed</a> (Q1 2026 · 41.5% underemployment).</div>
+    <div class="source">BLS Employment Situation Table A-4 — the four 25+ rows auto-update with each national jobs report. Recent grads (22–27) is a different source and vintage and does not: <a href="https://www.newyorkfed.org/research/college-labor-market" target="_blank">NY Fed</a>, Q1 2026 · 41.5% underemployment.</div>
   </div>
 
   <div class="data-card">
@@ -532,18 +584,28 @@ footer a:hover{color:var(--gold)}
   </div>
 
   <div class="data-card">
-    <h3>JOLTS March 2026 — National Key Metrics (Released May 5, 2026)</h3>
+    <!-- This table asserted three vintages at once: a hardcoded "JOLTS March 2026
+         … (Released May 5, 2026)" heading, an auto column header that had already
+         advanced to May 2026, and a source line naming the April 2026 release. Its
+         comparison column was frozen at Mar 2025, so the "YoY Change" it sat under
+         had quietly stretched to a 14-month span — and the four non-openings rows
+         were hardcoded and outright wrong (5.6M hires against an actual 5.2M).
+         Every cell is fetched now, and the two columns are the same calendar month
+         a year apart. The YoY cells carry no colour class: their sign varies, and
+         the updater rewrites text only, so a hardcoded colour would eventually
+         contradict the number inside it. -->
+    <h3>National JOLTS — Key Metrics (<span data-field="jolts-tbl-month">May 2026</span>)</h3>
     <table class="data-table">
-      <thead><tr><th>Metric</th><th data-field="jolts-col-current">May 2026</th><th>Mar 2025</th><th>YoY Change</th></tr></thead>
+      <thead><tr><th>Metric</th><th data-field="jolts-col-current">May 2026</th><th data-field="jolts-col-prev">May 2025</th><th>YoY Change</th></tr></thead>
       <tbody>
-        <tr><td>National Job Openings</td><td class="td-amber" data-field="jolts-openings-table">7.6M</td><td>~7.5M</td><td class="td-amber">+100K</td></tr>
-        <tr><td>National Hires</td><td class="td-green">5.6M</td><td>~5.2M</td><td class="td-green">+400K</td></tr>
-        <tr><td>National Separations</td><td>5.4M</td><td>~5.0M</td><td class="td-amber">+400K</td></tr>
-        <tr><td>Quits</td><td>3.2M</td><td>~3.1M</td><td class="td-amber">+100K</td></tr>
-        <tr><td>Layoffs &amp; Discharges</td><td class="td-red">1.9M</td><td>~1.6M</td><td class="td-red">+300K</td></tr>
+        <tr><td>National Job Openings</td><td class="td-amber" data-field="jolts-open-cur">7.6M</td><td data-field="jolts-open-prev">7.3M</td><td data-field="jolts-open-yoy">+284K</td></tr>
+        <tr><td>National Hires</td><td data-field="jolts-hire-cur">5.2M</td><td data-field="jolts-hire-prev">5.3M</td><td data-field="jolts-hire-yoy">−158K</td></tr>
+        <tr><td>National Separations</td><td data-field="jolts-sep-cur">5.1M</td><td data-field="jolts-sep-prev">5.3M</td><td data-field="jolts-sep-yoy">−187K</td></tr>
+        <tr><td>Quits</td><td data-field="jolts-quit-cur">3.1M</td><td data-field="jolts-quit-prev">3.3M</td><td data-field="jolts-quit-yoy">−222K</td></tr>
+        <tr><td>Layoffs &amp; Discharges</td><td class="td-red" data-field="jolts-layoff-cur">1.7M</td><td data-field="jolts-layoff-prev">1.7M</td><td data-field="jolts-layoff-yoy">+37K</td></tr>
       </tbody>
     </table>
-    <div class="source">Source: BLS JOLTS Release, April 2026 · National data auto-updated · State JOLTS: last monthly release was Dec 2025 (USDL-26-0579)</div>
+    <div class="source">Source: BLS JOLTS, national, seasonally adjusted · both columns auto-updated for the same calendar month · State JOLTS: last monthly release was Dec 2025 (USDL-26-0579)</div>
   </div>
 
   <div class="info-box">
@@ -609,7 +671,12 @@ footer a:hover{color:var(--gold)}
 
   <div class="info-box">
     <span class="icon">🗺️</span>
-    <p><strong>Geography of the recovery:</strong> The April expansion was concentrated in Cape (Barnstable), the Pioneer Valley (Amherst-Northampton), and the Boston metro. Worcester and Springfield are the only two MA metros with positive year-over-year job growth as well, reflecting a broader pivot of activity outside the Boston core. Compared to April 2025, unemployment rates rose in nine of twelve labor market areas — a reminder that the level remains higher than a year ago even as monthly trends improve.</p>
+    <!-- "Worcester and Springfield are the only two" was contradicted by the table
+         above it (Barnstable +4.1%), by the caption beside it ("three areas gained
+         jobs YoY") and by the chart's own three positive bars. The count and the
+         names now read off the c-metro-yoy array, so they cannot disagree with the
+         bars they describe. -->
+    <p><strong>Geography of the recovery:</strong> The April expansion was concentrated in Cape (Barnstable), the Pioneer Valley (Amherst-Northampton), and the Boston metro. Of the seven published metro areas, <span id="metroPosN">three</span> — <span id="metroPosNames">Barnstable, Worcester and Springfield</span> — gained jobs year-over-year, reflecting a broader pivot of activity outside the Boston core. Compared to April 2025, unemployment rates rose in nine of twelve labor market areas — a reminder that the level remains higher than a year ago even as monthly trends improve.</p>
   </div>
 </div>
 
@@ -620,10 +687,17 @@ footer a:hover{color:var(--gold)}
 
   <div class="alert green">
     <h4>✅ MA April 2026 State Employment — Released May 22, 2026</h4>
+    <!-- A release log entry: these are the figures EOLWD published that day, so
+         they stay as they were. Both headline numbers have since been revised
+         though — the page elsewhere restated this +21,600 as if it were current,
+         which is how it ended up asserting a six-month gain no window in the
+         current vintage reaches. The trailing note derives today's values from the
+         payroll series so the record and the revision sit side by side. -->
     <p>MA Unemployment: <strong>4.7%</strong> (held) | Payroll Jobs: <strong>+8,500</strong> | March revised UP: +6,800 → <strong>+7,200</strong> | 6-Month Total (Nov–Apr): <strong>+21,600</strong> (+19,600 private)<br>
     LFPR: 65.6% · Prime-age (25–54) LFPR: 86.7% (10-year high)<br>
     Top sectors: Construction +3,100 · Ed/Health +1,900 · Prof/Business +1,400<br>
-    Source: BLS LAUS/CES via Mass.gov EOLWD, May 22, 2026</p>
+    Source: BLS LAUS/CES via Mass.gov EOLWD, May 22, 2026<br>
+    <em>Figures as reported that day. After revision the current series puts April at <span id="aprRev">+7,400</span> and the Nov–Apr six-month total at <span id="novAprRev">+14,200</span>.</em></p>
   </div>
 
   <div class="alert blue">
@@ -651,18 +725,23 @@ footer a:hover{color:var(--gold)}
   </div>
 
   <div class="chart-grid">
-    <div class="chart-card"><h3>MA Monthly Unemployment Rate — 2025 through Apr 2026</h3><div class="chart-area"><canvas id="c-trend"></canvas></div></div>
+    <div class="chart-card"><h3>MA Monthly Unemployment Rate — <span id="trendRange">Jan 2025 → May 2026</span></h3><div class="chart-area"><canvas id="c-trend"></canvas></div></div>
     <div class="chart-card">
-      <h3>April 2026 MA Snapshot</h3>
+      <!-- A record of what the April release said on May 22 — not a live snapshot.
+           Its +8,500 April print has since been revised to +7,400, which the rest
+           of the page already said, so the card is now dated and written in the
+           past tense: every figure is attributed to that release and stays true.
+           The current month is in the table beside it. -->
+      <h3>MA Snapshot — as reported in the April 2026 release (May 22, 2026)</h3>
       <div style="padding:8px 0">
         <div class="stat-row" style="margin-bottom:12px">
-          <div class="stat-card"><div class="label">MA Unemployment</div><div class="value amber">4.7%</div><div class="sub">Held month-over-month</div></div>
+          <div class="stat-card"><div class="label">MA Unemployment</div><div class="value amber">4.7%</div><div class="sub">As reported for Apr 2026</div></div>
           <div class="stat-card"><div class="label">National Rate</div><div class="value blue">4.3%</div><div class="sub">Apr 2026</div></div>
-          <div class="stat-card"><div class="label">Apr Job Change</div><div class="value green">+8,500</div><div class="sub">Strongest since Oct</div></div>
+          <div class="stat-card"><div class="label">Apr Job Change</div><div class="value green">+8,500</div><div class="sub">As first reported · since revised to +7,400</div></div>
         </div>
         <div class="alert green" style="margin-bottom:0">
-          <h4>✅ Six-Month Run Continues</h4>
-          <p>EOLWD: "<em>The recent period of employment expansion continued in April, outpacing the rest of the country, with most sectors gaining jobs.</em>" — Chief Economist Mark Rembert. MA has now added jobs in 6 of the last 7 months.</p>
+          <h4>✅ EOLWD's framing at the April release</h4>
+          <p>EOLWD: "<em>The recent period of employment expansion continued in April, outpacing the rest of the country, with most sectors gaining jobs.</em>" — Chief Economist Mark Rembert. EOLWD reported at that release that MA had added jobs in 6 of the previous 7 months.</p>
         </div>
       </div>
     </div>
@@ -672,16 +751,23 @@ footer a:hover{color:var(--gold)}
     <div class="data-card" style="margin-bottom:0">
       <h3>Massachusetts — Recent Monthly Data</h3>
       <table class="data-table">
-        <thead><tr><th>Metric</th><th>Apr 2026</th><th>Mar 2026 (rev)</th><th>Feb 2026</th><th>Jan 2026</th></tr></thead>
-        <tbody>
-          <tr><td>Unemployment Rate (SA)</td><td class="td-amber">4.7%</td><td class="td-amber">4.7%</td><td class="td-red">4.8%</td><td class="td-amber">4.7%</td></tr>
-          <tr><td>Payroll Job Change</td><td class="td-green">+8,500</td><td class="td-green">+7,200</td><td class="td-red">−7,100</td><td class="td-green">+3,700</td></tr>
-          <tr><td>Labor Force Change</td><td class="td-red">−11,700</td><td class="td-red">−15,027</td><td class="td-red">−11,463</td><td class="td-red">−8,842</td></tr>
-          <tr><td>LFPR (overall)</td><td>65.6%</td><td>65.8%</td><td>66.0%</td><td>66.1%</td></tr>
-          <tr><td>LFPR (25–54)</td><td class="td-green">86.7%</td><td class="td-green">86.5%</td><td>86.3%</td><td>86.2%</td></tr>
+        <!-- Headers and all three rows are rebuilt from the same arrays that drive
+             the charts. Hardcoded, this table contradicted the rest of the page: it
+             showed April at +8,500 while three other places said April had been
+             revised to +7,400, and carried −15,027 / −11,700 labor-force changes
+             where the live series says −15,051 / −11,721. It was also a month
+             behind — April as latest, when May had been released. The two LFPR rows
+             are gone rather than left to drift: no live series backs them, so with
+             derived headers they would have silently slipped a month against their
+             own columns. LFPR by age lives on the Unemployment tab. -->
+        <thead><tr><th>Metric</th><th id="mrmH1">May 2026</th><th id="mrmH2">Apr 2026</th><th id="mrmH3">Mar 2026</th><th id="mrmH4">Feb 2026</th></tr></thead>
+        <tbody id="mrmBody">
+          <tr><td>Unemployment Rate (SA)</td><td class="td-amber">4.5%</td><td class="td-amber">4.7%</td><td class="td-amber">4.7%</td><td class="td-red">4.8%</td></tr>
+          <tr><td>Payroll Job Change</td><td class="td-red">−2,900</td><td class="td-green">+7,400</td><td class="td-green">+7,200</td><td class="td-red">−7,100</td></tr>
+          <tr><td>Labor Force Change</td><td class="td-red">−8,965</td><td class="td-red">−11,721</td><td class="td-red">−15,051</td><td class="td-red">−11,463</td></tr>
         </tbody>
       </table>
-      <div class="source">Source: BLS LAUS / CES via Mass.gov EOLWD · April release May 22, 2026</div>
+      <div class="source">Source: BLS LAUS / CES, seasonally adjusted · rebuilt from the same series as the charts above, so it cannot disagree with them · LFPR by age is on the Unemployment tab · latest MA release: June 23, 2026</div>
     </div>
     <div class="data-card" style="margin-bottom:0">
       <h3>National Context — <span data-field="nat-ctx-month">June 2026</span> (Released <span data-field="nat-ctx-rel">July 16, 2026</span>)</h3>
@@ -702,7 +788,13 @@ footer a:hover{color:var(--gold)}
 
   <div class="info-box" style="margin-top:18px">
     <span class="icon">📅</span>
-    <p><strong>Next releases:</strong> MA May 2026 &amp; revised April → June 22, 2026 &nbsp;·&nbsp; MA Local Labor Markets (May) → June 23, 2026 &nbsp;·&nbsp; National June 2026 → July 2026 &nbsp;·&nbsp; BLS State JOLTS Annual (2025) → July 2026</p>
+    <!-- This listed fixed "next release" dates (June 22/23 2026) that had simply
+         become past dates — the footer already auto-stamps a later day, and the
+         June national data it promised is auto-injected higher up the page. Future
+         release dates are not derivable from any series on this page, so the
+         cadence is described and the authoritative calendars are linked instead of
+         restating dates that go stale by construction. -->
+    <p><strong>Release cadence:</strong> MA state employment (LAUS/CES) is published monthly by EOLWD roughly three weeks after the reference month, with the prior month revised alongside it; MA local labor market data follows a few days later. The national Employment Situation leads the state data by about three weeks, and JOLTS trails it by a month. State JOLTS is annual from 2026. For exact dates see the <a href="https://www.bls.gov/schedule/news_release/" target="_blank">BLS release calendar</a> and <a href="https://www.mass.gov/lists/labor-market-information-news-releases" target="_blank">EOLWD news releases</a>.</p>
   </div>
 </div>
 
@@ -710,7 +802,11 @@ footer a:hover{color:var(--gold)}
 
 <footer>
   <strong>Sources:</strong> BLS LAUS · BLS CES · BLS JOLTS · BLS CPS Table A-7 · BLS Foreign-Born Workers Summary · Mass.gov EOLWD<br>
-  <span style="margin-top:6px;display:block">Updated July 16, 2026 · Reflects MA April 2026 release (May 22), Local LMI (May 26), BLS Foreign-Born Annual (May 19) · <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">Massachusetts Data Hub</a></span>
+  <!-- Only "Updated" used to be auto here; the rest was hand-written and claimed
+       the page reflects the MA April release long after MA had moved to May and
+       national to June — provenance contradicting the date stamped beside it. Both
+       vintages are read from the series now. -->
+  <span style="margin-top:6px;display:block">Updated <span data-field="foot-updated">July 16, 2026</span> · MA data through <span data-field="foot-ma-mo">May 2026</span> · national data through <span data-field="foot-nat-mo">June 2026</span> · <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">Massachusetts Data Hub</a></span>
 </footer>
 
 <script>
@@ -736,6 +832,322 @@ function sc(id,cfg){
   if(ctx) charts[id]=new Chart(ctx,cfg);
 }
 
+// ── Live series ───────────────────────────────────────────────────────────────
+// scripts/fetch-bls-data.js rewrites whatever sits between each pair of block
+// comments marked with an @tag below, on every run. Every series the page uses is
+// declared here, once, and everything downstream — charts, tables, stat cards,
+// prose — reads from these. Each tag must appear exactly once in this file: the
+// updater replaces the first match only, so a second copy would silently freeze.
+//
+// The rule this page now follows: if a series holds a number, nothing retypes it.
+// It used to assert "+1,300 jobs for full-year 2025" in three places while its own
+// month-by-month payroll series summed to −17,300. A benchmark revision had
+// flipped the sign; the hand-written prose never heard about it, and sat directly
+// above a chart that disagreed.
+
+// MA payroll month-over-month change (BLS CES SMS25000000000000001, SA).
+// Injected as FULL history, not the chart's trailing window: the prose derives
+// full-year and since-a-given-month totals from this, and a 16-month window would
+// silently turn those into partial sums as its start month falls off the back.
+// The chart slices to 16 at the point of use.
+var momLab=[/*@mom-lab*/'Feb 19','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 20','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 21','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 22','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 23','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 24','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar','Apr','May 26'/*@*/];
+var momData=[/*@mom-data*/7600,4300,15100,3700,4300,-4900,1600,3400,800,4700,8200,3300,10500,-37300,-652000,54400,76800,86800,61100,47400,31600,16400,-3000,14300,13500,16300,22300,9600,12400,40500,9700,-5300,34100,10600,10400,7600,20600,5400,14900,-2200,10300,16000,1500,2700,-6100,8300,-5600,17600,1500,3000,-6300,3300,5700,2000,3700,300,100,-1200,7700,-2100,-200,6900,-9500,7100,6300,-9900,1000,0,-700,-3300,100,0,-5500,-2600,-100,-200,-13100,5200,-9000,-3000,6300,400,4300,2000,-7100,7200,7400,-2900/*@*/];
+
+// c-jobs — MA annual net job growth, December-to-December.
+var jobsLab=[/*@jobs-lab*/'2021','2022','2023','2024','2025'/*@*/];
+var jobsData=[/*@jobs-data*/188400,73400,37400,-4300,-17300/*@*/];
+
+// MA labor force level (BLS LAUS). Note Oct 2025 is absent, not zero: the
+// appropriations lapse meant BLS published no value for that month.
+var lfLab=[/*@lf-lab*/'Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr','May 26'/*@*/];
+var lfData=[/*@lf-data*/3949077,3951911,3952593,3951418,3949636,3948218,3946177,3943000,3939694,3935591,3935586,3926744,3915281,3900230,3888509,3879544/*@*/];
+
+// MA unemployment rate, trailing months (same Oct-2025 hole as above).
+var trendLab=[/*@trend-lab*/'Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr','May 26'/*@*/];
+var trendMA=[/*@trend-ma*/4.2,4.3,4.3,4.4,4.4,4.4,4.5,4.5,4.6,4.7,4.7,4.7,4.8,4.7,4.7,4.5/*@*/];
+
+// MA vs national UR on ONE axis — national leads MA by a month, so the newest
+// point carries national with MA null. Because both sit on a shared axis, the
+// prose can quote them for the same month instead of pairing MA's latest with
+// national's latest, which are not the same month.
+var ur2Lab=[/*@ur2-lab*/'May 25','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr','May','Jun 26'/*@*/];
+var ur2MA=[/*@ur2-ma*/4.4,4.4,4.5,4.5,4.6,4.7,4.7,4.7,4.8,4.7,4.7,4.5,null/*@*/];
+var ur2Nat=[/*@ur2-nat*/4.3,4.1,4.3,4.3,4.4,4.5,4.4,4.3,4.4,4.3,4.3,4.3,4.2/*@*/];
+
+// National job openings rate (JOLTS JOR), monthly.
+var joltsLab=[/*@jolts-lab*/'Jan 24','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar','Apr','May 26'/*@*/];
+var joltsNat=[/*@jolts-nat*/5.1,5.1,5.0,4.6,4.7,4.5,4.5,4.6,4.2,4.5,4.6,4.4,4.5,4.4,4.2,4.3,4.4,4.3,4.3,4.2,4.3,4.3,4.1,4.0,4.4,4.2,4.2,4.6,4.6/*@*/];
+// MA state JOLTS openings rate, quarterly samples. BLS discontinued monthly state
+// JOLTS after Dec 2025, so this is a closed historical series — a verified
+// constant, not something the updater can refresh. Keyed by year-month so it stays
+// aligned as the national axis above grows past it.
+var joltsMA={'2024-0':5.2,'2024-3':4.9,'2024-6':4.7,'2024-9':4.4,'2025-0':4.5,'2025-3':4.3,'2025-6':4.1,'2025-9':4.2,'2025-11':4.0};
+
+// MA labor underutilization, quarterly 4-quarter moving averages. BLS publishes
+// these quarterly with a long lag and the updater does not fetch them, so they are
+// a verified constant — but they are the ONLY source for the U-3/U-6 gap, and the
+// prose reads both rates from here so it cannot pair one with a different vintage.
+var u6Lab=['Q1 24','Q2 24','Q3 24','Q4 24','Q1 25','Q2 25','Q3 25'];
+var u6U6=[6.4,6.7,7.1,7.2,7.2,7.3,7.2];
+var u6U3=[3.8,3.7,4.0,4.0,4.2,4.4,4.3];
+
+// MA metro YoY job change — EOLWD Local LMI, April 2026 release. Not fetched.
+var metroYoyLab=['Barnstable','Worcester','Springfield','Boston Metro Div','Pittsfield','Cambridge-Newton-Framingham','Amherst-Northampton'];
+var metroYoyData=[4.1,0.4,0.3,-0.1,-0.3,-0.4,-0.6];
+
+// Foreign-born employed (CPS Table A-7, NSA). Same Oct-2025 hole.
+var fbmLab=[/*@fbm-lab*/'Feb 25','Mar','Apr','May','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr','May','Jun 26'/*@*/];
+var lfprCurLab=/*@lfpr-curlab*/'Jun 2026'/*@*/;
+
+// CPS race×sex + education (SA). The tables on the demographics tab read from
+// these; they used to hold their own hardcoded copies under captions promising
+// they auto-updated.
+var grBarCur=[/*@gr-bar-cur*/3.5,3.1,4.2,6.6,5.2/*@*/];
+var grBarPrev=[/*@gr-bar-prev*/3.4,3.1,4.1,6.9,4.8/*@*/];
+var grUrLab=[/*@gr-ur-lab*/'Dec 24','Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr','May','Jun 26'/*@*/];
+var grUrMen=[/*@gr-ur-men*/4.2,4.1,4.2,4.3,4.4,4.3,4.3,4.4,4.4,4.4,4.5,4.4,4.3,4.4,4.2,4.4,4.4,4.3/*@*/];
+var grUrWomen=[/*@gr-ur-women*/4.1,4,4.1,4.1,4,4.2,3.9,4.1,4.3,4.4,4.5,4.4,4.3,4.5,4.3,4.2,4.1,4/*@*/];
+var grEduCol=[/*@gr-edu-col*/2.5,2.3,2.5,2.6,2.5,2.6,2.5,2.7,2.7,2.8,2.9,2.8,3,3,2.8,2.8,2.7,2.7/*@*/];
+var grEduSc=[/*@gr-edu-sc*/3.4,3.5,3.5,3.5,3.6,3.3,3.2,3,3.2,3.4,3.5,3.8,3.6,3.5,3.6,3.2,3.6,3.6/*@*/];
+var grEduHs=[/*@gr-edu-hs*/5.7,5.2,6,5.8,6.2,5.6,5.8,5.6,6.7,6.8,6.8,5.6,5.3,5.6,5.9,6.4,6,5.5/*@*/];
+var grLfprMen=[91.6,91.3,91.0,90.6,90.4,90.5,90.6,90.8,90.6,89.8,89.2,88.7,88.7,88.4,88.2,88.3,88.5,88.6,89.0,89.1,87.9,88.0,88.6,89.1,89.3,89.4,/*@grlfpr-men*/89.2/*@*/];
+var grLfprWomen=[76.7,76.4,75.9,75.6,75.3,75.2,75.5,75.4,75.8,75.6,75.2,74.6,74.5,73.9,73.9,73.7,74.3,75.0,75.3,76.0,75.1,75.3,76.4,77.4,77.9,77.8,/*@grlfpr-women*/77.6/*@*/];
+var grLfprLab=['2000','01','02','03','04','05','06','07','08','09','2010','11','12','13','14','15','2016','17','18','19','2020','21','22','23','24','25',/*@grlfpr-lab*/'Jun 26'/*@*/];
+
+// ── Derived text ──────────────────────────────────────────────────────────────
+var MONA=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var MONF=['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+// The updater labels a point with its year only at year-starts and at the ends of
+// the window; every other label is a bare month name. Walk the labels carrying the
+// year forward. Every January carries its year explicitly, so the roll is never
+// guessed — and this stays correct across months BLS leaves unpublished (the
+// Oct-2025 lapse), which a naive index-offset walk would silently mis-date.
+function seriesKeys(lab){
+  var yr=null;
+  return lab.map(function(s){
+    var p=String(s).split(' '), m=MONA.indexOf(p[0]);
+    if(p.length>1) yr=2000+parseInt(p[1],10);
+    else if(m===0&&yr!=null) yr+=1;
+    return {y:yr,m:m,o:yr*12+m};
+  });
+}
+// Reproduces the updater's axisLabels(): year shown at year-starts and endpoints.
+function axLab(keys){
+  return keys.map(function(k,i){
+    return (k.m===0||i===0||i===keys.length-1) ? MONA[k.m]+' '+String(k.y).slice(2) : MONA[k.m];
+  });
+}
+var sgn=function(n){return (n<0?'−':'+')+Math.abs(Math.round(n)).toLocaleString('en-US')};
+var moS=function(k){return MONA[k.m]+' '+k.y};              // 'May 2026'
+var moS2=function(k){return MONA[k.m]+' '+String(k.y).slice(2)}; // 'May 26'
+// Chart axes carry quarters as 'Q3 25'; prose wants them spelled out.
+var qLab=function(s){var p=String(s).split(' '); return p[0]+' 20'+p[1];};
+var txt=function(id,s){var e=document.getElementById(id); if(e) e.textContent=s;};
+
+var momK=seriesKeys(momLab);
+var momLast=momK[momK.length-1];
+var momLastV=momData[momData.length-1];
+var lfK=seriesKeys(lfLab);
+var trendK=seriesKeys(trendLab);
+var grUrK=seriesKeys(grUrLab);
+
+// Net payroll change across (y0,m0)..(y1,m1) inclusive. Returns null unless every
+// month in the span is present — a span running past the data, or across a month
+// BLS never published, reads as "no answer" instead of a quietly short sum.
+function momNet(y0,m0,y1,m1){
+  var lo=y0*12+m0, hi=y1*12+m1, t=0, c=0;
+  for(var i=0;i<momK.length;i++){ if(momK[i].o>=lo&&momK[i].o<=hi){t+=momData[i];c++;} }
+  return c===(hi-lo+1)?t:null;
+}
+function momAt(y,m){var o=y*12+m; for(var i=0;i<momK.length;i++) if(momK[i].o===o) return momData[i]; return null;}
+
+// Labor force month-over-month change, defined only where the previous month is
+// actually adjacent. BLS published no Oct 2025, and differencing across that hole
+// reports two months of decline as if it were one month's.
+function lfChgAt(k){
+  for(var i=1;i<lfK.length;i++) if(lfK[i].o===k.o && lfK[i-1].o===k.o-1) return Math.round(lfData[i]-lfData[i-1]);
+  return null;
+}
+
+// Trailing six months of payroll change. Always inside the injected history, so
+// unlike the frozen "Nov–Apr +21,600" it replaces, it cannot end up describing a
+// window the current vintage no longer contains.
+var mom6=momData.slice(-6).reduce(function(a,b){return a+b},0);
+var mom6Lab=moS2(momK[momK.length-6])+'–'+moS2(momLast)+' (6mo)';
+
+// The trough this page counts its recovery from. The first month counted is the
+// one AFTER the anchor.
+var SEP_ANCHOR={y:2025,m:8};
+var sepNet=momNet(SEP_ANCHOR.y,SEP_ANCHOR.m+1,momLast.y,momLast.m);
+var sepMonths=(momLast.y*12+momLast.m)-(SEP_ANCHOR.y*12+SEP_ANCHOR.m);
+
+function renderDerived(){
+  var i;
+
+  // ── Hero ──
+  txt('heroPayVal',sgn(momLastV));
+  txt('heroPayMo',moS(momLast));
+  var hp=document.getElementById('heroPayVal');
+  if(hp) hp.className='val '+(momLastV<0?'bad':'good');
+  txt('heroSepMo',moS(SEP_ANCHOR));
+  txt('heroSepVal',sepNet==null?'—':sgn(sepNet));
+  var hs=document.getElementById('heroSepVal');
+  if(hs) hs.className='val '+(sepNet==null?'warn':sepNet<0?'bad':'good');
+
+  // ── Overview ──
+  txt('ovMo',MONA[momLast.m]);
+  txt('ovPayDesc',sgn(momLastV));
+  txt('ovSepDesc',sepNet==null?'—':sgn(sepNet));
+  txt('ovSepMoDesc',moS(SEP_ANCHOR));
+  txt('ovPayIcon',momLastV<0?'📉':'✅');
+  txt('ovPayHead',moS(momLast)+': '+sgn(momLastV)+' jobs');
+  var ova=document.getElementById('ovPayAlert');
+  if(ova) ova.className='alert '+(momLastV<0?'amber':'green');
+  // Newest first; the year is spelled out once and then implied, unless the run
+  // crosses a year boundary.
+  var three=[];
+  for(i=momK.length-1;i>=0&&three.length<3;i--){
+    var lbl=(three.length===0||momK[i].y!==momLast.y)?moS(momK[i]):MONA[momK[i].m];
+    three.push(lbl+' '+sgn(momData[i]));
+  }
+  txt('ovPay3',three.join(' · '));
+  txt('ovSepMo',moS(SEP_ANCHOR));
+  txt('ovSepVal',sepNet==null?'—':sgn(sepNet));
+
+  // ── Overview: MA vs national UR, quoted for the SAME month ──
+  // National leads MA by a month on this shared axis, so anchor on MA's newest
+  // point and read national off the same index rather than each series' latest.
+  var uiMA=-1;
+  for(i=ur2MA.length-1;i>=0;i--) if(ur2MA[i]!=null){uiMA=i;break;}
+  if(uiMA>=0){
+    var urK=seriesKeys(ur2Lab)[uiMA];
+    txt('ovUrHead',Number(ur2MA[uiMA]).toFixed(1)+'% ('+moS(urK)+')');
+    txt('ovUrMa',Number(ur2MA[uiMA]).toFixed(1)+'%');
+    txt('ovUrMo',moS(urK));
+    txt('ovUrNat',ur2Nat[uiMA]==null?'not yet published':Number(ur2Nat[uiMA]).toFixed(1)+'%');
+  }
+  var lfLastK=lfK[lfK.length-1], lfLastChg=lfChgAt(lfLastK);
+  txt('ovLfChg',lfLastChg==null?'—':sgn(lfLastChg));
+  txt('ovLfMo',moS(lfLastK)); txt('ovLfMo2',moS(lfLastK));
+
+  // ── Unemployment: U-3 vs U-6, always the same quarter ──
+  var q=u6Lab.length-1, gap=u6U6[q]-u6U3[q];
+  txt('u6CardLab',qLab(u6Lab[q])); txt('u6CardVal',u6U6[q].toFixed(1)+'%');
+  txt('u6CardSub','+'+gap.toFixed(1)+' pts above U-3 (same quarter)');
+  txt('u3q',u6U3[q].toFixed(1)+'%'); txt('u6q',u6U6[q].toFixed(1)+'%');
+  txt('u6gap',gap.toFixed(1)+' points');
+  txt('u6qLab',qLab(u6Lab[q])); txt('u6qLab2',qLab(u6Lab[q])); txt('u6qLab3',qLab(u6Lab[q]));
+
+  // ── Job growth ──
+  var prevM=momK[momK.length-2], prevV=momData[momData.length-2];
+  var prev2M=momK[momK.length-3], prev2V=momData[momData.length-3];
+  txt('jgDesc',moS(momLast)+' '+sgn(momLastV)+' (prelim) · '+MONF[prevM.m]+' revised to '+sgn(prevV));
+  txt('jgSepDesc',sepNet==null?'—':sgn(sepNet));
+  txt('jgSepMoDesc',MONF[SEP_ANCHOR.m]+' '+SEP_ANCHOR.y);
+  txt('jgIcon',momLastV<0?'⚠️':'✅');
+  txt('jgHead',moS(momLast)+(momLastV<0?' — Payroll Reversal':' — Payrolls Rose'));
+  var jga=document.getElementById('jgAlert');
+  if(jga) jga.className='alert '+(momLastV<0?'amber':'green');
+  txt('jgVal',sgn(momLastV)); txt('jgMo',moS(momLast));
+  // Most recent decline before the latest print, stated as a fact about a month.
+  // "First monthly loss since August 2025" was already false — the page's own
+  // series showed Sep 2025 and a bigger Feb 2026 — and that phrasing re-breaks
+  // every time a new negative month lands.
+  var dip=null;
+  for(i=momK.length-2;i>=0;i--) if(momData[i]<0){dip={k:momK[i],v:momData[i]};break;}
+  txt('jgPrevDip',dip?sgn(dip.v)+' in '+moS(dip.k):'none in the series');
+  txt('jgApr',sgn(prevV)); txt('jgMar',sgn(prev2V));
+  txt('jgSepMo',MONF[SEP_ANCHOR.m]+' '+SEP_ANCHOR.y);
+  txt('jgSepVal',sepNet==null?'—':sgn(sepNet));
+  txt('jgC1Lab',moS(momLast)); txt('jgC1Val',sgn(momLastV));
+  txt('jgC1Sub',dip?moS(dip.k):'none');
+  var c1=document.getElementById('jgC1Val'); if(c1) c1.className='value '+(momLastV<0?'red':'green');
+  txt('jgC2Lab',moS(prevM)); txt('jgC2Val',sgn(prevV));
+  var c2=document.getElementById('jgC2Val'); if(c2) c2.className='value '+(prevV<0?'red':'green');
+  txt('jgC3Lab',moS2(SEP_ANCHOR)+'–'+moS2(momLast));
+  txt('jgC3Val',sepNet==null?'—':sgn(sepNet));
+  txt('jgC3Sub','Net over '+sepMonths+' months');
+  var c3=document.getElementById('jgC3Val'); if(c3) c3.className='value '+(sepNet==null?'amber':sepNet<0?'red':'green');
+  var fy=jobsLab.length-1;
+  txt('jgC4Val',sgn(jobsData[fy]));
+  var c4=document.getElementById('jgC4Val'); if(c4) c4.className='value '+(jobsData[fy]<0?'red':'green');
+  txt('jg6Lab',moS(momK[momK.length-6])+'–'+moS(momLast));
+  txt('jg6Val',sgn(mom6));
+  txt('jgFY25',sgn(jobsData[fy]));
+
+  // ── Foreign-born chart titles ──
+  var fbK=seriesKeys(fbmLab);
+  txt('fbmRange',moS(fbK[0])+' → '+moS(fbK[fbK.length-1]));
+  txt('natLfprMo',String(lfprCurLab));
+
+  // ── Demographics: Information sector ──
+  // Reads the auto field rather than paraphrasing it; "about 10%" had drifted past
+  // the −9.0% the field actually holds.
+  var ic=document.querySelector('[data-field="ma-info-chg"]');
+  if(ic){ var isx=ic.textContent.replace(/^[−+-]/,''); txt('infoChg1',isx); txt('infoChg2',isx); }
+
+  // ── Demographics: race × sex table ──
+  [['rsWm',0],['rsWw',1],['rsAll',2],['rsBlack',3],['rsHisp',4]].forEach(function(p){
+    txt(p[0]+'Cur',grBarCur[p[1]]==null?'—':Number(grBarCur[p[1]]).toFixed(1)+'%');
+    txt(p[0]+'Prev',grBarPrev[p[1]]==null?'—':Number(grBarPrev[p[1]]).toFixed(1)+'%');
+  });
+  var grL=grUrK[grUrK.length-1];
+  var grAt=function(arr,y,m){for(var j=0;j<grUrK.length;j++) if(grUrK[j].y===y&&grUrK[j].m===m) return arr[j]; return null;};
+  [['rsMen',grUrMen],['rsWomen',grUrWomen]].forEach(function(p){
+    var c=grAt(p[1],grL.y,grL.m), v=grAt(p[1],grL.y-1,grL.m);
+    txt(p[0]+'Cur',c==null?'—':Number(c).toFixed(1)+'%');
+    txt(p[0]+'Prev',v==null?'—':Number(v).toFixed(1)+'%');
+  });
+
+  // ── Demographics: education table ──
+  var lastOf=function(a){return a[a.length-1]};
+  txt('eduCol',Number(lastOf(grEduCol)).toFixed(1)+'%');
+  txt('eduSc',Number(lastOf(grEduSc)).toFixed(1)+'%');
+  txt('eduHs',Number(lastOf(grEduHs)).toFixed(1)+'%');
+
+  // ── Demographics: prime-age LFPR ──
+  var pm=Number(lastOf(grLfprMen)), pw=Number(lastOf(grLfprWomen));
+  txt('plfprVal',pm.toFixed(1)+' / '+pw.toFixed(1));
+  txt('plfprGap',(pm-pw).toFixed(1)+' pt gap');
+  txt('plfprRowLab','2026 ('+String(lastOf(grLfprLab)).split(' ')[0]+')');
+  txt('plfprMen',pm.toFixed(1)+'%'); txt('plfprWomen',pw.toFixed(1)+'%');
+  txt('plfprRowGap',(pm-pw).toFixed(1));
+
+  // ── Regions: metros with positive YoY ──
+  var pos=metroYoyLab.filter(function(_,j){return metroYoyData[j]>0});
+  var words=['zero','one','two','three','four','five','six','seven'];
+  txt('metroPosN',words[pos.length]||String(pos.length));
+  txt('metroPosNames',pos.length<2?pos.join(''):pos.slice(0,-1).join(', ')+' and '+pos[pos.length-1]);
+
+  // ── Latest: the April release record, against the revised series ──
+  // Guarded: if either month leaves the injected history the note reads "—"
+  // rather than quietly reporting a partial sum as the six-month total.
+  var aprRev=momAt(2026,3), novApr=momNet(2025,10,2026,3);
+  txt('aprRev',aprRev==null?'—':sgn(aprRev));
+  txt('novAprRev',novApr==null?'—':sgn(novApr));
+
+  // ── Latest: MA recent monthly data ──
+  txt('trendRange',moS(trendK[0])+' → '+moS(trendK[trendK.length-1]));
+  var pick=trendK.slice(-4).reverse();
+  for(i=0;i<4;i++) txt('mrmH'+(i+1),pick[i]?moS(pick[i]):'—');
+  var body=document.getElementById('mrmBody');
+  if(body){
+    var urAt=function(k){for(var j=0;j<trendK.length;j++) if(trendK[j].o===k.o) return trendMA[j]; return null;};
+    var rows=[
+      ['Unemployment Rate (SA)',function(k){var v=urAt(k); return v==null?null:{s:Number(v).toFixed(1)+'%',c:v>=4.8?'td-red':'td-amber'};}],
+      ['Payroll Job Change',function(k){var v=momAt(k.y,k.m); return v==null?null:{s:sgn(v),c:v<0?'td-red':'td-green'};}],
+      ['Labor Force Change',function(k){var v=lfChgAt(k); return v==null?null:{s:sgn(v),c:v<0?'td-red':'td-green'};}]
+    ];
+    body.innerHTML=rows.map(function(r){
+      return '<tr><td>'+r[0]+'</td>'+pick.map(function(k){
+        var g=r[1](k);
+        return g?'<td class="'+g.c+'">'+g.s+'</td>':'<td>—</td>';
+      }).join('')+'</tr>';
+    }).join('');
+  }
+}
+
 function initCharts(tab){
   switch(tab){
     case 'overview':
@@ -746,9 +1158,14 @@ function initCharts(tab){
           {label:'National',data:[3.5,8.1,5.4,3.6,3.6,4.0,4.4,4.3],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:B,borderWidth:2,borderDash:[5,3]}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      // Annual bars are injected (Dec-to-Dec); the trailing-6-month bar is derived
+      // from the payroll series so it always describes the six months that just
+      // happened. It used to be a frozen "+21,600 Nov–Apr" — a real EOLWD figure
+      // from the pre-revision April release that no window in the current vintage
+      // reaches (the best is +14,200).
       sc('c-jobs',{type:'bar',data:{
-        labels:['2021','2022','2023','2024','2025','Nov–Apr (6mo)'],
-        datasets:[{data:[176000,123000,62000,-5800,1300,21600],
+        labels:jobsLab.concat([mom6Lab]),
+        datasets:[{data:jobsData.concat([mom6]),
           backgroundColor:function(ctx){return ctx.raw<0?R+'cc':(ctx.raw<5000?Y+'cc':G+'cc')},
           borderColor:function(ctx){return ctx.raw<0?R:(ctx.raw<5000?Y:G)},
           borderWidth:1.5,borderRadius:6}]},
@@ -757,38 +1174,54 @@ function initCharts(tab){
 
     case 'unemployment':
       sc('c-laborforce',{type:'line',data:{
-        labels:[/*@lf-lab*/'Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr','May 26'/*@*/],
+        labels:axLab(lfK),
         datasets:[{label:'MA Labor Force',
-          data:[/*@lf-data*/3949077,3951911,3952593,3951418,3949636,3948218,3946177,3943000,3939694,3935591,3935586,3926744,3915281,3900230,3888509,3879544/*@*/],
+          data:lfData,
           borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:3,borderWidth:2.5,
-          pointRadius:function(ctx){return ctx.dataIndex===15?7:3},
-          pointBackgroundColor:function(ctx){return ctx.dataIndex===15?R:'rgba(0,0,0,0)'},
+          // Highlight the newest point by position, not a hardcoded index 15.
+          pointRadius:function(ctx){return ctx.dataIndex===lfData.length-1?7:3},
+          pointBackgroundColor:function(ctx){return ctx.dataIndex===lfData.length-1?R:'rgba(0,0,0,0)'},
         }]},
         options:{responsive:true,maintainAspectRatio:false,
           plugins:{legend:{display:false},
             tooltip:{callbacks:{label:function(c){return c.raw.toLocaleString()+' people'}}}},
           scales:{y:{min:3850000,ticks:{callback:function(v){return(v/1000000).toFixed(3)+'M'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-unemp2',{type:'line',data:{
-        labels:[/*@ur2-lab*/'May 25','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr','May','Jun 26'/*@*/],
+        labels:ur2Lab,
         datasets:[
-          {label:'MA (U-3)',data:[/*@ur2-ma*/4.4,4.4,4.5,4.5,4.6,4.7,4.7,4.7,4.8,4.7,4.7,4.5,null/*@*/],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2.5},
-          {label:'National',data:[/*@ur2-nat*/4.3,4.1,4.3,4.3,4.4,4.5,4.4,4.3,4.4,4.3,4.3,4.3,4.2/*@*/],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2,borderDash:[5,3]}
+          {label:'MA (U-3)',data:ur2MA,borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2.5},
+          {label:'National',data:ur2Nat,borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2,borderDash:[5,3]}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{min:3,max:5.5,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-u6',{type:'line',data:{
-        labels:['Q1 24','Q2 24','Q3 24','Q4 24','Q1 25','Q2 25','Q3 25'],
+        labels:u6Lab,
         datasets:[
-          {label:'U-6 (true underemployment)',data:[6.4,6.7,7.1,7.2,7.2,7.3,7.2],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:R,borderWidth:2.5},
-          {label:'U-3 (official rate)',data:[3.8,3.7,4.0,4.0,4.2,4.4,4.3],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:B,borderWidth:2,borderDash:[5,3]}
+          {label:'U-6 (true underemployment)',data:u6U6,borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:R,borderWidth:2.5},
+          {label:'U-3 (official rate)',data:u6U3,borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:5,pointBackgroundColor:B,borderWidth:2,borderDash:[5,3]}
         ]},
         options:{responsive:true,maintainAspectRatio:false,
           plugins:{legend:{position:'bottom',labels:{font:{size:11}}},
             tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'%'}}}},
           scales:{y:{min:2,max:9,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      // Derived from the labor-force levels above instead of hardcoded. The
+      // hardcoded version carried an Oct-2025 bar (−2,476) for a month BLS never
+      // published, and labelled the Sep→Nov two-month drop (−4,103) as November's
+      // alone; it also stopped at Apr 26 and disagreed with the table beside it
+      // (−15,027 against the series' −15,051).
+      //
+      // The axis runs every month end-to-end and lfChgAt yields null wherever the
+      // previous month wasn't published — so Oct AND Nov 2025 both show as gaps
+      // (Nov's change is just as unknowable as Oct's without an Oct level). The
+      // hole stays visible instead of being quietly closed up.
+      var lfChgK=[], lfChg=[];
+      for(var lo=lfK[0].o+1; lo<=lfK[lfK.length-1].o; lo++){
+        var lk={y:Math.floor(lo/12), m:lo%12, o:lo};
+        lfChgK.push(lk); lfChg.push(lfChgAt(lk));
+      }
       sc('c-lfchange',{type:'bar',data:{
-        labels:['Apr 25','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar','Apr 26'],
+        labels:axLab(lfChgK),
         datasets:[{
-          data:[-1175,-1782,-1418,-2041,-3177,-3306,-2476,-4103,-5,-8842,-11463,-15027,-11700],
+          data:lfChg,
           backgroundColor:function(ctx){return ctx.raw<-8000?R+'ee':(ctx.raw<-3000?R+'aa':R+'66')},
           borderColor:R,borderWidth:1.5,borderRadius:4}]},
         options:{responsive:true,maintainAspectRatio:false,
@@ -798,9 +1231,12 @@ function initCharts(tab){
       break;
 
     case 'jobs':
+      // The payroll series is injected as full history for the prose; the chart
+      // takes the trailing 16 months and rebuilds its own labels so the window's
+      // first point still carries a year.
       sc('c-monthly',{type:'bar',data:{
-        labels:[/*@mom-lab*/'Feb 25','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar','Apr','May 26'/*@*/],
-        datasets:[{data:[/*@mom-data*/-5500,-2600,-100,-200,-13100,5200,-9000,-3000,6300,400,4300,2000,-7100,7200,7400,-2900/*@*/],
+        labels:axLab(momK.slice(-16)),
+        datasets:[{data:momData.slice(-16),
           backgroundColor:function(ctx){return ctx.raw<0?R+'cc':G+'cc'},
           borderColor:function(ctx){return ctx.raw<0?R:G},
           borderWidth:1.5,borderRadius:5}]},
@@ -812,11 +1248,18 @@ function initCharts(tab){
       break;
 
     case 'jolts':
+      // The national line was labelled "(auto-updated)" and was nothing of the
+      // sort: hardcoded, it had drifted to 4.1 for Mar 2026 against an actual 4.2
+      // and stopped two months short of the published data. It is fetched now
+      // (JOLTS JOR), so the label is finally true. The MA line is genuinely frozen
+      // — BLS ended monthly state JOLTS after Dec 2025 — so its quarterly samples
+      // are placed on the national axis by month and spanGaps joins them.
+      var joltsK=seriesKeys(joltsLab);
       sc('c-jolts',{type:'line',data:{
-        labels:['Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Apr 25','Jul 25','Oct 25','Dec 25','Mar 26','Apr 26'],
+        labels:axLab(joltsK),
         datasets:[
-          {label:'MA Openings Rate (ended Dec 2025)',data:[5.2,4.9,4.7,4.4,4.5,4.3,4.1,4.2,4.0,null,null],borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2,borderDash:[4,3]},
-          {label:'National (auto-updated)',data:[5.3,5.0,4.8,4.6,4.5,4.5,4.4,4.3,4.0,4.1,null],borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2.5}
+          {label:'MA Openings Rate (quarterly samples · ended Dec 2025)',data:joltsK.map(function(k){var v=joltsMA[k.y+'-'+k.m]; return v==null?null:v;}),spanGaps:true,borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2,borderDash:[4,3]},
+          {label:'National (auto-updated)',data:joltsNat,borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2.5}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{min:3.5,max:6,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-ratio',{type:'line',data:{
@@ -851,8 +1294,8 @@ function initCharts(tab){
           borderWidth:1.5,borderRadius:5}]},
         options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return(c.raw>0?'+':'')+c.raw+'%'}}}},scales:{x:{ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},y:{grid:{display:false}}}}});
       sc('c-metro-yoy',{type:'bar',data:{
-        labels:['Barnstable','Worcester','Springfield','Boston Metro Div','Pittsfield','Cambridge-Newton-Framingham','Amherst-Northampton'],
-        datasets:[{label:'YoY % Job Change',data:[4.1,0.4,0.3,-0.1,-0.3,-0.4,-0.6],
+        labels:metroYoyLab,
+        datasets:[{label:'YoY % Job Change',data:metroYoyData,
           backgroundColor:function(ctx){return ctx.raw<0?R+'cc':G+'cc'},
           borderColor:function(ctx){return ctx.raw<0?R:G},
           borderWidth:1.5,borderRadius:5}]},
@@ -877,12 +1320,12 @@ function initCharts(tab){
       sc('c-nat-lfpr',{type:'bar',data:{
         labels:['FB Total','FB Men','FB Women','NB Total','NB Men','NB Women'],
         datasets:[
-          {label:/*@lfpr-curlab*/'Jun 2026'/*@*/,data:[/*@lfpr-cur*/65.6,76.7,55.8,61.0,65.4,57.0/*@*/],backgroundColor:B+'cc',borderColor:B,borderWidth:1.5,borderRadius:5},
+          {label:lfprCurLab,data:[/*@lfpr-cur*/65.6,76.7,55.8,61.0,65.4,57.0/*@*/],backgroundColor:B+'cc',borderColor:B,borderWidth:1.5,borderRadius:5},
           {label:/*@lfpr-prevlab*/'Jun 2025'/*@*/,data:[/*@lfpr-prev*/66.3,77.2,56.0,61.8,66.5,57.4/*@*/],backgroundColor:Y+'aa',borderColor:Y,borderWidth:1.5,borderRadius:5}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'%'}}}},scales:{y:{min:45,max:85,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-fb-monthly',{type:'line',data:{
-        labels:[/*@fbm-lab*/'Feb 25','Mar','Apr','May','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr','May','Jun 26'/*@*/],
+        labels:fbmLab,
         datasets:[{label:'Foreign-Born Employed (thousands, NSA)',
           data:[/*@fbm-data*/31687,32225,31803,31579,31231,30764,30814,30744,30802,31112,31562,31168,31974,31648,31472,30725/*@*/],
           borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:B,borderWidth:2.5}]},
@@ -900,48 +1343,53 @@ function initCharts(tab){
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+' (Jan22=100)'}}}},scales:{y:{min:92,max:108,ticks:{callback:function(v){return v}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-gr-ur',{type:'line',data:{
-        labels:[/*@gr-ur-lab*/'Dec 24','Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr','May','Jun 26'/*@*/],
+        labels:grUrLab,
         datasets:[
-          {label:'Men (16+)',data:[/*@gr-ur-men*/4.2,4.1,4.2,4.3,4.4,4.3,4.3,4.4,4.4,4.4,4.5,4.4,4.3,4.4,4.2,4.4,4.4,4.3/*@*/],borderColor:R,backgroundColor:R+'12',fill:false,tension:.3,pointRadius:3,borderWidth:2.5},
-          {label:'Women (16+)',data:[/*@gr-ur-women*/4.1,4,4.1,4.1,4,4.2,3.9,4.1,4.3,4.4,4.5,4.4,4.3,4.5,4.3,4.2,4.1,4/*@*/],borderColor:P,backgroundColor:P+'12',fill:false,tension:.3,pointRadius:3,borderWidth:2},
+          {label:'Men (16+)',data:grUrMen,borderColor:R,backgroundColor:R+'12',fill:false,tension:.3,pointRadius:3,borderWidth:2.5},
+          {label:'Women (16+)',data:grUrWomen,borderColor:P,backgroundColor:P+'12',fill:false,tension:.3,pointRadius:3,borderWidth:2},
           {label:'White Men (20+)',data:[/*@gr-ur-wm*/3.3,3.1,3.5,3.4,3.7,3.6,3.4,3.5,3.6,3.5,3.6,3.4,3.3,3.4,3.2,3.5,3.6,3.5/*@*/],borderColor:G,backgroundColor:G+'18',fill:true,tension:.3,pointRadius:3,borderWidth:2.5}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'%'}}}},scales:{y:{min:2.5,max:5,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-gr-bar',{type:'bar',data:{
         labels:['White Men','White Women','All','Black','Hispanic'],
         datasets:[
-          {label:/*@gr-bar-curlab*/'Jun 2026'/*@*/,data:[/*@gr-bar-cur*/3.5,3.1,4.2,6.6,5.2/*@*/],backgroundColor:B+'cc',borderColor:B,borderWidth:1.5,borderRadius:5},
-          {label:/*@gr-bar-prevlab*/'Jun 2025'/*@*/,data:[/*@gr-bar-prev*/3.4,3.1,4.1,6.9,4.8/*@*/],backgroundColor:Y+'aa',borderColor:Y,borderWidth:1.5,borderRadius:5}
+          {label:/*@gr-bar-curlab*/'Jun 2026'/*@*/,data:grBarCur,backgroundColor:B+'cc',borderColor:B,borderWidth:1.5,borderRadius:5},
+          {label:/*@gr-bar-prevlab*/'Jun 2025'/*@*/,data:grBarPrev,backgroundColor:Y+'aa',borderColor:Y,borderWidth:1.5,borderRadius:5}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'%'}}}},scales:{y:{min:0,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-gr-lfpr',{type:'line',data:{
-        labels:['2000','01','02','03','04','05','06','07','08','09','2010','11','12','13','14','15','2016','17','18','19','2020','21','22','23','24','25','Jun 26'],
+        // Settled annual averages, then the latest month as the trailing point —
+        // that last point is injected (LNS11300061/62) rather than hardcoded.
+        labels:grLfprLab,
         datasets:[
-          {label:'Men 25–54',data:[91.6,91.3,91.0,90.6,90.4,90.5,90.6,90.8,90.6,89.8,89.2,88.7,88.7,88.4,88.2,88.3,88.5,88.6,89.0,89.1,87.9,88.0,88.6,89.1,89.3,89.4,89.2],borderColor:B,backgroundColor:B+'12',fill:false,tension:.25,pointRadius:2,borderWidth:2.5},
-          {label:'Women 25–54',data:[76.7,76.4,75.9,75.6,75.3,75.2,75.5,75.4,75.8,75.6,75.2,74.6,74.5,73.9,73.9,73.7,74.3,75.0,75.3,76.0,75.1,75.3,76.4,77.4,77.9,77.8,77.6],borderColor:Y,backgroundColor:Y+'18',fill:true,tension:.25,pointRadius:2,borderWidth:2.5}
+          {label:'Men 25–54',data:grLfprMen,borderColor:B,backgroundColor:B+'12',fill:false,tension:.25,pointRadius:2,borderWidth:2.5},
+          {label:'Women 25–54',data:grLfprWomen,borderColor:Y,backgroundColor:Y+'18',fill:true,tension:.25,pointRadius:2,borderWidth:2.5}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'%'}}}},scales:{y:{min:72,max:93,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-gr-edu',{type:'line',data:{
         labels:[/*@gr-edu-lab*/'Dec 24','Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr','May','Jun 26'/*@*/],
         datasets:[
-          {label:'Bachelor’s+ (25+)',data:[/*@gr-edu-col*/2.5,2.3,2.5,2.6,2.5,2.6,2.5,2.7,2.7,2.8,2.9,2.8,3,3,2.8,2.8,2.7,2.7/*@*/],borderColor:G,backgroundColor:G+'18',fill:true,tension:.3,pointRadius:3,borderWidth:2.5},
-          {label:'Some college / assoc.',data:[/*@gr-edu-sc*/3.4,3.5,3.5,3.5,3.6,3.3,3.2,3,3.2,3.4,3.5,3.8,3.6,3.5,3.6,3.2,3.6,3.6/*@*/],borderColor:B,backgroundColor:B+'12',fill:false,tension:.3,pointRadius:3,borderWidth:2,borderDash:[5,3]},
-          {label:'High school only',data:[/*@gr-edu-hs*/5.7,5.2,6,5.8,6.2,5.6,5.8,5.6,6.7,6.8,6.8,5.6,5.3,5.6,5.9,6.4,6,5.5/*@*/],borderColor:R,backgroundColor:R+'12',fill:false,tension:.3,pointRadius:3,borderWidth:2}
+          {label:'Bachelor’s+ (25+)',data:grEduCol,borderColor:G,backgroundColor:G+'18',fill:true,tension:.3,pointRadius:3,borderWidth:2.5},
+          {label:'Some college / assoc.',data:grEduSc,borderColor:B,backgroundColor:B+'12',fill:false,tension:.3,pointRadius:3,borderWidth:2,borderDash:[5,3]},
+          {label:'High school only',data:grEduHs,borderColor:R,backgroundColor:R+'12',fill:false,tension:.3,pointRadius:3,borderWidth:2}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'%'}}}},scales:{y:{min:2,max:7.5,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       break;
 
     case 'latest':
       sc('c-trend',{type:'line',data:{
-        labels:[/*@trend-lab*/'Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr','May 26'/*@*/],
+        labels:axLab(trendK),
         datasets:[{label:'MA Unemployment Rate',
-          data:[/*@trend-ma*/4.2,4.3,4.3,4.4,4.4,4.4,4.5,4.5,4.6,4.7,4.7,4.7,4.8,4.7,4.7,4.5/*@*/],
+          data:trendMA,
           borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:R,borderWidth:2.5}]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'%'}}}},scales:{y:{min:4,max:5.2,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       break;
   }
 }
 
+// Runs once at load, not per-tab: the derived figures live on tabs that may never
+// be opened, and the elements exist in the DOM either way.
+renderDerived();
 initCharts('overview');
 window._ci = {overview: true};
 </script>
