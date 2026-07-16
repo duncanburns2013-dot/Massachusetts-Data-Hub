@@ -470,11 +470,11 @@ footer a:hover{color:var(--gold)}
   <p style="font-size:0.85rem;color:var(--muted);margin-bottom:20px">Not the annual rate — the <strong>total price increase</strong> since January 2021. Each line runs through the latest BLS release; the final point on the chart shows its month. Boston-area CPI is published bimonthly, so it lags the national series.</p>
 
   <div class="stat-row">
-    <div class="stat-card"><div class="label">National CPI-U</div><div class="value red">+27.3%</div><div class="sub">Jan '21 → Apr '26 (BLS)</div></div>
-    <div class="stat-card"><div class="label">Boston CPI-U</div><div class="value red">+23.6%</div><div class="sub">Jan '21 → Jan '26 (BLS bimonthly)</div></div>
-    <div class="stat-card"><div class="label">Boston Shelter</div><div class="value red">+27.5%</div><div class="sub">Jan '21 → Jan '26 — above national</div></div>
-    <div class="stat-card"><div class="label">Boston Tuition &amp; Childcare</div><div class="value red">+6.7% YoY</div><div class="sub">Jan '26 — record high since 2018</div></div>
-    <div class="stat-card"><div class="label">$1 (Jan '21) Buys</div><div class="value red">$0.79</div><div class="sub">National purchasing power today</div></div>
+    <div class="stat-card"><div class="label">National CPI-U</div><div class="value red" id="scNat">—</div><div class="sub" id="scNatSub">—</div></div>
+    <div class="stat-card"><div class="label">Boston CPI-U</div><div class="value red" id="scBos">—</div><div class="sub">Jan '21 → latest BLS Boston release (bimonthly)</div></div>
+    <div class="stat-card"><div class="label">Boston Shelter</div><div class="value red" id="scBosSh">—</div><div class="sub">Jan '21 → latest — vs <span id="scNatSh">—</span> national</div></div>
+    <div class="stat-card"><div class="label">Boston Tuition &amp; Childcare</div><div class="value red">+6.7% YoY</div><div class="sub">Jan '26 — a record high at the time</div></div>
+    <div class="stat-card"><div class="label">$1 (Jan '21) Buys</div><div class="value red" id="scDollar">—</div><div class="sub">National purchasing power today</div></div>
   </div>
 
   <div class="alert"><h4>⚠️ The Double Squeeze — Inflation on Top of an Already-Expensive State</h4><div class="alert-grid">
@@ -482,7 +482,7 @@ footer a:hover{color:var(--gold)}
     <div class="alert-item">Boston headline looks lower because MA avoided the worst energy spikes. <strong>Shelter numbers:</strong> Boston <strong id="dsBosSh">—</strong> cumulative vs. <strong id="dsNatSh">—</strong> national</div>
     <div class="alert-item">Boston tuition &amp; childcare rose <strong>6.7% YoY</strong> in Jan 2026 — at the time the steepest rise since BLS began the series in 2018</div>
     <div class="alert-item">All of this sits <strong>on top of</strong> MA's cost-of-living premium — BEA RPP 2024 puts MA at <span id="rppLvl2">—</span> against a national 100, so you were already paying <strong id="rppPrem2">—</strong> more <em>before</em> inflation hit</div>
-    <div class="alert-item">A $100 grocery run in Jan 2021 now costs <strong id="dsBask">—</strong> nationally — and more like <strong id="dsBaskMa">—</strong> in MA when the RPP premium is included</div>
+    <div class="alert-item">A $100 grocery run in Jan 2021 now costs <strong id="dsBask">—</strong> nationally (BLS CPI-U, compounded since Jan 2021) — and MA starts from the higher base noted above</div>
     <div class="alert-item">In March 2026, national CPI jumped <strong>0.9% in a single month</strong> as gasoline surged 21.2% — a reminder of how fast a single energy spike moves the headline number</div>
   </div></div>
 
@@ -517,10 +517,10 @@ footer a:hover{color:var(--gold)}
   <div class="alert" style="background:var(--amber-bg);border-color:rgba(184,134,11,0.15);border-left-color:var(--amber)"><h4 style="color:var(--amber)">📊 Why "Lower Than National" Doesn't Mean Massachusetts Is Cheaper</h4><div class="alert-grid">
     <div class="alert-item">Boston's CPI only measures <strong>price changes from its own baseline</strong> — not absolute price levels between cities</div>
     <div class="alert-item">MA started from a <strong>higher base</strong>: BEA RPP = <strong id="rppLvl3">—</strong> (<span id="rppPrem3">—</span> above the national average for all goods/services)</div>
-    <div class="alert-item">A 23.6% increase <em>on top of</em> an elevated base means a MA family pays <strong>more in absolute dollars</strong> for the same inflation rate</div>
-    <div class="alert-item">Example: A $100 grocery basket nationally costs <strong>$105.80 in MA</strong> (RPP). After 23.6% inflation: <strong>$130.77</strong> vs. $126.10 nationally</div>
+    <div class="alert-item">A <span id="cavBos">—</span> increase <em>on top of</em> an elevated base means a MA family pays <strong>more in absolute dollars</strong> for the same inflation rate</div>
+    <div class="alert-item">But the two <strong>don't multiply</strong>: RPP covers Massachusetts statewide, while Boston's CPI covers the Boston-Cambridge-Newton metro — which reaches into New Hampshire. Carrying RPP forward by CPI misses BEA's own published level by 1–4 points, so read the premium and the inflation rate as two separate facts, not one dollar figure</div>
     <div class="alert-item">Shelter RPP is even worse: Boston housing component is <strong>24.4% above national</strong> (BEA) — and shelter inflation has been higher too</div>
-    <div class="alert-item">Wages have grown <strong>~21%</strong> since Jan 2021 — prices are up <strong>26%</strong> nationally. Real purchasing power has <strong>fallen</strong></div>
+    <div class="alert-item">Wages have grown <strong id="cavWage">—</strong> since Jan 2021 — prices are up <strong id="cavNat">—</strong> nationally. Real purchasing power has <strong>fallen</strong>, by <span id="cavGap">—</span></div>
   </div></div>
 
   <div class="info-box"><h4>ℹ️ Cumulative Inflation Data Sources</h4><p><strong>National CPI-U</strong> (CPIAUCSL): BLS, seasonally adjusted, monthly. Jan 2021 index: 261.582. Dec 2025: 326.030. March 2026 data released April 10, 2026.<br><strong>Boston CPI-U</strong> (CUURA103SA0): BLS, not seasonally adjusted, bimonthly. Jan 2026 index: 347.892. Covers Boston-Cambridge-Newton, MA-NH CBSA.<br><strong>Boston Shelter</strong>: BLS CPI shelter sub-index for Boston CBSA. Jan 2026: shelter +2.0% YoY (OER +4.1%, rent +3.6%).<br><strong>Wages</strong>: BLS Average Hourly Earnings, Total Private (CES0500000003), seasonally adjusted.<br><strong>Methodology</strong>: Cumulative change = ((Current Index / Jan 2021 Index) - 1) × 100.</p></div>
@@ -1641,12 +1641,37 @@ function initCharts(tab) {
       setTxt('rppPrem3', rppPremium.toFixed(1)+'%');
       setTxt('rppLoss',  rppLoss.toFixed(1)+'%');
 
-      // $100 basket, national line from cumNat, MA line lifted by the RPP premium.
+      // $100 basket, national only. Deliberately NOT lifted by the RPP premium:
+      // RPP is a Massachusetts-wide price *level*, CPI is Boston-metro price *change*,
+      // and the two do not compose -- carrying RPP(2021) forward by Boston CPI misses
+      // BEA's published RPP by 1-4 points (checked against FRED MARPPALL for 2022-24).
+      // The premium is stated as its own fact instead of being multiplied in.
       var iNat=lastIdx(cumNat);
+      if(iNat>=0) setTxt('dsBask','~$'+(100*(1+cumNat[iNat]/100)).toFixed(0));
+
+      var iBos=lastIdx(cumBos);
+      if(iBos>=0) setTxt('cavBos','+'+cumBos[iBos].toFixed(1)+'%');
+
+      // Headline stat cards. Same series as the chart below them, so the big numbers
+      // and the plot can never disagree. Only the national card carries a month --
+      // Boston is bimonthly and carries its last real reading forward (see above).
+      var iNatSh=lastIdx(cumNatSh), iBosSh=lastIdx(cumBosSh);
       if(iNat>=0){
-        var basket=100*(1+cumNat[iNat]/100);
-        setTxt('dsBask','~$'+basket.toFixed(0));
-        setTxt('dsBaskMa','~$'+(basket*(RPP_MA/100)).toFixed(0));
+        setTxt('scNat','+'+cumNat[iNat].toFixed(1)+'%');
+        setTxt('scNatSub',"Jan '21 → "+cumL[iNat]+' (BLS)');
+        setTxt('scDollar','$'+(1/(1+cumNat[iNat]/100)).toFixed(2));
+      }
+      if(iBos>=0)   setTxt('scBos',  '+'+cumBos[iBos].toFixed(1)+'%');
+      if(iBosSh>=0) setTxt('scBosSh','+'+cumBosSh[iBosSh].toFixed(1)+'%');
+      if(iNatSh>=0) setTxt('scNatSh','+'+cumNatSh[iNatSh].toFixed(1)+'%');
+
+      // Wages vs prices. The gap is stated explicitly because it is narrow (~1pp) --
+      // quoting the two rounded figures alone invites reading a much wider one.
+      var iWage=lastIdx(cumWage);
+      if(iWage>=0 && iNat>=0){
+        setTxt('cavWage','+'+cumWage[iWage].toFixed(1)+'%');
+        setTxt('cavNat', '+'+cumNat[iNat].toFixed(1)+'%');
+        setTxt('cavGap', (cumNat[iNat]-cumWage[iWage]).toFixed(1)+'pp');
       }
 
       safeChart('chartCumNatVsBos',{type:'line',data:{labels:cumL,datasets:[{label:'National CPI-U',data:cumNat,borderColor:'#c0392b',backgroundColor:'rgba(192,57,43,0.06)',fill:true,tension:.35,pointRadius:2,pointHoverRadius:6,borderWidth:2.5},{label:'Boston CPI-U',data:cumBos,borderColor:'#b8860b',borderWidth:2.5,tension:.35,pointRadius:2,pointHoverRadius:6,spanGaps:false},{label:'National Core CPI',data:cumNatCore,borderColor:'#1a7a4c',borderWidth:1.5,borderDash:[6,3],tension:.35,pointRadius:0,pointHoverRadius:5}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top',labels:{font:{size:11}}},tooltip:{callbacks:{label:pTip}}},scales:{y:{beginAtZero:true,max:30,ticks:{callback:function(v){return v+'%'}},title:{display:true,text:'Cumulative Change (%)'}},x:{grid:{display:false}}}}});
