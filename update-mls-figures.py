@@ -1,10 +1,20 @@
 #!/usr/bin/env python3
 """
-Refresh current-year MLS PIN figures in the MA Data Hub dashboards.
+Refresh current-period MLS PIN figures in the MA Data Hub dashboards.
 
-Pulls YTD closed-sale aggregates from Bridge MLS PIN and substitutes them
-in-place in ma-housing-dashboard.html, haverhill-market-report.html, and
+Pulls TRAILING-12-MONTH closed-sale aggregates from Bridge MLS PIN and writes them into
+the data arrays of ma-housing-dashboard.html, haverhill-market-report.html, and
 MASTER_DATA.md. Historical years (2014..prev_year) are not modified.
+
+Note "trailing 12 months", not YTD: fetch_closed_trailing_12mo() queries
+CloseDate >= TRAILING_12MO_START, i.e. a rolling 365-day window ending today. The
+docstring used to say YTD and the dashboards inherited the error, labelling a
+Jul-2025→Jul-2026 window "2026 YTD" and a 12-month closing count "YTD Sold".
+
+This script writes DATA ARRAYS ONLY. The pages derive every displayed figure from
+those arrays at render time — see the PROSE DERIVATION block at the foot of each. Do
+not add regex patches for individual cards here; that is the defect this structure
+exists to prevent (see the note above replace_array_tail).
 
 Requires: BRIDGE_TOKEN env var. No third-party deps (urllib only).
 """
@@ -263,7 +273,9 @@ for scope_name, scope in SCOPES.items():
             line += f" dom={a['avg_dom']}"
         print(line)
 
-# Active SF inventory for months supply (SF only — that's what dashboards show)
+# Active inventory for months supply. SF for every scope; condo/multi as well, because
+# the MA dashboard's property-type breakdown shows a Months Supply column for all three
+# and nothing was fetching the condo/multi side of it.
 active_sf = {
     name: fetch_active_count(scope, PT_SF) for name, scope in SCOPES.items()
 }
@@ -277,62 +289,155 @@ ms = {
 }
 ms_hav_co = months_supply(active_co_hav, results["haverhill"]["co"]["count"])
 
+# Months supply for condo/multi, for the four markets the MA dashboard charts.
+PT_LOOKUP = {"co": PT_CONDO, "mf": PT_MULTI}
+ms_pt: dict[str, dict[str, float | None]] = {}
+for name in ("ma", "boston", "essex", "newburyport"):
+    ms_pt[name] = {}
+    for pt_label, pt_spec in PT_LOOKUP.items():
+        active = fetch_active_count(SCOPES[name], pt_spec)
+        ms_pt[name][pt_label] = months_supply(active, results[name][pt_label]["count"])
+print(f"  months supply (condo/multi): {ms_pt}")
+
 
 # ---------- HTML SUBSTITUTION HELPERS ----------
-
-def _money_k(v):
-    """Format $X K-style: 610171 -> $610K, 1320379 -> $1320K, 1.1M -> $1.10M."""
-    if v is None:
-        return None
-    if v >= 1_000_000:
-        return f"${v/1_000_000:.2f}M"
-    return f"${round(v/1000)}K"
+#
+# The updater writes DATA ARRAYS AND NOTHING ELSE.
+#
+# It used to also reach into the markup and rewrite ~20 card headlines with a regex
+# apiece (patch_overview_card / patch_pt_card / patch_ma_hero / patch_hav_hero /
+# patch_hav_snapshot). Two things went wrong with that, and both are now structural
+# rather than a matter of adding more patterns:
+#
+#   1. Partial coverage read as full coverage. Anything without a pattern -- table
+#      columns, every "Change"/"YoY" cell, prose, the affordability panels -- silently
+#      kept whatever was typed at the last hand edit. The data is trailing-365-days, so
+#      a page last touched in April contradicted itself in ~40 places by mid-July while
+#      `misses` reported all-OK.
+#   2. A patched headline and an unpatched copy of the same series could disagree, and
+#      did: clicking a property-type toggle re-read the stale `pt` literal and
+#      overwrote the statewide card the script had just written correctly.
+#
+# The pages now derive every displayed figure from the arrays at render time, so this
+# script's whole job is to keep the array tails true. If a substitution misses, the
+# page is stale and the run fails loudly instead of publishing a half-updated page.
 
 
 def _money_full(v):
+    """$865,741 — used only by the MASTER_DATA.md tables, which are markdown, not HTML."""
     return f"${round(v):,}" if v is not None else None
 
 
-def replace_array_tail(html: str, var: str, metric: str, new_value, is_float: bool) -> tuple[str, bool]:
+def fmt_dom(d):
+    return None if d is None else str(round(d))
+
+
+def _key_re(key: str) -> str:
+    """Match a JS object key whether or not it is quoted.
+
+    Both forms are live in these files: `d` is authored with bare keys (price:[…]) and
+    `dpt` is machine-emitted JSON with quoted ones ("price": […]). The original anchor
+    only ever matched the bare form, which is the whole reason `pt` went un-updated for
+    the life of the file. Everything that addresses a key goes through here so that
+    cannot silently recur.
     """
-    Replace the rightmost (current-year) value in a JS array literal.
-    Works for both `var sf={price:[...,X],...}` and `ma:{price:[...,X],...}` styles.
-    Returns (new_html, replaced).
+    return rf'(?:\b{re.escape(key)}\b|"{re.escape(key)}")'
+
+
+def _tail_re(metric: str) -> str:
+    """Match `metric: [ …, LAST ]` and capture LAST (a number or null)."""
+    return _key_re(metric) + r'\s*:\s*\[[^\]]*?,\s*(-?\d+(?:\.\d+)?|null)\s*\]'
+
+
+def _object_span(html: str, key: str, start: int = 0, end: int | None = None):
+    """Byte span of the object literal introduced by `key:` / `key =` / `"key":`.
+
+    Brace-matched, so the scan stops at the container's own closing brace and cannot
+    wander into a sibling. Returns (open_idx, close_idx) or None.
+
+    The old anchor was a bare regex -- rf"\\b{var}\\s*[:=]\\s*\\{{" -- with the metric
+    array matched by [^{}]*? after it. That could not express "the `ma` inside `d`" as
+    distinct from "the `ma` inside `pt`", and it could not match a quoted key at all,
+    which is exactly why every write landed in `d` and none in `pt`. Nothing logged a
+    MISS because the script never tried.
     """
+    region_end = len(html) if end is None else end
+    m = re.compile(_key_re(key) + r'\s*[:=]\s*\{').search(html, start, region_end)
+    if not m:
+        return None
+    open_idx = m.end() - 1
+    depth = 0
+    for j in range(open_idx, region_end):
+        c = html[j]
+        if c == "{":
+            depth += 1
+        elif c == "}":
+            depth -= 1
+            if depth == 0:
+                return open_idx, j + 1
+    return None
+
+
+def _resolve_path(html: str, path: str):
+    """Resolve a dotted path ('d.ma', 'dpt.nbpt.mf', 'sf') to the span of its object."""
+    lo, hi = 0, len(html)
+    for seg in path.split("."):
+        span = _object_span(html, seg, lo, hi)
+        if not span:
+            return None
+        lo, hi = span
+    return lo, hi
+
+
+def replace_array_tail(html: str, path: str, metric: str, new_value, is_float: bool) -> tuple[str, bool]:
+    """Replace the rightmost (current-period) value of `path.metric`'s array literal.
+
+    `path` is dotted and each segment is brace-matched, so 'd.ma' and 'dpt.ma' address
+    different objects that both have an `ma` key -- which the old single-anchor form
+    could not do.
+
+    A None value writes `null` rather than skipping. A market with no closings in the
+    trailing year is a fact the page can render ('—'); silently leaving last year's
+    number there is not. The tail pattern accepts `null` back, so the cell re-fills on
+    the next run that has data.
+    """
+    span = _resolve_path(html, path)
+    if not span:
+        return html, False
+    lo, hi = span
+    repl = "null" if new_value is None else (
+        f"{new_value:.2f}" if is_float else str(int(round(new_value)))
+    )
+    m = re.compile(_tail_re(metric)).search(html, lo, hi)
+    if not m:
+        return html, False
+    return html[: m.start(1)] + repl + html[m.end(1):], True
+
+
+def replace_scalar(html: str, name: str, new_value, is_float: bool) -> tuple[str, bool]:
+    """Replace a bare `var name=<number>;` / `const name = <number>;` declaration."""
     if new_value is None:
         return html, False
     repl = f"{new_value:.2f}" if is_float else str(int(round(new_value)))
-    # Anchor the variable name, then locate the metric array within its {...} object,
-    # then replace the last numeric element. Allow .price or price (the var path).
-    if "." in var:
-        head, tail = var.split(".", 1)
-        anchor = rf"\b{re.escape(tail)}\s*[:=]\s*\{{"
-    else:
-        anchor = rf"\b{re.escape(var)}\s*[:=]\s*\{{"
-    # Pattern: anchor ... metric:[ ... , LAST_NUM ]
-    pat = anchor + rf"[^{{}}]*?\b{re.escape(metric)}\s*:\s*\[[^\]]*?,(-?\d+(?:\.\d+)?)\]"
-    m = re.search(pat, html)
+    pat = re.compile(rf'(\b(?:var|const|let)\s+{re.escape(name)}\s*=\s*)(-?\d+(?:\.\d+)?|null)')
+    m = pat.search(html)
     if not m:
         return html, False
-    grp_start, grp_end = m.start(1), m.end(1)
-    return html[:grp_start] + repl + html[grp_end:], True
+    return html[: m.start(2)] + repl + html[m.end(2):], True
 
 
-def replace_after_anchor(html: str, anchor: str, value_pattern: str, new_value) -> tuple[str, bool]:
-    """Find `anchor` then replace the next `value_pattern` match with new_value."""
-    if new_value is None:
-        return html, False
-    m = re.search(re.escape(anchor) + r"(.*?)" + value_pattern, html, re.DOTALL)
-    if not m:
-        return html, False
-    pre = html[: m.start()]
-    span_inner = html[m.start() : m.end()]
-    # Replace just the captured value group within span_inner
-    inner_match = re.search(value_pattern, span_inner)
-    inner_full = inner_match.group(0)
-    inner_replaced = re.sub(value_pattern, new_value, inner_full, count=1)
-    span_inner = span_inner.replace(inner_full, inner_replaced, 1)
-    return pre + span_inner + html[m.end() :], True
+def replace_asof(html: str, stamp: str) -> tuple[str, bool]:
+    """Rewrite the page's single DATA_ASOF vintage stamp.
+
+    Both pages used to carry the date in three or four places -- a hero stamp, a footer
+    stamp, and prose like "YTD as of April 25" / "Data as of April 25, 2026". The
+    script patched the first two by regex and had no pattern for the prose, so the
+    footer advanced to today while the labels beside the same numbers still said April.
+    One constant now; the pages read it for every date they show.
+    """
+    pat = re.compile(r"(\b(?:var|const)\s+DATA_ASOF\s*=\s*')[^']*(')")
+    new_html, n = pat.subn(lambda m: m.group(1) + stamp + m.group(2), html, count=1)
+    return new_html, n > 0
 
 
 # ---------- LOAD FILES ----------
@@ -345,22 +450,24 @@ hav = HAV.read_text(encoding="utf-8")
 ma = MA.read_text(encoding="utf-8")
 md = MD.read_text(encoding="utf-8")
 
+footer_date = TODAY.strftime("%B %d, %Y")
 
-# ---------- MA DASHBOARD: data arrays ----------
 
-ma_changes = []
+# ---------- MA DASHBOARD ----------
 
-def _do(label: str, fn):
-    """Run a substitution; record success/miss."""
-    result = fn()
-    if isinstance(result, tuple):
-        new_html, ok = result
-    else:
-        new_html, ok = result, True
-    ma_changes.append((label, ok))
-    return new_html
+ma_changes: list[tuple[str, bool]] = []
 
-# d.ma / d.boston / d.essex / d.nbpt — price, sqft, dom, units, supply
+
+def _arr(html, changes, label, path, metric, value, is_float=True):
+    html, ok = replace_array_tail(html, path, metric, value, is_float=is_float)
+    changes.append((f"{label} {path}.{metric}", ok))
+    return html
+
+
+# d.<market> — the 13-year single-family series. Every SF figure on the page (hero,
+# overview cards, per-market cards, the 13-year tables, the property-type SF view, the
+# whole affordability tab, the Greater Newburyport Newburyport row) is derived from
+# these five arrays, so this loop is the entire single-family surface.
 MA_MARKET_KEY = {"ma": "ma", "boston": "boston", "essex": "essex", "newburyport": "nbpt"}
 for scope_name, ma_key in MA_MARKET_KEY.items():
     a = results[scope_name]["sf"]
@@ -372,244 +479,46 @@ for scope_name, ma_key in MA_MARKET_KEY.items():
         ("supply", ms[scope_name]),
     ]
     for metric, val in pairs:
-        ma = _do(
-            f"ma-dash arr d.{ma_key}.{metric}",
-            lambda v=ma, m=metric, k=ma_key, x=val: replace_array_tail(v, k, m, x, is_float=True),
-        )
+        ma = _arr(ma, ma_changes, "ma-dash", f"d.{ma_key}", metric, val)
 
-# MA dashboard: Overview cards (line ~465-468) — use anchor-based replacement
-# MA card
-ma_avg_full = _money_full(results["ma"]["sf"]["avg_price"])
-ma_dom = results["ma"]["sf"]["avg_dom"]
-ma_units = results["ma"]["sf"]["count"]
-ma_supply = ms["ma"]
-ma_sqft = round(results["ma"]["sf"]["avg_sqft"]) if results["ma"]["sf"]["avg_sqft"] else None
+# dpt.<market>.<co|mf> — the 5-year condominium and multi-family series.
+#
+# This is new. `pt` used to hold a copy of all three property types and the script
+# never wrote any of it: its anchor could not match a quoted key, so the condo/multi
+# arrays had been frozen since the file was written, and the SF copy leaked over the
+# correct card whenever a toggle was clicked. `dpt` now holds condo/multi only (SF is
+# read from `d`) and is addressed by an explicit container path.
+for scope_name, ma_key in MA_MARKET_KEY.items():
+    for pt_label in ("co", "mf"):
+        a = results[scope_name][pt_label]
+        pairs = [
+            ("price", a["avg_price"]),
+            ("sqft", a["avg_sqft"]),
+            ("dom", a["avg_dom"]),
+            ("units", a["count"]),
+            ("supply", ms_pt[scope_name][pt_label]),
+        ]
+        for metric, val in pairs:
+            ma = _arr(ma, ma_changes, "ma-dash", f"dpt.{ma_key}.{pt_label}", metric, val)
 
-boston_val_k = _money_k(results["boston"]["sf"]["avg_price"])
-boston_dom = results["boston"]["sf"]["avg_dom"]
-boston_sqft = round(results["boston"]["sf"]["avg_sqft"]) if results["boston"]["sf"]["avg_sqft"] else None
-
-essex_full = _money_full(results["essex"]["sf"]["avg_price"])
-essex_dom = results["essex"]["sf"]["avg_dom"]
-essex_sqft = round(results["essex"]["sf"]["avg_sqft"]) if results["essex"]["sf"]["avg_sqft"] else None
-
-nbpt_val_k = _money_k(results["newburyport"]["sf"]["avg_price"])
-nbpt_dom = results["newburyport"]["sf"]["avg_dom"]
-nbpt_sqft = round(results["newburyport"]["sf"]["avg_sqft"]) if results["newburyport"]["sf"]["avg_sqft"] else None
-
-
-def fmt_dom(d):
-    return None if d is None else str(round(d))
-
-
-# Overview cards — match by card-label anchor then replace the next card-val
-def patch_overview_card(html, label, val_str, sqft, dom, units=None, supply=None):
-    """Update the Overview card for `label` market."""
-    # Find the <div class="card ..."><div class="card-label">LABEL</div><div class="card-val ...">$X</div>...</div>
-    # Card is one HTML element with nested children. We anchor on the label.
-    anchor = f'class="card-label">{label}</div>'
-    idx = html.find(anchor)
-    if idx < 0:
-        return html, False
-    # Find the closing </div> of this card. Easier: take a 1200-char window and substitute.
-    end_idx = html.find('</div></div>', idx) + len('</div></div>')
-    # Try to find the full card by walking divs — fallback: bounded window
-    window_end = min(idx + 1500, len(html))
-    window = html[idx:window_end]
-    new_window = window
-    # card-val
-    if val_str:
-        new_window = re.sub(
-            r'(class="card-val[^"]*">)\$[\d.,KM]+(</div>)',
-            lambda m, v=val_str: m.group(1) + v + m.group(2),
-            new_window,
-            count=1,
-        )
-    # card-metric-label "$/SqFt" -> next card-metric-val
-    if sqft is not None:
-        new_window = re.sub(
-            r'(card-metric-label">\$/SqFt</div><div class="card-metric-val">)\$[\d.,]+',
-            rf'\g<1>${sqft}',
-            new_window,
-            count=1,
-        )
-    # DOM
-    if dom is not None:
-        new_window = re.sub(
-            r'(card-metric-label">(?:Days on Market|DOM)</div><div class="card-metric-val">)[\d.]+',
-            rf'\g<1>{fmt_dom(dom)}',
-            new_window,
-            count=1,
-        )
-    # Units (12mo)
-    if units is not None:
-        new_window = re.sub(
-            r'(card-metric-label">Units \(12mo\)</div><div class="card-metric-val">)[\d.,]+',
-            rf'\g<1>{units:,}',
-            new_window,
-            count=1,
-        )
-    # Months Supply
-    if supply is not None:
-        new_window = re.sub(
-            r'(card-metric-label">Months Supply</div><div class="card-metric-val">)[\d.,]+',
-            rf'\g<1>{supply}',
-            new_window,
-            count=1,
-        )
-    return html[:idx] + new_window + html[window_end:], (new_window != window)
-
-
-ma, ok = patch_overview_card(ma, "Massachusetts", ma_avg_full, ma_sqft, ma_dom, ma_units, ma_supply)
-ma_changes.append(("ma-dash overview card MA", ok))
-ma, ok = patch_overview_card(ma, "Boston", boston_val_k, boston_sqft, boston_dom)
-ma_changes.append(("ma-dash overview card Boston", ok))
-ma, ok = patch_overview_card(ma, "Essex County", essex_full, essex_sqft, essex_dom)
-ma_changes.append(("ma-dash overview card Essex", ok))
-ma, ok = patch_overview_card(ma, "Newburyport", nbpt_val_k, nbpt_sqft, nbpt_dom)
-ma_changes.append(("ma-dash overview card Newburyport", ok))
-
-
-# Property type cards (pt-ma-val etc. — line 533-536)
-def patch_pt_card(html, id_, sf_avg, condo_avg, multi_avg):
-    """Update the property-type breakdown card (id=pt-{market}-val)."""
-    # The card has id="pt-X-val">$Y SF</div> followed by Condo/Multi card-metric-vals
-    anchor = f'id="{id_}">'
-    idx = html.find(anchor)
-    if idx < 0:
-        return html, False
-    end_window = min(idx + 800, len(html))
-    window = html[idx:end_window]
-    new_window = window
-    if sf_avg:
-        new_window = re.sub(
-            r'(>)\$[\d.,KM]+ SF(</div>)',
-            rf'\g<1>{_money_k(sf_avg)} SF\g<2>',
-            new_window,
-            count=1,
-        )
-    if condo_avg is not None:
-        new_window = re.sub(
-            r'(card-metric-label">Condo 2026</div><div class="card-metric-val">)\$[\d.,KM]+',
-            rf'\g<1>{_money_k(condo_avg)}',
-            new_window,
-            count=1,
-        )
-    if multi_avg is not None:
-        new_window = re.sub(
-            r'(card-metric-label">Multi 2026</div><div class="card-metric-val">)\$[\d.,KM]+',
-            rf'\g<1>{_money_k(multi_avg)}',
-            new_window,
-            count=1,
-        )
-    return html[:idx] + new_window + html[end_window:], (new_window != window)
-
-
-ma, ok = patch_pt_card(
-    ma, "pt-ma-val",
-    results["ma"]["sf"]["avg_price"],
-    results["ma"]["co"]["avg_price"],
-    results["ma"]["mf"]["avg_price"],
-)
-ma_changes.append(("ma-dash pt-ma card", ok))
-ma, ok = patch_pt_card(
-    ma, "pt-boston-val",
-    results["boston"]["sf"]["avg_price"],
-    results["boston"]["co"]["avg_price"],
-    results["boston"]["mf"]["avg_price"],
-)
-ma_changes.append(("ma-dash pt-boston card", ok))
-ma, ok = patch_pt_card(
-    ma, "pt-essex-val",
-    results["essex"]["sf"]["avg_price"],
-    results["essex"]["co"]["avg_price"],
-    results["essex"]["mf"]["avg_price"],
-)
-ma_changes.append(("ma-dash pt-essex card", ok))
-ma, ok = patch_pt_card(
-    ma, "pt-nbpt-val",
-    results["newburyport"]["sf"]["avg_price"],
-    results["newburyport"]["co"]["avg_price"],
-    results["newburyport"]["mf"]["avg_price"],
-)
-ma_changes.append(("ma-dash pt-nbpt card", ok))
-
-
-# MA hero stats (lines ~378-398)
-hero_ma_k = _money_k(results["ma"]["sf"]["avg_price"])
-hero_nbpt_full = (
-    f"${results['newburyport']['sf']['avg_price']/1_000_000:.2f}M"
-    if results["newburyport"]["sf"]["avg_price"]
-    else None
-)
-
-
-def patch_ma_hero(html):
-    out = html
-    changes = 0
-    # MA Average
-    if hero_ma_k:
-        out, n = re.subn(
-            r'(<div class="hs-label">MA Average</div>\s*<div class="hs-val gold">)\$[\d.,KM]+(</div>)',
-            rf'\g<1>{hero_ma_k}\g<2>',
-            out,
-            count=1,
-        )
-        changes += n
-    # Newburyport
-    if hero_nbpt_full:
-        out, n = re.subn(
-            r'(<div class="hs-label">Newburyport</div>\s*<div class="hs-val gold">)\$[\d.,KM]+(</div>)',
-            rf'\g<1>{hero_nbpt_full}\g<2>',
-            out,
-            count=1,
-        )
-        changes += n
-    # DOM
-    if ma_dom is not None:
-        out, n = re.subn(
-            r'(<div class="hs-label">Days on Market</div>\s*<div class="hs-val">)[\d.]+(</div>)',
-            rf'\g<1>{fmt_dom(ma_dom)}\g<2>',
-            out,
-            count=1,
-        )
-        changes += n
-    return out, changes > 0
-
-
-ma, ok = patch_ma_hero(ma)
-ma_changes.append(("ma-dash hero stats", ok))
-
-
-# Footer "Updated April 25, 2026"
-footer_date = TODAY.strftime("%B %d, %Y")
-ma, n = re.subn(
-    r'(Updated )[A-Z][a-z]+ \d+, \d{4}',
-    rf'\g<1>{footer_date}',
-    ma,
-    count=1,
-)
-ma_changes.append(("ma-dash footer date", n > 0))
-ma, n = re.subn(
-    r'(<div class="hero-date">)[A-Z][a-z]+ \d+, \d{4}',
-    rf'\g<1>{footer_date}',
-    ma,
-    count=1,
-)
-ma_changes.append(("ma-dash hero date", n > 0))
+ma, ok = replace_asof(ma, footer_date)
+ma_changes.append(("ma-dash DATA_ASOF", ok))
 
 
 # ---------- HAVERHILL DASHBOARD ----------
 
-hav_changes = []
+hav_changes: list[tuple[str, bool]] = []
 
-# Data arrays: sf, co, mf, es (Essex SF), ma (MA SF)
 HAV_ARRS = [
     ("sf", "haverhill", "sf", [
         ("price", "avg_price", True),
         ("sqft", "avg_sqft", True),
         ("dom", "avg_dom", True),
-        ("sold", "count", False),  # YTD count — see note below
+        ("sold", "count", False),
+        # sp_lp_pct was already computed for every scope and only ever written to
+        # MASTER_DATA.md, so the SP/LP row of the Full Data table had no live backing
+        # and its current-year cell sat frozen. It is a series on the page now.
+        ("splp", "sp_lp_pct", True),
     ]),
     ("co", "haverhill", "co", [
         ("price", "avg_price", True),
@@ -638,138 +547,17 @@ HAV_ARRS = [
 for var, scope, pt_label, fields in HAV_ARRS:
     for arr_key, agg_key, is_float in fields:
         val = results[scope][pt_label].get(agg_key)
-        hav, ok = replace_array_tail(hav, var, arr_key, val, is_float=is_float)
-        hav_changes.append((f"hav-dash arr {var}.{arr_key}", ok))
+        hav = _arr(hav, hav_changes, "hav-dash", var, arr_key, val, is_float=is_float)
 
-# Haverhill SF inv & supply arrays (special — only sf has inv/supply)
-hav, ok = replace_array_tail(hav, "sf", "inv", active_sf["haverhill"], is_float=False)
-hav_changes.append(("hav-dash arr sf.inv", ok))
-hav, ok = replace_array_tail(hav, "sf", "supply", ms["haverhill"], is_float=True)
-hav_changes.append(("hav-dash arr sf.supply", ok))
+hav = _arr(hav, hav_changes, "hav-dash", "sf", "inv", active_sf["haverhill"], is_float=False)
+hav = _arr(hav, hav_changes, "hav-dash", "sf", "supply", ms["haverhill"], is_float=True)
 
+# Haverhill condo months supply has no historical series — a scalar, not an array tail.
+hav, ok = replace_scalar(hav, "CO_SUPPLY", ms_hav_co, is_float=True)
+hav_changes.append(("hav-dash CO_SUPPLY", ok))
 
-# Haverhill hero stats (lines ~157-162)
-def patch_hav_hero(html):
-    out = html
-    pairs = [
-        (r'(<div class="hs-l">SF Avg Sale</div><div class="hs-v blue">)\$[\d.,KM]+(</div>)',
-         _money_k(results["haverhill"]["sf"]["avg_price"])),
-        (r'(<div class="hs-l">Condo Avg</div><div class="hs-v green">)\$[\d.,KM]+(</div>)',
-         _money_k(results["haverhill"]["co"]["avg_price"])),
-        (r'(<div class="hs-l">Multi-Family</div><div class="hs-v orange">)\$[\d.,KM]+(</div>)',
-         _money_k(results["haverhill"]["mf"]["avg_price"])),
-        (r'(<div class="hs-l">SF DOM</div><div class="hs-v">)[\d.]+(</div>)',
-         fmt_dom(results["haverhill"]["sf"]["avg_dom"])),
-        (r'(<div class="hs-l">SF Supply</div><div class="hs-v">)[\d.]+(</div>)',
-         f"{ms['haverhill']}" if ms["haverhill"] is not None else None),
-        (r'(<div class="hs-l">MA Statewide</div><div class="hs-v red">)\$[\d.,KM]+(</div>)',
-         _money_k(results["ma"]["sf"]["avg_price"])),
-    ]
-    ok_any = False
-    for pat, val in pairs:
-        if val is None:
-            continue
-        new, n = re.subn(pat, rf"\g<1>{val}\g<2>", out, count=1)
-        if n > 0:
-            ok_any = True
-            out = new
-    return out, ok_any
-
-
-hav, ok = patch_hav_hero(hav)
-hav_changes.append(("hav-dash hero stats", ok))
-
-
-# Haverhill panel snapshot cards (SF/Condo/MF)
-def patch_hav_snapshot(html, panel_id, price_val, sqft, dom, supply_or_sold, supply_label):
-    """Update the 4 cards at top of each Haverhill panel (SF, Condo, MF)."""
-    start = html.find(f'id="p-{panel_id}"')
-    if start < 0:
-        return html, False
-    # Take a 2500-char window — panel snapshot cards are in the first ~1500 chars after id
-    end = min(start + 2500, len(html))
-    window = html[start:end]
-    new_window = window
-    if price_val is not None:
-        new_window = re.sub(
-            r'(Avg Sale Price</div><div class="cv [a-z]+">)\$[\d.,]+',
-            rf"\g<1>{_money_full(price_val)}",
-            new_window,
-            count=1,
-        )
-    if sqft is not None:
-        new_window = re.sub(
-            r'(\$/SqFt</div><div class="cv [a-z]+">)\$[\d.,]+',
-            rf"\g<1>${round(sqft)}",
-            new_window,
-            count=1,
-        )
-    if dom is not None:
-        new_window = re.sub(
-            r'(Days on Market</div><div class="cv [a-z]+">)[\d.]+',
-            rf"\g<1>{fmt_dom(dom)}",
-            new_window,
-            count=1,
-        )
-    if supply_or_sold is not None:
-        new_window = re.sub(
-            rf'({re.escape(supply_label)}</div><div class="cv [a-z]+">)[\d.,]+',
-            rf"\g<1>{supply_or_sold}",
-            new_window,
-            count=1,
-        )
-    return html[:start] + new_window + html[end:], (new_window != window)
-
-
-# SF panel: Avg, $/SqFt, DOM, Months Supply (4th card)
-hav, ok = patch_hav_snapshot(
-    hav, "sf",
-    results["haverhill"]["sf"]["avg_price"],
-    results["haverhill"]["sf"]["avg_sqft"],
-    results["haverhill"]["sf"]["avg_dom"],
-    ms["haverhill"],
-    "Months Supply",
-)
-hav_changes.append(("hav-dash SF snapshot", ok))
-
-# Condo panel: Avg, $/SqFt, DOM, Months Supply
-hav, ok = patch_hav_snapshot(
-    hav, "condo",
-    results["haverhill"]["co"]["avg_price"],
-    results["haverhill"]["co"]["avg_sqft"],
-    results["haverhill"]["co"]["avg_dom"],
-    ms_hav_co,
-    "Months Supply",
-)
-hav_changes.append(("hav-dash Condo snapshot", ok))
-
-# MF panel: Avg, $/SqFt, DOM, 12mo Sold (4th card label is "12mo Sold")
-hav, ok = patch_hav_snapshot(
-    hav, "mf",
-    results["haverhill"]["mf"]["avg_price"],
-    results["haverhill"]["mf"]["avg_sqft"],
-    results["haverhill"]["mf"]["avg_dom"],
-    results["haverhill"]["mf"]["count"],
-    "12mo Sold",
-)
-hav_changes.append(("hav-dash MF snapshot", ok))
-
-
-# Footer prepared date
-hav, n = re.subn(
-    r'(Prepared )[A-Z][a-z]+ \d+, \d{4}',
-    rf"\g<1>{footer_date}",
-    hav,
-    count=1,
-)
-hav_changes.append(("hav-dash footer date", n > 0))
-hav, n = re.subn(
-    r'(<div class="hero-date">)[A-Z][a-z]+ \d+, \d{4}',
-    rf"\g<1>{footer_date}",
-    hav,
-    count=1,
-)
-hav_changes.append(("hav-dash hero date", n > 0))
+hav, ok = replace_asof(hav, footer_date)
+hav_changes.append(("hav-dash DATA_ASOF", ok))
 
 
 # ---------- MASTER_DATA.md ----------
@@ -820,7 +608,7 @@ if results["ma"]["sf"]["sp_lp_pct"] is not None:
         "MASTER_DATA MA SP/LP",
     )
 
-# MA Units Sold (YTD count)
+# MA Units Sold (trailing-12mo count)
 md = md_replace(
     md,
     r"(\| Units Sold \| )[\d,]+(\s*\| MLS PIN)",
@@ -860,16 +648,76 @@ MA.write_text(ma, encoding="utf-8")
 MD.write_text(md, encoding="utf-8")
 
 
-# ---------- REPORT ----------
+# ---------- REPORT + GUARD ----------
+
+all_changes = ma_changes + hav_changes + md_changes
 
 print("\n[mls-update] Substitution report:")
-for label, ok in ma_changes + hav_changes + md_changes:
+for label, ok in all_changes:
     marker = "OK" if ok else "MISS"
     print(f"  [{marker:>4}] {label}")
 
-misses = sum(1 for _, ok in ma_changes + hav_changes + md_changes if not ok)
-if misses:
-    print(f"\n[mls-update] {misses} substitutions missed (no pattern match). "
-          "Check dashboard HTML for format drift.")
+# Post-substitution guard: read every managed array tail back out of the file we just
+# wrote and assert it is the value we meant to write.
+#
+# `misses` alone only ever caught PATTERN drift — a regex that stopped matching. It
+# could not catch a pattern that matched the WRONG place, which is what happened for
+# months: the anchor for `pt`'s arrays matched `d`'s instead, so the script reported
+# every substitution OK while `pt` had not been touched since the file was authored.
+# Reading the value back distinguishes "wrote it" from "thought it wrote it".
+def _verify(html: str, path: str, metric: str, expected) -> bool:
+    span = _resolve_path(html, path)
+    if not span:
+        return False
+    lo, hi = span
+    m = re.search(_tail_re(metric), html[lo:hi])
+    if not m:
+        return False
+    got = m.group(1)
+    if expected is None:
+        return got == "null"
+    return got != "null" and abs(float(got) - float(expected)) < 0.01
 
+
+verify_fails = []
+for scope_name, ma_key in MA_MARKET_KEY.items():
+    a = results[scope_name]["sf"]
+    for metric, val in [("price", a["avg_price"]), ("sqft", a["avg_sqft"]),
+                        ("dom", a["avg_dom"]), ("units", a["count"]),
+                        ("supply", ms[scope_name])]:
+        want = val if metric != "units" else (None if val is None else round(val))
+        if not _verify(ma, f"d.{ma_key}", metric, want):
+            verify_fails.append(f"ma-dash d.{ma_key}.{metric}")
+    for pt_label in ("co", "mf"):
+        b = results[scope_name][pt_label]
+        for metric, val in [("price", b["avg_price"]), ("sqft", b["avg_sqft"]),
+                            ("dom", b["avg_dom"]), ("units", b["count"]),
+                            ("supply", ms_pt[scope_name][pt_label])]:
+            want = val if metric != "units" else (None if val is None else round(val))
+            if not _verify(ma, f"dpt.{ma_key}.{pt_label}", metric, want):
+                verify_fails.append(f"ma-dash dpt.{ma_key}.{pt_label}.{metric}")
+
+for var, scope, pt_label, fields in HAV_ARRS:
+    for arr_key, agg_key, _is_float in fields:
+        if not _verify(hav, var, arr_key, results[scope][pt_label].get(agg_key)):
+            verify_fails.append(f"hav-dash {var}.{arr_key}")
+
+if verify_fails:
+    print("\n[mls-update] READ-BACK FAILED for:")
+    for f in verify_fails:
+        print(f"  [FAIL] {f}")
+
+misses = sum(1 for _, ok in all_changes if not ok)
 print("\n[mls-update] Done.")
+
+# Fail the run rather than publish a page that is stale in a way nobody can see. Every
+# figure the pages show is derived from these arrays, so an array the script could not
+# write means published numbers that silently disagree with each other — the exact
+# failure mode this whole structure exists to prevent. A loud red run is recoverable;
+# twelve weeks of quiet drift is what we just spent a day undoing.
+if misses or verify_fails:
+    sys.exit(
+        f"[mls-update] {misses} substitution(s) missed, "
+        f"{len(verify_fails)} read-back failure(s) — dashboards NOT updated cleanly. "
+        "Check the HTML data blocks for structural drift."
+    )
