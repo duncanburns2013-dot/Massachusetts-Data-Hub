@@ -702,6 +702,81 @@ for var, scope, pt_label, fields in HAV_ARRS:
         if not _verify(hav, var, arr_key, results[scope][pt_label].get(agg_key)):
             verify_fails.append(f"hav-dash {var}.{arr_key}")
 
+
+# ---------- CROSS-FILE CONSISTENCY GUARD ----------
+#
+# The MA and Essex single-family series exist on both pages: as the subject of
+# ma-housing-dashboard.html (`d.ma` / `d.essex`) and as benchmark lines on
+# haverhill-market-report.html (`ma` / `es`). They are ONE series and must stay one.
+#
+# They did not used to be. They were two independently transcribed copies that
+# disagreed on every historical year -- MA 2018 was 459,802 on the Haverhill report and
+# 469,326.80 on the MA dashboard, Essex 2018 was off by $20,763 -- and Haverhill's MA
+# 2019-2021 were not measurements at all but round "estimated from trend" placeholders
+# drawn as if they were real.
+#
+# This script is why nobody noticed. It writes the current-period tail into both files
+# from a single query, so the one number a reader would think to compare always
+# matched, while the twelve behind it did not. The guard closes that: the tails
+# agreeing is no longer evidence that the series agree, because now the whole series is
+# checked. Reconciling the values was the fix; this is what keeps it fixed.
+#
+# Note this asserts CONSISTENCY, not correctness. The historical values predate the
+# repo (migrated from duncanburns2013-dot/Housing-Market-Data, source extracts never
+# committed) and no script here can reproduce them. If they are ever re-derived from
+# the source, both files must be updated together -- which is exactly what this
+# enforces.
+
+def _read_array(html: str, path: str, metric: str) -> list[str] | None:
+    """Every element of `path.metric`'s array literal, as raw tokens."""
+    span = _resolve_path(html, path)
+    if not span:
+        return None
+    lo, hi = span
+    m = re.search(_key_re(metric) + r"\s*:\s*\[([^\]]*)\]", html[lo:hi])
+    if not m:
+        return None
+    return [tok.strip() for tok in m.group(1).split(",")]
+
+
+def _num_eq(a: str, b: str) -> bool:
+    if a == "null" or b == "null":
+        return a == b
+    try:
+        return abs(float(a) - float(b)) < 0.01
+    except ValueError:
+        return False
+
+
+SHARED_SERIES = [("ma", "d.ma"), ("es", "d.essex")]
+drift = []
+for hav_var, ma_path in SHARED_SERIES:
+    for metric in ("price", "sqft", "dom"):
+        a = _read_array(hav, hav_var, metric)
+        b = _read_array(ma, ma_path, metric)
+        if a is None or b is None:
+            drift.append(
+                f"{hav_var}.{metric}: unreadable "
+                f"(hav={'ok' if a else 'MISSING'}, ma={'ok' if b else 'MISSING'})"
+            )
+            continue
+        if len(a) != len(b):
+            drift.append(
+                f"{hav_var}.{metric}: length {len(a)} (haverhill) vs {len(b)} (ma-housing)"
+            )
+            continue
+        for i, (x, y) in enumerate(zip(a, b)):
+            if not _num_eq(x, y):
+                drift.append(
+                    f"{hav_var}.{metric}[{i}]: haverhill {x} vs ma-housing {y}"
+                )
+
+if drift:
+    print("\n[mls-update] SHARED-SERIES DRIFT (haverhill vs ma-housing):")
+    for f in drift:
+        print(f"  [DRIFT] {f}")
+
+
 if verify_fails:
     print("\n[mls-update] READ-BACK FAILED for:")
     for f in verify_fails:
@@ -715,9 +790,10 @@ print("\n[mls-update] Done.")
 # write means published numbers that silently disagree with each other — the exact
 # failure mode this whole structure exists to prevent. A loud red run is recoverable;
 # twelve weeks of quiet drift is what we just spent a day undoing.
-if misses or verify_fails:
+if misses or verify_fails or drift:
     sys.exit(
         f"[mls-update] {misses} substitution(s) missed, "
-        f"{len(verify_fails)} read-back failure(s) — dashboards NOT updated cleanly. "
+        f"{len(verify_fails)} read-back failure(s), "
+        f"{len(drift)} shared-series drift(s) — dashboards NOT updated cleanly. "
         "Check the HTML data blocks for structural drift."
     )

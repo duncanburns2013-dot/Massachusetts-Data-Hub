@@ -285,6 +285,7 @@ td{border-bottom:1px solid #e8e5df !important}
 
 <footer class="footer">
 <p><strong>Data:</strong> MLS PIN • Haverhill, MA Area Market Review • Essex County & Massachusetts Statewide</p>
+<p style="font-size:0.75rem;color:#8e95a2;max-width:760px;margin:10px auto 0;line-height:1.5;">The '26 column of every series is the live MLS PIN trailing-12-month window, refreshed daily. Historical years (2014–'25) are a fixed extraction of MLS PIN records whose vintage predates this repository and has not been re-verified against the source. The Essex County and Massachusetts benchmark lines are the same series published on the <a href="ma-housing-dashboard.html" style="color:inherit;">MA Housing dashboard</a> — one source, so the two pages cannot disagree.</p>
 <p class="footer-date">—</p>
 </footer>
 
@@ -309,11 +310,42 @@ var CO_SUPPLY=1.41;
 var co={price:[165593,160365,183939,218203,234165,249764,271743,275383,334207,367418,364132,393158,390317.03],sqft:[117,132,141,154,173,175,198,227,256,269,303,328,313.55],dom:[109,98,99,60,48,45,39,26,20,25,25,36,34.10],sold:[232,284,349,360,389,396,418,352,282,238,179,267,229]};
 var mf={price:[272490,260400,302308,287497,348257,381158,407537,475750,596750,588602,651679,825442,851924.53],sqft:[85,108,128,110,129,140,168,172,211,220,224,262,283.37],dom:[93,111,69,65,59,62,36,18,23,45,28,17,31.70],sold:[124,103,111,120,155,167,131,145,155,124,78,95,106]};
 
-// ESSEX COUNTY SF (from uploaded PDFs)
-var es={price:[429291,430641,433233,469479,493791,506909,554413,649235,690545,760007,844470,860822,902270.27],sqft:[200,209,216,230,247,258,270,312,350,367,384,407,415.25],dom:[112,115,105,70,68,69,64,37,30,43,41,41,33.60]};
+// ══════════════════════════════════════════════════════════════════════════════
+// BENCHMARK SERIES — Essex County and Massachusetts single-family.
+//
+// These two arrays are benchmark lines only: they place Haverhill against its county
+// and its state. They are not this page's subject. They now hold the SAME NUMBERS as
+// ma-housing-dashboard.html's `d.essex` / `d.ma`, where those series ARE the subject.
+//
+// They used to be a second, independently transcribed copy, and the two copies
+// disagreed on every historical year while agreeing exactly on the '26 tail — because
+// update-mls-figures.py writes that tail into both files from one query and has never
+// owned a single historical value. That is what kept the split invisible: the number
+// that moved daily matched, so nothing looked broken.
+//
+// Worse, MA 2019-2021 here were not measurements. They were 480000 / 525000 / 610000,
+// "estimated from trend" per the note that used to sit on this line, and the chart
+// drew them in the same unbroken stroke as the real years — so a reader was shown an
+// estimate as a measurement. They are gone.
+//
+// Which transcription was the true extraction could NOT be established: both series
+// entered this repo in its root commit (migrated from duncanburns2013-dot/
+// Housing-Market-Data) and the "uploaded PDFs" they cited were never committed. On the
+// non-estimated years the two differed by ~1% in BOTH directions — two extraction
+// vintages of one quantity, not one real and one invented. Adopting the sibling's
+// series is therefore a CONSOLIDATION, not a verdict that these digits are the more
+// accurate ones. It collapses two drifting copies into one that a single edit can
+// correct, and it removes the three invented points.
+//
+// Provenance: 2014-2025 inherited, extraction vintage unverifiable. 2026 = live MLS
+// PIN trailing-12mo, rewritten daily by the updater.
+//
+// update-mls-figures.py now asserts these arrays equal ma-housing's on every run and
+// fails if they ever diverge again. Do not edit one copy without the other.
+// ══════════════════════════════════════════════════════════════════════════════
+var es={price:[436550.39,429872.35,438899.66,471640.17,514554.43,507006.32,557642.41,666066.39,687858.97,758025.38,843511.96,857795.05,902270.27],sqft:[203.77,209.95,218.01,231.70,250.35,259.03,274.74,315.47,350.68,366.36,384.35,405.88,415.25],dom:[108,119,104,68,68,67,58,36,29,41,40,41,33.60]};
 
-// MASSACHUSETTS SF (from uploaded PDFs, 2019-2021 estimated from trend)
-var ma={price:[395513,426582,412874,441240,459802,480000,525000,610000,674256,695688,756569,801356,865732.11],sqft:[193,203,205,216,229,240,258,302,329,334,360,378,395.30],dom:[115,124,115,86,76,72,55,32,34,48,43,48,37.10]};
+var ma={price:[401127.83,421080.95,418366.91,445794.96,469326.80,487015.71,521186.08,615027.48,676696.44,701487.11,763446.08,803731.19,865732.11],sqft:[198.05,202.00,206.72,218.48,232.27,241.34,251.81,293.68,331.37,336.59,362.71,379.57,395.30],dom:[117,125,113,86,74,76,70,43,34,47,42,47,37.10]};
 
 function mkOpts(yFmt,noLeg){return{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:!noLeg,position:'top',labels:{boxWidth:8,padding:10,color:'#6b7280'}}},scales:{y:{ticks:{callback:yFmt,color:'#8e95a2'},grid:{color:'#ece8e1'}},x:{ticks:{color:'#8e95a2'},grid:{display:false}}}}}
 

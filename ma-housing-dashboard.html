@@ -640,10 +640,32 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
         </div>
     </div></section>
     
-    <footer class="footer"><p class="footer-text"><strong>Data:</strong> MLS PIN • Census ACS • Bankrate</p><p class="footer-date">Updated July 16, 2026 • Year-over-Year Analysis (2025→2026)</p></footer>
+    <footer class="footer"><p class="footer-text"><strong>Data:</strong> MLS PIN • Census ACS • Bankrate</p><p class="footer-text" style="font-size:0.75rem;color:var(--text-muted);max-width:760px;margin:10px auto 0;line-height:1.5;">The 2026 column of every single-family series is the live MLS PIN trailing-12-month window, refreshed daily. Historical years (2014–2025) are a fixed extraction of MLS PIN records whose vintage predates this repository and has not been re-verified against the source. The <a href="haverhill-market-report.html" style="color:inherit;">Haverhill report</a> draws its Massachusetts and Essex County benchmarks from this same series — one source, so the two pages cannot disagree.</p><p class="footer-date">Updated July 16, 2026 • Year-over-Year Analysis (2025→2026)</p></footer>
 
     <script>
     const years = ["2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026"];
+
+    // ══════════════════════════════════════════════════════════════════════════
+    // `d` — the 13-year single-family series, and now the ONLY copy of it on the site.
+    //
+    // Provenance, stated plainly because it used to be stated nowhere:
+    //   2014-2025  inherited. These values entered the repo in its root commit, having
+    //              been migrated from duncanburns2013-dot/Housing-Market-Data. No
+    //              script here has ever written a historical value, the source extracts
+    //              were never committed, and the vintage/method behind them could not be
+    //              re-established. Treat them as a fixed MLS PIN extraction of unverified
+    //              vintage — not as figures this repo can reproduce on demand.
+    //   2026       live. The trailing-12-month window, rewritten daily by
+    //              update-mls-figures.py from one Bridge/MLS PIN query.
+    //
+    // haverhill-market-report.html carries `ma` and `es` benchmark lines that used to be
+    // a SECOND, independently transcribed copy of d.ma / d.essex. The two disagreed on
+    // every historical year (MA '18: 459,802 there vs 469,326.80 here) while agreeing
+    // exactly on the '26 tail — because the updater writes that tail into both files
+    // from the same query, which masked the split for the life of both files. That page
+    // now carries these values. update-mls-figures.py asserts the two agree on every
+    // run and fails if they diverge. Do not edit one copy without the other.
+    // ══════════════════════════════════════════════════════════════════════════
     const d = {
         ma:    { price:[401127.83,421080.95,418366.91,445794.96,469326.8,487015.71,521186.08,615027.48,676696.44,701487.11,763446.08,803731.19,865732.11],   sqft:[198.05,202.0,206.72,218.48,232.27,241.34,251.81,293.68,331.37,336.59,362.71,379.57,395.30],   dom:[117.0,125.0,113.0,86.0,74.0,76.0,70.0,43.0,34.0,47.0,42.0,47.0,37.10],   units:[46099.0,45317.0,51733.0,53495.0,53352.0,53135.0,53393.0,54613.0,52859.0,43815.0,36656.0,38214.0,40058.00],   supply:[4.19,3.8,3.01,2.29,2.04,2.33,1.58,0.67,0.62,0.82,1.24,1.52,2.16] },
         boston:{ price:[823229.89,643383.33,721869.84,774271.85,820165.88,848129.66,1067706.29,1091509.39,1117397.02,1004513.11,1061217.89,1293101.22,1311427.09],  sqft:[325.83,305.28,362.1,375.77,413.76,412.01,448.77,502.36,523.55,487.41,506.61,581.39,582.56],  dom:[81.0,82.0,73.0,55.0,52.0,53.0,49.0,49.0,44.0,51.0,46.0,52.0,38.20],  units:[1034.0,977.0,1018.0,1028.0,991.0,1038.0,952.0,942.0,1101.0,955.0,755.0,797.0,823.00],  supply:[2.09,1.58,1.82,1.45,1.67,1.72,1.16,1.5,1.12,1.28,1.99,2.18,2.97] },
