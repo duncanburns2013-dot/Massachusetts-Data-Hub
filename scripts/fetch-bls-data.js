@@ -20,6 +20,10 @@ const EMPLOYMENT_SERIES = {
   US_HH_EMP:             'LNS12000000',    // household-survey employed, level (thousands)
   US_LABOR_FORCE:        'LNS11000000',    // civilian labor force, level (thousands)
   US_U6:                 'LNS13327709',    // U-6 underemployment rate
+  US_UNEMPLOYMENT_LEVEL: 'LNS13000000',    // unemployed, level (thousands) — denominator
+                                           // for the JOLTS openings-per-unemployed ratio.
+                                           // Must be national and in thousands to match
+                                           // JTS...JOL, which is also national thousands.
 };
 
 // National JOLTS only — BLS discontinued monthly state JOLTS (last: Dec 2025).
@@ -464,14 +468,23 @@ async function updateDashboard(data, empSeries) {
     const v        = data.us_job_openings.latest.value;
     const openingsM = (v / 1000).toFixed(1) + 'M';
     const date      = data.us_job_openings.latest.date;
-    const unemployed = data.ma_unemployment_level?.latest?.value ?? 186000;
-    const ratio      = (v / unemployed).toFixed(2);
+    // Openings (JTS...JOL) are national, in thousands — so the denominator must be too.
+    // This previously used MA unemployment *level*, which is national-vs-state AND
+    // thousands-vs-persons, understating the ratio ~24x (rendered 0.04 against a card
+    // subtitle reading "Healthy: 1.0-1.2"). LNS13000000 is national unemployed in
+    // thousands, so the ratio comes out unitless and comparable to that subtitle.
+    const unemployed = data.us_unemployment_level?.latest?.value;
+    const ratio      = unemployed ? (v / unemployed).toFixed(2) : null;
     setField('jolts-openings',       openingsM);
     setField('jolts-openings-date',  `${date} · auto-updated`);
     setField('jolts-openings-table', openingsM);
     setField('jolts-col-current',    date);
-    setField('jolts-ratio',          ratio);
-    console.log(`   ✅ JOLTS fields updated: ${openingsM} (${date})`);
+    if (ratio) {
+      setField('jolts-ratio', ratio);
+    } else {
+      console.warn('   ⚠️  JOLTS ratio skipped: no US unemployment level fetched');
+    }
+    console.log(`   ✅ JOLTS fields updated: ${openingsM} (${date}), ratio ${ratio ?? 'n/a'}`);
   }
 
   // ── National Employment Situation block + table ───────────────────────────
@@ -650,6 +663,7 @@ async function main() {
     ma_labor_force:        { latest: getLatestValue(findSeries(EMPLOYMENT_SERIES.MA_LABOR_FORCE)) },
     ma_total_nonfarm:      { latest: getLatestValue(findSeries(EMPLOYMENT_SERIES.MA_TOTAL_NONFARM)) },
     us_unemployment_rate:  { latest: getLatestValue(findSeries(EMPLOYMENT_SERIES.US_UNEMPLOYMENT_RATE)) },
+    us_unemployment_level: { latest: getLatestValue(findSeries(EMPLOYMENT_SERIES.US_UNEMPLOYMENT_LEVEL)) },
     us_job_openings:       null,
     jolts_note: 'BLS discontinued monthly state JOLTS in 2026. National JOLTS still monthly. First annual state release: July 2026.',
   };
