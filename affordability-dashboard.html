@@ -278,7 +278,7 @@ footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1p
 <!-- INFLATION -->
 <div id="inflation" class="tab-content">
   <h2 class="section-title">Inflation Squeeze</h2>
-  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">Northeast inflation consistently outpaces national averages. Real wages have declined.</p>
+  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px" id="inflationIntro">—</p>
   <div class="stat-row">
     <div class="stat-card"><div class="label">Northeast CPI</div><div class="value red"><span id="neCpiYoY">—</span></div><div class="sub"><span id="neCpiYoYMo">—</span></div></div>
     <div class="stat-card"><div class="label">Core Inflation</div><div class="value amber">2.5%</div><div class="sub">Ex food & energy</div></div>
@@ -289,10 +289,11 @@ footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1p
     <div class="chart-card"><h3>NE vs National Inflation</h3><div class="chart-area"><canvas id="c7"></canvas></div><div class="source">Source: BLS CPI, 2020–2026</div></div>
     <div class="chart-card"><h3>Real Wage Impact</h3>
       <div style="padding:10px 0">
-        <div style="margin-bottom:16px"><div class="label" style="font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)">Nominal Wage Growth</div><div style="font-family:'DM Serif Display';font-size:2.5rem;color:var(--green)">+21.8%</div></div>
-        <div style="margin-bottom:16px"><div class="label" style="font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)">CPI Increase</div><div style="font-family:'DM Serif Display';font-size:2.5rem;color:var(--red)">+22.7%</div></div>
-        <div style="border-top:2px solid var(--border);padding-top:16px"><div class="label" style="font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)">Real Wage Change</div><div style="font-family:'DM Serif Display';font-size:2.5rem;color:var(--red)">−0.7%</div><div style="font-size:0.78rem;color:var(--muted);margin-top:4px">Workers have LESS purchasing power than 4 years ago</div></div>
+        <div style="margin-bottom:16px"><div class="label" style="font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)">Nominal Wage Growth</div><div style="font-family:'DM Serif Display';font-size:2.5rem;color:var(--green)"><span id="wageNominal">—</span></div><div style="font-size:0.68rem;color:var(--muted)">MA private-sector hourly pay · <span id="wageWindow">—</span></div></div>
+        <div style="margin-bottom:16px"><div class="label" style="font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)">CPI Increase</div><div style="font-family:'DM Serif Display';font-size:2.5rem;color:var(--red)"><span id="wageCpi">—</span></div><div style="font-size:0.68rem;color:var(--muted)">Northeast prices · <span id="wageCpiWindow">—</span></div></div>
+        <div style="border-top:2px solid var(--border);padding-top:16px"><div class="label" style="font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)">Real Wage Change</div><div style="font-family:'DM Serif Display';font-size:2.5rem" id="wageRealVal">—</div><div style="font-size:0.78rem;color:var(--muted);margin-top:4px" id="wageRealNote">—</div></div>
       </div>
+      <div class="source" id="wageSource">—</div>
     </div>
   </div>
 </div>
@@ -446,6 +447,53 @@ const neCpiYoY=(NE_CPI.latest.v/NE_CPI.prior.v-1)*100;
 const neCpiCum=(NE_CPI.latest.v/NE_CPI.base.v-1)*100;
 const usCpiYoY=(US_CPI.latest.v/US_CPI.prior.v-1)*100;
 
+// ── Real wages: one window, two named series, index levels on both sides ─────
+// The panel read "+21.8% wages / +22.7% CPI / −0.7% real" over "4 years". The
+// ratio was computed correctly; both inputs were wrong, in different ways:
+//   • +22.7% was Northeast CPI June 2021 → June 2026 — a FIVE-year change
+//     (349.552/284.741 = +22.76%) carrying a four-year label. The true four-year
+//     NE CPI rise is +15.65% (May) / +14.06% (June).
+//   • +21.8% matched no published wage series at all — not US AHE (+23.25% over
+//     that same five years), not MA AHE (+19.30%). It has no provenance, so it
+//     could not be repaired in place, only replaced with something sourced.
+// Correcting either half alone would have been worse than leaving it: the CPI
+// fix on its own turns the panel into "+6.7% real", a raise invented out of a
+// wage number nobody can trace.
+//
+// Wage series: Massachusetts total private average hourly earnings, all
+// employees (BLS CES State & Metro; FRED SMU25000000500000003). Chosen over the
+// national CES0500000003 that scripts/update_cumulative_inflation.py already
+// fetches, because this is a Massachusetts page — and the choice is not
+// cosmetic: MA hourly pay grew +10.4% over these four years against the
+// nation's +16.9%, so the national series would credit MA workers with a raise
+// they did not get. Both series here are NSA and compared same-month-to-
+// same-month, which is what makes the NSA CPI (CUUR0100SA0) their right partner
+// and seasonal adjustment unnecessary. No monthly MA-specific CPI is published;
+// Northeast is the closest geography BLS prints, and it is already this tab's
+// series, so the panel and the card above it deflate by the same index.
+//
+// Window: May 2022 → May 2026 — four years, the label the panel always meant,
+// now applied to BOTH sides. May rather than June is the terminal month because
+// the state CES release lags the national one: MA has no June 2026 print yet,
+// and pairing a June CPI against a May wage would rebuild the exact mismatch
+// this replaces. When BLS publishes, move both pairs together or not at all.
+//
+// The sign is robust rather than an artifact of the window: MA hourly pay
+// trails NE CPI over four years (−4.6%), five years (−4.9%) and since January
+// 2020 (−2.8%), and MA average WEEKLY earnings — which count hours, not just
+// the rate — trail it by −7.4% over the same four years. It is the US series
+// that is window-dependent (+1.0% / −0.8% / +2.6%), a second reason not to
+// borrow it for a Massachusetts claim. Nothing below asserts that direction in
+// prose regardless; the verdict line is written from the sign at render time.
+const REAL_WAGE={
+  from:'May 2022', to:'May 2026',
+  cpi: {from:302.939, to:350.338},  // CUUR0100SA0 — NE urban, all items, NSA
+  wage:{from:39.26,   to:43.33},    // SMU25000000500000003 — MA total private AHE, NSA
+};
+const wageNominal=(REAL_WAGE.wage.to/REAL_WAGE.wage.from-1)*100;
+const wageCpi=(REAL_WAGE.cpi.to/REAL_WAGE.cpi.from-1)*100;
+const wageReal=((1+wageNominal/100)/(1+wageCpi/100)-1)*100;
+
 // ── BLS LAUS annual averages (FRED MAUR / UNRATE), mean of monthly SA values ──
 // 2025 is an 11-month mean: BLS published no October 2025 household survey during
 // the shutdown. The old series carried MA 2025 = 4.8, which was December's monthly
@@ -546,6 +594,51 @@ setTxt('neCpiYoY',    neCpiYoY.toFixed(1)+'%');
 setTxt('neCpiYoYMo',  NE_CPI.latest.lbl);
 setTxt('neCpiCum',    pct1(neCpiCum));
 setTxt('neCpiCumBase',NE_CPI.base.lbl);
+
+// ── Real wages ───────────────────────────────────────────────────────────────
+// Both halves of the window label are printed next to their own figure, so the
+// "4 years" claim is checkable against the numbers instead of being asserted
+// over them — that mislabel is what hid a five-year CPI change inside a
+// four-year panel for as long as it did.
+const wageWin=REAL_WAGE.from+' → '+REAL_WAGE.to;
+setTxt('wageNominal',  pct1(wageNominal));
+setTxt('wageWindow',   wageWin);
+setTxt('wageCpi',      pct1(wageCpi));
+setTxt('wageCpiWindow',wageWin);
+setTxt('wageRealVal',  pct1(wageReal));
+(function(){
+  // Colour and verdict both follow the sign. The panel used to hardcode red
+  // beside a fixed sentence — "Workers have LESS purchasing power than 4 years
+  // ago" — which would have gone on reading as true no matter what the figures
+  // above it were corrected to. On sourced inputs the gap is in fact much wider
+  // than the −0.7% claimed, but it is stated as a comparison of two measured
+  // rises rather than as a verdict, and a release that closes it must be able to
+  // turn this line around without anyone remembering to edit prose.
+  const el=document.getElementById('wageRealVal');
+  if(el) el.style.color = wageReal<0 ? 'var(--red)' : 'var(--green)';
+  // ±0.25pt is inside what a CES benchmark revision routinely moves, so a
+  // near-tie is reported as a tie rather than called a win for either side.
+  setTxt('wageRealNote', Math.abs(wageReal)<0.25
+    ? 'Massachusetts hourly pay roughly kept pace with Northeast prices over these four years.'
+    : (wageReal<0
+      ? 'Massachusetts hourly pay rose slower than Northeast prices over these four years.'
+      : 'Massachusetts hourly pay rose faster than Northeast prices over these four years.'));
+})();
+setTxt('wageSource','Sources: MA total private average hourly earnings, all employees, NSA '
+  +'(BLS CES, SMU25000000500000003) and Northeast CPI-U, all items, NSA (BLS CUUR0100SA0), '
+  +wageWin+'. Real change = nominal wage growth deflated by CPI over the same two months.');
+
+// The intro asserted "Northeast inflation consistently outpaces national
+// averages. Real wages have declined." Its first half is contradicted by this
+// tab's own chart (2022: NE +7.1% vs US +8.0% — outpaced, not outpacing), and
+// its second was the Real Wage panel's conclusion hardcoded a second time, where
+// it would have quietly survived any correction made to the panel itself. Both
+// halves now read the same constants the cards do, and state values rather than
+// a direction.
+setTxt('inflationIntro',
+  'Northeast inflation is running at '+neCpiYoY.toFixed(1)+'% year over year against '
+  +usCpiYoY.toFixed(1)+'% nationally ('+NE_CPI.latest.lbl+'). Massachusetts hourly pay is '
+  +pct1(wageReal)+' in real terms over the four years to '+REAL_WAGE.to+'.');
 
 // The hero mirrors the Unemployment stat card rather than carrying its own copy.
 // That card is the updater's injection surface — it rewrites the rate and its month
