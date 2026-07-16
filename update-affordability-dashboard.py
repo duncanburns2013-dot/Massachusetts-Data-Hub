@@ -81,14 +81,35 @@ data_changes = 0
 # Unemployment updates
 if ma_unemp.get("value"):
     new_ma = ma_unemp["value"]
-    unemp_match = re.search(r'Unemployment.*?(\d+\.\d+)%', html[:3000])
-    if unemp_match:
-        old_val = unemp_match.group(1)
-        if old_val != new_ma:
-            html, n = do_replace(html, f"{old_val}%", f"{new_ma}%", "MA Unemployment")
-            data_changes += n
+    # Target the Unemployment stat card by its own markup, and rewrite only inside
+    # that card. The old anchor searched html[:3000] for /Unemployment.*?(\d+\.\d+)%/
+    # -- but the first "Unemployment" sits at index ~12,138, and it is the hero
+    # "#44 Unemployment Rank" card, not the rate. So the search never matched, the
+    # card sat on Dec 2025 for 7 months, and nothing said so.
+    #
+    # It also replaced the bare string "4.8%" everywhere in the file, which would
+    # have clobbered any unrelated figure that happened to share the value. Scoped
+    # to the card now.
+    card_re = re.compile(
+        r'(<div class="label">Unemployment</div><div class="value[^"]*">)(\d+\.\d+)%'
+        r'(</div><div class="sub">)([^<]*)(</div>)'
+    )
+    card = card_re.search(html)
+    if card:
+        old_val, old_sub = card.group(2), card.group(4)
+        # Keep the card's own "December 2025" subtitle honest about which month the
+        # value is from -- it drifted 7 months precisely because the rate and its
+        # vintage label were maintained separately.
+        new_sub = f"{ma_unemp.get('periodName','')} {ma_unemp.get('year','')}".strip() or old_sub
+        if old_val != str(new_ma) or old_sub != new_sub:
+            html = card_re.sub(
+                lambda m: f"{m.group(1)}{new_ma}%{m.group(3)}{new_sub}{m.group(5)}",
+                html, count=1,
+            )
+            print(f"  MA Unemployment: '{old_val}% ({old_sub})' -> '{new_ma}% ({new_sub})'")
+            data_changes += 1
     else:
-        print("  !! MA Unemployment: anchor not found in html[:3000] -- NOT updated")
+        print("  !! MA Unemployment: stat-card anchor not found -- NOT updated")
     if us_unemp.get("value"):
         new_delta = round(float(new_ma) - float(us_unemp["value"]), 1)
         sign = "+" if new_delta >= 0 else ""
