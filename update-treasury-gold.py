@@ -9,7 +9,13 @@ No API key needed â completely free and open.
 Updates:
   - MASTER_DATA.md gold holdings table
   - data/treasury-gold-latest.json (for dashboard consumption)
-  - tax-budget-dashboard.html (gold reserve info box, if present)
+
+Does NOT touch any dashboard HTML. The docstring used to claim it updated
+"tax-budget-dashboard.html (gold reserve info box, if present)" and the module
+defined a TAX_BUDGET_HTML path to match, but nothing ever read that constant and
+no such info box exists -- the dashboard makes no mention of gold at all. The
+claim and the unused path have been removed rather than left to imply a coupling
+that was never there.
 """
 import json, os, re, sys
 from urllib.request import urlopen, Request
@@ -17,7 +23,6 @@ from datetime import datetime
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MASTER_DATA = os.path.join(BASE_DIR, "MASTER_DATA.md")
-TAX_BUDGET_HTML = os.path.join(BASE_DIR, "tax-budget-dashboard.html")
 
 API_URL = (
     "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/"
