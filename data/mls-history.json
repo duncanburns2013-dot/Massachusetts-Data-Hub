@@ -1,0 +1,1472 @@
+{
+ "meta": {
+  "generated": "2026-07-17",
+  "source": "MLS PIN via Bridge Data Output",
+  "window": "closed sales per calendar year, by CloseDate",
+  "property_types": {
+   "sf": "Residential / Single Family Residence",
+   "co": "Residential / Condominium",
+   "mf": "Residential Income"
+  },
+  "years": [
+   2014,
+   2015,
+   2016,
+   2017,
+   2018,
+   2019,
+   2020,
+   2021,
+   2022,
+   2023,
+   2024,
+   2025
+  ],
+  "unavailable": {
+   "inv": "active listing counts are point-in-time; MLS cannot return a past year",
+   "supply": "derived from active inventory, so likewise current-period only"
+  }
+ },
+ "cells": {
+  "haverhill|sf|2014": {
+   "count": 384,
+   "avg_price": 283671.26,
+   "median_price": 273500,
+   "avg_sqft": 151.9,
+   "avg_dom": 84.0,
+   "sp_lp_pct": 97.79
+  },
+  "haverhill|co|2014": {
+   "count": 244,
+   "avg_price": 175676.34,
+   "median_price": 172500,
+   "avg_sqft": 130.34,
+   "avg_dom": 95.4,
+   "sp_lp_pct": 97.45
+  },
+  "haverhill|mf|2014": {
+   "count": 108,
+   "avg_price": 246555.56,
+   "median_price": 240000,
+   "avg_sqft": 87.38,
+   "avg_dom": 66.8,
+   "sp_lp_pct": 96.44
+  },
+  "boston|sf|2014": {
+   "count": 971,
+   "avg_price": 698230.03,
+   "median_price": 450000,
+   "avg_sqft": 323.06,
+   "avg_dom": 51.2,
+   "sp_lp_pct": 99.42
+  },
+  "boston|co|2014": {
+   "count": 4260,
+   "avg_price": 668352.14,
+   "median_price": 479700,
+   "avg_sqft": 575.97,
+   "avg_dom": 43.8,
+   "sp_lp_pct": 100.29
+  },
+  "boston|mf|2014": {
+   "count": 720,
+   "avg_price": 710121.75,
+   "median_price": 510000,
+   "avg_sqft": 205.62,
+   "avg_dom": 48.4,
+   "sp_lp_pct": 99.6
+  },
+  "newburyport|sf|2014": {
+   "count": 178,
+   "avg_price": 587791.01,
+   "median_price": 515000,
+   "avg_sqft": 281.65,
+   "avg_dom": 69.4,
+   "sp_lp_pct": 97.16
+  },
+  "newburyport|co|2014": {
+   "count": 162,
+   "avg_price": 343693.13,
+   "median_price": 331500,
+   "avg_sqft": 271.37,
+   "avg_dom": 61.5,
+   "sp_lp_pct": 98.23
+  },
+  "newburyport|mf|2014": {
+   "count": 9,
+   "avg_price": 549972.22,
+   "median_price": 555000,
+   "avg_sqft": 176.92,
+   "avg_dom": 83.7,
+   "sp_lp_pct": 92.27
+  },
+  "essex|sf|2014": {
+   "count": 5571,
+   "avg_price": 445129.43,
+   "median_price": 375000,
+   "avg_sqft": 211.17,
+   "avg_dom": 79.1,
+   "sp_lp_pct": 97.52
+  },
+  "essex|co|2014": {
+   "count": 2367,
+   "avg_price": 279530.94,
+   "median_price": 245000,
+   "avg_sqft": 201.33,
+   "avg_dom": 80.2,
+   "sp_lp_pct": 97.88
+  },
+  "essex|mf|2014": {
+   "count": 904,
+   "avg_price": 320232.04,
+   "median_price": 303500,
+   "avg_sqft": 116.61,
+   "avg_dom": 72.2,
+   "sp_lp_pct": 97.29
+  },
+  "ma|sf|2014": {
+   "count": 45132,
+   "avg_price": 430803.52,
+   "median_price": 336000,
+   "avg_sqft": 208.03,
+   "avg_dom": 81.2,
+   "sp_lp_pct": 97.53
+  },
+  "ma|co|2014": {
+   "count": 18760,
+   "avg_price": 406403.7,
+   "median_price": 316000,
+   "avg_sqft": 318.99,
+   "avg_dom": 67.4,
+   "sp_lp_pct": 99.06
+  },
+  "ma|mf|2014": {
+   "count": 5722,
+   "avg_price": 391504.74,
+   "median_price": 315000,
+   "avg_sqft": 136.46,
+   "avg_dom": 69.8,
+   "sp_lp_pct": 96.99
+  },
+  "haverhill|sf|2015": {
+   "count": 456,
+   "avg_price": 297516.15,
+   "median_price": 288750,
+   "avg_sqft": 161.75,
+   "avg_dom": 73.1,
+   "sp_lp_pct": 98.27
+  },
+  "haverhill|co|2015": {
+   "count": 270,
+   "avg_price": 182527.88,
+   "median_price": 183250,
+   "avg_sqft": 133.25,
+   "avg_dom": 69.3,
+   "sp_lp_pct": 97.99
+  },
+  "haverhill|mf|2015": {
+   "count": 113,
+   "avg_price": 288191.61,
+   "median_price": 277000,
+   "avg_sqft": 102.73,
+   "avg_dom": 78.5,
+   "sp_lp_pct": 97.25
+  },
+  "boston|sf|2015": {
+   "count": 1001,
+   "avg_price": 714012.27,
+   "median_price": 472000,
+   "avg_sqft": 342.33,
+   "avg_dom": 49.0,
+   "sp_lp_pct": 100.21
+  },
+  "boston|co|2015": {
+   "count": 4283,
+   "avg_price": 713917.19,
+   "median_price": 530000,
+   "avg_sqft": 622.55,
+   "avg_dom": 44.7,
+   "sp_lp_pct": 100.79
+  },
+  "boston|mf|2015": {
+   "count": 792,
+   "avg_price": 761709.79,
+   "median_price": 572000,
+   "avg_sqft": 235.86,
+   "avg_dom": 50.4,
+   "sp_lp_pct": 99.23
+  },
+  "newburyport|sf|2015": {
+   "count": 192,
+   "avg_price": 596385.88,
+   "median_price": 535000,
+   "avg_sqft": 294.53,
+   "avg_dom": 71.2,
+   "sp_lp_pct": 97.48
+  },
+  "newburyport|co|2015": {
+   "count": 137,
+   "avg_price": 374137.76,
+   "median_price": 375000,
+   "avg_sqft": 278.64,
+   "avg_dom": 74.1,
+   "sp_lp_pct": 98.13
+  },
+  "newburyport|mf|2015": {
+   "count": 8,
+   "avg_price": 491687.5,
+   "median_price": 492500,
+   "avg_sqft": 198.83,
+   "avg_dom": 80.2,
+   "sp_lp_pct": 95.61
+  },
+  "essex|sf|2015": {
+   "count": 6146,
+   "avg_price": 456876.02,
+   "median_price": 385000,
+   "avg_sqft": 219.95,
+   "avg_dom": 75.3,
+   "sp_lp_pct": 98.15
+  },
+  "essex|co|2015": {
+   "count": 2541,
+   "avg_price": 284629.04,
+   "median_price": 245000,
+   "avg_sqft": 209.09,
+   "avg_dom": 75.5,
+   "sp_lp_pct": 98.03
+  },
+  "essex|mf|2015": {
+   "count": 962,
+   "avg_price": 354132.49,
+   "median_price": 341750,
+   "avg_sqft": 127.58,
+   "avg_dom": 73.4,
+   "sp_lp_pct": 98.23
+  },
+  "ma|sf|2015": {
+   "count": 49421,
+   "avg_price": 441342.3,
+   "median_price": 345900,
+   "avg_sqft": 219.37,
+   "avg_dom": 80.1,
+   "sp_lp_pct": 98.05
+  },
+  "ma|co|2015": {
+   "count": 19456,
+   "avg_price": 424730.2,
+   "median_price": 326500,
+   "avg_sqft": 334.39,
+   "avg_dom": 64.8,
+   "sp_lp_pct": 99.5
+  },
+  "ma|mf|2015": {
+   "count": 6072,
+   "avg_price": 426714.01,
+   "median_price": 342500,
+   "avg_sqft": 149.66,
+   "avg_dom": 70.8,
+   "sp_lp_pct": 97.27
+  },
+  "haverhill|sf|2016": {
+   "count": 488,
+   "avg_price": 316950.36,
+   "median_price": 309000,
+   "avg_sqft": 168.96,
+   "avg_dom": 58.8,
+   "sp_lp_pct": 98.82
+  },
+  "haverhill|co|2016": {
+   "count": 266,
+   "avg_price": 188978.23,
+   "median_price": 190125,
+   "avg_sqft": 143.52,
+   "avg_dom": 62.8,
+   "sp_lp_pct": 98.5
+  },
+  "haverhill|mf|2016": {
+   "count": 116,
+   "avg_price": 313404.31,
+   "median_price": 304000,
+   "avg_sqft": 118.98,
+   "avg_dom": 49.6,
+   "sp_lp_pct": 99.58
+  },
+  "boston|sf|2016": {
+   "count": 1029,
+   "avg_price": 702515.62,
+   "median_price": 530000,
+   "avg_sqft": 362.74,
+   "avg_dom": 47.3,
+   "sp_lp_pct": 100.13
+  },
+  "boston|co|2016": {
+   "count": 4309,
+   "avg_price": 807826.97,
+   "median_price": 575000,
+   "avg_sqft": 686.86,
+   "avg_dom": 42.9,
+   "sp_lp_pct": 100.83
+  },
+  "boston|mf|2016": {
+   "count": 752,
+   "avg_price": 891441.73,
+   "median_price": 615000,
+   "avg_sqft": 255.71,
+   "avg_dom": 50.5,
+   "sp_lp_pct": 99.29
+  },
+  "newburyport|sf|2016": {
+   "count": 200,
+   "avg_price": 598947.94,
+   "median_price": 540950,
+   "avg_sqft": 298.95,
+   "avg_dom": 77.0,
+   "sp_lp_pct": 97.2
+  },
+  "newburyport|co|2016": {
+   "count": 148,
+   "avg_price": 395358.89,
+   "median_price": 360500,
+   "avg_sqft": 295.44,
+   "avg_dom": 58.7,
+   "sp_lp_pct": 98.06
+  },
+  "newburyport|mf|2016": {
+   "count": 8,
+   "avg_price": 571550,
+   "median_price": 577500,
+   "avg_sqft": 236.85,
+   "avg_dom": 71.1,
+   "sp_lp_pct": 101.47
+  },
+  "essex|sf|2016": {
+   "count": 6298,
+   "avg_price": 469813.18,
+   "median_price": 400000,
+   "avg_sqft": 229.26,
+   "avg_dom": 65.8,
+   "sp_lp_pct": 98.83
+  },
+  "essex|co|2016": {
+   "count": 2622,
+   "avg_price": 294556.44,
+   "median_price": 257500,
+   "avg_sqft": 222.39,
+   "avg_dom": 68.5,
+   "sp_lp_pct": 98.76
+  },
+  "essex|mf|2016": {
+   "count": 1038,
+   "avg_price": 384543.88,
+   "median_price": 370000,
+   "avg_sqft": 139.32,
+   "avg_dom": 62.5,
+   "sp_lp_pct": 98.96
+  },
+  "ma|sf|2016": {
+   "count": 53347,
+   "avg_price": 447884.88,
+   "median_price": 359000,
+   "avg_sqft": 219.13,
+   "avg_dom": 72.0,
+   "sp_lp_pct": 98.48
+  },
+  "ma|co|2016": {
+   "count": 20594,
+   "avg_price": 454993.42,
+   "median_price": 340000,
+   "avg_sqft": 355.19,
+   "avg_dom": 58.3,
+   "sp_lp_pct": 99.78
+  },
+  "ma|mf|2016": {
+   "count": 6687,
+   "avg_price": 452272.68,
+   "median_price": 355000,
+   "avg_sqft": 183.55,
+   "avg_dom": 67.2,
+   "sp_lp_pct": 98.05
+  },
+  "haverhill|sf|2017": {
+   "count": 480,
+   "avg_price": 333193.0,
+   "median_price": 320000,
+   "avg_sqft": 187.19,
+   "avg_dom": 39.1,
+   "sp_lp_pct": 99.79
+  },
+  "haverhill|co|2017": {
+   "count": 327,
+   "avg_price": 208620.77,
+   "median_price": 212000,
+   "avg_sqft": 158.3,
+   "avg_dom": 61.6,
+   "sp_lp_pct": 99.31
+  },
+  "haverhill|mf|2017": {
+   "count": 149,
+   "avg_price": 335000.01,
+   "median_price": 337000,
+   "avg_sqft": 119.55,
+   "avg_dom": 44.0,
+   "sp_lp_pct": 100.88
+  },
+  "boston|sf|2017": {
+   "count": 995,
+   "avg_price": 807187.0,
+   "median_price": 576600,
+   "avg_sqft": 395.02,
+   "avg_dom": 38.9,
+   "sp_lp_pct": 100.54
+  },
+  "boston|co|2017": {
+   "count": 4365,
+   "avg_price": 839297.42,
+   "median_price": 600000,
+   "avg_sqft": 711.61,
+   "avg_dom": 36.7,
+   "sp_lp_pct": 101.07
+  },
+  "boston|mf|2017": {
+   "count": 725,
+   "avg_price": 1046996.55,
+   "median_price": 738920,
+   "avg_sqft": 287.78,
+   "avg_dom": 35.4,
+   "sp_lp_pct": 100.73
+  },
+  "newburyport|sf|2017": {
+   "count": 180,
+   "avg_price": 664974.21,
+   "median_price": 627500,
+   "avg_sqft": 319.3,
+   "avg_dom": 64,
+   "sp_lp_pct": 98.17
+  },
+  "newburyport|co|2017": {
+   "count": 160,
+   "avg_price": 464298.91,
+   "median_price": 425625,
+   "avg_sqft": 327.63,
+   "avg_dom": 54.4,
+   "sp_lp_pct": 98.44
+  },
+  "newburyport|mf|2017": {
+   "count": 4,
+   "avg_price": 508500,
+   "median_price": 487500,
+   "avg_sqft": 281.67,
+   "avg_dom": 48.5,
+   "sp_lp_pct": 96.09
+  },
+  "essex|sf|2017": {
+   "count": 6231,
+   "avg_price": 509954.92,
+   "median_price": 430000,
+   "avg_sqft": 245.37,
+   "avg_dom": 48.4,
+   "sp_lp_pct": 99.49
+  },
+  "essex|co|2017": {
+   "count": 2801,
+   "avg_price": 322218.42,
+   "median_price": 280000,
+   "avg_sqft": 239.31,
+   "avg_dom": 50.9,
+   "sp_lp_pct": 99.65
+  },
+  "essex|mf|2017": {
+   "count": 1103,
+   "avg_price": 425759.73,
+   "median_price": 408000,
+   "avg_sqft": 155.17,
+   "avg_dom": 41.1,
+   "sp_lp_pct": 100.42
+  },
+  "ma|sf|2017": {
+   "count": 53274,
+   "avg_price": 475680.97,
+   "median_price": 380000,
+   "avg_sqft": 231.82,
+   "avg_dom": 54.9,
+   "sp_lp_pct": 99.14
+  },
+  "ma|co|2017": {
+   "count": 20885,
+   "avg_price": 477157.49,
+   "median_price": 360000,
+   "avg_sqft": 373.18,
+   "avg_dom": 45.9,
+   "sp_lp_pct": 100.3
+  },
+  "ma|mf|2017": {
+   "count": 7039,
+   "avg_price": 488232.36,
+   "median_price": 372500,
+   "avg_sqft": 166.43,
+   "avg_dom": 49.2,
+   "sp_lp_pct": 99.3
+  },
+  "haverhill|sf|2018": {
+   "count": 491,
+   "avg_price": 349789.92,
+   "median_price": 338000,
+   "avg_sqft": 193.94,
+   "avg_dom": 40.1,
+   "sp_lp_pct": 99.85
+  },
+  "haverhill|co|2018": {
+   "count": 325,
+   "avg_price": 236717.94,
+   "median_price": 235000,
+   "avg_sqft": 173.88,
+   "avg_dom": 40.7,
+   "sp_lp_pct": 99.82
+  },
+  "haverhill|mf|2018": {
+   "count": 165,
+   "avg_price": 373884.24,
+   "median_price": 374900,
+   "avg_sqft": 134.35,
+   "avg_dom": 40.1,
+   "sp_lp_pct": 100.88
+  },
+  "boston|sf|2018": {
+   "count": 1032,
+   "avg_price": 827689.28,
+   "median_price": 615000,
+   "avg_sqft": 420.26,
+   "avg_dom": 34.8,
+   "sp_lp_pct": 101.21
+  },
+  "boston|co|2018": {
+   "count": 4530,
+   "avg_price": 879499.65,
+   "median_price": 660500,
+   "avg_sqft": 763.0,
+   "avg_dom": 38.7,
+   "sp_lp_pct": 100.63
+  },
+  "boston|mf|2018": {
+   "count": 683,
+   "avg_price": 1099506.53,
+   "median_price": 815000,
+   "avg_sqft": 321.74,
+   "avg_dom": 38.2,
+   "sp_lp_pct": 99.67
+  },
+  "newburyport|sf|2018": {
+   "count": 204,
+   "avg_price": 676765.23,
+   "median_price": 612450,
+   "avg_sqft": 330.62,
+   "avg_dom": 45.9,
+   "sp_lp_pct": 98.36
+  },
+  "newburyport|co|2018": {
+   "count": 153,
+   "avg_price": 495566.82,
+   "median_price": 445000,
+   "avg_sqft": 342.13,
+   "avg_dom": 45.1,
+   "sp_lp_pct": 99.23
+  },
+  "newburyport|mf|2018": {
+   "count": 12,
+   "avg_price": 744783.33,
+   "median_price": 717500,
+   "avg_sqft": 222.01,
+   "avg_dom": 46.2,
+   "sp_lp_pct": 94.68
+  },
+  "essex|sf|2018": {
+   "count": 6130,
+   "avg_price": 530414.43,
+   "median_price": 450000,
+   "avg_sqft": 259.36,
+   "avg_dom": 44.4,
+   "sp_lp_pct": 99.76
+  },
+  "essex|co|2018": {
+   "count": 2659,
+   "avg_price": 335450.44,
+   "median_price": 299000,
+   "avg_sqft": 255.84,
+   "avg_dom": 43.9,
+   "sp_lp_pct": 100.1
+  },
+  "essex|mf|2018": {
+   "count": 1077,
+   "avg_price": 474001.23,
+   "median_price": 449000,
+   "avg_sqft": 170.01,
+   "avg_dom": 35.3,
+   "sp_lp_pct": 100.35
+  },
+  "ma|sf|2018": {
+   "count": 52636,
+   "avg_price": 500658.79,
+   "median_price": 400000,
+   "avg_sqft": 244.63,
+   "avg_dom": 49.5,
+   "sp_lp_pct": 99.34
+  },
+  "ma|co|2018": {
+   "count": 20660,
+   "avg_price": 503634.36,
+   "median_price": 385000,
+   "avg_sqft": 401.02,
+   "avg_dom": 42.4,
+   "sp_lp_pct": 100.37
+  },
+  "ma|mf|2018": {
+   "count": 7276,
+   "avg_price": 524204.25,
+   "median_price": 401250,
+   "avg_sqft": 289.83,
+   "avg_dom": 41.9,
+   "sp_lp_pct": 99.24
+  },
+  "haverhill|sf|2019": {
+   "count": 455,
+   "avg_price": 367674.2,
+   "median_price": 355000,
+   "avg_sqft": 204.08,
+   "avg_dom": 39.1,
+   "sp_lp_pct": 100.21
+  },
+  "haverhill|co|2019": {
+   "count": 325,
+   "avg_price": 253823.37,
+   "median_price": 246000,
+   "avg_sqft": 187.71,
+   "avg_dom": 38.5,
+   "sp_lp_pct": 99.68
+  },
+  "haverhill|mf|2019": {
+   "count": 140,
+   "avg_price": 407841.61,
+   "median_price": 412000,
+   "avg_sqft": 152.02,
+   "avg_dom": 33.4,
+   "sp_lp_pct": 100.95
+  },
+  "boston|sf|2019": {
+   "count": 976,
+   "avg_price": 871903.73,
+   "median_price": 650000,
+   "avg_sqft": 444.84,
+   "avg_dom": 39.1,
+   "sp_lp_pct": 100.3
+  },
+  "boston|co|2019": {
+   "count": 4325,
+   "avg_price": 921877.62,
+   "median_price": 652500,
+   "avg_sqft": 775.4,
+   "avg_dom": 45.4,
+   "sp_lp_pct": 99.37
+  },
+  "boston|mf|2019": {
+   "count": 696,
+   "avg_price": 1168890.71,
+   "median_price": 855500,
+   "avg_sqft": 339.23,
+   "avg_dom": 40.4,
+   "sp_lp_pct": 98.17
+  },
+  "newburyport|sf|2019": {
+   "count": 240,
+   "avg_price": 755965.48,
+   "median_price": 715000,
+   "avg_sqft": 339.43,
+   "avg_dom": 49.6,
+   "sp_lp_pct": 98.79
+  },
+  "newburyport|co|2019": {
+   "count": 179,
+   "avg_price": 535068.27,
+   "median_price": 485000,
+   "avg_sqft": 361.7,
+   "avg_dom": 53.4,
+   "sp_lp_pct": 98.72
+  },
+  "newburyport|mf|2019": {
+   "count": 8,
+   "avg_price": 825475,
+   "median_price": 779500,
+   "avg_sqft": 279.54,
+   "avg_dom": 41,
+   "sp_lp_pct": 98.23
+  },
+  "essex|sf|2019": {
+   "count": 6322,
+   "avg_price": 550830.58,
+   "median_price": 471900,
+   "avg_sqft": 268.1,
+   "avg_dom": 45.5,
+   "sp_lp_pct": 99.54
+  },
+  "essex|co|2019": {
+   "count": 2722,
+   "avg_price": 361220.18,
+   "median_price": 317750,
+   "avg_sqft": 270.57,
+   "avg_dom": 45.2,
+   "sp_lp_pct": 99.6
+  },
+  "essex|mf|2019": {
+   "count": 1017,
+   "avg_price": 512885.95,
+   "median_price": 485000,
+   "avg_sqft": 182.71,
+   "avg_dom": 35.7,
+   "sp_lp_pct": 99.96
+  },
+  "ma|sf|2019": {
+   "count": 53142,
+   "avg_price": 516280.96,
+   "median_price": 415000,
+   "avg_sqft": 251.56,
+   "avg_dom": 51.3,
+   "sp_lp_pct": 99.11
+  },
+  "ma|co|2019": {
+   "count": 20629,
+   "avg_price": 524039.3,
+   "median_price": 399500,
+   "avg_sqft": 410.24,
+   "avg_dom": 46.6,
+   "sp_lp_pct": 99.63
+  },
+  "ma|mf|2019": {
+   "count": 7259,
+   "avg_price": 544419.67,
+   "median_price": 420000,
+   "avg_sqft": 228.23,
+   "avg_dom": 43.3,
+   "sp_lp_pct": 98.93
+  },
+  "haverhill|sf|2020": {
+   "count": 468,
+   "avg_price": 431251.02,
+   "median_price": 411500,
+   "avg_sqft": 222.58,
+   "avg_dom": 28.2,
+   "sp_lp_pct": 101.66
+  },
+  "haverhill|co|2020": {
+   "count": 318,
+   "avg_price": 268583.22,
+   "median_price": 261000,
+   "avg_sqft": 204.12,
+   "avg_dom": 24.3,
+   "sp_lp_pct": 101.09
+  },
+  "haverhill|mf|2020": {
+   "count": 137,
+   "avg_price": 482487.03,
+   "median_price": 465500,
+   "avg_sqft": 175.84,
+   "avg_dom": 27.0,
+   "sp_lp_pct": 102.54
+  },
+  "boston|sf|2020": {
+   "count": 878,
+   "avg_price": 956184.95,
+   "median_price": 690000,
+   "avg_sqft": 462.68,
+   "avg_dom": 34.3,
+   "sp_lp_pct": 100.52
+  },
+  "boston|co|2020": {
+   "count": 4136,
+   "avg_price": 862646.82,
+   "median_price": 660000,
+   "avg_sqft": 756.24,
+   "avg_dom": 44.1,
+   "sp_lp_pct": 99.09
+  },
+  "boston|mf|2020": {
+   "count": 539,
+   "avg_price": 1218125.72,
+   "median_price": 906000,
+   "avg_sqft": 346.6,
+   "avg_dom": 45.4,
+   "sp_lp_pct": 97.67
+  },
+  "newburyport|sf|2020": {
+   "count": 208,
+   "avg_price": 821451.9,
+   "median_price": 750500,
+   "avg_sqft": 378.64,
+   "avg_dom": 44.0,
+   "sp_lp_pct": 99.71
+  },
+  "newburyport|co|2020": {
+   "count": 160,
+   "avg_price": 543803.82,
+   "median_price": 515000,
+   "avg_sqft": 391.01,
+   "avg_dom": 40.8,
+   "sp_lp_pct": 100.36
+  },
+  "newburyport|mf|2020": {
+   "count": 9,
+   "avg_price": 777922.22,
+   "median_price": 759900,
+   "avg_sqft": 328.69,
+   "avg_dom": 43.1,
+   "sp_lp_pct": 99.32
+  },
+  "essex|sf|2020": {
+   "count": 6092,
+   "avg_price": 622956.9,
+   "median_price": 535000,
+   "avg_sqft": 292.76,
+   "avg_dom": 36.9,
+   "sp_lp_pct": 101.41
+  },
+  "essex|co|2020": {
+   "count": 2687,
+   "avg_price": 390299.12,
+   "median_price": 349900,
+   "avg_sqft": 295.39,
+   "avg_dom": 42.0,
+   "sp_lp_pct": 100.49
+  },
+  "essex|mf|2020": {
+   "count": 838,
+   "avg_price": 588378.68,
+   "median_price": 550000,
+   "avg_sqft": 208.71,
+   "avg_dom": 33.2,
+   "sp_lp_pct": 101.24
+  },
+  "ma|sf|2020": {
+   "count": 54086,
+   "avg_price": 577521.8,
+   "median_price": 460000,
+   "avg_sqft": 272.67,
+   "avg_dom": 43.6,
+   "sp_lp_pct": 102.28
+  },
+  "ma|co|2020": {
+   "count": 20313,
+   "avg_price": 531341.83,
+   "median_price": 425000,
+   "avg_sqft": 413.28,
+   "avg_dom": 44.4,
+   "sp_lp_pct": 99.85
+  },
+  "ma|mf|2020": {
+   "count": 6465,
+   "avg_price": 586990.16,
+   "median_price": 465000,
+   "avg_sqft": 201.02,
+   "avg_dom": 39.5,
+   "sp_lp_pct": 99.9
+  },
+  "haverhill|sf|2021": {
+   "count": 480,
+   "avg_price": 484862.48,
+   "median_price": 460000,
+   "avg_sqft": 262.78,
+   "avg_dom": 21.5,
+   "sp_lp_pct": 105.33
+  },
+  "haverhill|co|2021": {
+   "count": 299,
+   "avg_price": 296661.73,
+   "median_price": 290000,
+   "avg_sqft": 238.03,
+   "avg_dom": 18.9,
+   "sp_lp_pct": 104.55
+  },
+  "haverhill|mf|2021": {
+   "count": 156,
+   "avg_price": 531154.49,
+   "median_price": 535000,
+   "avg_sqft": 199.74,
+   "avg_dom": 21.9,
+   "sp_lp_pct": 105.07
+  },
+  "boston|sf|2021": {
+   "count": 1117,
+   "avg_price": 1086945.45,
+   "median_price": 765000,
+   "avg_sqft": 517.49,
+   "avg_dom": 31.9,
+   "sp_lp_pct": 102.24
+  },
+  "boston|co|2021": {
+   "count": 5881,
+   "avg_price": 925136.92,
+   "median_price": 690000,
+   "avg_sqft": 832.1,
+   "avg_dom": 53.3,
+   "sp_lp_pct": 99.59
+  },
+  "boston|mf|2021": {
+   "count": 775,
+   "avg_price": 1268818.08,
+   "median_price": 1015000,
+   "avg_sqft": 384.24,
+   "avg_dom": 39.1,
+   "sp_lp_pct": 98.8
+  },
+  "newburyport|sf|2021": {
+   "count": 185,
+   "avg_price": 941914.36,
+   "median_price": 850000,
+   "avg_sqft": 455.01,
+   "avg_dom": 27.0,
+   "sp_lp_pct": 102.85
+  },
+  "newburyport|co|2021": {
+   "count": 165,
+   "avg_price": 586323.74,
+   "median_price": 557000,
+   "avg_sqft": 454.14,
+   "avg_dom": 27.5,
+   "sp_lp_pct": 103.43
+  },
+  "newburyport|mf|2021": {
+   "count": 9,
+   "avg_price": 906433.33,
+   "median_price": 915000,
+   "avg_sqft": 339.23,
+   "avg_dom": 37.1,
+   "sp_lp_pct": 101.57
+  },
+  "essex|sf|2021": {
+   "count": 5965,
+   "avg_price": 713369.3,
+   "median_price": 605000,
+   "avg_sqft": 334.48,
+   "avg_dom": 25.2,
+   "sp_lp_pct": 105.19
+  },
+  "essex|co|2021": {
+   "count": 2804,
+   "avg_price": 434700.25,
+   "median_price": 385000,
+   "avg_sqft": 330.11,
+   "avg_dom": 29.5,
+   "sp_lp_pct": 102.54
+  },
+  "essex|mf|2021": {
+   "count": 1123,
+   "avg_price": 675349.59,
+   "median_price": 640000,
+   "avg_sqft": 239.84,
+   "avg_dom": 25.4,
+   "sp_lp_pct": 103.39
+  },
+  "ma|sf|2021": {
+   "count": 53922,
+   "avg_price": 662660.43,
+   "median_price": 530000,
+   "avg_sqft": 315.94,
+   "avg_dom": 28.1,
+   "sp_lp_pct": 103.88
+  },
+  "ma|co|2021": {
+   "count": 24489,
+   "avg_price": 596486.81,
+   "median_price": 477150,
+   "avg_sqft": 479.97,
+   "avg_dom": 38.1,
+   "sp_lp_pct": 101.4
+  },
+  "ma|mf|2021": {
+   "count": 8791,
+   "avg_price": 656411.54,
+   "median_price": 545000,
+   "avg_sqft": 227.62,
+   "avg_dom": 32.5,
+   "sp_lp_pct": 101.65
+  },
+  "haverhill|sf|2022": {
+   "count": 375,
+   "avg_price": 525407.35,
+   "median_price": 500000,
+   "avg_sqft": 289.64,
+   "avg_dom": 21.9,
+   "sp_lp_pct": 104.4
+  },
+  "haverhill|co|2022": {
+   "count": 241,
+   "avg_price": 354561.57,
+   "median_price": 350000,
+   "avg_sqft": 264.24,
+   "avg_dom": 17.9,
+   "sp_lp_pct": 104.82
+  },
+  "haverhill|mf|2022": {
+   "count": 132,
+   "avg_price": 608255.3,
+   "median_price": 600000,
+   "avg_sqft": 223.08,
+   "avg_dom": 26.8,
+   "sp_lp_pct": 103.35
+  },
+  "boston|sf|2022": {
+   "count": 991,
+   "avg_price": 1066003.32,
+   "median_price": 792000,
+   "avg_sqft": 520.73,
+   "avg_dom": 31.8,
+   "sp_lp_pct": 102.29
+  },
+  "boston|co|2022": {
+   "count": 4451,
+   "avg_price": 984296.88,
+   "median_price": 725000,
+   "avg_sqft": 844.91,
+   "avg_dom": 39.9,
+   "sp_lp_pct": 100.01
+  },
+  "boston|mf|2022": {
+   "count": 697,
+   "avg_price": 1379174.34,
+   "median_price": 1071000,
+   "avg_sqft": 409.06,
+   "avg_dom": 38.6,
+   "sp_lp_pct": 98.68
+  },
+  "newburyport|sf|2022": {
+   "count": 156,
+   "avg_price": 1077706.52,
+   "median_price": 950000,
+   "avg_sqft": 495.06,
+   "avg_dom": 26.8,
+   "sp_lp_pct": 101.76
+  },
+  "newburyport|co|2022": {
+   "count": 154,
+   "avg_price": 664970.87,
+   "median_price": 614500,
+   "avg_sqft": 490.54,
+   "avg_dom": 29.5,
+   "sp_lp_pct": 102.57
+  },
+  "newburyport|mf|2022": {
+   "count": 11,
+   "avg_price": 983363.64,
+   "median_price": 895000,
+   "avg_sqft": 347.8,
+   "avg_dom": 22.3,
+   "sp_lp_pct": 90.46
+  },
+  "essex|sf|2022": {
+   "count": 5078,
+   "avg_price": 766970.02,
+   "median_price": 640000,
+   "avg_sqft": 367.37,
+   "avg_dom": 24.7,
+   "sp_lp_pct": 104.55
+  },
+  "essex|co|2022": {
+   "count": 2279,
+   "avg_price": 483789.45,
+   "median_price": 429900,
+   "avg_sqft": 359.81,
+   "avg_dom": 28.5,
+   "sp_lp_pct": 103.4
+  },
+  "essex|mf|2022": {
+   "count": 822,
+   "avg_price": 750662.2,
+   "median_price": 691000,
+   "avg_sqft": 261.8,
+   "avg_dom": 28.4,
+   "sp_lp_pct": 101.78
+  },
+  "ma|sf|2022": {
+   "count": 45839,
+   "avg_price": 720966.5,
+   "median_price": 575000,
+   "avg_sqft": 343.59,
+   "avg_dom": 27.5,
+   "sp_lp_pct": 103.52
+  },
+  "ma|co|2022": {
+   "count": 19768,
+   "avg_price": 639726.55,
+   "median_price": 509900,
+   "avg_sqft": 497.46,
+   "avg_dom": 32.1,
+   "sp_lp_pct": 102.24
+  },
+  "ma|mf|2022": {
+   "count": 7107,
+   "avg_price": 720317.33,
+   "median_price": 597500,
+   "avg_sqft": 250.27,
+   "avg_dom": 32.6,
+   "sp_lp_pct": 101.44
+  },
+  "haverhill|sf|2023": {
+   "count": 283,
+   "avg_price": 551173.87,
+   "median_price": 525000,
+   "avg_sqft": 298.35,
+   "avg_dom": 24.8,
+   "sp_lp_pct": 103.6
+  },
+  "haverhill|co|2023": {
+   "count": 215,
+   "avg_price": 363260.75,
+   "median_price": 360000,
+   "avg_sqft": 285.81,
+   "avg_dom": 18.4,
+   "sp_lp_pct": 103.54
+  },
+  "haverhill|mf|2023": {
+   "count": 81,
+   "avg_price": 662661.11,
+   "median_price": 650000,
+   "avg_sqft": 239.34,
+   "avg_dom": 27.7,
+   "sp_lp_pct": 103.8
+  },
+  "boston|sf|2023": {
+   "count": 761,
+   "avg_price": 1082495.19,
+   "median_price": 800000,
+   "avg_sqft": 525.15,
+   "avg_dom": 37.2,
+   "sp_lp_pct": 100.87
+  },
+  "boston|co|2023": {
+   "count": 3564,
+   "avg_price": 1094666.98,
+   "median_price": 750000,
+   "avg_sqft": 899.13,
+   "avg_dom": 42.5,
+   "sp_lp_pct": 99.57
+  },
+  "boston|mf|2023": {
+   "count": 564,
+   "avg_price": 1320116.78,
+   "median_price": 1012000,
+   "avg_sqft": 386.76,
+   "avg_dom": 41.7,
+   "sp_lp_pct": 98.26
+  },
+  "newburyport|sf|2023": {
+   "count": 125,
+   "avg_price": 1113346.18,
+   "median_price": 950000,
+   "avg_sqft": 534.06,
+   "avg_dom": 27.2,
+   "sp_lp_pct": 102.6
+  },
+  "newburyport|co|2023": {
+   "count": 108,
+   "avg_price": 685249.13,
+   "median_price": 627000,
+   "avg_sqft": 512.99,
+   "avg_dom": 26.3,
+   "sp_lp_pct": 101.22
+  },
+  "newburyport|mf|2023": {
+   "count": 5,
+   "avg_price": 802000,
+   "median_price": 760000,
+   "avg_sqft": 369.6,
+   "avg_dom": 16.6,
+   "sp_lp_pct": 100.49
+  },
+  "essex|sf|2023": {
+   "count": 3898,
+   "avg_price": 813741.15,
+   "median_price": 680000,
+   "avg_sqft": 380.85,
+   "avg_dom": 27.9,
+   "sp_lp_pct": 103.16
+  },
+  "essex|co|2023": {
+   "count": 1930,
+   "avg_price": 504546.96,
+   "median_price": 445000,
+   "avg_sqft": 377.24,
+   "avg_dom": 29.9,
+   "sp_lp_pct": 102.54
+  },
+  "essex|mf|2023": {
+   "count": 572,
+   "avg_price": 748941.83,
+   "median_price": 715000,
+   "avg_sqft": 273.07,
+   "avg_dom": 29.1,
+   "sp_lp_pct": 101.76
+  },
+  "ma|sf|2023": {
+   "count": 36330,
+   "avg_price": 755208.94,
+   "median_price": 600000,
+   "avg_sqft": 355.78,
+   "avg_dom": 31.6,
+   "sp_lp_pct": 102.29
+  },
+  "ma|co|2023": {
+   "count": 16373,
+   "avg_price": 689658.4,
+   "median_price": 535000,
+   "avg_sqft": 522.14,
+   "avg_dom": 35.5,
+   "sp_lp_pct": 101.39
+  },
+  "ma|mf|2023": {
+   "count": 5173,
+   "avg_price": 742877.11,
+   "median_price": 630000,
+   "avg_sqft": 369.34,
+   "avg_dom": 33.5,
+   "sp_lp_pct": 101.21
+  },
+  "haverhill|sf|2024": {
+   "count": 300,
+   "avg_price": 588968.65,
+   "median_price": 560000,
+   "avg_sqft": 319.04,
+   "avg_dom": 21.8,
+   "sp_lp_pct": 104.27
+  },
+  "haverhill|co|2024": {
+   "count": 191,
+   "avg_price": 393929.27,
+   "median_price": 400000,
+   "avg_sqft": 306.13,
+   "avg_dom": 24.3,
+   "sp_lp_pct": 102.9
+  },
+  "haverhill|mf|2024": {
+   "count": 95,
+   "avg_price": 731507.56,
+   "median_price": 693000,
+   "avg_sqft": 249.62,
+   "avg_dom": 24.8,
+   "sp_lp_pct": 102.51
+  },
+  "boston|sf|2024": {
+   "count": 805,
+   "avg_price": 1132848.86,
+   "median_price": 830000,
+   "avg_sqft": 550.27,
+   "avg_dom": 34.2,
+   "sp_lp_pct": 101.21
+  },
+  "boston|co|2024": {
+   "count": 3491,
+   "avg_price": 1074411.23,
+   "median_price": 760000,
+   "avg_sqft": 925.79,
+   "avg_dom": 44.7,
+   "sp_lp_pct": 99.32
+  },
+  "boston|mf|2024": {
+   "count": 595,
+   "avg_price": 1416767.48,
+   "median_price": 1140000,
+   "avg_sqft": 414.6,
+   "avg_dom": 37.3,
+   "sp_lp_pct": 99.41
+  },
+  "newburyport|sf|2024": {
+   "count": 131,
+   "avg_price": 1234211.96,
+   "median_price": 1100000,
+   "avg_sqft": 574.16,
+   "avg_dom": 32.5,
+   "sp_lp_pct": 100.7
+  },
+  "newburyport|co|2024": {
+   "count": 144,
+   "avg_price": 768538.54,
+   "median_price": 672500,
+   "avg_sqft": 535.56,
+   "avg_dom": 33,
+   "sp_lp_pct": 100.47
+  },
+  "newburyport|mf|2024": {
+   "count": 5,
+   "avg_price": 1100777.6,
+   "median_price": 1100000,
+   "avg_sqft": 376.47,
+   "avg_dom": 45.4,
+   "sp_lp_pct": 94.52
+  },
+  "essex|sf|2024": {
+   "count": 4201,
+   "avg_price": 870718.32,
+   "median_price": 715000,
+   "avg_sqft": 403.12,
+   "avg_dom": 29.7,
+   "sp_lp_pct": 102.78
+  },
+  "essex|co|2024": {
+   "count": 1943,
+   "avg_price": 531005.83,
+   "median_price": 460000,
+   "avg_sqft": 400.16,
+   "avg_dom": 31.0,
+   "sp_lp_pct": 101.33
+  },
+  "essex|mf|2024": {
+   "count": 646,
+   "avg_price": 890238.52,
+   "median_price": 781375,
+   "avg_sqft": 299.9,
+   "avg_dom": 29.9,
+   "sp_lp_pct": 101.62
+  },
+  "ma|sf|2024": {
+   "count": 37997,
+   "avg_price": 809406.58,
+   "median_price": 642380,
+   "avg_sqft": 389.07,
+   "avg_dom": 31.9,
+   "sp_lp_pct": 101.93
+  },
+  "ma|co|2024": {
+   "count": 16291,
+   "avg_price": 702168.82,
+   "median_price": 550000,
+   "avg_sqft": 542.12,
+   "avg_dom": 35.9,
+   "sp_lp_pct": 100.78
+  },
+  "ma|mf|2024": {
+   "count": 5534,
+   "avg_price": 832476.2,
+   "median_price": 705550,
+   "avg_sqft": 281.44,
+   "avg_dom": 31.7,
+   "sp_lp_pct": 101.35
+  },
+  "haverhill|sf|2025": {
+   "count": 355,
+   "avg_price": 614351.13,
+   "median_price": 600000,
+   "avg_sqft": 334.49,
+   "avg_dom": 28.6,
+   "sp_lp_pct": 101.8
+  },
+  "haverhill|co|2025": {
+   "count": 258,
+   "avg_price": 392762.73,
+   "median_price": 385000,
+   "avg_sqft": 316.43,
+   "avg_dom": 28.7,
+   "sp_lp_pct": 100.61
+  },
+  "haverhill|mf|2025": {
+   "count": 98,
+   "avg_price": 820146.94,
+   "median_price": 780000,
+   "avg_sqft": 275.06,
+   "avg_dom": 23.0,
+   "sp_lp_pct": 103.77
+  },
+  "boston|sf|2025": {
+   "count": 813,
+   "avg_price": 1299708.23,
+   "median_price": 895000,
+   "avg_sqft": 585.14,
+   "avg_dom": 36.9,
+   "sp_lp_pct": 100.81
+  },
+  "boston|co|2025": {
+   "count": 3474,
+   "avg_price": 1091879.0,
+   "median_price": 764750,
+   "avg_sqft": 897.96,
+   "avg_dom": 48.6,
+   "sp_lp_pct": 98.8
+  },
+  "boston|mf|2025": {
+   "count": 594,
+   "avg_price": 1452052.76,
+   "median_price": 1188500,
+   "avg_sqft": 425.23,
+   "avg_dom": 41.5,
+   "sp_lp_pct": 98.37
+  },
+  "newburyport|sf|2025": {
+   "count": 141,
+   "avg_price": 1325882.79,
+   "median_price": 1190000,
+   "avg_sqft": 581.39,
+   "avg_dom": 33.9,
+   "sp_lp_pct": 99.54
+  },
+  "newburyport|co|2025": {
+   "count": 122,
+   "avg_price": 808717.42,
+   "median_price": 700000,
+   "avg_sqft": 579.09,
+   "avg_dom": 36.0,
+   "sp_lp_pct": 99.15
+  },
+  "newburyport|mf|2025": {
+   "count": 6,
+   "avg_price": 1311666.67,
+   "median_price": 1215000,
+   "avg_sqft": 437.61,
+   "avg_dom": 44.5,
+   "sp_lp_pct": 98.19
+  },
+  "essex|sf|2025": {
+   "count": 4369,
+   "avg_price": 896083.33,
+   "median_price": 750000,
+   "avg_sqft": 413.41,
+   "avg_dom": 31.7,
+   "sp_lp_pct": 101.96
+  },
+  "essex|co|2025": {
+   "count": 1926,
+   "avg_price": 541592.09,
+   "median_price": 470000,
+   "avg_sqft": 411.51,
+   "avg_dom": 34.7,
+   "sp_lp_pct": 100.47
+  },
+  "essex|mf|2025": {
+   "count": 574,
+   "avg_price": 941202.91,
+   "median_price": 825000,
+   "avg_sqft": 314.35,
+   "avg_dom": 28.1,
+   "sp_lp_pct": 101.85
+  },
+  "ma|sf|2025": {
+   "count": 38870,
+   "avg_price": 853462.01,
+   "median_price": 670000,
+   "avg_sqft": 391.7,
+   "avg_dom": 35.6,
+   "sp_lp_pct": 101.18
+  },
+  "ma|co|2025": {
+   "count": 16735,
+   "avg_price": 710146.39,
+   "median_price": 554350,
+   "avg_sqft": 539.73,
+   "avg_dom": 41.1,
+   "sp_lp_pct": 99.94
+  },
+  "ma|mf|2025": {
+   "count": 5512,
+   "avg_price": 874915.87,
+   "median_price": 744000,
+   "avg_sqft": 290.58,
+   "avg_dom": 35.1,
+   "sp_lp_pct": 100.47
+  }
+ }
+}
