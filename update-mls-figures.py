@@ -114,10 +114,27 @@ SCOPES = {
 }
 
 
+class BridgeRateLimited(Exception):
+    """Bridge's quota is spent and its reset is further out than we waited.
+
+    Distinct from RuntimeError (a short/untrustworthy fetch, which must never be
+    cached) because it is not a data problem: the cells already fetched are sound.
+    Only backfill_history() catches it — it stops and keeps them, so the next run
+    resumes. The nightly tail leaves it uncaught and dies loudly, as it should:
+    ~29 queries that cannot get through means something is actually wrong.
+    """
+
+
 # Bridge rate-limits on a ~1-minute rolling window. Space calls out slightly so
 # a big statewide pass doesn't burst straight through the quota in a few seconds.
 _MIN_REQUEST_INTERVAL = 0.25  # seconds
 _last_request_ts = 0.0
+
+# How long we will sit on a 429. The nightly tail sees ~46s resets, so 120s is
+# generous and it should fail fast rather than hang. A backfill exhausts the quota
+# hard enough that Bridge pushes the reset ~an hour out (observed: 54min), and it
+# has hours of work to do anyway — so let it wait rather than throw the pass away.
+_MAX_429_WAIT = 3600.0 if ARGS.backfill_history else 120.0
 
 
 def _throttle() -> None:
@@ -136,7 +153,7 @@ def _wait_after_429(e: urllib.error.HTTPError, body: str, attempt: int) -> float
     retry_after = e.headers.get("Retry-After") if e.headers else None
     if retry_after:
         try:
-            return min(float(retry_after) + 1.0, 120.0)
+            return min(float(retry_after) + 1.0, _MAX_429_WAIT)
         except ValueError:
             pass  # HTTP-date form is rare here; fall through to body parsing
     m = re.search(r"reset on (.+?)\s*\(", body)
@@ -147,7 +164,7 @@ def _wait_after_429(e: urllib.error.HTTPError, body: str, attempt: int) -> float
             )
             secs = (reset - datetime.datetime.now(datetime.timezone.utc)).total_seconds()
             if secs > 0:
-                return min(secs + 3.0, 120.0)
+                return min(secs + 3.0, _MAX_429_WAIT)
         except ValueError:
             pass
     return min(2 ** attempt + 0.5 * attempt, 60.0)
@@ -177,6 +194,10 @@ def _get(params: dict, max_retries: int = 8) -> dict:
                 print(f"  [retry] {e.code} on Bridge call — sleeping {wait:.1f}s (attempt {attempt+1}/{max_retries})")
                 time.sleep(wait)
                 continue
+            if e.code == 429 and ARGS.backfill_history:
+                # Recoverable: backfill_history() stops and keeps the cells already on
+                # disk, so a re-run resumes rather than restarting ~5,000 requests.
+                raise BridgeRateLimited(body)
             sys.exit(f"Bridge HTTP {e.code}: {body}")
         except (urllib.error.URLError, TimeoutError) as e:
             last_err = str(e)
@@ -420,8 +441,8 @@ def load_history() -> dict:
     return h
 
 
-def backfill_history(history: dict) -> dict:
-    """Fetch every (scope, pt, year) cell missing from the cache.
+def backfill_history(history: dict) -> tuple[dict, bool]:
+    """Fetch every (scope, pt, year) cell missing from the cache. Returns (cache, complete).
 
     Incremental by design. A full pass is ~1M rows / ~5k requests / ~20-40min, which is
     survivable once but not nightly, and not something to restart from zero because
@@ -442,12 +463,21 @@ def backfill_history(history: dict) -> dict:
     ]
     if not todo:
         print("[mls-update] history cache complete — nothing to backfill")
-        return history
+        return history, True
 
     print(f"[mls-update] backfilling {len(todo)} cell(s) — this is the expensive path")
     for n, (scope_name, pt_label, yr) in enumerate(todo, 1):
         try:
             rows = fetch_closed_year(SCOPES[scope_name], PT_BY_LABEL[pt_label], yr)
+        except BridgeRateLimited as e:
+            # The quota is gone for this window. Every cell before this one is already
+            # on disk, so stop and let the caller commit them: the re-run picks up here
+            # instead of restarting. This cell fetched partially and is NOT cached — a
+            # short year must never be averaged (see fetch_closed_year).
+            print(f"[mls-update] rate limit reached at cell {n}/{len(todo)} "
+                  f"({scope_name}/{pt_label}/{yr}) — stopping with {n - 1} fetched this run")
+            print(f"  Bridge said: {e}")
+            return history, False
         except RuntimeError as e:
             sys.exit(f"[mls-update] history fetch failed for {scope_name}/{pt_label}/{yr}: {e}")
         a = aggregate(rows)
@@ -473,7 +503,7 @@ def backfill_history(history: dict) -> dict:
         HISTORY_PATH.write_text(json.dumps(history, indent=1), encoding="utf-8")
         print(f"  [{n}/{len(todo)}] {scope_name:<11} {pt_label} {yr}: "
               f"n={a['count']:>5}" + (f" avg=${a['avg_price']:>10,.0f}" if a["avg_price"] else " (no closings)"))
-    return history
+    return history, True
 
 
 def history_series(history: dict, scope_name: str, pt_label: str, agg_key: str) -> list | None:
@@ -594,7 +624,32 @@ print(f"[mls-update] year={YEAR}, trailing-12mo from {TRAILING_12MO_START}")
 # History first: if it is going to fail, fail before spending the tail's quota.
 HISTORY = load_history()
 if ARGS.backfill_history:
-    HISTORY = backfill_history(HISTORY)
+    HISTORY, _hist_complete = backfill_history(HISTORY)
+    # A backfill is a cache-population pass and deliberately STOPS here rather than
+    # going on to render the pages. It has just spent the Bridge quota, so the tail —
+    # and the price-distribution step queued behind it — would do nothing but 429, fail
+    # the job, and take the freshly-fetched cache down with it (the commit step never
+    # runs on a failed job). Exiting 0 lets the cache be committed; the next nightly
+    # reads it, composes it with a cheap fresh tail, and writes the full series.
+    _remaining = [
+        (s, p, y)
+        for y in HIST_YEARS
+        for s in SCOPES
+        for p in PT_BY_LABEL
+        if _cell_key(s, p, y) not in HISTORY["cells"]
+    ]
+    if _hist_complete and not _remaining:
+        print(f"[mls-update] history cache complete ({HIST_START}-{HIST_END}) — "
+              "the next nightly writes FULL series")
+    else:
+        print(
+            f"::warning::[mls-update] backfill incomplete — {len(_remaining)} of "
+            f"{len(SCOPES) * len(PT_BY_LABEL) * len(HIST_YEARS)} cell(s) still missing. "
+            "Progress IS saved: re-run `gh workflow run update-mls.yml "
+            "-f backfill_history=true` to resume where this stopped."
+        )
+    print("[mls-update] backfill pass done — cache written; pages left to the nightly.")
+    sys.exit(0)
 
 HIST_READY = all(
     history_series(HISTORY, s, p, "avg_price") is not None

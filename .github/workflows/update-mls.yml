@@ -76,12 +76,18 @@ jobs:
             python update-mls-figures.py
           fi
 
+      # Both skipped on a backfill. That pass populates data/mls-history.json and exits
+      # before the tail, having just spent the Bridge quota — price-distribution would do
+      # nothing but 429, fail the job, and take the freshly-fetched cache down with it.
+      # A backfill commits the cache and nothing else; the nightly runs these as normal.
       - name: Refresh price-distribution tab
+        if: ${{ inputs.backfill_history != true }}
         env:
           BRIDGE_TOKEN: ${{ secrets.BRIDGE_TOKEN }}
         run: node update-price-distribution.js
 
       - name: Refresh historical-context panel
+        if: ${{ inputs.backfill_history != true }}
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: node update-housing-history.js
@@ -89,16 +95,27 @@ jobs:
       - name: Check for changes
         id: changes
         run: |
-          git diff --quiet -- ma-housing-dashboard.html haverhill-market-report.html MASTER_DATA.md data/mls-history.json data/price-distribution-latest.json data/housing-history-latest.json \
-            && echo "changed=false" >> $GITHUB_OUTPUT \
-            || echo "changed=true"  >> $GITHUB_OUTPUT
+          # git status, not git diff: the first backfill CREATES data/mls-history.json, and
+          # git diff only reports tracked files — a brand-new cache would read as "no
+          # change" and be thrown away instead of committed.
+          if [ -n "$(git status --porcelain -- ma-housing-dashboard.html haverhill-market-report.html MASTER_DATA.md data/mls-history.json data/price-distribution-latest.json data/housing-history-latest.json)" ]; then
+            echo "changed=true"  >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Commit updates
         if: steps.changes.outputs.changed == 'true'
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add ma-housing-dashboard.html haverhill-market-report.html MASTER_DATA.md data/mls-history.json data/price-distribution-latest.json data/housing-history-latest.json
+          git add ma-housing-dashboard.html haverhill-market-report.html MASTER_DATA.md data/price-distribution-latest.json data/housing-history-latest.json
+          # data/mls-history.json exists only once a backfill has populated it
+          # (-f backfill_history=true). A tail-only run never writes it, and `git add`
+          # fatals on a pathspec that matches nothing — which broke every nightly.
+          if [ -f data/mls-history.json ]; then
+            git add data/mls-history.json
+          fi
           git commit -m "Auto-update: MLS PIN figures $(date -u +'%Y-%m-%d')"
           # Retry push up to 5 times, rebasing on each rejection (handles concurrent pushes)
           for attempt in 1 2 3 4 5; do
