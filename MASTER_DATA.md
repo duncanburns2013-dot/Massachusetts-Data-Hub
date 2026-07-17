@@ -146,7 +146,7 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 | 2023 | $758,182 | $819,125 | $1,081,007 | $1,122,737 |
 | 2024 | $812,972 | $874,817 | $1,140,443 | $1,218,706 |
 | 2025 | $858,122 | $899,712 | $1,324,123 | $1,327,602 |
-| 2026 | $865,531 | $902,388 | $1,313,675 | $1,269,654 |
+| 2026 | $865,439 | $902,567 | $1,313,675 | $1,269,654 |
 
 - **5-Year Growth:** MA +29.2%, Newburyport +41.1%, Boston +22.6%
 - **Note:** These are AVERAGES (skewed by luxury); Warren Group MEDIANS used for affordability analysis
@@ -157,7 +157,7 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 |--------|-------|--------|----------|
 | Avg DOM | 37 days | MLS PIN | ✅ Feb 2026 |
 | SP/LP Ratio | 100.97% | MLS PIN | ✅ Feb 2026 |
-| Units Sold | 40,194 | MLS PIN | ✅ Feb 2026 |
+| Units Sold | 40,262 | MLS PIN | ✅ Feb 2026 |
 | Units Sold YoY | +1.5% | MLS PIN | ✅ Feb 2026 |
 
 ### Haverhill Specific
@@ -167,7 +167,7 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 | Median household income | $88,326 | Census QuickFacts ACS 2020-2024 | ✅ Feb 2026 |
 | MA median household income | $104,800 | ACS 2020-2024 | ✅ Feb 2026 |
 | Condo median (Haverhill) | $385,000 | MLS | ✅ Feb 2026 |
-| SF median (Haverhill) | $601,000 | MLS | ✅ Feb 2026 |
+| SF median (Haverhill) | $602,000 | MLS | ✅ Feb 2026 |
 | Income needed for condo | ~$86K | Calc: 6.5%, 20% down, 28% DTI | ✅ Feb 2026 |
 | Income needed for SF | ~$124K | Calc: 6.5%, 20% down, 28% DTI | ✅ Feb 2026 |
 
