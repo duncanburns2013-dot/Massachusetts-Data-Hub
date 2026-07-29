@@ -1,11 +1,21 @@
 # .github/workflows/update-nh.yml
-# MANUAL fallback only. PrimeMLS/Cloudflare rate-limits GitHub's datacenter IPs and
-# returns truncated data, so the DAILY refresh runs on Duncan's PC (Task Scheduler ->
-# run_nh_update.bat) from a residential IP. This workflow_dispatch is a manual backup.
+# Daily refresh, with the PC task (Task Scheduler -> run_nh_update.bat) as a
+# redundant second path. Either can commit; whichever runs second finds no changes
+# and exits cleanly.
+#
+# History: the cron was disabled because PrimeMLS/Cloudflare throttles GitHub's
+# datacenter IPs and a throttled run emailed a failure every time. Two things
+# changed that. (1) The low-volume redesign genuinely works from CI — runs on
+# 2026-07-10/11/12 all succeeded in ~2m20s. (2) A throttled pull now exits 75
+# instead of 1 and is reported here as a neutral skip, so it no longer produces
+# failure mail. The safe-write guard still means nothing is ever published from a
+# truncated pull.
 name: Update NH Figures
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "20 7 * * *"   # 07:20 UTC daily
 
 jobs:
   update-nh:
@@ -21,12 +31,29 @@ jobs:
         with:
           python-version: "3.12"
       - name: Rebuild NH figures (recent months + towns + active; history from committed aggregates)
+        id: pull
         env:
           PRIMEMLS_CLIENT_ID: ${{ secrets.PRIMEMLS_CLIENT_ID }}
           PRIMEMLS_CLIENT_SECRET: ${{ secrets.PRIMEMLS_CLIENT_SECRET }}
-        run: python update-nh-figures.py all
+        run: |
+          set +e
+          python update-nh-figures.py all
+          code=$?
+          set -e
+          if [ "$code" -eq 0 ]; then
+            echo "throttled=false" >> $GITHUB_OUTPUT
+          elif [ "$code" -eq 75 ]; then
+            # Expected and self-healing: the feed throttled us and the safe-write
+            # guard refused to publish a truncated pull. Not a failure.
+            echo "::notice::PrimeMLS pull was throttled/truncated - nothing written. Next run will retry."
+            echo "throttled=true" >> $GITHUB_OUTPUT
+          else
+            echo "::error::update-nh-figures.py failed with exit code $code"
+            exit "$code"
+          fi
       - name: Check for changes
         id: changes
+        if: steps.pull.outputs.throttled == 'false'
         run: |
           git diff --quiet -- data/nh-figures.json data/nh-state-monthly.json \
             && echo "changed=false" >> $GITHUB_OUTPUT \

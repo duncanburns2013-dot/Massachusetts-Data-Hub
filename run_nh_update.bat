@@ -16,10 +16,22 @@ git pull --quiet
 
 echo Pulling PrimeMLS and rebuilding NH figures...
 python update-nh-figures.py all
-if errorlevel 1 (
-  echo ABORTED: pull was truncated/rate-limited or errored - nothing committed.
-  exit /b 1
+REM 75 = throttled/truncated pull, nothing written. Expected and self-healing, so
+REM exit 0 and let Task Scheduler record a clean run. Anything else is a real error.
+REM Checked high-to-low: `errorlevel N` means "N or greater".
+if errorlevel 76 goto :realerror
+if errorlevel 75 (
+  echo SKIPPED: pull was throttled/truncated - nothing committed. Next run will retry.
+  exit /b 0
 )
+if errorlevel 1 goto :realerror
+goto :committed
+
+:realerror
+echo FAILED: update-nh-figures.py errored - nothing committed.
+exit /b 1
+
+:committed
 
 git add data/nh-figures.json data/nh-state-monthly.json
 git diff --cached --quiet && (echo No changes to commit. & exit /b 0)

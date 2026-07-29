@@ -31,6 +31,9 @@ from pathlib import Path
 TOKEN_URL = "https://primemls.paragonrels.com/OData/primemls/identity/connect/token"
 DATA_URL = "https://primemls.paragonrels.com/OData/primemls/DD1.7/Property"
 SCOPE = "OData"
+# Seconds to wait before re-reading a short page to tell "end of data" apart from
+# "throttled and truncated". See fetch_all.
+TRUNCATION_RECHECK_DELAY = 3.0
 # A real browser UA — Cloudflare 403s the default python-urllib UA from datacenter (CI) IPs.
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
@@ -40,7 +43,11 @@ def _load_dotenv():
     p = Path(__file__).resolve().parent / ".env"
     if not p.exists():
         return
-    for line in p.read_text(encoding="utf-8").splitlines():
+    # utf-8-sig, not utf-8: PowerShell's `Set-Content -Encoding utf8` (the obvious
+    # way to create this file on Windows) writes a BOM. Read as plain utf-8 the
+    # first key becomes "﻿PRIMEMLS_CLIENT_ID" and auth fails with a confusing
+    # KeyError on a file that looks completely correct in an editor.
+    for line in p.read_text(encoding="utf-8-sig").splitlines():
         line = line.strip()
         if line and not line.startswith("#") and "=" in line:
             k, v = line.split("=", 1)
@@ -112,9 +119,26 @@ def fetch_all(filt, select, page=200, order="CloseDate desc", pace=0.4, max_page
         if order:
             params["$orderby"] = order
         batch = _get(params).get("value", [])
-        rows.extend(batch)
+
+        # A page shorter than $top means one of two very different things: we
+        # genuinely reached the end, OR Cloudflare/PrimeMLS quietly truncated the
+        # response under throttling. Treating the second as the first is silent
+        # data loss, and it is exactly what produced Salem=200 (of ~1,755) and
+        # Derry=0 on 2026-07-13 while the run reported success.
+        #
+        # So make a short page prove itself: pause and re-request the SAME offset.
+        # A real end-of-data is deterministic and returns the same short page; a
+        # throttled one usually returns more the second time.
         if len(batch) < page:
-            break
+            time.sleep(TRUNCATION_RECHECK_DELAY)
+            verify = _get(params).get("value", [])
+            if len(verify) > len(batch):
+                batch = verify                      # first read was truncated
+            if len(batch) < page:
+                rows.extend(batch)
+                break
+
+        rows.extend(batch)
         skip += page
         time.sleep(pace)
     return rows
