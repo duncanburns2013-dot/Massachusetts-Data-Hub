@@ -159,15 +159,30 @@ def aggregate(sold, active):
 
 
 # ---- safety check ----------------------------------------------------------
+# Exit code for "the pull was throttled/truncated, nothing was written". This is
+# an expected, self-healing condition — the next run fixes it — so callers can
+# treat it as a neutral skip rather than a build failure. Distinct from 1, which
+# means a genuine error worth looking at. (75 = BSD sysexits EX_TEMPFAIL.)
+EXIT_THROTTLED = 75
+
+
+def _abort_throttled(msg):
+    print(f"ABORT: {msg} — nothing written.", file=sys.stderr)
+    raise SystemExit(EXIT_THROTTLED)
+
+
 def _check(name, entry, prior):
     """Abort the whole run if a market looks truncated (empty, or volume dropped
     vs the last published figures — sold counts only ever grow)."""
     if not entry or not entry.get("volume"):
-        raise SystemExit(f"ABORT: '{name}' returned no data (truncated / rate-limited pull) — nothing written.")
+        _abort_throttled(f"'{name}' returned no data (truncated / rate-limited pull)")
     pv = (prior.get("markets", {}).get(name) or {}).get("volume")
-    if pv and entry["volume"] < pv * 0.98:
-        raise SystemExit(f"ABORT: '{name}' volume {entry['volume']} << previous {pv} "
-                         f"(truncated pull) — nothing written.")
+    # Closed sales are cumulative, so any real decrease is a truncated pull rather
+    # than a market move. The old 2% band was wide enough to let a mild truncation
+    # through and publish it as real (e.g. 1,740 of 1,755 passed). 0.5% still
+    # tolerates the odd retroactively-corrected listing.
+    if pv and entry["volume"] < pv * 0.995:
+        _abort_throttled(f"'{name}' volume {entry['volume']} < previous {pv} (truncated pull)")
 
 
 # ---- io + drivers ----------------------------------------------------------
