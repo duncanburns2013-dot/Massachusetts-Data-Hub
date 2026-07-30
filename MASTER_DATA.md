@@ -1,6 +1,6 @@
 # Massachusetts Data Hub — Master Data Reference
 
-> **Last Updated:** July 29, 2026
+> **Last Updated:** July 30, 2026
 > **Maintainer:** Duncan Burns
 > **Purpose:** Single source of truth for all verified data points used across dashboards
 
@@ -146,7 +146,7 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 | 2023 | $758,182 | $819,125 | $1,081,007 | $1,122,737 |
 | 2024 | $812,972 | $874,817 | $1,140,443 | $1,218,706 |
 | 2025 | $858,122 | $899,712 | $1,324,123 | $1,327,602 |
-| 2026 | $865,716 | $905,171 | $1,313,207 | $1,268,151 |
+| 2026 | $865,956 | $905,432 | $1,309,773 | $1,266,661 |
 
 - **5-Year Growth:** MA +29.2%, Newburyport +41.1%, Boston +22.6%
 - **Note:** These are AVERAGES (skewed by luxury); Warren Group MEDIANS used for affordability analysis
@@ -157,7 +157,7 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 |--------|-------|--------|----------|
 | Avg DOM | 37 days | MLS PIN | ✅ Feb 2026 |
 | SP/LP Ratio | 101.01% | MLS PIN | ✅ Feb 2026 |
-| Units Sold | 41,791 | MLS PIN | ✅ Feb 2026 |
+| Units Sold | 42,000 | MLS PIN | ✅ Feb 2026 |
 | Units Sold YoY | +1.5% | MLS PIN | ✅ Feb 2026 |
 
 ### Haverhill Specific
