@@ -159,6 +159,7 @@ footer a:hover{color:var(--duckling)}
 .grid .card:nth-child(13){transition-delay:0.6s}
 .grid .card:nth-child(14){transition-delay:0.65s}
 .grid .card:nth-child(15){transition-delay:0.7s}
+.grid .card:nth-child(16){transition-delay:0.75s}
 @media(max-width:960px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:768px){.hero{padding:48px 16px 36px}.hero-stats{grid-template-columns:repeat(2,1fr)}.main-content{padding:20px 16px 40px}.grid-wrap{padding:16px}.share-bar{gap:8px}.share-btn{padding:7px 12px;font-size:0.68rem}}
 @media(max-width:540px){.hero-stats{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.grid-wrap{padding:12px}}
@@ -189,6 +190,7 @@ footer a:hover{color:var(--duckling)}
     </div>
     <div class="grid-wrap">
     <div class="grid">
+      <a href="worst-policies-dashboard.html" class="card c-red rv"><div class="card-top"><div class="card-icon red">&#x26A0;&#xFE0F;</div><span class="badge">New</span></div><div class="card-name">The 25 Worst Policies in Massachusetts</div><div class="card-desc">A ranked, sourced inventory compiled from 29 research repositories. Every entry names the statute, the dollar figure, the roll-call vote, and the repo it came from &mdash; from the $130B&ndash;$400B net-zero mandate stack to the $4.49B unfunded &sect;&nbsp;3A rezoning order.</div><div class="card-foot"><div class="tags"><span class="tag">Cross-repo</span><span class="tag">Statutes</span><span class="tag">Roll calls</span></div><div class="arrow">&rarr;</div></div></a>
       <a href="immigration-dashboard.html" class="card c-cranberry rv"><div class="card-top"><div class="card-icon cranberry">&#x1F6C2;</div><span class="badge">Live</span></div><div class="card-name">Immigration &mdash; National + Massachusetts</div><div class="card-desc">Border encounters, net international migration, deportation math, Census revisions, fiscal impact (Cato/NASEM), MA shelter crisis, H-1B data, and city-level concentration analysis.</div><div class="card-foot"><div class="tags"><span class="tag">CBP</span><span class="tag">Census</span><span class="tag">ICE</span><span class="tag">CBO</span></div><div class="arrow">&rarr;</div></div></a>
       <a href="ma-housing-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F3E0;</div><span class="badge">Live</span></div><div class="card-name">Massachusetts Housing Market</div><div class="card-desc">Statewide, Boston, Essex County, and Greater Newburyport. Median prices, DOM, SP/LP ratios, 5-year MLS trends, and affordability calculations.</div><div class="card-foot"><div class="tags"><span class="tag">Warren Group</span><span class="tag">MLS PIN</span><span class="tag">Census ACS</span></div><div class="arrow">&rarr;</div></div></a>
       <a href="nh-housing-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F3D4;&#xFE0F;</div><span class="badge">Live</span></div><div class="card-name">New Hampshire Housing Market</div><div class="card-desc">Statewide market data with regional breakdowns. Median prices, average sales, DOM, sell-through rates, and SP/LP ratios.</div><div class="card-foot"><div class="tags"><span class="tag">Paragon MLS</span></div><div class="arrow">&rarr;</div></div></a>
@@ -229,8 +231,8 @@ footer a:hover{color:var(--duckling)}
 const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis')})},{threshold:0.04,rootMargin:'0px 0px -15px 0px'});
 document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
 var SHARE_URL='https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/';
-var SHARE_TITLE='Massachusetts Data Hub \u2014 15 interactive dashboards tracking the Commonwealth\'s affordability crisis';
-var SHARE_TEXT='Tax competitiveness #41, $313K income needed to live comfortably, healthcare costs #1 in nation. 15 dashboards built from official government data.';
+var SHARE_TITLE='Massachusetts Data Hub \u2014 16 interactive dashboards tracking the Commonwealth\'s affordability crisis';
+var SHARE_TEXT='Tax competitiveness #41, $313K income needed to live comfortably, healthcare costs #1 in nation. 16 dashboards built from official government data.';
 function shareOn(p){
   var u=encodeURIComponent(SHARE_URL),t=encodeURIComponent(SHARE_TITLE),d=encodeURIComponent(SHARE_TEXT);
   var urls={

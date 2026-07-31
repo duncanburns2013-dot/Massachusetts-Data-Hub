@@ -325,6 +325,58 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 
 ---
 
+## ⚠️ Policy Registry — Ranked Inventory
+
+Full detail and charts: [`worst-policies-dashboard.html`](worst-policies-dashboard.html). Ranked by documented cost to residents and taxpayers.
+
+| # | Policy | Citation | Documented cost | Source repo |
+|---|--------|----------|-----------------|-------------|
+| 1 | Net-zero mandate stack (GWSA + Climate Roadmap) | Ch. 298/2008 (c. 21N); St. 2021 c. 8 | $130B–$400B+ economy-wide; ~$377/yr per household | Data Hub · Mass-Fiscal-Energy-Legislation |
+| 2 | Offshore wind "full cost recovery" | Ch. 169/2008 §83C, amd. St. 2016 c. 188 §12 | ~4% of every bill, uncapped; 2.75% utility remuneration | Data Hub · ma-electricity-analysis |
+| 3 | Pension + OPEB underfunding | PERAC 2024; ACFR FY2024 | $107.6B liabilities; $4.9B/yr (~8% of budget) | Data Hub · Massachusetts-Disaster |
+| 4 | Emergency Assistance shelter administration | Right-to-shelter as administered pre-2025 | $856M–$978M FY24; $1.06B FY25; $3,496–$3,870/family/wk | Data Hub · The-Invasion · fraud-detection |
+| 5 | Records exemption + refused audit | Ballot Q1 2024 (71.8% yes) | Not dollar-denominated | Data Hub · The-Peoples-Audit |
+| 6 | MBTA Communities Act § 3A | M.G.L. c. 40A §3A | ~$4.49B fees vs. $15M appropriated (99.7% unfunded) | MBTA-Communities-Act |
+| 7 | RGGI cap-and-trade | M.G.L. c. 21N §§1–9 | $1.36B since 2008; $200.4M in 2025; ~15% returned | Data Hub |
+| 8 | Fair Share surtax + Ch. 70 supplanting | Art. XLIV (2022, 51%) | ~$3.0B/yr; $496M Ch. 70 shifted | Data Hub · MA-2027-Budget-Analysis |
+| 9 | MBTA structural finance / Big Dig debt | Forward Funding, 2000 | ~$1.1B/yr = $412 per household | MBTA-Scam |
+| 10 | Lawmaker-nonprofit loophole | MGL Ch. 55 §7A | $104M/yr lobbying; $457M 2015–2025 | Data Hub · HHS-MA-DOGE |
+| 11 | MCAS graduation requirement repeal | Ballot Q2, Nov 2024 | Universal Grade 10 decline, 2025 | Data Hub · MA-v-NH |
+| 12 | "Protecting Ratepayers" storage mandate | St. 2024 c. 239 §83E | 5,000 MW with guaranteed pass-through | Data Hub |
+| 13 | H.5151 / H.5175 | 194th Session, 2026 | "$9B" = $310/yr claimed; ~$150/yr realistic | Mass-Fiscal-Energy-Legislation |
+| 14 | Pipeline capacity opposition | Executive policy, no statute | Supply is ~40% of the bill | Data Hub |
+| 15 | $25,000 homebuyer subsidy | MassHousing DPA (deferred 2nd mortgage) | Gateway bottom tier +74% vs. top +57% | The-25K-Problem |
+| 16 | Property tax growth under Prop 2½ | M.G.L. c. 59 §21C | $24.0B levy FY2026, +$1.2B YoY; MA #48 | Data Hub · CoH |
+| 17 | Third-party competitive supply protected | Ban bills blocked in committee | $525M excess consumer cost 2015–2021 (MA AG) | ma-electricity-analysis |
+| 18 | UI tax + separate non-UI payroll tax | M.G.L. c. 151A + PFML | MA #45 on UI tax — *ranking only, no underlying analysis* | Data Hub |
+| 19 | Estate tax at $1M threshold | M.G.L. c. 65C | 86,382 returns / $12.1B AGI cumulative outflow | Data Hub |
+| 20 | Benefits fraud detection capacity | State Auditor BSI | ~$11–13M detected vs. ~$50M modeled (SNAP) | fraud-detection |
+| 21 | Health rate approvals vs. own benchmark | MA DOI rate review | 7.1%–12.2% approved vs. 3.6% benchmark | Data Hub · MA-Health-Insurance |
+| 22 | Chapter 40B as primary supply tool | M.G.L. c. 40B §§20–23 | ~70K units in 50+ yrs vs. 222,000-unit deficit | MA-Housing-Affordability-Issues |
+| 23 | H-1B wage levels as applied in MA | Federal prevailing-wage tiers | 18.9% of MA positions at 36% below median | H1B |
+| 24 | Boston equity apparatus vs. service delivery | City of Boston ACFR | $548K → $28.5M (52×); BPD −177 officers | All-Things-Boston |
+| 25 | Healthcare regulatory capture | SOC lobbyist registrations | $39M hospital lobbying 2020–2025 | Pay-To-Play-MA-Non-Profits |
+
+### ⚠️ Known Cross-Repo Conflicts — Unreconciled
+
+Treat these as ranges, not point estimates. Resolve here first, then propagate to dashboards.
+
+| Figure | Competing values | Where |
+|--------|-----------------|-------|
+| FY2024 shelter spending | $856M / $894M / $932M / $978M | The-Invasion / immigration-dashboard / MA-v-NH / this file |
+| Cost per shelter family per week | $3,496 / $3,870 / ~$10,000/mo | this file / fraud-detection / Massachusetts-Disaster |
+| MA electricity premium over US avg | +56% (Apr 2026) / +74% (Nov 2024) / +79% (Dec 2025) / +57% | energy-dashboard / ma-electricity-analysis / Mass-Fiscal-Energy-Legislation / Maura-Healey-Year-3- |
+| Industrial rate premium | +112% (EIA Oct 2025) / +134% | energy-dashboard / affordability-dashboard |
+| Unfunded OPEB | $13.7B (Commonwealth) / $15.77B (+MBTA) / $52.8B (all entities) | All correct for different scopes — labels don't always say which |
+| Total state liabilities | $107.6B (ACFR FY2024) / $122.5B | pension-dashboard / Maura-Healey-Year-3- (Dec 2025 vintage) |
+| Unfunded pension total | $42.07B / $42.1B / $42.76B (incl. Boston + MBTA) | Massachusetts-Disaster / pension-dashboard |
+
+### 📭 Coverage Gaps
+
+No repository in the network currently analyzes: **rent control** (neither the 1994 statewide ban nor current proposals to lift it), **permitting timelines**, **Article 80** in Boston, or the **UI trust fund structure**. Given the 222,000-unit deficit identified as the core housing problem, rent control sits directly on the critical path and is unexamined.
+
+---
+
 ## 🔗 Dashboard Registry
 
 | Dashboard | Repo / Path | Live URL | Status |
@@ -338,6 +390,7 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 | Boston Education | `/education/boston-dashboard.html` | TBD (migrate) | Active |
 | Merrimack Valley Education | `/education/merrimack-valley.html` | TBD (migrate) | Active |
 | Healthcare Insurance | `/healthcare/index.html` | TBD (migrate) | Planned |
+| **Worst Policies (ranked)** | `worst-policies-dashboard.html` | Live | Active |
 
 ### Current Live URLs (old repos — migrate over time)
 
@@ -356,6 +409,7 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 | Date | What Changed | Updated By |
 |------|-------------|------------|
 | 2026-02-05 | Initial creation — all data compiled from prior chats | Claude + Duncan |
+| 2026-07-31 | Added Policy Registry (25 ranked entries), cross-repo conflict table, and coverage gaps; synthesized from 29 research repositories | Claude + Duncan |
 
 ---
 
