@@ -34,6 +34,29 @@ CURRENT_LATEST_RETURNS = -16921
 CURRENT_LATEST_AGI_B = -4.18
 
 
+def warn(msg):
+    """Print a warning that is visible in the GitHub Actions run, not just the log."""
+    print(f"::warning::{msg}" if os.environ.get("GITHUB_ACTIONS") else f"WARNING: {msg}")
+
+
+def is_plausible(rec):
+    """
+    Sanity-gate a fetched year before it is allowed to rewrite the dashboard.
+
+    A year is only trusted if BOTH sides of the flow parsed: returns and AGI.
+    Zero AGI against non-zero returns is the exact signature of a column-name
+    parse failure, and is never a real IRS result.
+    """
+    if not rec:
+        return False
+    return (
+        rec["outflow_returns"] > 0
+        and rec["inflow_returns"] > 0
+        and rec["outflow_agi_k"] > 0
+        and rec["inflow_agi_k"] > 0
+    )
+
+
 def fetch_csv(url):
     req = Request(url, headers={"User-Agent": "MA-Data-Hub/1.0"})
     try:
@@ -56,6 +79,24 @@ def head_check(url):
         return False
 
 
+def _pick(row, *names, default=""):
+    """
+    Read the first present column from a case-normalized row.
+
+    The IRS ships these files with mixed-case headers — `n1` and the FIPS
+    columns are lowercase but AGI is uppercase `AGI` — so a case-sensitive
+    lookup silently reads returns correctly and AGI as zero. Every column is
+    matched lowercased for that reason. Missing/short rows yield None from
+    DictReader, so coerce before stripping.
+    """
+    for n in names:
+        if n in row:
+            v = row[n]
+            if v is not None:
+                return str(v).strip()
+    return default
+
+
 def get_ma_totals(rows, fips_col_from, fips_col_to, ma_fips_col, total_code="96"):
     """
     Extract MA total-migration row from an inflow or outflow CSV.
@@ -64,21 +105,24 @@ def get_ma_totals(rows, fips_col_from, fips_col_to, ma_fips_col, total_code="96"
     IRS CSV columns vary by year, but generally:
       - y1_statefips / y2_statefips  OR  y1_state_fips / y2_state_fips
       - n1 (number of returns) or return_num
-      - agi (AGI in thousands) or agi_num
+      - AGI (AGI in thousands) or agi_num
     """
-    for row in rows:
-        fips_from = row.get(fips_col_from, row.get("y1_statefips", row.get("y1_state_fips", ""))).strip()
-        fips_to = row.get(fips_col_to, row.get("y2_statefips", row.get("y2_state_fips", ""))).strip()
+    for raw_row in rows:
+        # Lowercase every header once, so the lookups below are case-agnostic.
+        row = {str(k).lower().strip(): v for k, v in raw_row.items() if k}
+
+        fips_from = _pick(row, fips_col_from.lower(), "y1_statefips", "y1_state_fips")
+        fips_to = _pick(row, fips_col_to.lower(), "y2_statefips", "y2_state_fips")
 
         # We want the "Total Migration" row for MA
         is_ma_outflow = (fips_from == ma_fips_col and fips_to == total_code)
         is_ma_inflow = (fips_to == ma_fips_col and fips_from == total_code)
 
         if is_ma_outflow or is_ma_inflow:
-            n1_raw = row.get("n1", row.get("return_num", "0")).strip().replace(",", "")
-            agi_raw = row.get("agi", row.get("agi_num", "0")).strip().replace(",", "")
+            n1_raw = _pick(row, "n1", "return_num", default="0").replace(",", "")
+            agi_raw = _pick(row, "agi", "agi_num", default="0").replace(",", "")
             try:
-                return int(n1_raw), int(agi_raw)
+                return int(float(n1_raw)), int(float(agi_raw))
             except ValueError:
                 pass
     return 0, 0
@@ -137,6 +181,9 @@ def fetch_year(y1, y2):
 def main():
     print("=== IRS SOI Migration Data Update ===\n")
 
+    verification = "not_run"
+    rejected_new = None
+
     # ââ Check for NEW data year ââ
     # Current latest is 2022-23. Check if 2023-24 has dropped.
     new_year = None
@@ -182,11 +229,38 @@ def main():
             ret_diff = abs(current["net_returns"] - CURRENT_LATEST_RETURNS)
             agi_diff = abs(current["net_agi_billions"] - CURRENT_LATEST_AGI_B)
             if ret_diff < 200 and agi_diff < 0.15:
-                print(f"\n  â Current 2022-23 data verified (returns: {current['net_returns']:+,}, AGI: ${current['net_agi_billions']:+,.2f}B)")
+                verification = "ok"
+                print(f"\n  OK - current {CURRENT_LATEST_YEAR} data verified "
+                      f"(returns: {current['net_returns']:+,}, "
+                      f"AGI: ${current['net_agi_billions']:+,.2f}B)")
             else:
-                print(f"\n  â ï¸  Current 2022-23 data MISMATCH:")
+                verification = "mismatch"
+                print(f"\n  !! Current {CURRENT_LATEST_YEAR} data MISMATCH:")
                 print(f"      Dashboard: {CURRENT_LATEST_RETURNS:+,} returns, ${CURRENT_LATEST_AGI_B:+,.2f}B")
                 print(f"      Fetched:   {current['net_returns']:+,} returns, ${current['net_agi_billions']:+,.2f}B")
+                # Surface it. This check printed into a log nobody reads while an
+                # AGI column-case bug held every AGI figure at zero for months;
+                # a CI annotation is what makes the next such drift visible.
+                warn(
+                    f"IRS SOI {CURRENT_LATEST_YEAR} verification mismatch - "
+                    f"dashboard {CURRENT_LATEST_RETURNS:+,} returns / "
+                    f"${CURRENT_LATEST_AGI_B:+,.2f}B vs fetched "
+                    f"{current['net_returns']:+,} returns / "
+                    f"${current['net_agi_billions']:+,.2f}B"
+                )
+
+        # A new year that comes back with zeroed AGI means the parser failed, not
+        # that Massachusetts lost $0. Never let that overwrite published figures.
+        if new_result and not is_plausible(new_result):
+            warn(
+                f"IRS SOI {new_result['year']} looks unparsed "
+                f"(returns={new_result['net_returns']:+,}, "
+                f"AGI=${new_result['net_agi_billions']:+,.2f}B) - skipping dashboard update."
+            )
+            print(f"\n  !! {new_result['year']} rejected as implausible - "
+                  f"dashboard left unchanged.")
+            rejected_new = new_result
+            new_result = None
 
         # If new year available, update the dashboard
         if new_result:
@@ -254,9 +328,11 @@ def main():
     # ââ Save JSON ââ
     out = {
         "fetched_at": datetime.utcnow().isoformat() + "Z",
-        "source": "IRS Statistics of Income â State-to-State Migration Data",
+        "source": "IRS Statistics of Income \u2014 State-to-State Migration Data",
         "latest_year_verified": CURRENT_LATEST_YEAR,
+        "verification": verification,
         "new_year_found": new_result["year"] if new_result else None,
+        "new_year_rejected": rejected_new["year"] if rejected_new else None,
         "results": results,
     }
     json_path = os.path.join(BASE_DIR, "data", "irs-soi-migration-latest.json")

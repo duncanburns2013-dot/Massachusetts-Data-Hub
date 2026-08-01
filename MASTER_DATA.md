@@ -1,8 +1,8 @@
 # Massachusetts Data Hub — Master Data Reference
 
-> **Last Updated:** August 01, 2026
+> **Last Reviewed:** August 01, 2026
 > **Maintainer:** Duncan Burns
-> **Purpose:** Single source of truth for all verified data points used across dashboards
+> **Purpose:** Reference for hand-verified data points used across dashboards
 
 ---
 
@@ -13,7 +13,24 @@ When starting a new Claude chat, say:
 
 Every entry includes: **figure → source → source URL → date verified → which dashboard uses it**
 
-When a figure is updated, change it here FIRST, then update the relevant dashboard.
+### ⚠️ This file is NOT the source of truth for API-fed figures
+
+Anything a workflow refreshes on a schedule is authoritative in `data/*.json`, not here.
+This file is a hand-kept reference and **will drift** between reviews. Where a row is
+marked 🔄 below, read the JSON instead — that is what the dashboards actually render.
+
+| Feed | Source of truth | Refresh |
+|------|----------------|---------|
+| MLS PIN housing (MA/Essex/Boston/Newburyport) | `data/mls-history.json` + live T12M in the dashboards | daily |
+| NH PrimeMLS | `data/nh-figures.json` | daily |
+| Census ACS | `data/census-latest.json` | monthly (20th) |
+| BLS employment | `data/employment-latest.json` | monthly |
+| CBP encounters | `data/cbp-encounters-latest.json` | monthly (25th) |
+| IRS SOI migration | `data/irs-soi-migration-latest.json` | monthly (1st) |
+| CPI / cumulative inflation | `cpi_update_status.txt` | monthly |
+
+For everything else — the hand-verified policy, fiscal and study figures — change it here
+FIRST, then update the relevant dashboard.
 
 ---
 
@@ -31,11 +48,20 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 | FY2022 | 2,378,944 | CBP | ✅ Feb 2026 |
 | FY2023 | 2,475,669 | CBP | ✅ Feb 2026 |
 | FY2024 | 2,136,800 | CBP | ✅ Feb 2026 |
-| FY2025 (thru Jan) | 237,538 | CBP | ✅ Feb 2026 |
+| FY2025 (full year) | 237,538 | CBP (USBP only) | 🔄 Jul 2026 |
+| FY2026 (thru May 2026) | 61,726 | CBP (USBP only) | 🔄 Jul 2026 |
 
 - **FY2025 pace:** Lowest since 1970
 - **FY2021-24 total:** ~10.8M nationwide encounters
 - **Source URL:** https://www.cbp.gov/newsroom/stats/southwest-land-border-encounters
+
+> **⚠️ Methodology break at FY2025 — do not compare across it.**
+> FY2017–FY2024 are **total** SWB encounters (Border Patrol + Office of Field Operations
+> ports of entry), from OHSS/KHSM. CBP stopped publishing the OFO port-of-entry component
+> for FY2025+, so FY2025 and FY2026 above are **Border Patrol only** and are therefore not
+> like-for-like with the years above them. The immigration dashboard's total series
+> deliberately ends at FY2024 for this reason.
+> Live figures: `data/cbp-encounters-latest.json` (🔄 refreshed monthly on the 25th).
 
 ### National — Net International Migration (Census)
 
@@ -103,23 +129,40 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 
 ### Massachusetts — Concentration Cities
 
+🔄 Live values: `data/census-latest.json` (ACS 5-year, vintage 2024, refreshed monthly on the 20th).
+The figures below are that file's current contents; the Feb 2026 column showed an older ACS vintage.
+
 | City | Foreign-Born % | Source | Verified |
 |------|---------------|--------|----------|
-| Chelsea | 44% | ACS | ✅ Feb 2026 |
-| Lawrence | ~40% | ACS | ✅ Feb 2026 |
-| Revere | ~38% | ACS | ✅ Feb 2026 |
-| Methuen | 23% | ACS | ✅ Feb 2026 |
+| Chelsea | 46% | ACS 2024 (5-yr) | 🔄 Jul 2026 |
+| Everett | 46% | ACS 2024 (5-yr) | 🔄 Jul 2026 |
+| Lawrence | 45% | ACS 2024 (5-yr) | 🔄 Jul 2026 |
+| Revere | 44% | ACS 2024 (5-yr) | 🔄 Jul 2026 |
+| Malden | 41% | ACS 2024 (5-yr) | 🔄 Jul 2026 |
+| Lynn | 37% | ACS 2024 (5-yr) | 🔄 Jul 2026 |
+| Brockton | 34% | ACS 2024 (5-yr) | 🔄 Jul 2026 |
+| Framingham / Quincy | 33% | ACS 2024 (5-yr) | 🔄 Jul 2026 |
+| Lowell | 30% | ACS 2024 (5-yr) | 🔄 Jul 2026 |
+| Boston | 28% | ACS 2024 (5-yr) | 🔄 Jul 2026 |
+| Waltham | 26% | ACS 2024 (5-yr) | 🔄 Jul 2026 |
+| Worcester | 25% | ACS 2024 (5-yr) | 🔄 Jul 2026 |
+| Methuen / Somerville | 24% | ACS 2024 (5-yr) | 🔄 Jul 2026 |
+| Springfield | 10% | ACS 2024 (5-yr) | 🔄 Jul 2026 |
 
 - **60-mile radius of Beacon Hill** — inner-ring cities bearing disproportionate burden
-- **Lawrence multilingual population:** 78.5%
-- **Chelsea multilingual population:** 70.4%
+- **Lawrence multilingual population:** 78.1%
+- **Chelsea multilingual population:** 70.6%
+- **Everett:** 63.4% · **Revere:** 56.3% · **Lynn:** 53.5% · **Malden:** 50.9%
+- **MA median household income:** $103,960 (ACS 2024 5-yr)
 
 ### Massachusetts — Population & Migration
 
 | Metric | Figure | Source | Verified |
 |--------|--------|--------|----------|
-| IRS returns lost (cumulative) | 86,382 | IRS SOI | ✅ Jan 2026 |
-| AGI lost (cumulative) | $12.1B | IRS SOI | ✅ Jan 2026 |
+| IRS returns lost (cumulative 2011–2023) | 184,719 | IRS SOI | 🔄 Aug 2026 |
+| AGI lost (cumulative 2011–2023) | $24.7B | IRS SOI | 🔄 Aug 2026 |
+| Net outflow, latest year (2022-23) | 16,921 returns | IRS SOI | 🔄 Aug 2026 |
+| Net AGI loss, latest year (2022-23) | $4.18B | IRS SOI | 🔄 Aug 2026 |
 | 2024 US growth from immigration | 84% | Census | ✅ Jan 2026 |
 | MA NIM "nosedive" (2025 proj) | Historic decline | Census Vintage 2025 | ✅ Feb 2026 |
 
@@ -139,43 +182,61 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 
 ### Massachusetts — Average Prices (MLS PIN, 5-Year)
 
+🔄 **Source of truth: `data/mls-history.json`** (closed sales per calendar year), regenerated
+by `update-mls-figures.py`. The dashboards read that cache directly — do not hand-edit a
+price here or there. Values below are the cache as of its 2026-07-17 generation.
+
 | Year | MA Statewide | Essex County | Boston | Newburyport |
 |------|-------------|--------------|--------|-------------|
-| 2021 | $664,120 | $715,539 | $1,080,332 | $940,514 |
-| 2022 | $723,395 | $771,458 | $1,068,618 | $1,075,891 |
-| 2023 | $758,182 | $819,125 | $1,081,007 | $1,122,737 |
-| 2024 | $812,972 | $874,817 | $1,140,443 | $1,218,706 |
-| 2025 | $858,122 | $899,712 | $1,324,123 | $1,327,602 |
-| 2026 | $863,658 | $904,416 | $1,309,225 | $1,252,618 |
+| 2021 | $662,660 | $713,369 | $1,086,945 | $941,914 |
+| 2022 | $720,966 | $766,970 | $1,066,003 | $1,077,706 |
+| 2023 | $755,208 | $813,741 | $1,082,495 | $1,113,346 |
+| 2024 | $809,406 | $870,718 | $1,132,848 | $1,234,211 |
+| 2025 | $853,462 | $896,083 | $1,299,708 | $1,325,882 |
 
-- **5-Year Growth:** MA +29.2%, Newburyport +41.1%, Boston +22.6%
+- **5-Year Growth (2021→2025):** MA +28.8%, Newburyport +40.8%, Essex +25.6%, Boston +19.6%
 - **Note:** These are AVERAGES (skewed by luxury); Warren Group MEDIANS used for affordability analysis
 
-### Massachusetts — Market Indicators (2025)
+#### Live trailing-12-month window (changes daily — do not transcribe)
 
-| Metric | Value | Source | Verified |
-|--------|-------|--------|----------|
-| Avg DOM | 38 days | MLS PIN | ✅ Feb 2026 |
-| SP/LP Ratio | 100.92% | MLS PIN | ✅ Feb 2026 |
-| Units Sold | 38,279 | MLS PIN | ✅ Feb 2026 |
-| Units Sold YoY | +1.5% | MLS PIN | ✅ Feb 2026 |
+The dashboards' last column is **not calendar 2026** — it is a rolling trailing-12-month
+window rewritten every day. As of **August 01, 2026**: MA $863,658 · Essex $904,416 ·
+Boston $1,309,225. Quote it with its as-of date or not at all.
+
+### Massachusetts — Market Indicators
+
+| Metric | Calendar 2025 | Trailing 12mo (as of 2026-08-01) | Source |
+|--------|--------------|----------------------------------|--------|
+| Avg DOM | 35.6 days | 37.7 days | MLS PIN 🔄 |
+| SP/LP Ratio | 101.18% | — | MLS PIN 🔄 |
+| Units Sold | 38,870 | 38,279 | MLS PIN 🔄 |
+| Median Price | $670,000 | — | MLS PIN 🔄 |
+
+> Earlier revisions of this file listed the trailing-12-month figures (DOM 38, units 38,279)
+> under a "2025" heading. They are the live window, not the calendar year — split out above.
 
 ### Haverhill Specific
 
 | Metric | Value | Source | Verified |
 |--------|-------|--------|----------|
 | Median household income | $88,326 | Census QuickFacts ACS 2020-2024 | ✅ Feb 2026 |
-| MA median household income | $104,800 | ACS 2020-2024 | ✅ Feb 2026 |
+| MA median household income | $103,960 | ACS 2024 (5-yr), `data/census-latest.json` | 🔄 Jul 2026 |
 | Condo median (Haverhill) | $390,000 | MLS | ✅ Feb 2026 |
 | SF median (Haverhill) | $605,000 | MLS | ✅ Feb 2026 |
 | Income needed for condo | ~$86K | Calc: 6.5%, 20% down, 28% DTI | ✅ Feb 2026 |
 | Income needed for SF | ~$124K | Calc: 6.5%, 20% down, 28% DTI | ✅ Feb 2026 |
 
-### New Hampshire — Market Data (Paragon MLS, Jan 2026)
+### New Hampshire — Market Data (PrimeMLS)
+
+🔄 Source of truth: `data/nh-figures.json`, refreshed daily by `update-nh-figures.py`.
+Values below are that file as of **2026-08-01**. (Feed is PrimeMLS, not Paragon.)
 
 | Region | Median Price | Avg Sale | Avg DOM | SP/LP |
 |--------|-------------|----------|---------|-------|
-| NH Statewide | $438,000 | $530,781 | 29 days | 100.24% |
+| NH Statewide | $441,616 | $528,884 | 29 days | 100.41% |
+
+- **Active inventory:** 2,922 listings · median list $649,000 · avg list $864,326
+- Also tracked per-market: Portsmouth, Salem, Derry, Windham
 
 ### Boston — Commercial Real Estate (CMBS)
 
@@ -192,12 +253,30 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 
 ## 💼 Employment & Labor
 
-### Massachusetts — JOLTS
+### Massachusetts — Current Labor Market
+
+🔄 Source of truth: `data/employment-latest.json`, refreshed monthly from the BLS API.
+Values below are that file as of **2026-07-31** (reference month June 2026).
+
+| Metric | Value | Period | Source |
+|--------|-------|--------|--------|
+| MA unemployment rate | 4.4% | June 2026 | BLS LAUS 🔄 |
+| MA unemployment level | 170,985 | June 2026 | BLS LAUS 🔄 |
+| MA labor force | 3,873,506 | June 2026 | BLS LAUS 🔄 |
+| MA total nonfarm | 3,719,500 | June 2026 | BLS CES 🔄 |
+| US unemployment rate | 4.2% | June 2026 | BLS 🔄 |
+| US job openings | 7.594M | May 2026 | BLS JOLTS 🔄 |
+
+> **⚠️ BLS discontinued monthly state-level JOLTS in 2026.** National JOLTS is still monthly;
+> state figures are annual now, first annual release July 2026. Any "MA job openings rate"
+> quoted monthly is a pre-2026 series and cannot be extended.
+
+### Massachusetts — JOLTS (historical, pre-discontinuation)
 
 | Metric | Value | Source | Verified |
 |--------|-------|--------|----------|
 | Job openings rate (peak) | ~5.5% | BLS JOLTS | ✅ Feb 2026 |
-| Job openings rate (current) | ~4.2% | BLS JOLTS | ✅ Feb 2026 |
+| Job openings rate (2025) | ~4.2% | BLS JOLTS | ✅ Feb 2026 |
 | MA premium over national rate | Nearly gone | BLS JOLTS | ✅ Feb 2026 |
 
 ### National — Labor Market (2025)
@@ -327,19 +406,28 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 
 ## 🔗 Dashboard Registry
 
-| Dashboard | Repo / Path | Live URL | Status |
-|-----------|------------|----------|--------|
-| Immigration (National + MA) | `/immigration/index.html` | TBD (migrate) | Active |
-| MA Housing Market | `/housing/ma-dashboard.html` | TBD (migrate) | Active |
-| NH Housing Market | `/housing/nh-dashboard.html` | TBD (migrate) | Active |
-| Haverhill Market Report | `/housing/haverhill-report.html` | TBD (migrate) | Active |
-| Master Affordability | `/affordability/dashboard.html` | TBD (migrate) | Active |
-| MA Education (Statewide) | `/education/index.html` | TBD (migrate) | Active |
-| Boston Education | `/education/boston-dashboard.html` | TBD (migrate) | Active |
-| Merrimack Valley Education | `/education/merrimack-valley.html` | TBD (migrate) | Active |
-| Healthcare Insurance | `/healthcare/index.html` | TBD (migrate) | Planned |
+All dashboards live at `https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/<file>`.
+Migration off the old repos is complete — the paths below are the real ones in this repo.
 
-### Current Live URLs (old repos — migrate over time)
+| Dashboard | File | Auto-refreshed by | Cadence |
+|-----------|------|-------------------|---------|
+| Immigration (National + MA) | `immigration-dashboard.html` | `update-cbp-encounters.py` | monthly (25th) |
+| MA Housing Market | `ma-housing-dashboard.html` | `update-mls-figures.py` | daily |
+| NH Housing Market | `nh-housing-dashboard.html` | `update-nh-figures.py` | daily |
+| Haverhill Market Report | `haverhill-market-report.html` | `update-mls-figures.py` | daily |
+| Master Affordability | `affordability-dashboard.html` | `update-affordability-dashboard.py` + CPI | monthly |
+| MA Education (Statewide) | `education-statewide.html` | — (manual) | — |
+| Boston Education | `education-boston.html` | — (manual) | — |
+| Merrimack Valley Education | `education-merrimack-valley.html` | — (manual) | — |
+| Healthcare Insurance | `healthcare-dashboard.html` | — (manual) | — |
+| Employment | `employment-dashboard.html` | `scripts/fetch-bls-data.js` | monthly |
+| Commercial RE | `commercial-re-dashboard.html` | — (manual) | — |
+| Energy | `energy-dashboard.html` | `update-energy-dashboard.py` | monthly (15th) |
+| Tax & Budget | `tax-budget-dashboard.html` | `update-irs-soi-migration.py` | monthly (1st) |
+| Pension | `pension-dashboard.html` | — (manual) | — |
+| Pay to Play | `pay-to-play-dashboard.html` | — (manual) | — |
+
+### Old repos (superseded — these still serve older copies)
 
 - https://duncanburns2013-dot.github.io/Immigration/
 - https://duncanburns2013-dot.github.io/Housing-Market-Data/housing-market-dashboard.html
@@ -356,6 +444,7 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 | Date | What Changed | Updated By |
 |------|-------------|------------|
 | 2026-02-05 | Initial creation — all data compiled from prior chats | Claude + Duncan |
+| 2026-08-01 | Repo audit. Reconciled this file against the live API feeds it had drifted from: ACS figures → vintage 2024, MA median income $104,800 → $103,960, MLS 5-yr table → `mls-history.json` values, NH → PrimeMLS 2026-08-01, IRS cumulative 86,382/$12.1B → 184,719/$24.7B (matching the live dashboard). Split the trailing-12-month window out from calendar 2025, recorded the CBP FY2025 methodology break and the BLS state-JOLTS discontinuation, corrected the dashboard registry. Marked API-fed rows 🔄. | Claude + Duncan |
 
 ---
 
