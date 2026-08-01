@@ -6,14 +6,14 @@
   "since": "2020-01-01",
   "markets": {
     "Portsmouth": {
-      "volume": 1040,
-      "median_sale": 719000,
-      "avg_sale": 938236,
+      "volume": 1042,
+      "median_sale": 719500,
+      "avg_sale": 938475,
       "avg_dom": 29,
-      "splp_pct": 99.31,
-      "active_count": 28,
-      "active_avg_list": 1987589,
-      "active_median_list": 2074500,
+      "splp_pct": 99.3,
+      "active_count": 31,
+      "active_avg_list": 1952177,
+      "active_median_list": 1860000,
       "by_bedroom": {
         "1": {
           "avg": 550938,
@@ -24,8 +24,8 @@
           "n": 212
         },
         "3": {
-          "avg": 865689,
-          "n": 505
+          "avg": 866465,
+          "n": 507
         },
         "4": {
           "avg": 1151571,
@@ -68,9 +68,9 @@
           "avg": 1189070
         },
         "2026": {
-          "n": 69,
-          "median": 835000,
-          "avg": 1119927
+          "n": 71,
+          "median": 840000,
+          "avg": 1118309
         }
       },
       "distribution": [
@@ -108,11 +108,11 @@
         },
         {
           "band": "$900K-1M",
-          "count": 61
+          "count": 62
         },
         {
           "band": "$1-1.25M",
-          "count": 75
+          "count": 76
         },
         {
           "band": "$1.25-1.5M",
@@ -129,9 +129,9 @@
       ]
     },
     "Salem": {
-      "volume": 1771,
+      "volume": 1774,
       "median_sale": 540000,
-      "avg_sale": 588427,
+      "avg_sale": 589278,
       "avg_dom": 19,
       "splp_pct": 101.59,
       "active_count": 24,
@@ -147,12 +147,12 @@
           "n": 217
         },
         "3": {
-          "avg": 531426,
-          "n": 916
+          "avg": 531500,
+          "n": 917
         },
         "4": {
-          "avg": 707714,
-          "n": 520
+          "avg": 710127,
+          "n": 522
         },
         "5+": {
           "avg": 822729,
@@ -191,9 +191,9 @@
           "avg": 667244
         },
         "2026": {
-          "n": 123,
-          "median": 635000,
-          "avg": 693029
+          "n": 126,
+          "median": 637000,
+          "avg": 702520
         }
       },
       "distribution": [
@@ -219,7 +219,7 @@
         },
         {
           "band": "$600-700K",
-          "count": 253
+          "count": 254
         },
         {
           "band": "$700-800K",
@@ -235,11 +235,11 @@
         },
         {
           "band": "$1-1.25M",
-          "count": 65
+          "count": 66
         },
         {
           "band": "$1.25-1.5M",
-          "count": 27
+          "count": 28
         },
         {
           "band": "$1.5-2M",
@@ -252,14 +252,14 @@
       ]
     },
     "Derry": {
-      "volume": 1817,
+      "volume": 1819,
       "median_sale": 465000,
-      "avg_sale": 498802,
+      "avg_sale": 498953,
       "avg_dom": 17,
       "splp_pct": 102.57,
-      "active_count": 31,
-      "active_avg_list": 914252,
-      "active_median_list": 799900,
+      "active_count": 34,
+      "active_avg_list": 895635,
+      "active_median_list": 789900,
       "by_bedroom": {
         "1": {
           "avg": 303305,
@@ -270,8 +270,8 @@
           "n": 223
         },
         "3": {
-          "avg": 483179,
-          "n": 1024
+          "avg": 483476,
+          "n": 1026
         },
         "4": {
           "avg": 583642,
@@ -314,9 +314,9 @@
           "avg": 606991
         },
         "2026": {
-          "n": 136,
+          "n": 138,
           "median": 595500,
-          "avg": 618922
+          "avg": 619161
         }
       },
       "distribution": [
@@ -338,7 +338,7 @@
         },
         {
           "band": "$500-600K",
-          "count": 377
+          "count": 378
         },
         {
           "band": "$600-700K",
@@ -346,7 +346,7 @@
         },
         {
           "band": "$700-800K",
-          "count": 96
+          "count": 97
         },
         {
           "band": "$800-900K",
@@ -375,9 +375,9 @@
       ]
     },
     "Windham": {
-      "volume": 1300,
+      "volume": 1301,
       "median_sale": 727000,
-      "avg_sale": 819539,
+      "avg_sale": 820600,
       "avg_dom": 30,
       "splp_pct": 100.99,
       "active_count": 35,
@@ -401,8 +401,8 @@
           "n": 679
         },
         "5+": {
-          "avg": 1285440,
-          "n": 108
+          "avg": 1293830,
+          "n": 109
         }
       },
       "by_year": {
@@ -437,9 +437,9 @@
           "avg": 1006575
         },
         "2026": {
-          "n": 96,
-          "median": 820000,
-          "avg": 954654
+          "n": 97,
+          "median": 825000,
+          "avg": 967493
         }
       },
       "distribution": [
@@ -493,39 +493,39 @@
         },
         {
           "band": "$2M+",
-          "count": 37
+          "count": 38
         }
       ]
     },
     "NH Statewide": {
-      "volume": 91567,
-      "median_sale": 441402,
-      "avg_sale": 528511,
+      "volume": 91710,
+      "median_sale": 441616,
+      "avg_sale": 528884,
       "avg_dom": 29,
       "splp_pct": 100.41,
-      "active_count": 2870,
-      "active_avg_list": 867746,
-      "active_median_list": 649900,
+      "active_count": 2922,
+      "active_avg_list": 864326,
+      "active_median_list": 649000,
       "by_bedroom": {
         "1": {
-          "avg": 248213,
-          "n": 1526
+          "avg": 248107,
+          "n": 1527
         },
         "2": {
-          "avg": 363001,
-          "n": 14158
+          "avg": 363045,
+          "n": 14174
         },
         "3": {
-          "avg": 478783,
-          "n": 48378
+          "avg": 479158,
+          "n": 48459
         },
         "4": {
-          "avg": 666292,
-          "n": 22860
+          "avg": 666579,
+          "n": 22899
         },
         "5+": {
-          "avg": 997102,
-          "n": 4457
+          "avg": 998822,
+          "n": 4463
         }
       },
       "by_year": {
@@ -560,66 +560,66 @@
           "avg": 637769
         },
         "2026": {
-          "n": 6476,
-          "median": 562754,
-          "avg": 669858
+          "n": 6619,
+          "median": 563036,
+          "avg": 671963
         }
       },
       "distribution": [
         {
           "band": "<$200K",
-          "count": 6485
+          "count": 6488
         },
         {
           "band": "$200-300K",
-          "count": 12411
+          "count": 12421
         },
         {
           "band": "$300-400K",
-          "count": 18613
+          "count": 18624
         },
         {
           "band": "$400-500K",
-          "count": 17635
+          "count": 17661
         },
         {
           "band": "$500-600K",
-          "count": 12086
+          "count": 12110
         },
         {
           "band": "$600-700K",
-          "count": 8529
+          "count": 8548
         },
         {
           "band": "$700-800K",
-          "count": 5149
+          "count": 5163
         },
         {
           "band": "$800-900K",
-          "count": 3244
+          "count": 3248
         },
         {
           "band": "$900K-1M",
-          "count": 1867
+          "count": 1874
         },
         {
           "band": "$1-1.25M",
-          "count": 1994
+          "count": 2004
         },
         {
           "band": "$1.25-1.5M",
-          "count": 1264
+          "count": 1270
         },
         {
           "band": "$1.5-2M",
-          "count": 1136
+          "count": 1139
         },
         {
           "band": "$2M+",
-          "count": 1154
+          "count": 1160
         }
       ]
     }
   },
-  "updated": "2026-07-31"
+  "updated": "2026-08-01"
 }
