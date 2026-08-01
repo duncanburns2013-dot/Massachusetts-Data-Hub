@@ -416,7 +416,7 @@ footer a:hover{color:var(--gold)}
   <div class="stat-row">
     <div class="stat-card"><div class="label">BEA Regional Price Parity</div><div class="value red">105.8</div><div class="sub">5.8% above national average (BEA 2024)</div></div>
     <div class="stat-card"><div class="label">$100 Buys Only</div><div class="value red">$94.56</div><div class="sub">In real purchasing power</div></div>
-    <div class="stat-card"><div class="label">Electricity Rate</div><div class="value red">29.45¢/kWh</div><div class="sub">vs 18.83¢ national avg (EIA, Apr 2026)</div></div>
+    <div class="stat-card"><div class="label">Electricity Rate</div><div class="value red">28.82¢/kWh</div><div class="sub">vs 18.44¢ national avg (EIA, May 2026)</div></div>
     <div class="stat-card"><div class="label">Infant Childcare</div><div class="value red">$24K+/yr</div><div class="sub">#2 most expensive (DOL/EPI)</div></div>
   </div>
 
@@ -429,7 +429,7 @@ footer a:hover{color:var(--gold)}
       <tbody>
         <tr><td><strong>All Items (CPI-U)</strong></td><td class="highlight">+3.2%</td><td>+2.9%</td><td class="highlight">+0.3pp</td><td>BLS CPI (May 2026)</td></tr>
         <tr><td><strong>Shelter / Housing</strong></td><td>+2.2%</td><td>+3.6%</td><td class="good">-1.4pp</td><td>BLS CPI (May 2026)</td></tr>
-        <tr><td><strong>Electricity</strong></td><td class="highlight">29.45¢/kWh</td><td>18.83¢/kWh</td><td class="highlight">~56%</td><td>EIA (Apr 2026)</td></tr>
+        <tr><td><strong>Electricity</strong></td><td class="highlight">28.82¢/kWh</td><td>18.44¢/kWh</td><td class="highlight">~56%</td><td>EIA (May 2026)</td></tr>
         <tr><td><strong>Overall Price Level</strong></td><td class="highlight" id="rppLvl">—</td><td>100.0</td><td class="highlight" id="rppPrem">—</td><td>BEA RPP (2024)</td></tr>
         <tr><td><strong>Purchasing Power of $100</strong></td><td class="highlight" id="rppPP">—</td><td>$100.00</td><td class="highlight" id="rppPPd">—</td><td>BEA RPP (2024)</td></tr>
       </tbody>
@@ -543,9 +543,9 @@ footer a:hover{color:var(--gold)}
 
   <div class="chart-grid">
     <div class="chart-card">
-      <h3>EIA Residential Electricity Rates — MA vs Selected States (¢/kWh, Apr 2026)</h3>
+      <h3>EIA Residential Electricity Rates — MA vs Selected States (¢/kWh, May 2026)</h3>
       <div class="chart-area"><canvas id="chartElectricity"></canvas></div>
-      <p class="source">Source: U.S. Energy Information Administration, Electric Power Monthly (Apr 2026)</p>
+      <p class="source">Source: U.S. Energy Information Administration, Electric Power Monthly (May 2026)</p>
     </div>
     <div class="chart-card">
       <h3>Annual Cost of Infant Childcare by State</h3>
@@ -560,7 +560,7 @@ footer a:hover{color:var(--gold)}
       <thead><tr><th>Category</th><th>Massachusetts</th><th>US Average</th><th>MA Premium</th><th>Source</th></tr></thead>
       <tbody>
         <tr><td>Overall Cost of Living (RPP)</td><td class="highlight">105.8</td><td>100.0</td><td class="highlight">+8.2%</td><td>BEA (2024)</td></tr>
-        <tr><td>Residential Electricity</td><td class="highlight">29.45¢/kWh</td><td>18.83¢/kWh</td><td class="highlight">~56%</td><td>EIA Electric Power Monthly (Apr 2026)</td></tr>
+        <tr><td>Residential Electricity</td><td class="highlight">28.82¢/kWh</td><td>18.44¢/kWh</td><td class="highlight">~56%</td><td>EIA Electric Power Monthly (May 2026)</td></tr>
         <tr><td>Median Household Income</td><td>$113,900</td><td>$83,730</td><td class="good">+36% nominal</td><td>Census ACS (2024)</td></tr>
         <tr><td>After RPP Adjustment</td><td class="highlight">~$107,700</td><td>$83,730</td><td>+29% real</td><td>BEA-adjusted</td></tr>
         <tr><td>Infant Childcare (annual)</td><td class="highlight">$24,000+</td><td>$14,802</td><td class="highlight">+62%</td><td>EPI / DOL</td></tr>
@@ -1907,7 +1907,7 @@ function initCharts(tab) {
         type: 'bar',
         data: {
           labels: ['Massachusetts','Connecticut','Rhode Island','New Hampshire','New York','US Average','Florida','North Carolina','Texas'],
-          datasets: [{ label: '¢ per kWh', data: [29.45,32.24,28.30,27.24,29.45,18.83,15.38,16.25,16.99], backgroundColor: ctx => ctx.raw > 25 ? '#c0392b' : ctx.raw > 20 ? '#b8860b' : '#1a7a4c', borderRadius: 6 }]
+          datasets: [{ label: '¢ per kWh', data: [28.82,27.37,29.46,27.33,29.93,18.44,15.17,15.09,16.44], backgroundColor: ctx => ctx.raw > 25 ? '#c0392b' : ctx.raw > 20 ? '#b8860b' : '#1a7a4c', borderRadius: 6 }]
         },
         options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { beginAtZero: true, title: { display: true, text: 'Cents per kWh (Residential)' } } }, plugins: { legend: { display: false } } }
       });

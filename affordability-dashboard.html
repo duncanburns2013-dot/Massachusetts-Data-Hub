@@ -178,7 +178,7 @@ footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1p
   <div class="stat-row">
     <!-- The updater rewrites this card's rate AND its month label together; keep the
          markup shape (label / value / sub) exactly as-is or its anchor stops matching. -->
-    <div class="stat-card"><div class="label">Unemployment</div><div class="value red">4.5%</div><div class="sub">May 2026</div></div>
+    <div class="stat-card"><div class="label">Unemployment</div><div class="value red">4.4%</div><div class="sub">June 2026</div></div>
     <div class="stat-card"><div class="label">States Below MA</div><div class="value red">32 of 50</div><div class="sub">+ DC · lower rate · May of 2026</div></div>
     <div class="stat-card"><div class="label">Net Jobs 2025</div><div class="value red">−4,500</div><div class="sub">Declining employment</div></div>
     <div class="stat-card"><div class="label">Layoffs YTD</div><div class="value amber">323K</div><div class="sub">+13.7% vs 2024</div></div>
@@ -246,7 +246,7 @@ footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1p
          Every OTHER month label on this tab is deliberately spelled out in full
          ("February 2026") so the updater's /Mmm 20NN/ search cannot re-date data it
          does not actually refresh. -->
-    <div class="stat-card"><div class="label">Residential Rate</div><div class="value red"><span id="elecMaCard">—</span></div><div class="sub">per kWh (Apr 2026)</div></div>
+    <div class="stat-card"><div class="label">Residential Rate</div><div class="value red"><span id="elecMaCard">—</span></div><div class="sub">per kWh (May 2026)</div></div>
     <div class="stat-card"><div class="label">Industrial Rate</div><div class="value red"><span id="elecIndCard">—</span></div><div class="sub">+134% vs US</div></div>
     <div class="stat-card"><div class="label">Rate Growth</div><div class="value red"><span id="elecGrowth">—</span></div><div class="sub">Since 2014 · US <span id="elecGrowthUs">—</span></div></div>
     <div class="stat-card"><div class="label">Annual Extra Cost</div><div class="value amber"><span id="elecExtraYr">—</span></div><div class="sub">vs national avg</div></div>
@@ -342,7 +342,7 @@ footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1p
 <footer>
   <a href="index.html">← Back to Massachusetts Data Hub</a><br>
   <strong>Sources:</strong> BLS (LAUS, CES, OES, CPI) · BEA (SAINC, SAPCE, RPP) · Census ACS · Warren Group · MIT Living Wage · CHIA · EIA<br>
-  <a href="https://x.com/DuncanBurnsMA">@DuncanBurnsMA</a> · <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">GitHub</a> · Last Updated: July 16, 2026 · #mapoli
+  <a href="https://x.com/DuncanBurnsMA">@DuncanBurnsMA</a> · <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">GitHub</a> · Last Updated: August 01, 2026 · #mapoli
 </footer>
 
 <script>
@@ -372,7 +372,7 @@ const pct1=n=>(n>=0?'+':'−')+Math.abs(n).toFixed(1)+'%';
 // NB: never write a bare "NN.NN" followed by a cent sign anywhere else in this
 // file — comments included. The updater matches that shape, and a stray literal
 // either gets silently rewritten or competes with the two seeds below.
-const MA_ELEC=parseFloat('29.45¢'), US_ELEC=parseFloat('18.83¢');
+const MA_ELEC=parseFloat('28.82¢'), US_ELEC=parseFloat('18.44¢');
 const elecPrem=(MA_ELEC-US_ELEC)/US_ELEC*100;
 
 // EIA industrial price, February 2026. Deliberately NOT written with a cent sign:
