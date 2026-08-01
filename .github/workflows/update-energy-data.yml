@@ -1,8 +1,22 @@
 name: Update Energy Data
 
+# Schedule is aligned to EIA's publication calendar, not to a round number.
+#
+# EIA Electric Power Monthly lands around the 23rd-26th with data for two
+# months prior (May 2026 data was published 2026-07-23). The old monthly run on
+# the 15th therefore fired about a week BEFORE each release and then slept for
+# a month: the 2026-07-15 run correctly pulled April data, EIA published May on
+# 2026-07-23, and the dashboard would have sat on April until 2026-08-15. Every
+# release was reaching the site roughly three weeks late, by construction.
+#
+# Running on the 26th picks each release up within days. The 2nd is a catch-up
+# for months when EIA slips past the 26th; the updater rewrites the same values
+# when nothing has changed, and the commit step is a no-op on an unchanged tree,
+# so the extra run costs nothing.
 on:
   schedule:
-    - cron: "0 10 15 * *"
+    - cron: "0 10 26 * *"
+    - cron: "0 10 2 * *"
   workflow_dispatch:
 
 permissions:
