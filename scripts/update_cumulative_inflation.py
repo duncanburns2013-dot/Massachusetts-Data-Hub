@@ -35,6 +35,9 @@ SNAPSHOT_MONTHS = [
 MONTH_ABBR = {1:"Jan",2:"Feb",3:"Mar",4:"Apr",5:"May",6:"Jun",
               7:"Jul",8:"Aug",9:"Sep",10:"Oct",11:"Nov",12:"Dec"}
 
+MONTH_NAME = {1:"January",2:"February",3:"March",4:"April",5:"May",6:"June",
+              7:"July",8:"August",9:"September",10:"October",11:"November",12:"December"}
+
 # BLS series (national — work without key, better with key)
 BLS_SERIES = {
     "nat_cpi":    "CUSR0000SA0",
@@ -186,6 +189,24 @@ def replace_var(html, varname, new_literal):
         print(f"  WARNING: 'var {varname}' not found in HTML")
     return new_html
 
+def stamp_freshness_badge(html, through_month):
+    """
+    Rewrite the Live Cost Tracker's "Updated <Month> <Year>" badge.
+
+    The badge is the only freshness signal a reader sees on that panel, but it
+    was a hardcoded literal while every series beside it refreshed monthly —
+    so it sat on "May 2026" while the chart carried July data. Restate it from
+    the data's own latest month on every run.
+    """
+    label = f"Updated {MONTH_NAME[through_month[1]]} {through_month[0]}"
+    pattern = r"(&#x2713;|✓)\s*Updated\s+[A-Z][a-z]+\s+\d{4}"
+    new_html, count = re.subn(pattern, rf"\g<1> {label}", html, count=1)
+    if count == 0:
+        print("  WARNING: Live Cost Tracker freshness badge not found in HTML")
+    else:
+        print(f"  Freshness badge -> {label}")
+    return new_html
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
@@ -251,6 +272,7 @@ def main():
     html = replace_var(html, "cumBosSh",   js_array(cum_bos_sh))
     html = replace_var(html, "cumWage",    js_array(cum_wage))
     html = replace_var(html, "cumYoY",     js_array(yoy))
+    html = stamp_freshness_badge(html, snapshots[-1])
 
     with open(DASHBOARD_FILE, "w", encoding="utf-8") as f:
         f.write(html)

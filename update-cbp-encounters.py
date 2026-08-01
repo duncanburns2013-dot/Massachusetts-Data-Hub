@@ -239,6 +239,22 @@ def main():
     else:
         print("  !! FY callout anchor not found -- NOT updated")
 
+    # Keep the hero's freshness line honest. It was a hardcoded "Updated
+    # February 2026" while this script refreshed the border series every month,
+    # so the page advertised itself as five months staler than its own data.
+    # State the CBP coverage window instead, and say plainly that the other
+    # sources on the page are hand-maintained.
+    hero = (f'<p class="sub">Official data from Census Bureau, CBP, ICE, IRS, DHS, CBO '
+            f'&bull; CBP border series current through {fmt_month(*last)} '
+            f'&bull; other sources dated in each section</p>')
+    hm = re.search(r'<p class="sub">Official data from Census Bureau.*?</p>', html, re.S)
+    if hm:
+        if hm.group(0) != hero:
+            html = html[:hm.start()] + hero + html[hm.end():]
+            print(f"  Hero freshness line: CBP through {fmt_month(*last)}.")
+    else:
+        print("  !! hero freshness anchor not found -- NOT updated")
+
     # Keep the chart's footnote honest about how much of the year is in the bar.
     nm = re.search(r"FY\d{4}\* = [^,]*, \d+ of 12 months", html)
     if nm:

@@ -242,9 +242,18 @@ Values below are that file as of **2026-08-01**. (Feed is PrimeMLS, not Paragon.
 
 | Metric | Value | Source | Verified |
 |--------|-------|--------|----------|
-| Office vacancy (C&W) | 18.2% | Cushman & Wakefield Q4 2025 | ✅ Feb 2026 |
-| Office vacancy (Colliers) | 23.9% | Colliers Q4 2025 | ✅ Feb 2026 |
+| Office vacancy (C&W) | 19.0% | Cushman & Wakefield Q2 2026 | ✅ Aug 2026 |
+| Office vacancy (Colliers) | 23.7% | Colliers Q2 2026 | ✅ Aug 2026 |
+| Office vacancy (CBRE) | 18.7% | CBRE Q2 2026 | ✅ Aug 2026 |
+| National office vacancy | 20.1% | Cushman & Wakefield Q2 2026 | ✅ Aug 2026 |
+| CMBS office delinquency | 11.57% | Trepp, June 2026 | ✅ Aug 2026 |
+| CMBS all-property delinquency | 7.35% | Trepp, June 2026 | ✅ Aug 2026 |
 | Pre-COVID vacancy | ~7.5% | Multiple sources | ✅ Feb 2026 |
+
+> **Vacancy definitions differ by brokerage — these are not competing estimates of one
+> number.** C&W 19.0%, CBRE 18.7% and Colliers 23.7% all describe Greater Boston Q2 2026
+> on different footprints (submarket set, building class, sublease treatment). Quote the
+> brokerage with the figure, and don't mix them in a single time series.
 | Major sale discounts (2025) | 31–62% losses | Boston Globe / CommercialEdge | ✅ Feb 2026 |
 | Boston property tax dependence | ~73% of $4.8B budget | Boston.gov | ✅ Feb 2026 |
 | National avg office value decline | ~37% | Green Street | ✅ Feb 2026 |
@@ -444,6 +453,7 @@ Migration off the old repos is complete — the paths below are the real ones in
 | Date | What Changed | Updated By |
 |------|-------------|------------|
 | 2026-02-05 | Initial creation — all data compiled from prior chats | Claude + Duncan |
+| 2026-08-01 | Refreshed the manual dashboards. Commercial RE → Q2 2026 (C&W Boston 19.0%, US 20.1%; Colliers 23.7%; CBRE 18.7%; Trepp office delinquency 11.57%). Tax & Budget verified already current (FY2027 H.5555 enacted $63.4B, signed 2026-07-09, parsed July 2026). Healthcare held at the 2024 MA/US pair with KFF's 2025 national figure ($26,993) noted, since no MA 2025 comparator is published. Made the CPI badge and immigration hero self-stamping so they can't go stale again. | Claude + Duncan |
 | 2026-08-01 | Repo audit. Reconciled this file against the live API feeds it had drifted from: ACS figures → vintage 2024, MA median income $104,800 → $103,960, MLS 5-yr table → `mls-history.json` values, NH → PrimeMLS 2026-08-01, IRS cumulative 86,382/$12.1B → 184,719/$24.7B (matching the live dashboard). Split the trailing-12-month window out from calendar 2025, recorded the CBP FY2025 methodology break and the BLS state-JOLTS discontinuation, corrected the dashboard registry. Marked API-fed rows 🔄. | Claude + Duncan |
 
 ---
