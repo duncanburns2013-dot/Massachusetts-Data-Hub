@@ -257,9 +257,9 @@
       "avg_sale": 499177,
       "avg_dom": 17,
       "splp_pct": 102.56,
-      "active_count": 33,
-      "active_avg_list": 906867,
-      "active_median_list": 799900,
+      "active_count": 31,
+      "active_avg_list": 901668,
+      "active_median_list": 779900,
       "by_bedroom": {
         "1": {
           "avg": 303305,
@@ -380,8 +380,8 @@
       "avg_sale": 820600,
       "avg_dom": 30,
       "splp_pct": 100.99,
-      "active_count": 35,
-      "active_avg_list": 946726,
+      "active_count": 33,
+      "active_avg_list": 950012,
       "active_median_list": 899000,
       "by_bedroom": {
         "1": {
@@ -498,26 +498,26 @@
       ]
     },
     "NH Statewide": {
-      "volume": 91737,
+      "volume": 91739,
       "median_sale": 441654,
-      "avg_sale": 528923,
+      "avg_sale": 528933,
       "avg_dom": 29,
       "splp_pct": 100.41,
-      "active_count": 2912,
-      "active_avg_list": 866325,
-      "active_median_list": 649000,
+      "active_count": 2901,
+      "active_avg_list": 865040,
+      "active_median_list": 645599,
       "by_bedroom": {
         "1": {
           "avg": 248107,
           "n": 1527
         },
         "2": {
-          "avg": 363042,
-          "n": 14176
+          "avg": 363044,
+          "n": 14177
         },
         "3": {
-          "avg": 479228,
-          "n": 48475
+          "avg": 479251,
+          "n": 48476
         },
         "4": {
           "avg": 666582,
@@ -560,9 +560,9 @@
           "avg": 637769
         },
         "2026": {
-          "n": 6646,
+          "n": 6648,
           "median": 563357,
-          "avg": 671925
+          "avg": 672022
         }
       },
       "distribution": [
@@ -576,7 +576,7 @@
         },
         {
           "band": "$300-400K",
-          "count": 18628
+          "count": 18629
         },
         {
           "band": "$400-500K",
@@ -612,7 +612,7 @@
         },
         {
           "band": "$1.5-2M",
-          "count": 1140
+          "count": 1141
         },
         {
           "band": "$2M+",
@@ -621,5 +621,5 @@
       ]
     }
   },
-  "updated": "2026-08-02"
+  "updated": "2026-08-03"
 }
