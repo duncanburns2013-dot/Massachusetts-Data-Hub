@@ -26,7 +26,7 @@ import statistics
 import sys
 from pathlib import Path
 
-from primemls import fetch_all
+from primemls import Throttled, fetch_all
 
 HERE = Path(__file__).resolve().parent
 RAW = HERE / "data" / "_raw_nh"                       # raw records — gitignored, NEVER published
@@ -259,10 +259,15 @@ if __name__ == "__main__":
     prior = load_out()
     data = load_out()
     monthly = None
-    if mode in ("cities", "all"):
-        do_cities(data, prior)
-    if mode in ("state", "all"):
-        monthly = do_state(data, prior)
+    try:
+        if mode in ("cities", "all"):
+            do_cities(data, prior)
+        if mode in ("state", "all"):
+            monthly = do_state(data, prior)
+    except Throttled as e:
+        # Shut out by the feed rather than fed bad data — same self-healing
+        # condition as a truncated pull, so exit 75 (skip), not 1 (failure).
+        _abort_throttled(str(e))
     # Every market validated -> persist atomically (nothing written before here).
     if monthly is not None:
         MONTHLY.write_text(json.dumps(monthly))
