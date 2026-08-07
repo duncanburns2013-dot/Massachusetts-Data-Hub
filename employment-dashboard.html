@@ -148,7 +148,7 @@ footer a:hover{color:var(--gold)}
 <!-- OVERVIEW -->
 <div class="tab-content active" id="overview">
   <div class="section-title">Labor Market Overview</div>
-  <div class="section-desc">MA (<span id="ovMo">May</span>): <span id="ovPayDesc">−2,900</span> jobs · 4.5% UR · <span id="ovSepDesc">+17,600</span> jobs since <span id="ovSepMoDesc">Sep 2025</span> · National <span data-field="ov-nat-pay">+57K</span> · <span data-field="ov-nat-ur">4.2%</span></div>
+  <div class="section-desc">MA (<span id="ovMo">May</span>): <span id="ovPayDesc">−2,900</span> jobs · <span id="ovUrDesc">4.5%</span> UR · <span id="ovSepDesc">+17,600</span> jobs since <span id="ovSepMoDesc">Sep 2025</span> · National <span data-field="ov-nat-pay">+57K</span> · <span data-field="ov-nat-ur">4.2%</span></div>
 
   <!-- Heading, colour and figures all derive from the payroll series below. This
        box previously read "✅ Six Straight Months of MA Job Growth" directly above
@@ -1024,6 +1024,10 @@ function renderDerived(){
     var urK=seriesKeys(ur2Lab)[uiMA];
     txt('ovUrHead',Number(ur2MA[uiMA]).toFixed(1)+'% ('+moS(urK)+')');
     txt('ovUrMa',Number(ur2MA[uiMA]).toFixed(1)+'%');
+    // The summary line's UR was the one figure on it left as bare text, so it
+    // alone could not move: it still read 4.5% next to live June figures while
+    // the alert box directly below already said 4.4%. Same series, same index.
+    txt('ovUrDesc',Number(ur2MA[uiMA]).toFixed(1)+'%');
     txt('ovUrMo',moS(urK));
     txt('ovUrNat',ur2Nat[uiMA]==null?'not yet published':Number(ur2Nat[uiMA]).toFixed(1)+'%');
   }

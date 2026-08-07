@@ -45,6 +45,8 @@ import json
 import os
 import re
 import sys
+import time
+import urllib.error
 from datetime import datetime, timezone
 from html import unescape
 from urllib.request import urlopen, Request
@@ -73,10 +75,51 @@ MONTH_FULL = {1: "Oct", 2: "Nov", 3: "Dec", 4: "Jan", 5: "Feb", 6: "Mar",
               7: "Apr", 8: "May", 9: "Jun", 10: "Jul", 11: "Aug", 12: "Sep"}
 
 
-def fetch(url):
-    req = Request(url, headers={"User-Agent": "MA-Data-Hub/1.0"})
-    with urlopen(req, timeout=45) as r:
-        return r.read().decode("utf-8", "replace")
+# Exit code for "the source blocked us, nothing was written". Expected and
+# self-healing, so callers can treat it as a neutral skip rather than a build
+# failure. Distinct from 1, which means the page/parse is genuinely wrong.
+# (75 = BSD sysexits EX_TEMPFAIL, same convention as update-nh-figures.py.)
+EXIT_BLOCKED = 75
+
+# cbp.gov fronts these pages with a bot filter that 403s a custom agent string.
+# "MA-Data-Hub/1.0" was honest and got this feed blocked from 2026-07-16 onward;
+# a real browser UA is what actually gets served. Same lesson as primemls.py.
+UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+      "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+
+
+class Blocked(RuntimeError):
+    """The source refused us (403/429) and the retries ran out."""
+
+
+def fetch(url, max_retries=4):
+    last = None
+    for attempt in range(max_retries):
+        req = Request(url, headers={
+            "User-Agent": UA,
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.9",
+        })
+        try:
+            with urlopen(req, timeout=45) as r:
+                return r.read().decode("utf-8", "replace")
+        except urllib.error.HTTPError as e:
+            last = f"HTTP {e.code}"
+            if e.code in (403, 429, 500, 502, 503, 504) and attempt < max_retries - 1:
+                ra = e.headers.get("Retry-After")
+                wait = float(ra) if (ra and ra.isdigit()) else 8.0 * (attempt + 1)
+                time.sleep(min(wait, 60))
+                continue
+            if e.code in (403, 429):
+                raise Blocked(f"{url}: {last}")
+            raise
+        except (urllib.error.URLError, TimeoutError) as e:
+            last = str(e)
+            if attempt < max_retries - 1:
+                time.sleep(2 ** attempt)
+                continue
+            raise
+    raise Blocked(f"{url}: unreachable ({last})")
 
 
 def parse_month_header(cell):
@@ -152,11 +195,15 @@ def fmt_month(mi, yr):
 def main():
     print("=== CBP Border Patrol SW-border update ===\n")
 
-    fetched = {}
+    fetched, blocked = {}, 0
     for fy, url in sorted(FY_PAGES.items()):
         print(f"  FY{fy}: {url}")
         try:
             got = fy_total(url)
+        except Blocked as e:
+            print(f"    !! blocked by the source: {e}")
+            blocked += 1
+            continue
         except Exception as e:
             print(f"    !! fetch/parse failed: {e}")
             got = None
@@ -168,6 +215,11 @@ def main():
         fetched[fy] = got
 
     if not fetched:
+        # Being shut out is not the same as the page having changed shape under
+        # us. The first is transient and self-healing; the second needs a human.
+        if blocked:
+            print("\nEvery page was blocked. Dashboard left untouched.", file=sys.stderr)
+            return EXIT_BLOCKED
         print("\nNothing fetched. Dashboard left untouched.")
         return 1
 
@@ -238,6 +290,20 @@ def main():
             print(f"  FY{cur_fy} callout: rewritten from fetched data.")
     else:
         print("  !! FY callout anchor not found -- NOT updated")
+
+    # Stamp the page with the month this data actually covers, every successful
+    # run. Unconditional on purpose: if it only fired when a number moved, a feed
+    # that quietly stopped returning new months would keep an old stamp looking
+    # current -- which is exactly how this page came to claim February in August.
+    stamp = fmt_month(*last)
+    sm = re.search(r'(data-field="page-updated">)[^<]*(<)', html)
+    if sm:
+        new_stamp = sm.group(1) + stamp + sm.group(2)
+        if sm.group(0) != new_stamp:
+            html = html[:sm.start()] + new_stamp + html[sm.end():]
+            print(f"  Page update stamp -> {stamp} (latest month in the data).")
+    else:
+        print("  !! page-updated anchor not found -- NOT updated")
 
     # Keep the chart's footnote honest about how much of the year is in the bar.
     nm = re.search(r"FY\d{4}\* = [^,]*, \d+ of 12 months", html)
