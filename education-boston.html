@@ -48,8 +48,17 @@ nav button.active{color:var(--navy);border-bottom-color:var(--gold)}
 .kpi.red .val{color:var(--red)}.kpi.blue .val{color:var(--blue)}.kpi.green .val{color:var(--green)}.kpi.orange .val,.kpi.yellow .val{color:var(--amber)}.kpi.purple .val{color:var(--purple)}
 .grid{display:grid;gap:14px;margin-bottom:22px}.grid-2{grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}.grid-3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.card.full{grid-column:1/-1}
 .card h3{font-size:.82rem;font-weight:700;color:var(--navy);margin-bottom:10px}
-.chart-wrap{position:relative;height:280px}.chart-wrap.tall{height:340px}
+.chart-wrap{position:relative;height:280px}.chart-wrap.tall{height:340px}.chart-wrap.short{height:240px}
+.insight{margin-top:12px;padding:12px 14px;background:var(--surface2);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;font-size:.76rem;line-height:1.6;color:var(--text)}
+.insight strong{color:var(--navy)}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.62rem;font-weight:700;letter-spacing:.03em;white-space:nowrap}
+.badge.red{background:var(--red-bg);color:var(--red)}
+.badge.green{background:var(--green-bg);color:var(--green)}
+.badge.yellow,.badge.amber{background:var(--amber-bg);color:var(--amber)}
+.badge.blue{background:var(--blue-bg);color:var(--blue)}
+.table-wrap{overflow-x:auto}
 .callout{background:var(--blue-bg);border:1px solid rgba(26,68,128,.12);border-radius:12px;padding:16px 18px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start;border-left:4px solid var(--blue)}
 .callout.red,.callout.warn{background:var(--red-bg);border-left-color:var(--red);border-color:rgba(192,57,43,.12)}
 .callout.amber{background:var(--amber-bg);border-left-color:var(--amber);border-color:rgba(184,134,11,.15)}
@@ -271,6 +280,7 @@ tr:hover{background:rgba(15,41,66,.02)}
 </div>
 <div class="card full">
 <h3>Accountability Breakdown</h3>
+<div class="table-wrap">
 <table>
 <thead><tr><th>Indicator</th><th>Non-HS Points</th><th>Non-HS Max</th><th>HS Points</th><th>HS Max</th><th>Status</th></tr></thead>
 <tbody>
@@ -287,6 +297,7 @@ tr:hover{background:rgba(15,41,66,.02)}
 <tr><td>Adv. Coursework</td><td>—</td><td>—</td><td>3</td><td>4</td><td><span class="badge green">Typical High</span></td></tr>
 </tbody>
 </table>
+</div>
 <div class="insight"><strong>High school is the crisis point:</strong> Boston earned 0 out of 12 possible achievement points at the high school level — every subject declined. The district's "moderate progress" classification is propped up by non-HS scores and chronic absenteeism improvements.</div>
 </div>
 </div>
@@ -294,19 +305,22 @@ tr:hover{background:rgba(15,41,66,.02)}
 
 </div><!-- container -->
 
-<footer>
-Data: <a href="https://profiles.doe.mass.edu" target="_blank">Massachusetts DESE School & District Profiles</a> — 2025 MCAS &amp; Accountability Results<br>
-Boston District Code: 00350000 | Dashboard created Feb 2026
+<footer class="footer">
+Data: <a href="https://profiles.doe.mass.edu" target="_blank" rel="noopener">Massachusetts DESE School &amp; District Profiles</a> &mdash; 2025 MCAS &amp; Accountability Results<br>
+Boston District Code: 00350000 | Dashboard created Feb 2026. Compare with <a href="education-merrimack-valley.html">the Merrimack Valley</a> and <a href="education-statewide.html">statewide</a>.
 </footer>
 
 <script>
-Chart.defaults.color='#a3aed0';
-Chart.defaults.borderColor='#3d4566';
+Chart.defaults.color='#7a756e';
+Chart.defaults.borderColor='#e8e5df';
 Chart.defaults.font.family="'DM Sans',sans-serif";
+Chart.defaults.font.size=11;
 Chart.defaults.plugins.legend.labels.boxWidth=12;
 Chart.defaults.plugins.legend.labels.padding=16;
-const C={r:'#ff5757',o:'#ff9f43',b:'#4da6ff',g:'#2ecc71',p:'#c084fc',c:'#22d3ee',y:'#fbbf24',pk:'#f472b6',w:'#a3b8d8'};
-const GC='#353b58';
+// Series palette, keyed to the page's own light-theme variables. Boston is red
+// throughout; w is the neutral used for the state comparison series.
+const C={r:'#c0392b',o:'#e07a1f',b:'#1a4480',g:'#1a7a4c',p:'#7e22ce',c:'#0e7490',y:'#b8860b',pk:'#be185d',w:'#8792a6'};
+const GC='#e8e5df';
 const initialized={};
 
 function showTab(id,btn){
@@ -348,9 +362,9 @@ plugins:{legend:{position:'bottom'}}}});
 new Chart(document.getElementById('overviewAll'),{type:'bar',data:{
 labels:['ELA 3-8','Math 3-8','Science 5&8','ELA Gr.10','Math Gr.10','Science Gr.10','Civics Gr.8'],
 datasets:[
-{label:'Boston',data:[29,28,22,40,38,33,23],backgroundColor:'rgba(255,87,87,0.85)'},
-{label:'State',data:[42,41,42,51,45,46,39],backgroundColor:'rgba(163,184,216,0.65)'},
-{label:'Gap',data:[-13,-13,-20,-11,-7,-13,-16],backgroundColor:'rgba(255,159,67,0.6)',type:'bar'}
+{label:'Boston',data:[29,28,22,40,38,33,23],backgroundColor:'rgba(192,57,43,0.85)'},
+{label:'State',data:[42,41,42,51,45,46,39],backgroundColor:'rgba(135,146,166,0.65)'},
+{label:'Gap',data:[-13,-13,-20,-11,-7,-13,-16],backgroundColor:'rgba(224,122,31,0.6)',type:'bar'}
 ]},options:{responsive:true,maintainAspectRatio:false,
 scales:{y:{ticks:{callback:function(v){return v+'%'}},grid:{color:GC}},x:{grid:{display:false}}},
 plugins:{legend:{position:'top'}}}});
@@ -367,11 +381,11 @@ new Chart(document.getElementById('gradeMath'),{type:'bar',data:{labels:grades,d
 {label:'State',data:[44,43,40,41,39,38,45],backgroundColor:C.w}
 ]},options:bOpts(60,true)});
 new Chart(document.getElementById('gradeScoreELA'),{type:'line',data:{labels:grades,datasets:[
-{label:'Boston',data:[488,485,488,485,485,483,492],borderColor:C.r,backgroundColor:'rgba(255,87,87,0.15)',fill:true,tension:.3,borderWidth:3},
+{label:'Boston',data:[488,485,488,485,485,483,492],borderColor:C.r,backgroundColor:'rgba(192,57,43,0.15)',fill:true,tension:.3,borderWidth:3},
 {label:'State Baseline (500)',data:[500,500,500,500,500,500,500],borderColor:C.w,borderDash:[5,5],pointRadius:0}
 ]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:475,max:510,grid:{color:GC}},x:{grid:{display:false}}}}});
 new Chart(document.getElementById('gradeScoreMath'),{type:'line',data:{labels:grades,datasets:[
-{label:'Boston',data:[487,486,486,486,485,484,493],borderColor:C.o,backgroundColor:'rgba(255,159,67,0.15)',fill:true,tension:.3,borderWidth:3},
+{label:'Boston',data:[487,486,486,486,485,484,493],borderColor:C.o,backgroundColor:'rgba(224,122,31,0.15)',fill:true,tension:.3,borderWidth:3},
 {label:'State Baseline (500)',data:[500,500,500,500,500,500,500],borderColor:C.w,borderDash:[5,5],pointRadius:0}
 ]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:475,max:510,grid:{color:GC}},x:{grid:{display:false}}}}});
 new Chart(document.getElementById('gradeScience'),{type:'bar',data:{
@@ -429,10 +443,10 @@ backgroundColor:function(ctx){var v=ctx.raw;return v>=50?C.g:v>=45?C.y:C.r;}},
 new Chart(document.getElementById('growthRace'),{type:'bar',data:{
 labels:['White','Asian','Multi-Race','All','Black','Hispanic','Am. Indian'],
 datasets:[
-{label:'ELA SGP (3-8)',data:[53.1,53.3,51.7,48.7,46.7,47.2,46.9],backgroundColor:'rgba(255,87,87,0.75)'},
-{label:'Math SGP (3-8)',data:[52.8,56.0,51.2,49.9,47.5,49.1,46.6],backgroundColor:'rgba(255,159,67,0.75)'},
-{label:'ELA SGP (HS)',data:[52.1,51.8,50.7,49.6,47.3,49.8,null],backgroundColor:'rgba(77,166,255,0.75)'},
-{label:'Math SGP (HS)',data:[60.1,64.2,60.8,57.8,55.2,56.9,null],backgroundColor:'rgba(46,204,113,0.75)'}
+{label:'ELA SGP (3-8)',data:[53.1,53.3,51.7,48.7,46.7,47.2,46.9],backgroundColor:'rgba(192,57,43,0.75)'},
+{label:'Math SGP (3-8)',data:[52.8,56.0,51.2,49.9,47.5,49.1,46.6],backgroundColor:'rgba(224,122,31,0.75)'},
+{label:'ELA SGP (HS)',data:[52.1,51.8,50.7,49.6,47.3,49.8,null],backgroundColor:'rgba(26,68,128,0.75)'},
+{label:'Math SGP (HS)',data:[60.1,64.2,60.8,57.8,55.2,56.9,null],backgroundColor:'rgba(26,122,76,0.75)'}
 ]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:40,max:70,grid:{color:GC}},x:{grid:{display:false}}}}});
 }
 
@@ -451,9 +465,9 @@ new Chart(document.getElementById('absentSpecial'),{type:'bar',data:{
 labels:['All Students','High Needs','Low Income','EL/Former EL','Disability'],
 datasets:[
 {label:'Elem/Middle 2025',data:[26.3,29.5,31.6,24.5,35.5],backgroundColor:C.o},
-{label:'Elem/Middle 2024',data:[27.4,30.6,32.6,25.4,37.1],backgroundColor:'rgba(255,159,67,0.35)'},
+{label:'Elem/Middle 2024',data:[27.4,30.6,32.6,25.4,37.1],backgroundColor:'rgba(224,122,31,0.35)'},
 {label:'High School 2025',data:[36.1,39.7,40.4,35.1,48.1],backgroundColor:C.r},
-{label:'High School 2024',data:[38.3,41.5,42.2,35.2,50.5],backgroundColor:'rgba(255,87,87,0.35)'}
+{label:'High School 2024',data:[38.3,41.5,42.2,35.2,50.5],backgroundColor:'rgba(192,57,43,0.35)'}
 ]},options:bOpts(55,true)});
 }
 
@@ -462,7 +476,7 @@ new Chart(document.getElementById('gradRace'),{type:'bar',data:{
 labels:['Asian','White','Multi-Race','Black','All','Hispanic','EL'],
 datasets:[
 {label:'2024 Rate',data:[91.7,88.7,80.2,79.3,79.7,75.6,68.1],backgroundColor:C.b},
-{label:'2023 Rate',data:[93.3,87.3,79.8,78.2,80.5,77.5,69.3],backgroundColor:'rgba(77,166,255,0.35)'}
+{label:'2023 Rate',data:[93.3,87.3,79.8,78.2,80.5,77.5,69.3],backgroundColor:'rgba(26,68,128,0.35)'}
 ]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:55,max:100,ticks:{callback:function(v){return v+'%'}},grid:{color:GC}},x:{grid:{display:false}}}}});
 new Chart(document.getElementById('gradSpecial'),{type:'bar',data:{
 labels:['All Students','Low Income','High Needs','Disability','EL/Former EL'],
@@ -481,13 +495,13 @@ new Chart(document.getElementById('accNHS'),{type:'bar',data:{
 labels:['ELA Ach','Math Ach','Science','ELA Growth','Math Growth','EL Prof','Absenteeism'],
 datasets:[
 {label:'Points Earned',data:[2,2,2,2,2,3,3],backgroundColor:C.b},
-{label:'Max Possible',data:[4,4,4,4,4,4,4],backgroundColor:'rgba(163,184,216,0.2)'}
+{label:'Max Possible',data:[4,4,4,4,4,4,4],backgroundColor:'rgba(135,146,166,0.2)'}
 ]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{max:5,grid:{color:GC}},x:{grid:{display:false}}}}});
 new Chart(document.getElementById('accHS'),{type:'bar',data:{
 labels:['ELA Ach','Math Ach','Science','ELA Growth','Math Growth','Grad Rate','Ext. Engage','Dropout','EL Prof','Absent','Adv. Course'],
 datasets:[
 {label:'Points Earned',data:[0,0,0,2,3,0,0,1,4,4,3],backgroundColor:function(ctx){var v=ctx.raw;return v===0?C.r:v<=2?C.y:C.g;}},
-{label:'Max Possible',data:[4,4,4,4,4,4,4,4,4,4,4],backgroundColor:'rgba(163,184,216,0.15)'}
+{label:'Max Possible',data:[4,4,4,4,4,4,4,4,4,4,4],backgroundColor:'rgba(135,146,166,0.15)'}
 ]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{max:5,grid:{color:GC}},x:{grid:{display:false},ticks:{maxRotation:45}}}}});
 }
 
