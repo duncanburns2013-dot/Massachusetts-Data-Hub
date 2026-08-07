@@ -17,7 +17,7 @@ Interactive dashboards and data analysis covering housing, immigration, educatio
 | [Affordability](affordability-dashboard.html) | CPI, wages, housing, exodus data | ✅ Live | BLS, IRS SOI, BU Study |
 | [Education (State)](education-statewide.html) | Enrollment shifts, spending, MCAS | ✅ Live | DESE, MCAS |
 | [Education (Boston)](education-boston.html) | BPS absenteeism, gaps, demographics | ✅ Live | DESE, BPS |
-| [Education (MV)](education-merrimack-valley.html) | Haverhill/Methuen/Lawrence comparison | ✅ Live | DESE, MassINC |
+| [Education (MV)](education-merrimack-valley.html) | Haverhill/Methuen/Lawrence — MCAS by grade, gaps, growth, absenteeism, graduation, accountability, spending | ✅ Live | DESE |
 | [Healthcare](healthcare-dashboard.html) | Insurance rates, premiums, MA vs national | 🟡 Planned | DOI, KFF, CHIA |
 | [Employment](employment-dashboard.html) | JOLTS, NFP revisions, hiring recession | 🟡 Planned | BLS JOLTS, CES |
 | [Commercial RE](commercial-re-dashboard.html) | Boston office vacancy, CMBS, property tax | 🟡 Planned | Trepp, C&W, Colliers |

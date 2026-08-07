@@ -6,16 +6,16 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Massachusetts Data Hub">
   <meta property="og:title" content="Merrimack Valley Education — 2025 Performance Dashboard">
-  <meta property="og:description" content="Enrollment, MCAS scores, and school district data for the Merrimack Valley region of Massachusetts.">
+  <meta property="og:description" content="MCAS achievement, growth, absenteeism, graduation, accountability and school spending for Haverhill, Methuen and Lawrence — against the Massachusetts average.">
   <meta property="og:url" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/education-merrimack-valley.html">
   <meta property="og:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Merrimack Valley Education — 2025 Performance Dashboard">
-  <meta name="twitter:description" content="Enrollment, MCAS scores, and school district data for the Merrimack Valley region of Massachusetts.">
+  <meta name="twitter:description" content="MCAS achievement, growth, absenteeism, graduation, accountability and school spending for Haverhill, Methuen and Lawrence — against the Massachusetts average.">
   <meta name="twitter:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
-  <meta name="description" content="Enrollment, MCAS scores, and school district data for the Merrimack Valley region of Massachusetts.">
+  <meta name="description" content="MCAS achievement, growth, absenteeism, graduation, accountability and school spending for Haverhill, Methuen and Lawrence — against the Massachusetts average.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Merrimack Valley Education — 2025 Performance Dashboard</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -48,19 +48,31 @@ nav button.active{color:var(--navy);border-bottom-color:var(--gold)}
 .kpi.red .val{color:var(--red)}.kpi.blue .val{color:var(--blue)}.kpi.green .val{color:var(--green)}.kpi.orange .val,.kpi.yellow .val{color:var(--amber)}.kpi.purple .val{color:var(--purple)}
 .grid{display:grid;gap:14px;margin-bottom:22px}.grid-2{grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}.grid-3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.card.full{grid-column:1/-1}
 .card h3{font-size:.82rem;font-weight:700;color:var(--navy);margin-bottom:10px}
-.chart-wrap{position:relative;height:280px}.chart-wrap.tall{height:340px}
+.card .note{font-size:.66rem;color:var(--muted);margin:-6px 0 10px}
+.chart-wrap{position:relative;height:280px}.chart-wrap.tall{height:360px}.chart-wrap.short{height:240px}.chart-wrap.xtall{height:440px}
 .callout{background:var(--blue-bg);border:1px solid rgba(26,68,128,.12);border-radius:12px;padding:16px 18px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start;border-left:4px solid var(--blue)}
 .callout.red,.callout.warn{background:var(--red-bg);border-left-color:var(--red);border-color:rgba(192,57,43,.12)}
 .callout.amber{background:var(--amber-bg);border-left-color:var(--amber);border-color:rgba(184,134,11,.15)}
+.callout.green{background:var(--green-bg);border-left-color:var(--green);border-color:rgba(26,122,76,.15)}
 .callout .ico{font-size:1.1rem;flex-shrink:0}
 .callout p,.callout .text{font-size:.78rem;color:var(--text);line-height:1.6}
+.insight{margin-top:12px;padding:12px 14px;background:var(--surface2);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;font-size:.76rem;line-height:1.6;color:var(--text)}
+.insight strong{color:var(--navy)}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.62rem;font-weight:700;letter-spacing:.03em;white-space:nowrap}
+.badge.red{background:var(--red-bg);color:var(--red)}
+.badge.green{background:var(--green-bg);color:var(--green)}
+.badge.yellow,.badge.amber{background:var(--amber-bg);color:var(--amber)}
+.badge.blue{background:var(--blue-bg);color:var(--blue)}
 .legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px;justify-content:center}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--muted);font-weight:500}
 .legend-dot{width:10px;height:10px;border-radius:50%}
+.table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:.78rem}
 th{background:rgba(15,41,66,.04);padding:10px 14px;text-align:left;font-weight:700;color:var(--navy);border-bottom:2px solid var(--navy);font-size:.65rem;text-transform:uppercase;letter-spacing:.08em}
 td{padding:10px 14px;border-bottom:1px solid var(--border)}
+td.num{text-align:center;font-variant-numeric:tabular-nums}
 tr:hover{background:rgba(15,41,66,.02)}
 .footer{text-align:center;padding:32px 24px;color:var(--muted);font-size:.72rem;border-top:1px solid var(--border);margin-top:30px;background:#fff}
 .footer a{color:var(--navy);text-decoration:none;font-weight:600;border-bottom:1px solid var(--gold)}.footer a:hover{color:var(--gold)}
@@ -73,292 +85,655 @@ tr:hover{background:rgba(15,41,66,.02)}
 
 <div class="hero">
 <h1>Merrimack Valley Education</h1>
-<p class="sub">2025 MCAS Performance Dashboard &mdash; Haverhill, Methuen & Lawrence</p>
+<p class="sub">2025 MCAS &amp; Accountability Dashboard &mdash; Haverhill, Methuen &amp; Lawrence, measured against Massachusetts</p>
 <div class="stat-row">
-<div class="stat-box"><div class="num">28%</div><div class="lbl">Haverhill<br>ELA Proficient</div></div>
-<div class="stat-box"><div class="num">30%</div><div class="lbl">Methuen<br>ELA Proficient</div></div>
-<div class="stat-box"><div class="num">18%</div><div class="lbl">Lawrence<br>ELA Proficient</div></div>
-<div class="stat-box"><div class="num">43%</div><div class="lbl">State Avg<br>ELA Proficient</div></div>
+<div class="stat-box"><div class="num" id="heroHav">&mdash;</div><div class="lbl">Haverhill<br>ELA Proficient 3-8</div></div>
+<div class="stat-box"><div class="num" id="heroMet">&mdash;</div><div class="lbl">Methuen<br>ELA Proficient 3-8</div></div>
+<div class="stat-box"><div class="num" id="heroLaw">&mdash;</div><div class="lbl">Lawrence<br>ELA Proficient 3-8</div></div>
+<div class="stat-box"><div class="num" id="heroSta">&mdash;</div><div class="lbl">State Avg<br>ELA Proficient 3-8</div></div>
 </div>
 </div>
 
 <nav>
 <button class="active" onclick="showTab('overview',this)">Overview</button>
-<button onclick="showTab('mcas',this)">MCAS Performance</button>
-<button onclick="showTab('failure',this)">Achievement Gaps</button>
-<button onclick="showTab('teachers',this)">Teachers & Staff</button>
-<button onclick="showTab('compare',this)">District Comparison</button>
+<button onclick="showTab('grades',this)">By Grade</button>
+<button onclick="showTab('gaps',this)">Achievement Gaps</button>
+<button onclick="showTab('growth',this)">Growth</button>
+<button onclick="showTab('absenteeism',this)">Absenteeism</button>
+<button onclick="showTab('graduation',this)">Graduation</button>
+<button onclick="showTab('accountability',this)">Accountability</button>
+<button onclick="showTab('money',this)">Teachers &amp; Money</button>
 </nav>
 
 <div class="container">
 
 <div class="legend">
-<div class="legend-item"><div class="legend-dot" style="background:#4da6ff"></div> Haverhill</div>
-<div class="legend-item"><div class="legend-dot" style="background:#c084fc"></div> Methuen</div>
-<div class="legend-item"><div class="legend-dot" style="background:#ff5757"></div> Lawrence</div>
-<div class="legend-item"><div class="legend-dot" style="background:#2ecc71"></div> State Average</div>
+<div class="legend-item"><div class="legend-dot" style="background:#1a4480"></div> Haverhill</div>
+<div class="legend-item"><div class="legend-dot" style="background:#7e22ce"></div> Methuen</div>
+<div class="legend-item"><div class="legend-dot" style="background:#c0392b"></div> Lawrence</div>
+<div class="legend-item"><div class="legend-dot" style="background:#1a7a4c"></div> Massachusetts</div>
 </div>
 
 <!-- ═══ OVERVIEW ═══ -->
 <div class="tab active" id="overview">
-<div class="kpi-grid">
-<div class="kpi blue"><div class="val">-15pts</div><div class="lbl">Haverhill Gap<br>from State ELA</div></div>
-<div class="kpi purple"><div class="val">-13pts</div><div class="lbl">Methuen Gap<br>from State ELA</div></div>
-<div class="kpi red"><div class="val">-25pts</div><div class="lbl">Lawrence Gap<br>from State ELA</div></div>
-<div class="kpi orange"><div class="val">5th Worst</div><div class="lbl">Lawrence Rank<br>in MA</div></div>
-</div>
+<div class="kpi-grid" id="kpiOverview"></div>
 <div class="grid grid-2">
 <div class="card full">
-<h3>ELA Performance vs State Average</h3>
-<div class="chart-wrap short"><canvas id="overviewELA"></canvas></div>
-<div class="insight"><strong>All three cities fall far below state average:</strong> Lawrence has only 18% proficiency — the 5th lowest in Massachusetts. Even Methuen at 30% is 13 points below state.</div>
+<h3>Every Subject, Every District &mdash; % Meeting or Exceeding Expectations</h3>
+<div class="chart-wrap tall"><canvas id="ovAll"></canvas></div>
+<div class="insight" id="insOverview"></div>
 </div>
 <div class="card">
-<h3>Gap from State Average — All Subjects</h3>
-<div class="chart-wrap"><canvas id="overviewGap"></canvas></div>
+<h3>Where Students Land &mdash; Grades 3-8 ELA Achievement Levels</h3>
+<div class="chart-wrap"><canvas id="ovLevels"></canvas></div>
 </div>
 <div class="card">
-<h3>Average Scaled Scores</h3>
-<div class="chart-wrap"><canvas id="overviewScores"></canvas></div>
+<h3>Gap from the State Average, in Percentage Points</h3>
+<div class="chart-wrap"><canvas id="ovGap"></canvas></div>
+</div>
+<div class="card full">
+<h3>Average Composite Scaled Score vs the 500 Standard</h3>
+<p class="note">DESE scales MCAS so that 500 is the boundary between "partially meeting" and "meeting" expectations.</p>
+<div class="chart-wrap"><canvas id="ovScores"></canvas></div>
+<div class="insight" id="insScores"></div>
 </div>
 </div>
 </div>
 
-<!-- ═══ MCAS PERFORMANCE ═══ -->
-<div class="tab" id="mcas">
-<div class="kpi-grid">
-<div class="kpi blue"><div class="val">28%</div><div class="lbl">Haverhill<br>ELA</div></div>
-<div class="kpi blue"><div class="val">29%</div><div class="lbl">Haverhill<br>Math</div></div>
-<div class="kpi purple"><div class="val">30%</div><div class="lbl">Methuen<br>ELA</div></div>
-<div class="kpi purple"><div class="val">27%</div><div class="lbl">Methuen<br>Math</div></div>
-<div class="kpi red"><div class="val">18%</div><div class="lbl">Lawrence<br>ELA</div></div>
-<div class="kpi red"><div class="val">19%</div><div class="lbl">Lawrence<br>Math</div></div>
-</div>
+<!-- ═══ BY GRADE ═══ -->
+<div class="tab" id="grades">
 <div class="grid grid-2">
+<div class="card">
+<h3>ELA &mdash; % Meeting/Exceeding by Grade</h3>
+<div class="chart-wrap"><canvas id="grELA"></canvas></div>
+</div>
+<div class="card">
+<h3>Math &mdash; % Meeting/Exceeding by Grade</h3>
+<div class="chart-wrap"><canvas id="grMath"></canvas></div>
+</div>
+<div class="card">
+<h3>Average Scaled Score by Grade &mdash; ELA</h3>
+<div class="chart-wrap"><canvas id="grScoreELA"></canvas></div>
+</div>
+<div class="card">
+<h3>Average Scaled Score by Grade &mdash; Math</h3>
+<div class="chart-wrap"><canvas id="grScoreMath"></canvas></div>
+</div>
 <div class="card full">
-<h3>MCAS % Meeting/Exceeding Expectations</h3>
-<div class="chart-wrap tall"><canvas id="mcasAll"></canvas></div>
-<div class="insight"><strong>Consistent underperformance:</strong> All three cities lag state averages by 13-25 percentage points across all subjects.</div>
-</div>
-<div class="card">
-<h3>Average Scaled Scores by Subject</h3>
-<div class="chart-wrap"><canvas id="mcasScores"></canvas></div>
-</div>
-<div class="card">
-<h3>Performance Distribution</h3>
-<div class="chart-wrap"><canvas id="mcasRadar"></canvas></div>
+<h3>Science &amp; Civics</h3>
+<div class="chart-wrap short"><canvas id="grScience"></canvas></div>
+<div class="insight" id="insGrades"></div>
 </div>
 </div>
 </div>
 
 <!-- ═══ ACHIEVEMENT GAPS ═══ -->
-<div class="tab" id="failure">
-<div class="kpi-grid">
-<div class="kpi blue"><div class="val">27%</div><div class="lbl">Haverhill<br>Not Meeting ELA</div></div>
-<div class="kpi purple"><div class="val">25%</div><div class="lbl">Methuen<br>Not Meeting ELA</div></div>
-<div class="kpi red"><div class="val">41%</div><div class="lbl">Lawrence<br>Not Meeting ELA</div></div>
-<div class="kpi orange"><div class="val">3x</div><div class="lbl">Lawrence vs<br>State Gap</div></div>
-</div>
+<div class="tab" id="gaps">
+<div class="kpi-grid" id="kpiGaps"></div>
 <div class="grid grid-2">
 <div class="card full">
-<h3>Students NOT Meeting Expectations</h3>
-<div class="chart-wrap tall"><canvas id="failureChart"></canvas></div>
-<div class="insight"><strong>Crisis level in Lawrence:</strong> 41% fail ELA, 36% fail Math. Nearly 4 in 10 students are being left behind — 2-3x the state average.</div>
+<h3>ELA Composite Scaled Score by Student Group &mdash; Grades 3-8</h3>
+<div class="chart-wrap xtall"><canvas id="gapELA"></canvas></div>
+</div>
+<div class="card full">
+<h3>Math Composite Scaled Score by Student Group &mdash; Grades 3-8</h3>
+<div class="chart-wrap xtall"><canvas id="gapMath"></canvas></div>
+</div>
+<div class="card">
+<h3>High School (Grade 10) ELA by Student Group</h3>
+<div class="chart-wrap tall"><canvas id="gapHS"></canvas></div>
+</div>
+<div class="card">
+<h3>Year-Over-Year Change in ELA Score, Grades 3-8 (2024 &rarr; 2025)</h3>
+<div class="chart-wrap tall"><canvas id="gapChange"></canvas></div>
+</div>
+<div class="card full">
+<div class="insight" id="insGaps"></div>
 </div>
 </div>
 </div>
 
-<!-- ═══ TEACHERS & STAFF ═══ -->
-<div class="tab" id="teachers">
-<div class="kpi-grid">
-<div class="kpi blue"><div class="val">$77,182</div><div class="lbl">Haverhill<br>Avg Salary</div></div>
-<div class="kpi purple"><div class="val">$79,604</div><div class="lbl">Methuen<br>Avg Salary</div></div>
-<div class="kpi red"><div class="val">$74,603</div><div class="lbl">Lawrence<br>Avg Salary</div></div>
-<div class="kpi green"><div class="val">$81,399</div><div class="lbl">State Avg<br>Salary</div></div>
-</div>
+<!-- ═══ GROWTH ═══ -->
+<div class="tab" id="growth">
+<div class="kpi-grid" id="kpiGrowth"></div>
 <div class="grid grid-2">
-<div class="card">
-<h3>Average Teacher Salary (2020-21)</h3>
-<div class="chart-wrap"><canvas id="salaryChart"></canvas></div>
-<div class="insight"><strong>All below state average:</strong> Every district pays teachers less than the state average of $81,399.</div>
-</div>
-<div class="card">
-<h3>Teacher Attendance (2025)</h3>
-<div class="chart-wrap"><canvas id="attendChart"></canvas></div>
+<div class="card full">
+<h3>Student Growth Percentile &mdash; ELA, Grades 3-8</h3>
+<p class="note">50 is typical growth statewide. SGP measures progress against academic peers, independent of how high or low the starting point was.</p>
+<div class="chart-wrap tall"><canvas id="gwELA"></canvas></div>
 </div>
 <div class="card full">
-<h3>Educator Evaluations (2021-22)</h3>
-<div class="chart-wrap short"><canvas id="evalChart"></canvas></div>
-<div class="insight"><strong>Lawrence shows highest "Exemplary" rate:</strong> 25.4% of Lawrence educators rated exemplary vs 7.8% in Haverhill and 4.0% in Methuen, despite worst student outcomes.</div>
+<h3>Student Growth Percentile &mdash; Math, Grades 3-8</h3>
+<div class="chart-wrap tall"><canvas id="gwMath"></canvas></div>
+</div>
+<div class="card full">
+<h3>Non-High School vs High School Growth &mdash; All Students</h3>
+<div class="chart-wrap short"><canvas id="gwSpan"></canvas></div>
+<div class="insight" id="insGrowth"></div>
 </div>
 </div>
 </div>
 
-<!-- ═══ DISTRICT COMPARISON ═══ -->
-<div class="tab" id="compare">
-<div class="kpi-grid">
-<div class="kpi green"><div class="val">49</div><div class="lbl">Haverhill<br>ELA SGP</div></div>
-<div class="kpi green"><div class="val">52</div><div class="lbl">Haverhill<br>Math SGP</div></div>
-<div class="kpi yellow"><div class="val">48</div><div class="lbl">Methuen<br>ELA SGP</div></div>
-<div class="kpi green"><div class="val">51</div><div class="lbl">Methuen<br>Math SGP</div></div>
-<div class="kpi green"><div class="val">51</div><div class="lbl">Lawrence<br>ELA SGP</div></div>
-<div class="kpi green"><div class="val">53</div><div class="lbl">Lawrence<br>Math SGP</div></div>
+<!-- ═══ ABSENTEEISM ═══ -->
+<div class="tab" id="absenteeism">
+<div class="kpi-grid" id="kpiAbs"></div>
+<div class="grid grid-2">
+<div class="card full">
+<h3>Chronic Absenteeism by Student Group, 2024-25</h3>
+<p class="note">Share of students absent 10% or more of their enrolled days. Source: DESE Student Attendance Report (end of year).</p>
+<div class="chart-wrap xtall"><canvas id="absGroup"></canvas></div>
 </div>
+<div class="card">
+<h3>Change from 2023-24 to 2024-25</h3>
+<div class="chart-wrap tall"><canvas id="absChange"></canvas></div>
+</div>
+<div class="card">
+<h3>Accountability Split &mdash; Elementary/Middle vs High School</h3>
+<p class="note">Source: 2025 Official Accountability Report, which splits the same measure by grade span.</p>
+<div class="chart-wrap tall"><canvas id="absSpan"></canvas></div>
+</div>
+<div class="card full">
+<div class="insight" id="insAbs"></div>
+</div>
+</div>
+</div>
+
+<!-- ═══ GRADUATION ═══ -->
+<div class="tab" id="graduation">
+<div class="kpi-grid" id="kpiGrad"></div>
+<div class="grid grid-2">
+<div class="card full">
+<h3>Four-Year Cohort Graduation Rate by Student Group &mdash; Class of 2025</h3>
+<p class="note">Groups with a cohort under 20 students are suppressed as unreliable.</p>
+<div class="chart-wrap xtall"><canvas id="grdGroup"></canvas></div>
+</div>
+<div class="card">
+<h3>Class of 2024 vs Class of 2025</h3>
+<div class="chart-wrap tall"><canvas id="grdYoY"></canvas></div>
+</div>
+<div class="card">
+<h3>Annual Dropout Rate by Student Group, 2024-25</h3>
+<div class="chart-wrap tall"><canvas id="grdDrop"></canvas></div>
+</div>
+<div class="card full">
+<h3>Extended Engagement &amp; Advanced Coursework Completion</h3>
+<p class="note">Extended engagement counts students still enrolled or completing after five years. Source: 2025 Official Accountability Report.</p>
+<div class="chart-wrap short"><canvas id="grdEng"></canvas></div>
+<div class="insight" id="insGrad"></div>
+</div>
+</div>
+</div>
+
+<!-- ═══ ACCOUNTABILITY ═══ -->
+<div class="tab" id="accountability">
+<div class="kpi-grid" id="kpiAcct"></div>
 <div class="grid grid-2">
 <div class="card">
-<h3>Student Growth Percentile (SGP)</h3>
-<div class="chart-wrap"><canvas id="sgpChart"></canvas></div>
-<div class="insight"><strong>Good news — students are growing:</strong> All three cities show typical or above-typical growth (SGP 48-53), meaning students make progress even if achievement levels remain low.</div>
+<h3>2025 Points Earned &mdash; Non-High School Grades</h3>
+<div class="chart-wrap tall"><canvas id="acNHS"></canvas></div>
 </div>
 <div class="card">
-<h3>All Metrics Comparison (Normalized)</h3>
-<div class="chart-wrap"><canvas id="radarChart"></canvas></div>
+<h3>2025 Points Earned &mdash; High School Grades</h3>
+<div class="chart-wrap tall"><canvas id="acHS"></canvas></div>
+</div>
+<div class="card full">
+<h3>Indicator-by-Indicator Points, All Students</h3>
+<div class="table-wrap"><table id="acTable"></table></div>
+<div class="insight" id="insAcct"></div>
+</div>
+</div>
+</div>
+
+<!-- ═══ TEACHERS & MONEY ═══ -->
+<div class="tab" id="money">
+<div class="kpi-grid" id="kpiMoney"></div>
+<div class="grid grid-2">
+<div class="card">
+<h3>Average Teacher Salary, 2023-24</h3>
+<div class="chart-wrap"><canvas id="mnSalary"></canvas></div>
+</div>
+<div class="card">
+<h3>Per-Pupil Expenditure, FY2024</h3>
+<div class="chart-wrap"><canvas id="mnPPX"></canvas></div>
+</div>
+<div class="card">
+<h3>Teacher Evaluation Ratings, 2024-25</h3>
+<div class="chart-wrap"><canvas id="mnEval"></canvas></div>
+</div>
+<div class="card">
+<h3>Teacher Attendance Rate, 2024-25</h3>
+<div class="chart-wrap"><canvas id="mnAtt"></canvas></div>
+</div>
+<div class="card full">
+<h3>Who These Districts Serve &mdash; Selected Populations, 2025-26</h3>
+<div class="chart-wrap short"><canvas id="mnPop"></canvas></div>
+<div class="insight" id="insMoney"></div>
 </div>
 </div>
 </div>
 
 </div><!-- container -->
 
-<footer>
-Data: <a href="https://profiles.doe.mass.edu" target="_blank">MA DESE MCAS 2025</a>, Teacher Salaries 2020-21, Staff Attendance 2025<br>
-Dashboard created February 2026
+<footer class="footer">
+Data: <a href="https://profiles.doe.mass.edu" target="_blank" rel="noopener">Massachusetts DESE School &amp; District Profiles</a> &mdash; 2025 MCAS, 2025 Official Accountability Reports, Graduation Rates (class of 2025), Dropout &amp; Attendance (2024-25), Teacher Salaries (2023-24), Per-Pupil Expenditure (FY2024), Selected Populations (2025-26).<br>
+District codes: Haverhill 01280000 &middot; Methuen 01810000 &middot; Lawrence 01490000. Compare with <a href="education-boston.html">Boston</a> and <a href="education-statewide.html">statewide</a>.
 </footer>
 
 <script>
-Chart.defaults.color='#a3aed0';
-Chart.defaults.borderColor='#3d4566';
-Chart.defaults.font.family="'DM Sans',sans-serif";
-Chart.defaults.plugins.legend.labels.boxWidth=12;
-Chart.defaults.plugins.legend.labels.padding=16;
-const C={h:'#4da6ff',m:'#c084fc',l:'#ff5757',s:'#2ecc71',o:'#ff9f43',y:'#fbbf24',r:'#ff5757',g:'#2ecc71',b:'#4da6ff',p:'#c084fc'};
-const GC='#353b58';
-const initialized={};
+const D = {"names":{"haverhill":"Haverhill","methuen":"Methuen","lawrence":"Lawrence","state":"State"},"districts":["haverhill","methuen","lawrence"],"subjLabels":["ELA 3-8","Math 3-8","Science 5&8","Civics Gr.8","ELA Gr.10","Math Gr.10","Science Gr.10"],"subj":{"haverhill":[28.0,29.0,29.0,20.0,28.0,25.0,29.0],"methuen":[30.0,27.0,27.0,23.0,33.0,25.0,36.0],"lawrence":[18.0,19.0,17.0,16.0,17.0,11.0,14.0],"state":[42.0,41.0,42.0,39.0,51.0,45.0,46.0]},"gradeLabels":["Gr.3","Gr.4","Gr.5","Gr.6","Gr.7","Gr.8","Gr.10"],"grades":{"haverhill":{"ela_me":[34.0,28.0,25.0,29.0,26.0,27.0,28.0],"math_me":[35.0,34.0,27.0,29.0,25.0,27.0,25.0],"ela_ss":[489.0,486.0,487.0,483.0,484.0,483.0,483.0],"math_ss":[493.0,490.0,487.0,487.0,485.0,488.0,482.0]},"methuen":{"ela_me":[30.0,30.0,24.0,30.0,32.0,32.0,33.0],"math_me":[29.0,24.0,21.0,27.0,32.0,30.0,25.0],"ela_ss":[487.0,488.0,488.0,486.0,488.0,487.0,490.0],"math_ss":[484.0,483.0,485.0,488.0,488.0,489.0,486.0]},"lawrence":{"ela_me":[18.0,16.0,12.0,19.0,20.0,21.0,17.0],"math_me":[25.0,17.0,17.0,16.0,18.0,19.0,11.0],"ela_ss":[478.0,477.0,477.0,476.0,478.0,477.0,474.0],"math_ss":[482.0,480.0,480.0,480.0,480.0,482.0,473.0]},"state":{"ela_me":[42.0,40.0,38.0,42.0,42.0,44.0,51.0],"math_me":[44.0,43.0,40.0,41.0,39.0,38.0,45.0]}},"levels":{"haverhill":[3.0,25.0,45.0,27.0],"methuen":[3.0,26.0,45.0,25.0],"lawrence":[2.0,16.0,42.0,41.0],"state":[7.0,34.0,39.0,20.0]},"tested":{"haverhill":3601.0,"methuen":3091.0,"lawrence":5843.0},"tested10":{"haverhill":484.0,"methuen":416.0,"lawrence":771.0},"groupLabels":["All","High Needs","Low Income","EL/Former EL","Disability","Asian","Black","Hispanic","Multi-Race","White"],"gaps":{"haverhill":{"ela_nhs":[485.6,480.1,480.5,472.6,470.2,494.2,482.1,480.0,490.0,492.3],"math_nhs":[488.4,482.7,482.9,477.4,473.7,498.9,485.3,482.3,489.3,495.9],"ela_hs":[483.1,474.8,474.5,462.1,468.7,null,475.4,473.0,null,493.6],"math_hs":[482.2,474.3,473.7,468.5,468.5,null,470.7,473.5,null,490.7],"sci_nhs":[486.2,480.4,480.3,476.1,470.2,null,480.3,479.9,487.4,494.8],"sci_hs":[486.1,476.9,476.3,468.9,468.5,null,null,476.3,null,493.5],"ela_nhs_chg":[1.0,1.0,0.9,-0.3,1.6,0.0,1.4,1.2,2.5,1.2],"ela_hs_chg":[-7.2,-6.1,-6.3,-6.8,-4.3,null,-13.4,-6.6,null,-6.0],"math_nhs_chg":[0.7,0.5,0.6,-0.3,0.9,-1.9,0.9,0.6,0.2,1.6],"math_hs_chg":[-2.8,-3.3,-4.4,-1.9,-3.2,null,-10.0,-2.4,null,-2.3]},"methuen":{"ela_nhs":[487.3,481.1,482.0,475.5,470.1,495.1,487.7,482.7,492.8,493.6],"math_nhs":[486.3,480.6,481.1,476.0,470.8,504.8,485.2,481.2,493.1,492.8],"ela_hs":[489.5,482.0,483.4,464.2,466.0,null,491.3,481.5,null,496.4],"math_hs":[486.3,479.8,480.8,468.1,466.3,null,486.4,479.6,null,492.4],"sci_nhs":[485.2,480.1,480.8,473.5,471.8,501.3,482.9,480.5,489.9,491.1],"sci_hs":[491.7,485.2,486.9,466.2,468.5,null,485.4,484.8,null,498.6],"ela_nhs_chg":[0.7,0.8,0.8,1.0,0.0,-0.8,1.8,0.6,-1.1,1.4],"ela_hs_chg":[-5.4,-4.6,-3.8,-11.1,-10.8,null,-0.2,-6.3,null,-6.4],"math_nhs_chg":[-0.6,-0.5,-0.6,-0.2,-1.6,1.8,0.1,-0.7,1.0,-0.3],"math_hs_chg":[-4.1,-3.2,-2.6,-7.2,-9.3,null,1.1,-4.4,null,-4.2]},"lawrence":{"ela_nhs":[477.2,475.7,475.7,470.6,461.9,493.7,481.0,476.6,479.7,490.2],"math_nhs":[480.8,479.7,479.6,476.9,466.3,498.1,483.8,480.4,480.9,487.4],"ela_hs":[474.2,471.8,472.3,460.3,464.5,null,null,473.3,null,null],"math_hs":[473.8,472.0,472.3,465.9,468.0,null,null,473.2,null,null],"sci_nhs":[478.5,477.5,477.5,472.7,465.5,null,479.2,478.2,null,485.6],"sci_hs":[475.5,473.2,473.7,464.0,465.8,null,null,474.9,null,null],"ela_nhs_chg":[0.5,0.3,0.2,-0.1,-0.3,2.7,1.1,0.4,-4.1,2.6],"ela_hs_chg":[-5.6,-6.5,-6.5,-5.8,-7.1,null,null,-5.9,null,null],"math_nhs_chg":[0.2,0.1,0.0,0.3,-0.9,1.2,0.4,0.2,-2.9,-1.6],"math_hs_chg":[-4.3,-5.0,-4.9,-3.9,-2.4,null,null,-4.1,null,null]}},"growth":{"haverhill":{"ela_nhs":[48.6,47.9,47.9,50.2,44.1,53.0,49.2,48.1,49.6,48.8],"math_nhs":[51.7,50.0,50.3,51.3,46.1,50.8,54.5,49.9,49.3,53.6],"ela_hs":[33.9,32.4,31.5,38.1,37.0,null,null,32.7,null,35.6],"math_hs":[31.4,31.3,30.2,39.0,36.0,null,null,29.6,null,34.1]},"methuen":{"ela_nhs":[48.5,48.0,49.0,50.8,44.7,48.5,49.1,47.5,46.8,49.9],"math_nhs":[51.1,50.4,50.7,52.5,45.0,60.6,55.6,50.1,51.2,51.2],"ela_hs":[42.1,39.8,38.9,50.0,38.5,null,46.2,38.9,null,42.9],"math_hs":[38.5,38.4,38.3,43.2,36.9,null,38.5,39.0,null,38.0]},"lawrence":{"ela_nhs":[51.1,50.7,50.4,51.1,43.9,53.7,55.0,51.0,null,53.3],"math_nhs":[52.6,52.5,52.4,54.1,46.1,54.0,58.9,52.6,null,49.5],"ela_hs":[37.0,37.3,37.2,38.5,32.4,null,null,37.0,null,null],"math_hs":[31.1,31.3,31.2,33.5,31.5,null,null,31.3,null,null]}},"absA":{"haverhill":{"nhs24":[23.1,27.8,29.4,22.8,29.2,7.9,13.1,27.7,22.6,19.6],"nhs25":[17.4,20.7,21.9,14.8,21.8,11.1,10.3,20.2,17.4,15.3],"hs24":[43.7,52.4,54.1,46.6,51.2,null,33.8,53.6,null,36.8],"hs25":[49.3,57.7,59.0,51.2,56.0,null,32.8,57.3,null,44.0]},"methuen":{"nhs24":[16.0,19.4,21.1,18.6,19.5,10.7,6.8,19.9,13.0,12.3],"nhs25":[15.2,18.2,19.7,19.2,18.2,5.6,7.9,19.0,9.9,11.6],"hs24":[42.5,46.0,48.3,40.7,43.2,null,26.5,46.0,null,42.1],"hs25":[41.1,42.8,44.5,35.8,37.3,null,21.4,43.8,null,43.2]},"lawrence":{"nhs24":[22.2,22.9,23.4,20.8,31.3,13.2,13.8,22.2,22.9,26.9],"nhs25":[16.5,17.0,17.5,15.2,24.3,2.7,10.5,16.6,13.5,19.3],"hs24":[42.5,43.6,44.3,41.7,52.5,null,null,42.6,null,null],"hs25":[33.4,34.4,35.0,33.3,41.8,null,null,33.7,null,null]}},"gradA":{"haverhill":{"g23":[79.2,72.1,71.2,57.4,60.0,null,92.9,70.5,null,84.0],"g24":[78.6,72.8,73.0,46.8,65.6,null,72.7,68.8,null,87.9],"eng":[88.2,84.5,84.0,68.5,81.6,null,100.0,81.4,null,91.8],"drop23":[4.3,5.7,5.9,12.4,4.7,null,1.7,5.9,null,3.3],"drop24":[3.0,4.2,4.3,6.4,4.5,null,2.5,4.5,null,1.9],"adv":[60.4,48.5,48.8,32.3,33.6,null,61.2,49.3,null,68.2]},"methuen":{"g23":[90.3,85.5,86.2,68.9,61.0,null,null,85.5,null,94.0],"g24":[86.5,81.4,81.3,59.2,73.2,null,null,79.6,null,92.9],"eng":[93.4,90.4,90.6,74.3,79.7,null,null,89.4,null,97.2],"drop23":[2.0,2.7,2.9,3.8,2.1,null,0.9,2.8,null,1.4],"drop24":[3.0,4.0,3.8,7.9,3.9,null,0.0,4.9,null,1.0],"adv":[53.3,36.1,37.9,13.0,16.3,null,40.3,39.9,null,69.4]},"lawrence":{"g23":[72.7,73.3,73.7,69.8,56.2,null,null,72.3,null,null],"g24":[74.0,73.2,73.2,64.8,50.6,null,null,73.4,null,null],"eng":[79.2,80.2,80.4,76.9,74.1,null,null,78.9,null,null],"drop23":[3.3,3.4,3.0,4.2,5.2,null,null,3.2,null,null],"drop24":[7.8,7.5,7.0,8.1,7.9,null,null,8.0,null,null],"adv":[77.5,76.9,77.3,75.6,58.1,null,null,77.7,null,null]}},"points":{"haverhill":{"English language arts achievement":{"nhs":"2","nhs_max":"4","hs":"0","hs_max":"4"},"Mathematics achievement":{"nhs":"2","nhs_max":"4","hs":"0","hs_max":"4"},"Science achievement":{"nhs":"0","nhs_max":"4","hs":"0","hs_max":"4"},"English language arts growth":{"nhs":"2","nhs_max":"4","hs":"1","hs_max":"4"},"Mathematics growth":{"nhs":"3","nhs_max":"4","hs":"1","hs_max":"4"},"Four-year cohort graduation rate":{"nhs":"-","nhs_max":"-","hs":"0","hs_max":"4"},"Extended engagement rate":{"nhs":"-","nhs_max":"-","hs":"0","hs_max":"4"},"Annual dropout rate":{"nhs":"-","nhs_max":"-","hs":"4","hs_max":"4"},"English language proficiency total":{"nhs":"4","nhs_max":"4","hs":"4","hs_max":"4"},"Chronic absenteeism":{"nhs":"4","nhs_max":"4","hs":"0","hs_max":"4"},"Advanced coursework completion":{"nhs":"-","nhs_max":"-","hs":"0","hs_max":"4"}},"methuen":{"English language arts achievement":{"nhs":"2","nhs_max":"4","hs":"0","hs_max":"4"},"Mathematics achievement":{"nhs":"0","nhs_max":"4","hs":"0","hs_max":"4"},"Science achievement":{"nhs":"1","nhs_max":"4","hs":"0","hs_max":"4"},"English language arts growth":{"nhs":"2","nhs_max":"4","hs":"2","hs_max":"4"},"Mathematics growth":{"nhs":"3","nhs_max":"4","hs":"1","hs_max":"4"},"Four-year cohort graduation rate":{"nhs":"-","nhs_max":"-","hs":"0","hs_max":"4"},"Extended engagement rate":{"nhs":"-","nhs_max":"-","hs":"2","hs_max":"4"},"Annual dropout rate":{"nhs":"-","nhs_max":"-","hs":"0","hs_max":"4"},"English language proficiency total":{"nhs":"4","nhs_max":"4","hs":"4","hs_max":"4"},"Chronic absenteeism":{"nhs":"3","nhs_max":"4","hs":"3","hs_max":"4"},"Advanced coursework completion":{"nhs":"-","nhs_max":"-","hs":"3","hs_max":"4"}},"lawrence":{"English language arts achievement":{"nhs":"2","nhs_max":"4","hs":"0","hs_max":"4"},"Mathematics achievement":{"nhs":"2","nhs_max":"4","hs":"0","hs_max":"4"},"Science achievement":{"nhs":"2","nhs_max":"4","hs":"0","hs_max":"4"},"English language arts growth":{"nhs":"3","nhs_max":"4","hs":"1","hs_max":"4"},"Mathematics growth":{"nhs":"3","nhs_max":"4","hs":"1","hs_max":"4"},"Four-year cohort graduation rate":{"nhs":"-","nhs_max":"-","hs":"2","hs_max":"4"},"Extended engagement rate":{"nhs":"-","nhs_max":"-","hs":"0","hs_max":"4"},"Annual dropout rate":{"nhs":"-","nhs_max":"-","hs":"0","hs_max":"4"},"English language proficiency total":{"nhs":"3","nhs_max":"4","hs":"3","hs_max":"4"},"Chronic absenteeism":{"nhs":"4","nhs_max":"4","hs":"4","hs_max":"4"},"Advanced coursework completion":{"nhs":"-","nhs_max":"-","hs":"3","hs_max":"4"}}},"cls":{"haverhill":{"pct":"44","label":"Moderate progress toward targets","t24":"47%","t25":"41%","reason":"Moderate progress toward targets"},"methuen":{"pct":"42","label":"Moderate progress toward targets","t24":"46%","t25":"39%","reason":"Moderate progress toward targets"},"lawrence":{"pct":"53","label":"Substantial progress toward targets","t24":"55%","t25":"52%","reason":"In need of broad/comprehensive support Chronically underperforming district"}},"subLabels":["All","High Needs","Low Income","English Learners","Disability","Asian","Black","Hispanic","Multi-Race","White"],"sub":{"grad_prev":{"All":{"boston":79.7,"haverhill":78.6,"lawrence":74.0,"methuen":86.5,"state":88.4},"High Needs":{"boston":77.1,"haverhill":72.8,"lawrence":73.2,"methuen":81.4,"state":82.2},"Low Income":{"boston":77.3,"haverhill":73.0,"lawrence":73.2,"methuen":81.3,"state":81.6},"English Learners":{"boston":68.1,"haverhill":46.8,"lawrence":64.8,"methuen":59.2,"state":66.7},"Disability":{"boston":63.8,"haverhill":65.6,"lawrence":50.6,"methuen":73.2,"state":75.4},"Asian":{"boston":91.7,"lawrence":100.0,"methuen":89.5,"state":95.5},"Black":{"boston":79.3,"haverhill":72.7,"lawrence":90.9,"methuen":96.3,"state":82.5},"Hispanic":{"boston":75.6,"haverhill":68.8,"lawrence":73.4,"methuen":79.6,"state":78.9},"Multi-Race":{"boston":80.2,"methuen":100.0,"state":88.6},"White":{"boston":88.7,"haverhill":87.9,"lawrence":69.6,"methuen":92.9,"state":92.6}},"dropout":{"All":{"boston":3.6,"haverhill":2.5,"lawrence":3.6,"methuen":2.2,"state":1.8},"High Needs":{"boston":4.1,"haverhill":3.1,"lawrence":3.7,"methuen":1.7,"state":3.0},"Low Income":{"boston":3.7,"haverhill":2.8,"lawrence":3.3,"methuen":1.5,"state":3.1},"English Learners":{"boston":6.5,"haverhill":2.6,"lawrence":4.7,"methuen":2.4,"state":6.5},"Disability":{"boston":3.9,"haverhill":3.7,"lawrence":3.5,"methuen":2.6,"state":2.6},"Asian":{"boston":0.9,"haverhill":0.0,"lawrence":0.0,"methuen":1.4,"state":0.4},"Black":{"boston":2.6,"haverhill":0.8,"lawrence":7.1,"methuen":0.0,"state":2.1},"Hispanic":{"boston":5.0,"haverhill":3.4,"lawrence":3.6,"methuen":2.4,"state":3.7},"Multi-Race":{"boston":3.0,"haverhill":0.0,"lawrence":0.0,"methuen":3.1,"state":1.7},"White":{"boston":2.8,"haverhill":1.9,"lawrence":5.1,"methuen":2.3,"state":1.0}},"abs":{"All":{"boston":33.0,"haverhill":27.2,"lawrence":23.3,"methuen":23.9,"state":18.8},"High Needs":{"boston":36.5,"haverhill":31.3,"lawrence":24.0,"methuen":26.0,"state":25.9},"Low Income":{"boston":38.6,"haverhill":32.8,"lawrence":24.4,"methuen":27.6,"state":28.9},"English Learners":{"boston":35.4,"haverhill":25.2,"lawrence":23.9,"methuen":24.5,"state":27.8},"Disability":{"boston":41.0,"haverhill":32.0,"lawrence":31.1,"methuen":26.1,"state":26.5},"Asian":{"boston":15.8,"haverhill":18.2,"lawrence":6.2,"methuen":13.2,"state":10.9},"Black":{"boston":33.4,"haverhill":16.2,"lawrence":14.8,"methuen":13.8,"state":20.7},"Hispanic":{"boston":40.7,"haverhill":31.5,"lawrence":23.5,"methuen":26.8,"state":29.5},"Multi-Race":{"boston":30.4,"haverhill":24.5,"lawrence":23.1,"methuen":18.0,"state":19.3},"White":{"boston":17.6,"haverhill":24.3,"lawrence":25.9,"methuen":22.8,"state":13.9}},"abs_prev":{"All":{"boston":34.6,"haverhill":29.1,"lawrence":29.2,"methuen":24.8,"state":19.7},"High Needs":{"boston":38.1,"haverhill":34.4,"lawrence":30.0,"methuen":27.5,"state":27.2},"Low Income":{"boston":40.2,"haverhill":36.0,"lawrence":30.5,"methuen":29.6,"state":30.3},"English Learners":{"boston":36.9,"haverhill":30.2,"lawrence":29.2,"methuen":25.9,"state":29.9},"Disability":{"boston":43.0,"haverhill":35.2,"lawrence":37.8,"methuen":26.5,"state":27.5},"Asian":{"boston":16.0,"haverhill":17.3,"lawrence":21.0,"methuen":19.0,"state":11.8},"Black":{"boston":35.6,"haverhill":19.0,"lawrence":23.2,"methuen":13.6,"state":22.5},"Hispanic":{"boston":41.8,"haverhill":34.8,"lawrence":29.3,"methuen":28.4,"state":31.3},"Multi-Race":{"boston":32.0,"haverhill":25.4,"lawrence":32.6,"methuen":23.8,"state":20.6},"White":{"boston":20.6,"haverhill":24.7,"lawrence":32.0,"methuen":22.1,"state":14.4}},"grad":{"All":{"boston":81.3,"haverhill":86.7,"lawrence":82.2,"methuen":90.9,"state":89.3},"High Needs":{"boston":78.6,"haverhill":83.3,"lawrence":81.7,"methuen":87.2,"state":83.5},"Low Income":{"boston":78.9,"haverhill":83.4,"lawrence":81.6,"methuen":87.9,"state":82.9},"English Learners":{"boston":73.0,"haverhill":80.3,"lawrence":79.1,"methuen":85.7,"state":71.1},"Disability":{"boston":66.1,"haverhill":75.9,"lawrence":63.2,"methuen":76.4,"state":78.7},"Asian":{"boston":92.1,"haverhill":null,"lawrence":null,"methuen":90.5,"state":95.8},"Black":{"boston":80.9,"haverhill":85.7,"lawrence":null,"methuen":94.4,"state":86.6},"Hispanic":{"boston":78.1,"haverhill":86.1,"lawrence":82.8,"methuen":88.6,"state":80.5},"Multi-Race":{"boston":80.6,"haverhill":null,"methuen":null,"state":89.3},"White":{"boston":89.4,"haverhill":87.7,"lawrence":null,"methuen":93.6,"state":93.4}}},"money":{"salary":{"haverhill":85921.0,"methuen":86154.0,"lawrence":84516.0,"boston":133127.0,"state":91014.0},"ppx":{"haverhill":19638.1,"methuen":18315.0,"lawrence":23443.9,"boston":35083.9,"state":22413.9},"ppx_total":{"haverhill":20353.0,"methuen":20409.2,"lawrence":23486.6,"boston":33854.2,"state":23165.1},"staffAtt":{"haverhill":94.0,"methuen":94.1,"lawrence":93.1,"boston":94.0,"state":93.5},"evalExemplary":{"haverhill":7.7,"methuen":4.0,"lawrence":19.9,"boston":24.2,"state":14.7},"evalProficient":{"haverhill":85.6,"methuen":94.6,"lawrence":68.5,"boston":71.6,"state":81.6},"evalNeeds":{"haverhill":6.4,"methuen":1.4,"lawrence":11.4,"boston":4.0,"state":3.6},"evalUnsat":{"haverhill":0.3,"methuen":0.0,"lawrence":0.3,"boston":0.2,"state":0.2},"highNeeds":{"haverhill":71.6,"methuen":67.1,"lawrence":91.9,"boston":80.9,"state":55.4},"el":{"haverhill":14.8,"methuen":18.4,"lawrence":43.4,"boston":33.6,"state":13.4},"lowIncome":{"haverhill":60.8,"methuen":53.0,"lawrence":82.8,"boston":68.3,"state":41.1},"swd":{"haverhill":25.6,"methuen":22.3,"lawrence":21.5,"boston":24.2,"state":21.1}}};
 
-function showTab(id,btn){
-document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-btn.classList.add('active');
-if(!initialized[id]){initialized[id]=true;initTab(id);}
+/* ── palette ─────────────────────────────────────────────────────────────── */
+const COL = {haverhill:'#1a4480', methuen:'#7e22ce', lawrence:'#c0392b', state:'#1a7a4c'};
+const FADE = {haverhill:'rgba(26,68,128,.30)', methuen:'rgba(126,34,206,.30)', lawrence:'rgba(192,57,43,.30)', state:'rgba(26,122,76,.30)'};
+const GC = '#e8e5df', TXT = '#7a756e';
+Chart.defaults.color = TXT;
+Chart.defaults.borderColor = GC;
+Chart.defaults.font.family = "'DM Sans',sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.plugins.legend.labels.boxWidth = 12;
+Chart.defaults.plugins.legend.labels.padding = 14;
+Chart.defaults.maintainAspectRatio = false;
+Chart.defaults.responsive = true;
+
+const DK = D.districts, ALL4 = DK.concat(['state']);
+const nm = k => D.names[k];
+const pct = v => v + '%';
+const fmt1 = v => (v === null || v === undefined) ? '—' : v.toFixed(1);
+
+/* ── chart option helpers ────────────────────────────────────────────────── */
+function vOpts(o){
+  o = o || {};
+  return {scales:{y:Object.assign({grid:{color:GC}, ticks:o.pct?{callback:pct}:{}}, o.y||{}),
+                  x:Object.assign({grid:{display:false}}, o.x||{})},
+          plugins:{legend:{position:'top', display:o.legend !== false}}};
+}
+function hOpts(o){
+  o = o || {};
+  return {indexAxis:'y',
+          scales:{x:Object.assign({grid:{color:GC}, ticks:o.pct?{callback:pct}:{}}, o.x||{}),
+                  y:Object.assign({grid:{display:false}}, o.y||{})},
+          plugins:{legend:{position:'top', display:o.legend !== false}}};
+}
+/** One dataset per district (+ state), reading `pick(districtKey)` for the data array. */
+function dsets(pick, keys){
+  return (keys || ALL4).map(k => ({label:nm(k), data:pick(k), backgroundColor:COL[k], borderColor:COL[k]}));
+}
+/** Dashed horizontal reference line drawn across a bar chart. */
+function refLine(value, label, n){
+  return {label:label, data:Array(n).fill(value), type:'line', borderColor:'#7a756e',
+          borderDash:[5,4], borderWidth:1.5, pointRadius:0, fill:false};
+}
+function kpi(cls, val, lbl){
+  return '<div class="kpi ' + cls + '"><div class="val">' + val + '</div><div class="lbl">' + lbl + '</div></div>';
 }
 
-function bOpts(yMax,pct){return{responsive:true,maintainAspectRatio:false,scales:{y:{max:yMax,ticks:pct?{callback:function(v){return v+'%'}}:{},grid:{color:GC}},x:{grid:{display:false}}}}}
-function hOpts(xMin,xMax,pct){return{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{min:xMin,max:xMax,ticks:pct?{callback:function(v){return v+'%'}}:{},grid:{color:GC}},y:{grid:{display:false}}},plugins:{legend:{display:false}}}}
-
-function initTab(id){
-if(id==='overview') initOverview();
-if(id==='mcas') initMCAS();
-if(id==='failure') initFailure();
-if(id==='teachers') initTeachers();
-if(id==='compare') initCompare();
+/* ── tab plumbing ────────────────────────────────────────────────────────── */
+const initialized = {};
+function showTab(id, btn){
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if(!initialized[id]){ initialized[id] = true; INIT[id](); }
+  window.scrollTo({top:0, behavior:'smooth'});
 }
+/** Signed change, formatted with an explicit + so direction is never ambiguous. */
+function signed(v){ return (v > 0 ? '+' : '') + v.toFixed(1); }
 
+/* ── OVERVIEW ────────────────────────────────────────────────────────────── */
 function initOverview(){
-new Chart(document.getElementById('overviewELA'),{type:'bar',data:{
-labels:['State Avg','Methuen','Haverhill','Lawrence'],
-datasets:[{data:[43,30,28,18],backgroundColor:[C.s,C.m,C.h,C.l]}]
-},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-scales:{y:{beginAtZero:true,max:50,ticks:{callback:v=>v+'%'},grid:{color:GC}},x:{grid:{display:false}}}}});
+  // weighted region average across the three districts (grades 3-8, ELA and math)
+  const w = DK.reduce((a,k) => a + D.tested[k], 0);
+  const regionELA  = DK.reduce((a,k) => a + D.subj[k][0] * D.tested[k], 0) / w;
+  const regionMath = DK.reduce((a,k) => a + D.subj[k][1] * D.tested[k], 0) / w;
 
-new Chart(document.getElementById('overviewGap'),{type:'bar',data:{
-labels:['Haverhill','Methuen','Lawrence'],
-datasets:[
-{label:'ELA Gap',data:[-15,-13,-25],backgroundColor:'rgba(255,87,87,0.8)'},
-{label:'Math Gap',data:[-13,-15,-23],backgroundColor:'rgba(255,159,67,0.8)'}
-]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{grid:{color:GC}},x:{grid:{display:false}}}}});
+  document.getElementById('kpiOverview').innerHTML =
+    DK.map((k,i) => kpi(['blue','purple','red'][i],
+        (D.subj[k][0] - D.subj.state[0]) + ' pts',
+        nm(k) + '<br>ELA Gap vs State')).join('') +
+    kpi('orange', regionELA.toFixed(0) + '%', 'Region Combined<br>ELA Proficient 3-8') +
+    kpi('orange', regionMath.toFixed(0) + '%', 'Region Combined<br>Math Proficient 3-8') +
+    kpi('green', w.toLocaleString(), 'Students Tested<br>Grades 3-8');
 
-new Chart(document.getElementById('overviewScores'),{type:'bar',data:{
-labels:['ELA','Math','Science'],
-datasets:[
-{label:'Haverhill',data:[486,488,486],backgroundColor:C.h},
-{label:'Methuen',data:[487,486,485],backgroundColor:C.m},
-{label:'Lawrence',data:[477,481,478],backgroundColor:C.l},
-{label:'Target (500)',data:[500,500,500],backgroundColor:C.s}
-]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:470,max:510,grid:{color:GC}},x:{grid:{display:false}}}}});
+  new Chart(document.getElementById('ovAll'), {type:'bar',
+    data:{labels:D.subjLabels, datasets:dsets(k => D.subj[k])},
+    options:vOpts({pct:true, y:{max:60, beginAtZero:true}})});
+
+  new Chart(document.getElementById('ovLevels'), {type:'bar',
+    data:{labels:ALL4.map(nm), datasets:[
+      {label:'Exceeding',          data:ALL4.map(k => D.levels[k][0]), backgroundColor:'#1a7a4c'},
+      {label:'Meeting',            data:ALL4.map(k => D.levels[k][1]), backgroundColor:'#3c85c6'},
+      {label:'Partially Meeting',  data:ALL4.map(k => D.levels[k][2]), backgroundColor:'#b8860b'},
+      {label:'Not Meeting',        data:ALL4.map(k => D.levels[k][3]), backgroundColor:'#c0392b'}]},
+    options:Object.assign(hOpts({pct:true, x:{stacked:true, max:100}, y:{stacked:true}}),
+                          {plugins:{legend:{position:'bottom'}}})});
+
+  new Chart(document.getElementById('ovGap'), {type:'bar',
+    data:{labels:D.subjLabels, datasets:dsets(k => D.subj[k].map((v,i) => v - D.subj.state[i]), DK)},
+    options:vOpts({y:{title:{display:true, text:'percentage points vs state'}}})});
+
+  new Chart(document.getElementById('ovScores'), {type:'bar',
+    data:{labels:['ELA 3-8','Math 3-8','Science 5&8','ELA Gr.10','Math Gr.10'],
+      datasets:dsets(k => [D.gaps[k].ela_nhs[0], D.gaps[k].math_nhs[0], D.gaps[k].sci_nhs[0],
+                           D.gaps[k].ela_hs[0], D.gaps[k].math_hs[0]], DK)
+        .concat([refLine(500, 'Meeting expectations (500)', 5)])},
+    options:vOpts({y:{min:465, max:510}})});
+
+  document.getElementById('insOverview').innerHTML =
+    '<strong>One region, three different problems.</strong> On grades 3-8 ELA the three districts sit ' +
+    (D.subj.state[0] - D.subj.methuen[0]) + ' to ' + (D.subj.state[0] - D.subj.lawrence[0]) +
+    ' points below the state, and no district clears the state average on any of the seven measures. ' +
+    'But the shape differs: Methuen is strongest at the high-school end (' +
+    D.subj.methuen[4] + '% ELA in grade 10, ' + D.subj.methuen[6] + '% science), Haverhill is flat across every grade, ' +
+    'and Lawrence trails everywhere &mdash; only ' + D.subj.lawrence[5] + '% of its grade-10 students meet the math standard against ' +
+    D.subj.state[5] + '% statewide.';
+
+  document.getElementById('insScores').innerHTML =
+    '<strong>Composite scores tell the same story more precisely.</strong> No district in the region reaches 500 on any measure. ' +
+    'Haverhill and Methuen cluster in the mid-480s; Lawrence sits near ' + fmt1(D.gaps.lawrence.ela_nhs[0]) +
+    ' in ELA and ' + fmt1(D.gaps.lawrence.ela_hs[0]) + ' by grade 10 &mdash; roughly a quarter of a standard deviation further back.';
 }
 
-function initMCAS(){
-new Chart(document.getElementById('mcasAll'),{type:'bar',data:{
-labels:['ELA','Math','Science'],
-datasets:[
-{label:'Haverhill',data:[28,29,29],backgroundColor:C.h},
-{label:'Methuen',data:[30,27,27],backgroundColor:C.m},
-{label:'Lawrence',data:[18,19,17],backgroundColor:C.l},
-{label:'State Avg',data:[43,42,42],backgroundColor:C.s}
-]},options:bOpts(50,true)});
+/* ── BY GRADE ────────────────────────────────────────────────────────────── */
+function initGrades(){
+  const L = D.gradeLabels;
+  new Chart(document.getElementById('grELA'), {type:'bar',
+    data:{labels:L, datasets:dsets(k => D.grades[k].ela_me)},
+    options:vOpts({pct:true, y:{max:60, beginAtZero:true}})});
+  new Chart(document.getElementById('grMath'), {type:'bar',
+    data:{labels:L, datasets:dsets(k => D.grades[k].math_me)},
+    options:vOpts({pct:true, y:{max:60, beginAtZero:true}})});
 
-new Chart(document.getElementById('mcasScores'),{type:'bar',data:{
-labels:['ELA','Math','Science'],
-datasets:[
-{label:'Haverhill',data:[486,488,486],backgroundColor:C.h},
-{label:'Methuen',data:[487,486,485],backgroundColor:C.m},
-{label:'Lawrence',data:[477,481,478],backgroundColor:C.l},
-{label:'Target (500)',data:[500,500,500],backgroundColor:C.s}
-]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:470,max:510,grid:{color:GC}},x:{grid:{display:false}}}}});
+  new Chart(document.getElementById('grScoreELA'), {type:'line',
+    data:{labels:L, datasets:DK.map(k => ({label:nm(k), data:D.grades[k].ela_ss, borderColor:COL[k],
+      backgroundColor:FADE[k], tension:.3, borderWidth:3, pointRadius:3}))
+      .concat([refLine(500, 'Meeting expectations (500)', L.length)])},
+    options:vOpts({y:{min:465, max:510}})});
+  new Chart(document.getElementById('grScoreMath'), {type:'line',
+    data:{labels:L, datasets:DK.map(k => ({label:nm(k), data:D.grades[k].math_ss, borderColor:COL[k],
+      backgroundColor:FADE[k], tension:.3, borderWidth:3, pointRadius:3}))
+      .concat([refLine(500, 'Meeting expectations (500)', L.length)])},
+    options:vOpts({y:{min:465, max:510}})});
 
-new Chart(document.getElementById('mcasRadar'),{type:'radar',data:{
-labels:['ELA','Math','Science','Salary','Attendance'],
-datasets:[
-{label:'Haverhill',data:[65,69,69,95,100],borderColor:C.h,backgroundColor:'rgba(77,166,255,0.15)'},
-{label:'Methuen',data:[70,64,64,98,100],borderColor:C.m,backgroundColor:'rgba(192,132,252,0.15)'},
-{label:'Lawrence',data:[42,45,40,92,99],borderColor:C.l,backgroundColor:'rgba(255,87,87,0.15)'}
-]},options:{responsive:true,maintainAspectRatio:false,scales:{r:{beginAtZero:true,max:100,grid:{color:GC},angleLines:{color:GC}}}}});
+  new Chart(document.getElementById('grScience'), {type:'bar',
+    data:{labels:['Science 5&8','Civics Gr.8','Science Gr.10'],
+      datasets:dsets(k => [D.subj[k][2], D.subj[k][3], D.subj[k][6]])},
+    options:vOpts({pct:true, y:{max:55, beginAtZero:true}})});
+
+  document.getElementById('insGrades').innerHTML =
+    '<strong>Grade 10 is where the districts diverge.</strong> Through grades 3-8 all three run a flat line in the mid-20s to low-30s. ' +
+    'At grade 10 Methuen climbs to ' + D.grades.methuen.ela_me[6] + '% in ELA while Haverhill holds at ' +
+    D.grades.haverhill.ela_me[6] + '% and Lawrence falls to ' + D.grades.lawrence.ela_me[6] + '%. ' +
+    'Civics, tested once in grade 8, is the weakest subject in the region &mdash; Haverhill ' + D.subj.haverhill[3] +
+    '%, Methuen ' + D.subj.methuen[3] + '%, Lawrence ' + D.subj.lawrence[3] + '%, against ' + D.subj.state[3] + '% statewide.';
 }
 
-function initFailure(){
-new Chart(document.getElementById('failureChart'),{type:'bar',data:{
-labels:['ELA','Math','Science'],
-datasets:[
-{label:'Haverhill',data:[27,25,26],backgroundColor:C.h},
-{label:'Methuen',data:[25,27,27],backgroundColor:C.m},
-{label:'Lawrence',data:[41,36,40],backgroundColor:C.l},
-{label:'State Avg',data:[16,16,16],backgroundColor:C.s}
-]},options:bOpts(50,true)});
+/* ── ACHIEVEMENT GAPS ────────────────────────────────────────────────────── */
+function spread(arr){
+  const v = arr.filter(x => x !== null && x !== undefined);
+  return v.length > 1 ? Math.max.apply(null,v) - Math.min.apply(null,v) : null;
+}
+function initGaps(){
+  const G = D.groupLabels;
+  document.getElementById('kpiGaps').innerHTML =
+    DK.map((k,i) => kpi(['blue','purple','red'][i], fmt1(spread(D.gaps[k].ela_nhs)) + ' pts',
+        nm(k) + '<br>Widest ELA Spread')).join('') +
+    DK.map((k,i) => kpi(['blue','purple','red'][i], fmt1(D.gaps[k].ela_nhs[4]),
+        nm(k) + '<br>Disability ELA Score')).join('');
+
+  new Chart(document.getElementById('gapELA'), {type:'bar',
+    data:{labels:G, datasets:dsets(k => D.gaps[k].ela_nhs, DK)
+      .concat([refLine(500, 'Meeting expectations (500)', G.length)])},
+    options:hOpts({x:{min:455, max:510}})});
+  new Chart(document.getElementById('gapMath'), {type:'bar',
+    data:{labels:G, datasets:dsets(k => D.gaps[k].math_nhs, DK)
+      .concat([refLine(500, 'Meeting expectations (500)', G.length)])},
+    options:hOpts({x:{min:455, max:510}})});
+  new Chart(document.getElementById('gapHS'), {type:'bar',
+    data:{labels:G, datasets:dsets(k => D.gaps[k].ela_hs, DK)
+      .concat([refLine(500, 'Meeting expectations (500)', G.length)])},
+    options:hOpts({x:{min:455, max:515}})});
+  new Chart(document.getElementById('gapChange'), {type:'bar',
+    data:{labels:G, datasets:dsets(k => D.gaps[k].ela_nhs_chg, DK)},
+    options:hOpts({x:{title:{display:true, text:'scaled-score points, 2024 → 2025'}}})});
+
+  document.getElementById('insGaps').innerHTML =
+    '<strong>Which district you attend matters as much as which group you belong to.</strong> ' +
+    'Hispanic students &mdash; the largest group in the region &mdash; average ' + fmt1(D.gaps.methuen.ela_nhs[7]) +
+    ' in Methuen, ' + fmt1(D.gaps.haverhill.ela_nhs[7]) + ' in Haverhill and ' + fmt1(D.gaps.lawrence.ela_nhs[7]) +
+    ' in Lawrence, a ' + (D.gaps.methuen.ela_nhs[7] - D.gaps.lawrence.ela_nhs[7]).toFixed(1) +
+    '-point spread within one demographic. Lawrence\'s district-wide average (' + fmt1(D.gaps.lawrence.ela_nhs[0]) +
+    ') sits below the low-income average in both Haverhill (' + fmt1(D.gaps.haverhill.ela_nhs[2]) + ') and Methuen (' +
+    fmt1(D.gaps.methuen.ela_nhs[2]) + '). Students with disabilities are the lowest-scoring group in all three districts; ' +
+    'in Lawrence that group (' + fmt1(D.gaps.lawrence.ela_nhs[4]) + ') sits nearly 40 points under the 500 standard. ' +
+    'Grades 3-8 scores nudged up almost everywhere in 2025 &mdash; grade 10, on the right, did not.';
 }
 
-function initTeachers(){
-new Chart(document.getElementById('salaryChart'),{type:'bar',data:{
-labels:['Haverhill','Methuen','Lawrence','State Avg'],
-datasets:[{data:[77182,79604,74603,81399],backgroundColor:[C.h,C.m,C.l,C.s]}]
-},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-scales:{y:{min:70000,max:85000,ticks:{callback:v=>'$'+(v/1000)+'k'},grid:{color:GC}},x:{grid:{display:false}}}}});
+/* ── GROWTH ──────────────────────────────────────────────────────────────── */
+function initGrowth(){
+  const G = D.groupLabels;
+  document.getElementById('kpiGrowth').innerHTML =
+    DK.map((k,i) => kpi(D.growth[k].ela_nhs[0] >= 50 ? 'green' : 'yellow', fmt1(D.growth[k].ela_nhs[0]),
+        nm(k) + '<br>ELA SGP 3-8')).join('') +
+    DK.map((k,i) => kpi(D.growth[k].math_hs[0] >= 50 ? 'green' : 'red', fmt1(D.growth[k].math_hs[0]),
+        nm(k) + '<br>Math SGP Gr.10')).join('');
 
-new Chart(document.getElementById('attendChart'),{type:'bar',data:{
-labels:['Haverhill','Methuen','Lawrence','State Avg'],
-datasets:[{data:[94.0,94.1,93.1,93.8],backgroundColor:[C.h,C.m,C.l,C.s]}]
-},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-scales:{y:{min:91,max:96,ticks:{callback:v=>v+'%'},grid:{color:GC}},x:{grid:{display:false}}}}});
+  new Chart(document.getElementById('gwELA'), {type:'bar',
+    data:{labels:G, datasets:dsets(k => D.growth[k].ela_nhs, DK)
+      .concat([refLine(50, 'Typical growth (50)', G.length)])},
+    options:vOpts({y:{min:30, max:60}, x:{ticks:{maxRotation:45}}})});
+  new Chart(document.getElementById('gwMath'), {type:'bar',
+    data:{labels:G, datasets:dsets(k => D.growth[k].math_nhs, DK)
+      .concat([refLine(50, 'Typical growth (50)', G.length)])},
+    options:vOpts({y:{min:30, max:65}, x:{ticks:{maxRotation:45}}})});
+  new Chart(document.getElementById('gwSpan'), {type:'bar',
+    data:{labels:['ELA grades 3-8','Math grades 3-8','ELA grade 10','Math grade 10'],
+      datasets:dsets(k => [D.growth[k].ela_nhs[0], D.growth[k].math_nhs[0],
+                           D.growth[k].ela_hs[0], D.growth[k].math_hs[0]], DK)
+        .concat([refLine(50, 'Typical growth (50)', 4)])},
+    options:vOpts({y:{min:25, max:60}})});
 
-new Chart(document.getElementById('evalChart'),{type:'bar',data:{
-labels:['Haverhill','Methuen','Lawrence'],
-datasets:[
-{label:'Exemplary',data:[7.8,4.0,25.4],backgroundColor:C.g},
-{label:'Proficient',data:[86.2,94.4,69.5],backgroundColor:C.b},
-{label:'Needs Improv.',data:[5.8,1.6,5.0],backgroundColor:C.o}
-]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{stacked:true,max:100,ticks:{callback:v=>v+'%'},grid:{color:GC}},x:{stacked:true,grid:{display:false}}}}});
+  document.getElementById('insGrowth').innerHTML =
+    '<strong>The elementary and middle grades are working. The high schools are not.</strong> ' +
+    'In grades 3-8 all three districts post typical growth &mdash; Lawrence is the strongest in the region at ' +
+    fmt1(D.growth.lawrence.ela_nhs[0]) + ' in ELA and ' + fmt1(D.growth.lawrence.math_nhs[0]) + ' in math, ' +
+    'meaning its students gain as much in a year as similar students anywhere in Massachusetts. ' +
+    'At grade 10 growth collapses: ' + fmt1(D.growth.haverhill.math_hs[0]) + ' in Haverhill, ' +
+    fmt1(D.growth.lawrence.math_hs[0]) + ' in Lawrence, ' + fmt1(D.growth.methuen.math_hs[0]) + ' in Methuen &mdash; ' +
+    'all rated low growth by DESE. Low achievement plus typical growth is a starting-point problem; ' +
+    'low achievement plus low growth is a current-instruction problem, and that is what grade 10 looks like.';
 }
 
-function initCompare(){
-new Chart(document.getElementById('sgpChart'),{type:'bar',data:{
-labels:['ELA','Math'],
-datasets:[
-{label:'Haverhill',data:[49,52],backgroundColor:C.h},
-{label:'Methuen',data:[48,51],backgroundColor:C.m},
-{label:'Lawrence',data:[51,53],backgroundColor:C.l},
-{label:'Typical (50)',data:[50,50],backgroundColor:'#64748b'}
-]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:40,max:60,grid:{color:GC}},x:{grid:{display:false}}}}});
+/* ── ABSENTEEISM ─────────────────────────────────────────────────────────── */
+function initAbsenteeism(){
+  const S = D.subLabels;
+  document.getElementById('kpiAbs').innerHTML =
+    ALL4.map((k,i) => kpi(['blue','purple','red','green'][i], D.sub.abs.All[k] + '%',
+        nm(k) + '<br>Chronically Absent')).join('') +
+    DK.map(k => kpi(D.sub.abs.All[k] <= D.sub.abs_prev.All[k] ? 'green' : 'red',
+        signed(D.sub.abs.All[k] - D.sub.abs_prev.All[k]),
+        nm(k) + '<br>Change vs 2023-24')).join('');
 
-new Chart(document.getElementById('radarChart'),{type:'radar',data:{
-labels:['ELA','Math','Science','Salary','Attendance'],
-datasets:[
-{label:'Haverhill',data:[65,69,69,95,100],borderColor:C.h,backgroundColor:'rgba(77,166,255,0.15)'},
-{label:'Methuen',data:[70,64,64,98,100],borderColor:C.m,backgroundColor:'rgba(192,132,252,0.15)'},
-{label:'Lawrence',data:[42,45,40,92,99],borderColor:C.l,backgroundColor:'rgba(255,87,87,0.15)'}
-]},options:{responsive:true,maintainAspectRatio:false,scales:{r:{beginAtZero:true,max:100,grid:{color:GC},angleLines:{color:GC}}}}});
+  new Chart(document.getElementById('absGroup'), {type:'bar',
+    data:{labels:S, datasets:dsets(k => S.map(g => D.sub.abs[g][k]))},
+    options:hOpts({pct:true, x:{beginAtZero:true, max:40}})});
+  new Chart(document.getElementById('absChange'), {type:'bar',
+    data:{labels:S, datasets:dsets(k => S.map(g =>
+      (D.sub.abs[g][k] === null || D.sub.abs_prev[g][k] === null) ? null
+        : +(D.sub.abs[g][k] - D.sub.abs_prev[g][k]).toFixed(1)))},
+    options:hOpts({x:{title:{display:true, text:'percentage points (negative = improving)'}}})});
+  new Chart(document.getElementById('absSpan'), {type:'bar',
+    data:{labels:['Elem/Middle 2024','Elem/Middle 2025','High School 2024','High School 2025'],
+      datasets:dsets(k => [D.absA[k].nhs24[0], D.absA[k].nhs25[0], D.absA[k].hs24[0], D.absA[k].hs25[0]], DK)},
+    options:vOpts({pct:true, y:{beginAtZero:true, max:65}})});
+
+  document.getElementById('insAbs').innerHTML =
+    '<strong>Absenteeism is falling everywhere &mdash; except in Haverhill\'s high school.</strong> ' +
+    'District-wide, Lawrence improved most (' + D.sub.abs_prev.All.lawrence + '% to ' + D.sub.abs.All.lawrence +
+    '%), and all three still sit above the state\'s ' + D.sub.abs.All.state + '%. ' +
+    'Split by grade span, the accountability data shows Haverhill\'s high school moving the wrong way &mdash; ' +
+    D.absA.haverhill.hs24[0] + '% chronically absent in 2024, ' + D.absA.haverhill.hs25[0] + '% in 2025, ' +
+    'the one indicator on which Haverhill scored zero accountability points where Lawrence scored full marks. ' +
+    'Lawrence\'s high school, at ' + D.absA.lawrence.hs25[0] + '%, is now the region\'s best.';
 }
 
-// Init overview immediately since it is visible on load
-initialized['overview']=true;
+/* ── GRADUATION ──────────────────────────────────────────────────────────── */
+function initGraduation(){
+  const S = D.subLabels;
+  document.getElementById('kpiGrad').innerHTML =
+    ALL4.map((k,i) => kpi(['blue','purple','red','green'][i], D.sub.grad.All[k] + '%',
+        nm(k) + '<br>4-Year Grad 2025')).join('') +
+    DK.map(k => kpi(D.sub.grad.All[k] >= D.sub.grad_prev.All[k] ? 'green' : 'red',
+        signed(D.sub.grad.All[k] - D.sub.grad_prev.All[k]),
+        nm(k) + '<br>Change vs 2024')).join('');
+
+  new Chart(document.getElementById('grdGroup'), {type:'bar',
+    data:{labels:S, datasets:dsets(k => S.map(g => D.sub.grad[g][k]))},
+    options:hOpts({pct:true, x:{min:40, max:100}})});
+  new Chart(document.getElementById('grdYoY'), {type:'bar',
+    data:{labels:ALL4.map(nm), datasets:[
+      {label:'Class of 2024', data:ALL4.map(k => D.sub.grad_prev.All[k]), backgroundColor:'#b8b3ab'},
+      {label:'Class of 2025', data:ALL4.map(k => D.sub.grad.All[k]), backgroundColor:ALL4.map(k => COL[k])}]},
+    options:vOpts({pct:true, y:{min:65, max:95}})});
+  new Chart(document.getElementById('grdDrop'), {type:'bar',
+    data:{labels:S, datasets:dsets(k => S.map(g => D.sub.dropout[g][k]))},
+    options:hOpts({pct:true, x:{beginAtZero:true, max:8}})});
+  new Chart(document.getElementById('grdEng'), {type:'bar',
+    data:{labels:['Extended engagement rate','Advanced coursework completion'],
+      datasets:dsets(k => [D.gradA[k].eng[0], D.gradA[k].adv[0]], DK)},
+    options:vOpts({pct:true, y:{beginAtZero:true, max:100}})});
+
+  document.getElementById('insGrad').innerHTML =
+    '<strong>Graduation is the region\'s good news, and it is driven by English learners.</strong> ' +
+    'Every district gained: Haverhill ' + fmt1(D.sub.grad_prev.All.haverhill) + '% to ' + fmt1(D.sub.grad.All.haverhill) + '%, ' +
+    'Lawrence ' + fmt1(D.sub.grad_prev.All.lawrence) + '% to ' + fmt1(D.sub.grad.All.lawrence) + '%, Methuen ' +
+    fmt1(D.sub.grad_prev.All.methuen) + '% to ' + fmt1(D.sub.grad.All.methuen) +
+    '% &mdash; Methuen now graduates a higher share than Massachusetts as a whole. ' +
+    'The largest single move is Haverhill\'s English learners, from ' + fmt1(D.sub.grad_prev['English Learners'].haverhill) +
+    '% in 2024 to ' + fmt1(D.sub.grad['English Learners'].haverhill) + '% in 2025. All three districts now graduate English learners at a ' +
+    'higher rate than the state (' + fmt1(D.sub.grad['English Learners'].state) + '%) and lose fewer of them to dropout than the state does (' +
+    fmt1(D.sub.dropout['English Learners'].state) + '%). Lawrence also sends ' + fmt1(D.gradA.lawrence.adv[0]) +
+    '% of its students through advanced coursework, the highest in the region.';
+}
+
+/* ── ACCOUNTABILITY ──────────────────────────────────────────────────────── */
+const IND = ['English language arts achievement','Mathematics achievement','Science achievement',
+  'English language arts growth','Mathematics growth','Four-year cohort graduation rate',
+  'Extended engagement rate','Annual dropout rate','English language proficiency total',
+  'Chronic absenteeism','Advanced coursework completion'];
+const IND_SHORT = ['ELA achievement','Math achievement','Science achievement','ELA growth','Math growth',
+  'Graduation rate','Extended engagement','Dropout rate','EL proficiency','Chronic absenteeism','Adv. coursework'];
+
+function ptNum(v){ const n = parseFloat(v); return isNaN(n) ? null : n; }
+
+function initAccountability(){
+  document.getElementById('kpiAcct').innerHTML =
+    DK.map((k,i) => kpi(['blue','purple','red'][i], D.cls[k].pct + '%',
+        nm(k) + '<br>Progress to Targets')).join('') +
+    DK.map((k,i) => kpi(D.cls[k].pct >= 50 ? 'green' : 'yellow',
+        D.cls[k].label.replace(' progress toward targets','').replace('progress toward targets','—'),
+        nm(k) + '<br>Classification')).join('');
+
+  new Chart(document.getElementById('acNHS'), {type:'bar',
+    data:{labels:IND_SHORT, datasets:dsets(k => IND.map(x => ptNum((D.points[k][x]||{}).nhs)), DK)
+      .concat([refLine(4, 'Maximum (4)', IND.length)])},
+    options:vOpts({y:{max:4.5, beginAtZero:true}, x:{ticks:{maxRotation:60, minRotation:45}}})});
+  new Chart(document.getElementById('acHS'), {type:'bar',
+    data:{labels:IND_SHORT, datasets:dsets(k => IND.map(x => ptNum((D.points[k][x]||{}).hs)), DK)
+      .concat([refLine(4, 'Maximum (4)', IND.length)])},
+    options:vOpts({y:{max:4.5, beginAtZero:true}, x:{ticks:{maxRotation:60, minRotation:45}}})});
+
+  let html = '<thead><tr><th>Indicator</th>' +
+    DK.map(k => '<th colspan="2" style="text-align:center">' + nm(k) + '</th>').join('') + '</tr>' +
+    '<tr><th></th>' + DK.map(() => '<th style="text-align:center">Non-HS</th><th style="text-align:center">HS</th>').join('') +
+    '</tr></thead><tbody>';
+  IND.forEach((ind, i) => {
+    html += '<tr><td>' + IND_SHORT[i] + '</td>';
+    DK.forEach(k => {
+      const p = D.points[k][ind] || {};
+      html += cell(p.nhs, p.nhs_max) + cell(p.hs, p.hs_max);
+    });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  document.getElementById('acTable').innerHTML = html;
+
+  document.getElementById('insAcct').innerHTML =
+    '<strong>Lawrence &mdash; a state-designated chronically underperforming district &mdash; is making the most progress toward its targets.</strong> ' +
+    'DESE scores each district against its own improvement targets: Lawrence earned ' + D.cls.lawrence.pct +
+    '% of possible points and the "substantial progress" label, ahead of Haverhill (' + D.cls.haverhill.pct +
+    '%) and Methuen (' + D.cls.methuen.pct + '%), both "moderate progress". ' +
+    'The classification and the progress score answer different questions: one asks how far below standard a district sits, ' +
+    'the other asks whether it is closing the distance. All three earn zero on every high-school achievement indicator, ' +
+    'which is what caps the region\'s scores.';
+}
+function cell(v, max){
+  const n = ptNum(v);
+  if(n === null) return '<td class="num" style="color:#b8b3ab">—</td>';
+  const cls = n >= 3 ? 'green' : n >= 2 ? 'yellow' : 'red';
+  return '<td class="num"><span class="badge ' + cls + '">' + n + ' / ' + max + '</span></td>';
+}
+
+/* ── TEACHERS & MONEY ────────────────────────────────────────────────────── */
+function initMoney(){
+  const M = D.money;
+  document.getElementById('kpiMoney').innerHTML =
+    DK.map((k,i) => kpi(['blue','purple','red'][i], '$' + Math.round(M.ppx[k]/1000) + 'K',
+        nm(k) + '<br>Per-Pupil Spending')).join('') +
+    DK.map((k,i) => kpi(['blue','purple','red'][i], '$' + Math.round(M.salary[k]/1000) + 'K',
+        nm(k) + '<br>Avg Teacher Salary')).join('');
+
+  new Chart(document.getElementById('mnSalary'), {type:'bar',
+    data:{labels:ALL4.map(nm), datasets:[{label:'Average salary', data:ALL4.map(k => M.salary[k]),
+      backgroundColor:ALL4.map(k => COL[k])}]},
+    options:vOpts({legend:false, y:{min:75000, max:95000, ticks:{callback:v => '$' + (v/1000) + 'k'}}})});
+
+  new Chart(document.getElementById('mnPPX'), {type:'bar',
+    data:{labels:ALL4.map(nm), datasets:[
+      {label:'In-district', data:ALL4.map(k => M.ppx[k]), backgroundColor:ALL4.map(k => COL[k])},
+      {label:'Total (incl. out-of-district)', data:ALL4.map(k => M.ppx_total[k]), backgroundColor:ALL4.map(k => FADE[k])}]},
+    options:vOpts({y:{beginAtZero:true, ticks:{callback:v => '$' + (v/1000) + 'k'}}})});
+
+  new Chart(document.getElementById('mnEval'), {type:'bar',
+    data:{labels:ALL4.map(nm), datasets:[
+      {label:'Exemplary',         data:ALL4.map(k => M.evalExemplary[k]),  backgroundColor:'#1a7a4c'},
+      {label:'Proficient',        data:ALL4.map(k => M.evalProficient[k]), backgroundColor:'#3c85c6'},
+      {label:'Needs improvement', data:ALL4.map(k => M.evalNeeds[k]),      backgroundColor:'#b8860b'},
+      {label:'Unsatisfactory',    data:ALL4.map(k => M.evalUnsat[k]),      backgroundColor:'#c0392b'}]},
+    options:vOpts({pct:true, y:{stacked:true, max:100}, x:{stacked:true}})});
+
+  new Chart(document.getElementById('mnAtt'), {type:'bar',
+    data:{labels:ALL4.map(nm), datasets:[{label:'Teacher attendance rate',
+      data:ALL4.map(k => M.staffAtt[k]), backgroundColor:ALL4.map(k => COL[k])}]},
+    options:vOpts({legend:false, pct:true, y:{min:90, max:96}})});
+
+  new Chart(document.getElementById('mnPop'), {type:'bar',
+    data:{labels:['High needs','English learners','Low income','Students with disabilities'],
+      datasets:dsets(k => [M.highNeeds[k], M.el[k], M.lowIncome[k], M.swd[k]])},
+    options:vOpts({pct:true, y:{beginAtZero:true, max:100}})});
+
+  document.getElementById('insMoney').innerHTML =
+    '<strong>Spending tracks need, not results.</strong> Lawrence spends $' + Math.round(M.ppx.lawrence).toLocaleString() +
+    ' per pupil in-district against Haverhill\'s $' + Math.round(M.ppx.haverhill).toLocaleString() + ' and Methuen\'s $' +
+    Math.round(M.ppx.methuen).toLocaleString() + ' &mdash; and serves a student body that is ' + M.lowIncome.lawrence +
+    '% low income and ' + M.el.lawrence + '% English learners, against a state average of ' + M.lowIncome.state + '% and ' +
+    M.el.state + '%. All three districts pay teachers below the state average of $' + Math.round(M.salary.state).toLocaleString() +
+    '. The evaluation data is the odd one out: Lawrence rates ' + M.evalExemplary.lawrence +
+    '% of its teachers exemplary and Methuen just ' + fmt1(M.evalExemplary.methuen) +
+    '%, a ' + (M.evalExemplary.lawrence / M.evalExemplary.methuen).toFixed(0) +
+    '-to-1 difference that says more about how each district applies the rubric than about classroom quality.';
+}
+
+/* ── boot ────────────────────────────────────────────────────────────────── */
+const INIT = {overview:initOverview, grades:initGrades, gaps:initGaps, growth:initGrowth,
+  absenteeism:initAbsenteeism, graduation:initGraduation, accountability:initAccountability, money:initMoney};
+
+document.getElementById('heroHav').textContent = D.subj.haverhill[0] + '%';
+document.getElementById('heroMet').textContent = D.subj.methuen[0] + '%';
+document.getElementById('heroLaw').textContent = D.subj.lawrence[0] + '%';
+document.getElementById('heroSta').textContent = D.subj.state[0] + '%';
+
+initialized['overview'] = true;
 initOverview();
 </script>
 </body>
