@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "update-employment": "node fetch-bls-data.js",
-    "test-release-schedule": "node test-release-schedule.mjs"
+    "test-release-schedule": "node test-release-schedule.mjs",
+    "test-us-sectors": "node test-us-sectors.mjs"
   }
 }

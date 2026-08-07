@@ -45,6 +45,7 @@ jobs:
         id: changes
         run: |
           git diff --quiet employment-dashboard.html data/employment-latest.json \
+              data/national-payroll-vintages.json \
             && echo "changed=false" >> $GITHUB_OUTPUT \
             || echo "changed=true"  >> $GITHUB_OUTPUT
 
@@ -55,6 +56,10 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add employment-dashboard.html
           git add data/employment-latest.json
+          # Append-only record of each month's first-print payroll figure. BLS
+          # serves only the current vintage, so a first print not committed here
+          # on release day is gone for good and its revision can never be shown.
+          git add data/national-payroll-vintages.json
           git commit -m "Auto-update: Employment data $(date +'%B %Y')"
           for attempt in 1 2 3 4 5; do
             if git push; then
