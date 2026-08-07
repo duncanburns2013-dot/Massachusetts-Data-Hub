@@ -6,6 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DASHBOARD_PATH    = path.join(__dirname, '..', 'employment-dashboard.html');
 const DATA_OUTPUT_PATH  = path.join(__dirname, '..', 'data', 'employment-latest.json');
 const DATA_PREV_PATH    = path.join(__dirname, '..', 'data', 'employment-previous.json');
+const RELEASE_SCHED_PATH = path.join(__dirname, '..', 'data', 'bls-release-schedule.json');
 
 // ── Series IDs ────────────────────────────────────────────────────────────────
 const EMPLOYMENT_SERIES = {
@@ -184,6 +185,41 @@ async function loadPreviousData() {
   } catch {
     return null;
   }
+}
+
+// ── BLS release schedule ──────────────────────────────────────────────────────
+// The "Released <date>" stamps used to come from new Date(), i.e. whenever CI
+// happened to run. That silently republished a false provenance line every time
+// the workflow woke up on a non-release day: the Aug 5 and Aug 6 2026 runs both
+// printed "June 2026 National Employment — Released August 5 / 6, 2026" when the
+// June reference month was actually released July 2, 2026.
+//
+// The real dates cannot be derived — there is no first-Friday rule. In 2026 the
+// Apr reference month went out on the *second* Friday (May 8) and Jun went out on
+// a Thursday (Jul 2, moved for July 4). So the published schedule is pinned in
+// data/bls-release-schedule.json and read here. bls.gov itself is not fetchable
+// from CI (it 403s non-browser clients, same block that stalled the CBP feed);
+// api.bls.gov serves the numbers but carries no release dates.
+async function loadReleaseSchedule() {
+  try {
+    const raw = await fs.readFile(RELEASE_SCHED_PATH, 'utf-8');
+    return JSON.parse(raw).employment_situation || {};
+  } catch (err) {
+    console.log(`::warning::Could not read ${path.basename(RELEASE_SCHED_PATH)} (${err.message}) — release dates will render as "—"`);
+    return {};
+  }
+}
+
+// Reference month → the day BLS actually published it. Formatted from the date
+// parts rather than through Date/toLocaleDateString, because "2026-08-07" parses
+// as UTC midnight and would render as August 6 on any runner west of Greenwich.
+// Returns null when the month is not in the schedule — the caller renders an em
+// dash rather than substituting today, which is the bug this replaced.
+function releaseDateFor(sched, year, monIdx, FULLMON) {
+  const iso = sched[`${year}-${String(monIdx + 1).padStart(2, '0')}`];
+  if (!iso) return null;
+  const [y, m, d] = iso.split('-').map(Number);
+  return `${FULLMON[m - 1]} ${d}, ${y}`;
 }
 
 // ── Chart-array helpers ─────────────────────────────────────────────────────────
@@ -523,6 +559,7 @@ function updateMASectorSpectrum(html, find) {
 // ── Dashboard updater ─────────────────────────────────────────────────────────
 async function updateDashboard(data, empSeries) {
   let html = await fs.readFile(DASHBOARD_PATH, 'utf-8');
+  const releaseSchedule = await loadReleaseSchedule();
   const find = (id) => empSeries?.find(s => s.seriesID === id);
 
   // MA total nonfarm (SMS25000000000000001) is fetched twice — once in the
@@ -627,8 +664,17 @@ async function updateDashboard(data, empSeries) {
 
   const nf = nser(EMPLOYMENT_SERIES.US_NONFARM);
   if (nf.length >= 3) {
-    const relDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     const cM = lastOf(nf), pM = prevOf(nf);
+    // Two distinct dates that used to be the same value, which is what made the
+    // old stamp wrong. relDate = the day BLS published this reference month.
+    // runDate = the day this script last rewrote the page. Only the second one
+    // is "today", and only the second one describes the auto-update itself.
+    const relDate = releaseDateFor(releaseSchedule, cM.year, cM.mon, FULLMON);
+    const runDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    if (!relDate) {
+      console.log(`::warning::No BLS release date on file for ${FULLMON[cM.mon]} ${cM.year} — top up data/bls-release-schedule.json from https://www.bls.gov/schedule/news_release/empsit.htm`);
+    }
+    const relStamp = relDate || '—';
     const moK = (a, i) => (a[a.length - i].value - a[a.length - i - 1].value) * 1000; // i=1 newest MoM
     const ur  = nser(EMPLOYMENT_SERIES.US_UNEMPLOYMENT_RATE);
     const u6  = nser(EMPLOYMENT_SERIES.US_U6);
@@ -651,8 +697,8 @@ async function updateDashboard(data, empSeries) {
     setField('ov-nat-ur',  urCur.toFixed(1) + '%');
     // National Employment alert block
     setField('nat-emp-month', monLong(cM));
-    setField('nat-emp-rel',   relDate);
-    setField('nat-emp-rel2',  relDate);
+    setField('nat-emp-rel',   relStamp);
+    setField('nat-emp-rel2',  relStamp);
     setField('nat-payrolls',  sgn(payCur));
     setField('nat-ur',        urCur.toFixed(1) + '%');
     setField('nat-ur-chg',    urChg);
@@ -661,7 +707,7 @@ async function updateDashboard(data, empSeries) {
     setField('nat-lf',        sgn(lfCur));
     // National Context table
     setField('nat-ctx-month', monLong(cM));
-    setField('nat-ctx-rel',   relDate);
+    setField('nat-ctx-rel',   relStamp);
     setField('nat-col-cur',   monShort(cM));
     setField('nat-col-prev',  monShort(pM));
     setField('nat-u3-cur',    urCur.toFixed(1) + '%');
@@ -674,8 +720,10 @@ async function updateDashboard(data, empSeries) {
     setField('nat-lf-cur',    sgn(lfCur));
     setField('nat-lf-prev',   sgn(lfPrev));
     if (cumSep != null) setField('nat-cum-sep', sgn(cumSep) + ' cumulative');
-    setField('nat-src-date',  relDate);
-    console.log(`   ✅ National block updated: ${monLong(cM)} — payrolls ${sgn(payCur)}, UR ${urCur}% ${urChg}`);
+    // "Headline aggregates auto-updated <date>" — this one really is the run
+    // date; it describes this script, not the BLS release.
+    setField('nat-src-date',  runDate);
+    console.log(`   ✅ National block updated: ${monLong(cM)} — payrolls ${sgn(payCur)}, UR ${urCur}% ${urChg}, BLS released ${relStamp}`);
   }
 
   // Foreign-Born tab subtitle month
@@ -940,4 +988,4 @@ if (process.env.BLS_SKIP_MAIN !== '1') {
   });
 }
 
-export { monthsOf, inject, injectHTMLBlock, updateMASectorSpectrum, MA_SECTOR_SERIES, MA_SECTOR_META };
+export { monthsOf, inject, injectHTMLBlock, updateMASectorSpectrum, MA_SECTOR_SERIES, MA_SECTOR_META, loadReleaseSchedule, releaseDateFor };

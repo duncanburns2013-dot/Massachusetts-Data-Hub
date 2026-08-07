@@ -215,6 +215,31 @@ When a figure is updated, change it here FIRST, then update the relevant dashboa
 - **Key finding:** "Hiring recession" — low-hire/low-fire environment, worst since 2009 by multiple measures
 - **Healthcare masks weakness:** 713K healthcare jobs > total net gains, meaning all other sectors flat/negative
 
+### National — Employment Situation Release Dates
+
+Machine-readable copy lives in [`data/bls-release-schedule.json`](data/bls-release-schedule.json); the employment updater reads it to stamp "Released &lt;date&gt;" on the national block.
+
+| Reference Month | Released | Source | Verified |
+|-----------------|----------|--------|----------|
+| November 2025 | Dec 16, 2025 | BLS schedule | ✅ Aug 2026 |
+| December 2025 | Jan 09, 2026 | BLS schedule | ✅ Aug 2026 |
+| January 2026 | Feb 11, 2026 | BLS schedule | ✅ Aug 2026 |
+| February 2026 | Mar 06, 2026 | BLS schedule | ✅ Aug 2026 |
+| March 2026 | Apr 03, 2026 | BLS schedule | ✅ Aug 2026 |
+| April 2026 | May 08, 2026 | BLS schedule | ✅ Aug 2026 |
+| May 2026 | Jun 05, 2026 | BLS schedule | ✅ Aug 2026 |
+| June 2026 | Jul 02, 2026 | BLS schedule | ✅ Aug 2026 |
+| July 2026 | Aug 07, 2026 | BLS schedule | ✅ Aug 2026 |
+| August 2026 | Sep 04, 2026 | BLS schedule | ✅ Aug 2026 |
+| September 2026 | Oct 02, 2026 | BLS schedule | ✅ Aug 2026 |
+| October 2026 | Nov 06, 2026 | BLS schedule | ✅ Aug 2026 |
+| November 2026 | Dec 04, 2026 | BLS schedule | ✅ Aug 2026 |
+
+- **Not a first-Friday rule.** April 2026 went out on the *second* Friday (May 8) and June 2026 on a *Thursday* (Jul 2, moved for July 4). These dates cannot be computed — they must be read from the published schedule.
+- **Source URL:** https://www.bls.gov/schedule/news_release/empsit.htm
+- **Maintenance:** BLS publishes ~13 months ahead. When the newest reference month is missing, the updater logs a `::warning::` in the Actions run and renders an em dash instead of inventing a date — that warning is the cue to top up the table above and the JSON.
+- **Note:** bls.gov HTML 403s non-browser clients, so this cannot be scraped from CI (the same block that stalled the CBP feed). `api.bls.gov` serves the figures but carries no release dates.
+
 ---
 
 ## 🎓 Education
