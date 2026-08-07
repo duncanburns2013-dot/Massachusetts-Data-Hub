@@ -38,6 +38,13 @@ jobs:
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
         run: python update-census-data.py
 
+      # Consumes data/census-latest.json for its income benchmark, so it runs
+      # after the Census step. BEA price parities are annual; monthly is ample.
+      - name: Rebuild cost-of-living dataset (BEA + MIT)
+        env:
+          CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+        run: python update-cost-of-living.py
+
       - name: Check for changes
         id: changes
         run: |
@@ -51,7 +58,7 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add immigration-dashboard.html affordability-dashboard.html
-          git add data/census-latest.json
+          git add data/census-latest.json data/cost-of-living-latest.json
           git commit -m "Auto-update: Census ACS data $(date +'%B %Y')"
           for attempt in 1 2 3 4 5; do
             if git push; then

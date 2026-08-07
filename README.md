@@ -14,7 +14,7 @@ Interactive dashboards and data analysis covering housing, immigration, educatio
 | [MA Housing](ma-housing-dashboard.html) | Statewide, Boston, Essex County, Newburyport | ✅ Live | Warren Group, MLS PIN |
 | [NH Housing](nh-housing-dashboard.html) | NH statewide with regional breakdowns | ✅ Live | Paragon MLS |
 | [Haverhill Report](haverhill-market-report.html) | SF/Condo affordability deep dive | ✅ Live | MLS, Census QuickFacts |
-| [Affordability](affordability-dashboard.html) | CPI, wages, housing, exodus data | ✅ Live | BLS, IRS SOI, BU Study |
+| [Cost of Living](affordability-dashboard.html) | BEA price parities (state + metro), price-adjusted income, MIT living wage | ✅ Live | BEA, MIT, Census ACS |
 | [Education (State)](education-statewide.html) | Enrollment shifts, spending, MCAS | ✅ Live | DESE, MCAS |
 | [Education (Boston)](education-boston.html) | BPS absenteeism, gaps, demographics | ✅ Live | DESE, BPS |
 | [Education (MV)](education-merrimack-valley.html) | Haverhill/Methuen/Lawrence — MCAS by grade, gaps, growth, absenteeism, graduation, accountability, spending | ✅ Live | DESE |
@@ -34,7 +34,7 @@ Massachusetts-Data-Hub/
 ├── ma-housing-dashboard.html           ← MA housing market
 ├── nh-housing-dashboard.html           ← NH housing market
 ├── haverhill-market-report.html        ← Haverhill deep dive
-├── affordability-dashboard.html        ← Master affordability & employment
+├── affordability-dashboard.html        ← What it costs to live in MA (BEA + MIT)
 ├── education-statewide.html            ← MA education statewide
 ├── education-boston.html                ← Boston Public Schools
 ├── education-merrimack-valley.html     ← Haverhill/Methuen/Lawrence
