@@ -797,11 +797,11 @@ footer a:hover{color:var(--gold)}
       <h3>Where the <span data-field="us-sec-month">July 2026</span> Change Came From</h3>
       <table class="data-table">
         <thead><tr><th>Industry</th><th>Jobs</th><th>Level</th></tr></thead>
-        <tbody><!--@us-sec-table--><tr><td>Government</td><td class="td-red">−53,000</td><td>23,600K</td></tr><!--@--></tbody>
+        <tbody><!--@us-sec-table--><tr><td>Private Education & Health</td><td class="td-green">+25,000</td><td>27,962K</td></tr><tr><td>Construction</td><td class="td-green">+22,000</td><td>8,343K</td></tr><tr><td>Professional & Business</td><td class="td-green">+18,000</td><td>22,518K</td></tr><tr><td>Information</td><td class="td-green">+11,000</td><td>2,780K</td></tr><tr><td>Other Services</td><td class="td-green">+9,000</td><td>6,038K</td></tr><tr><td>Manufacturing</td><td class="td-green">+5,000</td><td>12,611K</td></tr><tr><td>Mining & Logging</td><td class="td-red">−2,000</td><td>607K</td></tr><tr><td>Trade, Transportation & Utilities</td><td class="td-red">−4,000</td><td>28,708K</td></tr><tr><td>Financial Activities</td><td class="td-red">−14,000</td><td>9,090K</td></tr><tr><td>Leisure & Hospitality</td><td class="td-red">−40,000</td><td>16,931K</td></tr><tr><td>Government</td><td class="td-red">−53,000</td><td>23,270K</td></tr><!--@--></tbody>
       </table>
       <!-- The industry rows sum to the headline, so this reconciliation is a real
            check on the table rather than a caption asserting it is correct. -->
-      <div class="source" data-field="us-sec-recon">Private +30,000 · Government −53,000 · Total −23,000</div>
+      <div class="source" data-field="us-sec-recon">Private +30,000 · Government −53,000 · Total −23,000 — industry rows sum to the headline</div>
     </div>
 
     <div class="data-card" style="margin-bottom:0">
@@ -878,8 +878,8 @@ function sc(id,cfg){
 // full-year and since-a-given-month totals from this, and a 16-month window would
 // silently turn those into partial sums as its start month falls off the back.
 // The chart slices to 16 at the point of use.
-var momLab=[/*@mom-lab*/'Feb 24','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar','Apr','May','Jun 26'/*@*/];
-var momData=[/*@mom-data*/-200,6900,-9500,7100,6300,-9900,1000,0,-700,-3300,100,0,-5500,-2600,-100,-200,-13100,5200,-9000,-3000,6300,400,4300,2000,-7100,7200,7400,-4100,8400/*@*/];
+var momLab=[/*@mom-lab*/'Feb 19','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 20','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 21','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 22','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 23','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 24','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar','Apr','May','Jun 26'/*@*/];
+var momData=[/*@mom-data*/7600,4300,15100,3700,4300,-4900,1600,3400,800,4700,8200,3300,10500,-37300,-652000,54400,76800,86800,61100,47400,31600,16400,-3000,14300,13500,16300,22300,9600,12400,40500,9700,-5300,34100,10600,10400,7600,20600,5400,14900,-2200,10300,16000,1500,2700,-6100,8300,-5600,17600,1500,3000,-6300,3300,5700,2000,3700,300,100,-1200,7700,-2100,-200,6900,-9500,7100,6300,-9900,1000,0,-700,-3300,100,0,-5500,-2600,-100,-200,-13100,5200,-9000,-3000,6300,400,4300,2000,-7100,7200,7400,-4100,8400/*@*/];
 
 // BLS "State Employment and Unemployment" release dates, keyed by the REFERENCE
 // month the MA figures on this page describe — not the month they came out in.
@@ -896,8 +896,8 @@ var maRelSched=/*@ma-rel-sched*/{"2025-11":"January 7, 2026","2025-12":"January 
 function maRel(k){ return k ? (maRelSched[k.y+'-'+String(k.m+1).padStart(2,'0')]||'—') : '—'; }
 
 // c-jobs — MA annual net job growth, December-to-December.
-var jobsLab=[/*@jobs-lab*/'2025'/*@*/];
-var jobsData=[/*@jobs-data*/-17300/*@*/];
+var jobsLab=[/*@jobs-lab*/'2021','2022','2023','2024','2025'/*@*/];
+var jobsData=[/*@jobs-data*/188400,73400,37400,-4300,-17300/*@*/];
 
 // MA labor force level (BLS LAUS). Note Oct 2025 is absent, not zero: the
 // appropriations lapse meant BLS published no value for that month.
