@@ -237,6 +237,29 @@ Machine-readable copy lives in [`data/bls-release-schedule.json`](data/bls-relea
 
 - **Not a first-Friday rule.** April 2026 went out on the *second* Friday (May 8) and June 2026 on a *Thursday* (Jul 2, moved for July 4). These dates cannot be computed — they must be read from the published schedule.
 - **Source URL:** https://www.bls.gov/schedule/news_release/empsit.htm
+
+### Massachusetts — State Employment & Unemployment Release Dates
+
+The MA vintage. Lands ~3 weeks after the national release, which is why the MA blocks on the employment dashboard legitimately sit a month behind the national block. Same JSON file, `state_employment` key.
+
+| Reference Month | Released | Source | Verified |
+|-----------------|----------|--------|----------|
+| November 2025 | Jan 07, 2026 | BLS schedule | ✅ Aug 2026 |
+| December 2025 | Jan 27, 2026 | BLS schedule | ✅ Aug 2026 |
+| January 2026 | Apr 08, 2026 | BLS schedule | ✅ Aug 2026 |
+| February 2026 | Apr 22, 2026 | BLS schedule | ✅ Aug 2026 |
+| March 2026 | May 06, 2026 | BLS schedule | ✅ Aug 2026 |
+| April 2026 | May 22, 2026 | BLS schedule | ✅ Aug 2026 |
+| May 2026 | Jun 23, 2026 | BLS schedule | ✅ Aug 2026 |
+| June 2026 | Jul 21, 2026 | BLS schedule | ✅ Aug 2026 |
+| July 2026 | Aug 21, 2026 | BLS schedule | ✅ Aug 2026 |
+| August 2026 | Sep 18, 2026 | BLS schedule | ✅ Aug 2026 |
+| September 2026 | Oct 20, 2026 | BLS schedule | ✅ Aug 2026 |
+| October 2026 | Nov 20, 2026 | BLS schedule | ✅ Aug 2026 |
+| November 2026 | Dec 18, 2026 | BLS schedule | ✅ Aug 2026 |
+
+- **Even less regular than the national schedule.** The January 2026 reference month did not appear until **April 8, 2026**.
+- **Source URL:** https://www.bls.gov/schedule/news_release/laus.htm
 - **Maintenance:** BLS publishes ~13 months ahead. When the newest reference month is missing, the updater logs a `::warning::` in the Actions run and renders an em dash instead of inventing a date — that warning is the cue to top up the table above and the JSON.
 - **Note:** bls.gov HTML 403s non-browser clients, so this cannot be scraped from CI (the same block that stalled the CBP feed). `api.bls.gov` serves the figures but carries no release dates.
 

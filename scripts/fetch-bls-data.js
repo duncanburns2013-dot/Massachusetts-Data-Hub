@@ -200,13 +200,20 @@ async function loadPreviousData() {
 // data/bls-release-schedule.json and read here. bls.gov itself is not fetchable
 // from CI (it 403s non-browser clients, same block that stalled the CBP feed);
 // api.bls.gov serves the numbers but carries no release dates.
+// Returns both schedules: `national` (Employment Situation, drives the national
+// block) and `state` (State Employment and Unemployment, drives every MA
+// citation). They are genuinely different calendars — the MA vintage lands about
+// three weeks later — which is why the MA blocks legitimately sit a month behind.
 async function loadReleaseSchedule() {
   try {
-    const raw = await fs.readFile(RELEASE_SCHED_PATH, 'utf-8');
-    return JSON.parse(raw).employment_situation || {};
+    const raw = JSON.parse(await fs.readFile(RELEASE_SCHED_PATH, 'utf-8'));
+    return {
+      national: raw.employment_situation || {},
+      state:    raw.state_employment     || {},
+    };
   } catch (err) {
     console.log(`::warning::Could not read ${path.basename(RELEASE_SCHED_PATH)} (${err.message}) — release dates will render as "—"`);
-    return {};
+    return { national: {}, state: {} };
   }
 }
 
@@ -224,6 +231,7 @@ function releaseDateFor(sched, year, monIdx, FULLMON) {
 
 // ── Chart-array helpers ─────────────────────────────────────────────────────────
 const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const FULLMON = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 // Series → oldest-first list of monthly points. Drops the M13 annual average and
 // any month BLS marks unavailable (value "-", e.g. the 2025 appropriations lapse),
@@ -294,11 +302,34 @@ function updateCharts(html, find, findLong) {
     html = inject(html, 'trend-ma',  w.map(p => p.value).join(','));
   }
 
-  // c-laborforce — MA labor force level, trailing 16 months (last point is highlighted)
-  if (maLF.length) {
-    const w = maLF.slice(-16);
-    html = inject(html, 'lf-lab',  axisLabels(w));
-    html = inject(html, 'lf-data', w.map(p => p.value).join(','));
+  // c-laborforce — MA labor force level, plus the table and the peak-to-latest
+  // sentence underneath it.
+  //
+  // Injected from LF_ANCHOR, not the chart's trailing 16 months. Those consumers
+  // find the peak by scanning this array, and on a 16-month window the Mar-2025
+  // peak was one month from sliding off the back — after which "the peak" would
+  // silently become the highest month still in view and the sentence would
+  // re-anchor itself without saying so.
+  //
+  // Jan 2024 rather than all of history: the page's claim is about the post-2024
+  // decline. Feeding it 2019 makes the peak Feb 2020 and quietly turns a sentence
+  // about the current cycle into one about the pandemic — a different claim than
+  // the page is making. The chart slices to its 16-month window at the point of use.
+  const LF_ANCHOR = { year: 2024, mon: 0 };
+  const lfW = maLF.filter(p => ordOf(p) >= ordOf(LF_ANCHOR));
+  if (lfW.length) {
+    html = inject(html, 'lf-lab',  axisLabels(lfW));
+    html = inject(html, 'lf-data', lfW.map(p => p.value).join(','));
+  }
+
+  // MA unemployed persons, level — the "why" behind the rate move. Fetched on
+  // every run since the series list was written, but never injected, so the
+  // sentence explaining the rate carried a hand-typed count nothing could update.
+  const maUL = monthsOf(find(EMPLOYMENT_SERIES.MA_UNEMPLOYMENT_LEVEL))
+    .filter(p => ordOf(p) >= ordOf(LF_ANCHOR));
+  if (maUL.length) {
+    html = inject(html, 'ul-lab',  axisLabels(maUL));
+    html = inject(html, 'ul-data', maUL.map(p => p.value).join(','));
   }
 
   // c-monthly, plus every payroll figure in the prose — MA nonfarm month-over-month
@@ -562,6 +593,22 @@ async function updateDashboard(data, empSeries) {
   const releaseSchedule = await loadReleaseSchedule();
   const find = (id) => empSeries?.find(s => s.seriesID === id);
 
+  // MA release dates go to the client, keyed the way renderDerived() keys months
+  // and pre-formatted so the page never parses a date string (and so no browser
+  // timezone can shift "2026-07-21" back to the 20th).
+  //
+  // Client-side deliberately: every MA figure in the prose is derived there from
+  // the injected series, so the month those sentences describe is only settled in
+  // the browser. Stamping the citation anywhere else lets the date and the figure
+  // beside it disagree — which is exactly how all six MA citations came to read
+  // "June 23, 2026" (the May vintage) under prose that had moved on to June data.
+  html = inject(html, 'ma-rel-sched', '{' + Object.entries(releaseSchedule.state)
+    .map(([key, iso]) => {
+      const [y, m, d] = iso.split('-').map(Number);
+      return `"${key}":"${FULLMON[m - 1]} ${d}, ${y}"`;
+    })
+    .join(',') + '}');
+
   // MA total nonfarm (SMS25000000000000001) is fetched twice — once in the
   // employment batch (3 years) and once in the sector batch (from 2019) — so
   // find() returns whichever landed first, which is the short one. Anything that
@@ -658,7 +705,6 @@ async function updateDashboard(data, empSeries) {
   const nser  = (id) => monthsOf(find(id));
   const lastOf = (a) => a[a.length - 1];
   const prevOf = (a) => a[a.length - 2];
-  const FULLMON = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const sgn = (n) => (n < 0 ? '−' : '+') + Math.abs(Math.round(n)).toLocaleString('en-US');
   const sgnK = (n) => (n < 0 ? '−' : '+') + Math.round(Math.abs(n) / 1000) + 'K';
 
@@ -669,7 +715,7 @@ async function updateDashboard(data, empSeries) {
     // old stamp wrong. relDate = the day BLS published this reference month.
     // runDate = the day this script last rewrote the page. Only the second one
     // is "today", and only the second one describes the auto-update itself.
-    const relDate = releaseDateFor(releaseSchedule, cM.year, cM.mon, FULLMON);
+    const relDate = releaseDateFor(releaseSchedule.national, cM.year, cM.mon, FULLMON);
     const runDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     if (!relDate) {
       console.log(`::warning::No BLS release date on file for ${FULLMON[cM.mon]} ${cM.year} — top up data/bls-release-schedule.json from https://www.bls.gov/schedule/news_release/empsit.htm`);

@@ -14,7 +14,7 @@ const { loadReleaseSchedule, releaseDateFor } = await import('./fetch-bls-data.j
 const FULLMON = ['January','February','March','April','May','June','July','August',
                  'September','October','November','December'];
 
-const sched = await loadReleaseSchedule();
+const { national: sched, state: maSched } = await loadReleaseSchedule();
 let failed = 0;
 
 function check(label, actual, expected) {
@@ -45,6 +45,23 @@ check('no UTC-midnight off-by-one on a day-07 date',           rel(2026, 6),  'A
 // Unknown month returns null so the caller can render an em dash. Returning
 // today's date here is exactly the bug being guarded against.
 check('month absent from the schedule → null, never today',    rel(2031, 0),  null);
+
+console.log('\n── MA (State Employment and Unemployment) lookup ─────────────\n');
+
+const maRel = (y, monIdx) => releaseDateFor(maSched, y, monIdx, FULLMON);
+
+// The MA regression: every citation on the page read a hand-typed "June 23, 2026"
+// (the MAY vintage) while the prose beside it had moved to June data.
+check('June 2026 MA data → July 21, not June 23',              maRel(2026, 5), 'July 21, 2026');
+check('May 2026 MA data → the date that was frozen on the page',maRel(2026, 4), 'June 23, 2026');
+
+// State releases are a different calendar from the national one, roughly three
+// weeks later — which is why the MA blocks legitimately sit a month behind.
+check('state and national schedules are distinct',             maRel(2026, 6) === rel(2026, 6), false);
+
+// Jan 2026 state data did not appear until April. Nothing derived from a cadence
+// would ever produce this.
+check('January 2026 state data slipped to April',              maRel(2026, 0), 'April 8, 2026');
 
 console.log(`\n${failed === 0 ? '✨ all checks passed' : `❌ ${failed} check(s) failed`}\n`);
 process.exit(failed === 0 ? 0 : 1);

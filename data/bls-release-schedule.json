@@ -2,10 +2,12 @@
   "_what": "Actual BLS news-release dates, keyed by REFERENCE month (YYYY-MM) -> release date (YYYY-MM-DD).",
   "_why": "The dashboard used to stamp 'Released <today>' next to the national block, because the script called new Date(). Any run on a non-release day therefore published a false provenance line — e.g. the Aug 5 and Aug 6 2026 runs both said 'June 2026 National Employment — Released August 5 / 6, 2026' when June was actually released July 2, 2026.",
   "_not_derivable": "There is no first-Friday rule to compute. In 2026 alone: Dec-2025 ref released Jan 9, Jan-2026 ref released Feb 11, Apr-2026 ref released May 8 (second Friday), Jun-2026 ref released Jul 2 (a Thursday, moved for July 4). The published schedule is the only correct source.",
-  "_source": "https://www.bls.gov/schedule/news_release/empsit.htm",
+  "_source_employment_situation": "https://www.bls.gov/schedule/news_release/empsit.htm",
+  "_source_state_employment": "https://www.bls.gov/schedule/news_release/laus.htm",
   "_verified": "2026-08-07",
-  "_maintenance": "BLS publishes ~13 months ahead. When the newest reference month is missing from this file the updater logs a ::warning:: and renders the release date as an em dash rather than inventing one — that warning is the signal to top this file up from the source URL above.",
+  "_maintenance": "BLS publishes ~13 months ahead. When the newest reference month is missing from this file the updater logs a ::warning:: and renders the release date as an em dash rather than inventing one — that warning is the signal to top this file up from the source URLs above.",
 
+  "_employment_situation_note": "National Employment Situation — drives the national block. Reference month M lands in M+1.",
   "employment_situation": {
     "2025-11": "2025-12-16",
     "2025-12": "2026-01-09",
@@ -20,5 +22,22 @@
     "2026-09": "2026-10-02",
     "2026-10": "2026-11-06",
     "2026-11": "2026-12-04"
+  },
+
+  "_state_employment_note": "State Employment and Unemployment (monthly) — the MA LAUS/CES vintage. Lands ~3 weeks after the national release, which is why the MA blocks on the dashboard sit a month behind the national one. Even less regular than the national schedule: the Jan-2026 reference month did not appear until Apr 8, 2026.",
+  "state_employment": {
+    "2025-11": "2026-01-07",
+    "2025-12": "2026-01-27",
+    "2026-01": "2026-04-08",
+    "2026-02": "2026-04-22",
+    "2026-03": "2026-05-06",
+    "2026-04": "2026-05-22",
+    "2026-05": "2026-06-23",
+    "2026-06": "2026-07-21",
+    "2026-07": "2026-08-21",
+    "2026-08": "2026-09-18",
+    "2026-09": "2026-10-20",
+    "2026-10": "2026-11-20",
+    "2026-11": "2026-12-18"
   }
 }
