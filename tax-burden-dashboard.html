@@ -227,6 +227,14 @@ h1{font-weight:800;font-size:clamp(30px,5.2vw,54px);line-height:1.02;letter-spac
 
 .panel{background:var(--paper-2);border:1px solid var(--rule);padding:20px;position:sticky;top:24px;max-height:calc(100vh - 48px);overflow-y:auto}
 @media(max-width:900px){.panel{position:static;max-height:none}}
+  .jump{display:none}
+  @media(max-width:900px){
+    .jump{display:block;position:fixed;right:14px;bottom:14px;z-index:60;
+      font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;
+      font-weight:600;background:var(--ink);color:#fff;border:0;padding:13px 17px;
+      cursor:pointer;box-shadow:0 3px 16px rgba(0,0,0,.3)}
+    .jump:focus-visible{outline:2px solid var(--ledger);outline-offset:2px}
+  }
 .panel h3{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 15px;padding-bottom:9px;border-bottom:1px solid var(--rule);font-weight:600}
 .panel h3.mt{margin-top:24px}
 .panel h3.ma{color:var(--ma);border-bottom-color:var(--ma)}
@@ -534,13 +542,6 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
       <div class="field"><label for="kwh">Electricity, kWh/yr</label><input type="number" id="kwh" value="7200" step="200" min="0"></div>
       <div class="field"><label for="therms">Natural gas, therms/yr</label><input type="number" id="therms" value="750" step="25" min="0"></div>
 
-      <h3 class="mt">Investment &amp; retirement</h3>
-      <div class="field"><label for="brokerage">Money in a regular investment account</label><input type="number" id="brokerage" value="0" step="25000" min="0"><p class="hint">Don't put your 401(k) or IRA here — neither state taxes those while they grow, only when you take money out.</p></div>
-      <div class="field"><label for="yieldPct">What it pays out each year <span class="rangeval" id="vYield">2.0%</span></label><input type="range" id="yieldPct" min="0" max="8" step="0.1" value="2"><p class="hint">Dividends and interest. This is the one New Hampshire actually got rid of, in January 2025. Massachusetts still charges 5%.</p></div>
-      <div class="field"><label for="realizedGains">Investment profits you cashed out this year</label><input type="number" id="realizedGains" value="0" step="10000" min="0"><p class="hint">New Hampshire has never taxed these — that gap is decades old, not a recent change.</p></div>
-      <div class="field"><label for="gainsTerm">Did you hold it over a year?</label><select id="gainsTerm"><option value="lt">Long-term — MA 5%</option><option value="st">Short-term — MA 8.5%</option></select></div>
-      <div class="field"><label for="withdrawal">401(k)/IRA withdrawals/yr</label><input type="number" id="withdrawal" value="0" step="10000" min="0"><p class="hint">Massachusetts taxes withdrawals like regular pay. Fill this in to see a retiree instead of a worker.</p></div>
-
       <h3 class="mt">Housing</h3>
       <div class="field"><label for="homeValue">Home value</label><input type="number" id="homeValue" value="742986" step="25000" min="0"><p class="hint" id="homeValueHint"></p></div>
       <div id="grpCrossHouse">
@@ -567,6 +568,13 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
       <div class="field"><label for="nhUnfunded">Pension debt added to your bill</label><input type="number" id="nhUnfunded" value="0" step="250" min="0"><p class="hint">Zero on purpose, same rule as Massachusetts so neither state gets an unfair edge. New Hampshire has its own pension hole; it just isn't billed to you either.</p></div>
 
       </div>
+      <h3 class="mt">Investment &amp; retirement</h3>
+      <div class="field"><label for="brokerage">Money in a regular investment account</label><input type="number" id="brokerage" value="0" step="25000" min="0"><p class="hint">Don't put your 401(k) or IRA here — neither state taxes those while they grow, only when you take money out.</p></div>
+      <div class="field"><label for="yieldPct">What it pays out each year <span class="rangeval" id="vYield">2.0%</span></label><input type="range" id="yieldPct" min="0" max="8" step="0.1" value="2"><p class="hint">Dividends and interest. This is the one New Hampshire actually got rid of, in January 2025. Massachusetts still charges 5%.</p></div>
+      <div class="field"><label for="realizedGains">Investment profits you cashed out this year</label><input type="number" id="realizedGains" value="0" step="10000" min="0"><p class="hint">New Hampshire has never taxed these — that gap is decades old, not a recent change.</p></div>
+      <div class="field"><label for="gainsTerm">Did you hold it over a year?</label><select id="gainsTerm"><option value="lt">Long-term — MA 5%</option><option value="st">Short-term — MA 8.5%</option></select></div>
+      <div class="field"><label for="withdrawal">401(k)/IRA withdrawals/yr</label><input type="number" id="withdrawal" value="0" step="10000" min="0"><p class="hint">Massachusetts taxes withdrawals like regular pay. Fill this in to see a retiree instead of a worker.</p></div>
+
       <div id="grpBiz" hidden>
       <h3 class="mt">Your business</h3>
       <div class="field"><label for="bizProfit">Profit earned in the state</label><input type="number" id="bizProfit" value="650000" step="25000" min="0"><p class="hint">Taxable income attributed to that state.</p></div>
@@ -588,6 +596,8 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
       </select><p class="hint">Should your share of the national debt be split by headcount or by income? Either way you get the same answer for a given income — which is exactly why this layer is identical on both sides of the border.</p></div>
     </div>
   </aside>
+
+  <button class="jump" id="btnJump">Your numbers</button>
 </div>
 </div>
 
@@ -1998,6 +2008,12 @@ $('btnPng').addEventListener('click', () => {
     const a=document.createElement('a'); a.download='ma-vs-nh-burden.png';
     a.href=c.toDataURL('image/png'); a.click(); toast('PNG downloaded');
   }).catch(()=>toast('Render failed'));
+});
+$('btnJump').addEventListener('click', () => {
+  /* Instant, not smooth. On a phone the panel sits ~23,000px down, and animating that
+     distance takes many seconds -- long enough to read as a dead button. */
+  document.querySelector('.panel').scrollIntoView({block:'start'});
+  const f = document.getElementById('income'); if (f) f.focus({preventScroll:true});
 });
 $('btnReset').addEventListener('click', () => {
   if (mode === 'business') {
