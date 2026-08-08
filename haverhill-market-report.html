@@ -56,6 +56,60 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);line-
 
 .panel{display:none;padding:32px 0}
 .panel.active{display:block;animation:fadeUp .35s cubic-bezier(.22,1,.36,1)}
+
+/* ---- The Band panel -------------------------------------------------------
+   Series colors are NOT the page's --neon-* set. Those were picked to look
+   bright on white, not to be told apart: run through the CVD checks, cranberry
+   #680A1D also sits below the mark lightness band. #9B1B32 / #14558F validate
+   all-pairs (worst CVD dE 15.7, normal-vision 24.8, both >= 3:1 on the card).
+   Near markets are a recessive gray outline on purpose -- context, not a peer,
+   and it keeps the palette to the two series that actually carry the argument. */
+:root{--sub:#9B1B32;--abut:#14558F;--nearc:#8e95a2;--sub-soft:rgba(155,27,50,.10)}
+.band-lede{font-size:1.14rem;line-height:1.5;margin:22px 0 26px;padding-left:16px;
+  border-left:4px solid var(--sub);color:var(--ink);max-width:70ch}
+.band-lede em{font-style:normal;background:var(--sub-soft);padding:0 .22em;font-weight:600}
+.band-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.band-controls-l{font-size:.62rem;text-transform:uppercase;letter-spacing:.14em;
+  color:var(--muted);font-weight:600;margin-right:4px}
+.metric{font:inherit;font-size:.78rem;font-weight:500;color:var(--mid);cursor:pointer;
+  background:var(--card);border:1px solid var(--border);border-radius:100px;padding:6px 14px;
+  transition:background .18s,color .18s,border-color .18s}
+.metric:hover{border-color:var(--sub);color:var(--ink)}
+.metric.active{background:var(--sub);border-color:var(--sub);color:#fff}
+.metric:focus-visible{outline:2px solid var(--sub);outline-offset:2px}
+.band-fig{position:relative}
+.band-fig svg{width:100%;height:auto;display:block;overflow:visible}
+.band-find{margin-top:14px;padding:13px 15px;background:rgba(20,85,143,.05);
+  border-left:3px solid var(--abut);border-radius:6px;font-size:.9rem;color:var(--mid)}
+.band-find strong{color:var(--ink)}
+.b-tick{font-size:11px;fill:var(--muted)}
+.b-val{font-size:12px;fill:var(--mid)}
+.b-strong{fill:var(--ink);font-weight:700}
+.b-end{text-anchor:end}.b-mid{text-anchor:middle}.b-start{text-anchor:start}
+.b-grid{stroke:var(--border);stroke-width:1}
+.b-ref{stroke:var(--muted);stroke-width:1;stroke-dasharray:4 4}
+.bar-sub{fill:var(--sub)}.bar-abut{fill:var(--abut)}.bar-near{fill:var(--nearc);opacity:.5}
+.dot-sub{fill:var(--sub);stroke:var(--card);stroke-width:2.5}
+.dot-abut{fill:var(--abut);stroke:var(--card);stroke-width:2}
+.dot-near{fill:none;stroke:var(--nearc);stroke-width:1.8}
+/* The hit target is bigger than the mark -- an 8px dot is a pinpoint nobody hits. */
+.hit{fill:transparent;cursor:pointer}
+.hit:focus-visible{outline:none}
+.hit:focus-visible+.mark,.row-hot .mark{filter:brightness(1.12)}
+.mark-ring{fill:none;stroke:var(--ink);stroke-width:2;opacity:0;pointer-events:none}
+.cleg{display:flex;gap:14px;flex-wrap:wrap;font-size:.7rem;color:var(--mid)}
+.cleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.sw-subject{background:#9B1B32}.sw-abutter{background:#14558F}
+.sw-near{background:#8e95a2;opacity:.5}
+.band-tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .12s;
+  background:var(--ink);color:#fff;border-radius:7px;padding:9px 11px;font-size:.76rem;
+  line-height:1.45;white-space:nowrap;z-index:20;box-shadow:0 6px 20px rgba(0,0,0,.22)}
+.band-tip .tv{font-size:.98rem;font-weight:700;display:block}
+.band-tip .tn{color:rgba(255,255,255,.66)}
+.band-tip .tk{display:inline-block;width:12px;height:2px;border-radius:2px;
+  margin-right:6px;vertical-align:3px}
+.tile-sub{background:var(--card);border:1px solid var(--card-b);border-radius:12px;padding:18px}
+@media (max-width:640px){.band-controls{gap:6px}.metric{padding:5px 11px;font-size:.73rem}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .sec-t{font-size:1.3rem;font-weight:800;margin-bottom:3px;color:#1a2030}
 .sec-d{color:var(--muted);font-size:0.82rem;margin-bottom:18px}
@@ -181,6 +235,7 @@ td{border-bottom:1px solid #e8e5df !important}
 <button class="tog active" data-t="sf">Single Family</button>
 <button class="tog" data-t="condo">Condominium</button>
 <button class="tog" data-t="mf">Multi-Family</button>
+<button class="tog" data-t="band">The Band</button>
 <button class="tog" data-t="compare">Compare All</button>
 <button class="tog" data-t="afford">Affordability</button>
 </div></nav>
@@ -240,6 +295,68 @@ td{border-bottom:1px solid #e8e5df !important}
 <div class="cb"><div class="ch"><div class="ct">Multi-Family — Full Data</div></div><div class="tw"><table>
 <thead id="t-mf-head"></thead>
 <tbody id="t-mf-body"></tbody></table></div></div>
+</div></div>
+
+<!-- THE BAND — Haverhill against the towns it actually borders, plus its own
+     sub-markets. Everything in this panel renders from the BAND payload below,
+     which update-town-band.py writes. Every sentence is derived from thresholds
+     at build time; none is written about Haverhill specifically, so this panel
+     is safe to point at another town by editing that script's CONFIG. -->
+<div class="panel" id="p-band"><div class="container">
+<div class="sec-t" id="band-headline">—</div>
+<p class="sec-d" id="band-dek">—</p>
+
+<p class="band-lede" id="band-key">—</p>
+
+<!-- One filter row, above everything it scopes (dataviz: filters never live
+     inside a chart card, and they re-render every chart below them together). -->
+<div class="band-controls" role="group" aria-label="Choose the measure to compare">
+  <span class="band-controls-l">Compare by</span>
+  <button class="metric active" data-m="median" aria-pressed="true">Median price</button>
+  <button class="metric" data-m="ppsf" aria-pressed="false">$ / sq ft</button>
+  <button class="metric" data-m="splp" aria-pressed="false">Sale to list</button>
+  <button class="metric" data-m="over" aria-pressed="false">% over ask</button>
+</div>
+
+<div class="cb"><div class="ch"><div class="ct">Where Haverhill sits in its band</div>
+  <div class="cleg">
+    <span><i class="sw-subject"></i>Haverhill</span>
+    <span><i class="sw-abutter"></i>Abutting town</span>
+    <span><i class="sw-near"></i>Near market</span>
+  </div></div>
+  <div id="band-rank" class="band-fig"></div>
+  <div class="band-find" id="band-rank-find">—</div>
+</div>
+
+<div class="cb"><div class="ch"><div class="ct">Cheaper town, or smaller houses?</div></div>
+  <div id="band-scatter" class="band-fig"></div>
+  <div class="source">Median price against median price per square foot. Two different
+    measures, so two axes of one plot rather than two scales on one axis. Dashed lines
+    are the abutter-band medians.</div>
+</div>
+
+<div class="sec-t" style="margin-top:38px">Inside Haverhill</div>
+<p class="sec-d" id="band-sub-dek">—</p>
+<div class="cards" id="band-tiles"></div>
+<div class="band-find" id="band-sub-find">—</div>
+
+<div class="cb" id="band-named-wrap"><div class="ch"><div class="ct">Named areas, where MLS records one</div></div>
+  <div id="band-named" class="band-fig"></div>
+  <div class="source" id="band-named-caveat">—</div>
+</div>
+
+<div class="cb"><div class="ch"><div class="ct">When to list</div></div>
+  <div id="band-season" class="band-fig"></div>
+  <div class="band-find" id="band-season-find">—</div>
+</div>
+
+<div class="cb"><div class="ch"><div class="ct">Full comparison — every town in the band</div></div>
+  <div class="tw"><table id="band-table">
+    <thead><tr><th>Town</th><th>Sales</th><th>Median</th><th>$/sf</th><th>Days</th>
+      <th>SP:LP</th><th>Over ask</th><th>Role</th></tr></thead>
+    <tbody id="band-tbody"></tbody></table></div>
+  <div class="source" id="band-method">—</div>
+</div>
 </div></div>
 
 <!-- COMPARE ALL -->
@@ -687,6 +804,350 @@ var MEDIAN_SRC = 'ACS 2024 (5-yr)';
   setTxt('k-sf-first', money(sf.price[iFirst]));
   setTxt('k-sf-last', money(sf.price[iCur]));
   setTxt('k-sf-mult', (sf.price[iCur] / sf.price[iFirst]).toFixed(2) + '×');
+})();
+
+// ══ The Band ═══════════════════════════════════════════════════════════════
+// Renders the band panel from the BAND payload. update-town-band.py owns the
+// payload and every sentence in it; this file owns only how it is drawn. Point
+// that script at another town and this code needs no edits.
+var BAND = /*@band@*/{"town":"Haverhill","headline":"Haverhill is the second-cheapest town in its own neighborhood.","dek":"Single-family resale measured against the 6 towns Haverhill actually borders — not against a statewide average that pools it with Nantucket.","keyHtml":"Haverhill&rsquo;s gap to its neighbors is mostly about <em>house size, not price per foot</em>. Prices sit 28% below the abutter band, but per square foot the gap narrows to 7%. You are buying less house here, not cheaper house.","windowLabel":"closed sales since Jan 2025","totalN":2866,"towns":[{"n":555,"median":605000,"ppsf":330,"dom":21,"splp":101.83,"over":63.6,"town":"Haverhill","role":"subject"},{"n":473,"median":615000,"ppsf":327,"dom":21,"splp":102.31,"over":66.4,"town":"Methuen","role":"abutter"},{"n":292,"median":946500,"ppsf":364,"dom":20,"splp":104.08,"over":67.1,"town":"North Andover","role":"abutter"},{"n":145,"median":1085000,"ppsf":358,"dom":21,"splp":102.14,"over":54.5,"town":"Boxford","role":"abutter"},{"n":104,"median":727500,"ppsf":353,"dom":22,"splp":102.1,"over":58.7,"town":"Groveland","role":"abutter"},{"n":58,"median":1045000,"ppsf":359,"dom":20,"splp":99.08,"over":41.4,"town":"West Newbury","role":"abutter"},{"n":70,"median":705000,"ppsf":345,"dom":20,"splp":100.22,"over":47.1,"town":"Merrimac","role":"abutter"},{"n":140,"median":765000,"ppsf":365,"dom":20,"splp":102.57,"over":63.6,"town":"Georgetown","role":"near"},{"n":205,"median":701050,"ppsf":377,"dom":20,"splp":101.19,"over":54.1,"town":"Amesbury","role":"near"},{"n":205,"median":1100000,"ppsf":549,"dom":22,"splp":99.93,"over":35.1,"town":"Newburyport","role":"near"},{"n":430,"median":1127500,"ppsf":401,"dom":20,"splp":103.91,"over":65.3,"town":"Andover","role":"near"},{"n":189,"median":535000,"ppsf":340,"dom":21,"splp":102.06,"over":63.0,"town":"Lawrence","role":"near"}],"bandMedian":{"median":837000.0,"ppsf":355.5,"dom":20.5},"findings":{"median":"Haverhill ranks 11 of 12 on price and sits 28% below the abutter-band median of $837,000 — materially cheaper than the towns on its own borders.","ppsf":"Per square foot the gap is 7% below the band's $356. Much smaller than the price gap, which is the whole point: the difference is square footage, not the address.","splp":"Haverhill closes at 101.8% of asking. Across the whole comparison the range is 99.1%–104.1%, so every town here is selling at or above list.","over":"64% of Haverhill sales close above ask. Market time is not what separates these towns — every one of them clears in 20–22 days, a spread of barely a fortnight."},"subLocalities":[{"n":146,"median":616000,"ppsf":341,"dom":21,"splp":102.05,"over":67.8,"zip":"01835","name":"Bradford"},{"n":165,"median":615000,"ppsf":342,"dom":22,"splp":101.96,"over":62.4,"zip":"01832","name":"West Haverhill"},{"n":242,"median":591000,"ppsf":317,"dom":21,"splp":101.63,"over":62.0,"zip":"01830","name":"Downtown & East"}],"subDek":"MLS carries no usable neighborhood field for Haverhill: MLSAreaMinor, CityRegion and Neighborhood are empty, and MLSAreaMajor is filled on 18% of sales with ZIP strings mixed into it. PostalCode is on every record, and here it maps to the real geography.","subVerdict":"The 3 sub-markets are, statistically, one market — 4% separates the dearest from the cheapest, and they clear at the same speed and the same premium to ask. A Haverhill ZIP is not a price tier.","namedAreas":[{"area":"Bradford","median":546800,"n":242},{"area":"Riverside","median":493500,"n":60},{"area":"Winnekenni Park","median":614950,"n":24},{"area":"Ayers Village","median":597500,"n":18}],"namedCaveat":"Only 18% of Haverhill sales carry a named area, and areas under 15 sales are omitted. Indicative, not a ranking — this is the one cut on this page not built on complete data.","season":[{"month":"Jan","n":94,"splp":102.61},{"month":"Feb","n":99,"splp":103.81},{"month":"Mar","n":128,"splp":105.64},{"month":"Apr","n":173,"splp":105.18},{"month":"May","n":190,"splp":105.63},{"month":"Jun","n":249,"splp":104.4},{"month":"Jul","n":223,"splp":103.35},{"month":"Aug","n":177,"splp":104.12},{"month":"Sep","n":169,"splp":102.79},{"month":"Oct","n":201,"splp":102.36},{"month":"Nov","n":154,"splp":102.34},{"month":"Dec","n":131,"splp":102.59}],"seasonSince":"2021","seasonVerdict":"Listing in Mar has returned 105.6% of asking against 102.3% in Nov — a 3.3-point spread on the same house.","method":"Single-family closed sales, MLS PIN via Bridge. Headline window: closed sales since Jan 2025; seasonality uses the full pull from 2021. Medians throughout; sale-to-list is the mean of per-sale close÷list; market time is MLSPIN_MARKET_TIME. Haverhill borders New Hampshire and Plaistow NH, Atkinson NH, Newton NH, Salem NH are excluded from the band — MLS PIN sees NH listings only when dual-listed, so including one would understate its volume by an unknown margin. A known gap in the comparison, not a claim that they do not matter.","generated":"2026-08-08"}/*@*/;
+
+(function () {
+  if (!BAND || !document.getElementById('p-band')) return;
+  var $ = function (id) { return document.getElementById(id); };
+  var txt = function (id, s) { var e = $(id); if (e) e.textContent = s; };
+
+  var SUBJ = BAND.town;
+  var money = function (v) { return '$' + Math.round(v).toLocaleString(); };
+  // Half this band clears $1M, where "$1128K" is just a worse way to write $1.13M.
+  var moneyK = function (v) {
+    return v >= 1e6 ? '$' + (v / 1e6).toFixed(2) + 'M' : '$' + Math.round(v / 1000) + 'K';
+  };
+  var METRICS = {
+    median: { label: 'median price', fmt: moneyK,
+              full: money },
+    ppsf:   { label: 'per square foot', fmt: function (v) { return '$' + Math.round(v); },
+              full: function (v) { return '$' + Math.round(v) + ' / sq ft'; } },
+    splp:   { label: 'sale to list', fmt: function (v) { return v.toFixed(1) + '%'; },
+              full: function (v) { return v.toFixed(1) + '% of asking'; } },
+    over:   { label: 'share over ask', fmt: function (v) { return Math.round(v) + '%'; },
+              full: function (v) { return Math.round(v) + '% closed over ask'; } }
+  };
+  var metric = 'median';
+  var COLOR = { subject: '#9B1B32', abutter: '#14558F', near: '#8e95a2' };
+  var SVGNS = 'http://www.w3.org/2000/svg';
+
+  // ---- tooltip. Town names come from MLS, so textContent only, never innerHTML.
+  var tip = document.createElement('div');
+  tip.className = 'band-tip';
+  tip.setAttribute('role', 'status');
+  document.body.appendChild(tip);
+  var hideTip = function () { tip.style.opacity = '0'; };
+  function showTip(ev, rows, title) {
+    tip.replaceChildren();
+    var h = document.createElement('div');
+    h.className = 'tn';
+    h.textContent = title;
+    tip.appendChild(h);
+    rows.forEach(function (r) {
+      var line = document.createElement('div');
+      if (r.color) {
+        var k = document.createElement('span');
+        k.className = 'tk';
+        k.style.background = r.color;
+        line.appendChild(k);
+      }
+      var v = document.createElement('span');
+      v.className = 'tv';
+      v.textContent = r.value;                 // value leads
+      line.appendChild(v);
+      if (r.note) {
+        var n = document.createElement('span');
+        n.className = 'tn';
+        n.textContent = r.note;                // label follows
+        line.appendChild(n);
+      }
+      tip.appendChild(line);
+    });
+    tip.style.opacity = '1';
+    var w = tip.offsetWidth, hg = tip.offsetHeight;
+    var x = ev.clientX + 14, y = ev.clientY - hg - 10;
+    if (x + w > window.innerWidth - 8) x = ev.clientX - w - 14;
+    if (y < 8) y = ev.clientY + 18;
+    tip.style.left = (x + window.scrollX) + 'px';
+    tip.style.top = (y + window.scrollY) + 'px';
+  }
+
+  function el(name, attrs, cls) {
+    var n = document.createElementNS(SVGNS, name);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (cls) n.setAttribute('class', cls);
+    return n;
+  }
+  function svgText(x, y, cls, s) {
+    var t = el('text', { x: x, y: y }, cls);
+    t.textContent = s;
+    return t;
+  }
+  // Same readout on keyboard focus as on hover — the tooltip enhances, never gates.
+  function bindTip(hit, rowsFn, title, onHot) {
+    var move = function (ev) { showTip(ev, rowsFn(), title); };
+    hit.addEventListener('pointermove', move);
+    hit.addEventListener('pointerenter', function (ev) { move(ev); if (onHot) onHot(true); });
+    hit.addEventListener('pointerleave', function () { hideTip(); if (onHot) onHot(false); });
+    hit.addEventListener('focus', function () {
+      var b = hit.getBoundingClientRect();
+      showTip({ clientX: b.left + b.width / 2, clientY: b.top }, rowsFn(), title);
+      if (onHot) onHot(true);
+    });
+    hit.addEventListener('blur', function () { hideTip(); if (onHot) onHot(false); });
+    hit.setAttribute('tabindex', '0');
+    hit.setAttribute('role', 'img');
+    hit.setAttribute('aria-label', title);
+  }
+  function roleOf(t) {
+    return t.town === SUBJ ? 'subject' : (t.role === 'abutter' ? 'abutter' : 'near');
+  }
+
+  // ---- ranking bars: magnitude + identity, sorted, subject highlighted
+  function drawRank() {
+    var host = $('band-rank');
+    if (!host) return;
+    var M = METRICS[metric];
+    var rows = BAND.towns.filter(function (t) { return t[metric] != null; })
+                 .slice().sort(function (a, b) { return b[metric] - a[metric]; });
+    var W = 700, rh = 30, padL = 128, H = rows.length * rh + 30;
+    var mx = Math.max.apply(null, rows.map(function (t) { return t[metric]; }));
+    var mn = Math.min.apply(null, rows.map(function (t) { return t[metric]; }));
+    // Ratio measures cluster near 100, where a zero baseline flattens every town
+    // into one indistinguishable block. Those get a floor below the minimum and
+    // say so; price and $/sf keep the honest zero baseline.
+    var ratio = (metric === 'splp' || metric === 'over');
+    var zero = ratio ? mn - (mx - mn) * 0.4 - 0.2 : 0;
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img',
+      'aria-label': M.label + ' by town, ' + SUBJ + ' highlighted' });
+    rows.forEach(function (t, i) {
+      var y = i * rh + 6, k = roleOf(t), subj = k === 'subject';
+      var w = Math.max(((t[metric] - zero) / (mx - zero)) * (W - padL - 100), 2);
+      var g = el('g');
+      g.appendChild(svgText(padL - 9, y + 13, 'b-tick b-end' + (subj ? ' b-strong' : ''), t.town));
+      var bar = el('rect', { x: padL, y: y, width: w.toFixed(1), height: 18, rx: 4 },
+        'mark ' + (subj ? 'bar-sub' : (k === 'abutter' ? 'bar-abut' : 'bar-near')));
+      g.appendChild(bar);
+      g.appendChild(svgText(padL + w + 8, y + 13, 'b-val' + (subj ? ' b-strong' : ''), M.fmt(t[metric])));
+      var hit = el('rect', { x: 0, y: y - 5, width: W, height: 28 }, 'hit');
+      bindTip(hit, function () {
+        return [{ value: M.full(t[metric]), note: '  ' + M.label, color: COLOR[k] },
+                { value: t.n.toLocaleString() + ' sales', note: '  ' + BAND.windowLabel }];
+      }, t.town, function (on) { g.classList.toggle('row-hot', on); });
+      g.appendChild(hit);
+      svg.appendChild(g);
+    });
+    var foot = 'n = ' + BAND.totalN.toLocaleString() + ' ' + BAND.windowLabel
+             + (ratio ? '  ·  axis starts below the lowest town, not at zero' : '');
+    svg.appendChild(svgText(padL, H - 6, 'b-tick', foot));
+    host.replaceChildren(svg);
+    txt('band-rank-find', BAND.findings[metric]);
+  }
+
+  // ---- scatter: price against $/sf. Two measures, two axes — never two scales.
+  function drawScatter() {
+    var host = $('band-scatter');
+    if (!host) return;
+    var pts = BAND.towns.filter(function (t) { return t.ppsf && t.median; });
+    var W = 700, H = 400, L = 70, B = 46, T = 18, R = 112;
+    var xs = pts.map(function (p) { return p.ppsf; }), ys = pts.map(function (p) { return p.median; });
+    var x0 = Math.min.apply(null, xs) * 0.94, x1 = Math.max.apply(null, xs) * 1.05;
+    var y0 = Math.min.apply(null, ys) * 0.90, y1 = Math.max.apply(null, ys) * 1.07;
+    var px = function (x) { return L + (x - x0) / (x1 - x0) * (W - L - R); };
+    var py = function (y) { return H - B - (y - y0) / (y1 - y0) * (H - B - T); };
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img',
+      'aria-label': 'Median price against median price per square foot, by town' });
+    for (var i = 0; i <= 4; i++) {
+      var yv = y0 + (y1 - y0) * i / 4;
+      svg.appendChild(el('line', { x1: L, y1: py(yv).toFixed(1), x2: W - R, y2: py(yv).toFixed(1) }, 'b-grid'));
+      svg.appendChild(svgText(L - 8, py(yv) + 4, 'b-tick b-end', moneyK(yv)));
+      var xv = x0 + (x1 - x0) * i / 4;
+      svg.appendChild(svgText(px(xv), H - B + 18, 'b-tick b-mid', '$' + Math.round(xv)));
+    }
+    svg.appendChild(svgText((L + W - R) / 2, H - 8, 'b-tick b-mid', 'Median $ per square foot →'));
+    svg.appendChild(el('line', { x1: px(BAND.bandMedian.ppsf), y1: T,
+      x2: px(BAND.bandMedian.ppsf), y2: H - B }, 'b-ref'));
+    svg.appendChild(el('line', { x1: L, y1: py(BAND.bandMedian.median),
+      x2: W - R, y2: py(BAND.bandMedian.median) }, 'b-ref'));
+    svg.appendChild(svgText(W - R - 4, py(BAND.bandMedian.median) - 7, 'b-tick b-end', 'abutter-band median'));
+
+    var placed = [];
+    pts.forEach(function (t) {
+      var k = roleOf(t), x = px(t.ppsf), y = py(t.median);
+      var g = el('g');
+      var r = k === 'subject' ? 9 : (k === 'abutter' ? 6 : 5);
+      g.appendChild(el('circle', { cx: x.toFixed(1), cy: y.toFixed(1), r: r },
+        'mark ' + (k === 'subject' ? 'dot-sub' : (k === 'abutter' ? 'dot-abut' : 'dot-near'))));
+      var anchor = x > W - R - 76 ? 'b-end' : 'b-start';
+      var dx = anchor === 'b-end' ? -13 : 13;
+      var ly = y + 4;
+      for (var s = 0; s < 8; s++) {
+        var clash = placed.some(function (p) {
+          return Math.abs(ly - p[1]) < 12 && Math.abs(x - p[0]) < 100;
+        });
+        if (!clash) break;
+        ly += 13;
+      }
+      placed.push([x, ly]);
+      g.appendChild(svgText(x + dx, ly, 'b-tick ' + anchor + (k === 'subject' ? ' b-strong' : ''), t.town));
+      // 30px hit circle: the painted dot is 10-18px and nobody aims at that.
+      var hit = el('circle', { cx: x.toFixed(1), cy: y.toFixed(1), r: 15 }, 'hit');
+      bindTip(hit, function () {
+        return [{ value: money(t.median), note: '  median', color: COLOR[k] },
+                { value: '$' + t.ppsf + ' / sq ft', note: '  ' + t.n.toLocaleString() + ' sales' }];
+      }, t.town);
+      g.appendChild(hit);
+      svg.appendChild(g);
+    });
+    host.replaceChildren(svg);
+  }
+
+  // ---- seasonality
+  function drawSeason() {
+    var host = $('band-season');
+    if (!host || !BAND.season.length) return;
+    var W = 700, H = 240, L = 58, B = 36, T = 22;
+    var vals = BAND.season.map(function (m) { return m.splp; });
+    var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals);
+    var y0 = mn - (mx - mn) * 0.5 - 0.2, y1 = mx + (mx - mn) * 0.25 + 0.15;
+    var bw = (W - L - 18) / BAND.season.length;
+    var py = function (v) { return H - B - (v - y0) / (y1 - y0) * (H - B - T); };
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img',
+      'aria-label': 'Average sale-to-list ratio by the month a listing went on' });
+    for (var i = 0; i <= 3; i++) {
+      var yv = y0 + (y1 - y0) * i / 3;
+      svg.appendChild(el('line', { x1: L, y1: py(yv).toFixed(1), x2: W - 18, y2: py(yv).toFixed(1) }, 'b-grid'));
+      svg.appendChild(svgText(L - 8, py(yv) + 4, 'b-tick b-end', yv.toFixed(1) + '%'));
+    }
+    BAND.season.forEach(function (m, i) {
+      var x = L + i * bw + 3, y = py(m.splp), hi = m.splp === mx, lo = m.splp === mn;
+      var g = el('g');
+      g.appendChild(el('rect', { x: x.toFixed(1), y: y.toFixed(1), width: (bw - 8).toFixed(1),
+        height: (H - B - y).toFixed(1), rx: 4 }, 'mark ' + (hi ? 'bar-sub' : 'bar-abut')));
+      g.appendChild(svgText(x + (bw - 8) / 2, H - B + 16, 'b-tick b-mid', m.month));
+      if (hi || lo) g.appendChild(svgText(x + (bw - 8) / 2, y - 6, 'b-val b-mid b-strong', m.splp.toFixed(1) + '%'));
+      var hit = el('rect', { x: x - 3, y: T, width: bw, height: H - B - T + 8 }, 'hit');
+      bindTip(hit, function () {
+        return [{ value: m.splp.toFixed(1) + '% of asking', note: '',
+                  color: hi ? COLOR.subject : COLOR.abutter },
+                { value: m.n.toLocaleString() + ' listings', note: '  since ' + BAND.seasonSince }];
+      }, 'Listed in ' + m.month);
+      g.appendChild(hit);
+      svg.appendChild(g);
+    });
+    svg.appendChild(svgText(L, H - 4, 'b-tick', 'axis starts below the lowest month, not at zero'));
+    host.replaceChildren(svg);
+  }
+
+  // ---- named areas: sparse, so it always ships with its coverage caveat
+  function drawNamed() {
+    var host = $('band-named');
+    if (!host) return;
+    if (!BAND.namedAreas.length) {
+      var wrap = $('band-named-wrap');
+      if (wrap) wrap.style.display = 'none';
+      return;
+    }
+    var rows = BAND.namedAreas.slice().sort(function (a, b) { return b.median - a.median; });
+    var W = 700, rh = 28, padL = 144, H = rows.length * rh + 8;
+    var mx = Math.max.apply(null, rows.map(function (r) { return r.median; }));
+    var svg = el('svg', { viewBox: '0 0 ' + W + ' ' + H, role: 'img',
+      'aria-label': 'Median price by named MLS area' });
+    rows.forEach(function (a, i) {
+      var y = i * rh + 4, w = (a.median / mx) * (W - padL - 112);
+      var g = el('g');
+      g.appendChild(svgText(padL - 9, y + 13, 'b-tick b-end', a.area));
+      g.appendChild(el('rect', { x: padL, y: y, width: w.toFixed(1), height: 17, rx: 4 }, 'mark bar-abut'));
+      g.appendChild(svgText(padL + w + 8, y + 13, 'b-val', moneyK(a.median) + '   n=' + a.n));
+      var hit = el('rect', { x: 0, y: y - 4, width: W, height: 26 }, 'hit');
+      bindTip(hit, function () {
+        return [{ value: money(a.median), note: '  median', color: COLOR.abutter },
+                { value: a.n.toLocaleString() + ' sales', note: '  all years' }];
+      }, a.area, function (on) { g.classList.toggle('row-hot', on); });
+      g.appendChild(hit);
+      svg.appendChild(g);
+    });
+    host.replaceChildren(svg);
+  }
+
+  function drawTiles() {
+    var host = $('band-tiles');
+    if (!host) return;
+    host.replaceChildren();
+    BAND.subLocalities.forEach(function (s) {
+      var d = document.createElement('div');
+      d.className = 'card bl';
+      var l = document.createElement('div'); l.className = 'cl'; l.textContent = s.name;
+      var v = document.createElement('div'); v.className = 'cv blue'; v.textContent = money(s.median);
+      var g = document.createElement('div'); g.className = 'cg';
+      [['$/sf', '$' + s.ppsf], ['Over ask', s.over + '%'], ['Sales', s.n.toLocaleString()]]
+        .forEach(function (p) {
+          var c = document.createElement('div'); c.className = 'cm';
+          var cl = document.createElement('div'); cl.className = 'cm-l'; cl.textContent = p[0];
+          var cv = document.createElement('div'); cv.className = 'cm-v'; cv.textContent = p[1];
+          c.appendChild(cl); c.appendChild(cv); g.appendChild(c);
+        });
+      d.appendChild(l); d.appendChild(v); d.appendChild(g);
+      host.appendChild(d);
+    });
+  }
+
+  function drawTable() {
+    var b = $('band-tbody');
+    if (!b) return;
+    b.replaceChildren();
+    BAND.towns.slice().sort(function (x, y) { return y.median - x.median; }).forEach(function (t) {
+      var tr = document.createElement('tr');
+      [t.town, t.n.toLocaleString(), money(t.median), '$' + t.ppsf, String(t.dom),
+       t.splp.toFixed(1) + '%', Math.round(t.over) + '%',
+       t.town === SUBJ ? 'subject' : t.role].forEach(function (c) {
+        var td = document.createElement('td');
+        td.textContent = c;
+        if (t.town === SUBJ) td.style.fontWeight = '700';
+        tr.appendChild(td);
+      });
+      b.appendChild(tr);
+    });
+  }
+
+  function drawAll() { drawRank(); drawScatter(); drawSeason(); drawNamed(); drawTiles(); drawTable(); }
+
+  txt('band-headline', BAND.headline);
+  txt('band-dek', BAND.dek);
+  txt('band-sub-dek', BAND.subDek);
+  txt('band-sub-find', BAND.subVerdict);
+  txt('band-season-find', BAND.seasonVerdict);
+  txt('band-named-caveat', BAND.namedCaveat);
+  txt('band-method', BAND.method);
+  // keyHtml is built by update-town-band.py from its own template with the town
+  // name escaped; the only markup in it is the <em> the emphasis rule needs.
+  var key = $('band-key');
+  if (key) key.innerHTML = BAND.keyHtml;
+
+  Array.prototype.forEach.call(document.querySelectorAll('.metric'), function (btn) {
+    btn.addEventListener('click', function () {
+      metric = btn.getAttribute('data-m');
+      Array.prototype.forEach.call(document.querySelectorAll('.metric'), function (b) {
+        var on = b === btn;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      drawRank();
+    });
+  });
+  window.addEventListener('scroll', hideTip, { passive: true });
+
+  // The panel is display:none at load, so its SVGs would measure zero-wide.
+  // Draw once now for the table and tiles, and redraw when the tab is opened.
+  drawAll();
+  var bandBtn = document.querySelector('.tog[data-t="band"]');
+  if (bandBtn) bandBtn.addEventListener('click', function () { setTimeout(drawAll, 30); });
 })();
 </script>
 </body>

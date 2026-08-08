@@ -1,5 +1,7 @@
-# PrimeMLS record-level cache — DO NOT publish (MLS data licensing)
+# Record-level MLS caches — DO NOT publish (MLS data licensing). Only derived
+# aggregates ever get committed. _raw_band is update-town-band.py's pull cache.
 data/_raw_nh/
+data/_raw_band/
 # secrets
 .env
 
