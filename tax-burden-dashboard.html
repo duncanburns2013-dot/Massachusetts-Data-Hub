@@ -66,6 +66,13 @@ h1{font-weight:800;font-size:clamp(30px,5.2vw,54px);line-height:1.02;letter-spac
 /* Three tabs at desktop padding total ~393px, wider than a 375px phone. Without
    this the tab row forces the whole document wide and every section inherits the
    overflow — the page scrolls sideways. */
+/* Amount columns are white-space:nowrap so figures never break mid-number, which on
+   a phone makes the tables wider than the viewport and drags the whole document
+   sideways. Let each table scroll inside itself instead. */
+@media(max-width:700px){
+  .lines,.cmp,.srctable{display:block;overflow-x:auto;max-width:100%}
+  .layer,.section,#layerWrap,main{min-width:0;max-width:100%}
+}
 @media(max-width:480px){
   .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .tab{padding:12px 12px;font-size:10.5px;letter-spacing:.06em;white-space:nowrap}
