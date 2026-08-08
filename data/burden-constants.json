@@ -431,10 +431,11 @@
       },
       "pfmlEmployerRate": {
         "value": 0.0042,
-        "note": "Business mode. Employer share of MA Paid Family and Medical Leave: 0.42% of eligible wages, being 60% of the 0.70% medical-leave contribution. The 0.18% family-leave contribution may be taken entirely from employee wages and is NOT counted as an employer cost here. Rate unchanged from 2025. TWO LIMITS the model applies only partly: wages count only up to the Social Security taxable maximum PER EMPLOYEE, so applying the rate to total payroll overstates it for a firm with highly paid staff; and employers with fewer than 25 covered individuals owe NO employer share, which the model does apply via the headcount input.",
+        "note": "Business mode. Employer share of MA Paid Family and Medical Leave: 0.42% of eligible wages, being 60% of the 0.70% medical-leave contribution. The 0.18% family-leave contribution may be taken entirely from employee wages and is NOT counted as an employer cost here. Rate unchanged from 2025. TWO LIMITS the model applies only partly: wages count only up to the Social Security taxable maximum PER EMPLOYEE, so applying the rate to total payroll overstates it for a firm with highly paid staff; and employers with fewer than 25 covered individuals owe NO employer share, which the model does apply via the headcount input. KNOWN EXPIRY: Chapter 101 of the Acts of 2026 (enacted 12 June 2026) shifts the employer contribution off medical leave entirely and onto family leave effective 1 January 2027, with 2027 rates to be announced by 1 October 2026. The 0.42% here is correct FOR 2026 and is scheduled to change, so it must be re-derived rather than merely re-verified after that date.",
         "source": "MA Department of Family and Medical Leave, 2026 contribution rates",
         "url": "https://www.mass.gov/info-details/paid-family-and-medical-leave-employer-contribution-rates-and-calculator",
-        "verified": "2026-08-08"
+        "verified": "2026-08-08",
+        "expires": "2027-01-01"
       },
       "pfmlThresholdHeads": {
         "value": 25,
