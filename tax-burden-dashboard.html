@@ -1490,6 +1490,19 @@ function valueToBill(){
   const rate = +$('maPropRate').value || 1.09;
   $('proptax').value = Math.round((+$('homeValue').value || 0) * rate/100);
 }
+/* A datalist filters its dropdown by whatever is already in the box. Leave "Statewide
+   average" sitting there and the list shows exactly one item — the control looks broken
+   because you cannot browse to anything else. Clear on focus, restore on blur if nothing
+   was chosen. */
+function browsable(inputId, onRestore){
+  const el = document.getElementById(inputId);
+  el.addEventListener('focus', () => { el.dataset.prev = el.value; el.value = ''; });
+  el.addEventListener('blur',  () => {
+    if (!el.value && el.dataset.prev) el.value = el.dataset.prev;
+    if (onRestore) onRestore();
+  });
+}
+
 function townByName(name){
   const q = (name||'').trim().toLowerCase();
   return TOWNS.find(t => t[0].toLowerCase() === q) || null;
@@ -1520,6 +1533,7 @@ function buildTowns(){
   };
   $('town').addEventListener('change', apply);
   $('town').addEventListener('input', apply);   /* picking from the list fires input, not change */
+  browsable('town');
   $('proptax').addEventListener('change', () => { billToValue(); syncTown(); render(); });
   $('homeValue').addEventListener('change', () => { valueToBill(); syncTown(); render(); });
   buildNhTowns();
@@ -1541,11 +1555,16 @@ function buildNhTowns(){
   };
   $('nhTown').addEventListener('change', apply);
   $('nhTown').addEventListener('input', apply);
+  browsable('nhTown');
 }
+/* Deliberately NOT called from render(). The default NH rate (1.583%, the statewide
+   average) is numerically identical to Grafton's 15.83 per $1,000, so matching a rate
+   back to a town made every fresh load claim you were in Grafton. The box now only says
+   a town when you actually chose one. */
 function syncNhTown(){
   const pctRate = +$('nhPropRate').value || 0;
   const hit = NH_TOWNS.find(t => Math.abs(t[1]/10 - pctRate) < 0.0005);
-  $('nhTown').value = hit ? hit[0] : '';
+  if (hit) $('nhTown').value = hit[0];
 }
 
 function showTab(btn, v){
@@ -1628,7 +1647,6 @@ function render(){
     });
   }
 
-  syncNhTown();
   renderCompress(ma, nh);
   renderAsOf();
   renderPensionDisclosure();
