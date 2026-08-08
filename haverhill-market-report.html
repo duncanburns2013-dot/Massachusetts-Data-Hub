@@ -168,9 +168,9 @@ td{border-bottom:1px solid #e8e5df !important}
 <p class="hero-sub">13-year analysis across Single Family, Condominium & Multi-Family — benchmarked against Massachusetts and Essex County.</p>
 <div class="hero-line"></div>
 <div class="hero-stats">
-<div class="hs"><div class="hs-l">SF Avg Sale</div><div class="hs-v blue" id="h-sf-val">—</div><div class="hs-n"><span id="h-sf-chg">—</span> since <span class="yr-first">—</span></div></div>
-<div class="hs"><div class="hs-l">Condo Avg</div><div class="hs-v green" id="h-co-val">—</div><div class="hs-n"><span id="h-co-chg">—</span> since <span class="yr-first">—</span></div></div>
-<div class="hs"><div class="hs-l">Multi-Family</div><div class="hs-v orange" id="h-mf-val">—</div><div class="hs-n"><span id="h-mf-chg">—</span> since <span class="yr-first">—</span></div></div>
+<div class="hs"><div class="hs-l">SF Avg Sale</div><div class="hs-v blue" id="h-sf-val">—</div><div class="hs-n"><span id="h-sf-chg">—</span> vs <span class="yr-first">—</span></div></div>
+<div class="hs"><div class="hs-l">Condo Avg</div><div class="hs-v green" id="h-co-val">—</div><div class="hs-n"><span id="h-co-chg">—</span> vs <span class="yr-first">—</span></div></div>
+<div class="hs"><div class="hs-l">Multi-Family</div><div class="hs-v orange" id="h-mf-val">—</div><div class="hs-n"><span id="h-mf-chg">—</span> vs <span class="yr-first">—</span></div></div>
 <div class="hs"><div class="hs-l">SF DOM</div><div class="hs-v" id="h-sf-dom">—</div><div class="hs-n">Was <span id="h-sf-dom-first">—</span> in <span class="yr-first">—</span></div></div>
 <div class="hs"><div class="hs-l">SF Supply</div><div class="hs-v" id="h-sf-supply">—</div><div class="hs-n">Was <span id="h-sf-supply-first">—</span> in <span class="yr-first">—</span></div></div>
 <div class="hs"><div class="hs-l">MA Statewide</div><div class="hs-v red" id="h-ma-val">—</div><div class="hs-n">Haverhill <span id="h-vs-ma">—</span></div></div>
@@ -453,7 +453,15 @@ var MEDIAN_SRC = 'ACS 2024 (5-yr)';
   };
 
   var iCur = sf.price.length - 1, iFirst = 0;
+  // Headline comparisons are year-over-year. They used to run off iFirst (2014),
+  // which produced "+121% since 2014" as the lead statistic on every card -- a
+  // twelve-year number nobody is making a decision on, and one that only ever
+  // gets bigger, so it says the same thing every year. iPrev is the last complete
+  // calendar year; iCur is the trailing twelve months. iFirst survives only for
+  // the two cards that are explicitly labelled as long-run growth.
+  var iPrev = iCur - 1;
   var yrFirst = '20' + Y[iFirst].replace("'", ''), yrCur = '20' + Y[iCur].replace("'", '');
+  var yrPrev = '20' + Y[iPrev].replace("'", '');
 
   var money = function (v) { return v == null ? '—' : '$' + Math.round(v / 1000) + 'K'; };
   var moneyFull = function (v) { return v == null ? '—' : '$' + Math.round(v).toLocaleString(); };
@@ -474,7 +482,9 @@ var MEDIAN_SRC = 'ACS 2024 (5-yr)';
     e.className = e.className.replace(/\b(up|dn)\b/g, '').replace(/\s+/g, ' ').trim() + ' ' + cls(v);
   };
 
-  setAll('yr-first', yrFirst);
+  // The .yr-first spans label whichever baseline the card actually shows, and that
+  // is now the prior year everywhere except the two long-run cards below.
+  setAll('yr-first', yrPrev);
   setAll('yr-cur', yrCur);
   setAll('data-window', DATA_ASOF);
   setTxt('hist-prov', HIST_PROV);
@@ -488,13 +498,16 @@ var MEDIAN_SRC = 'ACS 2024 (5-yr)';
   setTxt('h-mf-val', money(mf.price[iCur]));
   // Was "+252%" in the hero, "+258%" on the card and "+258%" again in the takeaway --
   // three figures for one quantity, none of them the array's +212.6%.
-  setChg('h-sf-chg', pct(sf.price[iCur], sf.price[iFirst]));
-  setChg('h-co-chg', pct(co.price[iCur], co.price[iFirst]));
-  setChg('h-mf-chg', pct(mf.price[iCur], mf.price[iFirst]));
+  // One decimal on every YoY figure. Whole percents suited twelve-year growth,
+  // where the number runs to the hundreds; a single year's move is often under
+  // 1% and rounds to a meaningless "−0%" (Haverhill condos, 2026).
+  setChg('h-sf-chg', pct(sf.price[iCur], sf.price[iPrev]), 1);
+  setChg('h-co-chg', pct(co.price[iCur], co.price[iPrev]), 1);
+  setChg('h-mf-chg', pct(mf.price[iCur], mf.price[iPrev]), 1);
   setTxt('h-sf-dom', dom(sf.dom[iCur]));
-  setTxt('h-sf-dom-first', dom(sf.dom[iFirst]));
+  setTxt('h-sf-dom-first', dom(sf.dom[iPrev]));
   setTxt('h-sf-supply', sup(sf.supply[iCur]));
-  setTxt('h-sf-supply-first', sup(sf.supply[iFirst]));
+  setTxt('h-sf-supply-first', sup(sf.supply[iPrev]));
   setTxt('h-ma-val', money(ma.price[iCur]));
   setTxt('h-vs-ma', fmtPct(pct(sf.price[iCur], ma.price[iCur]), 1));
 
@@ -505,23 +518,23 @@ var MEDIAN_SRC = 'ACS 2024 (5-yr)';
   PANELS.forEach(function (p) {
     var a = p.src;
     setTxt('c-' + p.k + '-price-val', moneyFull(a.price[iCur]));
-    setTxt('c-' + p.k + '-price-first', money(a.price[iFirst]));
-    setChg('c-' + p.k + '-price-chg', pct(a.price[iCur], a.price[iFirst]));
+    setTxt('c-' + p.k + '-price-first', money(a.price[iPrev]));
+    setChg('c-' + p.k + '-price-chg', pct(a.price[iCur], a.price[iPrev]), 1);
     setTxt('c-' + p.k + '-sqft-val', dollars(a.sqft[iCur]));
-    setTxt('c-' + p.k + '-sqft-first', dollars(a.sqft[iFirst]));
-    setChg('c-' + p.k + '-sqft-chg', pct(a.sqft[iCur], a.sqft[iFirst]));
+    setTxt('c-' + p.k + '-sqft-first', dollars(a.sqft[iPrev]));
+    setChg('c-' + p.k + '-sqft-chg', pct(a.sqft[iCur], a.sqft[iPrev]), 1);
     setTxt('c-' + p.k + '-dom-val', dom(a.dom[iCur]));
-    setTxt('c-' + p.k + '-dom-first', dom(a.dom[iFirst]));
-    setChg('c-' + p.k + '-dom-chg', pct(a.dom[iCur], a.dom[iFirst]));
+    setTxt('c-' + p.k + '-dom-first', dom(a.dom[iPrev]));
+    setChg('c-' + p.k + '-dom-chg', pct(a.dom[iCur], a.dom[iPrev]));
   });
   setTxt('c-sf-supply-val', sup(sf.supply[iCur]));
-  setTxt('c-sf-supply-first', sup(sf.supply[iFirst]));
+  setTxt('c-sf-supply-first', sup(sf.supply[iPrev]));
   // Haverhill condo months-supply has no historical series -- the updater computes it
   // live from active condo listings, so it is written straight into the card.
   setTxt('c-co-supply-val', sup(CO_SUPPLY));
   setTxt('c-mf-sold-val', num(mf.sold[iCur]));
-  setTxt('c-mf-sold-first', num(mf.sold[iFirst]));
-  setChg('c-mf-sold-chg', pct(mf.sold[iCur], mf.sold[iFirst]));
+  setTxt('c-mf-sold-first', num(mf.sold[iPrev]));
+  setChg('c-mf-sold-chg', pct(mf.sold[iCur], mf.sold[iPrev]));
 
   // ── Full Data tables ────────────────────────────────────────────────────────
   var TABLES = {
