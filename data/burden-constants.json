@@ -17,35 +17,137 @@
         "market": "Drifts continuously. Utility tariffs are refiled mid-year; pension liabilities move with asset returns; portfolios change daily. Treat any single figure as a snapshot."
       },
       "rules": [
-        ["utility", "market"],
-        ["unfunded", "market"],
-        ["Stock", "market"],
-        ["corporateReceipts", "annual"],
-        ["deficit", "annual"],
-        ["acs", "annual"],
-        ["national_acs", "annual"],
-        ["Pool", "annual"],
-        ["businessTaxes", "annual"],
-        ["Appropriation", "annual"],
-        ["interestDividendsRevenue", "annual"],
-        ["avgSingleFamily", "annual"],
-        ["effectivePropertyRate", "annual"],
-        ["perCapitaPropertyTax", "annual"]
+        [
+          "utility",
+          "market"
+        ],
+        [
+          "unfunded",
+          "market"
+        ],
+        [
+          "Stock",
+          "market"
+        ],
+        [
+          "corporateReceipts",
+          "annual"
+        ],
+        [
+          "deficit",
+          "annual"
+        ],
+        [
+          "acs",
+          "annual"
+        ],
+        [
+          "national_acs",
+          "annual"
+        ],
+        [
+          "Pool",
+          "annual"
+        ],
+        [
+          "businessTaxes",
+          "annual"
+        ],
+        [
+          "Appropriation",
+          "annual"
+        ],
+        [
+          "interestDividendsRevenue",
+          "annual"
+        ],
+        [
+          "avgSingleFamily",
+          "annual"
+        ],
+        [
+          "effectivePropertyRate",
+          "annual"
+        ],
+        [
+          "perCapitaPropertyTax",
+          "annual"
+        ]
       ]
     }
   },
-
   "federal": {
     "standardDeduction": {
-      "value": { "single": 16100, "mfj": 32200 },
+      "value": {
+        "single": 16100,
+        "mfj": 32200
+      },
       "source": "IRS Rev. Proc. 2025-32 (TY2026 inflation adjustments)",
       "url": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
       "verified": "2026-08-08"
     },
     "brackets": {
       "value": {
-        "single": [[12400, 0.10], [50400, 0.12], [105700, 0.22], [201775, 0.24], [256225, 0.32], [640600, 0.35], [null, 0.37]],
-        "mfj": [[24800, 0.10], [100800, 0.12], [211400, 0.22], [403550, 0.24], [512450, 0.32], [768700, 0.35], [null, 0.37]]
+        "single": [
+          [
+            12400,
+            0.1
+          ],
+          [
+            50400,
+            0.12
+          ],
+          [
+            105700,
+            0.22
+          ],
+          [
+            201775,
+            0.24
+          ],
+          [
+            256225,
+            0.32
+          ],
+          [
+            640600,
+            0.35
+          ],
+          [
+            null,
+            0.37
+          ]
+        ],
+        "mfj": [
+          [
+            24800,
+            0.1
+          ],
+          [
+            100800,
+            0.12
+          ],
+          [
+            211400,
+            0.22
+          ],
+          [
+            403550,
+            0.24
+          ],
+          [
+            512450,
+            0.32
+          ],
+          [
+            768700,
+            0.35
+          ],
+          [
+            null,
+            0.37
+          ]
+        ]
       },
       "note": "null cap = Infinity, restored by the writer.",
       "source": "IRS Rev. Proc. 2025-32 (TY2026)",
@@ -58,15 +160,33 @@
       "url": "https://www.ssa.gov/oact/cola/cbb.html",
       "verified": "2026-08-08"
     },
-    "ssRate":  { "value": 0.062,  "source": "IRC 3101(a) / 3111(a)", "url": "https://www.law.cornell.edu/uscode/text/26/3101", "verified": "2026-08-08" },
-    "medRate": { "value": 0.0145, "source": "IRC 3101(b) / 3111(b)", "url": "https://www.law.cornell.edu/uscode/text/26/3101", "verified": "2026-08-08" },
+    "ssRate": {
+      "value": 0.062,
+      "source": "IRC 3101(a) / 3111(a)",
+      "url": "https://www.law.cornell.edu/uscode/text/26/3101",
+      "verified": "2026-08-08"
+    },
+    "medRate": {
+      "value": 0.0145,
+      "source": "IRC 3101(b) / 3111(b)",
+      "url": "https://www.law.cornell.edu/uscode/text/26/3101",
+      "verified": "2026-08-08"
+    },
     "addlMedThreshold": {
-      "value": { "single": 200000, "mfj": 250000 },
+      "value": {
+        "single": 200000,
+        "mfj": 250000
+      },
       "source": "IRC 3101(b)(2) Additional Medicare Tax",
       "url": "https://www.irs.gov/taxtopics/tc560",
       "verified": "2026-08-08"
     },
-    "addlMedRate": { "value": 0.009, "source": "IRC 3101(b)(2)", "url": "https://www.irs.gov/taxtopics/tc560", "verified": "2026-08-08" },
+    "addlMedRate": {
+      "value": 0.009,
+      "source": "IRC 3101(b)(2)",
+      "url": "https://www.irs.gov/taxtopics/tc560",
+      "verified": "2026-08-08"
+    },
     "gasCentsPerGal": {
       "value": 18.4,
       "source": "IRC 4081 federal motor fuel excise, gasoline",
@@ -88,7 +208,6 @@
       "verified": "2026-08-08"
     }
   },
-
   "national_acs": {
     "_note": "Denominator for every derived share. Must be the same release as the state figures below or the derivation silently breaks. Pulled direct from the Census API (requires CENSUS_API_KEY, kept in .env which is gitignored) with: https://api.census.gov/data/2024/acs/acs1?get=NAME,B11001_001E,B19025_001E,B01003_001E,B19013_001E&for=us:1 -- swap for=state:25,33 for the state rows.",
     "release": "ACS 2024 1-year",
@@ -112,12 +231,21 @@
       "verified": "2026-08-08"
     }
   },
-
   "states": {
     "MA": {
       "name": "Massachusetts",
-      "incomeRate":   { "value": 0.05, "source": "M.G.L. c. 62 s.4", "url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleIX/Chapter62/Section4", "verified": "2026-08-08" },
-      "surtaxRate":   { "value": 0.04, "source": "M.G.L. c. 62 s.4(d); Art. XLIV as amended", "url": "https://www.mass.gov/info-details/massachusetts-4-surtax-on-taxable-income", "verified": "2026-08-08" },
+      "incomeRate": {
+        "value": 0.05,
+        "source": "M.G.L. c. 62 s.4",
+        "url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleIX/Chapter62/Section4",
+        "verified": "2026-08-08"
+      },
+      "surtaxRate": {
+        "value": 0.04,
+        "source": "M.G.L. c. 62 s.4(d); Art. XLIV as amended",
+        "url": "https://www.mass.gov/info-details/massachusetts-4-surtax-on-taxable-income",
+        "verified": "2026-08-08"
+      },
       "surtaxThreshold": {
         "value": 1107750,
         "note": "TY2026 inflation-adjusted threshold.",
@@ -126,7 +254,10 @@
         "verified": "2026-08-08"
       },
       "personalExemption": {
-        "value": { "single": 4400, "mfj": 8800 },
+        "value": {
+          "single": 4400,
+          "mfj": 8800
+        },
         "source": "M.G.L. c. 62 s.3(B)(b)",
         "url": "https://www.mass.gov/info-details/massachusetts-personal-income-tax-exemptions",
         "verified": "2026-08-08"
@@ -144,8 +275,19 @@
         "url": "https://www.mass.gov/info-details/massachusetts-income-tax-rates",
         "verified": "2026-08-08"
       },
-      "salesRate":  { "value": 0.0625, "source": "M.G.L. c. 64H", "url": "https://www.mass.gov/guides/sales-and-use-tax", "verified": "2026-08-08" },
-      "mealsRate":  { "value": 0.0625, "note": "Plus a 0.75% local option adopted by most municipalities; not modeled separately.", "source": "M.G.L. c. 64H s.6(h)", "url": "https://www.mass.gov/guides/sales-and-use-tax", "verified": "2026-08-08" },
+      "salesRate": {
+        "value": 0.0625,
+        "source": "M.G.L. c. 64H",
+        "url": "https://www.mass.gov/guides/sales-and-use-tax",
+        "verified": "2026-08-08"
+      },
+      "mealsRate": {
+        "value": 0.0625,
+        "note": "Plus a 0.75% local option adopted by most municipalities; not modeled separately.",
+        "source": "M.G.L. c. 64H s.6(h)",
+        "url": "https://www.mass.gov/guides/sales-and-use-tax",
+        "verified": "2026-08-08"
+      },
       "gasCentsPerGal": {
         "value": 26.5,
         "note": "CORRECTED from 27.47. Statute is 24.0c motor fuel excise + 2.5c underground storage tank delivery fee = 26.5c. The 27.47c figure appeared in both dashboards while the on-screen caption read '24c + 2.5c UST', i.e. the constant contradicted its own source line.",
@@ -155,12 +297,18 @@
       },
       "corporateExcisePool": {
         "value": 4662000000,
-        "note": "FY2025 corporate and business excise collections.",
+        "note": "FY2025 corporate and business excise collections. COMPOSITION, per the DOR FY2025 Annual Report collections-by-type table: Corporations $4,036,624K + Insurance $613,268K + Financial Institutions $19,949K = $4.670B, reconciling to this figure. That matters for any Layer 3 expansion: insurance and financial institution excises are ALREADY IN HERE. Adding them as separate pools would double-count about $633M, roughly 14% of the MA pool. See LAYER3-SCOPE.md.",
         "source": "MA DOR FY2025 revenue close, August 2025",
         "url": "https://www.mass.gov/news/fiscal-year-2025-revenue-collections-totaled-43708-billion",
         "verified": "2026-08-08"
       },
-      "enterpriseTaxPool": { "value": 0, "note": "MA has no payroll-base business tax analogous to the NH BET.", "source": "n/a", "url": "n/a", "verified": "2026-08-08" },
+      "enterpriseTaxPool": {
+        "value": 0,
+        "note": "MA has no payroll-base business tax analogous to the NH BET.",
+        "source": "n/a",
+        "url": "n/a",
+        "verified": "2026-08-08"
+      },
       "avgSingleFamilyBill": {
         "value": 8113,
         "source": "MA DLS, City & Town, February 2026 (FY2026 statewide average single-family tax bill)",
@@ -176,9 +324,24 @@
       },
       "acs": {
         "release": "ACS 2024 1-year",
-        "households": { "value": 2829804, "source": "Census ACS 2024 1-year, Table B11001 (Census API, direct)", "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B11001_001E&for=state:25", "verified": "2026-08-08" },
-        "aggregateHouseholdIncome": { "value": 408376085400, "source": "Census ACS 2024 1-year, Table B19025 (Census API, direct)", "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B19025_001E&for=state:25", "verified": "2026-08-08" },
-        "population": { "value": 7136171, "source": "Census ACS 2024 1-year, Table B01003 (Census API, direct)", "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B01003_001E&for=state:25", "verified": "2026-08-08" },
+        "households": {
+          "value": 2829804,
+          "source": "Census ACS 2024 1-year, Table B11001 (Census API, direct)",
+          "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B11001_001E&for=state:25",
+          "verified": "2026-08-08"
+        },
+        "aggregateHouseholdIncome": {
+          "value": 408376085400,
+          "source": "Census ACS 2024 1-year, Table B19025 (Census API, direct)",
+          "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B19025_001E&for=state:25",
+          "verified": "2026-08-08"
+        },
+        "population": {
+          "value": 7136171,
+          "source": "Census ACS 2024 1-year, Table B01003 (Census API, direct)",
+          "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B01003_001E&for=state:25",
+          "verified": "2026-08-08"
+        },
         "medianHouseholdIncome_ACS": {
           "value": 104828,
           "note": "CONTEXT ONLY, never an allocation divisor. ACS 1-year. The CPS vintage reports $113,900 for the same concept, a ~$9k disagreement. tax-budget-dashboard.html currently labels $113,900 as 'Census 2024 ACS', which is wrong: $113,900 is CPS via FRED MEHOINUSMAA646N.",
@@ -246,7 +409,6 @@
         "verified": "2026-08-08"
       }
     },
-
     "NH": {
       "name": "New Hampshire",
       "incomeRate": {
@@ -256,9 +418,28 @@
         "url": "https://www.revenue.nh.gov/news-and-media/repeal-nh-interest-and-dividends-tax-now-effect",
         "verified": "2026-08-08"
       },
-      "surtaxRate": { "value": 0, "source": "n/a", "url": "n/a", "verified": "2026-08-08" },
-      "surtaxThreshold": { "value": null, "note": "null = Infinity, restored by the writer.", "source": "n/a", "url": "n/a", "verified": "2026-08-08" },
-      "personalExemption": { "value": { "single": 0, "mfj": 0 }, "source": "n/a", "url": "n/a", "verified": "2026-08-08" },
+      "surtaxRate": {
+        "value": 0,
+        "source": "n/a",
+        "url": "n/a",
+        "verified": "2026-08-08"
+      },
+      "surtaxThreshold": {
+        "value": null,
+        "note": "null = Infinity, restored by the writer.",
+        "source": "n/a",
+        "url": "n/a",
+        "verified": "2026-08-08"
+      },
+      "personalExemption": {
+        "value": {
+          "single": 0,
+          "mfj": 0
+        },
+        "source": "n/a",
+        "url": "n/a",
+        "verified": "2026-08-08"
+      },
       "investmentIncomeRate": {
         "value": 0,
         "note": "Zero since 2025-01-01. This is the layer the I&D repeal actually moved. NH has NEVER taxed capital gains, so gains are a long-standing gap, not a new one.",
@@ -266,8 +447,18 @@
         "url": "https://www.revenue.nh.gov/news-and-media/repeal-nh-interest-and-dividends-tax-now-effect",
         "verified": "2026-08-08"
       },
-      "shortTermGainsRate": { "value": 0, "source": "n/a - NH does not tax capital gains", "url": "https://www.revenue.nh.gov/taxes-glance", "verified": "2026-08-08" },
-      "salesRate": { "value": 0, "source": "NH DRA - no general sales tax", "url": "https://www.revenue.nh.gov/taxes-glance", "verified": "2026-08-08" },
+      "shortTermGainsRate": {
+        "value": 0,
+        "source": "n/a - NH does not tax capital gains",
+        "url": "https://www.revenue.nh.gov/taxes-glance",
+        "verified": "2026-08-08"
+      },
+      "salesRate": {
+        "value": 0,
+        "source": "NH DRA - no general sales tax",
+        "url": "https://www.revenue.nh.gov/taxes-glance",
+        "verified": "2026-08-08"
+      },
       "mealsRate": {
         "value": 0.085,
         "note": "Meals & Rooms tax. NH's partial substitute for a sales tax.",
@@ -333,10 +524,31 @@
       },
       "acs": {
         "release": "ACS 2024 1-year",
-        "households": { "value": 570689, "source": "Census ACS 2024 1-year, Table B11001 (Census API, direct)", "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B11001_001E&for=state:33", "verified": "2026-08-08" },
-        "aggregateHouseholdIncome": { "value": 73392725500, "source": "Census ACS 2024 1-year, Table B19025 (Census API, direct)", "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B19025_001E&for=state:33", "verified": "2026-08-08" },
-        "population": { "value": 1409032, "source": "Census ACS 2024 1-year, Table B01003 (Census API, direct)", "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B01003_001E&for=state:33", "verified": "2026-08-08" },
-        "medianHouseholdIncome_ACS": { "value": 99782, "note": "CONTEXT ONLY.", "source": "Census ACS 2024 1-year, Table B19013 (Census API, direct)", "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B19013_001E&for=state:33", "verified": "2026-08-08" }
+        "households": {
+          "value": 570689,
+          "source": "Census ACS 2024 1-year, Table B11001 (Census API, direct)",
+          "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B11001_001E&for=state:33",
+          "verified": "2026-08-08"
+        },
+        "aggregateHouseholdIncome": {
+          "value": 73392725500,
+          "source": "Census ACS 2024 1-year, Table B19025 (Census API, direct)",
+          "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B19025_001E&for=state:33",
+          "verified": "2026-08-08"
+        },
+        "population": {
+          "value": 1409032,
+          "source": "Census ACS 2024 1-year, Table B01003 (Census API, direct)",
+          "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B01003_001E&for=state:33",
+          "verified": "2026-08-08"
+        },
+        "medianHouseholdIncome_ACS": {
+          "value": 99782,
+          "note": "CONTEXT ONLY.",
+          "source": "Census ACS 2024 1-year, Table B19013 (Census API, direct)",
+          "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B19013_001E&for=state:33",
+          "verified": "2026-08-08"
+        }
       },
       "utility": {
         "retailElectricCentsPerKwh": {
@@ -354,7 +566,7 @@
           "verified": "2026-08-08"
         },
         "gasPolicyCentsPerTherm": {
-          "value": 16.30,
+          "value": 16.3,
           "note": "SOURCED -- Liberty Utilities (EnergyNorth Natural Gas), residential Local Distribution Adjustment Charge, $0.1630/therm for the 2025-26 period. Eversource does not serve gas in New Hampshire, so unlike the electric comparison this is a different company from the MA side. TREAT AS A CEILING: the LDAC is the vehicle for the energy-efficiency programme but it also bundles the Regulatory Reconciliation Adjustment and Lost Revenue Factor, which are mechanisms I exclude on the Massachusetts side. Decomposing it needs NHPUC order DE 25-071. The two errors run the same way -- MA's 59.08c is a FLOOR (embedded policy not broken out) and this is a CEILING -- so the stated MA-NH gas gap of 42.78c/therm is the conservative version of the finding, not the flattering one.",
           "source": "Liberty Utilities EnergyNorth, NHPUC LDAC filing DG 24-098 (2025-26); see also DE 25-071",
           "url": "https://new-hampshire.libertyutilities.com/keene/residential/rates-and-tariffs/index.html",
