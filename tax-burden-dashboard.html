@@ -374,6 +374,7 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
     <p style="margin:0 0 10px"><b>Read this before quoting the number.</b> This is a first pass and it is deliberately incomplete. It covers the state business taxes whose rates are filed and verified, and nothing else.</p>
     <p style="margin:0 0 10px" id="bizSens"></p>
     <p style="margin:0 0 10px"><b>Not included yet:</b> Massachusetts Paid Family and Medical Leave, which has no New Hampshire equivalent and is a real cost; employer unemployment insurance in either state; and the sales tax a Massachusetts business pays on the things it buys, which is real but is not separately reported anywhere and would have to be estimated rather than sourced.</p>
+    <p style="margin:0 0 10px"><b>Why New Hampshire's figure moves less.</b> Massachusetts taxes four things on this page: profit, equipment or net worth, the things you buy in-state, and a floor under the whole excise. New Hampshire taxes two: profit and payroll. Equipment and purchases cannot move a New Hampshire bill at all — which is most of the reason the two states pull apart as a business gets more capital-intensive, and most of the reason they converge for a business that mainly employs people.</p>
     <p style="margin:0 0 10px"><b>Also not included:</b> property tax on business real estate. The town tables on this site are residential rates, and commercial rates differ — Massachusetts municipalities can run a split rate. Using residential figures here would be wrong, so they are not used.</p>
     <p style="margin:0"><b>What is right:</b> the rates below are filed and sourced, and New Hampshire's two business taxes are modelled correctly — the Business Enterprise Tax credits against the Business Profits Tax, so a firm paying both pays the greater of the two rather than the sum. Adding 7.5% and 0.55% together, as most comparisons do, overstates New Hampshire.</p>
   </div>
@@ -1666,11 +1667,16 @@ let mode = 'household';
    example makes New Hampshire look decisively cheaper; the thin-margin case reverses it
    outright, because the BET is charged on payroll and does not care that you barely made
    a profit. Showing only the first would be advocacy dressed as a calculator. */
+/* Each preset now carries its OWN profit and payroll. The first version varied only
+   equipment and purchases, which New Hampshire taxes neither of -- so NH sat frozen at
+   $37,500 across three different "businesses". That was a controlled comparison wearing
+   the label of a realistic one, and it read as a bug because it looked like one. */
 const BIZ_PRESETS = {
-  'Small manufacturer': {bizProfit:500000, bizPayroll:1200000, bizWorth:800000,  bizInputs:300000},
-  'Service firm':       {bizProfit:500000, bizPayroll:1200000, bizWorth:100000,  bizInputs:25000},
-  'Equipment-heavy':    {bizProfit:500000, bizPayroll:1200000, bizWorth:2500000, bizInputs:1200000},
-  'Thin margin, big payroll': {bizProfit:100000, bizPayroll:4500000, bizWorth:250000, bizInputs:150000}
+  'Small manufacturer': {bizProfit:650000, bizPayroll:1800000, bizWorth:1400000, bizInputs:850000},
+  'Service firm':       {bizProfit:400000, bizPayroll:2400000, bizWorth:80000,   bizInputs:60000},
+  'Equipment-heavy':    {bizProfit:900000, bizPayroll:2200000, bizWorth:4000000, bizInputs:1600000},
+  'Thin margin, big payroll': {bizProfit:100000, bizPayroll:4500000, bizWorth:250000, bizInputs:150000},
+  'Pre-profit startup': {bizProfit:0,      bizPayroll:300000,  bizWorth:50000,   bizInputs:40000}
 };
 const BIZ_DEFAULTS = BIZ_PRESETS['Small manufacturer'];
 
@@ -1697,7 +1703,9 @@ function renderBiz(){
   const maRows = [
     ['Corporate excise on profit', maIncomeTax, pctLabel(K.MA.corpRate) + ' of profit earned here'],
     ['Excise on equipment or net worth', maWorthTax, '$' + K.MA.corpPer1000.toFixed(2) + ' per $1,000, whichever is greater'],
-    ['Minimum excise top-up', maFloor, maFloor > 0 ? 'Excise cannot fall below ' + fmt(K.MA.corpMin) : 'Not binding at this size'],
+    ['Minimum excise top-up', maFloor, maFloor > 0
+        ? 'Excise cannot fall below ' + fmt(K.MA.corpMin) + ' — it is binding here'
+        : 'Not binding at this size'],
     ['Sales tax on what you buy', maSales, pctLabel(K.MA.salesRate) + ' on in-state purchases']
   ];
 
