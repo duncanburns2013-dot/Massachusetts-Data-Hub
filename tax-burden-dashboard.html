@@ -185,6 +185,9 @@ h1{font-weight:800;font-size:clamp(30px,5.2vw,54px);line-height:1.02;letter-spac
 .chip.q3{border-color:var(--oxblood);color:var(--oxblood)}
 .layer-note{font-size:14.5px;color:var(--ink-2);margin:0 0 13px;max-width:66ch}
 .layer-note b{color:var(--ink);font-weight:600}
+/* Plain-language lead sits first at full size; the precise, jargon-carrying version
+   stays available underneath in smaller type for anyone who wants it. */
+.layer-note.detail{font-size:12.5px;opacity:.78;border-left:2px solid var(--rule);padding-left:12px}
 
 .cmp{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12.5px}
 .cmp thead th{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;padding:6px 8px 6px 0;border-bottom:1.5px solid var(--ink);font-weight:600;text-align:right}
@@ -264,7 +267,7 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
 <div class="tabs" role="tablist" aria-label="View">
   <button class="tab" id="tabMa"      role="tab" aria-selected="true"  onclick="showTab(this,'ma')">Massachusetts</button>
   <button class="tab" id="tabNh"      role="tab" aria-selected="false" onclick="showTab(this,'nh')">New Hampshire</button>
-  <button class="tab" id="tabCompare" role="tab" aria-selected="false" onclick="showTab(this,'compare')">Compare →</button>
+  <button class="tab" id="tabCompare" role="tab" aria-selected="false" onclick="showTab(this,'compare')">Compare the two</button>
 </div>
 
 <div class="presets" id="presets"></div>
@@ -330,52 +333,57 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
     <div id="layerWrap">
     <section class="layer" id="layV">
       <div class="layer-head">
-        <h3 class="layer-name"><button class="toggle" data-layer="V" aria-pressed="true" aria-label="Toggle layer 1, billed to you"></button>1 · Billed to you</h3>
+        <h3 class="layer-name"><button class="toggle" data-layer="V" aria-pressed="true" aria-label="Toggle layer 1, billed to you"></button>1 · Taxes you can see</h3>
       <div class="layer-amt" id="amtV" hidden>$0</div>
       </div>
       <div class="layer-meta"><span class="chip q1">Solid evidence</span><span class="chip">Statutory rates</span></div>
-      <p class="layer-note">Where the whole reputation comes from. <b>New Hampshire's individual income tax is genuinely zero</b> — the Interest &amp; Dividends tax was repealed effective 1 January 2025, so there is no longer a personal income tax of any kind. There is no general sales tax either. What replaces both is property tax, at roughly 1.7% of value against Massachusetts's 1.1%. Note which gap is new: the I&amp;D repeal is two years old, but <b>New Hampshire has never taxed capital gains or wages</b>, so those gaps are not a recent policy change.</p>
+      <p class="layer-note"><b>These are the taxes with your name on them. Income tax, your property tax bill, sales tax at the register, the tax on gas. You can find every one of these on a bill or a receipt.</b></p>
+      <p class="layer-note detail">Where the whole reputation comes from. <b>New Hampshire's individual income tax is genuinely zero</b> — the Interest &amp; Dividends tax was repealed effective 1 January 2025, so there is no longer a personal income tax of any kind. There is no general sales tax either. What replaces both is property tax, at roughly 1.7% of value against Massachusetts's 1.1%. Note which gap is new: the I&amp;D repeal is two years old, but <b>New Hampshire has never taxed capital gains or wages</b>, so those gaps are not a recent policy change.</p>
       <table class="cmp" id="tblV"></table>
     </section>
 
     <section class="layer" id="layE">
       <div class="layer-head">
-        <h3 class="layer-name"><button class="toggle" data-layer="E" aria-pressed="true" aria-label="Toggle layer 2, paid on your behalf"></button>2 · Paid on your behalf</h3>
+        <h3 class="layer-name"><button class="toggle" data-layer="E" aria-pressed="true" aria-label="Toggle layer 2, paid on your behalf"></button>2 · Taxes your job pays for you</h3>
       <div class="layer-amt" id="amtE" hidden>$0</div>
       </div>
       <div class="layer-meta"><span class="chip q1">Solid evidence</span><span class="chip">Federal · identical</span></div>
-      <p class="layer-note">Employer FICA. <b>Identical on both sides of the border.</b> The first layer where moving buys you nothing.</p>
+      <p class="layer-note"><b>Your employer pays a Social Security and Medicare tax on top of your pay. It never shows up on your paycheck. Almost every economist says it still comes out of your wages — your pay is lower because of it.</b></p>
+      <p class="layer-note detail">Employer FICA. <b>Identical on both sides of the border.</b> The first layer where moving buys you nothing.</p>
       <table class="cmp" id="tblE"></table>
     </section>
 
     <section class="layer" id="layC">
       <div class="layer-head">
-        <h3 class="layer-name"><button class="toggle" data-layer="C" aria-pressed="true" aria-label="Toggle layer 3, embedded in prices and wages"></button>3 · Embedded in prices and wages</h3>
+        <h3 class="layer-name"><button class="toggle" data-layer="C" aria-pressed="true" aria-label="Toggle layer 3, embedded in prices and wages"></button>3 · Taxes hidden in prices</h3>
       <div class="layer-amt" id="amtC" hidden>$0</div>
       </div>
       <div class="layer-meta"><span class="chip q2">Modeled incidence</span><span class="chip">Structures differ materially</span></div>
-      <p class="layer-note">This is where the comparison gets interesting. Massachusetts levies a corporate excise on profits, which standard models push roughly 75% onto capital owners. New Hampshire levies two business taxes: a 7.5% Business Profits Tax that behaves like the Massachusetts excise, and a <b>0.55% Business Enterprise Tax whose base is compensation paid</b> — that is, wages. A tax on payroll lands on labour almost directly, so New Hampshire's business tax burden falls harder on wage earners than its rate suggests. The federal corporate slice inside this layer is identical on both sides.</p>
+      <p class="layer-note"><b>Companies pay taxes too. They get that money back by charging you more and paying workers less. So part of a company tax is really your tax. Nobody agrees on how much, so you can move the sliders and see.</b></p>
+      <p class="layer-note detail">This is where the comparison gets interesting. Massachusetts levies a corporate excise on profits, which standard models push roughly 75% onto capital owners. New Hampshire levies two business taxes: a 7.5% Business Profits Tax that behaves like the Massachusetts excise, and a <b>0.55% Business Enterprise Tax whose base is compensation paid</b> — that is, wages. A tax on payroll lands on labour almost directly, so New Hampshire's business tax burden falls harder on wage earners than its rate suggests. The federal corporate slice inside this layer is identical on both sides.</p>
       <table class="cmp" id="tblC"></table>
     </section>
 
     <section class="layer" id="layU">
       <div class="layer-head">
-        <h3 class="layer-name"><button class="toggle" data-layer="U" aria-pressed="true" aria-label="Toggle layer 4, collected through the meter"></button>4 · Collected through the meter</h3>
+        <h3 class="layer-name"><button class="toggle" data-layer="U" aria-pressed="true" aria-label="Toggle layer 4, collected through the meter"></button>4 · Taxes on your power bill</h3>
       <div class="layer-amt" id="amtU" hidden>$0</div>
       </div>
       <div class="layer-meta"><span class="chip q2">Tariff-verifiable</span><span class="chip">Genuine NH advantage</span></div>
-      <p class="layer-note">A real and under-discussed gap, and now taken from the filed tariffs rather than estimated. The inclusion rule: <b>a charge counts if it exists because of a legislative or regulatory mandate, not because of the physical cost of generating and delivering energy.</b> Electricity is a genuine like-for-like comparison — both figures are <b>Eversource</b>, the same company operating on both sides of the border. Massachusetts carries six mandated riders totalling 3.789¢/kWh; New Hampshire carries one, the System Benefits Charge, at 0.618¢. New Hampshire has no net-metering, SMART or EV rider at all, and its stranded cost line is a <em>credit</em>. That absence is the finding.</p>
+      <p class="layer-note"><b>Part of your electric and gas bill is not for energy at all. It pays for state programs. It is set by an agency, not a vote, and it is never called a tax. In Massachusetts these charges on gas now cost more than the gas.</b></p>
+      <p class="layer-note detail">A real and under-discussed gap, and now taken from the filed tariffs rather than estimated. The inclusion rule: <b>a charge counts if it exists because of a legislative or regulatory mandate, not because of the physical cost of generating and delivering energy.</b> Electricity is a genuine like-for-like comparison — both figures are <b>Eversource</b>, the same company operating on both sides of the border. Massachusetts carries six mandated riders totalling 3.789¢/kWh; New Hampshire carries one, the System Benefits Charge, at 0.618¢. New Hampshire has no net-metering, SMART or EV rider at all, and its stranded cost line is a <em>credit</em>. That absence is the finding.</p>
       <p class="layer-note">Read the gap as conservative in both directions. The Massachusetts figure is a <b>floor</b> — its own tariff footnote puts 83C/83D offshore wind, solar programme and grid modernisation costs inside the Distribution charge, unbroken out, and RPS/CES sits inside supply. The New Hampshire gas figure is a <b>ceiling</b> — Liberty's LDAC bundles regulatory mechanisms that Massachusetts excludes. Both errors run the same way, so the true gap is wider than shown, not narrower. Gas is where it bites: 59.08¢/therm in Massachusetts against 16.30¢ in New Hampshire.</p>
       <table class="cmp" id="tblU"></table>
     </section>
 
     <section class="layer" id="layD">
       <div class="layer-head">
-        <h3 class="layer-name"><button class="toggle" data-layer="D" aria-pressed="true" aria-label="Toggle layer 5, deferred to later"></button>5 · Deferred to later</h3>
+        <h3 class="layer-name"><button class="toggle" data-layer="D" aria-pressed="true" aria-label="Toggle layer 5, deferred to later"></button>5 · Taxes you will pay later</h3>
       <div class="layer-amt" id="amtD" hidden>$0</div>
       </div>
       <div class="layer-meta"><span class="chip q3">Allocation is a choice</span><span class="chip">Federal portion identical</span></div>
-      <p class="layer-note">Federal borrowing does not stop at the state line. A household with the same income owes the same share of it in Salem NH as in Salem MA — and the model now enforces that rather than asserting it. This layer is therefore <b>identical on both sides of the border</b>, which is a large part of why the advantage compresses at all.</p>
+      <p class="layer-note"><b>Government spent more than it collected. Somebody pays that back later, through higher taxes or fewer services. That somebody is probably you, or your kids.</b></p>
+      <p class="layer-note detail">Federal borrowing does not stop at the state line. A household with the same income owes the same share of it in Salem NH as in Salem MA — and the model now enforces that rather than asserting it. This layer is therefore <b>identical on both sides of the border</b>, which is a large part of why the advantage compresses at all.</p>
       <p class="layer-note"><b>State and local pension debt is deliberately excluded from both totals.</b> Every other line on this page is something a household actually pays. An unfunded pension liability isn't billed to anyone — it's a claim on future tax capacity, and the part collected today already arrives through the taxes Layer&nbsp;1 counts on each side. It is also the one item that cannot be sourced symmetrically across the border, so including it would tilt the comparison by construction. Both obligations are disclosed below instead.</p>
       <div class="disclose" id="pensionDisclose"></div>
       <table class="cmp" id="tblD"></table>
@@ -1463,12 +1471,12 @@ function renderAsOf(){
 let view = 'ma';
 
 const COPY = {
-  ma: ["What you're billed is the first layer, not the last.",
-       "Visible taxes — the ones with your name on the notice — are the only part most burden estimates count. Four more layers sit underneath: the employer half of payroll tax, tax embedded in prices and wages, policy costs collected through utility bills, and this year's borrowing, which is a tax with the due date left blank."],
-  nh: ["No income tax. No sales tax. Still five layers.",
-       "New Hampshire genuinely levies no wage income tax and no general sales tax — and the Interest &amp; Dividends tax went to zero on 1 January 2025. What it does collect arrives almost entirely through the one layer that ignores what you earn, plus the two federal layers that follow you across any state line."],
+  ma: ["The taxes you can see are only the start.",
+       "Most people count the taxes they can see. There are four more underneath: what your job pays for you, what companies pass on in prices, what shows up on your power bill, and what the government borrowed and has not paid back yet."],
+  nh: ["No income tax. No sales tax. You still pay.",
+       "New Hampshire really does have no income tax and no sales tax. But it still has to pay for schools and roads. It gets that money from property tax instead — a tax that does not care what you earn. And federal taxes follow you no matter which state you live in."],
   compare: ["Same house. Same income. Different side of the line.",
-       "New Hampshire has no income tax and no sales tax. That advantage is real, and it is smaller than the headline suggests — because two of the five burden layers are identical on both sides of the border, and New Hampshire loads almost everything it does collect onto the one layer that ignores what you earn."]
+       "Moving to New Hampshire really does save most people money. Just less than you would think. Two of the five kinds of tax are exactly the same in both states, and New Hampshire takes back a lot of the rest through higher property tax."]
 };
 
 /* Community -> average single-family bill -> implied home value at the effective rate.
