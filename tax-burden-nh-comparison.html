@@ -90,6 +90,11 @@ h1{font-weight:800;font-size:clamp(30px,5.2vw,54px);line-height:1.02;letter-spac
 .crow .num{font-family:var(--mono);font-size:12px;text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
 .crow .num.neg{color:var(--ma)}
 .compress .note{font-size:12px;color:var(--ink-2);margin:12px 0 0;font-style:italic}
+/* Sits inside #cardShot so it travels with the exported PNG — a shared card that
+   doesn't date itself is the one that gets quoted back wrong two years later. */
+.asof{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--ink-2);margin:14px 0 0;line-height:1.6}
+.asof b{color:var(--ink);font-weight:600}
+.asof .flag{color:var(--oxblood);font-weight:600}
 
 .toolbar{display:flex;gap:8px;flex-wrap:wrap;padding:16px 0;border-bottom:1px solid var(--rule)}
 .tool{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
@@ -202,6 +207,8 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
     <div id="compressRows"></div>
     <p class="note" id="compressNote"></p>
   </div>
+
+  <p class="asof" id="asOf"></p>
 </div>
 
 <div class="toolbar">
@@ -301,6 +308,7 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
       <p><strong>Assets are the sharpest edge.</strong> Massachusetts taxes interest and dividends at 5%, long-term capital gains at 5%, short-term at 8.5%, and retirement withdrawals as ordinary income — and counts all of it toward the 4% surtax threshold. New Hampshire taxes none of it. But be precise about what changed and when: the I&amp;D repeal (effective 1 January 2025) removed New Hampshire's tax on interest and dividends. Capital gains, wages and retirement withdrawals were <em>never</em> taxed by New Hampshire, so those gaps are long-standing rather than new. Tax-deferred balances are untaxed by both states while they grow; only withdrawals matter.</p>
       <p><strong>The methodological trap.</strong> Holding the house value constant is the only honest way to isolate tax policy, but it is not how anyone actually moves. New Hampshire's median sale price is roughly $575,000 against Massachusetts's average single-family <em>assessment</em> of $742,986 — different concepts, and NH DRA publishes equalization ratios precisely because assessed and market values diverge. Set both home values independently for the realistic version rather than the controlled one.</p>
       <p><strong>Not counted:</strong> the Real Estate Transfer Tax, which NH charges at $0.75 per $100 on <em>each</em> side of a transaction and MA charges as deed excise at a lower rate — material for a mover but not an annual cost. Also excluded: NH's Communications Services Tax, both states' tobacco and alcohol excises, MA's estate tax, and the roughly 58 New Hampshire fees that rose on 1 January 2026, mostly motor vehicle. Including them narrows the NH advantage.</p>
+      <p><strong>On exactness, and what this page is claiming.</strong> Every figure here is a point-in-time reading of a filed number, not a standing fact. Statutory rates move when a legislature moves them — New Hampshire's Interest &amp; Dividends tax was 5% in 2022 and is zero now. Fiscal-year revenue and Census figures re-close on a cycle. Utility tariffs are refiled mid-year and pension liabilities move with asset returns, so those are snapshots in the strictest sense; the stamp on the card above says which vintage you are reading. What a date <em>cannot</em> fix is a figure that never had a source: those are marked in the Status column of the ledger and flagged on the card, because calling a placeholder "current as of" would disguise the actual problem rather than disclose it. Re-run <code>update-burden-constants.py</code> against <a href="data/burden-constants.json">the constants file</a> to refresh; the build refuses to publish while unsourced defaults remain.</p>
       <p><strong>Massachusetts on its own:</strong> <a href="tax-burden-dashboard.html">The Five Layers — Massachusetts Total Government Burden</a>.</p>
     </footer>
   </main>
@@ -380,6 +388,12 @@ const K = {
   nationalHouseholds:132737146,
   nationalMeanHhIncome:114296,
 
+  // Point-in-time stamp. Drift only -- unverified figures are excluded, because
+  // dating a placeholder would imply a currency it does not have.
+  vintage:{"annual": {"count": 26, "newest": "2026-08-08", "oldest": "2026-08-08"}, "market": {"count": 4, "newest": "2026-08-08", "oldest": "2026-08-08"}, "statutory": {"count": 26, "newest": "2026-08-08", "oldest": "2026-08-08"}},
+  unverifiedCount:6,
+  generated:"2026-08-08",
+
   MA:{
       name:"Massachusetts",
       incomeRate:0.05, surtax:0.04, surThr:1107750,
@@ -393,6 +407,7 @@ const K = {
       incShare:0.026917552,   // DERIVED state aggregate / national aggregate
       popShare:0.020981889,
       elecCents:4, gasPolicyCents:18,
+      retailElecCents:28.82,   // EIA all-in price, bounds the policy component
       unfunded:1793,
       avgSfBill:8113, avgSfValue:742986,
       propRatePct:1.0919,   // DERIVED bill/value
@@ -411,6 +426,7 @@ const K = {
       incShare:0.004837581,   // DERIVED state aggregate / national aggregate
       popShare:0.004142859,
       elecCents:1, gasPolicyCents:4,
+      retailElecCents:27.33,   // EIA all-in price, bounds the policy component
       unfunded:699,
       propRatePct:1.583,
     }
@@ -678,6 +694,29 @@ function renderCompress(ma, nh){
   $('compressNote').innerHTML = note;
 }
 
+/* Dates the card. Two failures get conflated as "is this exact?" and they are not the
+   same thing: DRIFT is a figure that was right on a date and has moved since, which a
+   stamp fixes; PROVENANCE is a figure that never had a source, which a stamp cannot fix
+   and would actively disguise. So the stamp reports them separately. */
+function renderAsOf(){
+  const v = K.vintage || {}, mk = c => v[c] ? v[c].newest : null;
+  const parts = ['All figures <b>last verified ' + (mk('statutory') || K.generated)
+    + '</b> against the sources listed below. That is the checking date, not the data period — '
+    + 'each row states its own vintage (ACS 2024, FY2025 revenue close, EIA May 2026).'];
+  if (v.market)  parts.push('Utility tariffs and pension liabilities are a <b>snapshot</b>: tariffs are refiled mid-year and liabilities move with asset returns, so treat those as point-in-time rather than standing.');
+  if (K.MA.retailElecCents && K.NH.retailElecCents){
+    parts.push('For scale, EIA puts residential electricity at ' + K.MA.retailElecCents.toFixed(2)
+      + '¢/kWh in MA against ' + K.NH.retailElecCents.toFixed(2) + '¢ in NH — a gap of just '
+      + Math.abs(K.MA.retailElecCents - K.NH.retailElecCents).toFixed(2) + '¢ on the all-in price.');
+  }
+  if (K.unverifiedCount > 0){
+    parts.push('<span class="flag">' + K.unverifiedCount + ' input' + (K.unverifiedCount===1?'':'s')
+      + ' below still carry unsourced defaults</span> — see the Status column in the source ledger. '
+      + 'Those are not stale figures, they are placeholders, and no date makes them current.');
+  }
+  $('asOf').innerHTML = parts.join(' ');
+}
+
 function render(){
   const inp = readInputs();
   $('nhHomeValue').disabled = inp.sameHouse;
@@ -710,6 +749,7 @@ function render(){
 
   ['V','E','C','U','D'].forEach(k => $('lay'+k).classList.toggle('off', !layersOn[k]));
   renderCompress(ma, nh);
+  renderAsOf();
   updateChart(inp);
   writeHash(inp);
 }

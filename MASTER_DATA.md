@@ -404,6 +404,9 @@ JSON, not the HTML.
 | Federal corporate receipts FY2024 | $529,866,802,638 — FY25 is −14.7% | same | same | ✅ Aug 2026 |
 | MA unfunded pension + OPEB (stock) | $55.8B total · $42.1B pension-only · $19,719/household | Commonwealth ACFR FY2024; PERAC | See pension-dashboard.html | ✅ Aug 2026 |
 | MA annual pension appropriation FY2026 | $4.9B — ~8% of the state budget, **already in Layer 1** | Commonwealth budget FY2026 | same | ✅ Aug 2026 |
+| **MA residential electricity, all-in** | **28.82¢/kWh** (May 2026; 29.90¢ May 2025, −3.6%) | EIA Electric Power Monthly Table 5.6.A via API v2 | api.eia.gov/v2/electricity/retail-sales/data/ | ✅ Aug 2026 |
+| **NH residential electricity, all-in** | **27.33¢/kWh** (May 2026; 24.02¢ May 2025, **+13.8%**) | same | same | ✅ Aug 2026 |
+| US / New England residential electricity | 18.44¢ / 28.14¢ (May 2026) | same | same | ✅ Aug 2026 |
 | MA electric policy charges | 4.0¢/kWh — **placeholder** | DPU tariffs (EE, RE, NMRS, SMART, 83C/83D) | mass.gov/orgs/department-of-public-utilities | ⚠️ Unverified |
 | MA gas policy charges | 18¢/therm — **placeholder** | DPU tariff (EE surcharge, GSEP) | same | ⚠️ Unverified |
 | MA state/local unfunded annual accrual | $2,000/household — **placeholder** | PERAC; ACFRs | See pension-dashboard.html | ⚠️ Unverified |
@@ -466,6 +469,18 @@ burden dashboard checks this.
 | NH electric policy charges | 1.0¢/kWh — **placeholder** | NH PUC tariffs (SBC, stranded cost) | puc.nh.gov/regulatory/tariffs.html | ⚠️ Unverified |
 | NH gas policy charges | 4¢/therm — **placeholder** | NH PUC gas tariffs | same | ⚠️ Unverified |
 | NHRS unfunded annual accrual | $1,600/household — **placeholder** | NHRS actuarial valuation | nhrs.org/about-nhrs/financial-reports | ⚠️ Unverified |
+
+### ⚠️ The Layer 4 sanity bound — a component can't exceed the whole
+
+The MA and NH **policy-charge** placeholders (4.0¢ vs 1.0¢/kWh) imply a 3.0¢ gap. EIA
+puts the **all-in** residential price gap at just **1.49¢** (28.82¢ vs 27.33¢). For both
+to hold, New Hampshire would have to be dearer than Massachusetts on generation,
+transmission and distribution *combined* by 1.51¢. Possible, but it's a strong claim to
+arrive at by accident — the placeholders almost certainly overstate NH's Layer 4
+advantage. `update-burden-constants.py` now warns on this automatically.
+
+Worth watching regardless: **NH electricity rose 13.8% year over year while MA fell
+3.6%.** Whatever advantage NH has on the meter is closing fast.
 
 ### ⚠️ NH median property tax bill — sources disagree, carry all three
 

@@ -6,8 +6,33 @@
     "rules": [
       "Every figure needs value + source + url + verified. A figure with verified:false BLOCKS publication.",
       "meanHouseholdIncome and incomeShare are DERIVED from aggregateHouseholdIncome / households. Do not hardcode them.",
-      "That derivation is what makes the federal layers identical across states. See the consistency assertion in update-burden-constants.py."
-    ]
+      "That derivation is what makes the federal layers identical across states. See the consistency assertion in update-burden-constants.py.",
+      "DRIFT IS NOT THE SAME AS PROVENANCE. A dated stamp says 'this is what the filed numbers said on this date' -- it fixes staleness, not a missing source. Never stamp a placeholder and call it current."
+    ],
+    "volatility": {
+      "_note": "How fast each class of figure goes stale, matched against the figure's dotted path. First match wins; anything unmatched defaults to 'statutory'. Drives the as-of stamp and the refresh cadence in the dashboards.",
+      "_classes": {
+        "statutory": "Moves only when a legislature moves it. Re-check annually.",
+        "annual": "Refiled or re-closed on a fixed cycle -- fiscal-year revenue, ACS releases, assessed values. Re-check each cycle.",
+        "market": "Drifts continuously. Utility tariffs are refiled mid-year; pension liabilities move with asset returns; portfolios change daily. Treat any single figure as a snapshot."
+      },
+      "rules": [
+        ["utility", "market"],
+        ["unfunded", "market"],
+        ["Stock", "market"],
+        ["corporateReceipts", "annual"],
+        ["deficit", "annual"],
+        ["acs", "annual"],
+        ["national_acs", "annual"],
+        ["Pool", "annual"],
+        ["businessTaxes", "annual"],
+        ["Appropriation", "annual"],
+        ["interestDividendsRevenue", "annual"],
+        ["avgSingleFamily", "annual"],
+        ["effectivePropertyRate", "annual"],
+        ["perCapitaPropertyTax", "annual"]
+      ]
+    }
   },
 
   "federal": {
@@ -170,9 +195,16 @@
         }
       },
       "utility": {
+        "retailElectricCentsPerKwh": {
+          "value": 28.82,
+          "note": "VERIFIED BASELINE, period 2026-05. Residential average retail price (was 29.90c in May 2025, so MA fell 3.6% year over year). Not a policy charge -- this is the all-in price and acts as the upper bound and sanity check on the policy component below. US average 18.44c; New England 28.14c. Refresh via the EIA API (EIA_API_KEY in .env); update-energy-dashboard.py already has a latest_monthly(state) helper for exactly this call.",
+          "source": "EIA Electric Power Monthly Table 5.6.A, via the EIA API v2 (retail-sales, sectorid=RES)",
+          "url": "https://api.eia.gov/v2/electricity/retail-sales/data/?frequency=monthly&data[0]=price&facets[sectorid][]=RES&facets[stateid][]=MA",
+          "verified": "2026-08-08"
+        },
         "electricPolicyCentsPerKwh": {
           "value": 4.0,
-          "note": "UNVERIFIED PLACEHOLDER. Build by summing filed DPU tariff lines: energy efficiency, renewable energy, net metering recovery surcharge, SMART, 83C/83D long-term contracts, plus RPS/CES/APS compliance embedded in basic service supply.",
+          "note": "UNVERIFIED PLACEHOLDER. Build by summing filed DPU tariff lines: energy efficiency, renewable energy, net metering recovery surcharge, SMART, 83C/83D long-term contracts, plus RPS/CES/APS compliance embedded in basic service supply. SANITY BOUND: the MA-NH policy-charge gap implied by these placeholders is 3.0c, but the observed total retail price gap is only 1.49c (28.82 vs 27.33). A component gap twice the size of the whole-price gap requires NH to be dearer on every other component, which is possible but unlikely -- so these placeholders probably OVERSTATE the NH advantage in Layer 4. energy-dashboard.html carries a partial decomposition in $/household/yr: RGGI $200, RPS compliance $97, offshore wind $85, net-zero infrastructure $75, less BCCE savings $200. At 7,200 kWh that is 6.35c/kWh gross or 3.57c net -- overlapping but NOT congruent with the Layer 4 definition (RGGI sits in supply; 83C/83D IS the offshore wind line), so it cannot simply be substituted.",
           "source": "MA DPU tariffs",
           "url": "https://www.mass.gov/orgs/department-of-public-utilities",
           "verified": false
@@ -300,9 +332,16 @@
         "medianHouseholdIncome_ACS": { "value": 99782, "note": "CONTEXT ONLY.", "source": "Census ACS 2024 1-year, Table B19013 (Census API, direct)", "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B19013_001E&for=state:33", "verified": "2026-08-08" }
       },
       "utility": {
+        "retailElectricCentsPerKwh": {
+          "value": 27.33,
+          "note": "VERIFIED BASELINE, period 2026-05. Residential average retail price -- up 13.8% from 24.02c in May 2025, while Massachusetts FELL 3.6% over the same period. New Hampshire is now only 1.49c/kWh cheaper than Massachusetts on the all-in price, and closing fast. That materially weakens the 'Layer 4 is a genuine NH advantage' claim and should be reflected in the copy once the policy components are sourced.",
+          "source": "EIA Electric Power Monthly Table 5.6.A, via the EIA API v2 (retail-sales, sectorid=RES)",
+          "url": "https://api.eia.gov/v2/electricity/retail-sales/data/?frequency=monthly&data[0]=price&facets[sectorid][]=RES&facets[stateid][]=NH",
+          "verified": "2026-08-08"
+        },
         "electricPolicyCentsPerKwh": {
           "value": 1.0,
-          "note": "UNVERIFIED PLACEHOLDER. System Benefits Charge + stranded cost recovery + RPS compliance. This is one of the genuine NH advantages, so precision here materially affects the finding.",
+          "note": "UNVERIFIED PLACEHOLDER. System Benefits Charge + stranded cost recovery + RPS compliance. See the MA note: the 3.0c policy gap these placeholders imply exceeds the 1.49c total retail price gap EIA actually observes, so this figure is probably too low. Precision matters here because Layer 4 is the one the dashboard calls a genuine NH advantage.",
           "source": "NH PUC electric tariffs",
           "url": "https://www.puc.nh.gov/regulatory/tariffs.html",
           "verified": false

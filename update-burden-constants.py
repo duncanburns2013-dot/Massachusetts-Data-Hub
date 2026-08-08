@@ -204,6 +204,67 @@ def gate_invariance(data, derived):
           f"at {len(INVARIANCE_TEST_INCOMES)} income levels")
 
 
+# ---------------------------------------------------------------- gate 5
+
+def gate_component_bound(data):
+    """A modelled component gap must not exceed the observed whole-price gap.
+
+    Layer 4 claims MA policy charges exceed NH's by some cents/kWh. EIA publishes the
+    all-in residential price for both states. If the modelled policy-charge gap is
+    larger than the total price gap, every OTHER component (generation, transmission,
+    distribution) has to be dearer in NH by the difference. Not impossible, but it is a
+    strong claim that should be made deliberately rather than fall out of a placeholder.
+    """
+    have = {c: st for c, st in data["states"].items()
+            if "retailElectricCentsPerKwh" in st.get("utility", {})}
+    if len(have) < 2:
+        return
+    codes = sorted(have)
+    retail = {c: val(have[c], "utility", "retailElectricCentsPerKwh") for c in codes}
+    policy = {c: val(have[c], "utility", "electricPolicyCentsPerKwh") for c in codes}
+    retail_gap = max(retail.values()) - min(retail.values())
+    policy_gap = max(policy.values()) - min(policy.values())
+    if policy_gap > retail_gap:
+        print(f"\033[93m  !!\033[0m  Layer 4 policy gap {policy_gap:.2f}c/kWh EXCEEDS the observed "
+              f"retail price gap {retail_gap:.2f}c/kWh ("
+              + ", ".join(f"{c} {retail[c]:.2f}c" for c in codes) + ")."
+              "\n        Implies the cheaper-policy state is dearer on generation, transmission"
+              "\n        and distribution combined. Verify the tariffs before publishing Layer 4.")
+    else:
+        print(f"\033[92m  ok\033[0m  Layer 4 policy gap {policy_gap:.2f}c/kWh within the "
+              f"{retail_gap:.2f}c/kWh retail price gap")
+
+
+# ---------------------------------------------------------------- vintage
+
+def classify(path, rules):
+    for pattern, cls in rules:
+        if pattern.lower() in path.lower():
+            return cls
+    return "statutory"
+
+
+def vintage(data):
+    """Per-class oldest verified date, so the page can date itself honestly.
+
+    Drift and provenance are different failures. This addresses drift only: it says
+    what the filed numbers said on a date. Unverified figures are excluded outright --
+    stamping a placeholder with a date would imply a currency it does not have.
+    """
+    rules = data["_meta"]["volatility"]["rules"]
+    buckets = {}
+    for path, fig in walk_figures(data):
+        if fig.get("verified") is False:
+            continue
+        cls = classify(path, rules)
+        buckets.setdefault(cls, []).append(str(fig["verified"]))
+    out = {c: {"oldest": min(v), "newest": max(v), "count": len(v)}
+           for c, v in buckets.items()}
+    print("\033[92m  ok\033[0m  vintage: " + ", ".join(
+        f"{c} {d['count']} figs, oldest {d['oldest']}" for c, d in sorted(out.items())))
+    return out
+
+
 # ---------------------------------------------------------------- gate 4
 
 def gate_pool_split(data):
@@ -262,6 +323,7 @@ def state_block(code, st, d, indent="    "):
         f"  popShare:{d['popShare']:.9f},",
         f"  elecCents:{js_num(v('utility', 'electricPolicyCentsPerKwh'))}, "
         f"gasPolicyCents:{js_num(v('utility', 'gasPolicyCentsPerTherm'))},",
+        f"  retailElecCents:{js_num(v('utility', 'retailElectricCentsPerKwh'))},   // EIA all-in price, bounds the policy component",
         f"  unfunded:{js_num(v('unfundedAccrualPerHousehold'))},",
     ]
     if "effectivePropertyRatePct" in st:
@@ -275,7 +337,7 @@ def state_block(code, st, d, indent="    "):
     return ("\n" + indent).join(lines)
 
 
-def build_block(data, derived, unverified):
+def build_block(data, derived, unverified, vin):
     fed = data["federal"]
     br = val(fed, "brackets")
 
@@ -310,6 +372,12 @@ const K = {{
   nationalAggHhIncome:{js_num(derived['_national']['aggHhIncome'])},
   nationalHouseholds:{js_num(derived['_national']['households'])},
   nationalMeanHhIncome:{js_num(round(derived['_national']['aggHhIncome'] / derived['_national']['households']))},
+
+  // Point-in-time stamp. Drift only -- unverified figures are excluded, because
+  // dating a placeholder would imply a currency it does not have.
+  vintage:{json.dumps(vin, sort_keys=True)},
+  unverifiedCount:{len(unverified)},
+  generated:{json.dumps(stamp)},
 
   {states}
 }};
@@ -359,7 +427,9 @@ def main():
     gate_invariance(data, derived)
 
     gate_pool_split(data)
-    write_targets(build_block(data, derived, unverified), args.check)
+    gate_component_bound(data)
+    vin = vintage(data)
+    write_targets(build_block(data, derived, unverified, vin), args.check)
     print()
     if unverified and not args.check:
         print(f"\033[93m  {len(unverified)} unverified constant(s) are live in the HTML. "
