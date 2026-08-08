@@ -89,20 +89,38 @@ in one still requires changing the other.
 
 ## 🧾 Unverified constants
 
-Six figures remain placeholders and the pipeline reports them on every run:
+Four figures remain placeholders and the pipeline reports them on every run — the MA and
+NH electric and gas policy charges. Each must be summed from filed DPU / NH PUC tariffs,
+which needs a stated rule for which line items count as *policy cost* rather than
+ordinary delivery.
 
-| Figure | Why it's still open |
-|---|---|
-| MA + NH electric policy charges | Must be summed from filed DPU / NH PUC tariffs; needs a stated rule for which line items count as *policy cost* rather than delivery |
-| MA + NH gas policy charges | Same |
-| MA + NH unfunded accrual | Not a sourcing gap — a genuine modelling question. See below. |
+There is a hard bound on them. The current placeholders imply a **policy**-charge gap of
+3.0¢/kWh between the states, but EIA puts the **all-in** residential price gap at just
+1.49¢ (MA 28.82¢, NH 27.33¢). For both to hold, NH would have to be dearer than MA on
+generation, transmission and distribution combined. `gate_component_bound` warns on this
+every run.
 
-**The pension double-count.** MA's unfunded stock ($55.8B) and annual appropriation
-($4.9B) are both verified. The open question is what Layer 5 is *for*. Amortising the
-stock over the remaining schedule gives ~$1,793/household/yr; netting off the
-appropriation already collected through Layer 1 taxes gives ~$61. A thirtyfold spread
-depending on whether the layer means "what the promise costs per year" or "burden not
-yet billed." Both dashboards expose it as a user input rather than pick silently.
+## 🚫 What is deliberately NOT counted
+
+**State and local pension debt.** These are household calculators, and the test for every
+line is whether a household actually pays it. An unfunded pension liability is not billed
+to anyone — it's a claim on future tax capacity, and the portion collected today arrives
+through the appropriation funded by the income and property taxes Layer 1 already counts.
+Including it double-counts.
+
+It is also the one item that cannot be sourced symmetrically across the border: the MA
+figure omits most of the ~104 municipal systems PERAC tracks while NHRS is a single
+statewide system covering municipal employees, and MA carries $13.7B of OPEB with no NH
+counterpart sourced. Including it would tilt the comparison by construction.
+
+The obligations are real, so both are **disclosed beside Layer 5** as per-household
+stocks with that caveat attached, and told properly in `pension-dashboard.html`. The
+inputs remain editable for anyone who disagrees; they simply default to zero.
+
+Removing it also made the analysis better, not just safer: Layer 5 is now entirely
+federal and therefore genuinely identical on both sides, and the compression finding now
+holds at $75k where the old asymmetric guess (MA $2,000 vs NH $1,600) had been
+manufacturing a $400 NH advantage out of nothing.
 
 ## 🔧 Reading PDFs that block automated download
 

@@ -409,7 +409,8 @@ JSON, not the HTML.
 | US / New England residential electricity | 18.44¢ / 28.14¢ (May 2026) | same | same | ✅ Aug 2026 |
 | MA electric policy charges | 4.0¢/kWh — **placeholder** | DPU tariffs (EE, RE, NMRS, SMART, 83C/83D) | mass.gov/orgs/department-of-public-utilities | ⚠️ Unverified |
 | MA gas policy charges | 18¢/therm — **placeholder** | DPU tariff (EE surcharge, GSEP) | same | ⚠️ Unverified |
-| MA state/local unfunded annual accrual | $2,000/household — **placeholder** | PERAC; ACFRs | See pension-dashboard.html | ⚠️ Unverified |
+| MA pension-only unfunded (stock) | $42.1B · $14,877/household | Commonwealth ACFR FY2024; PERAC | See pension-dashboard.html | ✅ Aug 2026 |
+| MA state/local accrual in the burden model | **$0 — excluded by design**, see note below | Scope decision | — | ✅ Aug 2026 |
 
 ### ⚠️ The two MA median-income figures — do not merge them
 
@@ -468,7 +469,30 @@ burden dashboard checks this.
 | NH BET rate history | 0.75% → 0.72% (2016) → 0.675% (2018) → 0.6% (2019) → 0.55% (2022–) | NHFPI | same | ✅ Aug 2026 |
 | NH electric policy charges | 1.0¢/kWh — **placeholder** | NH PUC tariffs (SBC, stranded cost) | puc.nh.gov/regulatory/tariffs.html | ⚠️ Unverified |
 | NH gas policy charges | 4¢/therm — **placeholder** | NH PUC gas tariffs | same | ⚠️ Unverified |
-| NHRS unfunded annual accrual | $1,600/household — **placeholder** | NHRS actuarial valuation | nhrs.org/about-nhrs/financial-reports | ⚠️ Unverified |
+| NH state/local accrual in the burden model | **$0 — excluded by design**, same rule as MA | Scope decision | — | ✅ Aug 2026 |
+
+### 🚫 Why pension debt is excluded from the burden calculators
+
+The burden dashboards count what a household **pays**. An unfunded pension liability
+isn't billed to anyone — it's a claim on future tax capacity, and the portion collected
+today arrives through the appropriation funded by the income and property taxes Layer 1
+already counts. Counting it again in Layer 5 double-counts.
+
+It also cannot be sourced symmetrically across the border, in two opposite directions:
+
+| | Massachusetts | New Hampshire |
+|---|---|---|
+| OPEB (retiree health) | **included** in the $55.8B — $13.7B, only 15.6% funded | **not sourced** |
+| Municipal systems | **mostly excluded** — the $42.1B is MTRS + SERS + Boston Teachers; PERAC tracks ~104 | **included** — NHRS is one statewide system |
+
+Use **$42.1B MA vs $5.58B NH** for any pension-to-pension read, and carry the caveat.
+The stocks are disclosed beside Layer 5 on both dashboards; the full story lives in
+`pension-dashboard.html`.
+
+**Removing it improved the analysis.** Layer 5 is now entirely federal and therefore
+genuinely identical on both sides of the border, and the compression finding now holds at
+$75k — the old asymmetric placeholders (MA $2,000 vs NH $1,600) had been manufacturing a
+$400 NH advantage out of pure guesswork.
 
 ### ⚠️ The Layer 4 sanity bound — a component can't exceed the whole
 

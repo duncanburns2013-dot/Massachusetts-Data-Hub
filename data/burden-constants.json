@@ -231,12 +231,19 @@
         "url": "https://www.mass.gov/orgs/public-employee-retirement-administration-commission",
         "verified": "2026-08-08"
       },
-      "unfundedAccrualPerHousehold": {
-        "value": 1793,
-        "note": "MODELLING CHOICE, DELIBERATELY LEFT UNVERIFIED -- this is the one field where the honest answer is that the question is open. GROSS construction: $55.8B amortised over the ~11 years remaining to the 2036 statutory full-funding target = $5.07B/yr, divided by 2,829,804 households = $1,793. But the state already appropriates $4.9B/yr against that, and that appropriation is collected through the taxes counted in Layer 1. NET of it the deferred figure is roughly $61/household -- a thirtyfold difference depending on which question you are asking. Publishing the gross number double-counts against Layer 1; publishing the net number hides a $19,719-per-household obligation. The dashboard exposes this as a user input for exactly that reason. Resolve by deciding what the layer is FOR: net if it means 'new burden not yet billed', gross if it means 'what the promise costs per year'.",
-        "source": "Derived from the verified stock and appropriation above; amortisation schedule per Commonwealth funding schedule",
+      "unfundedPensionOnlyStock": {
+        "value": 42100000000,
+        "note": "VERIFIED CONTEXT. Pension shortfall excluding OPEB -- MTRS $25.5B + SERS $14.1B + Boston Teachers $2.6B. $14,877 per household. Use THIS, not the $55.8B total, for any NH comparison, since the NH figure excludes OPEB. Still not perfectly comparable: this omits most of the ~104 municipal systems PERAC tracks, while NHRS is a single statewide system covering municipal employees too.",
+        "source": "Commonwealth ACFR FY2024; PERAC; see pension-dashboard.html",
         "url": "https://www.mass.gov/orgs/public-employee-retirement-administration-commission",
-        "verified": false
+        "verified": "2026-08-08"
+      },
+      "unfundedAccrualPerHousehold": {
+        "value": 0,
+        "note": "DELIBERATELY ZERO -- excluded from the burden total on purpose, not missing. This is a household calculator, and the test for inclusion is whether the household actually pays the figure. An unfunded pension liability is not billed to anyone: it is a claim on future tax capacity, and to the extent it IS being collected it comes through the $4.9B appropriation funded by the income and property taxes Layer 1 already counts. Including it double-counts. It is also the only layer that cannot be sourced symmetrically against NH (MA carries OPEB that NH omits; NH carries municipal systems that MA's headline omits), and the gross-vs-net framing swings the answer thirtyfold -- a line that unstable informs no decision. The obligation is real and is disclosed beside Layer 5 as a per-household STOCK, and told properly in pension-dashboard.html. Layer 5's deferred argument is carried by federal borrowing, which is audited, unambiguous and identical on both sides of the border. The input remains editable for anyone who disagrees.",
+        "source": "Deliberate scope decision; stock disclosed separately above",
+        "url": "https://www.mass.gov/orgs/public-employee-retirement-administration-commission",
+        "verified": "2026-08-08"
       }
     },
 
@@ -362,11 +369,11 @@
         "verified": "2026-08-08"
       },
       "unfundedAccrualPerHousehold": {
-        "value": 699,
-        "note": "MODELLING CHOICE, DELIBERATELY LEFT UNVERIFIED -- built the SAME way as the MA figure so the comparison is not rigged by construction. GROSS: $5.58B amortised over the ~14 years remaining to the 2039 statutory payoff (2018 legislation amortises the 30 June 2017 UAAL through 2039; post-2017 gains and losses run on separate schedules of up to 20 years) = $399M/yr, divided by 570,689 households = $699. Same double-count problem as MA: NH employers already contribute against this annually and that contribution reaches households through local property tax, which Layer 1 counts. The NH employer contribution total is not yet sourced, so the net figure cannot be computed on this side -- which is precisely why both states stay unverified rather than one being netted and the other not.",
-        "source": "Derived from the verified NHRS stock above; amortisation per 2018 NH funding legislation",
+        "value": 0,
+        "note": "DELIBERATELY ZERO -- see the matching MA note. Excluded on the same basis and by the same rule, so the exclusion cannot favour either state. NH employers contribute against the NHRS liability annually and that reaches households through local property tax, which Layer 1 already counts. The $5.58B stock is disclosed beside Layer 5 instead. Input remains editable.",
+        "source": "Deliberate scope decision; stock disclosed separately above",
         "url": "https://www.nhrs.org/about-nhrs",
-        "verified": false
+        "verified": "2026-08-08"
       }
     }
   }

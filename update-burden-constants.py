@@ -324,7 +324,11 @@ def state_block(code, st, d, indent="    "):
         f"  elecCents:{js_num(v('utility', 'electricPolicyCentsPerKwh'))}, "
         f"gasPolicyCents:{js_num(v('utility', 'gasPolicyCentsPerTherm'))},",
         f"  retailElecCents:{js_num(v('utility', 'retailElectricCentsPerKwh'))},   // EIA all-in price, bounds the policy component",
-        f"  unfunded:{js_num(v('unfundedAccrualPerHousehold'))},",
+        f"  unfunded:{js_num(v('unfundedAccrualPerHousehold'))},   // deliberately 0 — disclosed as a stock, not billed",
+        f"  unfundedStock:{js_num(v('unfundedPensionOnlyStock') if 'unfundedPensionOnlyStock' in st else v('unfundedLiabilityStock'))},",]
+    if "unfundedPensionOnlyStock" in st:
+        lines.append(f"  unfundedStockAll:{js_num(v('unfundedLiabilityStock'))},   // incl. OPEB — NOT comparable to NH")
+    lines += [
     ]
     if "effectivePropertyRatePct" in st:
         lines.append(f"  propRatePct:{js_num(v('effectivePropertyRatePct'))},")

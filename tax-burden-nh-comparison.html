@@ -90,6 +90,13 @@ h1{font-weight:800;font-size:clamp(30px,5.2vw,54px);line-height:1.02;letter-spac
 .crow .num{font-family:var(--mono);font-size:12px;text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
 .crow .num.neg{color:var(--ma)}
 .compress .note{font-size:12px;color:var(--ink-2);margin:12px 0 0;font-style:italic}
+/* Disclosed beside a layer, deliberately NOT summed into it. */
+.disclose{border:1px dashed var(--rule);background:var(--paper-2);padding:12px 14px;margin:0 0 13px;
+  font-family:var(--mono);font-size:11.5px;color:var(--ink-2);line-height:1.65}
+.disclose b{color:var(--ink);font-weight:600}
+.disclose .ma{color:var(--ma);font-weight:600;font-variant-numeric:tabular-nums}
+.disclose .nh{color:var(--nh);font-weight:600;font-variant-numeric:tabular-nums}
+.disclose .caveat{display:block;margin-top:7px;font-style:italic}
 /* Sits inside #cardShot so it travels with the exported PNG — a shared card that
    doesn't date itself is the one that gets quoted back wrong two years later. */
 .asof{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--ink-2);margin:14px 0 0;line-height:1.6}
@@ -262,7 +269,9 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
         <h3 class="layer-name"><button class="toggle" data-layer="D" aria-pressed="true" aria-label="Toggle layer 5, deferred to later"></button>5 · Deferred to later</h3>
       </div>
       <div class="layer-meta"><span class="chip q3">Allocation is a choice</span><span class="chip">Federal portion identical</span></div>
-      <p class="layer-note">Federal borrowing does not stop at the state line. A household with the same income owes the same share of it in Salem NH as in Salem MA — and the model now enforces that rather than asserting it. <b>Only the state and local unfunded piece differs</b> — and New Hampshire's pension system carries its own unfunded liability, so the gap here is far narrower than the income tax comparison implies.</p>
+      <p class="layer-note">Federal borrowing does not stop at the state line. A household with the same income owes the same share of it in Salem NH as in Salem MA — and the model now enforces that rather than asserting it. This layer is therefore <b>identical on both sides of the border</b>, which is a large part of why the advantage compresses at all.</p>
+      <p class="layer-note"><b>State and local pension debt is deliberately excluded from both totals.</b> Every other line on this page is something a household actually pays. An unfunded pension liability isn't billed to anyone — it's a claim on future tax capacity, and the part collected today already arrives through the taxes Layer&nbsp;1 counts on each side. It is also the one item that cannot be sourced symmetrically across the border, so including it would tilt the comparison by construction. Both obligations are disclosed below instead.</p>
+      <div class="disclose" id="pensionDisclose"></div>
       <table class="cmp" id="tblD"></table>
     </section>
 
@@ -340,7 +349,7 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
       <div class="field"><label for="maElec">Electric policy charges <span class="rangeval" id="vMaElec">4.0¢</span></label><input type="range" id="maElec" min="0" max="8" step="0.1" value="4"></div>
       <div class="field"><label for="maGas">Gas policy charges <span class="rangeval" id="vMaGas">18¢</span></label><input type="range" id="maGas" min="0" max="60" step="1" value="18"></div>
       <div class="field"><label for="maExcise">Motor vehicle excise</label><input type="number" id="maExcise" value="600" step="50" min="0"></div>
-      <div class="field"><label for="maUnfunded">State/local unfunded accrual</label><input type="number" id="maUnfunded" value="2000" step="250" min="0"></div>
+      <div class="field"><label for="maUnfunded">State/local unfunded accrual</label><input type="number" id="maUnfunded" value="0" step="250" min="0"><p class="hint">Zero by design — see Layer 5. Editable.</p></div>
 
       <h3 class="mt nh">New Hampshire</h3>
       <div class="field"><label for="nhPropRate">Effective property rate <span class="rangeval" id="vNhProp">1.71%</span></label><input type="range" id="nhPropRate" min="0.4" max="3.5" step="0.01" value="1.71"><p class="hint">$17.10 per $1,000 statewide average. Municipal rates run $2.62–$36.54.</p></div>
@@ -348,7 +357,7 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
       <div class="field"><label for="nhGas">Gas policy charges <span class="rangeval" id="vNhGas">4¢</span></label><input type="range" id="nhGas" min="0" max="60" step="1" value="4"></div>
       <div class="field"><label for="nhExcise">Vehicle permit + registration</label><input type="number" id="nhExcise" value="900" step="50" min="0"><p class="hint">Municipal permit fee runs higher than the MA excise on newer vehicles.</p></div>
       <div class="field"><label for="nhMeals">Meals &amp; Rooms spending/yr</label><input type="number" id="nhMeals" value="4000" step="250" min="0"><p class="hint">Taxed at 8.5% — NH's substitute for a sales tax.</p></div>
-      <div class="field"><label for="nhUnfunded">State/local unfunded accrual</label><input type="number" id="nhUnfunded" value="1600" step="250" min="0"><p class="hint">NHRS carries its own unfunded liability. Placeholder.</p></div>
+      <div class="field"><label for="nhUnfunded">State/local unfunded accrual</label><input type="number" id="nhUnfunded" value="0" step="250" min="0"><p class="hint">Zero by design, on the same rule as MA so the exclusion can't favour either state.</p></div>
 
       <h3 class="mt">Incidence assumptions</h3>
       <div class="field"><label for="laborShare">Profits tax to labor <span class="rangeval" id="vLabor">25%</span></label><input type="range" id="laborShare" min="0" max="100" step="5" value="25"><p class="hint">Applies to MA corporate excise and NH BPT.</p></div>
@@ -371,7 +380,7 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
 /* BURDEN-CONSTANTS:BEGIN — generated by update-burden-constants.py, do not hand-edit */
 // Source of truth: data/burden-constants.json   ·   regenerate: python update-burden-constants.py
 // Last generated 2026-08-08. meanHhIncome and incShare are DERIVED — see gate 2 and 3 in the script.
-// DRAFT — 6 constant(s) still unverified: states.MA.utility.electricPolicyCentsPerKwh, states.MA.utility.gasPolicyCentsPerTherm, states.MA.unfundedAccrualPerHousehold, states.NH.utility.electricPolicyCentsPerKwh, states.NH.utility.gasPolicyCentsPerTherm, states.NH.unfundedAccrualPerHousehold
+// DRAFT — 4 constant(s) still unverified: states.MA.utility.electricPolicyCentsPerKwh, states.MA.utility.gasPolicyCentsPerTherm, states.NH.utility.electricPolicyCentsPerKwh, states.NH.utility.gasPolicyCentsPerTherm
 
 const K = {
   stdDed:{single:16100, mfj:32200},
@@ -390,8 +399,8 @@ const K = {
 
   // Point-in-time stamp. Drift only -- unverified figures are excluded, because
   // dating a placeholder would imply a currency it does not have.
-  vintage:{"annual": {"count": 26, "newest": "2026-08-08", "oldest": "2026-08-08"}, "market": {"count": 4, "newest": "2026-08-08", "oldest": "2026-08-08"}, "statutory": {"count": 26, "newest": "2026-08-08", "oldest": "2026-08-08"}},
-  unverifiedCount:6,
+  vintage:{"annual": {"count": 26, "newest": "2026-08-08", "oldest": "2026-08-08"}, "market": {"count": 7, "newest": "2026-08-08", "oldest": "2026-08-08"}, "statutory": {"count": 26, "newest": "2026-08-08", "oldest": "2026-08-08"}},
+  unverifiedCount:4,
   generated:"2026-08-08",
 
   MA:{
@@ -408,7 +417,9 @@ const K = {
       popShare:0.020981889,
       elecCents:4, gasPolicyCents:18,
       retailElecCents:28.82,   // EIA all-in price, bounds the policy component
-      unfunded:1793,
+      unfunded:0,   // deliberately 0 — disclosed as a stock, not billed
+      unfundedStock:42100000000,
+      unfundedStockAll:55800000000,   // incl. OPEB — NOT comparable to NH
       avgSfBill:8113, avgSfValue:742986,
       propRatePct:1.0919,   // DERIVED bill/value
     },
@@ -427,7 +438,8 @@ const K = {
       popShare:0.004142859,
       elecCents:1, gasPolicyCents:4,
       retailElecCents:27.33,   // EIA all-in price, bounds the policy component
-      unfunded:699,
+      unfunded:0,   // deliberately 0 — disclosed as a stock, not billed
+      unfundedStock:5580000000,
       propRatePct:1.583,
     }
 };
@@ -694,6 +706,26 @@ function renderCompress(ma, nh){
   $('compressNote').innerHTML = note;
 }
 
+/* Disclosed beside Layer 5, deliberately not summed into it — and the two states' stocks
+   are NOT cleanly comparable, so the caveat ships with the numbers rather than in a
+   footnote nobody reaches. */
+const fmtB1 = n => '$' + (n/1e9).toFixed(1) + 'B';
+function renderPensionDisclosure(){
+  const m = K.MA.unfundedStock / K.MA.households, n = K.NH.unfundedStock / K.NH.households;
+  $('pensionDisclose').innerHTML =
+      '<b>Real, but not billed to you this year — so not counted in either total.</b> '
+    + 'Massachusetts carries <span class="ma">' + fmtB1(K.MA.unfundedStock) + '</span> in unfunded pension '
+    + 'promises (<span class="ma">' + fmt(m) + '</span> per household); New Hampshire '
+    + '<span class="nh">' + fmtB1(K.NH.unfundedStock) + '</span> (<span class="nh">' + fmt(n)
+    + '</span> per household).'
+    + '<span class="caveat">Treat that ratio with care — the two figures are not built the same way. '
+    + 'The Massachusetts number omits most of the ~104 municipal systems PERAC tracks, while NHRS is a '
+    + 'single statewide system that already covers municipal employees. Massachusetts also carries '
+    + fmtB1((K.MA.unfundedStockAll || K.MA.unfundedStock) - K.MA.unfundedStock)
+    + ' of unfunded retiree healthcare with no New Hampshire counterpart sourced here. '
+    + 'Fixing both is exactly why this sits outside the totals rather than inside them.</span>';
+}
+
 /* Dates the card. Two failures get conflated as "is this exact?" and they are not the
    same thing: DRIFT is a figure that was right on a date and has moved since, which a
    stamp fixes; PROVENANCE is a figure that never had a source, which a stamp cannot fix
@@ -750,6 +782,7 @@ function render(){
   ['V','E','C','U','D'].forEach(k => $('lay'+k).classList.toggle('off', !layersOn[k]));
   renderCompress(ma, nh);
   renderAsOf();
+  renderPensionDisclosure();
   updateChart(inp);
   writeHash(inp);
 }
