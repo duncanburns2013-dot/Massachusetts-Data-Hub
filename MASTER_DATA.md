@@ -407,8 +407,10 @@ JSON, not the HTML.
 | **MA residential electricity, all-in** | **28.82¢/kWh** (May 2026; 29.90¢ May 2025, −3.6%) | EIA Electric Power Monthly Table 5.6.A via API v2 | api.eia.gov/v2/electricity/retail-sales/data/ | ✅ Aug 2026 |
 | **NH residential electricity, all-in** | **27.33¢/kWh** (May 2026; 24.02¢ May 2025, **+13.8%**) | same | same | ✅ Aug 2026 |
 | US / New England residential electricity | 18.44¢ / 28.14¢ (May 2026) | same | same | ✅ Aug 2026 |
-| MA electric policy charges | 4.0¢/kWh — **placeholder** | DPU tariffs (EE, RE, NMRS, SMART, 83C/83D) | mass.gov/orgs/department-of-public-utilities | ⚠️ Unverified |
-| MA gas policy charges | 18¢/therm — **placeholder** | DPU tariff (EE surcharge, GSEP) | same | ⚠️ Unverified |
+| **MA electric policy charges** | **3.789¢/kWh** — EE 2.292 + NMRS 0.625 + SMART 0.583 + EV 0.238 + RE 0.050 + ESMP 0.001 | Eversource MA filed tariff, Rate R1, eff. 1 Jul 2026 | eversource.com/…/electric-delivery-rates/egma | ✅ Aug 2026 |
+| **MA gas policy charges** | **59.08¢/therm** — EE 41.70 + GSEP 17.38 | Eversource MA Summary of Gas Rates | eversource.com/docs/default-source/rates-tariffs/summary-rates-gas.pdf | ✅ Aug 2026 |
+| MA gas commodity cost | 38.42¢/therm (eff. 1 May 2026) — **less than the policy riders above** | Eversource MA Cost of Gas | eversource.com/…/ma-cost-of-gas | ✅ Aug 2026 |
+| MA electric distribution / transmission | 9.443¢ / 4.673¢ per kWh — excluded as infrastructure | same tariff | same | ✅ Aug 2026 |
 | MA pension-only unfunded (stock) | $42.1B · $14,877/household | Commonwealth ACFR FY2024; PERAC | See pension-dashboard.html | ✅ Aug 2026 |
 | MA state/local accrual in the burden model | **$0 — excluded by design**, see note below | Scope decision | — | ✅ Aug 2026 |
 
@@ -467,8 +469,10 @@ burden dashboard checks this.
 | NH road toll (gas) | **23.75¢** = 22.2¢ toll + ~1.55¢ oil discharge surcharge | RSA 260:32 (base $0.18, +4.2¢ per 2014 SB 367); RSA 146-A | gc.nh.gov/rsa/html/XXI/260/260-32.htm | ✅ Aug 2026 |
 | NH BET share of business taxes | 25.7% (5-yr TY2019–23 avg); TY2023 BET = $253M | NHFPI | nhfpi.org/resource/business-enterprise-tax-rate-decreases-have-lowered-revenue-with-limited-economic-benefit/ | ✅ Aug 2026 |
 | NH BET rate history | 0.75% → 0.72% (2016) → 0.675% (2018) → 0.6% (2019) → 0.55% (2022–) | NHFPI | same | ✅ Aug 2026 |
-| NH electric policy charges | 1.0¢/kWh — **placeholder** | NH PUC tariffs (SBC, stranded cost) | puc.nh.gov/regulatory/tariffs.html | ⚠️ Unverified |
-| NH gas policy charges | 4¢/therm — **placeholder** | NH PUC gas tariffs | same | ⚠️ Unverified |
+| **NH electric policy charges** | **0.618¢/kWh** — System Benefits Charge, the only mandated rider | Eversource NH filed tariff, Rate R | eversource.com/…/electric-delivery-rates/nh | ✅ Aug 2026 |
+| **NH gas policy charges** | **16.30¢/therm** — Liberty EnergyNorth LDAC (a *ceiling*, bundles mechanisms MA excludes) | NHPUC DG 24-098; see also DE 25-071 | new-hampshire.libertyutilities.com | ✅ Aug 2026 |
+| NH electric distribution / transmission | 6.727¢ / 4.445¢ per kWh — excluded as infrastructure | Eversource NH Rate R | same | ✅ Aug 2026 |
+| NH stranded cost recovery | **−0.148¢/kWh — a credit, not a charge** | Eversource NH Rate R | same | ✅ Aug 2026 |
 | NH state/local accrual in the burden model | **$0 — excluded by design**, same rule as MA | Scope decision | — | ✅ Aug 2026 |
 
 ### 🚫 Why pension debt is excluded from the burden calculators
@@ -494,17 +498,29 @@ genuinely identical on both sides of the border, and the compression finding now
 $75k — the old asymmetric placeholders (MA $2,000 vs NH $1,600) had been manufacturing a
 $400 NH advantage out of pure guesswork.
 
-### ⚠️ The Layer 4 sanity bound — a component can't exceed the whole
+### ⚡ The Layer 4 inclusion rule
 
-The MA and NH **policy-charge** placeholders (4.0¢ vs 1.0¢/kWh) imply a 3.0¢ gap. EIA
-puts the **all-in** residential price gap at just **1.49¢** (28.82¢ vs 27.33¢). For both
-to hold, New Hampshire would have to be dearer than Massachusetts on generation,
-transmission and distribution *combined* by 1.51¢. Possible, but it's a strong claim to
-arrive at by accident — the placeholders almost certainly overstate NH's Layer 4
-advantage. `update-burden-constants.py` now warns on this automatically.
+> A charge is a **policy cost** if it exists because of a legislative or regulatory
+> mandate, rather than because of the physical cost of generating and delivering energy.
 
-Worth watching regardless: **NH electricity rose 13.8% year over year while MA fell
-3.6%.** Whatever advantage NH has on the meter is closing fast.
+Excluded on both sides as infrastructure or mechanism: distribution, transmission,
+revenue decoupling, regulatory reconciliation, stranded cost, customer charge.
+
+Electricity is genuinely like-for-like — both figures are **Eversource**, the same
+company on both sides of the border. Gas is not: Eversource doesn't serve NH gas, so
+that side is Liberty EnergyNorth.
+
+**Both figures are conservative in the same direction.** MA's is a **floor** — its own
+tariff footnote places the Long Term Renewable Contract Adjustment (83C/83D offshore
+wind), Solar Program Cost Adjustment and Grid Modernization *inside* the Distribution
+charge, unbroken out, and RPS/CES sits inside supply. NH's gas figure is a **ceiling** —
+the LDAC bundles mechanisms MA excludes. So the true gap is wider than stated.
+
+**Headline finding: Massachusetts gas policy charges (59.08¢/therm) cost more than the
+gas itself (38.42¢/therm).** The prior 18¢ placeholder understated it by over 3×.
+
+Worth watching separately: **NH electricity rose 13.8% year over year while MA fell
+3.6%.** Whatever advantage NH holds on the meter is closing fast.
 
 ### ⚠️ NH median property tax bill — sources disagree, carry all three
 

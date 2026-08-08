@@ -260,7 +260,8 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
         <h3 class="layer-name"><button class="toggle" data-layer="U" aria-pressed="true" aria-label="Toggle layer 4, collected through the meter"></button>4 · Collected through the meter</h3>
       </div>
       <div class="layer-meta"><span class="chip q2">Tariff-verifiable</span><span class="chip">Genuine NH advantage</span></div>
-      <p class="layer-note">A real and under-discussed gap. Massachusetts recovers energy efficiency, RPS/CES/APS compliance, net metering, SMART solar and 83C/83D long-term contract costs through rates. New Hampshire's System Benefits Charge and stranded cost recovery are substantially smaller, and its renewable portfolio standard is less aggressive. <b>Both defaults below are placeholders</b> — replace from DPU and NH PUC tariff sheets.</p>
+      <p class="layer-note">A real and under-discussed gap, and now taken from the filed tariffs rather than estimated. The inclusion rule: <b>a charge counts if it exists because of a legislative or regulatory mandate, not because of the physical cost of generating and delivering energy.</b> Electricity is a genuine like-for-like comparison — both figures are <b>Eversource</b>, the same company operating on both sides of the border. Massachusetts carries six mandated riders totalling 3.789¢/kWh; New Hampshire carries one, the System Benefits Charge, at 0.618¢. New Hampshire has no net-metering, SMART or EV rider at all, and its stranded cost line is a <em>credit</em>. That absence is the finding.</p>
+      <p class="layer-note">Read the gap as conservative in both directions. The Massachusetts figure is a <b>floor</b> — its own tariff footnote puts 83C/83D offshore wind, solar programme and grid modernisation costs inside the Distribution charge, unbroken out, and RPS/CES sits inside supply. The New Hampshire gas figure is a <b>ceiling</b> — Liberty's LDAC bundles regulatory mechanisms that Massachusetts excludes. Both errors run the same way, so the true gap is wider than shown, not narrower. Gas is where it bites: 59.08¢/therm in Massachusetts against 16.30¢ in New Hampshire.</p>
       <table class="cmp" id="tblU"></table>
     </section>
 
@@ -346,15 +347,15 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
 
       <h3 class="mt ma">Massachusetts</h3>
       <div class="field"><label for="maPropRate">Effective property rate <span class="rangeval" id="vMaProp">1.09%</span></label><input type="range" id="maPropRate" min="0.4" max="2.5" step="0.01" value="1.09"><p class="hint">$8,113 ÷ $742,986 = 1.09% statewide. Assessed, not market.</p></div>
-      <div class="field"><label for="maElec">Electric policy charges <span class="rangeval" id="vMaElec">4.0¢</span></label><input type="range" id="maElec" min="0" max="8" step="0.1" value="4"></div>
-      <div class="field"><label for="maGas">Gas policy charges <span class="rangeval" id="vMaGas">18¢</span></label><input type="range" id="maGas" min="0" max="60" step="1" value="18"></div>
+      <div class="field"><label for="maElec">Electric policy charges <span class="rangeval" id="vMaElec">3.8¢</span></label><input type="range" id="maElec" min="0" max="8" step="0.001" value="3.789"><p class="hint">Eversource MA filed tariff. A floor — 83C/83D and RPS aren't broken out.</p></div>
+      <div class="field"><label for="maGas">Gas policy charges <span class="rangeval" id="vMaGas">59¢</span></label><input type="range" id="maGas" min="0" max="90" step="0.01" value="59.08"><p class="hint">EE 41.70¢ + GSEP 17.38¢, filed tariff.</p></div>
       <div class="field"><label for="maExcise">Motor vehicle excise</label><input type="number" id="maExcise" value="600" step="50" min="0"></div>
       <div class="field"><label for="maUnfunded">State/local unfunded accrual</label><input type="number" id="maUnfunded" value="0" step="250" min="0"><p class="hint">Zero by design — see Layer 5. Editable.</p></div>
 
       <h3 class="mt nh">New Hampshire</h3>
       <div class="field"><label for="nhPropRate">Effective property rate <span class="rangeval" id="vNhProp">1.71%</span></label><input type="range" id="nhPropRate" min="0.4" max="3.5" step="0.01" value="1.71"><p class="hint">$17.10 per $1,000 statewide average. Municipal rates run $2.62–$36.54.</p></div>
-      <div class="field"><label for="nhElec">Electric policy charges <span class="rangeval" id="vNhElec">1.0¢</span></label><input type="range" id="nhElec" min="0" max="8" step="0.1" value="1"><p class="hint">System Benefits Charge + stranded cost. Placeholder — verify at NH PUC.</p></div>
-      <div class="field"><label for="nhGas">Gas policy charges <span class="rangeval" id="vNhGas">4¢</span></label><input type="range" id="nhGas" min="0" max="60" step="1" value="4"></div>
+      <div class="field"><label for="nhElec">Electric policy charges <span class="rangeval" id="vNhElec">0.6¢</span></label><input type="range" id="nhElec" min="0" max="8" step="0.001" value="0.618"><p class="hint">System Benefits Charge, Eversource NH filed tariff — same utility as the MA figure. NH has no net-metering, SMART or EV rider.</p></div>
+      <div class="field"><label for="nhGas">Gas policy charges <span class="rangeval" id="vNhGas">16¢</span></label><input type="range" id="nhGas" min="0" max="90" step="0.01" value="16.30"><p class="hint">Liberty EnergyNorth LDAC. A ceiling — it also bundles mechanisms MA excludes.</p></div>
       <div class="field"><label for="nhExcise">Vehicle permit + registration</label><input type="number" id="nhExcise" value="900" step="50" min="0"><p class="hint">Municipal permit fee runs higher than the MA excise on newer vehicles.</p></div>
       <div class="field"><label for="nhMeals">Meals &amp; Rooms spending/yr</label><input type="number" id="nhMeals" value="4000" step="250" min="0"><p class="hint">Taxed at 8.5% — NH's substitute for a sales tax.</p></div>
       <div class="field"><label for="nhUnfunded">State/local unfunded accrual</label><input type="number" id="nhUnfunded" value="0" step="250" min="0"><p class="hint">Zero by design, on the same rule as MA so the exclusion can't favour either state.</p></div>
@@ -380,8 +381,6 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
 /* BURDEN-CONSTANTS:BEGIN — generated by update-burden-constants.py, do not hand-edit */
 // Source of truth: data/burden-constants.json   ·   regenerate: python update-burden-constants.py
 // Last generated 2026-08-08. meanHhIncome and incShare are DERIVED — see gate 2 and 3 in the script.
-// DRAFT — 4 constant(s) still unverified: states.MA.utility.electricPolicyCentsPerKwh, states.MA.utility.gasPolicyCentsPerTherm, states.NH.utility.electricPolicyCentsPerKwh, states.NH.utility.gasPolicyCentsPerTherm
-
 const K = {
   stdDed:{single:16100, mfj:32200},
   brackets:{
@@ -399,8 +398,8 @@ const K = {
 
   // Point-in-time stamp. Drift only -- unverified figures are excluded, because
   // dating a placeholder would imply a currency it does not have.
-  vintage:{"annual": {"count": 26, "newest": "2026-08-08", "oldest": "2026-08-08"}, "market": {"count": 7, "newest": "2026-08-08", "oldest": "2026-08-08"}, "statutory": {"count": 26, "newest": "2026-08-08", "oldest": "2026-08-08"}},
-  unverifiedCount:4,
+  vintage:{"annual": {"count": 26, "newest": "2026-08-08", "oldest": "2026-08-08"}, "market": {"count": 11, "newest": "2026-08-08", "oldest": "2026-08-08"}, "statutory": {"count": 26, "newest": "2026-08-08", "oldest": "2026-08-08"}},
+  unverifiedCount:0,
   generated:"2026-08-08",
 
   MA:{
@@ -415,7 +414,7 @@ const K = {
       meanHhIncome:144312,   // DERIVED aggregate/households
       incShare:0.026917552,   // DERIVED state aggregate / national aggregate
       popShare:0.020981889,
-      elecCents:4, gasPolicyCents:18,
+      elecCents:3.789, gasPolicyCents:59.08,
       retailElecCents:28.82,   // EIA all-in price, bounds the policy component
       unfunded:0,   // deliberately 0 — disclosed as a stock, not billed
       unfundedStock:42100000000,
@@ -436,7 +435,7 @@ const K = {
       meanHhIncome:128604,   // DERIVED aggregate/households
       incShare:0.004837581,   // DERIVED state aggregate / national aggregate
       popShare:0.004142859,
-      elecCents:1, gasPolicyCents:4,
+      elecCents:0.618, gasPolicyCents:16.3,
       retailElecCents:27.33,   // EIA all-in price, bounds the policy component
       unfunded:0,   // deliberately 0 — disclosed as a stock, not billed
       unfundedStock:5580000000,

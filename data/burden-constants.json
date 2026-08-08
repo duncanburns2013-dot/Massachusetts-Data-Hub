@@ -203,18 +203,18 @@
           "verified": "2026-08-08"
         },
         "electricPolicyCentsPerKwh": {
-          "value": 4.0,
-          "note": "UNVERIFIED PLACEHOLDER. Build by summing filed DPU tariff lines: energy efficiency, renewable energy, net metering recovery surcharge, SMART, 83C/83D long-term contracts, plus RPS/CES/APS compliance embedded in basic service supply. SANITY BOUND: the MA-NH policy-charge gap implied by these placeholders is 3.0c, but the observed total retail price gap is only 1.49c (28.82 vs 27.33). A component gap twice the size of the whole-price gap requires NH to be dearer on every other component, which is possible but unlikely -- so these placeholders probably OVERSTATE the NH advantage in Layer 4. energy-dashboard.html carries a partial decomposition in $/household/yr: RGGI $200, RPS compliance $97, offshore wind $85, net-zero infrastructure $75, less BCCE savings $200. At 7,200 kWh that is 6.35c/kWh gross or 3.57c net -- overlapping but NOT congruent with the Layer 4 definition (RGGI sits in supply; 83C/83D IS the offshore wind line), so it cannot simply be substituted.",
-          "source": "MA DPU tariffs",
-          "url": "https://www.mass.gov/orgs/department-of-public-utilities",
-          "verified": false
+          "value": 3.789,
+          "note": "SOURCED FROM THE FILED TARIFF -- Eversource MA Rate R1 (Residential Non-Heating), effective 1 Jul - 31 Dec 2026. THIS IS ONE UTILITY, NOT A STATEWIDE AVERAGE. INCLUSION RULE: a charge counts as policy if it exists because of a legislative or regulatory mandate rather than the physical cost of generating and delivering electricity. Counted (c/kWh): Energy Efficiency 2.292 (Greater Boston/Cambridge/South Shore; Cape Cod & MV is 3.738), Net Metering Recovery Surcharge 0.625, Distributed Solar / SMART 0.583, Electric Vehicle Program Factor 0.238, Renewable Energy 0.050, Electric Sector Modernization Plan 0.001. Sum 3.789. EXCLUDED as infrastructure or mechanism: Distribution 9.443, Transmission 4.673, Revenue Decoupling 0.539, Transition Energy -0.077, Customer Charge $10/mo. THIS IS A FLOOR, NOT THE FULL FIGURE: the tariff's own footnote says the Distribution Energy Charge already contains the Long Term Renewable Contract Adjustment (i.e. 83C/83D offshore wind), Solar Program Cost Adjustment, Solar Expansion Cost Recovery Factor, Residential Assistance Adjustment Factor and Grid Modernization -- none broken out. RPS/CES/APS compliance sits inside supply, also not broken out. So the dashboard's claim that Layer 4 is 'the most verifiable hidden layer' is only partly true: the riders are verifiable, the embedded portion is not.",
+          "source": "Eversource Massachusetts filed electric delivery tariff, Rate R1, eff. 1 Jul 2026",
+          "url": "https://www.eversource.com/residential/account-billing/manage-bill/about-your-bill/rates-tariffs/electric-delivery-rates/egma",
+          "verified": "2026-08-08"
         },
         "gasPolicyCentsPerTherm": {
-          "value": 18.0,
-          "note": "UNVERIFIED PLACEHOLDER. Energy efficiency surcharge + GSEP. The energy dashboard notes GSEP alone runs 8-11% of a monthly gas bill.",
-          "source": "MA DPU gas tariffs",
-          "url": "https://www.mass.gov/orgs/department-of-public-utilities",
-          "verified": false
+          "value": 59.08,
+          "note": "SOURCED FROM THE FILED TARIFF -- Eversource MA Summary of Gas Rates, residential. Counted: Energy Efficiency Charge $0.4170/therm + Gas System Enhancement Program (GSEP) $0.1738/therm = $0.5908 = 59.08c. THE PLACEHOLDER WAS 18c -- this is more than three times higher, and it is the single largest correction in the model. At 750 therms it moves the MA gas line from $135 to $443/yr. Excluded for consistency with the electric side, where the equivalent is not isolable: Residential Assistance Charge $0.0833/therm (including it would give 67.41c). For scale, supply (cost of gas) was $0.3842/therm effective 1 May 2026, so these mandated riders exceed the commodity itself.",
+          "source": "Eversource Massachusetts Summary of Gas Rates (filed tariff)",
+          "url": "https://www.eversource.com/docs/default-source/rates-tariffs/summary-rates-gas.pdf",
+          "verified": "2026-08-08"
         }
       },
       "unfundedLiabilityStock": {
@@ -347,18 +347,18 @@
           "verified": "2026-08-08"
         },
         "electricPolicyCentsPerKwh": {
-          "value": 1.0,
-          "note": "UNVERIFIED PLACEHOLDER. System Benefits Charge + stranded cost recovery + RPS compliance. See the MA note: the 3.0c policy gap these placeholders imply exceeds the 1.49c total retail price gap EIA actually observes, so this figure is probably too low. Precision matters here because Layer 4 is the one the dashboard calls a genuine NH advantage.",
-          "source": "NH PUC electric tariffs",
-          "url": "https://www.puc.nh.gov/regulatory/tariffs.html",
-          "verified": false
+          "value": 0.618,
+          "note": "SOURCED FROM THE FILED TARIFF -- Eversource NH Rate R (Manchester), the SAME UTILITY as the Massachusetts figure, which makes this genuinely like-for-like rather than two different companies' accounting. Counted: System Benefits Charge 0.618 c/kWh, NH's energy efficiency and low-income program rider. EXCLUDED under the same rule as MA: Distribution 6.727, Transmission 4.445, Regulatory Reconciliation Adjustment 0.296, Pole Plant Adjustment -0.029, Customer Charge $19.81/mo, and Stranded Cost Recovery -0.148 (stranded cost excluded on both sides; note NH's is a CREDIT, not a charge). New Hampshire's tariff has no counterpart to Massachusetts's net metering, SMART, EV or sector-modernisation riders -- that absence is the finding, not an omission.",
+          "source": "Eversource New Hampshire filed electric delivery tariff, Rate R",
+          "url": "https://www.eversource.com/content/residential/account-billing/manage-bill/about-your-bill/rates-tariffs/electric-delivery-rates/nh",
+          "verified": "2026-08-08"
         },
         "gasPolicyCentsPerTherm": {
-          "value": 4.0,
-          "note": "UNVERIFIED PLACEHOLDER.",
-          "source": "NH PUC gas tariffs",
-          "url": "https://www.puc.nh.gov/regulatory/tariffs.html",
-          "verified": false
+          "value": 16.30,
+          "note": "SOURCED -- Liberty Utilities (EnergyNorth Natural Gas), residential Local Distribution Adjustment Charge, $0.1630/therm for the 2025-26 period. Eversource does not serve gas in New Hampshire, so unlike the electric comparison this is a different company from the MA side. TREAT AS A CEILING: the LDAC is the vehicle for the energy-efficiency programme but it also bundles the Regulatory Reconciliation Adjustment and Lost Revenue Factor, which are mechanisms I exclude on the Massachusetts side. Decomposing it needs NHPUC order DE 25-071. The two errors run the same way -- MA's 59.08c is a FLOOR (embedded policy not broken out) and this is a CEILING -- so the stated MA-NH gas gap of 42.78c/therm is the conservative version of the finding, not the flattering one.",
+          "source": "Liberty Utilities EnergyNorth, NHPUC LDAC filing DG 24-098 (2025-26); see also DE 25-071",
+          "url": "https://new-hampshire.libertyutilities.com/keene/residential/rates-and-tariffs/index.html",
+          "verified": "2026-08-08"
         }
       },
       "unfundedLiabilityStock": {

@@ -105,8 +105,11 @@ def score(txt: str) -> float:
 def extract(path: str, offset=None):
     data = open(path, "rb").read()
     content = inflate_all(data)
-    # object streams may hold further content streams
-    content += inflate_all(content)
+    # Object streams can hold further content streams, but only recurse when the file
+    # actually declares one — re-scanning every inflated blob unconditionally is
+    # quadratic and hangs on large PDFs.
+    if b"/ObjStm" in data:
+        content += inflate_all(content)
     parts = operands(content)
     if not parts:
         return "", "no text operands found"

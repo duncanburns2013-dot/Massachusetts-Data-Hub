@@ -89,16 +89,38 @@ in one still requires changing the other.
 
 ## 🧾 Unverified constants
 
-Four figures remain placeholders and the pipeline reports them on every run — the MA and
-NH electric and gas policy charges. Each must be summed from filed DPU / NH PUC tariffs,
-which needs a stated rule for which line items count as *policy cost* rather than
-ordinary delivery.
+**None.** Every constant is sourced to a primary reference with a URL and a verification
+date, and `python update-burden-constants.py` exits 0.
 
-There is a hard bound on them. The current placeholders imply a **policy**-charge gap of
-3.0¢/kWh between the states, but EIA puts the **all-in** residential price gap at just
-1.49¢ (MA 28.82¢, NH 27.33¢). For both to hold, NH would have to be dearer than MA on
-generation, transmission and distribution combined. `gate_component_bound` warns on this
-every run.
+### The Layer 4 inclusion rule
+
+Utility policy charges needed a stated rule rather than a judgment call:
+
+> A charge is a **policy cost** if it exists because of a legislative or regulatory
+> mandate, rather than because of the physical cost of generating and delivering energy.
+
+On that test, from the filed tariffs:
+
+| | Massachusetts | New Hampshire |
+|---|---|---|
+| Electric | **3.789¢/kWh** — EE 2.292, NMRS 0.625, SMART 0.583, EV 0.238, RE 0.050, ESMP 0.001 | **0.618¢/kWh** — System Benefits Charge only |
+| Gas | **59.08¢/therm** — EE 41.70 + GSEP 17.38 | **16.30¢/therm** — Liberty LDAC |
+
+Excluded on both sides as infrastructure or mechanism: distribution, transmission,
+revenue decoupling, regulatory reconciliation, stranded cost, customer charge.
+
+Electricity is genuinely like-for-like — both figures are **Eversource**, the same
+company operating on both sides of the border. Gas is not: Eversource doesn't serve NH
+gas, so that side is Liberty EnergyNorth.
+
+**Both figures are conservative, in the same direction.** MA's is a *floor* — its own
+tariff footnote puts 83C/83D offshore wind, solar programme and grid modernisation inside
+the Distribution charge, unbroken out, and RPS/CES sits inside supply. NH's gas figure is
+a *ceiling* — the LDAC bundles mechanisms MA excludes. So the real gap is wider than
+shown.
+
+The headline finding: **MA gas policy charges (59.08¢/therm) exceed the cost of the gas
+itself (38.42¢/therm).** The old 18¢ placeholder understated it by more than 3×.
 
 ## 🚫 What is deliberately NOT counted
 
