@@ -63,6 +63,13 @@ h1{font-weight:800;font-size:clamp(30px,5.2vw,54px);line-height:1.02;letter-spac
 #tabMa[aria-selected=true]{color:var(--ma);border-bottom-color:var(--ma)}
 #tabNh[aria-selected=true]{color:var(--nh);border-bottom-color:var(--nh)}
 .tab:focus-visible{outline:2px solid var(--ledger);outline-offset:-4px}
+/* Three tabs at desktop padding total ~393px, wider than a 375px phone. Without
+   this the tab row forces the whole document wide and every section inherits the
+   overflow — the page scrolls sideways. */
+@media(max-width:480px){
+  .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tab{padding:12px 12px;font-size:10.5px;letter-spacing:.06em;white-space:nowrap}
+}
 
 /* single-state headline */
 .total-strip{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end}
