@@ -449,7 +449,8 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
       <div class="field"><label for="maUnfunded">State/local unfunded accrual</label><input type="number" id="maUnfunded" value="0" step="250" min="0"><p class="hint">Zero by design — see Layer 5. Editable.</p></div>
 
       </div><div id="grpNh"><h3 class="mt nh">New Hampshire</h3>
-      <div class="field"><label for="nhPropRate">Effective property rate <span class="rangeval" id="vNhProp">1.71%</span></label><input type="range" id="nhPropRate" min="0.4" max="3.5" step="0.01" value="1.71"><p class="hint">$17.10 per $1,000 statewide average. Municipal rates run $2.62–$36.54.</p></div>
+      <div class="field"><label for="nhTown">Municipality</label><input type="text" id="nhTown" list="nhTownList" placeholder="Type a town…" autocomplete="off"><datalist id="nhTownList"></datalist><p class="hint">Sets that town's total rate — municipal + county + state and local education. NH publishes no average home value per town, so the house value above stays yours. Source: NH DRA 2025 Municipal Tax Rates.</p></div>
+      <div class="field"><label for="nhPropRate">Effective property rate <span class="rangeval" id="vNhProp">1.71%</span></label><input type="range" id="nhPropRate" min="0.1" max="4" step="0.0001" value="1.583"><p class="hint">$17.10 per $1,000 statewide average. Municipal rates run $2.62–$36.54.</p></div>
       <div class="field"><label for="nhElec">Electric policy charges <span class="rangeval" id="vNhElec">0.6¢</span></label><input type="range" id="nhElec" min="0" max="8" step="0.001" value="0.618"><p class="hint">System Benefits Charge, Eversource NH filed tariff — same utility as the MA figure. NH has no net-metering, SMART or EV rider.</p></div>
       <div class="field"><label for="nhGas">Gas policy charges <span class="rangeval" id="vNhGas">16¢</span></label><input type="range" id="nhGas" min="0" max="90" step="0.01" value="16.30"><p class="hint">Liberty EnergyNorth LDAC. A ceiling — it also bundles mechanisms MA excludes.</p></div>
       <div class="field"><label for="nhExcise">Vehicle permit + registration</label><input type="number" id="nhExcise" value="900" step="50" min="0"><p class="hint">Municipal permit fee runs higher than the MA excise on newer vehicles.</p></div>
@@ -900,6 +901,243 @@ const TOWNS = [
   ['Yarmouth',4949,710002],
 ];
 
+/* Total property tax rate per $1,000 for every reporting NH municipality — municipal +
+   county + state education + local education. NH DRA 2025 Municipal Tax Rates, completed
+   23 January 2026. Unlike Massachusetts, New Hampshire publishes no average single-family
+   value per town, so selecting a town sets the RATE only; the house value stays whatever
+   you entered. On Compare that is the point — the same house, priced by each state.
+   [name, total rate per $1,000] */
+const NH_TOWNS = [
+  ['Acworth',16.06],
+  ['Albany',6.99],
+  ['Alexandria',19.87],
+  ['Allenstown',24.88],
+  ['Alstead',18.72],
+  ['Alton',13.5],
+  ['Amherst',23.98],
+  ['Andover',14.65],
+  ['Antrim',23.11],
+  ['Ashland',19.19],
+  ['Atkinson',12.82],
+  ['Auburn',13.88],
+  ['Barnstead',17.15],
+  ['Barrington',19.56],
+  ['Bartlett',6.02],
+  ['Bath',23.51],
+  ['Bedford',16.49],
+  ['Belmont',17.39],
+  ['Bennington',20.67],
+  ['Benton',8.55],
+  ['Berlin',33.6],
+  ['Bethlehem',16.19],
+  ['Boscawen',20.8],
+  ['Bow',20.05],
+  ['Bradford',16.89],
+  ['Brentwood',17.13],
+  ['Bridgewater',6.35],
+  ['Bristol',13.16],
+  ['Brookfield',13.15],
+  ['Campton',17.46],
+  ['Canaan',31.16],
+  ['Candia',12.97],
+  ['Canterbury',20.49],
+  ['Carroll',12.08],
+  ['Center Harbor',11.84],
+  ['Charlestown',36.54],
+  ['Chatham',8.47],
+  ['Chester',16.9],
+  ['Chesterfield',21.65],
+  ['Chichester',17.83],
+  ['Claremont',30.54],
+  ['Clarksville',17.85],
+  ['Colebrook',17.08],
+  ['Columbia',21.71],
+  ['Concord',29.11],
+  ['Conway',11.54],
+  ['Cornish',17.3],
+  ['Croydon',8.98],
+  ['Dalton',17.07],
+  ['Danbury',23.7],
+  ['Danville',22.84],
+  ['Deerfield',15.54],
+  ['Deering',17.36],
+  ['Derry',18.99],
+  ['Dover',19.68],
+  ['Dublin',17.62],
+  ['Dummer',9.46],
+  ['Dunbarton',16.34],
+  ['Durham',18.87],
+  ['East Kingston',15.94],
+  ['Easton',8.98],
+  ['Eaton',14.74],
+  ['Effingham',15.38],
+  ['Ellsworth',7.36],
+  ['Enfield',17.83],
+  ['Epping',15.0],
+  ['Epsom',17.54],
+  ['Errol',9.45],
+  ['Exeter',18.76],
+  ['Farmington',15.64],
+  ['Fitzwilliam',19.22],
+  ['Francestown',15.6],
+  ['Franconia',15.94],
+  ['Franklin',17.63],
+  ['Freedom',7.39],
+  ['Fremont',16.95],
+  ['Gilford',11.85],
+  ['Gilmanton',15.25],
+  ['Gilsum',16.13],
+  ['Goffstown',20.88],
+  ['Gorham',23.45],
+  ['Goshen',14.99],
+  ['Grafton',15.83],
+  ['Grantham',19.9],
+  ['Greenland',13.36],
+  ['Greenville',16.72],
+  ['Groton',15.23],
+  ['Hampstead',19.09],
+  ['Hampton',12.61],
+  ['Hampton Falls',14.8],
+  ['Hancock',27.07],
+  ['Hanover',12.78],
+  ['Harrisville',13.03],
+  ["Hart's Location",2.62],
+  ['Haverhill',22.74],
+  ['Hebron',9.06],
+  ['Henniker',24.13],
+  ['Hill',13.26],
+  ['Hillsborough',21.05],
+  ['Hinsdale',31.08],
+  ['Holderness',9.42],
+  ['Hollis',18.9],
+  ['Hooksett',17.19],
+  ['Hopkinton',23.35],
+  ['Hudson',17.11],
+  ['Jackson',8.61],
+  ['Jaffrey',18.95],
+  ['Jefferson',21.66],
+  ['Keene',34.37],
+  ['Kensington',14.28],
+  ['Kingston',17.9],
+  ['Lancaster',21.07],
+  ['Landaff',27.26],
+  ['Langdon',28.41],
+  ['Lebanon',21.53],
+  ['Lee',27.61],
+  ['Lempster',15.63],
+  ['Lincoln',12.66],
+  ['Lisbon',21.3],
+  ['Litchfield',14.2],
+  ['Littleton',14.1],
+  ['Londonderry',14.47],
+  ['Loudon',22.75],
+  ['Lyman',14.05],
+  ['Lyme',28.19],
+  ['Lyndeborough',16.97],
+  ['Madbury',17.94],
+  ['Madison',8.98],
+  ['Manchester',20.24],
+  ['Marlborough',31.24],
+  ['Marlow',18.87],
+  ['Mason',25.05],
+  ['Meredith',10.62],
+  ['Merrimack',22.11],
+  ['Middleton',15.79],
+  ['Milan',14.66],
+  ['Milford',25.93],
+  ['Milton',14.76],
+  ['Mont Vernon',21.04],
+  ['Moultonborough',5.33],
+  ['Municipal Tax Rates',24.64],
+  ['Nashua',16.83],
+  ['Nelson',17.79],
+  ['New Boston',23.67],
+  ['New Castle',5.73],
+  ['New Durham',14.14],
+  ['New Hampton',13.96],
+  ['New Ipswich',17.03],
+  ['New London',11.86],
+  ['Newbury',10.48],
+  ['Newfields',16.95],
+  ['Newington',7.88],
+  ['Newmarket',19.42],
+  ['Newport',25.09],
+  ['Newton',16.77],
+  ['North Hampton',13.45],
+  ['Northfield',14.79],
+  ['Northumberland',27.33],
+  ['Northwood',11.91],
+  ['Nottingham',13.2],
+  ['Orange',17.4],
+  ['Orford',17.51],
+  ['Ossipee',12.77],
+  ['Pelham',19.09],
+  ['Pembroke',21.84],
+  ['Penacook',30.74],
+  ['Peterborough',22.35],
+  ['Piermont',22.46],
+  ['Pittsfield',17.82],
+  ['Plainfield',17.6],
+  ['Plaistow',14.44],
+  ['Plymouth',23.77],
+  ['Portsmouth',11.51],
+  ['Randolph',10.98],
+  ['Raymond',22.96],
+  ['Richmond',19.13],
+  ['Rindge',13.79],
+  ['Rochester',15.3],
+  ['Rollinsford',17.9],
+  ['Roxbury',16.71],
+  ['Rumney',14.5],
+  ['Rye',8.37],
+  ['Salem',18.16],
+  ['Salisbury',17.91],
+  ['Sanbornton',13.21],
+  ['Sandown',17.8],
+  ['Sandwich',9.25],
+  ['Seabrook',12.4],
+  ['Sharon',17.82],
+  ['Shelburne',20.21],
+  ['Somersworth',19.27],
+  ['South Hampton',14.47],
+  ['Springfield',13.75],
+  ['Stark',11.81],
+  ['Stewartstown',15.66],
+  ['Stoddard',11.28],
+  ['Strafford',20.96],
+  ['Stratham',13.52],
+  ['Sugar Hill',11.94],
+  ['Sullivan',18.57],
+  ['Sunapee',10.55],
+  ['Surry',16.82],
+  ['Sutton',16.61],
+  ['Swanzey',20.18],
+  ['Tamworth',14.78],
+  ['Temple',15.36],
+  ['Thornton',11.74],
+  ['Tilton',11.29],
+  ['Troy',21.54],
+  ['Tuftonboro',6.4],
+  ['Unity',19.65],
+  ['Wakefield',8.71],
+  ['Walpole',17.26],
+  ['Warner',17.32],
+  ['Warren',24.56],
+  ['Washington',15.95],
+  ['Waterville Valley',9.96],
+  ['Weare',21.64],
+  ['Webster',16.88],
+  ['Wentworth',28.54],
+  ['Westmoreland',25.92],
+  ['Whitefield',16.21],
+  ['Wilmot',16.09],
+  ['Wilton',26.98],
+  ['Winchester',19.67],
+  ['Windsor',10.54],
+  ['Wolfeboro',8.36],
+  ['Woodstock',12.37],
+];
+
 const PRESETS = {
   'Median-ish, $115k':{income:115000, homeValue:500000},
   'Two earners, $150k':{income:150000, homeValue:600000},
@@ -1261,6 +1499,30 @@ function buildTowns(){
   $('town').addEventListener('input', apply);   /* picking from the list fires input, not change */
   $('proptax').addEventListener('change', () => { billToValue(); syncTown(); render(); });
   $('homeValue').addEventListener('change', () => { valueToBill(); syncTown(); render(); });
+  buildNhTowns();
+}
+
+/* New Hampshire sets a RATE, not a bill. NH DRA publishes no average single-family value
+   per municipality, so there is nothing to derive a house from — which is fine here,
+   because the whole point of Compare is pricing the SAME house under each state. */
+function buildNhTowns(){
+  $('nhTownList').innerHTML = NH_TOWNS
+    .map(t => '<option value="' + t[0].replace(/"/g,'&quot;') + '">$' + t[1].toFixed(2) + ' per $1,000</option>').join('');
+  $('nhTown').setAttribute('placeholder', 'Type a town… (' + NH_TOWNS.length + ' municipalities)');
+  const apply = () => {
+    const q = ($('nhTown').value||'').trim().toLowerCase();
+    const hit = NH_TOWNS.find(t => t[0].toLowerCase() === q);
+    if (!hit) return;                 /* free text that matches nothing: leave the rate alone */
+    $('nhPropRate').value = (hit[1] / 10).toFixed(4);   /* per $1,000 -> percent of value */
+    render();
+  };
+  $('nhTown').addEventListener('change', apply);
+  $('nhTown').addEventListener('input', apply);
+}
+function syncNhTown(){
+  const pctRate = +$('nhPropRate').value || 0;
+  const hit = NH_TOWNS.find(t => Math.abs(t[1]/10 - pctRate) < 0.0005);
+  $('nhTown').value = hit ? hit[0] : '';
 }
 
 function showTab(btn, v){
@@ -1343,6 +1605,7 @@ function render(){
     });
   }
 
+  syncNhTown();
   renderCompress(ma, nh);
   renderAsOf();
   renderPensionDisclosure();
