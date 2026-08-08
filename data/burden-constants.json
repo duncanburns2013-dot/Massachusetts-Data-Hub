@@ -428,6 +428,20 @@
         "source": "MA DOR, Corporate Excise guide; M.G.L. c.63 s.39",
         "url": "https://www.mass.gov/guides/corporate-excise-tax",
         "verified": "2026-08-08"
+      },
+      "pfmlEmployerRate": {
+        "value": 0.0042,
+        "note": "Business mode. Employer share of MA Paid Family and Medical Leave: 0.42% of eligible wages, being 60% of the 0.70% medical-leave contribution. The 0.18% family-leave contribution may be taken entirely from employee wages and is NOT counted as an employer cost here. Rate unchanged from 2025. TWO LIMITS the model applies only partly: wages count only up to the Social Security taxable maximum PER EMPLOYEE, so applying the rate to total payroll overstates it for a firm with highly paid staff; and employers with fewer than 25 covered individuals owe NO employer share, which the model does apply via the headcount input.",
+        "source": "MA Department of Family and Medical Leave, 2026 contribution rates",
+        "url": "https://www.mass.gov/info-details/paid-family-and-medical-leave-employer-contribution-rates-and-calculator",
+        "verified": "2026-08-08"
+      },
+      "pfmlThresholdHeads": {
+        "value": 25,
+        "note": "Business mode. Employers with fewer than 25 covered individuals must still withhold the employee share but owe no employer contribution. This threshold decides whether the largest single unmodelled MA cost applies at all, so it is modelled rather than assumed away.",
+        "source": "MA Department of Family and Medical Leave, 2026 contribution rates",
+        "url": "https://www.mass.gov/info-details/paid-family-and-medical-leave-employer-contribution-rates-and-calculator",
+        "verified": "2026-08-08"
       }
     },
     "NH": {
@@ -620,6 +634,13 @@
         "note": "Business mode. 0.55% on the enterprise value tax base -- compensation paid, interest and dividends -- RSA 77-E. CRITICAL: BET paid is CREDITED against BPT liability, so an enterprise owing both effectively pays the GREATER of the two, not the sum. Modelling NH as 7.5%+0.55% overstates it. The dashboard shows the credit as an explicit negative line.",
         "source": "NH DRA, Taxes at a Glance -- Business Taxes; RSA 77-E; credit per RSA 77-A:5 X",
         "url": "https://www.revenue.nh.gov/taxes-glance/business-taxes",
+        "verified": "2026-08-08"
+      },
+      "pfmlEmployerRate": {
+        "value": 0,
+        "note": "Business mode. GENUINELY ZERO, not a placeholder. The Granite State Paid Family Leave Plan is the only VOLUNTARY state PFML program in the country: private employers may opt in and receive a business tax credit for half the premium, but no employer is required to contribute. This is a real asymmetry with Massachusetts and one of the larger ones in the model, so it is stated rather than left implicit.",
+        "source": "NH RSA 21-I:99 et seq., Granite State Paid Family Leave Plan (voluntary)",
+        "url": "https://www.paidfamilymedicalleave.nh.gov/",
         "verified": "2026-08-08"
       }
     }

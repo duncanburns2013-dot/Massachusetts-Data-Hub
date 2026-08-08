@@ -357,7 +357,7 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
 
 <div id="bizView" hidden>
   <h2>What a business pays, side by side</h2>
-  <p class="sub">State business taxes only, on the figures you enter. Both states also charge property tax on business real estate, and both have federal tax on top — those are the same wherever you are, so they are left out rather than padded in.</p>
+  <p class="sub">State taxes and state-mandated employer costs, on the figures you enter. Both states also charge property tax on business real estate, and both have federal tax on top — those are the same wherever you are, so they are left out rather than padded in.</p>
   <p class="sub" style="margin-top:-6px"><b>The numbers below are an example, not a survey.</b> Pick a shape of business, or type your own into the panel — the answer moves a long way depending on what you buy and who you employ.</p>
   <div class="presets" id="bizPresets"></div>
 
@@ -373,7 +373,7 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
   <div class="bizwarn">
     <p style="margin:0 0 10px"><b>Read this before quoting the number.</b> This is a first pass and it is deliberately incomplete. It covers the state business taxes whose rates are filed and verified, and nothing else.</p>
     <p style="margin:0 0 10px" id="bizSens"></p>
-    <p style="margin:0 0 10px"><b>Not included yet:</b> Massachusetts Paid Family and Medical Leave, which has no New Hampshire equivalent and is a real cost; employer unemployment insurance in either state; and the sales tax a Massachusetts business pays on the things it buys, which is real but is not separately reported anywhere and would have to be estimated rather than sourced.</p>
+    <p style="margin:0 0 10px"><b>Still not included:</b> employer unemployment insurance in either state, which is experience-rated and so varies by employer rather than by state. Paid Family and Medical Leave <em>is</em> now included, and it matters: it is charged on payroll, so leaving it out understated Massachusetts most severely for exactly the high-payroll businesses where New Hampshire's Business Enterprise Tax bites hardest. One caution on it — the 0.42% applies to each employee's wages only up to the Social Security maximum, and this model applies it to total payroll, so it is an upper bound where staff are highly paid.</p>
     <p style="margin:0 0 10px"><b>The biggest costs of operating here may not be taxes at all.</b> This page measures taxes, because taxes have filed rates that can be sourced and checked. It does not measure the cost of <em>permission</em>: licences and permit fees, inspections and renewals, and the carrying cost of an approval that takes months to issue while rent and payroll run anyway. Those can easily exceed the tax difference — a single multi-month permitting delay on a buildout can cost more than the entire annual state tax gap shown above. None of it is in this model, and its absence is not evidence that it is small.</p>
     <p style="margin:0 0 10px"><b>Nor is compliance capital.</b> When a rule changes how much space, staffing or equipment a business must provide, the cost lands as rent, buildout and headcount rather than as tax — so nothing on this page moves, even where the economics of a site have changed completely. Rules like these are written industry by industry and enforced municipality by municipality, which is precisely why no single figure can stand in for them. That is a reason to disclose the gap, not to fill it with an invented number.</p>
     <p style="margin:0 0 10px"><b>Why New Hampshire's figure moves less.</b> Massachusetts taxes four things on this page: profit, equipment or net worth, the things you buy in-state, and a floor under the whole excise. New Hampshire taxes two: profit and payroll. Equipment and purchases cannot move a New Hampshire bill at all — which is most of the reason the two states pull apart as a business gets more capital-intensive, and most of the reason they converge for a business that mainly employs people.</p>
@@ -471,6 +471,8 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
           <tr><td>Corporate excise on profit</td><td>8%<br><span class="src">Business mode. 8.0% of net income attributable to Massachusetts, M.G.L. c.63 s.39. This is the general business corporation rate; S corporations, financial institutions and insurers are taxed on different schedules and are NOT modelled.</span></td><td><a href="https://www.mass.gov/guides/corporate-excise-tax">MA DOR, Corporate Excise guide; M.G.L. c.63 s.39</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
           <tr><td>Corporate excise on net worth</td><td>$2.60 per $1,000<br><span class="src">Business mode. $2.60 per $1,000 of the GREATER of taxable Massachusetts tangible property or taxable net worth — a business corporation pays on one measure or the other, never both. New Hampshire levies no comparable net-worth tax.</span></td><td><a href="https://www.mass.gov/guides/corporate-excise-tax">MA DOR, Corporate Excise guide; M.G.L. c.63 s.32, s.39</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
           <tr><td>Minimum corporate excise</td><td>$456<br><span class="src">Business mode. Minimum corporate excise, applied to the COMBINED income and net-worth measures rather than to either separately. Binding only on very small or loss-making corporations; the dashboard shows the top-up as its own line so the reader can see when it bites.</span></td><td><a href="https://www.mass.gov/guides/corporate-excise-tax">MA DOR, Corporate Excise guide; M.G.L. c.63 s.39</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
+          <tr><td>PFML employer share</td><td>0.42%<br><span class="src">Business mode. Employer share of MA Paid Family and Medical Leave: 0.42% of eligible wages, being 60% of the 0.70% medical-leave contribution. The 0.18% family-leave contribution may be taken entirely from employee wages and is NOT counted as an employer cost here. Rate unchanged from 2025. TWO LIMITS the model applies only partly: wages count only up to the Social Security taxable maximum PER EMPLOYEE, so applying the rate to total payroll overstates it for a firm with highly paid staff; and employers with fewer than 25 covered individuals owe NO employer share, which the model does apply via the headcount input.</span></td><td><a href="https://www.mass.gov/info-details/paid-family-and-medical-leave-employer-contribution-rates-and-calculator">MA Department of Family and Medical Leave, 2026 contribution rates</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
+          <tr><td>PFML employer-share threshold</td><td>$25<br><span class="src">Business mode. Employers with fewer than 25 covered individuals must still withhold the employee share but owe no employer contribution. This threshold decides whether the largest single unmodelled MA cost applies at all, so it is modelled rather than assumed away.</span></td><td><a href="https://www.mass.gov/info-details/paid-family-and-medical-leave-employer-contribution-rates-and-calculator">MA Department of Family and Medical Leave, 2026 contribution rates</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
           <tr><td>Corporate &amp; business excise collected</td><td>$4.662B<br><span class="src">FY2025 corporate and business excise collections. COMPOSITION, per the DOR FY2025 Annual Report collections-by-type table: Corporations $4,036,624K + Insurance $613,268K + Financial Institutions $19,949K = $4.670B, reconciling to this figure. That matters for any Layer 3 expansion: insurance and financial institution excises are ALREADY IN HERE. Adding them as separate pools would double-count about $633M, roughly 14% of the MA pool. See LAYER3-SCOPE.md.</span></td><td><a href="https://www.mass.gov/news/fiscal-year-2025-revenue-collections-totaled-43708-billion">MA DOR FY2025 revenue close, August 2025</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
           <tr><td>Average single-family tax bill</td><td>$8,113</td><td><a href="https://www.mass.gov/info-details/fy2026-statewide-average-single-family-tax-bill">MA DLS, City & Town, February 2026 (FY2026 statewide average single-family tax bill)</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
           <tr><td>Average single-family assessment</td><td>$742,986<br><span class="src">FY2026 statewide average assessed single-family value. Effective rate = 8113 / 742986 = 1.092%. ASSESSED, not market.</span></td><td><a href="https://www.mass.gov/info-details/fy2026-statewide-average-single-family-tax-bill">MA DLS, City & Town, February 2026</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
@@ -488,6 +490,7 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
           <tr><td>Road toll (motor fuel)</td><td>23.75&cent; per gallon<br><span class="src">22.2c road toll + ~1.55c oil discharge and disposal surcharges = 23.75c. Corrected from a 23.83c placeholder that used 1.625c for the surcharge. Note RSA 260:32 still reads a $0.18 base rate; the 22.2c effective rate reflects the 4.2c increase enacted by 2014 SB 367, and the CPI-indexing mechanism at RSA 260:32-a was repealed by 2014, 17:5, so the rate is now fixed until the legislature moves it. The surcharge component varies slightly by year — treat the total as ~23.7-23.8c.</span></td><td><a href="https://gc.nh.gov/rsa/html/XXI/260/260-32.htm">RSA 260:32 (base); oil discharge surcharges per RSA 146-A; total per SalesTaxHandbook / Federation of Tax Administrators</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
           <tr><td>Business Profits Tax</td><td>7.5%<br><span class="src">Business mode. 7.5% of gross business profits, RSA 77-A, for taxable periods ending on or after 31 December 2023 — down from 8.5% in 2018. Filing threshold applies to smaller enterprises and is not modelled.</span></td><td><a href="https://www.revenue.nh.gov/taxes-glance/business-taxes">NH DRA, Taxes at a Glance — Business Taxes; RSA 77-A</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
           <tr><td>Business Enterprise Tax</td><td>0.55%<br><span class="src">Business mode. 0.55% on the enterprise value tax base — compensation paid, interest and dividends — RSA 77-E. CRITICAL: BET paid is CREDITED against BPT liability, so an enterprise owing both effectively pays the GREATER of the two, not the sum. Modelling NH as 7.5%+0.55% overstates it. The dashboard shows the credit as an explicit negative line.</span></td><td><a href="https://www.revenue.nh.gov/taxes-glance/business-taxes">NH DRA, Taxes at a Glance — Business Taxes; RSA 77-E; credit per RSA 77-A:5 X</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
+          <tr><td>PFML employer share</td><td>none<br><span class="src">Business mode. GENUINELY ZERO, not a placeholder. The Granite State Paid Family Leave Plan is the only VOLUNTARY state PFML program in the country: private employers may opt in and receive a business tax credit for half the premium, but no employer is required to contribute. This is a real asymmetry with Massachusetts and one of the larger ones in the model, so it is stated rather than left implicit.</span></td><td><a href="https://www.paidfamilymedicalleave.nh.gov/">NH RSA 21-I:99 et seq., Granite State Paid Family Leave Plan (voluntary)</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
           <tr><td>BPT collected</td><td>$819.2M<br><span class="src">Business Profits Tax portion = 74.3% of the audited $1,102.6M combined total. METHOD: NH DAS publishes BPT and BET only as one 'Business Taxes' line, so the audited TOTAL is primary and the DIVISION comes from NHFPI's five-year average (TY2019-2023), which puts BET at 25.7% of business tax revenue. Not a FY2025-specific split — a sourced ratio applied to a primary total. The division matters because BPT is a profits tax (largely capital incidence) while BET's base is compensation (largely labour incidence).</span></td><td><a href="https://nhfpi.org/resource/business-enterprise-tax-rate-decreases-have-lowered-revenue-with-limited-economic-benefit/">NH DAS FY2025 total; BPT/BET ratio from NH Fiscal Policy Institute (five-year TY2019-2023 average)</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
           <tr><td>BET collected</td><td>$283.4M<br><span class="src">Business Enterprise Tax portion = 25.7% of the audited $1,102.6M total. Rate 0.55% under RSA 77-E (history: 0.75% pre-2016, 0.72% 2016-17, 0.675% 2018, 0.6% 2019-21, 0.55% since 2022). Base is compensation plus interest and dividends paid. CAVEAT the model does not capture: BET credits equal to roughly 74% of BET liability are applied against BPT liability, so a firm paying both effectively pays the greater of the two rather than the sum. That makes the two pools less independent than treating them as separate incidence buckets implies — the labour-incidence share of NH business taxes is directionally right but the magnitude is soft. TY2023 BET revenue was $253M for scale.</span></td><td><a href="https://nhfpi.org/resource/business-enterprise-tax-rate-decreases-have-lowered-revenue-with-limited-economic-benefit/">NH DAS FY2025 total; BET share and rate history from NH Fiscal Policy Institute</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
           <tr><td>I&amp;D revenue, final year</td><td>$90.8M<br><span class="src">CONTEXT, not used in the model. FY2025 Interest & Dividends tax revenue, down 50.7% from FY2024's $184.3M as the repeal phased in (5% -> 4% -> 3% -> 0%). This is the size of what New Hampshire actually gave up on 1 Jan 2025, in the state's own accrual figures — useful for the dashboard's copy about which gap is new.</span></td><td><a href="https://www.das.nh.gov/accounting/FY%2025/FY2025_Monthly_Revenue_June_Preliminary_Accrual.pdf">NH DAS Monthly Revenue Focus, June FY2025 Preliminary Accrual</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
@@ -568,7 +571,8 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
       <div class="field"><label for="bizProfit">Profit earned in the state</label><input type="number" id="bizProfit" value="650000" step="25000" min="0"><p class="hint">Taxable income attributed to that state.</p></div>
       <div class="field"><label for="bizPayroll">Total payroll</label><input type="number" id="bizPayroll" value="1800000" step="50000" min="0"><p class="hint">Wages you pay out. New Hampshire taxes this directly.</p></div>
       <div class="field"><label for="bizWorth">Equipment or net worth</label><input type="number" id="bizWorth" value="1400000" step="50000" min="0"><p class="hint">Massachusetts charges on whichever is greater.</p></div>
-      <div class="field"><label for="bizInputs">Things you buy in-state per year</label><input type="number" id="bizInputs" value="850000" step="25000" min="0"><p class="hint">Massachusetts charges 6.25% sales tax on much of this. New Hampshire has none.</p></div>
+      <div class="field"><label for="bizHeads">How many people you employ</label><input type="number" id="bizHeads" value="28" step="1" min="0"><p class="hint">Massachusetts only charges the employer share of Paid Family and Medical Leave at 25 or more.</p></div>
+  <div class="field"><label for="bizInputs">Things you buy in-state per year</label><input type="number" id="bizInputs" value="850000" step="25000" min="0"><p class="hint">Massachusetts charges 6.25% sales tax on much of this. New Hampshire has none.</p></div>
       </div>
       <h3 class="mt">Who actually pays?</h3>
       <p class="hint" style="margin:-6px 0 12px">Businesses don't really pay taxes — people do. The only question is which people: workers through smaller paychecks, or owners through smaller profits. Economists argue about the split, so it's a slider, not a fact.</p>
@@ -609,7 +613,7 @@ const K = {
 
   // Point-in-time stamp. Drift only -- unverified figures are excluded, because
   // dating a placeholder would imply a currency it does not have.
-  vintage:{"annual": {"count": 26, "newest": "2026-08-08", "oldest": "2026-08-08"}, "market": {"count": 11, "newest": "2026-08-08", "oldest": "2026-08-08"}, "statutory": {"count": 31, "newest": "2026-08-08", "oldest": "2026-08-08"}},
+  vintage:{"annual": {"count": 26, "newest": "2026-08-08", "oldest": "2026-08-08"}, "market": {"count": 11, "newest": "2026-08-08", "oldest": "2026-08-08"}, "statutory": {"count": 34, "newest": "2026-08-08", "oldest": "2026-08-08"}},
   unverifiedCount:0,
   generated:"2026-08-08",
 
@@ -624,6 +628,8 @@ const K = {
       corpRate:0.08,
       corpPer1000:2.6,
       corpMin:456,
+      pfmlRate:0.0042,
+      pfmlHeads:25,
       households:2829804, aggHhIncome:408376085400,
       meanHhIncome:144312,   // DERIVED aggregate/households
       incShare:0.026917552,   // DERIVED state aggregate / national aggregate
@@ -647,6 +653,7 @@ const K = {
       corpPool:819231800, betPool:283368200,
       bptRate:0.075,
       betRate:0.0055,
+      pfmlRate:0,
       households:570689, aggHhIncome:73392725500,
       meanHhIncome:128604,   // DERIVED aggregate/households
       incShare:0.004837581,   // DERIVED state aggregate / national aggregate
@@ -1674,11 +1681,11 @@ let mode = 'household';
    $37,500 across three different "businesses". That was a controlled comparison wearing
    the label of a realistic one, and it read as a bug because it looked like one. */
 const BIZ_PRESETS = {
-  'Small manufacturer': {bizProfit:650000, bizPayroll:1800000, bizWorth:1400000, bizInputs:850000},
-  'Service firm':       {bizProfit:400000, bizPayroll:2400000, bizWorth:80000,   bizInputs:60000},
-  'Equipment-heavy':    {bizProfit:900000, bizPayroll:2200000, bizWorth:4000000, bizInputs:1600000},
-  'Thin margin, big payroll': {bizProfit:100000, bizPayroll:4500000, bizWorth:250000, bizInputs:150000},
-  'Pre-profit startup': {bizProfit:0,      bizPayroll:300000,  bizWorth:50000,   bizInputs:40000}
+  'Small manufacturer': {bizProfit:650000, bizPayroll:1800000, bizWorth:1400000, bizInputs:850000,  bizHeads:28},
+  'Service firm':       {bizProfit:400000, bizPayroll:2400000, bizWorth:80000,   bizInputs:60000,   bizHeads:18},
+  'Equipment-heavy':    {bizProfit:900000, bizPayroll:2200000, bizWorth:4000000, bizInputs:1600000, bizHeads:26},
+  'Thin margin, big payroll': {bizProfit:100000, bizPayroll:4500000, bizWorth:250000, bizInputs:150000, bizHeads:110},
+  'Pre-profit startup': {bizProfit:0,      bizPayroll:300000,  bizWorth:50000,   bizInputs:40000,   bizHeads:4}
 };
 const BIZ_DEFAULTS = BIZ_PRESETS['Small manufacturer'];
 
@@ -1693,6 +1700,14 @@ function renderBiz(){
   const payroll = Math.max(0, +$('bizPayroll').value || 0);
   const worth   = Math.max(0, +$('bizWorth').value   || 0);
   const inputs  = Math.max(0, +$('bizInputs').value  || 0);
+  const heads   = Math.max(0, +$('bizHeads').value   || 0);
+
+  /* Employer share of MA Paid Family and Medical Leave. Charged on PAYROLL, which is why
+     leaving it out flattered Massachusetts most in exactly the high-payroll case this
+     page uses to show the BET biting. New Hampshire's programme is voluntary, so its
+     mandatory employer cost really is zero rather than merely unsourced. */
+  const maPfml = heads >= K.MA.pfmlHeads ? payroll * K.MA.pfmlRate : 0;
+  const nhPfml = payroll * K.NH.pfmlRate;
 
   /* MA: 8% of income PLUS $2.60 per $1,000 of the greater of tangible property or net
      worth, with a $456 floor on the combined excise. */
@@ -1701,26 +1716,30 @@ function renderBiz(){
   const maExcise    = Math.max(K.MA.corpMin, maIncomeTax + maWorthTax);
   const maFloor     = maExcise - (maIncomeTax + maWorthTax);
   const maSales     = inputs * K.MA.salesRate;
-  const maTot       = maExcise + maSales;
+  const maTot       = maExcise + maSales + maPfml;
   const maRows = [
     ['Corporate excise on profit', maIncomeTax, pctLabel(K.MA.corpRate) + ' of profit earned here'],
     ['Excise on equipment or net worth', maWorthTax, '$' + K.MA.corpPer1000.toFixed(2) + ' per $1,000, whichever is greater'],
     ['Minimum excise top-up', maFloor, maFloor > 0
         ? 'Excise cannot fall below ' + fmt(K.MA.corpMin) + ' — it is binding here'
         : 'Not binding at this size'],
-    ['Sales tax on what you buy', maSales, pctLabel(K.MA.salesRate) + ' on in-state purchases']
+    ['Sales tax on what you buy', maSales, pctLabel(K.MA.salesRate) + ' on in-state purchases'],
+    ['Paid Family & Medical Leave', maPfml, heads >= K.MA.pfmlHeads
+        ? pctLabel(K.MA.pfmlRate) + ' of payroll, employer share'
+        : 'Under ' + K.MA.pfmlHeads + ' staff — no employer share owed']
   ];
 
   /* NH: the BET credits against the BPT, so a firm paying both owes the GREATER of the
      two, not the sum. Adding 7.5% and 0.55% together overstates New Hampshire. */
   const nhBpt = profit * K.NH.bptRate;
   const nhBet = payroll * K.NH.betRate;
-  const nhTot = Math.max(nhBpt, nhBet);
+  const nhTot = Math.max(nhBpt, nhBet) + nhPfml;
   const nhRows = [
     ['Business Profits Tax', nhBpt, pctLabel(K.NH.bptRate) + ' of profit earned here'],
     ['Business Enterprise Tax', nhBet, pctLabel(K.NH.betRate) + ' of payroll'],
-    ['You pay the greater, not the sum', nhTot - (nhBpt + nhBet), 'The BET credits against the BPT'],
-    ['Sales tax on what you buy', 0, 'New Hampshire has no sales tax']
+    ['You pay the greater, not the sum', Math.max(nhBpt, nhBet) - (nhBpt + nhBet), 'The BET credits against the BPT'],
+    ['Sales tax on what you buy', 0, 'New Hampshire has no sales tax'],
+    ['Paid Family & Medical Leave', nhPfml, 'Voluntary in New Hampshire — no employer is required to pay']
   ];
 
   const put = (el, rows) => { $(el).innerHTML = rows.map(r =>
@@ -2006,7 +2025,7 @@ FIELDS.forEach(f => {
   $(f).addEventListener('change', scheduleRender);
 });
 $('sameHouse').addEventListener('change', render);
-['bizProfit','bizPayroll','bizWorth','bizInputs'].forEach(function(f){
+['bizProfit','bizPayroll','bizWorth','bizInputs','bizHeads'].forEach(function(f){
   $(f).addEventListener('input', function(){ if (mode === 'business') renderBiz(); }); });
 
 $('bizPresets').innerHTML = Object.keys(BIZ_PRESETS).map(function(n){

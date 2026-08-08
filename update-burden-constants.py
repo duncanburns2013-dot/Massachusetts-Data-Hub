@@ -70,6 +70,8 @@ LEDGER = [
         ("states.MA.corporateExciseRate", "Corporate excise on profit"),
         ("states.MA.corporateExcisePer1000NetWorth", "Corporate excise on net worth"),
         ("states.MA.corporateExciseMinimum", "Minimum corporate excise"),
+        ("states.MA.pfmlEmployerRate", "PFML employer share"),
+        ("states.MA.pfmlThresholdHeads", "PFML employer-share threshold"),
         ("states.MA.corporateExcisePool", "Corporate &amp; business excise collected"),
         ("states.MA.avgSingleFamilyBill", "Average single-family tax bill"),
         ("states.MA.avgSingleFamilyValue", "Average single-family assessment"),
@@ -88,6 +90,7 @@ LEDGER = [
         ("states.NH.gasCentsPerGal", "Road toll (motor fuel)"),
         ("states.NH.businessProfitsTaxRate", "Business Profits Tax"),
         ("states.NH.businessEnterpriseTaxRate", "Business Enterprise Tax"),
+        ("states.NH.pfmlEmployerRate", "PFML employer share"),
         ("states.NH.corporateExcisePool", "BPT collected"),
         ("states.NH.enterpriseTaxPool", "BET collected"),
         ("states.NH.interestDividendsRevenue", "I&amp;D revenue, final year"),
@@ -393,7 +396,9 @@ def state_block(code, st, d, indent="    "):
                     ("corporateExcisePer1000NetWorth", "corpPer1000"),
                     ("corporateExciseMinimum", "corpMin"),
                     ("businessProfitsTaxRate", "bptRate"),
-                    ("businessEnterpriseTaxRate", "betRate")):
+                    ("businessEnterpriseTaxRate", "betRate"),
+                    ("pfmlEmployerRate", "pfmlRate"),
+                    ("pfmlThresholdHeads", "pfmlHeads")):
         if key in st:
             lines.append(f"  {js}:{js_num(v(key))},")
     lines += [
