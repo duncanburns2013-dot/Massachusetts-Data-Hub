@@ -407,6 +407,27 @@
         "source": "Deliberate scope decision; stock disclosed separately above",
         "url": "https://www.mass.gov/orgs/public-employee-retirement-administration-commission",
         "verified": "2026-08-08"
+      },
+      "corporateExciseRate": {
+        "value": 0.08,
+        "note": "Business mode. 8.0% of net income attributable to Massachusetts, M.G.L. c.63 s.39. This is the general business corporation rate; S corporations, financial institutions and insurers are taxed on different schedules and are NOT modelled.",
+        "source": "MA DOR, Corporate Excise guide; M.G.L. c.63 s.39",
+        "url": "https://www.mass.gov/guides/corporate-excise-tax",
+        "verified": "2026-08-08"
+      },
+      "corporateExcisePer1000NetWorth": {
+        "value": 2.6,
+        "note": "Business mode. $2.60 per $1,000 of the GREATER of taxable Massachusetts tangible property or taxable net worth -- a business corporation pays on one measure or the other, never both. New Hampshire levies no comparable net-worth tax.",
+        "source": "MA DOR, Corporate Excise guide; M.G.L. c.63 s.32, s.39",
+        "url": "https://www.mass.gov/guides/corporate-excise-tax",
+        "verified": "2026-08-08"
+      },
+      "corporateExciseMinimum": {
+        "value": 456,
+        "note": "Business mode. Minimum corporate excise, applied to the COMBINED income and net-worth measures rather than to either separately. Binding only on very small or loss-making corporations; the dashboard shows the top-up as its own line so the reader can see when it bites.",
+        "source": "MA DOR, Corporate Excise guide; M.G.L. c.63 s.39",
+        "url": "https://www.mass.gov/guides/corporate-excise-tax",
+        "verified": "2026-08-08"
       }
     },
     "NH": {
@@ -585,6 +606,20 @@
         "note": "DELIBERATELY ZERO -- see the matching MA note. Excluded on the same basis and by the same rule, so the exclusion cannot favour either state. NH employers contribute against the NHRS liability annually and that reaches households through local property tax, which Layer 1 already counts. The $5.58B stock is disclosed beside Layer 5 instead. Input remains editable.",
         "source": "Deliberate scope decision; stock disclosed separately above",
         "url": "https://www.nhrs.org/about-nhrs",
+        "verified": "2026-08-08"
+      },
+      "businessProfitsTaxRate": {
+        "value": 0.075,
+        "note": "Business mode. 7.5% of gross business profits, RSA 77-A, for taxable periods ending on or after 31 December 2023 -- down from 8.5% in 2018. Filing threshold applies to smaller enterprises and is not modelled.",
+        "source": "NH DRA, Taxes at a Glance -- Business Taxes; RSA 77-A",
+        "url": "https://www.revenue.nh.gov/taxes-glance/business-taxes",
+        "verified": "2026-08-08"
+      },
+      "businessEnterpriseTaxRate": {
+        "value": 0.0055,
+        "note": "Business mode. 0.55% on the enterprise value tax base -- compensation paid, interest and dividends -- RSA 77-E. CRITICAL: BET paid is CREDITED against BPT liability, so an enterprise owing both effectively pays the GREATER of the two, not the sum. Modelling NH as 7.5%+0.55% overstates it. The dashboard shows the credit as an explicit negative line.",
+        "source": "NH DRA, Taxes at a Glance -- Business Taxes; RSA 77-E; credit per RSA 77-A:5 X",
+        "url": "https://www.revenue.nh.gov/taxes-glance/business-taxes",
         "verified": "2026-08-08"
       }
     }
