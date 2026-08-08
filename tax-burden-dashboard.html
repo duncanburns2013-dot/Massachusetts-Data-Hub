@@ -289,8 +289,9 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
 
 <header class="masthead">
   <p class="eyebrow">Massachusetts Data Hub · Fiscal Incidence</p>
-  <h1 id="mastH1">What you're billed is the first layer, not the last.</h1>
-  <p class="standfirst" id="mastLede">Visible taxes — the ones with your name on the notice — are the only part most burden estimates count. Four more layers sit underneath: the employer half of payroll tax, tax embedded in prices and wages, policy costs collected through utility bills, and this year's borrowing, which is a tax with the due date left blank.</p>
+  <!-- Kept identical to COPY.ma below; showTab() overwrites both on load. -->
+  <h1 id="mastH1">The taxes you can see are only the start.</h1>
+  <p class="standfirst" id="mastLede">Most people count the taxes they can see. There are four more underneath: what your job pays for you, what companies pass on in prices, what shows up on your power bill, and what the government borrowed and has not paid back yet.</p>
 </header>
 
 <!-- One household, one engine, three views. Massachusetts and New Hampshire each get a
@@ -573,7 +574,7 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
       <div class="field"><label for="yieldPct">What it pays out each year <span class="rangeval" id="vYield">2.0%</span></label><input type="range" id="yieldPct" min="0" max="8" step="0.1" value="2"><p class="hint">Dividends and interest. This is the one New Hampshire actually got rid of, in January 2025. Massachusetts still charges 5%.</p></div>
       <div class="field"><label for="realizedGains">Investment profits you cashed out this year</label><input type="number" id="realizedGains" value="0" step="10000" min="0"><p class="hint">New Hampshire has never taxed these — that gap is decades old, not a recent change.</p></div>
       <div class="field"><label for="gainsTerm">Did you hold it over a year?</label><select id="gainsTerm"><option value="lt">Long-term — MA 5%</option><option value="st">Short-term — MA 8.5%</option></select></div>
-      <div class="field"><label for="withdrawal">401(k)/IRA withdrawals/yr</label><input type="number" id="withdrawal" value="0" step="10000" min="0"><p class="hint">Massachusetts taxes withdrawals like regular pay. Fill this in to see a retiree instead of a worker.</p></div>
+      <div class="field"><label for="withdrawal">401(k)/IRA withdrawals/yr</label><input type="number" id="withdrawal" value="0" step="10000" min="0"><p class="hint">Massachusetts taxes money you take out of a 401(k) or IRA like regular pay. It does not tax Social Security. Fill this in to see a retiree instead of a worker.</p></div>
 
       <div id="grpBiz" hidden>
       <h3 class="mt">Your business</h3>
