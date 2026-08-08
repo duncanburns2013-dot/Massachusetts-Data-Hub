@@ -294,8 +294,14 @@ def gate_component_bound(data):
               "\n        Implies the cheaper-policy state is dearer on generation, transmission"
               "\n        and distribution combined. Verify the tariffs before publishing Layer 4.")
     else:
-        print(f"\033[92m  ok\033[0m  Layer 4 policy gap {policy_gap:.2f}c/kWh within the "
-              f"{retail_gap:.2f}c/kWh retail price gap")
+        # Do NOT call this "within" the retail gap — it routinely is not, and saying so
+        # prints a reassuring line that is false. What actually passed is the 2.5x
+        # tolerance for the statewide-average vs single-utility mismatch. Say that.
+        rel = "exceeds" if policy_gap > retail_gap else "under"
+        ratio = policy_gap / retail_gap if retail_gap else float("inf")
+        print(f"\033[92m  ok\033[0m  Layer 4 policy gap {policy_gap:.2f}c/kWh {rel} the "
+              f"{retail_gap:.2f}c/kWh retail gap — within the 2.5x tolerance ({ratio:.1f}x) "
+              f"for statewide-average vs single-utility")
 
 
 # ---------------------------------------------------------------- vintage
