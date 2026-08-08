@@ -373,6 +373,123 @@ The MA vintage. Lands ~3 weeks after the national release, which is why the MA b
 
 ---
 
+## 🧾 Tax Burden — Federal & Massachusetts
+
+Machine-readable source of truth: [`data/burden-constants.json`](data/burden-constants.json).
+Both burden dashboards are generated from it by `update-burden-constants.py`. Change the
+JSON, not the HTML.
+
+| Figure | Value | Source | URL | Verified |
+|---|---|---|---|---|
+| Federal standard deduction TY2026 | $16,100 single / $32,200 MFJ | IRS Rev. Proc. 2025-32 | irs.gov/pub/irs-drop/rp-25-32.pdf | ✅ Aug 2026 |
+| Social Security wage base 2026 | $184,500 | SSA contribution & benefit base | ssa.gov/oact/cola/cbb.html | ✅ Aug 2026 |
+| MA income tax rate | 5.0% flat | M.G.L. c. 62 §4 | malegislature.gov | ✅ Aug 2026 |
+| MA 4% surtax threshold TY2026 | $1,107,750 | M.G.L. c. 62 §§4(d), 5A; DOR | mass.gov/info-details/massachusetts-4-surtax-on-taxable-income | ✅ Aug 2026 |
+| MA interest, dividends & long-term gains | 5% | M.G.L. c. 62 §4(a),(c) | mass.gov/info-details/massachusetts-income-tax-rates | ✅ Aug 2026 |
+| MA short-term capital gains | 8.5% (cut from 12%, St. 2023 c. 50) | M.G.L. c. 62 §4(c) | same | ✅ Aug 2026 |
+| MA motor fuel excise | **26.5¢/gal** (24¢ + 2.5¢ UST) | M.G.L. c. 64A §1; c. 21J §3 | mass.gov/info-details/motor-fuel-excise-tax | ✅ Aug 2026 |
+| MA avg single-family tax bill FY2026 | $8,113 | DLS *City & Town*, Feb 2026 | mass.gov/info-details/fy2026-statewide-average-single-family-tax-bill | ✅ Aug 2026 |
+| MA avg single-family assessed value FY2026 | $742,986 → 1.092% effective | DLS *City & Town*, Feb 2026 | same | ✅ Aug 2026 |
+| MA corporate & business excise FY2025 | $4.662B | DOR FY2025 close, Aug 2025 | mass.gov/news/fiscal-year-2025-revenue-collections-totaled-43708-billion | ✅ Aug 2026 |
+| MA households | 2,829,804 | Census ACS 2024 1-yr, B11001 | censusreporter.org/profiles/04000US25-massachusetts/ | ✅ Aug 2026 |
+| MA aggregate household income | $408.376B | Census ACS 2024 1-yr, B19025 | same | ✅ Aug 2026 |
+| **MA mean household income** | **$144,312** (B19025 ÷ B11001) | Derived — the allocation divisor | same | ✅ Aug 2026 |
+| MA population | 7,044,056 | Census ACS 2024 5-yr, B01003 | same | ✅ Aug 2026 |
+| MA share of national household income | 2.6918% (derived) | ACS B19025 ÷ national B19025 | same | ✅ Aug 2026 |
+| MA share of national population | 2.1032% (derived) | ACS B01003 | same | ✅ Aug 2026 |
+| US households | 132,737,144 | Census ACS 2024 1-yr, B11001 | censusreporter.org/tables/B11001/ | ✅ Aug 2026 |
+| US aggregate household income | $15.171T | Census ACS 2024 1-yr, B19025 | censusreporter.org/tables/B19025/ | ✅ Aug 2026 |
+| Federal deficit FY2025 | $1.8T (5.8–5.9% of GDP) | CBO Monthly Budget Review, Oct 2025 | cbo.gov/publication/61307 | ✅ Aug 2026 |
+| **Federal corporate income tax receipts FY2025** | **$452,089,303,420** (net) | U.S. Treasury, Final Monthly Treasury Statement Sept 2025, Table 4 | api.fiscaldata.treasury.gov — mts_table_4 | ✅ Aug 2026 |
+| Federal corporate receipts FY2024 | $529,866,802,638 — FY25 is −14.7% | same | same | ✅ Aug 2026 |
+| MA unfunded pension + OPEB (stock) | $55.8B total · $42.1B pension-only · $19,719/household | Commonwealth ACFR FY2024; PERAC | See pension-dashboard.html | ✅ Aug 2026 |
+| MA annual pension appropriation FY2026 | $4.9B — ~8% of the state budget, **already in Layer 1** | Commonwealth budget FY2026 | same | ✅ Aug 2026 |
+| MA electric policy charges | 4.0¢/kWh — **placeholder** | DPU tariffs (EE, RE, NMRS, SMART, 83C/83D) | mass.gov/orgs/department-of-public-utilities | ⚠️ Unverified |
+| MA gas policy charges | 18¢/therm — **placeholder** | DPU tariff (EE surcharge, GSEP) | same | ⚠️ Unverified |
+| MA state/local unfunded annual accrual | $2,000/household — **placeholder** | PERAC; ACFRs | See pension-dashboard.html | ⚠️ Unverified |
+
+### ⚠️ The two MA median-income figures — do not merge them
+
+| Vintage | Value | Concept | Use |
+|---|---|---|---|
+| Census **CPS ASEC** via FRED `MEHOINUSMAA646N` | **$113,900** | Median household income 2024 | Context / presets |
+| Census **ACS 1-year** B19013 | **$104,828** | Median household income 2024 | Context / presets |
+| Census **ACS 1-year** B19025 ÷ B11001 | **$144,312** | *Mean* household income | **Allocation divisor** |
+
+CPS and ACS disagree by ~$9K on the same concept. Carry both and cite which one any
+given chart uses — this is exactly the kind of thing a hostile reader finds first.
+
+**Known defect to fix:** `tax-budget-dashboard.html` (lines ~517 and ~564) labels
+$113,900 as "Census 2024 ACS". That is wrong — $113,900 is the **CPS** figure; ACS says
+$104,828. Also line ~184 of that file states property taxes average "$7,732/year" with
+no fiscal year label, against the FY2026 DLS figure of $8,113.
+
+**Never use a median as an allocation divisor.** Per-household shares must sum back to
+the statewide pool, which only works with the mean. The reconciliation panel on the
+burden dashboard checks this.
+
+---
+
+## 🗽 Tax Burden — New Hampshire
+
+| Figure | Value | Source | URL | Verified |
+|---|---|---|---|---|
+| NH individual income tax | **0%** — I&D repealed 1 Jan 2025 | NH DRA; HB 2 (2023) ch. 79 §§86-88 | revenue.nh.gov/news-and-media/repeal-nh-interest-and-dividends-tax-now-effect | ✅ Aug 2026 |
+| NH I&D rate history | 5% → 4% (2023) → 3% (2024) → 0% (2025) | NH DRA | revenue.nh.gov/taxes-glance/interest-dividends-tax | ✅ Aug 2026 |
+| NH capital gains tax | **None — never levied** (not a 2025 change) | NH DRA | revenue.nh.gov/taxes-glance | ✅ Aug 2026 |
+| NH general sales tax | None | NH DRA | revenue.nh.gov | ✅ Aug 2026 |
+| NH Meals & Rooms tax | 8.5% | RSA 78-A | revenue.nh.gov/taxes-glance/meals-rentals-tax | ✅ Aug 2026 |
+| NH Business Profits Tax | 7.5% | RSA 77-A | revenue.nh.gov/taxes-glance/business-taxes | ✅ Aug 2026 |
+| NH Business Enterprise Tax | 0.55% on compensation + interest + dividends paid | RSA 77-E | same | ✅ Aug 2026 |
+| NH Real Estate Transfer Tax | $0.75 per $100, **each side** | RSA 78-B | revenue.nh.gov | ✅ Aug 2026 |
+| NH households | 570,689 | Census ACS 2024 1-yr, B11001 | censusreporter.org/profiles/04000US33-new-hampshire/ | ✅ Aug 2026 |
+| NH aggregate household income | $73.393B | Census ACS 2024 1-yr, B19025 | same | ✅ Aug 2026 |
+| **NH mean household income** | **$128,604** (B19025 ÷ B11001) | Derived — allocation divisor | same | ✅ Aug 2026 |
+| NH median household income 2024 | $99,782 | Census ACS 2024 1-yr, B19013 | same | ✅ Aug 2026 |
+| NH population | 1,394,868 | Census ACS 2024 5-yr, B01003 | same | ✅ Aug 2026 |
+| NH share of national household income | **0.4838%** (derived) | ACS B19025 ÷ national B19025 | same | ✅ Aug 2026 |
+| NH share of national population | 0.4165% (derived) | ACS B01003 | same | ✅ Aug 2026 |
+| **NH average municipal property rate 2025** | **$15.83 per $1,000 → 1.583%** (was $20.96 in 2019) | NH Fiscal Policy Institute | nhfpi.org/resource/property-taxes-in-new-hampshire-how-they-work-and-how-they-compare/ | ✅ Aug 2026 |
+| NH per-capita property tax FY2022 | $3,388 — **2nd highest state**, behind NJ $3,617 | NHFPI | same | ✅ Aug 2026 |
+| NH property tax reliance | 60% (NHFPI) vs 63–64% (InDepthNH) — **carry both** | NHFPI / InDepthNH | same | ✅ Aug 2026 |
+| **NHRS unfunded liability** | **$5.58B**, 68.6% funded (30 Jun 2024) · $9,778/household | NHRS ACFR + GASB 67/74, FY2025 release | nhrs.org/docs/default-source/gasb/ | ✅ Aug 2026 |
+| NH municipal rate range | $2.62 – $36.54 per $1,000 | InDepthNH, Apr 2026 | indepthnh.org | ✅ Aug 2026 |
+| NH property tax share of state+local revenue | 63–64% | InDepthNH / NHFPI, Apr 2026 | same | ✅ Aug 2026 |
+| **NH business taxes FY2025 (BPT+BET)** | **$1,102.6M** — Gen $670.5M + Ed $432.1M | NH DAS Monthly Revenue Focus, June FY2025 accrual | das.nh.gov/accounting/FY%2025/FY2025_Monthly_Revenue_June_Preliminary_Accrual.pdf | ✅ Aug 2026 |
+| NH business taxes FY2024 | $1,217.9M (FY25 is −9.5%, and −12.4% vs the $1,259.0M plan) | same | same | ✅ Aug 2026 |
+| NH BPT / BET split | 75% / 25% — **assumed** | DAS publishes them combined; split needs NH DRA | revenue.nh.gov/taxes-glance/business-taxes | ⚠️ Split unverified |
+| NH Interest & Dividends revenue FY2025 | $90.8M, down 50.7% from FY2024's $184.3M | NH DAS, June FY2025 accrual | same | ✅ Aug 2026 |
+| NH General + Education Fund revenue FY2025 | $3,122.7M, 1.3% below plan | NH DAS, June FY2025 accrual | same | ✅ Aug 2026 |
+| NH road toll (gas) | **23.75¢** = 22.2¢ toll + ~1.55¢ oil discharge surcharge | RSA 260:32 (base $0.18, +4.2¢ per 2014 SB 367); RSA 146-A | gc.nh.gov/rsa/html/XXI/260/260-32.htm | ✅ Aug 2026 |
+| NH BET share of business taxes | 25.7% (5-yr TY2019–23 avg); TY2023 BET = $253M | NHFPI | nhfpi.org/resource/business-enterprise-tax-rate-decreases-have-lowered-revenue-with-limited-economic-benefit/ | ✅ Aug 2026 |
+| NH BET rate history | 0.75% → 0.72% (2016) → 0.675% (2018) → 0.6% (2019) → 0.55% (2022–) | NHFPI | same | ✅ Aug 2026 |
+| NH electric policy charges | 1.0¢/kWh — **placeholder** | NH PUC tariffs (SBC, stranded cost) | puc.nh.gov/regulatory/tariffs.html | ⚠️ Unverified |
+| NH gas policy charges | 4¢/therm — **placeholder** | NH PUC gas tariffs | same | ⚠️ Unverified |
+| NHRS unfunded annual accrual | $1,600/household — **placeholder** | NHRS actuarial valuation | nhrs.org/about-nhrs/financial-reports | ⚠️ Unverified |
+
+### ⚠️ NH median property tax bill — sources disagree, carry all three
+
+| Value | Effective rate | Source |
+|---|---|---|
+| $6,530 | 1.82% | Ownwell |
+| $6,707 | 1.46% | SmartAsset |
+| $5,680 | — | World Population Review (median across counties) |
+
+The dashboard uses 1.71%, derived from the ~$17.10 per $1,000 statewide average total
+rate, which is the cleanest of the four. **Note this is a rate on *assessed* value** —
+NH DRA publishes equalization ratios precisely because assessed and market values
+diverge, so applying it to a market price overstates the bill.
+
+### The constants-consistency rule
+
+`households × meanHouseholdIncome ÷ incomeShare` **must return the same national
+aggregate for every state.** Before this was enforced, MA implied a $14.91T national
+total and NH implied $17.50T — a 17.3% disagreement that made the "federal borrowing is
+identical across the border" claim false by $2,674 on a line captioned *"Identical
+basis"*. `update-burden-constants.py` now fails the build if this breaks.
+
+---
+
 ## 🔗 Dashboard Registry
 
 | Dashboard | Repo / Path | Live URL | Status |

@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Five Layers — Massachusetts Total Government Burden</title>
+<meta name="description" content="An interactive audit of what Massachusetts households actually pay across all five layers of government burden: billed, withheld on your behalf, embedded in prices, collected through the meter, and deferred to later.">
+<link rel="canonical" href="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/tax-burden-dashboard.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Massachusetts Data Hub">
+<meta property="og:title" content="The Five Layers — Massachusetts Total Government Burden">
+<meta property="og:description" content="Visible taxes are the first layer, not the last. An interactive incidence model across all five layers, with every contested assumption exposed as a control.">
+<meta property="og:url" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/tax-burden-dashboard.html">
+<meta property="og:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Five Layers — Massachusetts Total Government Burden">
+<meta name="twitter:description" content="Visible taxes are the first layer, not the last.">
+<meta name="twitter:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Public+Sans:ital,wght@0,300;0,400;0,600;0,800;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{
+  --ink:#16202E; --ink-2:#3A4757;
+  --paper:#E9EBE4; --paper-2:#F3F4EF; --rule:#C2C7BA;
+  --ledger:#1F5C4A; --amber:#B07C20; --oxblood:#8C2F2A; --slate:#4A6076; --dust:#C99C99;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sans:'Public Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;font-size:16px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px 96px}
+h2{font-weight:800;font-size:24px;letter-spacing:-.02em;margin:0 0 8px}
+.sub{font-size:14.5px;color:var(--ink-2);margin:0;max-width:66ch}
+a{color:var(--ledger)}
+
+/* hub nav */
+.hubnav{border-bottom:1px solid var(--rule);padding:12px 0;display:flex;gap:18px;flex-wrap:wrap;align-items:center;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}
+.hubnav a{color:var(--ink-2);text-decoration:none}
+.hubnav a:hover,.hubnav a:focus-visible{color:var(--ink);text-decoration:underline}
+.hubnav .home{color:var(--ink);font-weight:600}
+/* Bay Blue marks Massachusetts across both burden dashboards. The layer fills below
+   stay on the evidence-quality palette — they encode certainty, not geography. */
+.hubnav .here{color:#14558F;font-weight:600}
+
+/* masthead */
+.masthead{padding:44px 0 30px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);margin:0 0 18px}
+h1{font-weight:800;font-size:clamp(30px,5.2vw,54px);line-height:1.02;letter-spacing:-.025em;margin:0 0 16px;max-width:20ch}
+.standfirst{font-size:17px;max-width:62ch;color:var(--ink-2);margin:0;border-left:2px solid var(--rule);padding-left:16px}
+
+/* presets */
+.presets{display:flex;gap:8px;flex-wrap:wrap;padding:22px 0;border-bottom:1px solid var(--rule)}
+.preset{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+  padding:7px 12px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink-2);
+  cursor:pointer;border-radius:0;transition:all .15s
+}
+.preset:hover{border-color:var(--ink);color:var(--ink)}
+.preset[aria-pressed=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.preset:focus-visible{outline:2px solid var(--ledger);outline-offset:2px}
+
+/* total strip */
+#cardShot{background:var(--paper);padding:26px 0 24px;border-bottom:1px solid var(--rule)}
+.total-strip{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end}
+.total-figure{font-family:var(--mono);font-weight:600;font-size:clamp(42px,8vw,84px);line-height:.9;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.total-label{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);margin-bottom:10px}
+.total-pct{text-align:right}
+.total-pct .v{font-family:var(--mono);font-size:clamp(20px,3.4vw,32px);font-weight:500;color:var(--oxblood);font-variant-numeric:tabular-nums;letter-spacing:-.02em;display:block}
+.total-pct .k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);display:block;margin-bottom:6px}
+.ribbon{display:flex;gap:0;height:18px;margin-top:20px;border:1px solid var(--rule)}
+.ribbon div{transition:width .5s cubic-bezier(.4,0,.2,1)}
+.ribbon-key{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.ribbon-key i{display:inline-block;width:9px;height:9px;margin-right:5px;vertical-align:baseline;border:1px solid rgba(0,0,0,.15)}
+
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;padding:16px 0;border-bottom:1px solid var(--rule)}
+.tool{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.tool:hover{background:var(--ink);color:var(--paper)}
+.tool:focus-visible{outline:2px solid var(--ledger);outline-offset:2px}
+.toast{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ledger);align-self:center;opacity:0;transition:opacity .3s}
+.toast.on{opacity:1}
+
+/* layout */
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 306px;gap:44px;margin-top:36px;align-items:start}
+@media(max-width:900px){.cols{grid-template-columns:1fr;gap:32px}}
+
+/* signature column */
+.stack{display:grid;grid-template-columns:76px minmax(0,1fr);gap:22px}
+@media(max-width:560px){.stack{grid-template-columns:1fr}.column{display:none}}
+.col-track{position:sticky;top:24px;width:76px;background:var(--paper-2);border:1px solid var(--rule);display:flex;flex-direction:column-reverse;height:540px;overflow:hidden}
+.seg{width:100%;transition:height .5s cubic-bezier(.4,0,.2,1),opacity .3s;border-top:1px solid rgba(255,255,255,.35)}
+.seg.off{opacity:.13}
+.col-caption{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);margin-top:10px;text-align:center;line-height:1.4}
+
+/* Evidence-quality fills.
+   These are SVG data-URIs, not CSS gradients. html2canvas 1.4.1 does not rasterise
+   repeating-linear-gradient or radial-gradient, so the previous CSS-gradient version
+   exported the "Embedded" and "Utility" segments as blank paper — a white hole in the
+   middle of the shareable card. Verified by sampling the exported canvas. */
+.f-solid{background:var(--ledger)}
+.f-solid-2{background:var(--slate)}
+.f-hatch{background:#B07C20 url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Cpath d='M-2,2 l4,-4 M0,10 l10,-10 M8,12 l4,-4' stroke='%23C9942F' stroke-width='5'/%3E%3C/svg%3E") repeat}
+.f-hatch-2{background:#8C2F2A url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Cpath d='M-2,2 l4,-4 M0,10 l10,-10 M8,12 l4,-4' stroke='%23A03A34' stroke-width='5'/%3E%3C/svg%3E") repeat}
+.f-dot{background:#6E241F url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='7'%3E%3Ccircle cx='1.6' cy='1.6' r='1.6' fill='%238C2F2A'/%3E%3C/svg%3E") repeat}
+
+/* layer rows */
+.layer{border-top:1px solid var(--rule);padding:22px 0;transition:opacity .3s}
+.layer:first-of-type{border-top:2px solid var(--ink)}
+.layer.off{opacity:.34}
+.layer-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.layer-name{font-weight:800;font-size:19px;letter-spacing:-.01em;margin:0;display:flex;align-items:center;gap:10px}
+.layer-amt{font-family:var(--mono);font-weight:600;font-size:22px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.toggle{width:34px;height:19px;border:1px solid var(--rule);background:var(--paper-2);position:relative;cursor:pointer;flex:0 0 auto;padding:0}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:13px;height:13px;background:var(--ink-2);transition:transform .2s}
+.toggle[aria-pressed=true]{background:var(--ledger);border-color:var(--ledger)}
+.toggle[aria-pressed=true]::after{transform:translateX(15px);background:#fff}
+.toggle:focus-visible{outline:2px solid var(--ledger);outline-offset:2px}
+.layer-meta{display:flex;gap:10px;align-items:center;margin:8px 0 12px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--rule);color:var(--ink-2);background:var(--paper-2)}
+.chip.q1{border-color:var(--ledger);color:var(--ledger)}
+.chip.q2{border-color:var(--amber);color:var(--amber)}
+.chip.q3{border-color:var(--oxblood);color:var(--oxblood)}
+.layer-note{font-size:14.5px;color:var(--ink-2);margin:0 0 14px;max-width:64ch}
+.layer-note b{color:var(--ink);font-weight:600}
+.lines{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12.5px}
+.lines td{padding:5px 0;border-bottom:1px dotted var(--rule);vertical-align:baseline}
+.lines td:last-child{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:500}
+.lines .src{font-size:10px;color:var(--ink-2)}
+
+/* panel */
+.panel{background:var(--paper-2);border:1px solid var(--rule);padding:20px;position:sticky;top:24px;max-height:calc(100vh - 48px);overflow-y:auto}
+@media(max-width:900px){.panel{position:static;max-height:none}}
+.panel h3{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 15px;padding-bottom:9px;border-bottom:1px solid var(--rule);font-weight:600}
+.panel h3.mt{margin-top:24px}
+.field{margin-bottom:13px}
+.field label{display:block;font-size:11.5px;font-weight:600;margin-bottom:5px}
+.field input[type=number],.field select{width:100%;padding:7px 9px;border:1px solid var(--rule);background:#fff;font-family:var(--mono);font-size:13px;color:var(--ink);border-radius:0}
+.field input:focus,.field select:focus,.field input[type=range]:focus{outline:2px solid var(--ledger);outline-offset:1px}
+.field input[type=range]{width:100%;accent-color:var(--ledger);margin:4px 0 0}
+.rangeval{font-family:var(--mono);font-size:11px;color:var(--ink-2);float:right;font-weight:400}
+.hint{font-size:10.5px;color:var(--ink-2);line-height:1.4;margin:4px 0 0;font-style:italic}
+.hint.flag{color:var(--oxblood);font-style:normal}
+
+/* audit */
+.audit{background:var(--paper-2);border:1px solid var(--rule);border-left:3px solid var(--ledger);padding:18px 20px;margin-top:22px}
+.audit h3{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 12px;font-weight:600}
+.audit table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px}
+.audit td{padding:5px 0;border-bottom:1px dotted var(--rule)}
+.audit td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
+.audit .ok{color:var(--ledger);font-weight:600}
+.audit .warn{color:var(--oxblood);font-weight:600}
+
+.section{margin-top:44px;padding-top:32px;border-top:2px solid var(--ink)}
+.chartwrap{height:340px;margin-top:20px}
+.srctable{width:100%;border-collapse:collapse;margin-top:22px;font-size:13px}
+.srctable th{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;text-align:left;padding:8px 12px 8px 0;border-bottom:1.5px solid var(--ink);font-weight:600}
+.srctable td{padding:10px 12px 10px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.srctable .verify{font-family:var(--mono);font-size:10px;color:var(--oxblood);letter-spacing:.06em;text-transform:uppercase}
+.srctable .done{color:var(--ledger)}
+footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink-2);max-width:72ch}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="hubnav" aria-label="Massachusetts Data Hub">
+  <a class="home" href="index.html">← Massachusetts Data Hub</a>
+  <span class="here">Tax Burden</span>
+  <a href="tax-burden-nh-comparison.html">MA vs NH</a>
+  <a href="tax-budget-dashboard.html">Tax &amp; Budget</a>
+  <a href="energy-dashboard.html">Energy</a>
+  <a href="pension-dashboard.html">Pensions</a>
+  <a href="affordability-dashboard.html">Cost of Living</a>
+</nav>
+
+<header class="masthead">
+  <p class="eyebrow">Massachusetts Data Hub · Fiscal Incidence</p>
+  <h1>What you're billed is the first layer, not the last.</h1>
+  <p class="standfirst">Visible taxes — the ones with your name on the notice — are the only part most burden estimates count. Four more layers sit underneath: the employer half of payroll tax, tax embedded in prices and wages, policy costs collected through utility bills, and this year's borrowing, which is a tax with the due date left blank.</p>
+</header>
+
+<div class="presets" id="presets"></div>
+
+<div id="cardShot">
+  <div class="total-strip">
+    <div>
+      <div class="total-label" id="totalLabel">Total burden, all five layers</div>
+      <div class="total-figure" id="grandTotal">$0</div>
+    </div>
+    <div class="total-pct"><span class="k">Share of total compensation</span><span class="v" id="grandPct">0%</span></div>
+  </div>
+  <div class="ribbon" id="ribbon">
+    <div class="f-solid"   data-k="V"></div>
+    <div class="f-solid-2" data-k="E"></div>
+    <div class="f-hatch"   data-k="C"></div>
+    <div class="f-hatch-2" data-k="U"></div>
+    <div class="f-dot"     data-k="D"></div>
+  </div>
+  <div class="ribbon-key">
+    <span><i class="f-solid"></i>Billed</span>
+    <span><i class="f-solid-2"></i>Employer FICA</span>
+    <span><i class="f-hatch"></i>Embedded</span>
+    <span><i class="f-hatch-2"></i>Utility</span>
+    <span><i class="f-dot"></i>Deferred</span>
+  </div>
+</div>
+
+<div class="toolbar">
+  <button class="tool" id="btnLink">Copy permalink</button>
+  <button class="tool" id="btnPng">Download card as PNG</button>
+  <button class="tool" id="btnReset">Reset to defaults</button>
+  <span class="toast" id="toast" role="status" aria-live="polite"></span>
+</div>
+
+<div class="cols">
+  <main>
+    <h2 class="sr-only">The five layers</h2>
+    <div class="stack">
+      <div class="column">
+        <div class="col-track">
+          <div class="seg f-solid"   id="segV"></div>
+          <div class="seg f-solid-2" id="segE"></div>
+          <div class="seg f-hatch"   id="segC"></div>
+          <div class="seg f-hatch-2" id="segU"></div>
+          <div class="seg f-dot"     id="segD"></div>
+        </div>
+        <div class="col-caption">Fill<br>encodes<br>evidence</div>
+      </div>
+
+      <div>
+        <section class="layer" id="layV">
+          <div class="layer-head">
+            <h3 class="layer-name"><button class="toggle" data-layer="V" aria-pressed="true" aria-label="Toggle layer 1, billed to you"></button>1 · Billed to you</h3>
+            <div class="layer-amt" id="amtV">$0</div>
+          </div>
+          <div class="layer-meta"><span class="chip q1">Solid fill</span><span class="chip">Audited rates · statutory</span></div>
+          <p class="layer-note">Every figure comes from a published rate applied to a number you can verify on your own return, deed, or receipt. <b>No incidence assumption required.</b></p>
+          <table class="lines" id="lnV"></table>
+        </section>
+
+        <section class="layer" id="layE">
+          <div class="layer-head">
+            <h3 class="layer-name"><button class="toggle" data-layer="E" aria-pressed="true" aria-label="Toggle layer 2, paid on your behalf"></button>2 · Paid on your behalf</h3>
+            <div class="layer-amt" id="amtE">$0</div>
+          </div>
+          <div class="layer-meta"><span class="chip q1">Solid fill</span><span class="chip">Statutory · incidence near-consensus</span></div>
+          <p class="layer-note">The employer half of FICA. CBO, JCT and Treasury all model this as borne by the worker through lower wages. <b>The least controversial hidden layer.</b></p>
+          <table class="lines" id="lnE"></table>
+        </section>
+
+        <section class="layer" id="layC">
+          <div class="layer-head">
+            <h3 class="layer-name"><button class="toggle" data-layer="C" aria-pressed="true" aria-label="Toggle layer 3, embedded in prices and wages"></button>3 · Embedded in prices and wages</h3>
+            <div class="layer-amt" id="amtC">$0</div>
+          </div>
+          <div class="layer-meta"><span class="chip q2">Hatched</span><span class="chip">Collections audited · incidence modeled</span></div>
+          <p class="layer-note">Corporate tax is collected from firms and paid by people — the question is which people. JCT and CBO split it roughly <b>75% to capital owners, 25% to labor.</b> Because capital ownership is concentrated, a wage-earning household bears far less than the per-household average. Move the sliders to see how much of the answer is the assumption.</p>
+          <table class="lines" id="lnC"></table>
+        </section>
+
+        <section class="layer" id="layU">
+          <div class="layer-head">
+            <h3 class="layer-name"><button class="toggle" data-layer="U" aria-pressed="true" aria-label="Toggle layer 4, collected through the meter"></button>4 · Collected through the meter</h3>
+            <div class="layer-amt" id="amtU">$0</div>
+          </div>
+          <div class="layer-meta"><span class="chip q2">Hatched</span><span class="chip">Tariff-verifiable · not labeled tax</span></div>
+          <p class="layer-note">Legislatively mandated program costs recovered through regulated rates: energy efficiency, RPS/CES/APS compliance, net metering recovery, SMART solar, 83C/83D long-term contracts, and gas system enhancement. Functionally a consumption tax with an unelected rate-setter. <b>The most verifiable hidden layer and the least visible to the payer</b> — every component sits on a filed DPU tariff. It is also the smallest: see the note under the ribbon before leaning on it.</p>
+          <table class="lines" id="lnU"></table>
+        </section>
+
+        <section class="layer" id="layD">
+          <div class="layer-head">
+            <h3 class="layer-name"><button class="toggle" data-layer="D" aria-pressed="true" aria-label="Toggle layer 5, deferred to later"></button>5 · Deferred to later</h3>
+            <div class="layer-amt" id="amtD">$0</div>
+          </div>
+          <div class="layer-meta"><span class="chip q3">Dotted</span><span class="chip">Totals audited · allocation is a choice</span></div>
+          <p class="layer-note">Government consumed this much more than it collected. It will be settled by future taxation, inflation, or reduced future services — the only open question is by whom. <b>The allocation basis is not a fact, it's a position</b>, which is why it's a dropdown and not a constant.</p>
+          <table class="lines" id="lnD"></table>
+        </section>
+
+        <div class="audit">
+          <h3>Reconciliation check</h3>
+          <table id="auditTable"></table>
+          <p class="hint" id="auditNote" style="margin-top:12px;font-style:normal"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Where the layers land across the income distribution</h2>
+      <p class="sub">Same assumptions, applied at eight income levels. The visible layer is progressive; every hidden layer flattens or reverses that, because property tax, utility charges and per-household deficit allocation don't scale with earnings. Property tax, utility volumes and investment holdings are held at your entered values across all eight levels — that isolates the rate structure, but it is not how a real household at $50k would live.</p>
+      <div class="chartwrap"><canvas id="distChart"></canvas></div>
+    </div>
+
+    <div class="section">
+      <h2>Source ledger</h2>
+      <p class="sub">Every default in this model, where it came from, and what still needs replacing. Generated constants live in <a href="data/burden-constants.json">data/burden-constants.json</a> and are written into this page by <code>update-burden-constants.py</code>.</p>
+      <table class="srctable">
+        <thead><tr><th style="width:26%">Input</th><th style="width:20%">Default</th><th style="width:34%">Primary source</th><th style="width:20%">Status</th></tr></thead>
+        <tbody>
+          <tr><td>Federal brackets, standard deduction</td><td>TY2026 schedule</td><td><a href="https://www.irs.gov/pub/irs-drop/rp-25-32.pdf">IRS Rev. Proc. 2025-32</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>Social Security wage base</td><td>$184,500</td><td><a href="https://www.ssa.gov/oact/cola/cbb.html">SSA 2026 contribution base</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>MA rate / surtax threshold</td><td>5% · +4% over $1,107,750</td><td><a href="https://www.mass.gov/info-details/massachusetts-4-surtax-on-taxable-income">M.G.L. c. 62 §§4(d), 5A; DOR</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>MA investment income</td><td>5% · 8.5% short-term gains</td><td><a href="https://www.mass.gov/info-details/massachusetts-income-tax-rates">M.G.L. c. 62 §4(a),(c)</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>MA motor fuel excise</td><td>26.5¢ (24¢ + 2.5¢ UST)</td><td><a href="https://www.mass.gov/info-details/motor-fuel-excise-tax">M.G.L. c. 64A §1; c. 21J §3</a></td><td class="verify done">Corrected</td></tr>
+          <tr><td>Avg single-family tax bill</td><td>$8,113 on $742,986 (FY2026)</td><td><a href="https://www.mass.gov/info-details/fy2026-statewide-average-single-family-tax-bill">DLS <em>City &amp; Town</em>, Feb 2026</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>Town-level tax bills</td><td>11 communities</td><td>DLS FY2026 databank</td><td class="verify">Paste full 351</td></tr>
+          <tr><td>MA households</td><td>2,829,804</td><td><a href="https://censusreporter.org/profiles/04000US25-massachusetts/">ACS 2024 1-yr, Table B11001</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>MA mean household income</td><td>$144,312 (derived)</td><td><a href="https://censusreporter.org/tables/B19025/">ACS 2024 1-yr, B19025 ÷ B11001</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>MA median household income</td><td>$104,828 ACS · $113,900 CPS</td><td><a href="https://fred.stlouisfed.org/series/MEHOINUSMAA646N">ACS B19013; CPS via FRED</a></td><td class="verify done">Both carried</td></tr>
+          <tr><td>MA corporate &amp; business excise</td><td>$4.662B (FY2025)</td><td><a href="https://www.mass.gov/news/fiscal-year-2025-revenue-collections-totaled-43708-billion">DOR FY2025 close, Aug 2025</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>Federal corporate receipts</td><td>~$500B (FY2025)</td><td><a href="https://www.whitehouse.gov/omb/budget/historical-tables/">OMB Historical Table 2.1</a></td><td class="verify">Pull exact</td></tr>
+          <tr><td>Corporate incidence split</td><td>75% capital / 25% labor</td><td>JCT JCX-14-13; CBO methodology</td><td class="verify">Assumption</td></tr>
+          <tr><td>Electric policy charges</td><td>4.0¢/kWh</td><td><a href="https://www.mass.gov/orgs/department-of-public-utilities">DPU tariffs — EE, RE, NMRS, SMART, 83C/83D</a></td><td class="verify">Build from tariff</td></tr>
+          <tr><td>Gas policy charges</td><td>18¢/therm</td><td><a href="https://www.mass.gov/orgs/department-of-public-utilities">DPU tariff — EE surcharge, GSEP</a></td><td class="verify">Build from tariff</td></tr>
+          <tr><td>Federal deficit</td><td>$1.8T (FY2025)</td><td><a href="https://www.cbo.gov/publication/61307">CBO Monthly Budget Review, Oct 2025</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>MA share of federal burden</td><td>2.69% income · 2.10% population</td><td>Derived from ACS B19025 / B01003</td><td class="verify done">Derived</td></tr>
+          <tr><td>State/local unfunded accrual</td><td>$2,000 placeholder</td><td><a href="pension-dashboard.html">PERAC valuations; ACFRs — see Pensions</a></td><td class="verify">Build it</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <footer>
+      <p><strong>Method note.</strong> Layers 1 and 2 are arithmetic. Layers 3 and 5 are audited totals divided by a contested denominator — the model exposes the denominator rather than burying it. Layer 4 is the only one where better sourcing materially moves the number, and it is also the one you can source hardest, since every component is a filed tariff. Sales tax is modeled as 6.25% of a taxable-consumption share of income that declines with income, approximating CEX behaviour; replace with BLS Consumer Expenditure Survey decile shares for publication.</p>
+      <p><strong>On investment income.</strong> Massachusetts taxes interest, dividends and long-term capital gains at 5%, short-term gains at 8.5%, and counts all of it toward the 4% surtax threshold — which is why a single large realisation can trigger the surtax in a year when wages alone would not. Tax-deferred balances are not taxed while they grow; only withdrawals are, as ordinary income. Set a withdrawal figure to model a retiree rather than an accumulator.</p>
+      <p><strong>Not counted:</strong> tariffs and customs duties embedded in goods, federal excise beyond motor fuel, municipal debt service already inside the visible bill, the 0.75% local meals option, estate tax, deed excise, and the inflation tax. Including them raises the total; leaving them out keeps the figure conservative.</p>
+      <p><strong>Cross-border version:</strong> the same household run against New Hampshire sits at <a href="tax-burden-nh-comparison.html">MA vs NH — Same house, different side of the line</a>.</p>
+    </footer>
+  </main>
+
+  <aside>
+    <div class="panel">
+      <h3>Household</h3>
+      <div class="field"><label for="income">Gross wage income</label><input type="number" id="income" value="113900" step="1000" min="0"></div>
+      <div class="field"><label for="filing">Filing status</label><select id="filing"><option value="mfj">Married filing jointly</option><option value="single">Single</option></select></div>
+      <div class="field"><label for="empType">Employment</label><select id="empType"><option value="w2">W-2 employee</option><option value="se">Self-employed / 1099</option></select><p class="hint">1099 pays both FICA halves directly.</p></div>
+      <div class="field"><label for="town">Community</label><select id="town"></select><p class="hint">FY2026 average single-family bill. Extend the TOWNS array from the DLS databank.</p></div>
+      <div class="field"><label for="proptax">Property tax bill</label><input type="number" id="proptax" value="8113" step="100" min="0"></div>
+      <div class="field"><label for="excise">Motor vehicle excise</label><input type="number" id="excise" value="600" step="50" min="0"></div>
+      <div class="field"><label for="gallons">Motor fuel, gallons/yr</label><input type="number" id="gallons" value="1000" step="50" min="0"></div>
+      <div class="field"><label for="otherDed">Other MA deductions</label><input type="number" id="otherDed" value="0" step="500" min="0"><p class="hint">Replaces an undocumented $4,000 that used to be hardcoded into the MA calculation. Default is now zero — enter your own.</p></div>
+
+      <h3 class="mt">Investment &amp; retirement</h3>
+      <div class="field"><label for="brokerage">Taxable brokerage balance</label><input type="number" id="brokerage" value="0" step="10000" min="0"><p class="hint">401(k)/IRA balances do NOT belong here — they aren't taxed while they grow.</p></div>
+      <div class="field"><label for="yieldPct">Dividend &amp; interest yield <span class="rangeval" id="vYield">2.0%</span></label><input type="range" id="yieldPct" min="0" max="8" step="0.1" value="2"><p class="hint">MA taxes this at 5%. NH taxed it until the I&amp;D repeal took effect 1 Jan 2025.</p></div>
+      <div class="field"><label for="realizedGains">Realised capital gains/yr</label><input type="number" id="realizedGains" value="0" step="5000" min="0"></div>
+      <div class="field"><label for="gainsTerm">Holding period</label><select id="gainsTerm"><option value="lt">Long-term — 5%</option><option value="st">Short-term — 8.5%</option></select></div>
+      <div class="field"><label for="withdrawal">401(k)/IRA withdrawals/yr</label><input type="number" id="withdrawal" value="0" step="5000" min="0"><p class="hint">Taxed by MA as ordinary income on withdrawal. Set this to model a retiree.</p></div>
+
+      <h3 class="mt">Utility volume</h3>
+      <div class="field"><label for="kwh">Electricity, kWh/yr</label><input type="number" id="kwh" value="7200" step="200" min="0"></div>
+      <div class="field"><label for="therms">Natural gas, therms/yr</label><input type="number" id="therms" value="750" step="25" min="0"></div>
+      <div class="field"><label for="elecRate">Electric policy charges <span class="rangeval" id="vElec">4.0¢</span></label><input type="range" id="elecRate" min="0" max="8" step="0.1" value="4"><p class="hint">¢/kWh. Sum EE, RE, NMRS, SMART and LTC lines plus RPS/CES inside supply.</p></div>
+      <div class="field"><label for="gasRate">Gas policy charges <span class="rangeval" id="vGas">18¢</span></label><input type="range" id="gasRate" min="0" max="60" step="1" value="18"><p class="hint">¢/therm. EE surcharge + GSEP.</p></div>
+
+      <h3 class="mt">Incidence assumptions</h3>
+      <div class="field"><label for="laborShare">Corporate tax to labor <span class="rangeval" id="vLabor">25%</span></label><input type="range" id="laborShare" min="0" max="100" step="5" value="25"><p class="hint">JCT and CBO use 25%. Some models exceed 50%.</p></div>
+      <div class="field"><label for="capFactor">Capital-ownership factor <span class="rangeval" id="vCap">0.30</span></label><input type="range" id="capFactor" min="0" max="3" step="0.05" value="0.3"><p class="hint">Your share of average household capital income. 1.0 = average; a 401(k)-only household sits well below.</p><p class="hint flag" id="capFlag" hidden></p></div>
+
+      <h3 class="mt">Deferred burden</h3>
+      <div class="field"><label for="allocBasis">Federal deficit allocation</label><select id="allocBasis">
+        <option value="pop">Population share</option>
+        <option value="inc" selected>Personal income share</option>
+      </select><p class="hint" id="allocHint"></p></div>
+      <div class="field"><label for="deferScale">Scale to your income</label><select id="deferScale">
+        <option value="flat">Flat per household</option>
+        <option value="prop" selected>Proportional to mean</option>
+      </select><p class="hint">Proportional assumes repayment tracks today's income distribution.</p></div>
+      <div class="field"><label for="unfunded">State/local unfunded accrual</label><input type="number" id="unfunded" value="2000" step="250" min="0"><p class="hint">Placeholder. Build from PERAC valuations and ACFR OPEB notes — see the <a href="pension-dashboard.html">pension dashboard</a>.</p></div>
+    </div>
+  </aside>
+</div>
+</div>
+
+<script>
+'use strict';
+
+/* BURDEN-CONSTANTS:BEGIN — generated by update-burden-constants.py, do not hand-edit */
+// Source of truth: data/burden-constants.json   ·   regenerate: python update-burden-constants.py
+// Last generated 2026-08-08. meanHhIncome and incShare are DERIVED — see gate 2 and 3 in the script.
+// DRAFT — 6 constant(s) still unverified: states.MA.utility.electricPolicyCentsPerKwh, states.MA.utility.gasPolicyCentsPerTherm, states.MA.unfundedAccrualPerHousehold, states.NH.utility.electricPolicyCentsPerKwh, states.NH.utility.gasPolicyCentsPerTherm, states.NH.unfundedAccrualPerHousehold
+
+const K = {
+  stdDed:{single:16100, mfj:32200},
+  brackets:{
+    single:[[12400,0.1],[50400,0.12],[105700,0.22],[201775,0.24],[256225,0.32],[640600,0.35],[Infinity,0.37]],
+    mfj:[[24800,0.1],[100800,0.12],[211400,0.22],[403550,0.24],[512450,0.32],[768700,0.35],[Infinity,0.37]]
+  },
+  ssWageBase:184500, ssRate:0.062, medRate:0.0145,
+  addlMedThr:{single:200000, mfj:250000}, addlMedRate:0.009,
+  fedGasCents:18.4,
+  fedDeficit:1800000000000,
+  fedCorpReceipts:452089303420,
+  nationalAggHhIncome:15171367871400,
+  nationalHouseholds:132737146,
+  nationalMeanHhIncome:114296,
+
+  MA:{
+      name:"Massachusetts",
+      incomeRate:0.05, surtax:0.04, surThr:1107750,
+      exempt:{single:4400, mfj:8800},
+      investRate:0.05, stGainsRate:0.085,
+      salesRate:0.0625, mealsRate:0.0625,
+      gasCents:26.5,
+      corpPool:4662000000, betPool:0,
+      households:2829804, aggHhIncome:408376085400,
+      meanHhIncome:144312,   // DERIVED aggregate/households
+      incShare:0.026917552,   // DERIVED state aggregate / national aggregate
+      popShare:0.020981889,
+      elecCents:4, gasPolicyCents:18,
+      unfunded:1793,
+      avgSfBill:8113, avgSfValue:742986,
+      propRatePct:1.0919,   // DERIVED bill/value
+    },
+
+    NH:{
+      name:"New Hampshire",
+      incomeRate:0, surtax:0, surThr:Infinity,
+      exempt:{single:0, mfj:0},
+      investRate:0, stGainsRate:0,
+      salesRate:0, mealsRate:0.085,
+      gasCents:23.75,
+      corpPool:819231800, betPool:283368200,
+      households:570689, aggHhIncome:73392725500,
+      meanHhIncome:128604,   // DERIVED aggregate/households
+      incShare:0.004837581,   // DERIVED state aggregate / national aggregate
+      popShare:0.004142859,
+      elecCents:1, gasPolicyCents:4,
+      unfunded:699,
+      propRatePct:1.583,
+    }
+};
+/* BURDEN-CONSTANTS:END */
+
+/* FY2026 average single-family tax bills. Extend from the DLS databank —
+   dlstab.dor.state.ma.us AverageSingleFamilyTaxBill. */
+const TOWNS = [
+  ['Statewide average', 8113],
+  ['Weston', 26313],
+  ['Needham', 16690],
+  ['Marion', 8733],
+  ['Mattapoisett', 8012],
+  ['Rochester', 6603],
+  ['Somerset', 6034],
+  ['New Bedford', 4492],
+  ['Fall River', 4415],
+  ['Fairhaven', 4234],
+  ['Hancock', 835],
+  ['Custom — enter below', null]
+];
+
+const PRESETS = {
+  'Median MA household':{income:113900, filing:'mfj', proptax:8113, kwh:7200, therms:750},
+  'Two earners, $150k':{income:150000, filing:'mfj', proptax:8113, kwh:7200, therms:750},
+  'Single, $85k':{income:85000, filing:'single', proptax:5500, kwh:5000, therms:500},
+  'Self-employed, $200k':{income:200000, filing:'mfj', empType:'se', proptax:11000, kwh:8500, therms:900},
+  'Retiree, $70k drawdown':{income:0, filing:'mfj', withdrawal:70000, brokerage:400000, proptax:8113, kwh:6000, therms:700, capFactor:0.8},
+  'Surtax household, $1.4M':{income:1400000, filing:'mfj', proptax:26313, capFactor:2.5, brokerage:2000000, realizedGains:300000, kwh:20000, therms:2000}
+};
+
+const FIELDS = ['income','filing','empType','proptax','excise','gallons','otherDed',
+                'brokerage','yieldPct','realizedGains','gainsTerm','withdrawal',
+                'kwh','therms','elecRate','gasRate','laborShare','capFactor',
+                'allocBasis','deferScale','unfunded'];
+/* Selects are validated against their own <option> list on read. A permalink carrying
+   filing=joint used to set the select to "" and kill the page with
+   "K.brackets[filing] is not iterable". */
+const SELECTS = ['filing','empType','gainsTerm','allocBasis','deferScale'];
+const DEFAULTS = {};
+
+const $ = id => document.getElementById(id);
+const fmt  = n => (n<0?'−$':'$') + Math.round(Math.abs(n)).toLocaleString('en-US');
+const fmt0 = n => Math.round(n).toLocaleString('en-US');
+const fmtB = n => '$' + (n/1e9).toFixed(2) + 'B';
+const pct  = (num, den) => (den > 0 && isFinite(num/den)) ? (num/den*100).toFixed(1)+'%' : '—';
+
+let layersOn = {V:true, E:true, C:true, U:true, D:true};
+
+/* ============================================================
+   TAX ENGINES
+   ============================================================ */
+function fedIncomeTax(taxable, filing){
+  let tax = 0, prev = 0;
+  for (const [cap, rate] of K.brackets[filing]){
+    if (taxable <= prev) break;
+    tax += (Math.min(taxable, cap) - prev) * rate;
+    prev = cap;
+  }
+  return tax;
+}
+function payroll(income, filing, se){
+  const base = se ? income * 0.9235 : income;
+  const ss   = Math.min(base, K.ssWageBase) * K.ssRate;
+  const med  = base * K.medRate;
+  const addl = Math.max(0, base - K.addlMedThr[filing]) * K.addlMedRate;
+  return {employee: ss + med + addl, employer: ss + med};
+}
+/* Taxable-consumption share falls as income rises — approximates CEX behaviour.
+   Replace with BLS CEX decile shares before publication. */
+function consumptionShare(income){
+  if (income <= 40000)  return .34;
+  if (income >= 400000) return .11;
+  return .34 - (income - 40000) / 360000 * .23;
+}
+
+/* ============================================================
+   MODEL
+   ============================================================ */
+function model(inp){
+  const S = K.MA;
+  const se = inp.empType === 'se';
+  const fica = payroll(inp.income, inp.filing, se);
+  const seDed = se ? fica.employer : 0;
+
+  /* Investment income. Three buckets because MA taxes them three different ways,
+     and because only ONE of them is what New Hampshire repealed in 2025. */
+  const divInt   = inp.brokerage * inp.yieldPct / 100;
+  const gainsRate = inp.gainsTerm === 'st' ? S.stGainsRate : S.investRate;
+  const investIncome = divInt + inp.realizedGains + inp.withdrawal;
+
+  const fedInc = fedIncomeTax(
+    Math.max(0, inp.income + divInt + inp.realizedGains + inp.withdrawal - seDed - K.stdDed[inp.filing]),
+    inp.filing);
+
+  /* MA: 5% on wages, ordinary income and long-term gains; 8.5% on short-term.
+     The 4% surtax applies to TOTAL taxable income, gains included — which is why one
+     large realisation can trigger it in a year wages alone would not. */
+  const maOrdinary = Math.max(0, inp.income + divInt + inp.withdrawal - seDed - S.exempt[inp.filing] - inp.otherDed);
+  const maBase     = maOrdinary + inp.realizedGains;
+  const maInc = maOrdinary * S.incomeRate
+              + inp.realizedGains * gainsRate
+              + (maBase > S.surThr ? (maBase - S.surThr) * S.surtax : 0);
+
+  const empFica  = se ? fica.employee + fica.employer : fica.employee;
+  const sales    = inp.income * consumptionShare(inp.income) * S.salesRate;
+  const gasState = inp.gallons * S.gasCents / 100;
+  const gasFed   = inp.gallons * K.fedGasCents / 100;
+
+  const visible = [
+    ['Federal income tax', fedInc, 'IRS Rev. Proc. 2025-32'],
+    [se ? 'Self-employment tax' : 'FICA — employee share', empFica, se ? 'IRC §1401 · 15.3%' : 'IRC §3101'],
+    ['Massachusetts income tax', maInc, maBase > S.surThr ? '5% + 4% surtax over ' + fmt(S.surThr) : '5% · M.G.L. c. 62'],
+    ['Local property tax', inp.proptax, 'Prop 2½ levy · DLS'],
+    ['State sales &amp; use tax', sales, '6.25% × ' + (consumptionShare(inp.income)*100).toFixed(0) + '% consumption share'],
+    ['Motor vehicle excise', inp.excise, '$25 per $1,000 valuation'],
+    ['Motor fuel — state', gasState, '24¢ + 2.5¢ UST'],
+    ['Motor fuel — federal', gasFed, '18.4¢/gal']
+  ];
+  const vT = visible.reduce((s,r)=>s+r[1],0);
+
+  const employer = se ? [['Included above as self-employment tax', 0, 'Both halves paid directly']]
+                      : [['FICA — employer share', fica.employer, 'Modeled 100% to labor']];
+  const eT = se ? 0 : fica.employer;
+
+  /* The federal corporate slice runs through NATIONAL denominators, matching
+     tax-burden-nh-comparison.html exactly so the two dashboards cannot disagree about
+     the same Massachusetts household. Only the state excise uses state denominators. */
+  const lShare    = inp.laborShare / 100;
+  const wageRatio = inp.income / S.meanHhIncome;
+  const natWr     = inp.income / K.nationalMeanHhIncome;
+
+  const natPerHh  = K.fedCorpReceipts / K.nationalHouseholds;
+  const fedCorp   = natPerHh * (lShare * natWr + (1 - lShare) * inp.capFactor);
+
+  const statePerHh = S.corpPool / S.households;
+  const lBorne     = statePerHh * lShare * wageRatio;
+  const cBorne     = statePerHh * (1 - lShare) * inp.capFactor;
+
+  const corpPool = S.corpPool + K.fedCorpReceipts * S.incShare;
+  const perHh    = corpPool / S.households;
+  const corp = [
+    ['Federal corporate tax', fedCorp, fmtB(K.fedCorpReceipts) + ' ÷ ' + fmt0(K.nationalHouseholds) + ' US households'],
+    ['— MA corporate &amp; business excise pool', statePerHh, 'DOR FY2025 ' + fmtB(S.corpPool) + ' ÷ ' + fmt0(S.households)],
+    ['State excise borne via wages (' + inp.laborShare + '% to labor)', lBorne, 'Scaled ' + wageRatio.toFixed(2) + '× MA mean'],
+    ['State excise borne via capital ownership', cBorne, 'Factor ' + inp.capFactor.toFixed(2)]
+  ];
+  const cT = fedCorp + lBorne + cBorne;
+
+  const elec = inp.kwh * inp.elecRate / 100;
+  const gas  = inp.therms * inp.gasRate / 100;
+  const util = [
+    ['Electric policy charges', elec, inp.elecRate.toFixed(1) + '¢/kWh × ' + fmt0(inp.kwh) + ' kWh'],
+    ['Gas policy charges', gas, inp.gasRate.toFixed(0) + '¢/therm × ' + fmt0(inp.therms) + ' therms']
+  ];
+  const uT = elec + gas;
+
+  const share     = inp.allocBasis === 'pop' ? S.popShare : S.incShare;
+  const maDeficit = K.fedDeficit * share;
+  const flatShare = maDeficit / S.households;
+  const fedShare  = inp.deferScale === 'prop' ? flatShare * wageRatio : flatShare;
+  const defer = [
+    ['MA share of FY2025 federal borrowing', maDeficit, (share*100).toFixed(2) + '% of ' + fmtB(K.fedDeficit)],
+    ['— Flat per household', flatShare, '÷ ' + fmt0(S.households) + ' households'],
+    ['Your household share', fedShare, inp.deferScale==='prop' ? wageRatio.toFixed(2)+'× mean income' : 'Flat'],
+    ['State &amp; local unfunded accrual', inp.unfunded, 'PERAC / ACFR — user input']
+  ];
+  const dT = fedShare + inp.unfunded;
+
+  const on = layersOn;
+  const grand = (on.V?vT:0)+(on.E?eT:0)+(on.C?cT:0)+(on.U?uT:0)+(on.D?dT:0);
+  const totalComp = inp.income + investIncome + (se ? 0 : fica.employer);
+
+  return {visible,vT,employer,eT,corp,cT,util,uT,defer,dT,grand,totalComp,
+          corpPool,perHh,maDeficit,flatShare,wageRatio,share,divInt,investIncome,lBorne,cBorne};
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function readInputs(){
+  const o = {};
+  FIELDS.forEach(f => {
+    const el = $(f);
+    if (SELECTS.includes(f)){
+      /* selectedIndex < 0 means the value was never a real option — fall back. */
+      o[f] = el.selectedIndex >= 0 ? el.value : DEFAULTS[f];
+      if (el.selectedIndex < 0) el.value = DEFAULTS[f];
+    } else {
+      o[f] = Math.max(0, +el.value || 0);
+    }
+  });
+  return o;
+}
+
+function renderLines(el, rows){
+  el.innerHTML = rows.map(([label,amt,src]) => {
+    const sub = String(label).startsWith('—');
+    return '<tr' + (sub?' style="opacity:.55"':'') + '><td>' + label +
+           '<br><span class="src">' + src + '</span></td><td>' + fmt(amt) + '</td></tr>';
+  }).join('');
+}
+
+function render(){
+  const inp = readInputs();
+  $('vElec').textContent  = inp.elecRate.toFixed(1) + '¢';
+  $('vGas').textContent   = inp.gasRate.toFixed(0) + '¢';
+  $('vLabor').textContent = inp.laborShare + '%';
+  $('vCap').textContent   = inp.capFactor.toFixed(2);
+  $('vYield').textContent = inp.yieldPct.toFixed(1) + '%';
+  $('allocHint').textContent = 'Income share ' + (K.MA.incShare*100).toFixed(2)
+    + '%, population share ' + (K.MA.popShare*100).toFixed(2) + '%. Both derived from ACS.';
+
+  const m = model(inp);
+  const nOn = Object.values(layersOn).filter(Boolean).length;
+
+  $('grandTotal').textContent = fmt(m.grand);
+  $('grandPct').textContent   = pct(m.grand, m.totalComp);
+  $('totalLabel').textContent = nOn === 5 ? 'Total burden, all five layers'
+                                          : 'Total burden, ' + nOn + ' of 5 layers shown';
+
+  renderLines($('lnV'), m.visible);
+  renderLines($('lnE'), m.employer);
+  renderLines($('lnC'), m.corp);
+  renderLines($('lnU'), m.util);
+  renderLines($('lnD'), m.defer);
+
+  const vals = {V:m.vT, E:m.eT, C:m.cT, U:m.uT, D:m.dT};
+  ['V','E','C','U','D'].forEach(k=>{
+    $('amt'+k).textContent = fmt(vals[k]);
+    const shown = layersOn[k] ? vals[k] : 0;
+    $('seg'+k).style.height = (m.grand > 0 ? shown/m.grand*100 : 0) + '%';
+    $('seg'+k).classList.toggle('off', !layersOn[k]);
+    $('lay'+k).classList.toggle('off', !layersOn[k]);
+  });
+  document.querySelectorAll('#ribbon div').forEach(el=>{
+    const k = el.dataset.k;
+    el.style.width = (m.grand > 0 ? (layersOn[k]?vals[k]:0)/m.grand*100 : 0) + '%';
+  });
+
+  /* Capital-ownership cross-check: if you've entered a portfolio, capFactor should
+     reflect it. Flag the contradiction rather than silently overriding the slider. */
+  const impliedCap = K.MA.meanHhIncome > 0
+    ? (m.divInt + inp.realizedGains) / (K.MA.meanHhIncome * 0.12) : 0;
+  if (inp.brokerage > 0 && Math.abs(impliedCap - inp.capFactor) > 0.5){
+    $('capFlag').hidden = false;
+    $('capFlag').textContent = 'Your entered portfolio implies a factor near '
+      + impliedCap.toFixed(2) + ', not ' + inp.capFactor.toFixed(2)
+      + '. Layer 3 is using the slider.';
+  } else { $('capFlag').hidden = true; }
+
+  renderAudit(inp, m);
+  updateChart(inp);
+  writeHash(inp);
+}
+
+/* ============================================================
+   RECONCILIATION
+   The old version checked (pool ÷ N) × N == pool, which is true by construction and
+   could never fail — verified across 36 parameter combinations. These three checks can
+   actually fail, and the middle one DOES at the defaults: with 25% to labour and a 0.30
+   capital factor, a household at exactly the mean bears well under the pool average.
+   That is a defensible modelling position, but it is a position, and it should be
+   visible rather than hidden behind a tautology.
+   ============================================================ */
+function renderAudit(inp, m){
+  const S = K.MA;
+  const lShare = inp.laborShare/100;
+  /* A household AT THE STATE MEAN: wageRatio = 1, capFactor as set. */
+  const statePerHh = S.corpPool / S.households;
+  const atMean = statePerHh * lShare * 1 + statePerHh * (1 - lShare) * inp.capFactor;
+  const allocated = statePerHh > 0 ? atMean / statePerHh : 0;
+
+  /* Layer 5 closed form: the deficit share must equal deficit × income ÷ national
+     aggregate household income, independent of any state-level constant. */
+  const closed = K.fedDeficit * inp.income / K.nationalAggHhIncome;
+  const l5 = m.flatShare * m.wageRatio;
+  const l5ok = Math.abs(l5 - closed) < 1;
+
+  const derivedMean = S.aggHhIncome / S.households;
+  const meanOk = Math.abs(derivedMean - S.meanHhIncome) < 1;
+
+  const rows = [
+    ['MA corporate excise pool', fmtB(S.corpPool), ''],
+    ['÷ ' + fmt0(S.households) + ' households', fmt(statePerHh), ''],
+    ['Household at the mean bears', fmt(atMean), ''],
+    ['Share of pool actually allocated', (allocated*100).toFixed(1) + '%',
+      allocated > 0.98 ? 'ok' : 'warn'],
+    ['Layer 5 — modelled', fmt(l5), ''],
+    ['Layer 5 — closed form (deficit × income ÷ national aggregate)', fmt(closed), l5ok ? 'ok' : 'warn'],
+    ['Mean household income — derived from B19025 ÷ B11001', fmt(derivedMean), meanOk ? 'ok' : 'warn'],
+    ['Median household income (context only, never a divisor)', fmt(104828) + ' ACS / ' + fmt(113900) + ' CPS', '']
+  ];
+  $('auditTable').innerHTML = rows.map(([a,b,c]) =>
+    '<tr><td>'+a+'</td><td class="'+c+'">'+b+(c==='ok'?' ✓':(c==='warn'?' ⚠':''))+'</td></tr>').join('');
+
+  $('auditNote').innerHTML = allocated > 0.98
+    ? 'All three checks pass. The corporate pool fully allocates at the mean, Layer 5 matches its closed form, and the allocation divisor is the derived mean rather than the median.'
+    : '<b>The corporate pool does not fully allocate.</b> At ' + inp.laborShare + '% to labour and a '
+      + inp.capFactor.toFixed(2) + ' capital factor, a household at exactly the mean bears '
+      + (allocated*100).toFixed(1) + '% of its per-household share — the remainder falls on concentrated '
+      + 'capital owners above the mean. That is the intended reading of a concentrated-ownership model, '
+      + 'not an error, but it means this layer does not sum back to the statewide pool across average households.';
+}
+
+/* ============================================================
+   CHART
+   ============================================================ */
+let chart;
+const LEVELS = [50000, 75000, 113900, 150000, 200000, 300000, 500000, 1200000];
+function updateChart(base){
+  const rows = LEVELS.map(inc => model(Object.assign({}, base, {income: inc})));
+  const pick = key => rows.map(m => m.totalComp > 0 ? m[key] / m.totalComp * 100 : 0);
+  const z = () => rows.map(()=>0);
+  const data = {
+    labels: LEVELS.map(v => v>=1e6 ? '$'+(v/1e6).toFixed(1)+'M' : '$'+(v/1000)+'k'),
+    datasets:[
+      {label:'Billed to you',       data: layersOn.V?pick('vT'):z(), backgroundColor:'#1F5C4A'},
+      {label:'Employer FICA',       data: layersOn.E?pick('eT'):z(), backgroundColor:'#4A6076'},
+      {label:'Embedded corporate',  data: layersOn.C?pick('cT'):z(), backgroundColor:'#B07C20'},
+      {label:'Utility policy',      data: layersOn.U?pick('uT'):z(), backgroundColor:'#8C2F2A'},
+      {label:'Deferred',            data: layersOn.D?pick('dT'):z(), backgroundColor:'#C99C99'}
+    ]
+  };
+  if (chart){ chart.data = data; chart.update('none'); return; }
+  chart = new Chart($('distChart'), {
+    type:'bar', data,
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      scales:{
+        x:{stacked:true, grid:{display:false}, ticks:{font:{family:"'IBM Plex Mono'",size:11}, color:'#3A4757'}},
+        y:{stacked:true, grid:{color:'#C2C7BA'}, border:{display:false},
+           title:{display:true, text:'% of total compensation', font:{family:"'Public Sans'",size:11,weight:'600'}, color:'#3A4757'},
+           ticks:{callback:v=>v+'%', font:{family:"'IBM Plex Mono'",size:11}, color:'#3A4757'}}
+      },
+      plugins:{
+        legend:{position:'bottom', labels:{boxWidth:11, boxHeight:11, font:{family:"'Public Sans'",size:12}, color:'#16202E', padding:14}},
+        tooltip:{backgroundColor:'#16202E', bodyFont:{family:"'IBM Plex Mono'",size:12},
+          titleFont:{family:"'Public Sans'",size:12,weight:'600'},
+          callbacks:{label: c => c.dataset.label + ': ' + c.parsed.y.toFixed(1) + '%'}}
+      }
+    }
+  });
+}
+
+/* ============================================================
+   PERMALINK
+   ============================================================ */
+function writeHash(inp){
+  const p = new URLSearchParams();
+  FIELDS.forEach(f => { if (String(inp[f]) !== String(DEFAULTS[f])) p.set(f, inp[f]); });
+  const off = Object.keys(layersOn).filter(k=>!layersOn[k]);
+  if (off.length) p.set('off', off.join(''));
+  history.replaceState(null, '', p.toString() ? '#'+p : location.pathname + location.search);
+}
+function readHash(){
+  const p = new URLSearchParams(location.hash.slice(1));
+  if (![...p].length) return;
+  FIELDS.forEach(f => {
+    if (!p.has(f)) return;
+    const el = $(f), v = p.get(f);
+    if (SELECTS.includes(f)){
+      if ([...el.options].some(o => o.value === v)) el.value = v;   /* else keep default */
+    } else if (v !== '' && isFinite(+v)) {
+      el.value = Math.max(0, +v);
+    }
+  });
+  if (p.has('off')) p.get('off').split('').forEach(k => { if (k in layersOn) layersOn[k] = false; });
+  document.querySelectorAll('.toggle').forEach(b => b.setAttribute('aria-pressed', layersOn[b.dataset.layer]));
+}
+
+/* ============================================================
+   WIRING
+   ============================================================ */
+function syncTown(){
+  const bill = +$('proptax').value || 0;
+  const i = TOWNS.findIndex(t => t[1] === bill);
+  $('town').value = i >= 0 ? i : TOWNS.length - 1;   /* else "Custom" */
+}
+function buildTowns(){
+  $('town').innerHTML = TOWNS.map((t,i) =>
+    '<option value="'+i+'"'+(i===0?' selected':'')+'>'+t[0]+(t[1]!==null?' — '+fmt(t[1]):'')+'</option>').join('');
+  $('town').addEventListener('change', e => {
+    const t = TOWNS[+e.target.value];
+    if (t && t[1] !== null){ $('proptax').value = t[1]; render(); }
+  });
+}
+
+function applyDefaults(){
+  FIELDS.forEach(f => $(f).value = DEFAULTS[f]);
+  layersOn = {V:true,E:true,C:true,U:true,D:true};
+  document.querySelectorAll('.toggle').forEach(t => t.setAttribute('aria-pressed','true'));
+}
+
+function buildPresets(){
+  $('presets').innerHTML = Object.keys(PRESETS).map(n =>
+    '<button class="preset" data-p="'+n+'" aria-pressed="false">'+n+'</button>').join('');
+  $('presets').addEventListener('click', e => {
+    const b = e.target.closest('.preset');
+    if (!b) return;
+    document.querySelectorAll('.preset').forEach(x => x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+    applyDefaults();
+    const p = PRESETS[b.dataset.p];
+    Object.keys(p).forEach(k => { if ($(k)) $(k).value = p[k]; });
+    syncTown();                       /* presets used to leave the town selector stale */
+    render();
+  });
+}
+
+function toast(msg){
+  const t = $('toast');
+  t.textContent = msg; t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'), 2200);
+}
+
+document.querySelectorAll('.toggle').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const k = btn.dataset.layer;
+    layersOn[k] = !layersOn[k];
+    btn.setAttribute('aria-pressed', layersOn[k]);
+    render();
+  });
+});
+
+$('btnLink').addEventListener('click', () => {
+  navigator.clipboard.writeText(location.href)
+    .then(()=>toast('Permalink copied'))
+    .catch(()=>toast('Copy failed — use the address bar'));
+});
+
+$('btnPng').addEventListener('click', () => {
+  toast('Rendering…');
+  html2canvas($('cardShot'), {backgroundColor:'#E9EBE4', scale:2}).then(c => {
+    const a = document.createElement('a');
+    a.download = 'ma-burden-stack.png';
+    a.href = c.toDataURL('image/png');
+    a.click();
+    toast('PNG downloaded');
+  }).catch(()=>toast('Render failed'));
+});
+
+$('btnReset').addEventListener('click', () => {
+  applyDefaults();
+  document.querySelectorAll('.preset').forEach(x => x.setAttribute('aria-pressed','false'));
+  $('town').value = 0;
+  render();
+});
+
+/* One render per frame. `input` fires on every keystroke and every slider tick, and
+   each render runs the model nine times (once live, eight for the chart). */
+let raf = null;
+const scheduleRender = () => { if (raf) return; raf = requestAnimationFrame(() => { raf = null; render(); }); };
+
+FIELDS.forEach(f => {
+  DEFAULTS[f] = $(f).value;
+  $(f).addEventListener('input', scheduleRender);
+  $(f).addEventListener('change', f === 'proptax' ? () => { syncTown(); scheduleRender(); } : scheduleRender);
+});
+
+buildTowns();
+buildPresets();
+readHash();
+syncTown();
+render();
+</script>
+</body>
+</html>

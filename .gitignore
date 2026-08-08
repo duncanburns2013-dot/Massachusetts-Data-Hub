@@ -6,3 +6,7 @@ data/_raw_band/
 .env
 
 __pycache__/
+
+# local tooling scratch — dev-server config, agent workspace
+.claude/
+.superpowers/

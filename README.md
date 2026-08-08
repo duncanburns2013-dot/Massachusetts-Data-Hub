@@ -21,6 +21,12 @@ Interactive dashboards and data analysis covering housing, immigration, educatio
 | [Healthcare](healthcare-dashboard.html) | Insurance rates, premiums, MA vs national | 🟡 Planned | DOI, KFF, CHIA |
 | [Employment](employment-dashboard.html) | JOLTS, NFP revisions, hiring recession | 🟡 Planned | BLS JOLTS, CES |
 | [Commercial RE](commercial-re-dashboard.html) | Boston office vacancy, CMBS, property tax | 🟡 Planned | Trepp, C&W, Colliers |
+| [Tax Burden](tax-burden-dashboard.html) | All five layers of government burden — billed, withheld, embedded, metered, deferred | ✅ Live | IRS, DOR, DLS, CBO, DPU, Census |
+| [MA vs NH Burden](tax-burden-nh-comparison.html) | Same household, both sides of the border, all five layers | ✅ Live | NH DRA, MA DOR, DLS, CBO, Census |
+| [Tax & Budget](tax-budget-dashboard.html) | Income tax + surtax, state budget, rankings, cost of living | ✅ Live | DOR, BEA, BLS, Census |
+| [Pensions](pension-dashboard.html) | $55.8B unfunded, PRIT, 99 municipal systems | ✅ Live | ACFR, PERAC, PPD, PRIT |
+| [Energy](energy-dashboard.html) | RGGI carbon cost, electricity rates, Mass Save, GSEP | ✅ Live | EIA, RGGI Inc, ISO-NE, DPU |
+| [Pay-to-Play](pay-to-play-dashboard.html) | OCPF donations from lobbying firms, sector rankings | ✅ Live | OCPF, OpenSecrets, SOC |
 
 ## 📁 Repository Structure
 
@@ -40,7 +46,87 @@ Massachusetts-Data-Hub/
 ├── education-merrimack-valley.html     ← Haverhill/Methuen/Lawrence
 ├── healthcare-dashboard.html           ← Insurance & premiums (planned)
 ├── employment-dashboard.html           ← JOLTS & labor market (planned)
-└── commercial-re-dashboard.html        ← Boston office/CMBS (planned)
+├── commercial-re-dashboard.html        ← Boston office/CMBS (planned)
+├── tax-burden-dashboard.html           ← Total burden incidence model
+├── tax-burden-nh-comparison.html       ← Cross-border burden comparison
+├── tax-budget-dashboard.html           ← Tax, budget & rankings
+├── pension-dashboard.html              ← Unfunded liabilities
+├── energy-dashboard.html               ← Energy policy & carbon cost
+├── pay-to-play-dashboard.html          ← Lobbying & campaign finance
+├── data/burden-constants.json          ← Shared constants for BOTH burden dashboards
+├── update-burden-constants.py          ← Regenerates the K block in both; see below
+└── pdftext.py                          ← Stdlib PDF text extraction for blocked sources
+```
+
+## 🔒 Shared burden constants
+
+`tax-burden-dashboard.html` and `tax-burden-nh-comparison.html` both need the same
+Massachusetts figures. Rather than hand-editing two files and eventually publishing two
+dashboards that contradict each other, both read a generated block:
+
+```bash
+python update-burden-constants.py            # verify + write both files
+python update-burden-constants.py --check    # verify only, write nothing
+```
+
+Edit `data/burden-constants.json`, never the `K` object inside the HTML. The script
+enforces three gates and exits non-zero on any of them:
+
+1. **Provenance** — every figure needs `source`, `url` and `verified`. A figure marked
+   `verified: false` blocks publication (override with `--allow-unverified` for drafts).
+2. **Derivation** — `meanHouseholdIncome` and `incomeShare` are computed from
+   ACS `B19025 ÷ B11001`, never hardcoded, and all states must share one ACS release.
+3. **Invariance** — the federal layers must be identical across states for a given
+   household income. Layer 5 reduces algebraically to
+   `deficit × income ÷ national aggregate income`, so any divergence means the state
+   constants disagree with each other. This gate caught a live 17.3% inconsistency in
+   the NH figures that was making the cross-border dashboard contradict its own
+   headline finding.
+
+⚠️ **Known limitation:** the script unifies the *constants*, not the *model code*. The
+two dashboards still carry their own copies of the tax engine. Changing incidence logic
+in one still requires changing the other.
+
+## 🧾 Unverified constants
+
+Six figures remain placeholders and the pipeline reports them on every run:
+
+| Figure | Why it's still open |
+|---|---|
+| MA + NH electric policy charges | Must be summed from filed DPU / NH PUC tariffs; needs a stated rule for which line items count as *policy cost* rather than delivery |
+| MA + NH gas policy charges | Same |
+| MA + NH unfunded accrual | Not a sourcing gap — a genuine modelling question. See below. |
+
+**The pension double-count.** MA's unfunded stock ($55.8B) and annual appropriation
+($4.9B) are both verified. The open question is what Layer 5 is *for*. Amortising the
+stock over the remaining schedule gives ~$1,793/household/yr; netting off the
+appropriation already collected through Layer 1 taxes gives ~$61. A thirtyfold spread
+depending on whether the layer means "what the promise costs per year" or "burden not
+yet billed." Both dashboards expose it as a user input rather than pick silently.
+
+## 🔧 Reading PDFs that block automated download
+
+`pdftext.py` extracts text from PDFs with the standard library only — no poppler, no
+pypdf. Written because several primary sources here (NH DAS, CBO, Census) return 403 to
+scripted clients and ship subset fonts whose glyph ids sit at a fixed offset below ASCII.
+
+```bash
+python pdftext.py FILE.pdf              # auto-detects the encoding offset
+python pdftext.py FILE.pdf --offset 29  # force it
+```
+
+Handles indirect `/Length`, object streams, and both 1-byte and 2-byte text operands.
+NH DAS revenue PDFs decode at offset 29.
+
+**Downloading them:** a browser User-Agent does not help — those sites fingerprint the
+TLS stack, so `curl`/PowerShell/WebFetch all fail where a real browser succeeds. Open the
+site in a browser, then `fetch()` the file from the page's own JS context.
+
+**Census:** the ACS API now requires `CENSUS_API_KEY` on every request. Keep it in `.env`
+(gitignored). Query shape:
+
+```
+https://api.census.gov/data/2024/acs/acs1?get=NAME,B11001_001E,B19025_001E,B01003_001E&for=state:25,33&key=$CENSUS_API_KEY
 ```
 
 ## 🧱 Using the Template

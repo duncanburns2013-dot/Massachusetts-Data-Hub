@@ -1,0 +1,334 @@
+{
+  "_meta": {
+    "purpose": "Single source of truth for every constant shared by tax-burden-dashboard.html and tax-burden-nh-comparison.html. Edit here, run update-burden-constants.py, never hand-edit the K object in either HTML file.",
+    "maintainer": "Duncan Burns",
+    "updated": "2026-08-08",
+    "rules": [
+      "Every figure needs value + source + url + verified. A figure with verified:false BLOCKS publication.",
+      "meanHouseholdIncome and incomeShare are DERIVED from aggregateHouseholdIncome / households. Do not hardcode them.",
+      "That derivation is what makes the federal layers identical across states. See the consistency assertion in update-burden-constants.py."
+    ]
+  },
+
+  "federal": {
+    "standardDeduction": {
+      "value": { "single": 16100, "mfj": 32200 },
+      "source": "IRS Rev. Proc. 2025-32 (TY2026 inflation adjustments)",
+      "url": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+      "verified": "2026-08-08"
+    },
+    "brackets": {
+      "value": {
+        "single": [[12400, 0.10], [50400, 0.12], [105700, 0.22], [201775, 0.24], [256225, 0.32], [640600, 0.35], [null, 0.37]],
+        "mfj": [[24800, 0.10], [100800, 0.12], [211400, 0.22], [403550, 0.24], [512450, 0.32], [768700, 0.35], [null, 0.37]]
+      },
+      "note": "null cap = Infinity, restored by the writer.",
+      "source": "IRS Rev. Proc. 2025-32 (TY2026)",
+      "url": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+      "verified": "2026-08-08"
+    },
+    "ssWageBase": {
+      "value": 184500,
+      "source": "SSA 2026 contribution and benefit base",
+      "url": "https://www.ssa.gov/oact/cola/cbb.html",
+      "verified": "2026-08-08"
+    },
+    "ssRate":  { "value": 0.062,  "source": "IRC 3101(a) / 3111(a)", "url": "https://www.law.cornell.edu/uscode/text/26/3101", "verified": "2026-08-08" },
+    "medRate": { "value": 0.0145, "source": "IRC 3101(b) / 3111(b)", "url": "https://www.law.cornell.edu/uscode/text/26/3101", "verified": "2026-08-08" },
+    "addlMedThreshold": {
+      "value": { "single": 200000, "mfj": 250000 },
+      "source": "IRC 3101(b)(2) Additional Medicare Tax",
+      "url": "https://www.irs.gov/taxtopics/tc560",
+      "verified": "2026-08-08"
+    },
+    "addlMedRate": { "value": 0.009, "source": "IRC 3101(b)(2)", "url": "https://www.irs.gov/taxtopics/tc560", "verified": "2026-08-08" },
+    "gasCentsPerGal": {
+      "value": 18.4,
+      "source": "IRC 4081 federal motor fuel excise, gasoline",
+      "url": "https://www.irs.gov/pub/irs-pdf/p510.pdf",
+      "verified": "2026-08-08"
+    },
+    "deficit": {
+      "value": 1800000000000,
+      "note": "FY2025 actual, ~5.8-5.9% of GDP. Rounded to $1.8T as published.",
+      "source": "CBO Monthly Budget Review, October 2025",
+      "url": "https://www.cbo.gov/publication/61307",
+      "verified": "2026-08-08"
+    },
+    "corporateReceipts": {
+      "value": 452089303420,
+      "note": "FY2025 net Corporation Income Taxes, $452,089,303,419.78, from the Final Monthly Treasury Statement for September 2025 (fiscal year close). Down from FY2024's $529,866,802,637.57, a fall of $77.8B or 14.7% -- CBO attributed part of the drop to timing effects from IRS disaster-related deadline postponements that had inflated early FY2024. This replaces a rounded $500B placeholder that overstated the figure by $48B (10.6%) and inflated Layer 3 in both dashboards.",
+      "source": "U.S. Treasury, Final Monthly Treasury Statement Sept 2025, Table 4, via the Fiscal Data API",
+      "url": "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/mts/mts_table_4?filter=record_fiscal_year:eq:2025,record_calendar_month:eq:09",
+      "verified": "2026-08-08"
+    }
+  },
+
+  "national_acs": {
+    "_note": "Denominator for every derived share. Must be the same release as the state figures below or the derivation silently breaks. Pulled direct from the Census API (requires CENSUS_API_KEY, kept in .env which is gitignored) with: https://api.census.gov/data/2024/acs/acs1?get=NAME,B11001_001E,B19025_001E,B01003_001E,B19013_001E&for=us:1 -- swap for=state:25,33 for the state rows.",
+    "release": "ACS 2024 1-year",
+    "households": {
+      "value": 132737146,
+      "source": "Census ACS 2024 1-year, Table B11001 (Census API, direct)",
+      "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B11001_001E&for=us:1",
+      "verified": "2026-08-08"
+    },
+    "aggregateHouseholdIncome": {
+      "value": 15171367871400,
+      "source": "Census ACS 2024 1-year, Table B19025 (Census API, direct)",
+      "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B19025_001E&for=us:1",
+      "verified": "2026-08-08"
+    },
+    "population": {
+      "value": 340110990,
+      "note": "Now ACS 2024 1-year (B01003), matching the income tables. Previously carried the 5-year figure, which meant the population share was computed across mixed vintages.",
+      "source": "Census ACS 2024 1-year, Table B01003 (Census API, direct)",
+      "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B01003_001E&for=us:1",
+      "verified": "2026-08-08"
+    }
+  },
+
+  "states": {
+    "MA": {
+      "name": "Massachusetts",
+      "incomeRate":   { "value": 0.05, "source": "M.G.L. c. 62 s.4", "url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleIX/Chapter62/Section4", "verified": "2026-08-08" },
+      "surtaxRate":   { "value": 0.04, "source": "M.G.L. c. 62 s.4(d); Art. XLIV as amended", "url": "https://www.mass.gov/info-details/massachusetts-4-surtax-on-taxable-income", "verified": "2026-08-08" },
+      "surtaxThreshold": {
+        "value": 1107750,
+        "note": "TY2026 inflation-adjusted threshold.",
+        "source": "M.G.L. c. 62 s.4(d), s.5A; MA DOR",
+        "url": "https://www.mass.gov/info-details/massachusetts-4-surtax-on-taxable-income",
+        "verified": "2026-08-08"
+      },
+      "personalExemption": {
+        "value": { "single": 4400, "mfj": 8800 },
+        "source": "M.G.L. c. 62 s.3(B)(b)",
+        "url": "https://www.mass.gov/info-details/massachusetts-personal-income-tax-exemptions",
+        "verified": "2026-08-08"
+      },
+      "investmentIncomeRate": {
+        "value": 0.05,
+        "note": "MA taxes interest, dividends and long-term capital gains at the 5% Part B rate. Short-term capital gains are taxed at 8.5% (reduced from 12% by the 2023 tax act) and are handled separately in the model.",
+        "source": "M.G.L. c. 62 s.4(a),(c)",
+        "url": "https://www.mass.gov/info-details/massachusetts-income-tax-rates",
+        "verified": "2026-08-08"
+      },
+      "shortTermGainsRate": {
+        "value": 0.085,
+        "source": "M.G.L. c. 62 s.4(c), as amended by St. 2023 c. 50",
+        "url": "https://www.mass.gov/info-details/massachusetts-income-tax-rates",
+        "verified": "2026-08-08"
+      },
+      "salesRate":  { "value": 0.0625, "source": "M.G.L. c. 64H", "url": "https://www.mass.gov/guides/sales-and-use-tax", "verified": "2026-08-08" },
+      "mealsRate":  { "value": 0.0625, "note": "Plus a 0.75% local option adopted by most municipalities; not modeled separately.", "source": "M.G.L. c. 64H s.6(h)", "url": "https://www.mass.gov/guides/sales-and-use-tax", "verified": "2026-08-08" },
+      "gasCentsPerGal": {
+        "value": 26.5,
+        "note": "CORRECTED from 27.47. Statute is 24.0c motor fuel excise + 2.5c underground storage tank delivery fee = 26.5c. The 27.47c figure appeared in both dashboards while the on-screen caption read '24c + 2.5c UST', i.e. the constant contradicted its own source line.",
+        "source": "M.G.L. c. 64A s.1; c. 21J s.3 (UST delivery fee)",
+        "url": "https://www.mass.gov/info-details/motor-fuel-excise-tax",
+        "verified": "2026-08-08"
+      },
+      "corporateExcisePool": {
+        "value": 4662000000,
+        "note": "FY2025 corporate and business excise collections.",
+        "source": "MA DOR FY2025 revenue close, August 2025",
+        "url": "https://www.mass.gov/news/fiscal-year-2025-revenue-collections-totaled-43708-billion",
+        "verified": "2026-08-08"
+      },
+      "enterpriseTaxPool": { "value": 0, "note": "MA has no payroll-base business tax analogous to the NH BET.", "source": "n/a", "url": "n/a", "verified": "2026-08-08" },
+      "avgSingleFamilyBill": {
+        "value": 8113,
+        "source": "MA DLS, City & Town, February 2026 (FY2026 statewide average single-family tax bill)",
+        "url": "https://www.mass.gov/info-details/fy2026-statewide-average-single-family-tax-bill",
+        "verified": "2026-08-08"
+      },
+      "avgSingleFamilyValue": {
+        "value": 742986,
+        "note": "FY2026 statewide average assessed single-family value. Effective rate = 8113 / 742986 = 1.092%. ASSESSED, not market.",
+        "source": "MA DLS, City & Town, February 2026",
+        "url": "https://www.mass.gov/info-details/fy2026-statewide-average-single-family-tax-bill",
+        "verified": "2026-08-08"
+      },
+      "acs": {
+        "release": "ACS 2024 1-year",
+        "households": { "value": 2829804, "source": "Census ACS 2024 1-year, Table B11001 (Census API, direct)", "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B11001_001E&for=state:25", "verified": "2026-08-08" },
+        "aggregateHouseholdIncome": { "value": 408376085400, "source": "Census ACS 2024 1-year, Table B19025 (Census API, direct)", "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B19025_001E&for=state:25", "verified": "2026-08-08" },
+        "population": { "value": 7136171, "source": "Census ACS 2024 1-year, Table B01003 (Census API, direct)", "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B01003_001E&for=state:25", "verified": "2026-08-08" },
+        "medianHouseholdIncome_ACS": {
+          "value": 104828,
+          "note": "CONTEXT ONLY, never an allocation divisor. ACS 1-year. The CPS vintage reports $113,900 for the same concept, a ~$9k disagreement. tax-budget-dashboard.html currently labels $113,900 as 'Census 2024 ACS', which is wrong: $113,900 is CPS via FRED MEHOINUSMAA646N.",
+          "source": "Census ACS 2024 1-year, Table B19013",
+          "url": "https://censusreporter.org/profiles/04000US25-massachusetts/",
+          "verified": "2026-08-08"
+        },
+        "medianHouseholdIncome_CPS": {
+          "value": 113900,
+          "note": "CONTEXT ONLY. CPS ASEC vintage. Carry both; cite which one any given chart uses.",
+          "source": "Census CPS ASEC via FRED MEHOINUSMAA646N",
+          "url": "https://fred.stlouisfed.org/series/MEHOINUSMAA646N",
+          "verified": "2026-08-08"
+        }
+      },
+      "utility": {
+        "electricPolicyCentsPerKwh": {
+          "value": 4.0,
+          "note": "UNVERIFIED PLACEHOLDER. Build by summing filed DPU tariff lines: energy efficiency, renewable energy, net metering recovery surcharge, SMART, 83C/83D long-term contracts, plus RPS/CES/APS compliance embedded in basic service supply.",
+          "source": "MA DPU tariffs",
+          "url": "https://www.mass.gov/orgs/department-of-public-utilities",
+          "verified": false
+        },
+        "gasPolicyCentsPerTherm": {
+          "value": 18.0,
+          "note": "UNVERIFIED PLACEHOLDER. Energy efficiency surcharge + GSEP. The energy dashboard notes GSEP alone runs 8-11% of a monthly gas bill.",
+          "source": "MA DPU gas tariffs",
+          "url": "https://www.mass.gov/orgs/department-of-public-utilities",
+          "verified": false
+        }
+      },
+      "unfundedLiabilityStock": {
+        "value": 55800000000,
+        "note": "VERIFIED CONTEXT, not used directly in the model. Total unfunded pension + OPEB: MTRS $25.5B, SERS $14.1B, OPEB $13.7B, Boston Teachers $2.6B, MBTA $1.8B. Pension-only is $42.1B. Per household that is $19,719 total / $14,877 pension-only. NOTE the asymmetry when comparing with NH: this figure INCLUDES $13.7B of OPEB (retiree health), while the NH figure below is NHRS pension only. Compare pension-to-pension or the cross-border read is wrong.",
+        "source": "Commonwealth ACFR FY2024; PERAC valuations; see pension-dashboard.html",
+        "url": "https://www.mass.gov/orgs/public-employee-retirement-administration-commission",
+        "verified": "2026-08-08"
+      },
+      "annualPensionAppropriation": {
+        "value": 4900000000,
+        "note": "VERIFIED CONTEXT. FY2026 appropriation toward the unfunded liability -- roughly 8% of the entire state budget. Critically, this is ALREADY PAID through current taxes, so it sits in Layer 1 and must NOT be counted again in Layer 5.",
+        "source": "Commonwealth budget FY2026; see pension-dashboard.html",
+        "url": "https://www.mass.gov/orgs/public-employee-retirement-administration-commission",
+        "verified": "2026-08-08"
+      },
+      "unfundedAccrualPerHousehold": {
+        "value": 1793,
+        "note": "MODELLING CHOICE, DELIBERATELY LEFT UNVERIFIED -- this is the one field where the honest answer is that the question is open. GROSS construction: $55.8B amortised over the ~11 years remaining to the 2036 statutory full-funding target = $5.07B/yr, divided by 2,829,804 households = $1,793. But the state already appropriates $4.9B/yr against that, and that appropriation is collected through the taxes counted in Layer 1. NET of it the deferred figure is roughly $61/household -- a thirtyfold difference depending on which question you are asking. Publishing the gross number double-counts against Layer 1; publishing the net number hides a $19,719-per-household obligation. The dashboard exposes this as a user input for exactly that reason. Resolve by deciding what the layer is FOR: net if it means 'new burden not yet billed', gross if it means 'what the promise costs per year'.",
+        "source": "Derived from the verified stock and appropriation above; amortisation schedule per Commonwealth funding schedule",
+        "url": "https://www.mass.gov/orgs/public-employee-retirement-administration-commission",
+        "verified": false
+      }
+    },
+
+    "NH": {
+      "name": "New Hampshire",
+      "incomeRate": {
+        "value": 0,
+        "note": "No wage income tax, ever. The Interest & Dividends tax (the only NH personal income tax) was repealed effective 2025-01-01. Rate history: 5% -> 4% (2023) -> 3% (2024) -> 0% (2025).",
+        "source": "NH DRA; HB 2 (2023) ch. 79 ss.86-88",
+        "url": "https://www.revenue.nh.gov/news-and-media/repeal-nh-interest-and-dividends-tax-now-effect",
+        "verified": "2026-08-08"
+      },
+      "surtaxRate": { "value": 0, "source": "n/a", "url": "n/a", "verified": "2026-08-08" },
+      "surtaxThreshold": { "value": null, "note": "null = Infinity, restored by the writer.", "source": "n/a", "url": "n/a", "verified": "2026-08-08" },
+      "personalExemption": { "value": { "single": 0, "mfj": 0 }, "source": "n/a", "url": "n/a", "verified": "2026-08-08" },
+      "investmentIncomeRate": {
+        "value": 0,
+        "note": "Zero since 2025-01-01. This is the layer the I&D repeal actually moved. NH has NEVER taxed capital gains, so gains are a long-standing gap, not a new one.",
+        "source": "NH DRA, repeal of Interest & Dividends tax",
+        "url": "https://www.revenue.nh.gov/news-and-media/repeal-nh-interest-and-dividends-tax-now-effect",
+        "verified": "2026-08-08"
+      },
+      "shortTermGainsRate": { "value": 0, "source": "n/a - NH does not tax capital gains", "url": "https://www.revenue.nh.gov/taxes-glance", "verified": "2026-08-08" },
+      "salesRate": { "value": 0, "source": "NH DRA - no general sales tax", "url": "https://www.revenue.nh.gov/taxes-glance", "verified": "2026-08-08" },
+      "mealsRate": {
+        "value": 0.085,
+        "note": "Meals & Rooms tax. NH's partial substitute for a sales tax.",
+        "source": "RSA 78-A",
+        "url": "https://www.revenue.nh.gov/taxes-glance/meals-rentals-tax",
+        "verified": "2026-08-08"
+      },
+      "gasCentsPerGal": {
+        "value": 23.75,
+        "note": "22.2c road toll + ~1.55c oil discharge and disposal surcharges = 23.75c. Corrected from a 23.83c placeholder that used 1.625c for the surcharge. Note RSA 260:32 still reads a $0.18 base rate; the 22.2c effective rate reflects the 4.2c increase enacted by 2014 SB 367, and the CPI-indexing mechanism at RSA 260:32-a was repealed by 2014, 17:5, so the rate is now fixed until the legislature moves it. The surcharge component varies slightly by year -- treat the total as ~23.7-23.8c.",
+        "source": "RSA 260:32 (base); oil discharge surcharges per RSA 146-A; total per SalesTaxHandbook / Federation of Tax Administrators",
+        "url": "https://gc.nh.gov/rsa/html/XXI/260/260-32.htm",
+        "verified": "2026-08-08"
+      },
+      "businessTaxesTotal": {
+        "value": 1102600000,
+        "note": "VERIFIED. Combined Business Profits Tax + Business Enterprise Tax, FY2025 preliminary accrual: General Fund $670.5M + Education Fund $432.1M = $1,102.6M. Down 9.5% from FY2024's $1,217.9M and 12.4% below the $1,259.0M plan. NH DAS reports BPT and BET together as 'Business Taxes' and does not split them in this report. Matches MA's FY2025 vintage.",
+        "source": "NH DAS Monthly Revenue Focus, June FY2025 Preliminary Accrual",
+        "url": "https://www.das.nh.gov/accounting/FY%2025/FY2025_Monthly_Revenue_June_Preliminary_Accrual.pdf",
+        "verified": "2026-08-08"
+      },
+      "corporateExcisePool": {
+        "value": 819231800,
+        "note": "Business Profits Tax portion = 74.3% of the audited $1,102.6M combined total. METHOD: NH DAS publishes BPT and BET only as one 'Business Taxes' line, so the audited TOTAL is primary and the DIVISION comes from NHFPI's five-year average (TY2019-2023), which puts BET at 25.7% of business tax revenue. Not a FY2025-specific split -- a sourced ratio applied to a primary total. The division matters because BPT is a profits tax (largely capital incidence) while BET's base is compensation (largely labour incidence).",
+        "source": "NH DAS FY2025 total; BPT/BET ratio from NH Fiscal Policy Institute (five-year TY2019-2023 average)",
+        "url": "https://nhfpi.org/resource/business-enterprise-tax-rate-decreases-have-lowered-revenue-with-limited-economic-benefit/",
+        "verified": "2026-08-08"
+      },
+      "enterpriseTaxPool": {
+        "value": 283368200,
+        "note": "Business Enterprise Tax portion = 25.7% of the audited $1,102.6M total. Rate 0.55% under RSA 77-E (history: 0.75% pre-2016, 0.72% 2016-17, 0.675% 2018, 0.6% 2019-21, 0.55% since 2022). Base is compensation plus interest and dividends paid. CAVEAT the model does not capture: BET credits equal to roughly 74% of BET liability are applied against BPT liability, so a firm paying both effectively pays the greater of the two rather than the sum. That makes the two pools less independent than treating them as separate incidence buckets implies -- the labour-incidence share of NH business taxes is directionally right but the magnitude is soft. TY2023 BET revenue was $253M for scale.",
+        "source": "NH DAS FY2025 total; BET share and rate history from NH Fiscal Policy Institute",
+        "url": "https://nhfpi.org/resource/business-enterprise-tax-rate-decreases-have-lowered-revenue-with-limited-economic-benefit/",
+        "verified": "2026-08-08"
+      },
+      "interestDividendsRevenue": {
+        "value": 90800000,
+        "note": "CONTEXT, not used in the model. FY2025 Interest & Dividends tax revenue, down 50.7% from FY2024's $184.3M as the repeal phased in (5% -> 4% -> 3% -> 0%). This is the size of what New Hampshire actually gave up on 1 Jan 2025, in the state's own accrual figures -- useful for the dashboard's copy about which gap is new.",
+        "source": "NH DAS Monthly Revenue Focus, June FY2025 Preliminary Accrual",
+        "url": "https://www.das.nh.gov/accounting/FY%2025/FY2025_Monthly_Revenue_June_Preliminary_Accrual.pdf",
+        "verified": "2026-08-08"
+      },
+      "avgSingleFamilyBill": {
+        "value": null,
+        "note": "Not used. NH property tax is modeled as a rate against value because NH publishes rates, not a statewide average bill. Sources disagree on the median bill: $6,530 at 1.82% effective (Ownwell), $6,707 at 1.46% (SmartAsset), $5,680 median across counties (World Population Review). Carry the spread, do not resolve silently.",
+        "source": "multiple, in conflict",
+        "url": "n/a",
+        "verified": "2026-08-08"
+      },
+      "effectivePropertyRatePct": {
+        "value": 1.583,
+        "note": "CORRECTED from an unsourced 1.71%. $15.83 per $1,000 is the 2025 average NOMINAL total rate across NH municipalities, down from $20.96 in 2019 -- and it fell only because assessed values rose, not because bills did. Being nominal, it applies to ASSESSED value, the same basis as the MA figure (1.092% = $8,113 / $742,986 assessed), so the cross-border comparison is like-for-like. It is NOT an effective rate on market value: NH DRA runs an equalization process precisely because assessment timing varies by town, so applying this to a market price overstates the bill wherever assessments lag. Municipal rates range $2.62 to $36.54 per $1,000, so the statewide average hides enormous variation.",
+        "source": "NH Fiscal Policy Institute, Property Taxes in New Hampshire (2025 average municipal rate)",
+        "url": "https://nhfpi.org/resource/property-taxes-in-new-hampshire-how-they-work-and-how-they-compare/",
+        "verified": "2026-08-08"
+      },
+      "perCapitaPropertyTax": {
+        "value": 3388,
+        "note": "CONTEXT, not used in the model. FY2022 per-capita property taxes -- 2nd highest of any state, behind New Jersey's $3,617. NH is 1st in reliance on property tax as a share of state and local tax revenue. Sources disagree on that share: NHFPI says 60%, InDepthNH/NHFPI April 2026 coverage says 63-64%. Carry both.",
+        "source": "NH Fiscal Policy Institute",
+        "url": "https://nhfpi.org/resource/property-taxes-in-new-hampshire-how-they-work-and-how-they-compare/",
+        "verified": "2026-08-08"
+      },
+      "acs": {
+        "release": "ACS 2024 1-year",
+        "households": { "value": 570689, "source": "Census ACS 2024 1-year, Table B11001 (Census API, direct)", "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B11001_001E&for=state:33", "verified": "2026-08-08" },
+        "aggregateHouseholdIncome": { "value": 73392725500, "source": "Census ACS 2024 1-year, Table B19025 (Census API, direct)", "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B19025_001E&for=state:33", "verified": "2026-08-08" },
+        "population": { "value": 1409032, "source": "Census ACS 2024 1-year, Table B01003 (Census API, direct)", "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B01003_001E&for=state:33", "verified": "2026-08-08" },
+        "medianHouseholdIncome_ACS": { "value": 99782, "note": "CONTEXT ONLY.", "source": "Census ACS 2024 1-year, Table B19013 (Census API, direct)", "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B19013_001E&for=state:33", "verified": "2026-08-08" }
+      },
+      "utility": {
+        "electricPolicyCentsPerKwh": {
+          "value": 1.0,
+          "note": "UNVERIFIED PLACEHOLDER. System Benefits Charge + stranded cost recovery + RPS compliance. This is one of the genuine NH advantages, so precision here materially affects the finding.",
+          "source": "NH PUC electric tariffs",
+          "url": "https://www.puc.nh.gov/regulatory/tariffs.html",
+          "verified": false
+        },
+        "gasPolicyCentsPerTherm": {
+          "value": 4.0,
+          "note": "UNVERIFIED PLACEHOLDER.",
+          "source": "NH PUC gas tariffs",
+          "url": "https://www.puc.nh.gov/regulatory/tariffs.html",
+          "verified": false
+        }
+      },
+      "unfundedLiabilityStock": {
+        "value": 5580000000,
+        "note": "VERIFIED CONTEXT. NHRS Unfunded Actuarial Accrued Liability as of 30 June 2024, at a 68.6% funded ratio. Per household that is $9,778 against Massachusetts's $14,877 pension-only -- so MA carries roughly 1.5x the per-household pension hole. CAVEAT: this is NHRS PENSION ONLY. New Hampshire's retiree health (OPEB) unfunded liability is not included here, while the MA figure has a separate $13.7B OPEB line. Until NH OPEB is sourced, compare against MA's pension-only $42.1B, never its $55.8B total.",
+        "source": "NHRS ACFR and GASB 67/74 schedules, FY2025 release (valuation date 30 June 2024)",
+        "url": "https://www.nhrs.org/docs/default-source/gasb/2025-nhrs-combined-acfr-and-gasb67-74-(final)abfe78ba-fd19-426b-a7a7-d693dedd1c1d.pdf",
+        "verified": "2026-08-08"
+      },
+      "unfundedAccrualPerHousehold": {
+        "value": 699,
+        "note": "MODELLING CHOICE, DELIBERATELY LEFT UNVERIFIED -- built the SAME way as the MA figure so the comparison is not rigged by construction. GROSS: $5.58B amortised over the ~14 years remaining to the 2039 statutory payoff (2018 legislation amortises the 30 June 2017 UAAL through 2039; post-2017 gains and losses run on separate schedules of up to 20 years) = $399M/yr, divided by 570,689 households = $699. Same double-count problem as MA: NH employers already contribute against this annually and that contribution reaches households through local property tax, which Layer 1 counts. The NH employer contribution total is not yet sourced, so the net figure cannot be computed on this side -- which is precisely why both states stay unverified rather than one being netted and the other not.",
+        "source": "Derived from the verified NHRS stock above; amortisation per 2018 NH funding legislation",
+        "url": "https://www.nhrs.org/about-nhrs",
+        "verified": false
+      }
+    }
+  }
+}

@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Same House, Different Side — MA vs NH Total Government Burden</title>
+<meta name="description" content="An interactive cross-border audit: the same household, the same house, on both sides of the Massachusetts–New Hampshire line, across all five layers of government burden.">
+<link rel="canonical" href="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/tax-burden-nh-comparison.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Massachusetts Data Hub">
+<meta property="og:title" content="Same House, Different Side — MA vs NH Total Government Burden">
+<meta property="og:description" content="New Hampshire has no income tax and no sales tax. The advantage is real, and smaller than the headline — two of five layers are federal and identical.">
+<meta property="og:url" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/tax-burden-nh-comparison.html">
+<meta property="og:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Same House, Different Side — MA vs NH Total Government Burden">
+<meta name="twitter:description" content="The same household, both sides of the border, all five layers.">
+<meta name="twitter:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Public+Sans:ital,wght@0,300;0,400;0,600;0,800;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{
+  --ink:#16202E; --ink-2:#3A4757;
+  --paper:#E9EBE4; --paper-2:#F3F4EF; --rule:#C2C7BA;
+  --ledger:#1F5C4A; --amber:#B07C20; --oxblood:#8C2F2A; --slate:#4A6076; --dust:#C99C99;
+  /* MA = Bay Blue, the official Commonwealth brand blue. NH = red.
+     Negative space in the compression chart is drawn in MA blue rather than a third
+     colour, because a negative "NH advantage" simply means Massachusetts is cheaper. */
+  --ma:#14558F; --nh:#C0392B;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sans:'Public Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.55;font-size:16px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 96px}
+h2{font-weight:800;font-size:24px;letter-spacing:-.02em;margin:0 0 8px}
+.sub{font-size:14.5px;color:var(--ink-2);margin:0;max-width:68ch}
+a{color:var(--ledger)}
+
+.hubnav{border-bottom:1px solid var(--rule);padding:12px 0;display:flex;gap:18px;flex-wrap:wrap;align-items:center;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}
+.hubnav a{color:var(--ink-2);text-decoration:none}
+.hubnav a:hover,.hubnav a:focus-visible{color:var(--ink);text-decoration:underline}
+.hubnav .home{color:var(--ink);font-weight:600}
+.hubnav .here{color:var(--nh);font-weight:600}
+
+.masthead{padding:44px 0 30px;border-bottom:2px solid var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2);margin:0 0 18px}
+h1{font-weight:800;font-size:clamp(30px,5.2vw,54px);line-height:1.02;letter-spacing:-.025em;margin:0 0 16px;max-width:19ch}
+.standfirst{font-size:17px;max-width:64ch;color:var(--ink-2);margin:0;border-left:2px solid var(--rule);padding-left:16px}
+
+.presets{display:flex;gap:8px;flex-wrap:wrap;padding:22px 0;border-bottom:1px solid var(--rule)}
+.preset{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink-2);cursor:pointer;transition:all .15s}
+.preset:hover{border-color:var(--ink);color:var(--ink)}
+.preset[aria-pressed=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.preset:focus-visible{outline:2px solid var(--ledger);outline-offset:2px}
+
+#cardShot{background:var(--paper);padding:28px 0 26px;border-bottom:1px solid var(--rule)}
+.versus{display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:end}
+@media(max-width:700px){.versus{grid-template-columns:1fr;gap:18px}}
+.side .k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);margin-bottom:8px}
+.side .v{font-family:var(--mono);font-weight:600;font-size:clamp(34px,6vw,60px);line-height:.9;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.side .p{font-family:var(--mono);font-size:14px;color:var(--ink-2);margin-top:8px;font-variant-numeric:tabular-nums}
+.side.ma .v{color:var(--ma)}
+.side.nh{text-align:right}
+.side.nh .v{color:var(--nh)}
+@media(max-width:700px){.side.nh{text-align:left}}
+.delta{text-align:center;padding-bottom:6px}
+.delta .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);margin-bottom:6px}
+.delta .v{font-family:var(--mono);font-weight:600;font-size:clamp(20px,3vw,30px);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+
+/* the compression bar */
+.compress{margin-top:28px;border:1px solid var(--rule);background:var(--paper-2);padding:18px 20px}
+.compress h4{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 14px;font-weight:600;color:var(--ink-2)}
+.crow{display:grid;grid-template-columns:150px 1fr 92px;gap:14px;align-items:center;margin-bottom:9px}
+@media(max-width:640px){.crow{grid-template-columns:110px 1fr 78px;gap:9px}}
+.crow .lbl{font-family:var(--mono);font-size:10.5px;color:var(--ink-2);letter-spacing:.02em}
+/* SVG tick track, not repeating-linear-gradient — html2canvas 1.4.1 drops CSS gradients
+   and the PNG export lost the track entirely. */
+.crow .bar{height:15px;position:relative;
+  background:#F3F4EF url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='15'%3E%3Crect x='5' y='0' width='1' height='15' fill='%23C2C7BA'/%3E%3C/svg%3E") repeat-x}
+/* zero sits mid-track so a negative advantage reads as negative rather than vanishing */
+.crow .zero{position:absolute;top:-2px;bottom:-2px;width:1px;background:var(--ink-2);opacity:.5}
+.crow .fill{position:absolute;top:0;height:100%;background:var(--nh);transition:width .55s cubic-bezier(.4,0,.2,1),left .55s cubic-bezier(.4,0,.2,1)}
+.crow .fill.neg{background:var(--ma)}
+.crow .num{font-family:var(--mono);font-size:12px;text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
+.crow .num.neg{color:var(--ma)}
+.compress .note{font-size:12px;color:var(--ink-2);margin:12px 0 0;font-style:italic}
+
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;padding:16px 0;border-bottom:1px solid var(--rule)}
+.tool{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.tool:hover{background:var(--ink);color:var(--paper)}
+.tool:focus-visible{outline:2px solid var(--ledger);outline-offset:2px}
+.toast{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ledger);align-self:center;opacity:0;transition:opacity .3s}
+.toast.on{opacity:1}
+
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 306px;gap:44px;margin-top:36px;align-items:start}
+@media(max-width:900px){.cols{grid-template-columns:1fr;gap:32px}}
+
+.layer{border-top:1px solid var(--rule);padding:22px 0;transition:opacity .3s}
+.layer:first-of-type{border-top:2px solid var(--ink)}
+.layer.off{opacity:.32}
+.layer-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.layer-name{font-weight:800;font-size:18px;letter-spacing:-.01em;margin:0;display:flex;align-items:center;gap:10px}
+.toggle{width:34px;height:19px;border:1px solid var(--rule);background:var(--paper-2);position:relative;cursor:pointer;flex:0 0 auto;padding:0}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:13px;height:13px;background:var(--ink-2);transition:transform .2s}
+.toggle[aria-pressed=true]{background:var(--ledger);border-color:var(--ledger)}
+.toggle[aria-pressed=true]::after{transform:translateX(15px);background:#fff}
+.toggle:focus-visible{outline:2px solid var(--ledger);outline-offset:2px}
+.layer-meta{display:flex;gap:9px;align-items:center;margin:8px 0 11px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--rule);color:var(--ink-2);background:var(--paper-2)}
+.chip.q1{border-color:var(--ledger);color:var(--ledger)}
+.chip.q2{border-color:var(--amber);color:var(--amber)}
+.chip.q3{border-color:var(--oxblood);color:var(--oxblood)}
+.layer-note{font-size:14.5px;color:var(--ink-2);margin:0 0 13px;max-width:66ch}
+.layer-note b{color:var(--ink);font-weight:600}
+
+.cmp{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12.5px}
+.cmp thead th{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;padding:6px 8px 6px 0;border-bottom:1.5px solid var(--ink);font-weight:600;text-align:right}
+.cmp thead th:first-child{text-align:left}
+.cmp thead th.ma{color:var(--ma)}
+.cmp thead th.nh{color:var(--nh)}
+.cmp td{padding:6px 8px 6px 0;border-bottom:1px dotted var(--rule);text-align:right;font-variant-numeric:tabular-nums}
+.cmp td:first-child{text-align:left;font-weight:400}
+.cmp .src{font-size:9.5px;color:var(--ink-2);display:block;font-weight:400}
+.cmp tr.tot td{border-bottom:1.5px solid var(--ink);font-weight:600;padding-top:9px}
+.cmp tr.same td{color:var(--ink-2)}
+.cmp .pos{color:var(--oxblood)}
+.cmp .neg{color:var(--ledger)}
+
+.panel{background:var(--paper-2);border:1px solid var(--rule);padding:20px;position:sticky;top:24px;max-height:calc(100vh - 48px);overflow-y:auto}
+@media(max-width:900px){.panel{position:static;max-height:none}}
+.panel h3{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 15px;padding-bottom:9px;border-bottom:1px solid var(--rule);font-weight:600}
+.panel h3.mt{margin-top:24px}
+.panel h3.ma{color:var(--ma);border-bottom-color:var(--ma)}
+.panel h3.nh{color:var(--nh);border-bottom-color:var(--nh)}
+.field{margin-bottom:13px}
+.field label{display:block;font-size:11.5px;font-weight:600;margin-bottom:5px}
+.field input[type=number],.field select{width:100%;padding:7px 9px;border:1px solid var(--rule);background:#fff;font-family:var(--mono);font-size:13px;color:var(--ink)}
+.field input:focus,.field select:focus,.field input[type=range]:focus{outline:2px solid var(--ledger);outline-offset:1px}
+.field input[type=range]{width:100%;accent-color:var(--ledger);margin:4px 0 0}
+.rangeval{font-family:var(--mono);font-size:11px;color:var(--ink-2);float:right;font-weight:400}
+.hint{font-size:10.5px;color:var(--ink-2);line-height:1.4;margin:4px 0 0;font-style:italic}
+
+.section{margin-top:44px;padding-top:32px;border-top:2px solid var(--ink)}
+.chartwrap{height:350px;margin-top:20px}
+.srctable{width:100%;border-collapse:collapse;margin-top:22px;font-size:13px}
+.srctable th{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;text-align:left;padding:8px 12px 8px 0;border-bottom:1.5px solid var(--ink);font-weight:600}
+.srctable td{padding:10px 12px 10px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.srctable .verify{font-family:var(--mono);font-size:10px;color:var(--oxblood);letter-spacing:.06em;text-transform:uppercase}
+.srctable .done{color:var(--ledger)}
+footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink-2);max-width:72ch}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="hubnav" aria-label="Massachusetts Data Hub">
+  <a class="home" href="index.html">← Massachusetts Data Hub</a>
+  <span class="here">MA vs NH</span>
+  <a href="tax-burden-dashboard.html">Tax Burden</a>
+  <a href="tax-budget-dashboard.html">Tax &amp; Budget</a>
+  <a href="nh-housing-dashboard.html">NH Housing</a>
+  <a href="energy-dashboard.html">Energy</a>
+  <a href="affordability-dashboard.html">Cost of Living</a>
+</nav>
+
+<header class="masthead">
+  <p class="eyebrow">Massachusetts Data Hub · Cross-Border Incidence</p>
+  <h1>Same house. Same income. Different side of the line.</h1>
+  <p class="standfirst">New Hampshire has no income tax and no sales tax. That advantage is real, and it is smaller than the headline suggests — because two of the five burden layers are identical on both sides of the border, and New Hampshire loads almost everything it does collect onto the one layer that ignores what you earn.</p>
+</header>
+
+<div class="presets" id="presets"></div>
+
+<div id="cardShot">
+  <div class="versus">
+    <div class="side ma">
+      <div class="k">Massachusetts</div>
+      <div class="v" id="maTotal">$0</div>
+      <div class="p" id="maPct">—</div>
+    </div>
+    <div class="delta">
+      <div class="k">NH advantage</div>
+      <div class="v" id="deltaV">$0</div>
+    </div>
+    <div class="side nh">
+      <div class="k">New Hampshire</div>
+      <div class="v" id="nhTotal">$0</div>
+      <div class="p" id="nhPct">—</div>
+    </div>
+  </div>
+
+  <div class="compress">
+    <h4 id="compressHead">How the advantage changes as layers are added</h4>
+    <div id="compressRows"></div>
+    <p class="note" id="compressNote"></p>
+  </div>
+</div>
+
+<div class="toolbar">
+  <button class="tool" id="btnLink">Copy permalink</button>
+  <button class="tool" id="btnPng">Download card as PNG</button>
+  <button class="tool" id="btnReset">Reset to defaults</button>
+  <span class="toast" id="toast" role="status" aria-live="polite"></span>
+</div>
+
+<div class="cols">
+  <main>
+    <h2 class="sr-only">Layer-by-layer comparison</h2>
+    <section class="layer" id="layV">
+      <div class="layer-head">
+        <h3 class="layer-name"><button class="toggle" data-layer="V" aria-pressed="true" aria-label="Toggle layer 1, billed to you"></button>1 · Billed to you</h3>
+      </div>
+      <div class="layer-meta"><span class="chip q1">Solid evidence</span><span class="chip">Statutory rates</span></div>
+      <p class="layer-note">Where the whole reputation comes from. <b>New Hampshire's individual income tax is genuinely zero</b> — the Interest &amp; Dividends tax was repealed effective 1 January 2025, so there is no longer a personal income tax of any kind. There is no general sales tax either. What replaces both is property tax, at roughly 1.7% of value against Massachusetts's 1.1%. Note which gap is new: the I&amp;D repeal is two years old, but <b>New Hampshire has never taxed capital gains or wages</b>, so those gaps are not a recent policy change.</p>
+      <table class="cmp" id="tblV"></table>
+    </section>
+
+    <section class="layer" id="layE">
+      <div class="layer-head">
+        <h3 class="layer-name"><button class="toggle" data-layer="E" aria-pressed="true" aria-label="Toggle layer 2, paid on your behalf"></button>2 · Paid on your behalf</h3>
+      </div>
+      <div class="layer-meta"><span class="chip q1">Solid evidence</span><span class="chip">Federal · identical</span></div>
+      <p class="layer-note">Employer FICA. <b>Identical on both sides of the border.</b> The first layer where moving buys you nothing.</p>
+      <table class="cmp" id="tblE"></table>
+    </section>
+
+    <section class="layer" id="layC">
+      <div class="layer-head">
+        <h3 class="layer-name"><button class="toggle" data-layer="C" aria-pressed="true" aria-label="Toggle layer 3, embedded in prices and wages"></button>3 · Embedded in prices and wages</h3>
+      </div>
+      <div class="layer-meta"><span class="chip q2">Modeled incidence</span><span class="chip">Structures differ materially</span></div>
+      <p class="layer-note">This is where the comparison gets interesting. Massachusetts levies a corporate excise on profits, which standard models push roughly 75% onto capital owners. New Hampshire levies two business taxes: a 7.5% Business Profits Tax that behaves like the Massachusetts excise, and a <b>0.55% Business Enterprise Tax whose base is compensation paid</b> — that is, wages. A tax on payroll lands on labour almost directly, so New Hampshire's business tax burden falls harder on wage earners than its rate suggests. The federal corporate slice inside this layer is identical on both sides.</p>
+      <table class="cmp" id="tblC"></table>
+    </section>
+
+    <section class="layer" id="layU">
+      <div class="layer-head">
+        <h3 class="layer-name"><button class="toggle" data-layer="U" aria-pressed="true" aria-label="Toggle layer 4, collected through the meter"></button>4 · Collected through the meter</h3>
+      </div>
+      <div class="layer-meta"><span class="chip q2">Tariff-verifiable</span><span class="chip">Genuine NH advantage</span></div>
+      <p class="layer-note">A real and under-discussed gap. Massachusetts recovers energy efficiency, RPS/CES/APS compliance, net metering, SMART solar and 83C/83D long-term contract costs through rates. New Hampshire's System Benefits Charge and stranded cost recovery are substantially smaller, and its renewable portfolio standard is less aggressive. <b>Both defaults below are placeholders</b> — replace from DPU and NH PUC tariff sheets.</p>
+      <table class="cmp" id="tblU"></table>
+    </section>
+
+    <section class="layer" id="layD">
+      <div class="layer-head">
+        <h3 class="layer-name"><button class="toggle" data-layer="D" aria-pressed="true" aria-label="Toggle layer 5, deferred to later"></button>5 · Deferred to later</h3>
+      </div>
+      <div class="layer-meta"><span class="chip q3">Allocation is a choice</span><span class="chip">Federal portion identical</span></div>
+      <p class="layer-note">Federal borrowing does not stop at the state line. A household with the same income owes the same share of it in Salem NH as in Salem MA — and the model now enforces that rather than asserting it. <b>Only the state and local unfunded piece differs</b> — and New Hampshire's pension system carries its own unfunded liability, so the gap here is far narrower than the income tax comparison implies.</p>
+      <table class="cmp" id="tblD"></table>
+    </section>
+
+    <div class="section">
+      <h2>The advantage across the income distribution</h2>
+      <p class="sub">New Hampshire's advantage is not constant. It is negative or near zero at low incomes, because property tax and utility charges hit regardless of earnings and New Hampshire's property rate is higher. It widens with income, because that is where Massachusetts's income tax actually bites — and it widens fastest of all for households holding assets, since Massachusetts taxes interest, dividends and capital gains that New Hampshire does not.</p>
+      <div class="chartwrap"><canvas id="advChart"></canvas></div>
+    </div>
+
+    <div class="section">
+      <h2>Source ledger</h2>
+      <p class="sub">Constants are generated from <a href="data/burden-constants.json">data/burden-constants.json</a> by <code>update-burden-constants.py</code>, which refuses to publish a figure without a source URL and verification date. Anything marked below as unverified is a live placeholder.</p>
+      <table class="srctable">
+        <thead><tr><th style="width:28%">Input</th><th style="width:20%">Default</th><th style="width:32%">Source</th><th style="width:20%">Status</th></tr></thead>
+        <tbody>
+          <tr><td>NH individual income tax</td><td>0% — repealed</td><td><a href="https://www.revenue.nh.gov/news-and-media/repeal-nh-interest-and-dividends-tax-now-effect">NH DRA; HB 2 (2023) ch. 79</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>NH I&amp;D rate history</td><td>5% → 4% → 3% → 0%</td><td><a href="https://www.revenue.nh.gov/taxes-glance">NH DRA</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>NH capital gains tax</td><td>None — never levied</td><td><a href="https://www.revenue.nh.gov/taxes-glance">NH DRA</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>NH general sales tax</td><td>None</td><td><a href="https://www.revenue.nh.gov/taxes-glance">NH DRA</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>NH Meals &amp; Rooms tax</td><td>8.5%</td><td><a href="https://www.revenue.nh.gov/taxes-glance/meals-rentals-tax">RSA 78-A</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>NH Business Profits Tax</td><td>7.5%</td><td><a href="https://www.revenue.nh.gov/taxes-glance/business-taxes">RSA 77-A</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>NH Business Enterprise Tax</td><td>0.55% on compensation base</td><td><a href="https://www.revenue.nh.gov/taxes-glance/business-taxes">RSA 77-E</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>NH households</td><td>570,689</td><td><a href="https://censusreporter.org/profiles/04000US33-new-hampshire/">ACS 2024 1-yr, Table B11001</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>NH mean household income</td><td>$128,604 (derived)</td><td><a href="https://censusreporter.org/tables/B19025/">ACS 2024 1-yr, B19025 ÷ B11001</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>NH share of federal burden</td><td>0.484% income · 0.417% pop</td><td>Derived from ACS B19025 / B01003</td><td class="verify done">Derived</td></tr>
+          <tr><td>MA households / mean income</td><td>2,829,804 · $144,312</td><td><a href="https://censusreporter.org/profiles/04000US25-massachusetts/">ACS 2024 1-yr, same release</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>NH business taxes, FY2025 total</td><td>$1,102.6M (Gen $670.5M + Ed $432.1M)</td><td><a href="https://www.das.nh.gov/accounting/FY%2025/FY2025_Monthly_Revenue_June_Preliminary_Accrual.pdf">NH DAS Monthly Revenue Focus, June FY2025 accrual</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>NH BPT / BET split</td><td>75% / 25% assumed</td><td>DAS reports them combined; split needs NH DRA</td><td class="verify">Split unverified</td></tr>
+          <tr><td>NH Interest &amp; Dividends revenue FY2025</td><td>$90.8M &mdash; down 50.7% from $184.3M</td><td><a href="https://www.das.nh.gov/accounting/FY%2025/FY2025_Monthly_Revenue_June_Preliminary_Accrual.pdf">NH DAS, June FY2025 accrual</a></td><td class="verify done">Verified</td></tr>
+          <tr><td>NH effective property rate</td><td>1.71% (~$17.10/$1,000)</td><td><a href="https://www.revenue.nh.gov/municipal/property-tax-rates">NH DRA rate setting</a></td><td class="verify">Unverified</td></tr>
+          <tr><td>NH median property tax bill</td><td>$5,680 – $6,707</td><td>Ownwell / SmartAsset / WPR disagree</td><td class="verify">Spread carried</td></tr>
+          <tr><td>NH road toll (gas)</td><td>22.2¢ + 1.625¢ oil fee</td><td><a href="https://www.gencourt.state.nh.us/rsa/html/XXI/260/260-32.htm">RSA 260:32</a></td><td class="verify">Unverified</td></tr>
+          <tr><td>NH electric policy charges</td><td>1.0¢/kWh placeholder</td><td><a href="https://www.puc.nh.gov/regulatory/tariffs.html">NH PUC tariffs — SBC, stranded cost</a></td><td class="verify">Unverified</td></tr>
+          <tr><td>NH gas policy charges</td><td>4¢/therm placeholder</td><td><a href="https://www.puc.nh.gov/regulatory/tariffs.html">NH PUC gas tariffs</a></td><td class="verify">Unverified</td></tr>
+          <tr><td>NHRS unfunded accrual</td><td>$1,600 placeholder</td><td><a href="https://www.nhrs.org/about-nhrs/financial-reports">NHRS actuarial valuation</a></td><td class="verify">Unverified</td></tr>
+          <tr><td>MA avg single-family bill FY2026</td><td>$8,113 on $742,986</td><td><a href="https://www.mass.gov/info-details/fy2026-statewide-average-single-family-tax-bill">DLS <em>City &amp; Town</em>, Feb 2026</a></td><td class="verify done">Verified</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <footer>
+      <p><strong>What this dashboard argues.</strong> New Hampshire's advantage is real but substantially smaller than the "no income tax, no sales tax" framing implies, for three structural reasons: two of five layers are federal and identical; New Hampshire's property tax claws most of it back, at roughly 1.7% against 1.1% on the same house, with property tax supplying 63–64% of all NH state and local revenue; and the BET's compensation base makes it behave like a payroll tax rather than a profits tax. The consequence is that the advantage is <em>regressive</em> — near zero or negative at lower incomes, widening at higher ones. If better sourcing contradicts any of the three, the copy changes rather than the data.</p>
+      <p><strong>Assets are the sharpest edge.</strong> Massachusetts taxes interest and dividends at 5%, long-term capital gains at 5%, short-term at 8.5%, and retirement withdrawals as ordinary income — and counts all of it toward the 4% surtax threshold. New Hampshire taxes none of it. But be precise about what changed and when: the I&amp;D repeal (effective 1 January 2025) removed New Hampshire's tax on interest and dividends. Capital gains, wages and retirement withdrawals were <em>never</em> taxed by New Hampshire, so those gaps are long-standing rather than new. Tax-deferred balances are untaxed by both states while they grow; only withdrawals matter.</p>
+      <p><strong>The methodological trap.</strong> Holding the house value constant is the only honest way to isolate tax policy, but it is not how anyone actually moves. New Hampshire's median sale price is roughly $575,000 against Massachusetts's average single-family <em>assessment</em> of $742,986 — different concepts, and NH DRA publishes equalization ratios precisely because assessed and market values diverge. Set both home values independently for the realistic version rather than the controlled one.</p>
+      <p><strong>Not counted:</strong> the Real Estate Transfer Tax, which NH charges at $0.75 per $100 on <em>each</em> side of a transaction and MA charges as deed excise at a lower rate — material for a mover but not an annual cost. Also excluded: NH's Communications Services Tax, both states' tobacco and alcohol excises, MA's estate tax, and the roughly 58 New Hampshire fees that rose on 1 January 2026, mostly motor vehicle. Including them narrows the NH advantage.</p>
+      <p><strong>Massachusetts on its own:</strong> <a href="tax-burden-dashboard.html">The Five Layers — Massachusetts Total Government Burden</a>.</p>
+    </footer>
+  </main>
+
+  <aside>
+    <div class="panel">
+      <h3>Household</h3>
+      <div class="field"><label for="income">Gross wage income</label><input type="number" id="income" value="150000" step="5000" min="0"></div>
+      <div class="field"><label for="filing">Filing status</label><select id="filing"><option value="mfj">Married filing jointly</option><option value="single">Single</option></select></div>
+      <div class="field"><label for="empType">Employment</label><select id="empType"><option value="w2">W-2 employee</option><option value="se">Self-employed / 1099</option></select></div>
+      <div class="field"><label for="gallons">Motor fuel, gallons/yr</label><input type="number" id="gallons" value="1000" step="50" min="0"></div>
+      <div class="field"><label for="kwh">Electricity, kWh/yr</label><input type="number" id="kwh" value="7200" step="200" min="0"></div>
+      <div class="field"><label for="therms">Natural gas, therms/yr</label><input type="number" id="therms" value="750" step="25" min="0"></div>
+
+      <h3 class="mt">Investment &amp; retirement</h3>
+      <div class="field"><label for="brokerage">Taxable brokerage balance</label><input type="number" id="brokerage" value="0" step="25000" min="0"><p class="hint">401(k)/IRA balances do NOT belong here — neither state taxes them while they grow.</p></div>
+      <div class="field"><label for="yieldPct">Dividend &amp; interest yield <span class="rangeval" id="vYield">2.0%</span></label><input type="range" id="yieldPct" min="0" max="8" step="0.1" value="2"><p class="hint">The one NH actually repealed: I&amp;D tax gone 1 Jan 2025. MA still charges 5%.</p></div>
+      <div class="field"><label for="realizedGains">Realised capital gains/yr</label><input type="number" id="realizedGains" value="0" step="10000" min="0"><p class="hint">NH has never taxed these. Long-standing gap, not a new one.</p></div>
+      <div class="field"><label for="gainsTerm">Holding period</label><select id="gainsTerm"><option value="lt">Long-term — MA 5%</option><option value="st">Short-term — MA 8.5%</option></select></div>
+      <div class="field"><label for="withdrawal">401(k)/IRA withdrawals/yr</label><input type="number" id="withdrawal" value="0" step="10000" min="0"><p class="hint">MA taxes as ordinary income. Set this to model a retiree.</p></div>
+
+      <h3 class="mt">Housing</h3>
+      <div class="field"><label for="homeValue">Home value</label><input type="number" id="homeValue" value="600000" step="25000" min="0"><p class="hint">Held constant across the border to isolate policy. Untick below for the realistic version.</p></div>
+      <div class="field"><label><input type="checkbox" id="sameHouse" checked style="width:auto;margin-right:6px"> Same house both sides</label></div>
+      <div class="field"><label for="nhHomeValue">NH home value</label><input type="number" id="nhHomeValue" value="500000" step="25000" min="0" disabled><p class="hint">Used only when "same house" is off.</p></div>
+
+      <h3 class="mt ma">Massachusetts</h3>
+      <div class="field"><label for="maPropRate">Effective property rate <span class="rangeval" id="vMaProp">1.09%</span></label><input type="range" id="maPropRate" min="0.4" max="2.5" step="0.01" value="1.09"><p class="hint">$8,113 ÷ $742,986 = 1.09% statewide. Assessed, not market.</p></div>
+      <div class="field"><label for="maElec">Electric policy charges <span class="rangeval" id="vMaElec">4.0¢</span></label><input type="range" id="maElec" min="0" max="8" step="0.1" value="4"></div>
+      <div class="field"><label for="maGas">Gas policy charges <span class="rangeval" id="vMaGas">18¢</span></label><input type="range" id="maGas" min="0" max="60" step="1" value="18"></div>
+      <div class="field"><label for="maExcise">Motor vehicle excise</label><input type="number" id="maExcise" value="600" step="50" min="0"></div>
+      <div class="field"><label for="maUnfunded">State/local unfunded accrual</label><input type="number" id="maUnfunded" value="2000" step="250" min="0"></div>
+
+      <h3 class="mt nh">New Hampshire</h3>
+      <div class="field"><label for="nhPropRate">Effective property rate <span class="rangeval" id="vNhProp">1.71%</span></label><input type="range" id="nhPropRate" min="0.4" max="3.5" step="0.01" value="1.71"><p class="hint">$17.10 per $1,000 statewide average. Municipal rates run $2.62–$36.54.</p></div>
+      <div class="field"><label for="nhElec">Electric policy charges <span class="rangeval" id="vNhElec">1.0¢</span></label><input type="range" id="nhElec" min="0" max="8" step="0.1" value="1"><p class="hint">System Benefits Charge + stranded cost. Placeholder — verify at NH PUC.</p></div>
+      <div class="field"><label for="nhGas">Gas policy charges <span class="rangeval" id="vNhGas">4¢</span></label><input type="range" id="nhGas" min="0" max="60" step="1" value="4"></div>
+      <div class="field"><label for="nhExcise">Vehicle permit + registration</label><input type="number" id="nhExcise" value="900" step="50" min="0"><p class="hint">Municipal permit fee runs higher than the MA excise on newer vehicles.</p></div>
+      <div class="field"><label for="nhMeals">Meals &amp; Rooms spending/yr</label><input type="number" id="nhMeals" value="4000" step="250" min="0"><p class="hint">Taxed at 8.5% — NH's substitute for a sales tax.</p></div>
+      <div class="field"><label for="nhUnfunded">State/local unfunded accrual</label><input type="number" id="nhUnfunded" value="1600" step="250" min="0"><p class="hint">NHRS carries its own unfunded liability. Placeholder.</p></div>
+
+      <h3 class="mt">Incidence assumptions</h3>
+      <div class="field"><label for="laborShare">Profits tax to labor <span class="rangeval" id="vLabor">25%</span></label><input type="range" id="laborShare" min="0" max="100" step="5" value="25"><p class="hint">Applies to MA corporate excise and NH BPT.</p></div>
+      <div class="field"><label for="betLabor">BET to labor <span class="rangeval" id="vBet">90%</span></label><input type="range" id="betLabor" min="0" max="100" step="5" value="90"><p class="hint">NH only. Base is compensation paid, so incidence sits close to a payroll tax.</p></div>
+      <div class="field"><label for="capFactor">Capital-ownership factor <span class="rangeval" id="vCap">0.30</span></label><input type="range" id="capFactor" min="0" max="3" step="0.05" value="0.3"></div>
+
+      <h3 class="mt">Deferred burden</h3>
+      <div class="field"><label for="allocMode">Federal deficit allocation</label><select id="allocMode">
+        <option value="pop">Population share</option>
+        <option value="inc" selected>Personal income share</option>
+      </select><p class="hint">Either basis yields the same federal borrowing figure per household income — that invariance is enforced by the constants pipeline.</p></div>
+    </div>
+  </aside>
+</div>
+</div>
+
+<script>
+'use strict';
+
+/* BURDEN-CONSTANTS:BEGIN — generated by update-burden-constants.py, do not hand-edit */
+// Source of truth: data/burden-constants.json   ·   regenerate: python update-burden-constants.py
+// Last generated 2026-08-08. meanHhIncome and incShare are DERIVED — see gate 2 and 3 in the script.
+// DRAFT — 6 constant(s) still unverified: states.MA.utility.electricPolicyCentsPerKwh, states.MA.utility.gasPolicyCentsPerTherm, states.MA.unfundedAccrualPerHousehold, states.NH.utility.electricPolicyCentsPerKwh, states.NH.utility.gasPolicyCentsPerTherm, states.NH.unfundedAccrualPerHousehold
+
+const K = {
+  stdDed:{single:16100, mfj:32200},
+  brackets:{
+    single:[[12400,0.1],[50400,0.12],[105700,0.22],[201775,0.24],[256225,0.32],[640600,0.35],[Infinity,0.37]],
+    mfj:[[24800,0.1],[100800,0.12],[211400,0.22],[403550,0.24],[512450,0.32],[768700,0.35],[Infinity,0.37]]
+  },
+  ssWageBase:184500, ssRate:0.062, medRate:0.0145,
+  addlMedThr:{single:200000, mfj:250000}, addlMedRate:0.009,
+  fedGasCents:18.4,
+  fedDeficit:1800000000000,
+  fedCorpReceipts:452089303420,
+  nationalAggHhIncome:15171367871400,
+  nationalHouseholds:132737146,
+  nationalMeanHhIncome:114296,
+
+  MA:{
+      name:"Massachusetts",
+      incomeRate:0.05, surtax:0.04, surThr:1107750,
+      exempt:{single:4400, mfj:8800},
+      investRate:0.05, stGainsRate:0.085,
+      salesRate:0.0625, mealsRate:0.0625,
+      gasCents:26.5,
+      corpPool:4662000000, betPool:0,
+      households:2829804, aggHhIncome:408376085400,
+      meanHhIncome:144312,   // DERIVED aggregate/households
+      incShare:0.026917552,   // DERIVED state aggregate / national aggregate
+      popShare:0.020981889,
+      elecCents:4, gasPolicyCents:18,
+      unfunded:1793,
+      avgSfBill:8113, avgSfValue:742986,
+      propRatePct:1.0919,   // DERIVED bill/value
+    },
+
+    NH:{
+      name:"New Hampshire",
+      incomeRate:0, surtax:0, surThr:Infinity,
+      exempt:{single:0, mfj:0},
+      investRate:0, stGainsRate:0,
+      salesRate:0, mealsRate:0.085,
+      gasCents:23.75,
+      corpPool:819231800, betPool:283368200,
+      households:570689, aggHhIncome:73392725500,
+      meanHhIncome:128604,   // DERIVED aggregate/households
+      incShare:0.004837581,   // DERIVED state aggregate / national aggregate
+      popShare:0.004142859,
+      elecCents:1, gasPolicyCents:4,
+      unfunded:699,
+      propRatePct:1.583,
+    }
+};
+/* BURDEN-CONSTANTS:END */
+
+const PRESETS = {
+  'Median-ish, $115k':{income:115000, homeValue:500000},
+  'Two earners, $150k':{income:150000, homeValue:600000},
+  'Commuter, $250k':{income:250000, homeValue:800000},
+  'Retiree, $75k drawdown':{income:0, withdrawal:60000, brokerage:500000, homeValue:450000, capFactor:0.8},
+  'Investor, $600k':{income:600000, homeValue:1400000, capFactor:2, brokerage:2500000, realizedGains:250000}
+};
+
+const FIELDS = ['income','filing','empType','gallons','kwh','therms',
+  'brokerage','yieldPct','realizedGains','gainsTerm','withdrawal',
+  'homeValue','nhHomeValue',
+  'maPropRate','maElec','maGas','maExcise','maUnfunded',
+  'nhPropRate','nhElec','nhGas','nhExcise','nhMeals','nhUnfunded',
+  'laborShare','betLabor','capFactor','allocMode'];
+const SELECTS = ['filing','empType','gainsTerm','allocMode'];
+const DEFAULTS = {};
+
+const $ = id => document.getElementById(id);
+const fmt = n => (n<0?'−$':'$') + Math.round(Math.abs(n)).toLocaleString('en-US');
+const pct = (num, den) => (den > 0 && isFinite(num/den)) ? (num/den*100).toFixed(1)+'%' : '—';
+let layersOn = {V:true,E:true,C:true,U:true,D:true};
+
+/* ============================================================
+   ENGINES
+   ============================================================ */
+function fedIncomeTax(t, filing){
+  let tax=0, prev=0;
+  for (const [cap,rate] of K.brackets[filing]){
+    if (t<=prev) break;
+    tax += (Math.min(t,cap)-prev)*rate; prev=cap;
+  }
+  return tax;
+}
+function payroll(income, filing, se){
+  const base = se ? income*0.9235 : income;
+  return {
+    employee: Math.min(base,K.ssWageBase)*K.ssRate + base*K.medRate
+              + Math.max(0, base-K.addlMedThr[filing])*K.addlMedRate,
+    employer: Math.min(base,K.ssWageBase)*K.ssRate + base*K.medRate
+  };
+}
+function consumptionShare(inc){
+  if (inc<=40000) return .34;
+  if (inc>=400000) return .11;
+  return .34 - (inc-40000)/360000*.23;
+}
+
+/* ============================================================
+   PER-STATE MODEL
+   ============================================================ */
+function stateModel(S, inp, homeValue, propRate, elecRate, gasRate, excise, meals, unfunded){
+  const se   = inp.empType==='se';
+  const fica = payroll(inp.income, inp.filing, se);
+  const seDed = se ? fica.employer : 0;
+
+  /* Three investment buckets. NH zeroes all three, but only ONE of them — interest and
+     dividends — is what the 2025 I&D repeal actually changed. Capital gains, wages and
+     retirement withdrawals were never taxed by NH. */
+  const divInt = inp.brokerage * inp.yieldPct / 100;
+  const gainsRate = inp.gainsTerm === 'st' ? S.stGainsRate : S.investRate;
+  const investIncome = divInt + inp.realizedGains + inp.withdrawal;
+
+  // Layer 1
+  const fedInc = fedIncomeTax(
+    Math.max(0, inp.income + investIncome - seDed - K.stdDed[inp.filing]), inp.filing);
+
+  const ordinary = Math.max(0, inp.income + divInt + inp.withdrawal - seDed - S.exempt[inp.filing]);
+  const stateWage = ordinary * S.incomeRate;
+  const stateInvID = divInt * S.investRate;
+  const stateGains = inp.realizedGains * gainsRate;
+  const stateWithdraw = inp.withdrawal * S.investRate;
+  const surBase = ordinary + inp.realizedGains;
+  const surtax = (S.surtax > 0 && surBase > S.surThr) ? (surBase - S.surThr) * S.surtax : 0;
+  /* The V rows below bill wages, I&D, gains and withdrawals as SEPARATE lines, so the
+     wage line subtracts divInt and withdrawal back out of `ordinary`. Do not also add a
+     combined state-income figure here or the layer double-counts. */
+
+  const empFica = se ? fica.employee+fica.employer : fica.employee;
+  const sales   = inp.income*consumptionShare(inp.income)*S.salesRate;
+  const mealsTax= S.mealsRate ? meals*S.mealsRate : 0;
+  const prop    = homeValue*propRate/100;
+  const gasSt   = inp.gallons*S.gasCents/100;
+  const gasFed  = inp.gallons*K.fedGasCents/100;
+
+  const V = [
+    ['Federal income tax', fedInc, 'Identical'],
+    [se?'Self-employment tax':'FICA — employee', empFica, 'Identical'],
+    ['State tax — wages', ordinary > 0 ? Math.max(0, (ordinary - divInt - inp.withdrawal)) * S.incomeRate : 0,
+      S.incomeRate ? '5%' : 'None — never levied'],
+    ['State tax — interest &amp; dividends', stateInvID,
+      S.investRate ? '5%' : 'Repealed 1 Jan 2025'],
+    ['State tax — capital gains', stateGains,
+      S.investRate ? (inp.gainsTerm==='st'?'8.5% short-term':'5% long-term') : 'None — never levied'],
+    ['State tax — 401(k)/IRA withdrawals', stateWithdraw,
+      S.investRate ? '5% ordinary' : 'None — never levied'],
+    ['State surtax', surtax, S.surtax ? '4% over '+fmt(S.surThr) : 'None'],
+    ['Property tax', prop, propRate.toFixed(2)+'% of '+fmt(homeValue)],
+    ['General sales tax', sales, S.salesRate ? '6.25%' : 'None'],
+    ['Meals &amp; rooms tax', mealsTax, S.mealsRate ? (S.mealsRate*100).toFixed(2).replace(/0$/,'')+'%' : 'In sales tax'],
+    ['Vehicle excise / permit', excise, ''],
+    ['Motor fuel — state', gasSt, S.gasCents.toFixed(2)+'¢/gal'],
+    ['Motor fuel — federal', gasFed, 'Identical']
+  ];
+  const vT = V.reduce((s,r)=>s+r[1],0);
+
+  // Layer 2
+  const eT = se ? 0 : fica.employer;
+  const E = [[se?'Paid directly above':'FICA — employer', eT, 'Identical']];
+
+  /* Layer 3. The federal corporate slice runs through NATIONAL denominators so it is
+     genuinely identical on both sides — federal tax does not know which state you're in.
+     Routing it through state denominators (the earlier approach) made a 0.30 capital
+     factor mean "30% of MY STATE's average", which quietly differed by 12% across the
+     border on a row captioned "Identical". Only the state's own pools differ here. */
+  const wr    = inp.income/S.meanHhIncome;
+  const natWr = inp.income/K.nationalMeanHhIncome;
+  const lSh   = inp.laborShare/100, bSh = inp.betLabor/100;
+
+  const natPerHh  = K.fedCorpReceipts/K.nationalHouseholds;
+  const fedCorp   = natPerHh*(lSh*natWr + (1-lSh)*inp.capFactor);
+
+  const perHhProfit = S.corpPool/S.households;
+  const perHhBet    = S.betPool/S.households;
+  const profitLabor = perHhProfit*lSh*wr;
+  const profitCap   = perHhProfit*(1-lSh)*inp.capFactor;
+  const betLabor    = perHhBet*bSh*wr;
+  const betCap      = perHhBet*(1-bSh)*inp.capFactor;
+  const C = [
+    ['Federal corporate tax', fedCorp, 'Identical'],
+    ['State profits tax — via wages', profitLabor, inp.laborShare+'% to labor'],
+    ['State profits tax — via capital', profitCap, 'Factor '+inp.capFactor.toFixed(2)],
+    ['Enterprise tax — via wages', betLabor, S.betPool ? inp.betLabor+'% to labor' : 'No BET'],
+    ['Enterprise tax — via capital', betCap, S.betPool ? '' : '—']
+  ];
+  const cT = fedCorp+profitLabor+profitCap+betLabor+betCap;
+
+  // Layer 4
+  const elec = inp.kwh*elecRate/100, gas = inp.therms*gasRate/100;
+  const U = [
+    ['Electric policy charges', elec, elecRate.toFixed(1)+'¢/kWh'],
+    ['Gas policy charges', gas, gasRate.toFixed(0)+'¢/therm']
+  ];
+  const uT = elec+gas;
+
+  // Layer 5 — the federal line must be state-invariant; gate 3 in the constants
+  // pipeline enforces that the constants make it so.
+  const share = inp.allocMode==='pop' ? S.popShare : S.incShare;
+  const fedShare = (K.fedDeficit*share/S.households)*wr;
+  const D = [
+    ['Federal borrowing share', fedShare, 'Identical basis'],
+    ['State/local unfunded accrual', unfunded, 'Placeholder']
+  ];
+  const dT = fedShare+unfunded;
+
+  const totalComp = inp.income + investIncome + (se?0:fica.employer);
+  const on = layersOn;
+  const grand = (on.V?vT:0)+(on.E?eT:0)+(on.C?cT:0)+(on.U?uT:0)+(on.D?dT:0);
+
+  return {V,vT,E,eT,C,cT,U,uT,D,dT,grand,totalComp,investIncome};
+}
+
+function bothStates(inp){
+  const nhHome = inp.sameHouse ? inp.homeValue : inp.nhHomeValue;
+  return {
+    ma: stateModel(K.MA, inp, inp.homeValue, inp.maPropRate, inp.maElec, inp.maGas, inp.maExcise, 0, inp.maUnfunded),
+    nh: stateModel(K.NH, inp, nhHome,       inp.nhPropRate, inp.nhElec, inp.nhGas, inp.nhExcise, inp.nhMeals, inp.nhUnfunded)
+  };
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function readInputs(){
+  const o = {};
+  FIELDS.forEach(f => {
+    const el = $(f);
+    if (SELECTS.includes(f)){
+      o[f] = el.selectedIndex >= 0 ? el.value : DEFAULTS[f];
+      if (el.selectedIndex < 0) el.value = DEFAULTS[f];
+    } else {
+      o[f] = Math.max(0, +el.value || 0);
+    }
+  });
+  o.sameHouse = $('sameHouse').checked;
+  return o;
+}
+
+function renderCmp(el, maRows, nhRows){
+  const head = '<thead><tr><th>Line</th><th class="ma">MA</th><th class="nh">NH</th><th>Δ</th></tr></thead>';
+  const body = maRows.map((r,i) => {
+    const nh = nhRows[i];
+    const d  = nh[1]-r[1];
+    const identical = Math.abs(d) < 1;
+    const cls = identical ? '' : (d>0?'pos':'neg');
+    const note = r[2]===nh[2] ? r[2] : (r[2]+' / '+nh[2]);
+    return '<tr'+(identical?' class="same"':'')+'><td>'+r[0]+(note?'<span class="src">'+note+'</span>':'')+'</td>'
+         + '<td>'+fmt(r[1])+'</td><td>'+fmt(nh[1])+'</td>'
+         + '<td class="'+cls+'">'+(identical?'—':fmt(d))+'</td></tr>';
+  }).join('');
+  const mt = maRows.reduce((s,r)=>s+r[1],0), nt = nhRows.reduce((s,r)=>s+r[1],0);
+  const dt = nt-mt;
+  const foot = '<tr class="tot"><td>Layer total</td><td>'+fmt(mt)+'</td><td>'+fmt(nt)+'</td>'
+             + '<td class="'+(Math.abs(dt)<1?'':(dt>0?'pos':'neg'))+'">'+(Math.abs(dt)<1?'—':fmt(dt))+'</td></tr>';
+  el.innerHTML = head+'<tbody>'+body+foot+'</tbody>';
+}
+
+/* Cumulative advantage, drawn on a signed scale.
+   The previous version normalised every bar against the Layer-1 advantage and clamped
+   to [0,100]. Three consequences, all verified: at $75k three bars pinned to identical
+   full width while showing different numbers; at $50k every negative bar rendered at
+   zero width and the chart went blank; and any layer that widened the advantage was
+   silently capped. Now: one signed scale across all rows, zero marked, negatives drawn
+   left in oxblood, nothing clamped. */
+function renderCompress(ma, nh){
+  const sets = [
+    ['Layer 1 only',    ['vT']],
+    ['+ employer FICA', ['vT','eT']],
+    ['+ embedded',      ['vT','eT','cT']],
+    ['+ utility',       ['vT','eT','cT','uT']],
+    ['All five layers', ['vT','eT','cT','uT','dT']]
+  ];
+  const rows = sets.map(([lbl,keys]) => {
+    const m = keys.reduce((s,k)=>s+ma[k],0);
+    const n = keys.reduce((s,k)=>s+nh[k],0);
+    return {lbl, pct: m ? (m-n)/m : 0};
+  });
+  const span = Math.max(0.0001, ...rows.map(r => Math.abs(r.pct)));
+  const anyNeg = rows.some(r => r.pct < 0);
+  const zeroAt = anyNeg ? 50 : 0;           // centre the axis only when we need the left half
+  const half   = anyNeg ? 50 : 100;
+
+  $('compressRows').innerHTML = rows.map(r => {
+    const w = Math.abs(r.pct)/span*half;
+    const left = r.pct >= 0 ? zeroAt : zeroAt - w;
+    return '<div class="crow"><div class="lbl">'+r.lbl+'</div>'
+      + '<div class="bar"><div class="zero" style="left:'+zeroAt+'%"></div>'
+      + '<div class="fill'+(r.pct<0?' neg':'')+'" style="left:'+left+'%;width:'+w+'%"></div></div>'
+      + '<div class="num'+(r.pct<0?' neg':'')+'">'+(r.pct*100).toFixed(1)+'%</div></div>';
+  }).join('');
+
+  const first = rows[0].pct, last = rows[rows.length-1].pct;
+  const compresses = last < first;
+  const monotonic = rows.every((r,i) => i===0 || r.pct <= rows[i-1].pct + 1e-9);
+  $('compressHead').textContent = compresses
+    ? 'How the advantage compresses as layers are added'
+    : 'How the advantage changes as layers are added';
+
+  let note = 'Each bar is the New Hampshire advantage as a share of the Massachusetts burden at that level of accounting. ';
+  if (compresses){
+    note += 'It shrinks from ' + (first*100).toFixed(1) + '% to ' + (last*100).toFixed(1)
+          + '% because Layers 2 and 5 are federal — identical on both sides — and because New Hampshire’s property tax claws back much of what the missing income tax gave up.';
+    if (!monotonic) note += ' It is not monotonic: the utility layer widens the gap before the deferred layer closes it again.';
+  } else {
+    note += 'At this income it <em>widens</em>, from ' + (first*100).toFixed(1) + '% to ' + (last*100).toFixed(1)
+          + '%, because the layers that ignore earnings dominate when earnings are low. '
+          + 'The compression story holds at middle and upper incomes, not here — which is the regressive finding, stated honestly.';
+  }
+  if (anyNeg) note += ' Bars left of the zero line mean New Hampshire costs <em>more</em> at that level of accounting.';
+  $('compressNote').innerHTML = note;
+}
+
+function render(){
+  const inp = readInputs();
+  $('nhHomeValue').disabled = inp.sameHouse;
+  $('vMaProp').textContent = inp.maPropRate.toFixed(2)+'%';
+  $('vNhProp').textContent = inp.nhPropRate.toFixed(2)+'%';
+  $('vMaElec').textContent = inp.maElec.toFixed(1)+'¢';
+  $('vNhElec').textContent = inp.nhElec.toFixed(1)+'¢';
+  $('vMaGas').textContent  = inp.maGas.toFixed(0)+'¢';
+  $('vNhGas').textContent  = inp.nhGas.toFixed(0)+'¢';
+  $('vLabor').textContent  = inp.laborShare+'%';
+  $('vBet').textContent    = inp.betLabor+'%';
+  $('vCap').textContent    = inp.capFactor.toFixed(2);
+  $('vYield').textContent  = inp.yieldPct.toFixed(1)+'%';
+
+  const {ma,nh} = bothStates(inp);
+
+  $('maTotal').textContent = fmt(ma.grand);
+  $('nhTotal').textContent = fmt(nh.grand);
+  $('maPct').textContent   = pct(ma.grand, ma.totalComp) === '—' ? '—' : pct(ma.grand, ma.totalComp)+' of comp';
+  $('nhPct').textContent   = pct(nh.grand, nh.totalComp) === '—' ? '—' : pct(nh.grand, nh.totalComp)+' of comp';
+  const d = ma.grand-nh.grand;
+  $('deltaV').textContent  = fmt(d);
+  $('deltaV').style.color  = d>=0 ? 'var(--nh)' : 'var(--ma)';
+
+  renderCmp($('tblV'), ma.V, nh.V);
+  renderCmp($('tblE'), ma.E, nh.E);
+  renderCmp($('tblC'), ma.C, nh.C);
+  renderCmp($('tblU'), ma.U, nh.U);
+  renderCmp($('tblD'), ma.D, nh.D);
+
+  ['V','E','C','U','D'].forEach(k => $('lay'+k).classList.toggle('off', !layersOn[k]));
+  renderCompress(ma, nh);
+  updateChart(inp);
+  writeHash(inp);
+}
+
+/* ============================================================
+   CHART
+   ============================================================ */
+let chart;
+const LEVELS = [50000,75000,115000,150000,200000,300000,500000,1000000];
+function updateChart(base){
+  const rows = LEVELS.map(inc => bothStates(Object.assign({}, base, {income:inc})));
+  const data = {
+    labels: LEVELS.map(v => v>=1e6 ? '$'+(v/1e6).toFixed(1)+'M' : '$'+(v/1000)+'k'),
+    datasets:[
+      {type:'bar', label:'NH advantage, all layers ($)',
+       data: rows.map(r => r.ma.grand - r.nh.grand),
+       /* red where NH is cheaper, MA blue where Massachusetts is */
+       backgroundColor: rows.map(r => (r.ma.grand-r.nh.grand)>=0 ? '#C0392B' : '#14558F'),
+       order:2},
+      {type:'line', label:'NH advantage, Layer 1 only ($)',
+       data: rows.map(r => r.ma.vT - r.nh.vT),
+       borderColor:'#B07C20', backgroundColor:'#B07C20', borderWidth:2,
+       pointRadius:3, tension:.25, order:1}
+    ]
+  };
+  if (chart){ chart.data = data; chart.update('none'); return; }
+  chart = new Chart($('advChart'), {
+    type:'bar',          /* mixed charts still need a root type in Chart.js v4 */
+    data,
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      scales:{
+        x:{grid:{display:false}, ticks:{font:{family:"'IBM Plex Mono'",size:11}, color:'#3A4757'}},
+        y:{grid:{color:'#C2C7BA'}, border:{display:false},
+           title:{display:true, text:'Annual NH advantage', font:{family:"'Public Sans'",size:11,weight:'600'}, color:'#3A4757'},
+           ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'k', font:{family:"'IBM Plex Mono'",size:11}, color:'#3A4757'}}
+      },
+      plugins:{
+        legend:{position:'bottom', labels:{boxWidth:11, boxHeight:11, font:{family:"'Public Sans'",size:12}, color:'#16202E', padding:14}},
+        tooltip:{backgroundColor:'#16202E', bodyFont:{family:"'IBM Plex Mono'",size:12},
+          callbacks:{label: c => c.dataset.label+': '+fmt(c.parsed.y)}}
+      }
+    }
+  });
+}
+
+/* ============================================================
+   PERMALINK + WIRING
+   ============================================================ */
+function writeHash(inp){
+  const p = new URLSearchParams();
+  FIELDS.forEach(f => { if (String(inp[f])!==String(DEFAULTS[f])) p.set(f, inp[f]); });
+  if (!inp.sameHouse) p.set('diff','1');
+  const off = Object.keys(layersOn).filter(k=>!layersOn[k]);
+  if (off.length) p.set('off', off.join(''));
+  history.replaceState(null,'', p.toString() ? '#'+p : location.pathname + location.search);
+}
+function readHash(){
+  const p = new URLSearchParams(location.hash.slice(1));
+  if (![...p].length) return;
+  FIELDS.forEach(f => {
+    if (!p.has(f)) return;
+    const el = $(f), v = p.get(f);
+    if (SELECTS.includes(f)){
+      if ([...el.options].some(o => o.value === v)) el.value = v;
+    } else if (v !== '' && isFinite(+v)) {
+      el.value = Math.max(0, +v);
+    }
+  });
+  if (p.get('diff')) $('sameHouse').checked = false;
+  if (p.has('off')) p.get('off').split('').forEach(k => { if (k in layersOn) layersOn[k]=false; });
+  document.querySelectorAll('.toggle').forEach(b => b.setAttribute('aria-pressed', layersOn[b.dataset.layer]));
+}
+function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),2200); }
+
+function applyDefaults(){
+  FIELDS.forEach(f => $(f).value = DEFAULTS[f]);
+  $('sameHouse').checked = true;
+  layersOn = {V:true,E:true,C:true,U:true,D:true};
+  document.querySelectorAll('.toggle').forEach(t=>t.setAttribute('aria-pressed','true'));
+}
+
+$('presets').innerHTML = Object.keys(PRESETS).map(n =>
+  '<button class="preset" data-p="'+n+'" aria-pressed="false">'+n+'</button>').join('');
+$('presets').addEventListener('click', e => {
+  const b = e.target.closest('.preset'); if(!b) return;
+  document.querySelectorAll('.preset').forEach(x=>x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true');
+  applyDefaults();                     /* used to leave the "same house" box stale */
+  const p = PRESETS[b.dataset.p];
+  Object.keys(p).forEach(k => { if ($(k)) $(k).value = p[k]; });
+  render();
+});
+
+document.querySelectorAll('.toggle').forEach(btn => btn.addEventListener('click', () => {
+  const k = btn.dataset.layer;
+  layersOn[k] = !layersOn[k];
+  btn.setAttribute('aria-pressed', layersOn[k]);
+  render();
+}));
+
+$('btnLink').addEventListener('click', () => navigator.clipboard.writeText(location.href)
+  .then(()=>toast('Permalink copied')).catch(()=>toast('Copy failed')));
+$('btnPng').addEventListener('click', () => {
+  toast('Rendering…');
+  html2canvas($('cardShot'), {backgroundColor:'#E9EBE4', scale:2}).then(c => {
+    const a=document.createElement('a'); a.download='ma-vs-nh-burden.png';
+    a.href=c.toDataURL('image/png'); a.click(); toast('PNG downloaded');
+  }).catch(()=>toast('Render failed'));
+});
+$('btnReset').addEventListener('click', () => {
+  applyDefaults();
+  document.querySelectorAll('.preset').forEach(x=>x.setAttribute('aria-pressed','false'));
+  render();
+});
+
+let raf = null;
+const scheduleRender = () => { if (raf) return; raf = requestAnimationFrame(() => { raf = null; render(); }); };
+
+FIELDS.forEach(f => {
+  DEFAULTS[f] = $(f).value;
+  $(f).addEventListener('input', scheduleRender);
+  $(f).addEventListener('change', scheduleRender);
+});
+$('sameHouse').addEventListener('change', render);
+
+readHash();
+render();
+</script>
+</body>
+</html>
