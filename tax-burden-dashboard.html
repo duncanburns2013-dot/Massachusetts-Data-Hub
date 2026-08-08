@@ -432,19 +432,19 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
   <aside>
     <div class="panel">
       <h3>Household</h3>
-      <div class="field"><label for="income">Gross wage income</label><input type="number" id="income" value="150000" step="5000" min="0"></div>
+      <div class="field"><label for="income">Your household's pay, before tax</label><input type="number" id="income" value="150000" step="5000" min="0"></div>
       <div class="field"><label for="filing">Filing status</label><select id="filing"><option value="mfj">Married filing jointly</option><option value="single">Single</option></select></div>
-      <div class="field"><label for="empType">Employment</label><select id="empType"><option value="w2">W-2 employee</option><option value="se">Self-employed / 1099</option></select></div>
+      <div class="field"><label for="empType">How you're paid</label><select id="empType"><option value="w2">W-2 employee</option><option value="se">Self-employed / 1099</option></select></div>
       <div class="field"><label for="gallons">Motor fuel, gallons/yr</label><input type="number" id="gallons" value="1000" step="50" min="0"></div>
       <div class="field"><label for="kwh">Electricity, kWh/yr</label><input type="number" id="kwh" value="7200" step="200" min="0"></div>
       <div class="field"><label for="therms">Natural gas, therms/yr</label><input type="number" id="therms" value="750" step="25" min="0"></div>
 
       <h3 class="mt">Investment &amp; retirement</h3>
-      <div class="field"><label for="brokerage">Taxable brokerage balance</label><input type="number" id="brokerage" value="0" step="25000" min="0"><p class="hint">401(k)/IRA balances do NOT belong here — neither state taxes them while they grow.</p></div>
-      <div class="field"><label for="yieldPct">Dividend &amp; interest yield <span class="rangeval" id="vYield">2.0%</span></label><input type="range" id="yieldPct" min="0" max="8" step="0.1" value="2"><p class="hint">The one NH actually repealed: I&amp;D tax gone 1 Jan 2025. MA still charges 5%.</p></div>
-      <div class="field"><label for="realizedGains">Realised capital gains/yr</label><input type="number" id="realizedGains" value="0" step="10000" min="0"><p class="hint">NH has never taxed these. Long-standing gap, not a new one.</p></div>
-      <div class="field"><label for="gainsTerm">Holding period</label><select id="gainsTerm"><option value="lt">Long-term — MA 5%</option><option value="st">Short-term — MA 8.5%</option></select></div>
-      <div class="field"><label for="withdrawal">401(k)/IRA withdrawals/yr</label><input type="number" id="withdrawal" value="0" step="10000" min="0"><p class="hint">MA taxes as ordinary income. Set this to model a retiree.</p></div>
+      <div class="field"><label for="brokerage">Money in a regular investment account</label><input type="number" id="brokerage" value="0" step="25000" min="0"><p class="hint">Don't put your 401(k) or IRA here — neither state taxes those while they grow, only when you take money out.</p></div>
+      <div class="field"><label for="yieldPct">What it pays out each year <span class="rangeval" id="vYield">2.0%</span></label><input type="range" id="yieldPct" min="0" max="8" step="0.1" value="2"><p class="hint">Dividends and interest. This is the one New Hampshire actually got rid of, in January 2025. Massachusetts still charges 5%.</p></div>
+      <div class="field"><label for="realizedGains">Investment profits you cashed out this year</label><input type="number" id="realizedGains" value="0" step="10000" min="0"><p class="hint">New Hampshire has never taxed these — that gap is decades old, not a recent change.</p></div>
+      <div class="field"><label for="gainsTerm">Did you hold it over a year?</label><select id="gainsTerm"><option value="lt">Long-term — MA 5%</option><option value="st">Short-term — MA 8.5%</option></select></div>
+      <div class="field"><label for="withdrawal">401(k)/IRA withdrawals/yr</label><input type="number" id="withdrawal" value="0" step="10000" min="0"><p class="hint">Massachusetts taxes withdrawals like regular pay. Fill this in to see a retiree instead of a worker.</p></div>
 
       <h3 class="mt">Housing</h3>
       <div class="field"><label for="homeValue">Home value</label><input type="number" id="homeValue" value="742986" step="25000" min="0"><p class="hint" id="homeValueHint"></p></div>
@@ -456,31 +456,32 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
       <div id="grpMa"><h3 class="mt ma">Massachusetts</h3>
       <div class="field"><label for="town">Community</label><input type="text" id="town" list="townList" placeholder="Type a town…" autocomplete="off"><datalist id="townList"></datalist><p class="hint">All 351 communities, FY2026. Selecting one sets its average bill, its average assessed value, and its own effective rate. Source: DLS Municipal Databank.</p></div>
       <div class="field"><label for="proptax">MA property tax bill</label><input type="number" id="proptax" value="8113" step="100" min="0"><p class="hint">Drives the home value above, at the effective rate below — that is what lets the same house be priced on both sides of the border.</p></div>
-      <div class="field"><label for="maPropRate">Effective property rate <span class="rangeval" id="vMaProp">1.09%</span></label><input type="range" id="maPropRate" min="0.4" max="2.5" step="0.0001" value="1.0919"><p class="hint">$8,113 ÷ $742,986 = 1.09% statewide. Assessed, not market.</p></div>
-      <div class="field"><label for="maElec">Electric policy charges <span class="rangeval" id="vMaElec">3.8¢</span></label><input type="range" id="maElec" min="0" max="8" step="0.001" value="3.789"><p class="hint">Eversource MA filed tariff. A floor — 83C/83D and RPS aren't broken out.</p></div>
-      <div class="field"><label for="maGas">Gas policy charges <span class="rangeval" id="vMaGas">59¢</span></label><input type="range" id="maGas" min="0" max="90" step="0.01" value="59.08"><p class="hint">EE 41.70¢ + GSEP 17.38¢, filed tariff.</p></div>
+      <div class="field"><label for="maPropRate">Property tax rate <span class="rangeval" id="vMaProp">1.09%</span></label><input type="range" id="maPropRate" min="0.4" max="2.5" step="0.0001" value="1.0919"><p class="hint">$8,113 ÷ $742,986 = 1.09% statewide. Assessed, not market.</p></div>
+      <div class="field"><label for="maElec">Policy charges on your electric bill <span class="rangeval" id="vMaElec">3.8¢</span></label><input type="range" id="maElec" min="0" max="8" step="0.001" value="3.789"><p class="hint">Eversource MA filed tariff. A floor — 83C/83D and RPS aren't broken out.</p></div>
+      <div class="field"><label for="maGas">Policy charges on your gas bill <span class="rangeval" id="vMaGas">59¢</span></label><input type="range" id="maGas" min="0" max="90" step="0.01" value="59.08"><p class="hint">EE 41.70¢ + GSEP 17.38¢, filed tariff.</p></div>
       <div class="field"><label for="maExcise">Motor vehicle excise</label><input type="number" id="maExcise" value="600" step="50" min="0"></div>
-      <div class="field"><label for="maUnfunded">State/local unfunded accrual</label><input type="number" id="maUnfunded" value="0" step="250" min="0"><p class="hint">Zero by design — see Layer 5. Editable.</p></div>
+      <div class="field"><label for="maUnfunded">Pension debt added to your bill</label><input type="number" id="maUnfunded" value="0" step="250" min="0"><p class="hint">Zero on purpose. Massachusetts owes billions in unfunded pension promises, but nobody sends you a bill for it — and the part being paid down already comes out of the taxes counted above. Counting it here would count it twice. The size of the debt is shown further down.</p></div>
 
       </div><div id="grpNh"><h3 class="mt nh">New Hampshire</h3>
       <div class="field"><label for="nhTown">Municipality</label><input type="text" id="nhTown" list="nhTownList" placeholder="Type a town…" autocomplete="off"><datalist id="nhTownList"></datalist><p class="hint">Sets that town's total rate — municipal + county + state and local education. NH publishes no average home value per town, so the house value above stays yours. Source: NH DRA 2025 Municipal Tax Rates.</p></div>
-      <div class="field"><label for="nhPropRate">Effective property rate <span class="rangeval" id="vNhProp">1.71%</span></label><input type="range" id="nhPropRate" min="0.1" max="4" step="0.0001" value="1.583"><p class="hint">$17.10 per $1,000 statewide average. Municipal rates run $2.62–$36.54.</p></div>
-      <div class="field"><label for="nhElec">Electric policy charges <span class="rangeval" id="vNhElec">0.6¢</span></label><input type="range" id="nhElec" min="0" max="8" step="0.001" value="0.618"><p class="hint">System Benefits Charge, Eversource NH filed tariff — same utility as the MA figure. NH has no net-metering, SMART or EV rider.</p></div>
-      <div class="field"><label for="nhGas">Gas policy charges <span class="rangeval" id="vNhGas">16¢</span></label><input type="range" id="nhGas" min="0" max="90" step="0.01" value="16.30"><p class="hint">Liberty EnergyNorth LDAC. A ceiling — it also bundles mechanisms MA excludes.</p></div>
+      <div class="field"><label for="nhPropRate">Property tax rate <span class="rangeval" id="vNhProp">1.71%</span></label><input type="range" id="nhPropRate" min="0.1" max="4" step="0.0001" value="1.583"><p class="hint">$17.10 per $1,000 statewide average. Municipal rates run $2.62–$36.54.</p></div>
+      <div class="field"><label for="nhElec">Policy charges on your electric bill <span class="rangeval" id="vNhElec">0.6¢</span></label><input type="range" id="nhElec" min="0" max="8" step="0.001" value="0.618"><p class="hint">System Benefits Charge, Eversource NH filed tariff — same utility as the MA figure. NH has no net-metering, SMART or EV rider.</p></div>
+      <div class="field"><label for="nhGas">Policy charges on your gas bill <span class="rangeval" id="vNhGas">16¢</span></label><input type="range" id="nhGas" min="0" max="90" step="0.01" value="16.30"><p class="hint">Liberty EnergyNorth LDAC. A ceiling — it also bundles mechanisms MA excludes.</p></div>
       <div class="field"><label for="nhExcise">Vehicle permit + registration</label><input type="number" id="nhExcise" value="900" step="50" min="0"><p class="hint">Municipal permit fee runs higher than the MA excise on newer vehicles.</p></div>
-      <div class="field"><label for="nhMeals">Meals &amp; Rooms spending/yr</label><input type="number" id="nhMeals" value="4000" step="250" min="0"><p class="hint">Taxed at 8.5% — NH's substitute for a sales tax.</p></div>
-      <div class="field"><label for="nhUnfunded">State/local unfunded accrual</label><input type="number" id="nhUnfunded" value="0" step="250" min="0"><p class="hint">Zero by design, on the same rule as MA so the exclusion can't favour either state.</p></div>
+      <div class="field"><label for="nhMeals">Restaurants and hotels per year</label><input type="number" id="nhMeals" value="4000" step="250" min="0"><p class="hint">Taxed at 8.5% — NH's substitute for a sales tax.</p></div>
+      <div class="field"><label for="nhUnfunded">Pension debt added to your bill</label><input type="number" id="nhUnfunded" value="0" step="250" min="0"><p class="hint">Zero on purpose, same rule as Massachusetts so neither state gets an unfair edge. New Hampshire has its own pension hole; it just isn't billed to you either.</p></div>
 
-      </div><h3 class="mt">Incidence assumptions</h3>
-      <div class="field"><label for="laborShare">Profits tax to labor <span class="rangeval" id="vLabor">25%</span></label><input type="range" id="laborShare" min="0" max="100" step="5" value="25"><p class="hint">Applies to MA corporate excise and NH BPT.</p></div>
-      <div class="field"><label for="betLabor">BET to labor <span class="rangeval" id="vBet">90%</span></label><input type="range" id="betLabor" min="0" max="100" step="5" value="90"><p class="hint">NH only. Base is compensation paid, so incidence sits close to a payroll tax.</p></div>
-      <div class="field"><label for="capFactor">Capital-ownership factor <span class="rangeval" id="vCap">0.30</span></label><input type="range" id="capFactor" min="0" max="3" step="0.05" value="0.3"></div>
+      </div><h3 class="mt">Who actually pays?</h3>
+      <p class="hint" style="margin:-6px 0 12px">Businesses don't really pay taxes — people do. The only question is which people: workers through smaller paychecks, or owners through smaller profits. Economists argue about the split, so it's a slider, not a fact.</p>
+      <div class="field"><label for="laborShare">How much of business profit tax comes out of paychecks <span class="rangeval" id="vLabor">25%</span></label><input type="range" id="laborShare" min="0" max="100" step="5" value="25"><p class="hint">The rest comes out of company owners' returns. Government estimators typically use 25%. Applies to the MA corporate excise and NH's Business Profits Tax.</p></div>
+      <div class="field"><label for="betLabor">How much of NH's wage-based business tax comes out of paychecks <span class="rangeval" id="vBet">90%</span></label><input type="range" id="betLabor" min="0" max="100" step="5" value="90"><p class="hint">New Hampshire only. Its Business Enterprise Tax is charged on the wages a company pays out, so almost all of it lands on workers — it behaves like a payroll tax.</p></div>
+      <div class="field"><label for="capFactor">How much you own vs. an average household <span class="rangeval" id="vCap">0.30</span></label><input type="range" id="capFactor" min="0" max="3" step="0.05" value="0.3"></div>
 
-      <h3 class="mt">Deferred burden</h3>
-      <div class="field"><label for="allocMode">Federal deficit allocation</label><select id="allocMode">
+      <h3 class="mt">The bill that hasn't arrived yet</h3>
+      <div class="field"><label for="allocMode">How to split up the federal deficit</label><select id="allocMode">
         <option value="pop">Population share</option>
         <option value="inc" selected>Personal income share</option>
-      </select><p class="hint">Either basis yields the same federal borrowing figure per household income — that invariance is enforced by the constants pipeline.</p></div>
+      </select><p class="hint">Should your share of the national debt be split by headcount or by income? Either way you get the same answer for a given income — which is exactly why this layer is identical on both sides of the border.</p></div>
     </div>
   </aside>
 </div>
