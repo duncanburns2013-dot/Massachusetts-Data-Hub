@@ -53,6 +53,29 @@ a{color:var(--ledger)}
 h1{font-weight:800;font-size:clamp(30px,5.2vw,54px);line-height:1.02;letter-spacing:-.025em;margin:0 0 16px;max-width:19ch}
 .standfirst{font-size:17px;max-width:64ch;color:var(--ink-2);margin:0;border-left:2px solid var(--rule);padding-left:16px}
 
+/* mode toggle */
+.modes{display:flex;gap:8px;margin-top:26px}
+.mode{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;
+  padding:10px 16px;border:1px solid var(--rule);background:var(--paper-2);color:var(--ink-2);cursor:pointer}
+.mode[aria-selected=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.mode:focus-visible{outline:2px solid var(--ledger);outline-offset:2px}
+/* business mode */
+#bizView{margin-top:28px}
+.bizgrid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:20px}
+@media(max-width:760px){.bizgrid{grid-template-columns:1fr;gap:22px}}
+.bizcard{border-top:2px solid var(--ink);padding-top:14px}
+.bizcard.ma{border-top-color:var(--ma)} .bizcard.nh{border-top-color:var(--nh)}
+.bizcard h3{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 10px}
+.bizcard.ma h3{color:var(--ma)} .bizcard.nh h3{color:var(--nh)}
+.biztot{font-family:var(--mono);font-weight:600;font-size:clamp(30px,5vw,46px);line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.bizcard.ma .biztot{color:var(--ma)} .bizcard.nh .biztot{color:var(--nh)}
+.bizlines{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12.5px;margin-top:14px}
+.bizlines td{padding:5px 0;border-bottom:1px dotted var(--rule);vertical-align:baseline}
+.bizlines td:last-child{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:500}
+.bizlines .src{font-size:10px;color:var(--ink-2)}
+.bizwarn{border:1px solid var(--oxblood);background:var(--paper-2);padding:16px 18px;margin-top:26px;font-size:13px;line-height:1.6}
+.bizwarn b{color:var(--oxblood)}
+
 /* view tabs */
 .tabs{display:flex;gap:0;margin-top:26px;border-bottom:2px solid var(--ink)}
 .tab{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;
@@ -264,6 +287,11 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
 
 <!-- One household, one engine, three views. Massachusetts and New Hampshire each get a
      full five-layer breakdown; Compare puts them side by side once both are computed. -->
+<div class="modes" role="tablist" aria-label="Who are you?">
+  <button class="mode" id="modeHh" role="tab" aria-selected="true"  onclick="showMode(this,'household')">I'm a household</button>
+  <button class="mode" id="modeBiz" role="tab" aria-selected="false" onclick="showMode(this,'business')">I own a business</button>
+</div>
+
 <div class="tabs" role="tablist" aria-label="View">
   <button class="tab" id="tabMa"      role="tab" aria-selected="true"  onclick="showTab(this,'ma')">Massachusetts</button>
   <button class="tab" id="tabNh"      role="tab" aria-selected="false" onclick="showTab(this,'nh')">New Hampshire</button>
@@ -325,6 +353,27 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
   <button class="tool" id="btnPng">Download card as PNG</button>
   <button class="tool" id="btnReset">Reset to defaults</button>
   <span class="toast" id="toast" role="status" aria-live="polite"></span>
+</div>
+
+<div id="bizView" hidden>
+  <h2>What a business pays, side by side</h2>
+  <p class="sub">State business taxes only, on the figures you enter. Both states also charge property tax on business real estate, and both have federal tax on top — those are the same wherever you are, so they are left out rather than padded in.</p>
+
+  <div class="bizgrid">
+    <div class="bizcard ma"><h3>Massachusetts</h3><div class="biztot" id="bizMaTot">$0</div>
+      <table class="bizlines" id="bizMaLines"></table></div>
+    <div class="bizcard nh"><h3>New Hampshire</h3><div class="biztot" id="bizNhTot">$0</div>
+      <table class="bizlines" id="bizNhLines"></table></div>
+  </div>
+
+  <p class="asof" id="bizDelta" style="margin-top:22px"></p>
+
+  <div class="bizwarn">
+    <p style="margin:0 0 10px"><b>Read this before quoting the number.</b> This is a first pass and it is deliberately incomplete. It covers the state business taxes whose rates are filed and verified, and nothing else.</p>
+    <p style="margin:0 0 10px"><b>Not included yet:</b> Massachusetts Paid Family and Medical Leave, which has no New Hampshire equivalent and is a real cost; employer unemployment insurance in either state; and the sales tax a Massachusetts business pays on the things it buys, which is real but is not separately reported anywhere and would have to be estimated rather than sourced.</p>
+    <p style="margin:0 0 10px"><b>Also not included:</b> property tax on business real estate. The town tables on this site are residential rates, and commercial rates differ — Massachusetts municipalities can run a split rate. Using residential figures here would be wrong, so they are not used.</p>
+    <p style="margin:0"><b>What is right:</b> the rates below are filed and sourced, and New Hampshire's two business taxes are modelled correctly — the Business Enterprise Tax credits against the Business Profits Tax, so a firm paying both pays the greater of the two rather than the sum. Adding 7.5% and 0.55% together, as most comparisons do, overstates New Hampshire.</p>
+  </div>
 </div>
 
 <div class="cols">
@@ -479,7 +528,15 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
       <div class="field"><label for="nhMeals">Restaurants and hotels per year</label><input type="number" id="nhMeals" value="4000" step="250" min="0"><p class="hint">Taxed at 8.5% — NH's substitute for a sales tax.</p></div>
       <div class="field"><label for="nhUnfunded">Pension debt added to your bill</label><input type="number" id="nhUnfunded" value="0" step="250" min="0"><p class="hint">Zero on purpose, same rule as Massachusetts so neither state gets an unfair edge. New Hampshire has its own pension hole; it just isn't billed to you either.</p></div>
 
-      </div><h3 class="mt">Who actually pays?</h3>
+      </div>
+      <div id="grpBiz" hidden>
+      <h3 class="mt">Your business</h3>
+      <div class="field"><label for="bizProfit">Profit earned in the state</label><input type="number" id="bizProfit" value="500000" step="25000" min="0"><p class="hint">Taxable income attributed to that state.</p></div>
+      <div class="field"><label for="bizPayroll">Total payroll</label><input type="number" id="bizPayroll" value="1200000" step="50000" min="0"><p class="hint">Wages you pay out. New Hampshire taxes this directly.</p></div>
+      <div class="field"><label for="bizWorth">Equipment or net worth</label><input type="number" id="bizWorth" value="800000" step="50000" min="0"><p class="hint">Massachusetts charges on whichever is greater.</p></div>
+      <div class="field"><label for="bizInputs">Things you buy in-state per year</label><input type="number" id="bizInputs" value="300000" step="25000" min="0"><p class="hint">Massachusetts charges 6.25% sales tax on much of this. New Hampshire has none.</p></div>
+      </div>
+      <h3 class="mt">Who actually pays?</h3>
       <p class="hint" style="margin:-6px 0 12px">Businesses don't really pay taxes — people do. The only question is which people: workers through smaller paychecks, or owners through smaller profits. Economists argue about the split, so it's a slider, not a fact.</p>
       <div class="field"><label for="laborShare">How much of business profit tax comes out of paychecks <span class="rangeval" id="vLabor">25%</span></label><input type="range" id="laborShare" min="0" max="100" step="5" value="25"><p class="hint">The rest comes out of company owners' returns. Government estimators typically use 25%. Applies to the MA corporate excise and NH's Business Profits Tax.</p></div>
       <div class="field"><label for="betLabor">How much of NH's wage-based business tax comes out of paychecks <span class="rangeval" id="vBet">90%</span></label><input type="range" id="betLabor" min="0" max="100" step="5" value="90"><p class="hint">New Hampshire only. Its Business Enterprise Tax is charged on the wages a company pays out, so almost all of it lands on workers — it behaves like a payroll tax.</p></div>
@@ -1567,6 +1624,73 @@ function syncNhTown(){
   if (hit) $('nhTown').value = hit[0];
 }
 
+let mode = 'household';
+
+/* State business taxes only, and only those with a filed, sourced rate. Everything left
+   out is named on the page rather than quietly dropped. */
+function renderBiz(){
+  const profit  = Math.max(0, +$('bizProfit').value  || 0);
+  const payroll = Math.max(0, +$('bizPayroll').value || 0);
+  const worth   = Math.max(0, +$('bizWorth').value   || 0);
+  const inputs  = Math.max(0, +$('bizInputs').value  || 0);
+
+  /* MA: 8% of income PLUS $2.60 per $1,000 of the greater of tangible property or net
+     worth, with a $456 floor on the combined excise. */
+  const maIncomeTax = profit * 0.08;
+  const maWorthTax  = worth / 1000 * 2.60;
+  const maExcise    = Math.max(456, maIncomeTax + maWorthTax);
+  const maFloor     = maExcise - (maIncomeTax + maWorthTax);
+  const maSales     = inputs * K.MA.salesRate;
+  const maTot       = maExcise + maSales;
+  const maRows = [
+    ['Corporate excise on profit', maIncomeTax, '8% of profit earned here'],
+    ['Excise on equipment or net worth', maWorthTax, '$2.60 per $1,000, whichever is greater'],
+    ['Minimum excise top-up', maFloor, maFloor > 0 ? 'Excise cannot fall below $456' : 'Not binding at this size'],
+    ['Sales tax on what you buy', maSales, '6.25% on in-state purchases']
+  ];
+
+  /* NH: the BET credits against the BPT, so a firm paying both owes the GREATER of the
+     two, not the sum. Adding 7.5% and 0.55% together overstates New Hampshire. */
+  const nhBpt = profit * 0.075;
+  const nhBet = payroll * 0.0055;
+  const nhTot = Math.max(nhBpt, nhBet);
+  const nhRows = [
+    ['Business Profits Tax', nhBpt, '7.5% of profit earned here'],
+    ['Business Enterprise Tax', nhBet, '0.55% of payroll'],
+    ['You pay the greater, not the sum', nhTot - (nhBpt + nhBet), 'The BET credits against the BPT'],
+    ['Sales tax on what you buy', 0, 'New Hampshire has no sales tax']
+  ];
+
+  const put = (el, rows) => { $(el).innerHTML = rows.map(r =>
+    '<tr><td>' + r[0] + '<br><span class="src">' + r[2] + '</span></td><td>' + fmt(r[1]) + '</td></tr>').join(''); };
+  put('bizMaLines', maRows); put('bizNhLines', nhRows);
+  $('bizMaTot').textContent = fmt(maTot);
+  $('bizNhTot').textContent = fmt(nhTot);
+  const d = maTot - nhTot;
+  $('bizDelta').innerHTML = (d >= 0
+    ? 'On these numbers New Hampshire is <b>' + fmt(d) + '</b> a year cheaper in state business tax.'
+    : 'On these numbers Massachusetts is <b>' + fmt(-d) + '</b> a year cheaper in state business tax.')
+    + ' Read the box below before using that figure.';
+}
+
+function showMode(btn, m){
+  mode = m;
+  document.querySelectorAll('.mode').forEach(b => b.setAttribute('aria-selected', b === btn));
+  const biz = m === 'business';
+  $('bizView').hidden = !biz;
+  document.querySelector('.cols').hidden = biz;
+  document.querySelector('.tabs').hidden = biz;
+  $('cardShot').hidden = biz;
+  $('presets').hidden = biz;
+  $('grpBiz').hidden = !biz;
+  ['grpMa','grpNh','grpCrossHouse'].forEach(function(id){ if ($(id)) $(id).hidden = biz; });
+  if (biz){
+    $('mastH1').textContent = 'Same business. Different side of the line.';
+    $('mastLede').textContent = 'New Hampshire is recruiting your business. Here is what each state actually charges one, using only the taxes whose rates are filed and public.';
+    renderBiz();
+  } else showTab($('tabMa'), 'ma');
+}
+
 function showTab(btn, v){
   view = v;
   document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t === btn));
@@ -1792,6 +1916,8 @@ FIELDS.forEach(f => {
   $(f).addEventListener('change', scheduleRender);
 });
 $('sameHouse').addEventListener('change', render);
+['bizProfit','bizPayroll','bizWorth','bizInputs'].forEach(function(f){
+  $(f).addEventListener('input', function(){ if (mode === 'business') renderBiz(); }); });
 
 buildTowns();
 readHash();
