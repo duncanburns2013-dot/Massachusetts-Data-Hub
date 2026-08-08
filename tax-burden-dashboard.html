@@ -358,6 +358,8 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
 <div id="bizView" hidden>
   <h2>What a business pays, side by side</h2>
   <p class="sub">State business taxes only, on the figures you enter. Both states also charge property tax on business real estate, and both have federal tax on top — those are the same wherever you are, so they are left out rather than padded in.</p>
+  <p class="sub" style="margin-top:-6px"><b>The numbers below are an example, not a survey.</b> Pick a shape of business, or type your own into the panel — the answer moves a long way depending on what you buy and who you employ.</p>
+  <div class="presets" id="bizPresets"></div>
 
   <div class="bizgrid">
     <div class="bizcard ma"><h3>Massachusetts</h3><div class="biztot" id="bizMaTot">$0</div>
@@ -370,6 +372,7 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
 
   <div class="bizwarn">
     <p style="margin:0 0 10px"><b>Read this before quoting the number.</b> This is a first pass and it is deliberately incomplete. It covers the state business taxes whose rates are filed and verified, and nothing else.</p>
+    <p style="margin:0 0 10px" id="bizSens"></p>
     <p style="margin:0 0 10px"><b>Not included yet:</b> Massachusetts Paid Family and Medical Leave, which has no New Hampshire equivalent and is a real cost; employer unemployment insurance in either state; and the sales tax a Massachusetts business pays on the things it buys, which is real but is not separately reported anywhere and would have to be estimated rather than sourced.</p>
     <p style="margin:0 0 10px"><b>Also not included:</b> property tax on business real estate. The town tables on this site are residential rates, and commercial rates differ — Massachusetts municipalities can run a split rate. Using residential figures here would be wrong, so they are not used.</p>
     <p style="margin:0"><b>What is right:</b> the rates below are filed and sourced, and New Hampshire's two business taxes are modelled correctly — the Business Enterprise Tax credits against the Business Profits Tax, so a firm paying both pays the greater of the two rather than the sum. Adding 7.5% and 0.55% together, as most comparisons do, overstates New Hampshire.</p>
@@ -1659,6 +1662,18 @@ function syncNhTown(){
 
 let mode = 'household';
 
+/* Four shapes of business, chosen because they disagree with each other. The default
+   example makes New Hampshire look decisively cheaper; the thin-margin case reverses it
+   outright, because the BET is charged on payroll and does not care that you barely made
+   a profit. Showing only the first would be advocacy dressed as a calculator. */
+const BIZ_PRESETS = {
+  'Small manufacturer': {bizProfit:500000, bizPayroll:1200000, bizWorth:800000,  bizInputs:300000},
+  'Service firm':       {bizProfit:500000, bizPayroll:1200000, bizWorth:100000,  bizInputs:25000},
+  'Equipment-heavy':    {bizProfit:500000, bizPayroll:1200000, bizWorth:2500000, bizInputs:1200000},
+  'Thin margin, big payroll': {bizProfit:100000, bizPayroll:4500000, bizWorth:250000, bizInputs:150000}
+};
+const BIZ_DEFAULTS = BIZ_PRESETS['Small manufacturer'];
+
 /* Rates come from the constants file, so their labels have to as well. Trailing zeros
    would read wrong at these sizes: 0.55% must not print as 0.6% or 0.550%. */
 const pctLabel = r => (r * 100).toFixed(4).replace(/0+$/, '').replace(/\.$/, '') + '%';
@@ -1708,6 +1723,30 @@ function renderBiz(){
     ? 'On these numbers New Hampshire is <b>' + fmt(d) + '</b> a year cheaper in state business tax.'
     : 'On these numbers Massachusetts is <b>' + fmt(-d) + '</b> a year cheaper in state business tax.')
     + ' Read the box below before using that figure.';
+
+  /* The headline is usually driven by the purchases figure the READER typed, not by any
+     difference in tax rates -- at the default example it is four fifths of the gap. A
+     disclaimer that does not say so leaves the most load-bearing assumption invisible,
+     so this recomputes the attribution on every keystroke rather than asserting it once. */
+  const bits = [];
+  if (d > 0 && maSales > 0) {
+    bits.push(maSales >= d
+      ? '<b>Every dollar of this gap is sales tax on what you buy</b> — and then some. Take those '
+        + 'purchases out and Massachusetts is the cheaper of the two on these figures. This is not a '
+        + 'difference in tax rates; it is a difference in what you spend in-state.'
+      : '<b>' + Math.round(maSales / d * 100) + '% of the gap is sales tax on what you buy</b>, not a '
+        + 'difference in tax rates. On profit alone the two states are ' + pctLabel(K.MA.corpRate)
+        + ' against ' + pctLabel(K.NH.bptRate) + '. Change the purchases figure and the headline moves further '
+        + 'than any rate in this model.');
+  }
+  const crossover = profit * K.NH.bptRate / K.NH.betRate;
+  bits.push(nhBet > nhBpt
+    ? '<b>Here the Business Enterprise Tax is what sets New Hampshire\'s bill</b>, not the profits tax — '
+      + 'the BET is charged on payroll and does not care how thin your margin is. This is the case most '
+      + 'MA-vs-NH comparisons never show.'
+    : 'At this payroll the BET is fully credited against the profits tax and adds nothing. It would only '
+      + 'start to bite above ' + fmt(crossover) + ' of payroll at this profit.');
+  $('bizSens').innerHTML = '<b>What is actually driving this:</b> ' + bits.join(' ');
 }
 
 function showMode(btn, m){
@@ -1931,8 +1970,12 @@ $('btnPng').addEventListener('click', () => {
   }).catch(()=>toast('Render failed'));
 });
 $('btnReset').addEventListener('click', () => {
+  if (mode === 'business') {
+    applyBizPreset(BIZ_DEFAULTS, document.querySelector('#bizPresets .preset'));
+    return;
+  }
   applyDefaults();
-  document.querySelectorAll('.preset').forEach(x=>x.setAttribute('aria-pressed','false'));
+  document.querySelectorAll('#presets .preset').forEach(x=>x.setAttribute('aria-pressed','false'));
   render();
 });
 
@@ -1955,6 +1998,22 @@ FIELDS.forEach(f => {
 $('sameHouse').addEventListener('change', render);
 ['bizProfit','bizPayroll','bizWorth','bizInputs'].forEach(function(f){
   $(f).addEventListener('input', function(){ if (mode === 'business') renderBiz(); }); });
+
+$('bizPresets').innerHTML = Object.keys(BIZ_PRESETS).map(function(n){
+  return '<button class="preset" data-b="' + n + '" aria-pressed="' + (n === 'Small manufacturer') + '">' + n + '</button>';
+}).join('');
+$('bizPresets').addEventListener('click', function(e){
+  const b = e.target.closest('.preset'); if (!b) return;
+  applyBizPreset(BIZ_PRESETS[b.dataset.b], b);
+});
+
+function applyBizPreset(vals, btn){
+  document.querySelectorAll('#bizPresets .preset').forEach(function(x){
+    x.setAttribute('aria-pressed', x === btn);
+  });
+  Object.keys(vals).forEach(function(k){ $(k).value = vals[k]; });
+  renderBiz();
+}
 
 buildTowns();
 readHash();
