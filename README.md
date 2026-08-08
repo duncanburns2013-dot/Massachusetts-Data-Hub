@@ -55,8 +55,29 @@ Massachusetts-Data-Hub/
 ├── pay-to-play-dashboard.html          ← Lobbying & campaign finance
 ├── data/burden-constants.json          ← Shared constants for BOTH burden dashboards
 ├── update-burden-constants.py          ← Regenerates the K block in both; see below
+├── make-watermark.py                   ← Builds the MA/NH map watermark on the share cards
+├── data/geo/                           ← State boundary GeoJSON + generated SVGs
 └── pdftext.py                          ← Stdlib PDF text extraction for blocked sources
 ```
+
+## 🗺️ The share-card watermark
+
+Both cards carry a faint MA (Bay Blue) / NH (red) map behind the headline. Real
+boundary geometry — Census-derived GeoJSON in `data/geo/`, simplified by
+`make-watermark.py`. Regenerate with:
+
+```bash
+python make-watermark.py data/geo/massachusetts.geojson data/geo/new-hampshire.geojson
+```
+
+Two things about it are not optional, both learned by breaking them:
+
+- **It's an inline SVG data-URI, not an external image or a CSS gradient.** html2canvas
+  silently drops gradients, and `#cardShot` *is* the shareable PNG.
+- **The SVG carries explicit `width`/`height`, not just a `viewBox`.** Without intrinsic
+  dimensions html2canvas renders the card with no map at all — and does it silently. The
+  first version looked perfect on screen and exported blank; caught by diffing an export
+  against one rendered with the background turned off.
 
 ## 🔒 Shared burden constants
 
