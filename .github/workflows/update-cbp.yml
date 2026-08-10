@@ -36,10 +36,27 @@ jobs:
           python-version: "3.12"
 
       - name: Fetch CBP encounter data
-        run: python update-cbp-encounters.py
+        id: fetch
+        run: |
+          set +e
+          python update-cbp-encounters.py
+          code=$?
+          set -e
+          if [ "$code" -eq 0 ]; then
+            echo "blocked=false" >> $GITHUB_OUTPUT
+          elif [ "$code" -eq 75 ]; then
+            # cbp.gov's bot filter shut us out. Transient and self-healing, and
+            # nothing was written -- so this is a skip, not a build failure.
+            echo "::notice::cbp.gov blocked the fetch - nothing written. Next run will retry."
+            echo "blocked=true" >> $GITHUB_OUTPUT
+          else
+            echo "::error::update-cbp-encounters.py failed with exit code $code"
+            exit "$code"
+          fi
 
       - name: Check for changes
         id: changes
+        if: steps.fetch.outputs.blocked == 'false'
         run: |
           git diff --quiet -- '*.html' 'data/*.json' \
             && echo "changed=false" >> $GITHUB_OUTPUT \
@@ -67,12 +84,23 @@ jobs:
         if: steps.changes.outputs.changed == 'false'
         run: echo "CBP data unchanged - no commit needed."
 
+      # Reports what the run produced. Must never be able to fail the job: it used
+      # to read d["auto_fetched"], a key this script has never written, so with
+      # `if: always()` it raised KeyError and turned every run red -- including
+      # the ones that fetched and committed perfectly.
       - name: Job summary
         if: always()
+        continue-on-error: true
         run: |
           echo "### CBP Encounter Update" >> $GITHUB_STEP_SUMMARY
           if [ -f data/cbp-encounters-latest.json ]; then
-            echo '```json' >> $GITHUB_STEP_SUMMARY
-            python -c "import json; d=json.load(open('data/cbp-encounters-latest.json')); print(f'Auto-fetched: {d[\"auto_fetched\"]}')"  >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
+            python - <<'PY' >> $GITHUB_STEP_SUMMARY
+          import json
+          d = json.load(open("data/cbp-encounters-latest.json"))
+          print(f"Fetched at: {d.get('fetched_at', 'unknown')}")
+          print(f"Measure: {d.get('measure', 'unknown')}")
+          for fy, v in sorted(d.get("fy_totals", {}).items()):
+              print(f"- {fy}: {v['total']:,} "
+                    f"({v['months_reported']} months, {v['first_month']}-{v['last_month']})")
+          PY
           fi

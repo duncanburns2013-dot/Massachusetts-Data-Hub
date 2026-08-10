@@ -46,10 +46,10 @@ jobs:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
         run: python update-energy-dashboard.py
 
-      - name: "Affordability (BLS + EIA)"
+      - name: "Cost of living (BEA + MIT)"
         env:
-          EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
-        run: python update-affordability-dashboard.py
+          CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+        run: python update-cost-of-living.py
 
       - name: "Tax/Budget - EIA + CPI (BLS)"
         env:

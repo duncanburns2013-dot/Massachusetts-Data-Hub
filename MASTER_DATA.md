@@ -1,6 +1,6 @@
 # Massachusetts Data Hub — Master Data Reference
 
-> **Last Reviewed:** August 01, 2026
+> **Last Reviewed:** August 10, 2026
 > **Maintainer:** Duncan Burns
 > **Purpose:** Reference for hand-verified data points used across dashboards
 
@@ -189,10 +189,10 @@ price here or there. Values below are the cache as of its 2026-07-17 generation.
 | Year | MA Statewide | Essex County | Boston | Newburyport |
 |------|-------------|--------------|--------|-------------|
 | 2021 | $662,660 | $713,369 | $1,086,945 | $941,914 |
-| 2022 | $720,966 | $766,970 | $1,066,003 | $1,077,706 |
-| 2023 | $755,208 | $813,741 | $1,082,495 | $1,113,346 |
-| 2024 | $809,406 | $870,718 | $1,132,848 | $1,234,211 |
-| 2025 | $853,462 | $896,083 | $1,299,708 | $1,325,882 |
+| 2022 | $720,966 | $766,970 | $1,066,003 | $1,077,707 |
+| 2023 | $755,209 | $813,741 | $1,082,495 | $1,113,346 |
+| 2024 | $809,407 | $870,718 | $1,132,849 | $1,234,212 |
+| 2025 | $853,462 | $896,083 | $1,299,708 | $1,325,883 |
 
 - **5-Year Growth (2021→2025):** MA +28.8%, Newburyport +40.8%, Essex +25.6%, Boston +19.6%
 - **Note:** These are AVERAGES (skewed by luxury); Warren Group MEDIANS used for affordability analysis
@@ -200,20 +200,21 @@ price here or there. Values below are the cache as of its 2026-07-17 generation.
 #### Live trailing-12-month window (changes daily — do not transcribe)
 
 The dashboards' last column is **not calendar 2026** — it is a rolling trailing-12-month
-window rewritten every day. As of **August 01, 2026**: MA $863,658 · Essex $904,416 ·
-Boston $1,309,225. Quote it with its as-of date or not at all.
+window rewritten every day. As of **August 10, 2026**: MA $865,182 · Essex $905,975 ·
+Boston $1,308,841. Quote it with its as-of date or not at all.
 
 ### Massachusetts — Market Indicators
 
-| Metric | Calendar 2025 | Trailing 12mo (as of 2026-08-01) | Source |
+| Metric | Calendar 2025 | Trailing 12mo (as of 2026-08-10) | Source |
 |--------|--------------|----------------------------------|--------|
-| Avg DOM | 35.6 days | 37.7 days | MLS PIN 🔄 |
+| Avg DOM | 35.6 days | 37.5 days | MLS PIN 🔄 |
 | SP/LP Ratio | 101.18% | — | MLS PIN 🔄 |
-| Units Sold | 38,870 | 38,279 | MLS PIN 🔄 |
+| Units Sold | 38,870 | 39,323 | MLS PIN 🔄 |
 | Median Price | $670,000 | — | MLS PIN 🔄 |
 
-> Earlier revisions of this file listed the trailing-12-month figures (DOM 38, units 38,279)
-> under a "2025" heading. They are the live window, not the calendar year — split out above.
+> Earlier revisions listed the trailing-12-month figures under a "2025" heading —
+> most recently "Units Sold 39,323 ✅ Feb 2026", which is the live window, not the
+> calendar year, and not a February figure. They are separated above.
 
 ### Haverhill Specific
 
@@ -222,7 +223,7 @@ Boston $1,309,225. Quote it with its as-of date or not at all.
 | Median household income | $88,326 | Census QuickFacts ACS 2020-2024 | ✅ Feb 2026 |
 | MA median household income | $103,960 | ACS 2024 (5-yr), `data/census-latest.json` | 🔄 Jul 2026 |
 | Condo median (Haverhill) | $390,000 | MLS | ✅ Feb 2026 |
-| SF median (Haverhill) | $605,000 | MLS | ✅ Feb 2026 |
+| SF median (Haverhill) | $607,750 | MLS | ✅ Feb 2026 |
 | Income needed for condo | ~$86K | Calc: 6.5%, 20% down, 28% DTI | ✅ Feb 2026 |
 | Income needed for SF | ~$124K | Calc: 6.5%, 20% down, 28% DTI | ✅ Feb 2026 |
 
@@ -302,6 +303,54 @@ Values below are that file as of **2026-07-31** (reference month June 2026).
 
 - **Key finding:** "Hiring recession" — low-hire/low-fire environment, worst since 2009 by multiple measures
 - **Healthcare masks weakness:** 713K healthcare jobs > total net gains, meaning all other sectors flat/negative
+
+### National — Employment Situation Release Dates
+
+Machine-readable copy lives in [`data/bls-release-schedule.json`](data/bls-release-schedule.json); the employment updater reads it to stamp "Released &lt;date&gt;" on the national block.
+
+| Reference Month | Released | Source | Verified |
+|-----------------|----------|--------|----------|
+| November 2025 | Dec 16, 2025 | BLS schedule | ✅ Aug 2026 |
+| December 2025 | Jan 09, 2026 | BLS schedule | ✅ Aug 2026 |
+| January 2026 | Feb 11, 2026 | BLS schedule | ✅ Aug 2026 |
+| February 2026 | Mar 06, 2026 | BLS schedule | ✅ Aug 2026 |
+| March 2026 | Apr 03, 2026 | BLS schedule | ✅ Aug 2026 |
+| April 2026 | May 08, 2026 | BLS schedule | ✅ Aug 2026 |
+| May 2026 | Jun 05, 2026 | BLS schedule | ✅ Aug 2026 |
+| June 2026 | Jul 02, 2026 | BLS schedule | ✅ Aug 2026 |
+| July 2026 | Aug 07, 2026 | BLS schedule | ✅ Aug 2026 |
+| August 2026 | Sep 04, 2026 | BLS schedule | ✅ Aug 2026 |
+| September 2026 | Oct 02, 2026 | BLS schedule | ✅ Aug 2026 |
+| October 2026 | Nov 06, 2026 | BLS schedule | ✅ Aug 2026 |
+| November 2026 | Dec 04, 2026 | BLS schedule | ✅ Aug 2026 |
+
+- **Not a first-Friday rule.** April 2026 went out on the *second* Friday (May 8) and June 2026 on a *Thursday* (Jul 2, moved for July 4). These dates cannot be computed — they must be read from the published schedule.
+- **Source URL:** https://www.bls.gov/schedule/news_release/empsit.htm
+
+### Massachusetts — State Employment & Unemployment Release Dates
+
+The MA vintage. Lands ~3 weeks after the national release, which is why the MA blocks on the employment dashboard legitimately sit a month behind the national block. Same JSON file, `state_employment` key.
+
+| Reference Month | Released | Source | Verified |
+|-----------------|----------|--------|----------|
+| November 2025 | Jan 07, 2026 | BLS schedule | ✅ Aug 2026 |
+| December 2025 | Jan 27, 2026 | BLS schedule | ✅ Aug 2026 |
+| January 2026 | Apr 08, 2026 | BLS schedule | ✅ Aug 2026 |
+| February 2026 | Apr 22, 2026 | BLS schedule | ✅ Aug 2026 |
+| March 2026 | May 06, 2026 | BLS schedule | ✅ Aug 2026 |
+| April 2026 | May 22, 2026 | BLS schedule | ✅ Aug 2026 |
+| May 2026 | Jun 23, 2026 | BLS schedule | ✅ Aug 2026 |
+| June 2026 | Jul 21, 2026 | BLS schedule | ✅ Aug 2026 |
+| July 2026 | Aug 21, 2026 | BLS schedule | ✅ Aug 2026 |
+| August 2026 | Sep 18, 2026 | BLS schedule | ✅ Aug 2026 |
+| September 2026 | Oct 20, 2026 | BLS schedule | ✅ Aug 2026 |
+| October 2026 | Nov 20, 2026 | BLS schedule | ✅ Aug 2026 |
+| November 2026 | Dec 18, 2026 | BLS schedule | ✅ Aug 2026 |
+
+- **Even less regular than the national schedule.** The January 2026 reference month did not appear until **April 8, 2026**.
+- **Source URL:** https://www.bls.gov/schedule/news_release/laus.htm
+- **Maintenance:** BLS publishes ~13 months ahead. When the newest reference month is missing, the updater logs a `::warning::` in the Actions run and renders an em dash instead of inventing a date — that warning is the cue to top up the table above and the JSON.
+- **Note:** bls.gov HTML 403s non-browser clients, so this cannot be scraped from CI (the same block that stalled the CBP feed). `api.bls.gov` serves the figures but carries no release dates.
 
 ---
 
@@ -410,6 +459,178 @@ Values below are that file as of **2026-07-31** (reference month June 2026).
 
 - **Unreported purchases (2022):** 741 tonnes (likely China, Russia)
 - **Gold price (2026):** Hit $4,889/oz
+
+---
+
+## 🧾 Tax Burden — Federal & Massachusetts
+
+Machine-readable source of truth: [`data/burden-constants.json`](data/burden-constants.json).
+Both burden dashboards are generated from it by `update-burden-constants.py`. Change the
+JSON, not the HTML.
+
+| Figure | Value | Source | URL | Verified |
+|---|---|---|---|---|
+| Federal standard deduction TY2026 | $16,100 single / $32,200 MFJ | IRS Rev. Proc. 2025-32 | irs.gov/pub/irs-drop/rp-25-32.pdf | ✅ Aug 2026 |
+| Social Security wage base 2026 | $184,500 | SSA contribution & benefit base | ssa.gov/oact/cola/cbb.html | ✅ Aug 2026 |
+| MA income tax rate | 5.0% flat | M.G.L. c. 62 §4 | malegislature.gov | ✅ Aug 2026 |
+| MA 4% surtax threshold TY2026 | $1,107,750 | M.G.L. c. 62 §§4(d), 5A; DOR | mass.gov/info-details/massachusetts-4-surtax-on-taxable-income | ✅ Aug 2026 |
+| MA interest, dividends & long-term gains | 5% | M.G.L. c. 62 §4(a),(c) | mass.gov/info-details/massachusetts-income-tax-rates | ✅ Aug 2026 |
+| MA short-term capital gains | 8.5% (cut from 12%, St. 2023 c. 50) | M.G.L. c. 62 §4(c) | same | ✅ Aug 2026 |
+| MA motor fuel excise | **26.5¢/gal** (24¢ + 2.5¢ UST) | M.G.L. c. 64A §1; c. 21J §3 | mass.gov/info-details/motor-fuel-excise-tax | ✅ Aug 2026 |
+| MA avg single-family tax bill FY2026 | $8,113 | DLS *City & Town*, Feb 2026 | mass.gov/info-details/fy2026-statewide-average-single-family-tax-bill | ✅ Aug 2026 |
+| MA avg single-family assessed value FY2026 | $742,986 → 1.092% effective | DLS *City & Town*, Feb 2026 | same | ✅ Aug 2026 |
+| MA corporate & business excise FY2025 | $4.662B | DOR FY2025 close, Aug 2025 | mass.gov/news/fiscal-year-2025-revenue-collections-totaled-43708-billion | ✅ Aug 2026 |
+| MA households | 2,829,804 | Census ACS 2024 1-yr, B11001 | censusreporter.org/profiles/04000US25-massachusetts/ | ✅ Aug 2026 |
+| MA aggregate household income | $408.376B | Census ACS 2024 1-yr, B19025 | same | ✅ Aug 2026 |
+| **MA mean household income** | **$144,312** (B19025 ÷ B11001) | Derived — the allocation divisor | same | ✅ Aug 2026 |
+| MA population | 7,044,056 | Census ACS 2024 5-yr, B01003 | same | ✅ Aug 2026 |
+| MA share of national household income | 2.6918% (derived) | ACS B19025 ÷ national B19025 | same | ✅ Aug 2026 |
+| MA share of national population | 2.1032% (derived) | ACS B01003 | same | ✅ Aug 2026 |
+| US households | 132,737,144 | Census ACS 2024 1-yr, B11001 | censusreporter.org/tables/B11001/ | ✅ Aug 2026 |
+| US aggregate household income | $15.171T | Census ACS 2024 1-yr, B19025 | censusreporter.org/tables/B19025/ | ✅ Aug 2026 |
+| Federal deficit FY2025 | $1.8T (5.8–5.9% of GDP) | CBO Monthly Budget Review, Oct 2025 | cbo.gov/publication/61307 | ✅ Aug 2026 |
+| **Federal corporate income tax receipts FY2025** | **$452,089,303,420** (net) | U.S. Treasury, Final Monthly Treasury Statement Sept 2025, Table 4 | api.fiscaldata.treasury.gov — mts_table_4 | ✅ Aug 2026 |
+| Federal corporate receipts FY2024 | $529,866,802,638 — FY25 is −14.7% | same | same | ✅ Aug 2026 |
+| MA unfunded pension + OPEB (stock) | $55.8B total · $42.1B pension-only · $19,719/household | Commonwealth ACFR FY2024; PERAC | See pension-dashboard.html | ✅ Aug 2026 |
+| MA annual pension appropriation FY2026 | $4.9B — ~8% of the state budget, **already in Layer 1** | Commonwealth budget FY2026 | same | ✅ Aug 2026 |
+| **MA residential electricity, all-in** | **28.82¢/kWh** (May 2026; 29.90¢ May 2025, −3.6%) | EIA Electric Power Monthly Table 5.6.A via API v2 | api.eia.gov/v2/electricity/retail-sales/data/ | ✅ Aug 2026 |
+| **NH residential electricity, all-in** | **27.33¢/kWh** (May 2026; 24.02¢ May 2025, **+13.8%**) | same | same | ✅ Aug 2026 |
+| US / New England residential electricity | 18.44¢ / 28.14¢ (May 2026) | same | same | ✅ Aug 2026 |
+| **MA electric policy charges** | **3.789¢/kWh** — EE 2.292 + NMRS 0.625 + SMART 0.583 + EV 0.238 + RE 0.050 + ESMP 0.001 | Eversource MA filed tariff, Rate R1, eff. 1 Jul 2026 | eversource.com/…/electric-delivery-rates/egma | ✅ Aug 2026 |
+| **MA gas policy charges** | **59.08¢/therm** — EE 41.70 + GSEP 17.38 | Eversource MA Summary of Gas Rates | eversource.com/docs/default-source/rates-tariffs/summary-rates-gas.pdf | ✅ Aug 2026 |
+| MA gas commodity cost | 38.42¢/therm (eff. 1 May 2026) — **less than the policy riders above** | Eversource MA Cost of Gas | eversource.com/…/ma-cost-of-gas | ✅ Aug 2026 |
+| MA electric distribution / transmission | 9.443¢ / 4.673¢ per kWh — excluded as infrastructure | same tariff | same | ✅ Aug 2026 |
+| MA pension-only unfunded (stock) | $42.1B · $14,877/household | Commonwealth ACFR FY2024; PERAC | See pension-dashboard.html | ✅ Aug 2026 |
+| MA state/local accrual in the burden model | **$0 — excluded by design**, see note below | Scope decision | — | ✅ Aug 2026 |
+
+### ⚠️ The two MA median-income figures — do not merge them
+
+| Vintage | Value | Concept | Use |
+|---|---|---|---|
+| Census **CPS ASEC** via FRED `MEHOINUSMAA646N` | **$113,900** | Median household income 2024 | Context / presets |
+| Census **ACS 1-year** B19013 | **$104,828** | Median household income 2024 | Context / presets |
+| Census **ACS 1-year** B19025 ÷ B11001 | **$144,312** | *Mean* household income | **Allocation divisor** |
+
+CPS and ACS disagree by ~$9K on the same concept. Carry both and cite which one any
+given chart uses — this is exactly the kind of thing a hostile reader finds first.
+
+**Known defect to fix:** `tax-budget-dashboard.html` (lines ~517 and ~564) labels
+$113,900 as "Census 2024 ACS". That is wrong — $113,900 is the **CPS** figure; ACS says
+$104,828. Also line ~184 of that file states property taxes average "$7,732/year" with
+no fiscal year label, against the FY2026 DLS figure of $8,113.
+
+**Never use a median as an allocation divisor.** Per-household shares must sum back to
+the statewide pool, which only works with the mean. The reconciliation panel on the
+burden dashboard checks this.
+
+---
+
+## 🗽 Tax Burden — New Hampshire
+
+| Figure | Value | Source | URL | Verified |
+|---|---|---|---|---|
+| NH individual income tax | **0%** — I&D repealed 1 Jan 2025 | NH DRA; HB 2 (2023) ch. 79 §§86-88 | revenue.nh.gov/news-and-media/repeal-nh-interest-and-dividends-tax-now-effect | ✅ Aug 2026 |
+| NH I&D rate history | 5% → 4% (2023) → 3% (2024) → 0% (2025) | NH DRA | revenue.nh.gov/taxes-glance/interest-dividends-tax | ✅ Aug 2026 |
+| NH capital gains tax | **None — never levied** (not a 2025 change) | NH DRA | revenue.nh.gov/taxes-glance | ✅ Aug 2026 |
+| NH general sales tax | None | NH DRA | revenue.nh.gov | ✅ Aug 2026 |
+| NH Meals & Rooms tax | 8.5% | RSA 78-A | revenue.nh.gov/taxes-glance/meals-rentals-tax | ✅ Aug 2026 |
+| NH Business Profits Tax | 7.5% | RSA 77-A | revenue.nh.gov/taxes-glance/business-taxes | ✅ Aug 2026 |
+| NH Business Enterprise Tax | 0.55% on compensation + interest + dividends paid | RSA 77-E | same | ✅ Aug 2026 |
+| NH Real Estate Transfer Tax | $0.75 per $100, **each side** | RSA 78-B | revenue.nh.gov | ✅ Aug 2026 |
+| NH households | 570,689 | Census ACS 2024 1-yr, B11001 | censusreporter.org/profiles/04000US33-new-hampshire/ | ✅ Aug 2026 |
+| NH aggregate household income | $73.393B | Census ACS 2024 1-yr, B19025 | same | ✅ Aug 2026 |
+| **NH mean household income** | **$128,604** (B19025 ÷ B11001) | Derived — allocation divisor | same | ✅ Aug 2026 |
+| NH median household income 2024 | $99,782 | Census ACS 2024 1-yr, B19013 | same | ✅ Aug 2026 |
+| NH population | 1,394,868 | Census ACS 2024 5-yr, B01003 | same | ✅ Aug 2026 |
+| NH share of national household income | **0.4838%** (derived) | ACS B19025 ÷ national B19025 | same | ✅ Aug 2026 |
+| NH share of national population | 0.4165% (derived) | ACS B01003 | same | ✅ Aug 2026 |
+| **NH average municipal property rate 2025** | **$15.83 per $1,000 → 1.583%** (was $20.96 in 2019) | NH Fiscal Policy Institute | nhfpi.org/resource/property-taxes-in-new-hampshire-how-they-work-and-how-they-compare/ | ✅ Aug 2026 |
+| NH per-capita property tax FY2022 | $3,388 — **2nd highest state**, behind NJ $3,617 | NHFPI | same | ✅ Aug 2026 |
+| NH property tax reliance | 60% (NHFPI) vs 63–64% (InDepthNH) — **carry both** | NHFPI / InDepthNH | same | ✅ Aug 2026 |
+| **NHRS unfunded liability** | **$5.58B**, 68.6% funded (30 Jun 2024) · $9,778/household | NHRS ACFR + GASB 67/74, FY2025 release | nhrs.org/docs/default-source/gasb/ | ✅ Aug 2026 |
+| NH municipal rate range | $2.62 – $36.54 per $1,000 | InDepthNH, Apr 2026 | indepthnh.org | ✅ Aug 2026 |
+| NH property tax share of state+local revenue | 63–64% | InDepthNH / NHFPI, Apr 2026 | same | ✅ Aug 2026 |
+| **NH business taxes FY2025 (BPT+BET)** | **$1,102.6M** — Gen $670.5M + Ed $432.1M | NH DAS Monthly Revenue Focus, June FY2025 accrual | das.nh.gov/accounting/FY%2025/FY2025_Monthly_Revenue_June_Preliminary_Accrual.pdf | ✅ Aug 2026 |
+| NH business taxes FY2024 | $1,217.9M (FY25 is −9.5%, and −12.4% vs the $1,259.0M plan) | same | same | ✅ Aug 2026 |
+| NH BPT / BET split | 75% / 25% — **assumed** | DAS publishes them combined; split needs NH DRA | revenue.nh.gov/taxes-glance/business-taxes | ⚠️ Split unverified |
+| NH Interest & Dividends revenue FY2025 | $90.8M, down 50.7% from FY2024's $184.3M | NH DAS, June FY2025 accrual | same | ✅ Aug 2026 |
+| NH General + Education Fund revenue FY2025 | $3,122.7M, 1.3% below plan | NH DAS, June FY2025 accrual | same | ✅ Aug 2026 |
+| NH road toll (gas) | **23.75¢** = 22.2¢ toll + ~1.55¢ oil discharge surcharge | RSA 260:32 (base $0.18, +4.2¢ per 2014 SB 367); RSA 146-A | gc.nh.gov/rsa/html/XXI/260/260-32.htm | ✅ Aug 2026 |
+| NH BET share of business taxes | 25.7% (5-yr TY2019–23 avg); TY2023 BET = $253M | NHFPI | nhfpi.org/resource/business-enterprise-tax-rate-decreases-have-lowered-revenue-with-limited-economic-benefit/ | ✅ Aug 2026 |
+| NH BET rate history | 0.75% → 0.72% (2016) → 0.675% (2018) → 0.6% (2019) → 0.55% (2022–) | NHFPI | same | ✅ Aug 2026 |
+| **NH electric policy charges** | **0.618¢/kWh** — System Benefits Charge, the only mandated rider | Eversource NH filed tariff, Rate R | eversource.com/…/electric-delivery-rates/nh | ✅ Aug 2026 |
+| **NH gas policy charges** | **16.30¢/therm** — Liberty EnergyNorth LDAC (a *ceiling*, bundles mechanisms MA excludes) | NHPUC DG 24-098; see also DE 25-071 | new-hampshire.libertyutilities.com | ✅ Aug 2026 |
+| NH electric distribution / transmission | 6.727¢ / 4.445¢ per kWh — excluded as infrastructure | Eversource NH Rate R | same | ✅ Aug 2026 |
+| NH stranded cost recovery | **−0.148¢/kWh — a credit, not a charge** | Eversource NH Rate R | same | ✅ Aug 2026 |
+| NH state/local accrual in the burden model | **$0 — excluded by design**, same rule as MA | Scope decision | — | ✅ Aug 2026 |
+
+### 🚫 Why pension debt is excluded from the burden calculators
+
+The burden dashboards count what a household **pays**. An unfunded pension liability
+isn't billed to anyone — it's a claim on future tax capacity, and the portion collected
+today arrives through the appropriation funded by the income and property taxes Layer 1
+already counts. Counting it again in Layer 5 double-counts.
+
+It also cannot be sourced symmetrically across the border, in two opposite directions:
+
+| | Massachusetts | New Hampshire |
+|---|---|---|
+| OPEB (retiree health) | **included** in the $55.8B — $13.7B, only 15.6% funded | **not sourced** |
+| Municipal systems | **mostly excluded** — the $42.1B is MTRS + SERS + Boston Teachers; PERAC tracks ~104 | **included** — NHRS is one statewide system |
+
+Use **$42.1B MA vs $5.58B NH** for any pension-to-pension read, and carry the caveat.
+The stocks are disclosed beside Layer 5 on both dashboards; the full story lives in
+`pension-dashboard.html`.
+
+**Removing it improved the analysis.** Layer 5 is now entirely federal and therefore
+genuinely identical on both sides of the border, and the compression finding now holds at
+$75k — the old asymmetric placeholders (MA $2,000 vs NH $1,600) had been manufacturing a
+$400 NH advantage out of pure guesswork.
+
+### ⚡ The Layer 4 inclusion rule
+
+> A charge is a **policy cost** if it exists because of a legislative or regulatory
+> mandate, rather than because of the physical cost of generating and delivering energy.
+
+Excluded on both sides as infrastructure or mechanism: distribution, transmission,
+revenue decoupling, regulatory reconciliation, stranded cost, customer charge.
+
+Electricity is genuinely like-for-like — both figures are **Eversource**, the same
+company on both sides of the border. Gas is not: Eversource doesn't serve NH gas, so
+that side is Liberty EnergyNorth.
+
+**Both figures are conservative in the same direction.** MA's is a **floor** — its own
+tariff footnote places the Long Term Renewable Contract Adjustment (83C/83D offshore
+wind), Solar Program Cost Adjustment and Grid Modernization *inside* the Distribution
+charge, unbroken out, and RPS/CES sits inside supply. NH's gas figure is a **ceiling** —
+the LDAC bundles mechanisms MA excludes. So the true gap is wider than stated.
+
+**Headline finding: Massachusetts gas policy charges (59.08¢/therm) cost more than the
+gas itself (38.42¢/therm).** The prior 18¢ placeholder understated it by over 3×.
+
+Worth watching separately: **NH electricity rose 13.8% year over year while MA fell
+3.6%.** Whatever advantage NH holds on the meter is closing fast.
+
+### ⚠️ NH median property tax bill — sources disagree, carry all three
+
+| Value | Effective rate | Source |
+|---|---|---|
+| $6,530 | 1.82% | Ownwell |
+| $6,707 | 1.46% | SmartAsset |
+| $5,680 | — | World Population Review (median across counties) |
+
+The dashboard uses 1.71%, derived from the ~$17.10 per $1,000 statewide average total
+rate, which is the cleanest of the four. **Note this is a rate on *assessed* value** —
+NH DRA publishes equalization ratios precisely because assessed and market values
+diverge, so applying it to a market price overstates the bill.
+
+### The constants-consistency rule
+
+`households × meanHouseholdIncome ÷ incomeShare` **must return the same national
+aggregate for every state.** Before this was enforced, MA implied a $14.91T national
+total and NH implied $17.50T — a 17.3% disagreement that made the "federal borrowing is
+identical across the border" claim false by $2,674 on a line captioned *"Identical
+basis"*. `update-burden-constants.py` now fails the build if this breaks.
 
 ---
 

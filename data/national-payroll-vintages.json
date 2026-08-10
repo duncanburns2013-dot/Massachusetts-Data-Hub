@@ -1,0 +1,17 @@
+{
+  "_what": "First-print national payroll change (CES0000000001, SA, month-over-month) by REFERENCE month. Compared against the current vintage to show what BLS has since revised.",
+
+  "_why": "The dashboard printed the headline payroll number and linked out for 'revisions in the release'. Revisions are not a footnote here: May 2026 was first reported as +172,000 and now stands at +63,000. A page that shows only the current vintage silently rewrites history — the month reads as if it were always +63,000 and the 109,000-job markdown disappears.",
+
+  "_how_this_is_seeded": "BLS serves only the current vintage, so first prints cannot be re-fetched. These three were recovered from this repo's own git history: the updater commits employment-dashboard.html daily, so the value of data-field=\"nat-pay-cur\" in the FIRST commit that mentions a given reference month is that month's first print. Each recovered date lands exactly on the scheduled release day (May->Jun 5, June->Jul 2, July->Aug 7), which is what confirms they are first prints and not mid-cycle snapshots.",
+
+  "_maintenance": "Self-extending. Each run adds any reference month not already present, using that run's month-over-month value. Because the workflow runs daily and BLS publishes on a known schedule, a new month is always captured on its release day. Never edit an existing entry — that is the historical record the revision column is measured against.",
+
+  "_units": "Jobs, month-over-month change, seasonally adjusted.",
+
+  "first_print": {
+    "2026-05": 172000,
+    "2026-06": 57000,
+    "2026-07": -23000
+  }
+}

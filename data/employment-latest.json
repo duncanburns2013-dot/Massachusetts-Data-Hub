@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-07-31T16:16:34.884Z",
+  "fetched_at": "2026-08-07T18:13:05.503Z",
   "ma_unemployment_rate": {
     "latest": {
       "value": 4.4,
@@ -38,22 +38,23 @@
   },
   "us_unemployment_rate": {
     "latest": {
-      "value": 4.2,
+      "value": 4.1,
       "year": "2026",
-      "period": "M06",
-      "periodName": "June",
-      "date": "June 2026"
+      "period": "M07",
+      "periodName": "July",
+      "date": "July 2026"
     }
   },
   "us_unemployment_level": {
     "latest": {
-      "value": 7094,
+      "value": 6916,
       "year": "2026",
-      "period": "M06",
-      "periodName": "June",
-      "date": "June 2026"
+      "period": "M07",
+      "periodName": "July",
+      "date": "July 2026"
     },
     "byPeriod": {
+      "2026-M07": 6916,
       "2026-M06": 7094,
       "2026-M05": 7307,
       "2026-M04": 7373,
@@ -87,11 +88,11 @@
   },
   "us_job_openings": {
     "latest": {
-      "value": 7594,
+      "value": 7359,
       "year": "2026",
-      "period": "M05",
-      "periodName": "May",
-      "date": "May 2026"
+      "period": "M06",
+      "periodName": "June",
+      "date": "June 2026"
     }
   },
   "jolts_note": "BLS discontinued monthly state JOLTS in 2026. National JOLTS still monthly. First annual state release: July 2026."

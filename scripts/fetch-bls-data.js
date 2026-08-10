@@ -6,6 +6,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DASHBOARD_PATH    = path.join(__dirname, '..', 'employment-dashboard.html');
 const DATA_OUTPUT_PATH  = path.join(__dirname, '..', 'data', 'employment-latest.json');
 const DATA_PREV_PATH    = path.join(__dirname, '..', 'data', 'employment-previous.json');
+const RELEASE_SCHED_PATH = path.join(__dirname, '..', 'data', 'bls-release-schedule.json');
+const VINTAGES_PATH      = path.join(__dirname, '..', 'data', 'national-payroll-vintages.json');
 
 // ── Series IDs ────────────────────────────────────────────────────────────────
 const EMPLOYMENT_SERIES = {
@@ -25,6 +27,49 @@ const EMPLOYMENT_SERIES = {
                                            // Must be national and in thousands to match
                                            // JTS...JOL, which is also national thousands.
 };
+
+// National CES industry employment (SA, all employees, level in thousands).
+//
+// The dashboard reported the headline payroll number and then told the reader
+// "full sector breakdown & revisions in the release" — i.e. it linked out for the
+// part that explains the figure it had just printed. July 2026 is the case in
+// point: the headline was −23,000, but private payrolls ROSE 30,000 and
+// government fell 53,000. "Payrolls fell" and "the private sector added jobs"
+// were both true that month, and the page showed only the first.
+//
+// These sum to total nonfarm, so the table can be checked against the headline
+// rather than asserted alongside it — see the reconciliation row.
+const US_SECTOR_SERIES = {
+  PRIVATE:       'CES0500000001',  // total private — the check row, not a line item
+  MINING:        'CES1000000001',
+  CONSTRUCTION:  'CES2000000001',
+  MANUFACTURING: 'CES3000000001',
+  TRADE_TRANS:   'CES4000000001',
+  INFORMATION:   'CES5000000001',
+  FINANCIAL:     'CES5500000001',
+  PROF_BUS:      'CES6000000001',
+  EDU_HEALTH:    'CES6500000001',
+  LEISURE:       'CES7000000001',
+  OTHER_SVC:     'CES8000000001',
+  GOVERNMENT:    'CES9000000001',
+};
+
+// Display names, and the subset that forms the additive breakdown. PRIVATE is
+// deliberately excluded: it is the sum of the private rows, so including it as a
+// row would double-count and the reconciliation check would stop meaning anything.
+const US_SECTOR_META = [
+  ['EDU_HEALTH',    'Private Education & Health'],
+  ['LEISURE',       'Leisure & Hospitality'],
+  ['PROF_BUS',      'Professional & Business'],
+  ['TRADE_TRANS',   'Trade, Transportation & Utilities'],
+  ['GOVERNMENT',    'Government'],
+  ['CONSTRUCTION',  'Construction'],
+  ['MANUFACTURING', 'Manufacturing'],
+  ['FINANCIAL',     'Financial Activities'],
+  ['INFORMATION',   'Information'],
+  ['OTHER_SVC',     'Other Services'],
+  ['MINING',        'Mining & Logging'],
+];
 
 // National JOLTS only — BLS discontinued monthly state JOLTS (last: Dec 2025).
 // First annual state JOLTS release: July 2026.
@@ -186,8 +231,120 @@ async function loadPreviousData() {
   }
 }
 
+// ── BLS release schedule ──────────────────────────────────────────────────────
+// The "Released <date>" stamps used to come from new Date(), i.e. whenever CI
+// happened to run. That silently republished a false provenance line every time
+// the workflow woke up on a non-release day: the Aug 5 and Aug 6 2026 runs both
+// printed "June 2026 National Employment — Released August 5 / 6, 2026" when the
+// June reference month was actually released July 2, 2026.
+//
+// The real dates cannot be derived — there is no first-Friday rule. In 2026 the
+// Apr reference month went out on the *second* Friday (May 8) and Jun went out on
+// a Thursday (Jul 2, moved for July 4). So the published schedule is pinned in
+// data/bls-release-schedule.json and read here. bls.gov itself is not fetchable
+// from CI (it 403s non-browser clients, same block that stalled the CBP feed);
+// api.bls.gov serves the numbers but carries no release dates.
+// Returns both schedules: `national` (Employment Situation, drives the national
+// block) and `state` (State Employment and Unemployment, drives every MA
+// citation). They are genuinely different calendars — the MA vintage lands about
+// three weeks later — which is why the MA blocks legitimately sit a month behind.
+async function loadReleaseSchedule() {
+  try {
+    const raw = JSON.parse(await fs.readFile(RELEASE_SCHED_PATH, 'utf-8'));
+    return {
+      national: raw.employment_situation || {},
+      state:    raw.state_employment     || {},
+    };
+  } catch (err) {
+    console.log(`::warning::Could not read ${path.basename(RELEASE_SCHED_PATH)} (${err.message}) — release dates will render as "—"`);
+    return { national: {}, state: {} };
+  }
+}
+
+// First-print payroll changes, so the page can show what BLS has since revised.
+// BLS serves only the current vintage, so a month's first print is unrecoverable
+// once missed — this file is the only record of it, and existing entries are
+// therefore append-only. See the file's own _how_this_is_seeded note.
+async function loadVintages() {
+  try {
+    const raw = JSON.parse(await fs.readFile(VINTAGES_PATH, 'utf-8'));
+    return { doc: raw, firstPrint: raw.first_print || {} };
+  } catch (err) {
+    console.log(`::warning::Could not read ${path.basename(VINTAGES_PATH)} (${err.message}) — revisions will render as "—"`);
+    return { doc: null, firstPrint: {} };
+  }
+}
+
+// Record any reference month we have not seen before. Runs daily against a known
+// release schedule, so a new month is captured on the day it is first published —
+// which is what makes the stored value a first print. Existing months are never
+// touched: overwriting one would quietly erase the revision it is there to expose.
+async function saveNewVintages(doc, firstPrint, added) {
+  if (!doc || !added.length) return;
+  doc.first_print = Object.fromEntries(
+    Object.entries(firstPrint).sort(([a], [b]) => a.localeCompare(b))
+  );
+  await fs.writeFile(VINTAGES_PATH, JSON.stringify(doc, null, 2) + '\n');
+  console.log(`   📌 First print recorded for ${added.join(', ')}`);
+}
+
+// Month-over-month change in jobs, defined only where the two newest points are
+// genuinely adjacent months. BLS published no Oct 2025 (the appropriations lapse)
+// and monthsOf drops absent months, so differencing straight across the hole would
+// report two months of movement as one month's change.
+function momAdjacent(arr) {
+  if (!arr || arr.length < 2) return null;
+  const a = arr[arr.length - 1], b = arr[arr.length - 2];
+  return ordOf(a) - ordOf(b) === 1 ? Math.round((a.value - b.value) * 1000) : null;
+}
+
+// Industry rows for the "where the change came from" table, largest gain first.
+// `monthsFor` maps a US_SECTOR_SERIES key to its month array. Pure so the
+// reconciliation property (rows sum to the headline) can be tested offline.
+function buildSectorRows(monthsFor, meta) {
+  return meta
+    .map(([key, label]) => {
+      const m = monthsFor(key) || [];
+      return { label, chg: momAdjacent(m), lvl: m.length ? m[m.length - 1].value : null };
+    })
+    .filter(r => r.chg != null && r.lvl != null)
+    .sort((a, b) => b.chg - a.chg);
+}
+
+// What BLS has revised: the months behind the newest, each compared against the
+// first print recorded on its release day. `first: null` means the month predates
+// tracking — the caller renders an em dash, never a zero, because "we don't know"
+// and "unrevised" are different claims.
+function buildRevisionRows(nfMonths, firstPrint, back = 3) {
+  const out = [];
+  for (let i = 1; i <= back; i++) {
+    const idx = nfMonths.length - 1 - i;
+    if (idx < 1) break;
+    const m = nfMonths[idx], prev = nfMonths[idx - 1];
+    if (ordOf(m) - ordOf(prev) !== 1) continue;
+    const now = Math.round((m.value - prev.value) * 1000);
+    const key = `${m.year}-${String(m.mon + 1).padStart(2, '0')}`;
+    const first = firstPrint[key] == null ? null : firstPrint[key];
+    out.push({ year: m.year, mon: m.mon, key, first, now, rev: first == null ? null : now - first });
+  }
+  return out;
+}
+
+// Reference month → the day BLS actually published it. Formatted from the date
+// parts rather than through Date/toLocaleDateString, because "2026-08-07" parses
+// as UTC midnight and would render as August 6 on any runner west of Greenwich.
+// Returns null when the month is not in the schedule — the caller renders an em
+// dash rather than substituting today, which is the bug this replaced.
+function releaseDateFor(sched, year, monIdx, FULLMON) {
+  const iso = sched[`${year}-${String(monIdx + 1).padStart(2, '0')}`];
+  if (!iso) return null;
+  const [y, m, d] = iso.split('-').map(Number);
+  return `${FULLMON[m - 1]} ${d}, ${y}`;
+}
+
 // ── Chart-array helpers ─────────────────────────────────────────────────────────
 const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const FULLMON = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
 // Series → oldest-first list of monthly points. Drops the M13 annual average and
 // any month BLS marks unavailable (value "-", e.g. the 2025 appropriations lapse),
@@ -258,11 +415,34 @@ function updateCharts(html, find, findLong) {
     html = inject(html, 'trend-ma',  w.map(p => p.value).join(','));
   }
 
-  // c-laborforce — MA labor force level, trailing 16 months (last point is highlighted)
-  if (maLF.length) {
-    const w = maLF.slice(-16);
-    html = inject(html, 'lf-lab',  axisLabels(w));
-    html = inject(html, 'lf-data', w.map(p => p.value).join(','));
+  // c-laborforce — MA labor force level, plus the table and the peak-to-latest
+  // sentence underneath it.
+  //
+  // Injected from LF_ANCHOR, not the chart's trailing 16 months. Those consumers
+  // find the peak by scanning this array, and on a 16-month window the Mar-2025
+  // peak was one month from sliding off the back — after which "the peak" would
+  // silently become the highest month still in view and the sentence would
+  // re-anchor itself without saying so.
+  //
+  // Jan 2024 rather than all of history: the page's claim is about the post-2024
+  // decline. Feeding it 2019 makes the peak Feb 2020 and quietly turns a sentence
+  // about the current cycle into one about the pandemic — a different claim than
+  // the page is making. The chart slices to its 16-month window at the point of use.
+  const LF_ANCHOR = { year: 2024, mon: 0 };
+  const lfW = maLF.filter(p => ordOf(p) >= ordOf(LF_ANCHOR));
+  if (lfW.length) {
+    html = inject(html, 'lf-lab',  axisLabels(lfW));
+    html = inject(html, 'lf-data', lfW.map(p => p.value).join(','));
+  }
+
+  // MA unemployed persons, level — the "why" behind the rate move. Fetched on
+  // every run since the series list was written, but never injected, so the
+  // sentence explaining the rate carried a hand-typed count nothing could update.
+  const maUL = monthsOf(find(EMPLOYMENT_SERIES.MA_UNEMPLOYMENT_LEVEL))
+    .filter(p => ordOf(p) >= ordOf(LF_ANCHOR));
+  if (maUL.length) {
+    html = inject(html, 'ul-lab',  axisLabels(maUL));
+    html = inject(html, 'ul-data', maUL.map(p => p.value).join(','));
   }
 
   // c-monthly, plus every payroll figure in the prose — MA nonfarm month-over-month
@@ -523,7 +703,26 @@ function updateMASectorSpectrum(html, find) {
 // ── Dashboard updater ─────────────────────────────────────────────────────────
 async function updateDashboard(data, empSeries) {
   let html = await fs.readFile(DASHBOARD_PATH, 'utf-8');
+  const releaseSchedule = await loadReleaseSchedule();
+  const { doc: vintageDoc, firstPrint } = await loadVintages();
+  const addedVintages = [];
   const find = (id) => empSeries?.find(s => s.seriesID === id);
+
+  // MA release dates go to the client, keyed the way renderDerived() keys months
+  // and pre-formatted so the page never parses a date string (and so no browser
+  // timezone can shift "2026-07-21" back to the 20th).
+  //
+  // Client-side deliberately: every MA figure in the prose is derived there from
+  // the injected series, so the month those sentences describe is only settled in
+  // the browser. Stamping the citation anywhere else lets the date and the figure
+  // beside it disagree — which is exactly how all six MA citations came to read
+  // "June 23, 2026" (the May vintage) under prose that had moved on to June data.
+  html = inject(html, 'ma-rel-sched', '{' + Object.entries(releaseSchedule.state)
+    .map(([key, iso]) => {
+      const [y, m, d] = iso.split('-').map(Number);
+      return `"${key}":"${FULLMON[m - 1]} ${d}, ${y}"`;
+    })
+    .join(',') + '}');
 
   // MA total nonfarm (SMS25000000000000001) is fetched twice — once in the
   // employment batch (3 years) and once in the sector batch (from 2019) — so
@@ -621,14 +820,22 @@ async function updateDashboard(data, empSeries) {
   const nser  = (id) => monthsOf(find(id));
   const lastOf = (a) => a[a.length - 1];
   const prevOf = (a) => a[a.length - 2];
-  const FULLMON = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const sgn = (n) => (n < 0 ? '−' : '+') + Math.abs(Math.round(n)).toLocaleString('en-US');
   const sgnK = (n) => (n < 0 ? '−' : '+') + Math.round(Math.abs(n) / 1000) + 'K';
 
   const nf = nser(EMPLOYMENT_SERIES.US_NONFARM);
   if (nf.length >= 3) {
-    const relDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     const cM = lastOf(nf), pM = prevOf(nf);
+    // Two distinct dates that used to be the same value, which is what made the
+    // old stamp wrong. relDate = the day BLS published this reference month.
+    // runDate = the day this script last rewrote the page. Only the second one
+    // is "today", and only the second one describes the auto-update itself.
+    const relDate = releaseDateFor(releaseSchedule.national, cM.year, cM.mon, FULLMON);
+    const runDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    if (!relDate) {
+      console.log(`::warning::No BLS release date on file for ${FULLMON[cM.mon]} ${cM.year} — top up data/bls-release-schedule.json from https://www.bls.gov/schedule/news_release/empsit.htm`);
+    }
+    const relStamp = relDate || '—';
     const moK = (a, i) => (a[a.length - i].value - a[a.length - i - 1].value) * 1000; // i=1 newest MoM
     const ur  = nser(EMPLOYMENT_SERIES.US_UNEMPLOYMENT_RATE);
     const u6  = nser(EMPLOYMENT_SERIES.US_U6);
@@ -651,8 +858,8 @@ async function updateDashboard(data, empSeries) {
     setField('ov-nat-ur',  urCur.toFixed(1) + '%');
     // National Employment alert block
     setField('nat-emp-month', monLong(cM));
-    setField('nat-emp-rel',   relDate);
-    setField('nat-emp-rel2',  relDate);
+    setField('nat-emp-rel',   relStamp);
+    setField('nat-emp-rel2',  relStamp);
     setField('nat-payrolls',  sgn(payCur));
     setField('nat-ur',        urCur.toFixed(1) + '%');
     setField('nat-ur-chg',    urChg);
@@ -661,7 +868,7 @@ async function updateDashboard(data, empSeries) {
     setField('nat-lf',        sgn(lfCur));
     // National Context table
     setField('nat-ctx-month', monLong(cM));
-    setField('nat-ctx-rel',   relDate);
+    setField('nat-ctx-rel',   relStamp);
     setField('nat-col-cur',   monShort(cM));
     setField('nat-col-prev',  monShort(pM));
     setField('nat-u3-cur',    urCur.toFixed(1) + '%');
@@ -674,8 +881,64 @@ async function updateDashboard(data, empSeries) {
     setField('nat-lf-cur',    sgn(lfCur));
     setField('nat-lf-prev',   sgn(lfPrev));
     if (cumSep != null) setField('nat-cum-sep', sgn(cumSep) + ' cumulative');
-    setField('nat-src-date',  relDate);
-    console.log(`   ✅ National block updated: ${monLong(cM)} — payrolls ${sgn(payCur)}, UR ${urCur}% ${urChg}`);
+    // ── Where the headline came from: CES industry breakdown ───────────────
+    // The rows are additive to total nonfarm, so the reconciliation line under
+    // the table is an actual check — if the industry rows stop summing to the
+    // headline, it shows on the page instead of being asserted away.
+    const secMonths = (key) => monthsOf(find(US_SECTOR_SERIES[key]));
+    const secRows = buildSectorRows(secMonths, US_SECTOR_META);
+
+    if (secRows.length) {
+      setField('us-sec-month', monLong(cM));
+      const cls = (n) => (n < 0 ? ' class="td-red"' : n > 0 ? ' class="td-green"' : '');
+      html = injectHTMLBlock(html, 'us-sec-table', secRows.map(r =>
+        `<tr><td>${r.label}</td><td${cls(r.chg)}>${sgn(r.chg)}</td>`
+        + `<td>${Math.round(r.lvl).toLocaleString('en-US')}K</td></tr>`).join(''));
+
+      const priv = momAdjacent(secMonths('PRIVATE'));
+      const gov  = secRows.find(r => r.label === 'Government')?.chg;
+      const summed = secRows.reduce((t, r) => t + r.chg, 0);
+      // Stated, not assumed: if the parts ever stop adding to the headline, say so.
+      const recon = summed === payCur
+        ? `Private ${sgn(priv)} · Government ${sgn(gov)} · Total ${sgn(payCur)} — industry rows sum to the headline`
+        : `Private ${sgn(priv)} · Government ${sgn(gov)} · rows sum to ${sgn(summed)} vs headline ${sgn(payCur)} — BLS rounds each industry independently`;
+      setField('us-sec-recon', recon);
+      console.log(`   ✅ US sector table: ${secRows.length} industries, private ${sgn(priv)}, gov ${sgn(gov)}, sum ${sgn(summed)} vs headline ${sgn(payCur)}`);
+    }
+
+    // ── What BLS has revised since first print ─────────────────────────────
+    // BLS revises the prior two months with each release. Showing only the
+    // current vintage silently rewrites history: May 2026 was first reported as
+    // +172,000 and now stands at +63,000, and without this the month simply
+    // reads as though it had always been +63,000.
+    // Record the newest month's first print, once. ONLY the newest month is safe
+    // to record: BLS revises on release, so within a cycle the newest month's
+    // value is still exactly what was first published, and daily runs guarantee
+    // we see it before the next release moves it. Backfilling an older month here
+    // would store an already-revised figure as its "first print" and quietly
+    // report a real revision as zero.
+    const cmKey = `${cM.year}-${String(cM.mon + 1).padStart(2, '0')}`;
+    if (firstPrint[cmKey] == null) {
+      firstPrint[cmKey] = payCur;
+      addedVintages.push(cmKey);
+    }
+
+    const revRows = buildRevisionRows(nf, firstPrint).map(r =>
+      `<tr><td>${MON[r.mon]} ${r.year}</td>`
+      + `<td>${r.first == null ? '—' : sgn(r.first)}</td><td>${sgn(r.now)}</td>`
+      + `<td${r.rev == null ? '' : r.rev < 0 ? ' class="td-red"' : r.rev > 0 ? ' class="td-green"' : ''}>`
+      + `${r.rev == null ? '—' : r.rev === 0 ? 'unrevised' : sgn(r.rev)}</td></tr>`);
+
+    if (revRows.length) {
+      html = injectHTMLBlock(html, 'us-rev-table', revRows.join(''));
+      const tracked = Object.keys(firstPrint).length;
+      setField('us-rev-note', tracked ? `Tracking ${tracked} months of first prints.` : '');
+    }
+
+    // "Headline aggregates auto-updated <date>" — this one really is the run
+    // date; it describes this script, not the BLS release.
+    setField('nat-src-date',  runDate);
+    console.log(`   ✅ National block updated: ${monLong(cM)} — payrolls ${sgn(payCur)}, UR ${urCur}% ${urChg}, BLS released ${relStamp}`);
   }
 
   // Foreign-Born tab subtitle month
@@ -807,6 +1070,8 @@ async function updateDashboard(data, empSeries) {
   if (data.ma_unemployment_rate?.latest) setField('foot-ma-mo',  data.ma_unemployment_rate.latest.date);
   if (data.us_unemployment_rate?.latest) setField('foot-nat-mo', data.us_unemployment_rate.latest.date);
 
+  await saveNewVintages(vintageDoc, firstPrint, addedVintages);
+
   return html;
 }
 
@@ -914,6 +1179,17 @@ async function main() {
     console.warn(`   ⚠️  MA sectors skipped: ${err.message}`);
   }
 
+  // ── 2e. US industry employment (non-critical — feeds the sector breakdown) ──
+  console.log('\n🔄 Fetching US industry employment (CES national, SA)...');
+  try {
+    const usSectors = await fetchBLSData(Object.values(US_SECTOR_SERIES), currentYear - 1, currentYear);
+    empSeries.push(...usSectors);
+    const gov = usSectors.find(s => s.seriesID === US_SECTOR_SERIES.GOVERNMENT);
+    console.log(`   ✅ US sectors fetched (${usSectors.length}) — Government latest ${getLatestValue(gov)?.value}K (${getLatestValue(gov)?.date})`);
+  } catch (err) {
+    console.warn(`   ⚠️  US sectors skipped: ${err.message}`);
+  }
+
   // ── 3. Save snapshot + rotate previous ───────────────────────────────────
   await fs.mkdir(path.dirname(DATA_OUTPUT_PATH), { recursive: true });
   // Rotate: current → previous before overwriting
@@ -940,4 +1216,4 @@ if (process.env.BLS_SKIP_MAIN !== '1') {
   });
 }
 
-export { monthsOf, inject, injectHTMLBlock, updateMASectorSpectrum, MA_SECTOR_SERIES, MA_SECTOR_META };
+export { monthsOf, inject, injectHTMLBlock, updateMASectorSpectrum, MA_SECTOR_SERIES, MA_SECTOR_META, loadReleaseSchedule, releaseDateFor, buildSectorRows, buildRevisionRows, momAdjacent, US_SECTOR_META };

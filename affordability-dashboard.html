@@ -5,660 +5,461 @@
   <!-- Open Graph / Social Cards -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Massachusetts Data Hub">
-  <meta property="og:title" content="Massachusetts Affordability & Employment">
-  <meta property="og:description" content="Housing costs, income, and real affordability metrics across Massachusetts communities — official government data.">
+  <meta property="og:title" content="What It Costs to Live in Massachusetts">
+  <meta property="og:description" content="What is actually expensive in Massachusetts, where in the state it is expensive, and what a household needs to earn — from BEA Regional Price Parities and the MIT Living Wage Calculator.">
   <meta property="og:url" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/affordability-dashboard.html">
   <meta property="og:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Massachusetts Affordability & Employment">
-  <meta name="twitter:description" content="Housing costs, income, and real affordability metrics across Massachusetts communities — official government data.">
+  <meta name="twitter:title" content="What It Costs to Live in Massachusetts">
+  <meta name="twitter:description" content="What is actually expensive in Massachusetts, where in the state it is expensive, and what a household needs to earn — from BEA Regional Price Parities and the MIT Living Wage Calculator.">
   <meta name="twitter:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
-  <meta name="description" content="Housing costs, income, and real affordability metrics across Massachusetts communities — official government data.">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Massachusetts Affordability & Employment</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <meta name="description" content="What is actually expensive in Massachusetts, where in the state it is expensive, and what a household needs to earn — from BEA Regional Price Parities and the MIT Living Wage Calculator.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What It Costs to Live in Massachusetts</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f8f7f4;--card:#ffffff;--border:#e8e5df;--text:#1a1a1a;--muted:#7a756e;--red:#c0392b;--red-bg:rgba(192,57,43,0.06);--green:#1a7a4c;--green-bg:rgba(26,122,76,0.06);--blue:#1a4480;--blue-bg:rgba(26,68,128,0.06);--amber:#b8860b;--amber-bg:rgba(184,134,11,0.06);--purple:#7e22ce;--purple-bg:rgba(126,34,206,0.06);--gold:#c9a84c;--navy:#0f2942}
+
+:root{--bg:#f8f7f4;--surface:#ffffff;--surface2:#f8f7f4;--border:#e8e5df;--text:#1a1a1a;--muted:#7a756e;--accent:#1a4480;--accent2:#b8860b;--red:#c0392b;--green:#1a7a4c;--blue:#1a4480;--amber:#b8860b;--purple:#7e22ce;--navy:#0f2942;--gold:#c9a84c;--red-bg:rgba(192,57,43,0.06);--blue-bg:rgba(26,68,128,0.06);--green-bg:rgba(26,122,76,0.06);--amber-bg:rgba(184,134,11,0.06);--purple-bg:rgba(126,34,206,0.06)}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
-.hero{background:var(--navy);color:#fff;padding:48px 24px 36px;text-align:center;position:relative;overflow:hidden}
+.hero{background:var(--navy);color:#fff;padding:2.5rem 1.5rem 2rem;text-align:center;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,0.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(139,26,26,0.1) 0%,transparent 50%)}
-.hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.5rem,4.5vw,2.5rem);font-weight:400;margin-bottom:6px;letter-spacing:-0.01em;position:relative}
-.hero .sub{opacity:0.65;font-size:0.82rem;margin-bottom:24px;font-weight:400;letter-spacing:0.02em;position:relative;max-width:700px;margin-left:auto;margin-right:auto}
-.hero-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-width:1000px;margin:0 auto;position:relative}
-.hero-stat{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:14px 8px;text-align:center;backdrop-filter:blur(4px);transition:background 0.3s}
-.hero-stat:hover{background:rgba(255,255,255,0.1)}
-.hero-stat .val{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.1rem,2.5vw,1.6rem);font-weight:400}
-.hero-stat .lbl{font-size:0.6rem;opacity:0.55;margin-top:3px;text-transform:uppercase;letter-spacing:0.08em;font-weight:500}
-.hero-stat .val.bad{color:#e8a87c}.hero-stat .val.good{color:#7fd8a6}
-.tab-nav{display:flex;justify-content:center;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
-.tab-btn{padding:13px 16px;font-size:0.72rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.25s;text-transform:uppercase;letter-spacing:0.05em}
-.tab-btn:hover{color:var(--text);background:rgba(0,0,0,0.02)}
-.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
+.hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.4rem,4vw,2.2rem);font-weight:400;margin-bottom:.5rem;position:relative;letter-spacing:-0.01em}
+.hero .sub{opacity:.65;font-size:.78rem;margin-bottom:1.2rem;position:relative;max-width:640px;margin-left:auto;margin-right:auto}
+.hero .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;max-width:860px;margin:0 auto;position:relative}
+.hero .stat-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:12px 8px;min-width:auto}
+.hero .stat-box .num{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.1rem,2.5vw,1.5rem);font-weight:400;color:#e8a87c}
+.hero .stat-box .lbl{font-size:.58rem;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.5);margin-top:.2rem;font-weight:500}
+nav{display:flex;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.04);justify-content:center}
+nav button{padding:13px 16px;font-size:.72rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);white-space:nowrap;border-bottom:2px solid transparent;transition:all .25s;text-transform:uppercase;letter-spacing:.05em;font-family:'DM Sans',system-ui,sans-serif}
+nav button:hover{color:var(--text);background:rgba(0,0,0,.02)}
+nav button.active{color:var(--navy);border-bottom-color:var(--gold)}
 .container{max-width:1200px;margin:0 auto;padding:24px}
-.tab-content{display:none;animation:fadeUp 0.35s ease}.tab-content.active{display:block}
+.tab{display:none;animation:fadeUp .35s ease}.tab.active{display:block}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.section-title{font-family:'DM Serif Display',Georgia,serif;font-size:1.3rem;font-weight:400;margin-bottom:16px;color:var(--navy)}
-.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:22px}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.03);transition:box-shadow 0.3s,transform 0.3s}
-.stat-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.07);transform:translateY(-2px)}
-.stat-card .label{font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px}
-.stat-card .value{font-family:'DM Serif Display',Georgia,serif;font-size:1.8rem;font-weight:400;line-height:1.1}
-.stat-card .value.red{color:var(--red)}.stat-card .value.green{color:var(--green)}.stat-card .value.blue{color:var(--blue)}.stat-card .value.amber{color:var(--amber)}.stat-card .value.purple{color:var(--purple)}
-.stat-card .sub{font-size:0.68rem;color:var(--muted);margin-top:4px}
-.alert{background:var(--red-bg);border:1px solid rgba(192,57,43,0.15);border-radius:12px;padding:20px;margin-bottom:22px;border-left:4px solid var(--red)}
-.alert.blue{background:var(--blue-bg);border-color:rgba(26,68,128,0.15);border-left-color:var(--blue)}
-.alert.amber{background:var(--amber-bg);border-color:rgba(184,134,11,0.2);border-left-color:var(--amber)}
-.alert h4{color:var(--red);font-size:0.85rem;margin-bottom:10px;font-weight:700}
-.alert.blue h4{color:var(--blue)}.alert.amber h4{color:var(--amber)}
-.alert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px}
-.alert-item{font-size:0.78rem;color:var(--text);padding:4px 0;line-height:1.5}
-.alert-item strong{color:var(--red)}.alert.blue .alert-item strong{color:var(--blue)}.alert.amber .alert-item strong{color:var(--amber)}
-.chart-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:14px;margin-bottom:22px}
-.chart-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
-.chart-card h3{font-size:0.82rem;font-weight:700;margin-bottom:12px;color:var(--navy)}
-.chart-area{position:relative;height:260px}
-.data-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:22px;overflow-x:auto;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
-.data-card h3{font-size:0.85rem;font-weight:700;margin-bottom:12px;color:var(--navy)}
-.data-table{width:100%;border-collapse:collapse;font-size:0.78rem}
-.data-table th{text-align:left;padding:9px 12px;border-bottom:2px solid var(--navy);font-weight:700;color:var(--navy);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em}
-.data-table td{padding:9px 12px;border-bottom:1px solid var(--border)}
-.data-table tr:hover{background:rgba(15,41,66,0.02)}
-.data-table .highlight{color:var(--red);font-weight:700}.data-table .good{color:var(--green);font-weight:600}
-.info-box{background:var(--blue-bg);border:1px solid rgba(26,68,128,0.12);border-radius:12px;padding:20px;margin-bottom:22px;border-left:4px solid var(--blue)}
-.info-box h4{color:var(--blue);font-size:0.85rem;margin-bottom:8px;font-weight:700}
-.info-box p{font-size:0.78rem;color:var(--text);line-height:1.65}
-.source{font-size:0.65rem;color:var(--muted);margin-top:6px;font-style:italic}
-.mega-card{background:var(--navy);border-radius:14px;padding:32px 36px;margin-bottom:24px;display:grid;grid-template-columns:1.5fr 1fr;gap:40px;align-items:center;color:#fff}
-.mega-card .big-val{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(2.5rem,6vw,4rem);line-height:1;color:#e8a87c;letter-spacing:-1px}
-.mega-card .mega-label{font-size:0.65rem;letter-spacing:2px;opacity:0.5;text-transform:uppercase;font-weight:600;margin-bottom:8px}
-.mega-card .mega-desc{font-size:0.85rem;opacity:0.75;margin-top:12px;line-height:1.6}
-.mega-box{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;text-align:center}
-.mega-box .box-val{font-family:'DM Serif Display',Georgia,serif;font-size:2rem;line-height:1.1;margin:6px 0}
-.mega-box .box-val.red{color:#fca5a5}
-.mega-box .box-val.green{color:#7fd8a6}
-.mega-box hr{border:none;height:1px;background:rgba(255,255,255,0.1);margin:16px 0}
-.bar-item{margin-bottom:14px}
-.bar-head{display:flex;justify-content:space-between;margin-bottom:4px}
-.bar-label{font-size:0.75rem;color:var(--muted)}
-.bar-val{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:0.8rem}
-.bar-val.red{color:var(--red)}.bar-val.green{color:var(--green)}
-.bar-track{height:10px;background:var(--border);border-radius:5px;overflow:hidden;position:relative}
-.bar-fill{height:100%;border-radius:5px;transition:width 1s ease}
-.bar-fill.red{background:var(--red)}.bar-fill.green{background:var(--green)}
-.bar-threshold{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--navy);border-radius:2px}
-.threshold-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:20px 0}
-.threshold-item{text-align:center;padding:16px 10px;background:var(--card);border:1px solid var(--border);border-radius:10px}
-.threshold-item .tl{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:4px}
-.threshold-item .tv{font-family:'DM Serif Display',Georgia,serif;font-size:1.1rem;color:var(--red)}
-.afford-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
-.afford-card{padding:24px;border-radius:12px;text-align:center;border:1px solid var(--border)}
-.afford-card.good{background:var(--green-bg);border-color:rgba(26,122,76,0.2)}
-.afford-card.mid{background:var(--amber-bg);border-color:rgba(184,134,11,0.2)}
-.afford-card.bad{background:var(--red-bg);border-color:rgba(192,57,43,0.2)}
-.afford-card .af-icon{font-size:2rem;margin-bottom:8px}
-.afford-card .af-label{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)}
-.afford-card .af-status{font-family:'DM Serif Display',Georgia,serif;font-size:1.2rem;margin:6px 0}
-.afford-card.good .af-status{color:var(--green)}.afford-card.mid .af-status{color:var(--amber)}.afford-card.bad .af-status{color:var(--red)}
-.afford-card .af-desc{font-size:0.72rem;color:var(--muted)}
-.verdict{border-radius:10px;padding:18px 20px;text-align:center;margin:16px 0}
-.verdict.red{background:linear-gradient(135deg,#7f1d1d,#991b1b);color:#fff}
-.verdict h3{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(0.95rem,2vw,1.3rem);font-weight:400}
-.verdict p{font-size:0.78rem;margin-top:4px;opacity:.85}
-footer{text-align:center;padding:32px 24px;color:var(--muted);font-size:0.72rem;border-top:1px solid var(--border);background:#fff;margin-top:30px}
-footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1px solid var(--gold)}
-@media(max-width:900px){.mega-card{grid-template-columns:1fr}}
-@media(max-width:768px){.hero-stats{grid-template-columns:repeat(3,1fr)}.chart-grid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.threshold-grid{grid-template-columns:repeat(3,1fr)}.afford-grid{grid-template-columns:1fr}}
-@media(max-width:480px){.hero-stats{grid-template-columns:repeat(2,1fr)}.stat-row{grid-template-columns:1fr}.threshold-grid{grid-template-columns:repeat(2,1fr)}}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 12px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.03);transition:box-shadow .3s,transform .3s}
+.kpi:hover{box-shadow:0 4px 16px rgba(0,0,0,.07);transform:translateY(-2px)}
+.kpi .val{font-family:'DM Serif Display',Georgia,serif;font-size:1.6rem;font-weight:400;line-height:1.1}
+.kpi .lbl{font-size:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:4px}
+.kpi.red .val{color:var(--red)}.kpi.blue .val{color:var(--blue)}.kpi.green .val{color:var(--green)}.kpi.orange .val,.kpi.yellow .val{color:var(--amber)}.kpi.purple .val{color:var(--purple)}
+.grid{display:grid;gap:14px;margin-bottom:22px}.grid-2{grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}.grid-3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.card.full{grid-column:1/-1}
+.card h3{font-size:.82rem;font-weight:700;color:var(--navy);margin-bottom:10px}
+.card .note{font-size:.66rem;color:var(--muted);margin:-6px 0 10px}
+.chart-wrap{position:relative;height:280px}.chart-wrap.tall{height:360px}.chart-wrap.short{height:240px}.chart-wrap.xtall{height:440px}
+.callout{background:var(--blue-bg);border:1px solid rgba(26,68,128,.12);border-radius:12px;padding:16px 18px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start;border-left:4px solid var(--blue)}
+.callout.red,.callout.warn{background:var(--red-bg);border-left-color:var(--red);border-color:rgba(192,57,43,.12)}
+.callout.amber{background:var(--amber-bg);border-left-color:var(--amber);border-color:rgba(184,134,11,.15)}
+.callout .ico{font-size:1.1rem;flex-shrink:0}
+.callout p,.callout .text{font-size:.78rem;color:var(--text);line-height:1.6}
+.callout a{color:var(--navy);font-weight:600}
+.insight{margin-top:12px;padding:12px 14px;background:var(--surface2);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;font-size:.76rem;line-height:1.6;color:var(--text)}
+.insight strong{color:var(--navy)}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.62rem;font-weight:700;letter-spacing:.03em;white-space:nowrap}
+.badge.red{background:var(--red-bg);color:var(--red)}
+.badge.green{background:var(--green-bg);color:var(--green)}
+.badge.yellow,.badge.amber{background:var(--amber-bg);color:var(--amber)}
+.badge.blue{background:var(--blue-bg);color:var(--blue)}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.78rem}
+th{background:rgba(15,41,66,.04);padding:10px 14px;text-align:left;font-weight:700;color:var(--navy);border-bottom:2px solid var(--navy);font-size:.65rem;text-transform:uppercase;letter-spacing:.08em}
+td{padding:10px 14px;border-bottom:1px solid var(--border)}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+tr:hover{background:rgba(15,41,66,.02)}
+.footer{text-align:center;padding:32px 24px;color:var(--muted);font-size:.72rem;border-top:1px solid var(--border);margin-top:30px;background:#fff}
+.footer a{color:var(--navy);text-decoration:none;font-weight:600;border-bottom:1px solid var(--gold)}.footer a:hover{color:var(--gold)}
+@media(max-width:768px){.hero .stat-row{grid-template-columns:repeat(2,1fr)}.grid-2,.grid-3{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}.container{padding:16px}}
+@media(max-width:480px){.hero .stat-row{grid-template-columns:repeat(2,1fr)}.kpi-grid{grid-template-columns:1fr}nav button{padding:10px 10px;font-size:.65rem}}
+
 </style>
 </head>
 <body>
+
 <div class="hero">
-  <h1>Massachusetts is Unaffordable</h1>
-  <p class="sub">A data-driven analysis of the state's employment, housing, and cost-of-living crisis — built exclusively from official government sources.</p>
-  <div class="hero-stats">
-    <div class="hero-stat"><div class="val bad"><span id="heroUnemp">—</span></div><div class="lbl">Unemployment <span id="heroUnempMo"></span></div></div>
-    <div class="hero-stat"><div class="val bad">#2</div><div class="lbl">Cost of Living</div></div>
-    <div class="hero-stat"><div class="val bad">$638K</div><div class="lbl">Median Home</div></div>
-    <div class="hero-stat"><div class="val bad"><span id="heroElecPrem">—</span></div><div class="lbl">Electricity vs Nat'l</div></div>
-    <div class="hero-stat"><div class="val bad">55%</div><div class="lbl">Short of "Comfortable"</div></div>
-  </div>
+<h1>What It Costs to Live in Massachusetts</h1>
+<p class="sub">Massachusetts is not uniformly expensive. This is what actually costs more, where in the state it costs more, and what a household has to earn to cover it.</p>
+<div class="stat-row" id="heroStats"></div>
 </div>
-<nav class="tab-nav">
-  <button class="tab-btn active" onclick="switchTab('overview',this)">Overview</button>
-  <button class="tab-btn" onclick="switchTab('employment',this)">Employment</button>
-  <button class="tab-btn" onclick="switchTab('housing',this)">Housing</button>
-  <button class="tab-btn" onclick="switchTab('electricity',this)">⚡ Electricity</button>
-  <button class="tab-btn" onclick="switchTab('inflation',this)">Inflation</button>
-  <button class="tab-btn" onclick="switchTab('income',this)">Income</button>
-  <button class="tab-btn" onclick="switchTab('afford',this)">Affordability</button>
+
+<nav>
+<button class="active" onclick="showTab('real',this)">The Real Picture</button>
+<button onclick="showTab('costs',this)">What Costs More</button>
+<button onclick="showTab('geo',this)">Across the State</button>
+<button onclick="showTab('need',this)">What It Takes</button>
 </nav>
+
 <div class="container">
 
-<!-- OVERVIEW -->
-<div id="overview" class="tab-content active">
-  <div class="mega-card">
-    <div>
-      <div class="mega-label">The Bottom Line</div>
-      <div class="big-val">$313,747</div>
-      <div class="mega-desc">Annual income needed for a family of 4 to live "comfortably" in Massachusetts — the highest threshold in the entire nation.</div>
-    </div>
-    <div class="mega-box">
-      <div class="mega-label" style="color:rgba(255,255,255,0.5)">Median Family Income</div>
-      <div class="box-val green">$140,309</div>
-      <hr>
-      <div class="mega-label" style="color:rgba(255,255,255,0.5)">Shortfall</div>
-      <div class="box-val red">−$173,438</div>
-      <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:6px">Only 45% of what's needed</div>
-    </div>
-  </div>
-  <div class="chart-grid">
-    <div class="chart-card"><h3>Unemployment Trend — MA vs US</h3><div class="chart-area"><canvas id="c1"></canvas></div><div class="source">Source: BLS LAUS, 2019–2025</div></div>
-    <div class="chart-card"><h3>Cost of Living Premium (Index, US = 100)</h3><div class="chart-area"><canvas id="c2"></canvas></div><div class="source">Source: BEA Regional Price Parities</div></div>
-  </div>
+<!-- ═══ THE REAL PICTURE ═══ -->
+<div class="tab active" id="real">
+<div class="kpi-grid" id="kpiReal"></div>
+<div class="callout">
+<span class="ico">&#9878;</span>
+<div class="text"><strong>The headline claim, tested.</strong> A high price level only bites if incomes do not keep up with it. The BEA publishes both halves &mdash; a price level for every state (Regional Price Parities, US&nbsp;=&nbsp;100) and per-capita personal income deflated by that same price level. Comparing them is the cleanest available test of whether Massachusetts residents are, on average, behind.</div>
+</div>
+<div class="grid grid-2">
+<div class="card full">
+<h3>Price Level vs Income &mdash; All 50 States</h3>
+<p class="note">Right of 100 means things cost more than the national average; higher up means people earn more. States in the top-right earn their way past their own cost of living &mdash; states in the bottom-right do not.</p>
+<div class="chart-wrap tall"><canvas id="rScatter"></canvas></div>
+<div class="insight" id="insReal"></div>
+</div>
+<div class="card">
+<h3>Per-Capita Income &mdash; Before and After Adjusting for Prices</h3>
+<p class="note">Top ten states by nominal income, with the same states' price-adjusted income beside them.</p>
+<div class="chart-wrap tall"><canvas id="rIncome"></canvas></div>
+</div>
+<div class="card">
+<h3>Massachusetts Price Level by Category</h3>
+<p class="note">US = 100. These are the only five categories the BEA publishes.</p>
+<div class="chart-wrap tall"><canvas id="rCats"></canvas></div>
+</div>
+</div>
 </div>
 
-<!-- EMPLOYMENT -->
-<div id="employment" class="tab-content">
-  <h2 class="section-title">Employment Crisis</h2>
-  <!-- ANCHORED to May of 2026 (BLS LAUS, state series via FRED). This page holds
-       no 50-state series, so a live rank cannot be derived here -- it is stated as
-       a fact about a month instead, and the counts are given rather than a "worse
-       than N% of states" superlative that inverts the moment the data moves.
-       It replaces "ranks 44th -- worse than 86% of states", which was false: MA
-       was 4.5% and 32 of the other 50 states + DC were LOWER, not higher.
-       "In May of 2026" is deliberate, NOT a typo -- do not tidy it to the usual
-       abbreviated form. update-affordability-dashboard.py rewrites the FIRST
-       /Mmm 20NN/ literal it finds in this file to the latest EIA period, and the
-       short form of this date would match it. -->
-  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">In May of 2026, Massachusetts unemployment was 4.5%. Of the 50 other states and DC, 32 were lower, 15 were higher and 2 were level.</p>
-  <div class="stat-row">
-    <!-- The updater rewrites this card's rate AND its month label together; keep the
-         markup shape (label / value / sub) exactly as-is or its anchor stops matching. -->
-    <div class="stat-card"><div class="label">Unemployment</div><div class="value red">4.4%</div><div class="sub">June 2026</div></div>
-    <div class="stat-card"><div class="label">States Below MA</div><div class="value red">32 of 50</div><div class="sub">+ DC · lower rate · May of 2026</div></div>
-    <div class="stat-card"><div class="label">Net Jobs 2025</div><div class="value red">−4,500</div><div class="sub">Declining employment</div></div>
-    <div class="stat-card"><div class="label">Layoffs YTD</div><div class="value amber">323K</div><div class="sub">+13.7% vs 2024</div></div>
-  </div>
-  <div class="alert"><h4>⚠️ Critical Employment Indicators</h4><div class="alert-grid">
-    <div class="alert-item">MA was the <strong>only state</strong> to extend benefits to 30 weeks</div>
-    <div class="alert-item">September 2025: <strong>worst month since COVID</strong></div>
-    <div class="alert-item">Graduates: <strong>5.76%</strong> unemployment, <strong>34%</strong> underemployed</div>
-    <div class="alert-item">Insured unemployment: <strong>2.7%</strong> (5th highest nationally)</div>
-  </div></div>
-  <div class="chart-grid">
-    <div class="chart-card"><h3>State Unemployment Rankings</h3><div class="chart-area"><canvas id="c3"></canvas></div><div class="source">Source: BLS LAUS, May of 2026</div></div>
-    <div class="chart-card"><h3>MA vs US Historical Trend</h3><div class="chart-area"><canvas id="c4"></canvas></div><div class="source">Source: BLS LAUS, 2019–2025</div></div>
-  </div>
+<!-- ═══ WHAT COSTS MORE ═══ -->
+<div class="tab" id="costs">
+<div class="kpi-grid" id="kpiCosts"></div>
+<div class="grid grid-2">
+<div class="card full">
+<h3>Where Massachusetts Ranks on Each Category</h3>
+<p class="note">Rank out of 50 states, 1 = most expensive.</p>
+<div class="table-wrap"><table id="cTable"></table></div>
+<div class="insight" id="insCosts"></div>
+</div>
+<div class="card">
+<h3>Massachusetts vs Neighbouring and Peer States</h3>
+<div class="chart-wrap tall"><canvas id="cPeers"></canvas></div>
+</div>
+<div class="card">
+<h3>Has It Got Worse? Massachusetts Price Level Over Time</h3>
+<p class="note">Each category indexed to the national average of the same year, so a rising line means Massachusetts is pulling away from the rest of the country.</p>
+<div class="chart-wrap tall"><canvas id="cTrend"></canvas></div>
+</div>
+</div>
 </div>
 
-<!-- HOUSING -->
-<div id="housing" class="tab-content">
-  <h2 class="section-title">Housing Unattainability</h2>
-  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">The median MA family cannot afford the median MA home. Prices have risen 55% since 2019.</p>
-  <div class="stat-row">
-    <div class="stat-card"><div class="label">Median Price</div><div class="value red">$638K</div><div class="sub">Statewide · +3.7% YoY</div></div>
-    <div class="stat-card"><div class="label">Greater Boston</div><div class="value red">$800K</div><div class="sub">Metro median</div></div>
-    <div class="stat-card"><div class="label">Income Needed</div><div class="value amber">$171K</div><div class="sub">28% DTI rule</div></div>
-    <div class="stat-card"><div class="label">Housing Deficit</div><div class="value blue">222K</div><div class="sub">Units needed</div></div>
-  </div>
-  <div class="chart-grid">
-    <div class="chart-card"><h3>MA Median Home Price Trend</h3><div class="chart-area"><canvas id="c5"></canvas></div><div class="source">Source: Warren Group, 2019–2025</div></div>
-    <div class="chart-card"><h3>Regional Price Comparison ($K)</h3><div class="chart-area"><canvas id="c6"></canvas></div><div class="source">Source: MLS PIN, Warren Group</div></div>
-  </div>
-  <div class="data-card"><h3>Affordability Calculation</h3>
-    <table class="data-table"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody>
-      <tr><td>Median Home</td><td>$638,000</td></tr>
-      <tr><td>Down Payment (20%)</td><td>$127,600</td></tr>
-      <tr><td>Monthly @ 6.1%</td><td>$3,996</td></tr>
-      <tr><td>Income Needed</td><td>$171,257</td></tr>
-      <tr><td>Median HH Income</td><td>$103,960</td></tr>
-      <tr><td class="highlight">Gap</td><td class="highlight">−$67,297 (39% short)</td></tr>
-    </tbody></table>
-  </div>
+<!-- ═══ ACROSS THE STATE ═══ -->
+<div class="tab" id="geo">
+<div class="kpi-grid" id="kpiGeo"></div>
+<div class="grid grid-2">
+<div class="card full">
+<h3>Price Level by Massachusetts Metro Area</h3>
+<p class="note">BEA Regional Price Parities for every metro area covering part of Massachusetts. US = 100.</p>
+<div class="chart-wrap tall"><canvas id="gMetro"></canvas></div>
+<div class="insight" id="insGeo"></div>
+</div>
+<div class="card">
+<h3>Housing &mdash; the Spread</h3>
+<div class="chart-wrap"><canvas id="gHousing"></canvas></div>
+</div>
+<div class="card">
+<h3>Utilities &mdash; the Flat Line</h3>
+<div class="chart-wrap"><canvas id="gUtil"></canvas></div>
+</div>
+</div>
 </div>
 
-<!-- ELECTRICITY -->
-<div id="electricity" class="tab-content">
-  <h2 class="section-title">⚡ Electricity Crisis</h2>
-  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">Massachusetts residential electricity runs <span id="elecPremProse">—</span> above the national average: <span id="elecMaProse">—</span> vs <span id="elecUsProse">—</span> per kWh.</p>
-  <div class="mega-card" style="background:linear-gradient(135deg,#78350f,var(--navy))">
-    <div>
-      <div class="mega-label">Massachusetts Electricity Rate</div>
-      <div class="big-val"><span id="elecMaBig">—</span></div>
-      <div class="mega-desc">Per kilowatt-hour — <strong><span id="elecPremMega">—</span> higher</strong> than the national average of <span id="elecUsMega">—</span>/kWh. <span id="elecRankMega">—</span></div>
-    </div>
-    <div class="mega-box">
-      <div class="mega-label" style="color:rgba(255,255,255,0.5)">National Average</div>
-      <div class="box-val green"><span id="elecUsBox">—</span></div>
-      <hr>
-      <div class="mega-label" style="color:rgba(255,255,255,0.5)">MA Premium</div>
-      <div class="box-val red"><span id="elecPremBox">—</span></div>
-      <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);margin-top:6px">Extra <span id="elecExtraMo">—</span>/month for typical household</div>
-    </div>
-  </div>
-  <div class="stat-row">
-    <!-- "Feb 2026" here is the updater's EIA period anchor: it rewrites this label to
-         whatever month EIA last published, alongside the rate. Keep it abbreviated.
-         Every OTHER month label on this tab is deliberately spelled out in full
-         ("February 2026") so the updater's /Mmm 20NN/ search cannot re-date data it
-         does not actually refresh. -->
-    <div class="stat-card"><div class="label">Residential Rate</div><div class="value red"><span id="elecMaCard">—</span></div><div class="sub">per kWh (May 2026)</div></div>
-    <div class="stat-card"><div class="label">Industrial Rate</div><div class="value red"><span id="elecIndCard">—</span></div><div class="sub">+134% vs US</div></div>
-    <div class="stat-card"><div class="label">Rate Growth</div><div class="value red"><span id="elecGrowth">—</span></div><div class="sub">Since 2014 · US <span id="elecGrowthUs">—</span></div></div>
-    <div class="stat-card"><div class="label">Annual Extra Cost</div><div class="value amber"><span id="elecExtraYr">—</span></div><div class="sub">vs national avg</div></div>
-  </div>
-  <div class="alert amber"><h4>🏆 Highest Residential Rates — Massachusetts vs Peer States</h4><div class="alert-grid" id="elecRankList"></div><div class="source"><span id="elecNeNote">—</span> · Peer-state rates: EIA Table 5.6.A, February 2026; Massachusetts tracks the latest EIA release.</div></div>
-  <div class="chart-grid">
-    <div class="chart-card"><h3>MA vs US Rates (2014–latest)</h3><div class="chart-area"><canvas id="cElec1"></canvas></div><div class="source">Source: EIA Electric Power Monthly · final point is the latest EIA release</div></div>
-    <div class="chart-card"><h3>Massachusetts vs Peer States</h3><div class="chart-area"><canvas id="cElec2"></canvas></div><div class="source">Source: EIA Table 5.6.A · peer states as of February 2026</div></div>
-  </div>
-  <div class="chart-grid">
-    <div class="chart-card"><h3>Monthly Bill Breakdown</h3><div class="chart-area"><canvas id="cElec3"></canvas></div><div class="source">Source: Eversource rate schedules</div></div>
-    <div class="chart-card"><h3>Extra Annual Cost vs US Average</h3><div class="chart-area"><canvas id="cElec4"></canvas></div><div class="source">Source: EIA, 2014–2026</div></div>
-  </div>
-  <div class="data-card"><h3>Real MA Electric Bills — Policy Charges at 17%</h3>
-    <table class="data-table"><thead><tr><th>Bill Total</th><th>Policy Charge (17%)</th><th>Location</th><th>Source</th></tr></thead><tbody>
-      <tr><td>$427</td><td class="highlight">$73/month</td><td>Easthampton 2BR apt</td><td>WCVB</td></tr>
-      <tr><td>$709</td><td class="highlight">$121/month</td><td>Billerica home</td><td>WBUR</td></tr>
-      <tr><td>$853</td><td class="highlight">$145/month</td><td>Stoughton (with solar!)</td><td>Boston Globe</td></tr>
-    </tbody></table>
-  </div>
-  <div class="alert"><h4>🚨 Recent Rate Increases</h4><div class="alert-grid">
-    <div class="alert-item">Eversource electricity: <strong>+12.3%</strong> (Aug 1, 2025)</div>
-    <div class="alert-item">Eversource electricity: <strong>+5.01%</strong> (Feb 1, 2026)</div>
-    <div class="alert-item">National Grid gas delivery: <strong>+63%</strong> (Nov 1, 2024)</div>
-    <div class="alert-item">Eversource gas delivery: <strong>+24-28%</strong> (Nov 1, 2024)</div>
-  </div></div>
+<!-- ═══ WHAT IT TAKES ═══ -->
+<div class="tab" id="need">
+<div class="kpi-grid" id="kpiNeed"></div>
+<div class="grid grid-2">
+<div class="card full">
+<h3>Income Required Before Tax, by Household</h3>
+<p class="note">MIT Living Wage Calculator for Massachusetts &mdash; a bare-adequacy budget, not a comfortable one. The dashed line is the state median household income.</p>
+<div class="chart-wrap xtall"><canvas id="nWage"></canvas></div>
+<div class="insight" id="insNeed"></div>
+</div>
+<div class="card full">
+<h3>Where the Money Goes &mdash; Annual Budget by Household</h3>
+<div class="chart-wrap tall"><canvas id="nBudget"></canvas></div>
+<div class="insight" id="insBudget"></div>
+</div>
+<div class="card full">
+<h3>Typical Pay by Occupation vs What a Single Adult Needs</h3>
+<div class="chart-wrap xtall"><canvas id="nOcc"></canvas></div>
+</div>
+</div>
 </div>
 
-<!-- INFLATION -->
-<div id="inflation" class="tab-content">
-  <h2 class="section-title">Inflation Squeeze</h2>
-  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px" id="inflationIntro">—</p>
-  <div class="stat-row">
-    <div class="stat-card"><div class="label">Northeast CPI</div><div class="value red"><span id="neCpiYoY">—</span></div><div class="sub"><span id="neCpiYoYMo">—</span></div></div>
-    <div class="stat-card"><div class="label">Core Inflation</div><div class="value amber">2.5%</div><div class="sub">Ex food & energy</div></div>
-    <div class="stat-card"><div class="label">Cumulative</div><div class="value red"><span id="neCpiCum">—</span></div><div class="sub">Since <span id="neCpiCumBase">—</span></div></div>
-    <div class="stat-card"><div class="label">Electricity</div><div class="value amber">+6.3%</div><div class="sub">YoY increase</div></div>
-  </div>
-  <div class="chart-grid">
-    <div class="chart-card"><h3>NE vs National Inflation</h3><div class="chart-area"><canvas id="c7"></canvas></div><div class="source">Source: BLS CPI, 2020–2026</div></div>
-    <div class="chart-card"><h3>Real Wage Impact</h3>
-      <div style="padding:10px 0">
-        <div style="margin-bottom:16px"><div class="label" style="font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)">Nominal Wage Growth</div><div style="font-family:'DM Serif Display';font-size:2.5rem;color:var(--green)"><span id="wageNominal">—</span></div><div style="font-size:0.68rem;color:var(--muted)">MA private-sector hourly pay · <span id="wageWindow">—</span></div></div>
-        <div style="margin-bottom:16px"><div class="label" style="font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)">CPI Increase</div><div style="font-family:'DM Serif Display';font-size:2.5rem;color:var(--red)"><span id="wageCpi">—</span></div><div style="font-size:0.68rem;color:var(--muted)">Northeast prices · <span id="wageCpiWindow">—</span></div></div>
-        <div style="border-top:2px solid var(--border);padding-top:16px"><div class="label" style="font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted)">Real Wage Change</div><div style="font-family:'DM Serif Display';font-size:2.5rem" id="wageRealVal">—</div><div style="font-size:0.78rem;color:var(--muted);margin-top:4px" id="wageRealNote">—</div></div>
-      </div>
-      <div class="source" id="wageSource">—</div>
-    </div>
-  </div>
+<div class="callout amber">
+<span class="ico">&#128279;</span>
+<div class="text"><strong>Looking for employment, housing or electricity detail?</strong> This page used to carry thin versions of all three. They now live on the dashboards that update daily and go far deeper:
+<a href="employment-dashboard.html">Employment</a> (BLS, JOLTS, sectors, demographics) &middot;
+<a href="ma-housing-dashboard.html">MA Housing</a> (MLS PIN, Warren Group) &middot;
+<a href="energy-dashboard.html">Energy</a> (EIA rates, bill composition, mandates) &middot;
+<a href="tax-budget-dashboard.html">Tax &amp; Budget</a> (income, migration, property tax).</div>
 </div>
 
-<!-- INCOME -->
-<div id="income" class="tab-content">
-  <h2 class="section-title">Income by Occupation</h2>
-  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">Despite having the highest median income nationally, 7 of 15 common occupations pay below the living wage.</p>
-  <div class="stat-row">
-    <div class="stat-card"><div class="label">Median HH</div><div class="value green">$103,960</div><div class="sub">#1 nationally</div></div>
-    <div class="stat-card"><div class="label">Living Wage</div><div class="value blue">$60,080</div><div class="sub">Single adult</div></div>
-    <div class="stat-card"><div class="label">Below Threshold</div><div class="value red">7 of 15</div><div class="sub">Common jobs</div></div>
-    <div class="stat-card"><div class="label">Real Growth</div><div class="value amber">+4.1%</div><div class="sub">vs 5.5% national</div></div>
-  </div>
-  <div class="data-card"><h3>Salary vs Living Wage ($60,080)</h3><div id="salaryBars"></div><div class="source">Source: BLS OES, May 2024</div></div>
-</div>
+</div><!-- container -->
 
-<!-- AFFORDABILITY -->
-<div id="afford" class="tab-content">
-  <h2 class="section-title">The Affordability Crisis</h2>
-  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">The gap between what families need and what they earn continues to widen every year.</p>
-  <div class="chart-grid">
-    <div class="chart-card"><h3>Income vs Need</h3><div class="chart-area"><canvas id="c8"></canvas></div></div>
-    <div class="chart-card"><h3>Consumption vs Income Growth (%)</h3><div class="chart-area"><canvas id="c9"></canvas></div></div>
-  </div>
-  <div class="data-card"><h3>Living Wage Thresholds</h3>
-    <div class="threshold-grid">
-      <div class="threshold-item"><div class="tl">Single Adult</div><div class="tv">$60,080</div></div>
-      <div class="threshold-item"><div class="tl">Couple</div><div class="tv">$80,602</div></div>
-      <div class="threshold-item"><div class="tl">Single + Child</div><div class="tv">$114,708</div></div>
-      <div class="threshold-item"><div class="tl">Couple + Child</div><div class="tv">$124,849</div></div>
-      <div class="threshold-item"><div class="tl">Couple + 2 Kids</div><div class="tv">$156,857</div></div>
-    </div>
-    <div class="source">Source: MIT Living Wage Calculator (2025)</div>
-  </div>
-  <div class="afford-grid">
-    <div class="afford-card good"><div class="af-icon">✓</div><div class="af-label">Top 10%</div><div class="af-status">Comfortable</div><div class="af-desc">Housing, savings, and discretionary spending</div></div>
-    <div class="afford-card mid"><div class="af-icon">⚠️</div><div class="af-label">Median (50th)</div><div class="af-status">Treading Water</div><div class="af-desc">Meeting basics with no margin</div></div>
-    <div class="afford-card bad"><div class="af-icon">✗</div><div class="af-label">Bottom 60%</div><div class="af-status">Drowning</div><div class="af-desc">Cannot afford basic expenses</div></div>
-  </div>
-  <div class="verdict red" style="margin-top:22px"><h3>$313,747 to live comfortably. Median family income: $140,309. The math doesn't work.</h3><p>Massachusetts is the most expensive state to raise a family — and the gap is growing.</p></div>
-</div>
-
-</div><!-- /container -->
-
-<footer>
-  <a href="index.html">← Back to Massachusetts Data Hub</a><br>
-  <strong>Sources:</strong> BLS (LAUS, CES, OES, CPI) · BEA (SAINC, SAPCE, RPP) · Census ACS · Warren Group · MIT Living Wage · CHIA · EIA<br>
-  <a href="https://x.com/DuncanBurnsMA">@DuncanBurnsMA</a> · <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">GitHub</a> · Last Updated: August 01, 2026 · #mapoli
+<footer class="footer">
+Sources: <a href="https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area" target="_blank" rel="noopener">BEA Regional Price Parities</a> (state and metro, all items and five categories) &middot;
+BEA real per-capita personal income (chained 2017 dollars) &middot; BEA per-capita personal income via FRED &middot;
+<a href="https://livingwage.mit.edu/states/25" target="_blank" rel="noopener">MIT Living Wage Calculator</a> &middot; Census ACS median income.<br>
+<span id="vintage"></span> &middot; Rebuilt from source data by <code>update-cost-of-living.py</code>. &larr; <a href="index.html">Back to Massachusetts Data Hub</a>
 </footer>
 
+<script id="col-data" type="application/json">{"meta":{"generated":"2026-08-07T19:47:36Z","rpp_year":"2024","sources":{"rpp":"BEA Regional Price Parities (SARPP / MARPP)","real_income":"BEA Real per-capita personal income (SARPI, chained 2017 dollars)","nominal_income":"BEA per-capita personal income via FRED {ST}PCPI","living_wage":"MIT Living Wage Calculator, Massachusetts"}},"years":["2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020","2021","2022","2023","2024"],"rpp":{"AL":{"all":88.823,"goods":96.399,"housing":61.785,"utilities":84.643,"other":96.711},"AK":{"all":102.359,"goods":106.319,"housing":93.784,"utilities":119.021,"other":102.208},"AZ":{"all":100.677,"goods":95.361,"housing":106.804,"utilities":92.317,"other":102.808},"AR":{"all":86.937,"goods":93.597,"housing":58.203,"utilities":74.731,"other":95.312},"CA":{"all":110.72,"goods":106.098,"housing":154.346,"utilities":158.899,"other":102.591},"CO":{"all":103.052,"goods":98.727,"housing":127.359,"utilities":84.971,"other":99.613},"CT":{"all":103.61,"goods":97.33,"housing":117.048,"utilities":146.495,"other":102.658},"DE":{"all":99.808,"goods":96.155,"housing":102.015,"utilities":103.81,"other":101.235},"FL":{"all":103.414,"goods":98.059,"housing":122.107,"utilities":90.074,"other":101.324},"GA":{"all":96.293,"goods":98.929,"housing":88.694,"utilities":92.814,"other":97.343},"HI":{"all":109.951,"goods":111.562,"housing":125.304,"utilities":190.178,"other":102.898},"ID":{"all":95.494,"goods":96.311,"housing":90.027,"utilities":70.444,"other":99.015},"IL":{"all":99.958,"goods":103.832,"housing":93.944,"utilities":84.952,"other":100.156},"IN":{"all":93.329,"goods":95.509,"housing":73.926,"utilities":85.545,"other":99.145},"IA":{"all":87.762,"goods":93.73,"housing":65.322,"utilities":83.274,"other":92.927},"KS":{"all":90.068,"goods":94.027,"housing":71.156,"utilities":88.438,"other":93.816},"KY":{"all":90.159,"goods":95.967,"housing":64.313,"utilities":75.313,"other":97.25},"LA":{"all":88.207,"goods":93.7,"housing":63.104,"utilities":71.463,"other":95.706},"ME":{"all":97.05,"goods":97.171,"housing":78.94,"utilities":135.189,"other":103.191},"MD":{"all":104.959,"goods":102.524,"housing":121.079,"utilities":110.86,"other":101.596},"MA":{"all":105.757,"goods":98.82,"housing":128.068,"utilities":152.07,"other":102.852},"MI":{"all":96.217,"goods":95.993,"housing":82.332,"utilities":100.15,"other":100.933},"MN":{"all":98.621,"goods":100.519,"housing":91.281,"utilities":90.836,"other":100.213},"MS":{"all":86.953,"goods":96.219,"housing":56.456,"utilities":78.415,"other":96.09},"MO":{"all":90.817,"goods":96.299,"housing":69.88,"utilities":79.406,"other":95.169},"MT":{"all":94.645,"goods":96.006,"housing":84.648,"utilities":72.254,"other":98.715},"NE":{"all":90.103,"goods":94.101,"housing":75.174,"utilities":75.604,"other":92.98},"NV":{"all":99.979,"goods":96.271,"housing":114.135,"utilities":90.51,"other":98.744},"NH":{"all":104.165,"goods":98.578,"housing":114.947,"utilities":133.663,"other":103.879},"NJ":{"all":108.805,"goods":107.066,"housing":134.292,"utilities":114.187,"other":103.529},"NM":{"all":92.212,"goods":96.144,"housing":73.611,"utilities":77.895,"other":98.54},"NY":{"all":107.921,"goods":107.254,"housing":122.168,"utilities":134.37,"other":104.067},"NC":{"all":94.326,"goods":96.621,"housing":81.364,"utilities":88.619,"other":98.186},"ND":{"all":88.959,"goods":95.701,"housing":71.421,"utilities":73.669,"other":91.158},"OH":{"all":92.774,"goods":93.67,"housing":73.012,"utilities":95.823,"other":98.947},"OK":{"all":87.843,"goods":93.778,"housing":62.763,"utilities":73.882,"other":95.458},"OR":{"all":103.361,"goods":105.261,"housing":108.628,"utilities":107.046,"other":100.298},"PA":{"all":97.572,"goods":99.357,"housing":85.068,"utilities":109.321,"other":99.762},"RI":{"all":102.28,"goods":97.165,"housing":105.62,"utilities":146.653,"other":102.84},"SC":{"all":93.749,"goods":96.339,"housing":80.49,"utilities":88.303,"other":98.284},"SD":{"all":88.586,"goods":95.473,"housing":67.642,"utilities":79.651,"other":91.899},"TN":{"all":91.87,"goods":96.247,"housing":79.07,"utilities":72.137,"other":95.142},"TX":{"all":97.057,"goods":98.083,"housing":96.503,"utilities":87.512,"other":97.081},"UT":{"all":98.864,"goods":96.446,"housing":107.814,"utilities":78.739,"other":98.959},"VT":{"all":97.958,"goods":97.274,"housing":86.502,"utilities":125.833,"other":101.586},"VA":{"all":101.104,"goods":100.368,"housing":106.799,"utilities":92.185,"other":100.233},"WA":{"all":107.013,"goods":104.359,"housing":125.979,"utilities":92.86,"other":103.873},"WV":{"all":89.497,"goods":96.539,"housing":54.241,"utilities":92.242,"other":99.94},"WI":{"all":94.095,"goods":94.31,"housing":79.312,"utilities":89.906,"other":99.501},"WY":{"all":92.691,"goods":95.368,"housing":71.127,"utilities":78.422,"other":100.428}},"ma_history":{"all":[106.047,105.455,104.772,104.747,104.488,103.298,104.533,105.086,108.161,107.406,107.422,107.151,109.101,106.698,109.431,107.675,105.757],"goods":[98.392,97.747,99.657,101.385,101.224,100.805,103.958,102.157,103.74,103.829,102.316,103.58,105.339,105.633,107.089,100.042,98.82],"housing":[126.542,130.261,129.092,128.622,129.313,129.121,129.893,130.005,130.539,130.6,128.633,130.075,134.737,129.006,128.547,130.144,128.068],"utilities":[150.037,142.576,114.169,120.237,127.42,115.454,109.978,117.737,133.16,148.837,151.656,150.386,162.333,155.839,151.323,166.124,152.07],"other":[104.767,103.273,102.005,100.903,100.341,98.755,99.355,101.021,104.943,103.285,104.263,102.894,103.429,100.852,104.877,105.02,102.852]},"real_income":{"AL":52216.0,"AK":60272.0,"AZ":52890.0,"AR":55219.0,"CA":63028.0,"CO":65223.0,"CT":74254.0,"DE":55185.0,"FL":57131.0,"GA":52952.0,"HI":52272.0,"ID":52816.0,"IL":60333.0,"IN":55562.0,"IA":60144.0,"KS":59172.0,"KY":52290.0,"LA":56789.0,"ME":57480.0,"MD":61111.0,"MA":71629.0,"MI":53569.0,"MN":62039.0,"MS":48465.0,"MO":57850.0,"MT":59203.0,"NE":65297.0,"NV":56503.0,"NH":64632.0,"NJ":63142.0,"NM":51121.0,"NY":64153.0,"NC":56310.0,"ND":65271.0,"OH":56232.0,"OK":58692.0,"OR":55451.0,"PA":58620.0,"RI":55878.0,"SC":52463.0,"SD":69153.0,"TN":58582.0,"TX":58219.0,"UT":55116.0,"VT":58893.0,"VA":61914.0,"WA":64421.0,"WV":50051.0,"WI":58273.0,"WY":75501.0},"nominal_income":{"AL":57251.0,"AK":76606.0,"AZ":66024.0,"AR":59172.0,"CA":86378.0,"CO":82625.0,"CT":95083.0,"DE":68177.0,"FL":73340.0,"GA":62875.0,"HI":71573.0,"ID":62346.0,"IL":74564.0,"IN":63980.0,"IA":65448.0,"KS":65975.0,"KY":58310.0,"LA":61667.0,"ME":68764.0,"MD":79486.0,"MA":93575.0,"MI":63945.0,"MN":75548.0,"MS":51948.0,"MO":64940.0,"MT":69220.0,"NE":72696.0,"NV":70104.0,"NH":83222.0,"NJ":84844.0,"NM":58345.0,"NY":84978.0,"NC":65598.0,"ND":72037.0,"OH":64587.0,"OK":63671.0,"OR":70940.0,"PA":70856.0,"RI":70743.0,"SC":60649.0,"SD":75499.0,"TN":66288.0,"TX":69762.0,"UT":67345.0,"VT":71505.0,"VA":77277.0,"WA":85512.0,"WV":55432.0,"WI":67799.0,"WY":86609.0},"metros":{"Barnstable":{"all":98.351,"goods":97.015,"housing":90.012,"utilities":158.45,"other":101.197},"Boston":{"all":108.266,"goods":99.651,"housing":148.424,"utilities":148.768,"other":103.603},"Pittsfield":{"all":95.106,"goods":97.015,"housing":73.452,"utilities":153.711,"other":101.197},"Providence-Warwick":{"all":101.773,"goods":97.116,"housing":103.851,"utilities":148.809,"other":102.275},"Springfield":{"all":96.061,"goods":97.015,"housing":75.781,"utilities":154.996,"other":101.197},"Worcester":{"all":102.523,"goods":97.015,"housing":113.001,"utilities":155.206,"other":101.197}},"living_wage":{"columns":["1 adult","1 adult, 1 child","1 adult, 2 children","1 adult, 3 children","2 adults (1 working)","2 adults (1 working), 1 child","2 adults (1 working), 2 children","2 adults (1 working), 3 children","2 adults (both working)","2 adults (both working), 1 child","2 adults (both working), 2 children","2 adults (both working), 3 children"],"hourly":[30.58,58.26,76.55,92.36,39.32,48.06,50.87,58.35,19.63,31.61,39.61,47.48],"minimum_wage":[15.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0,15.0],"poverty_wage":[7.67,10.4,13.13,15.87,10.4,13.13,15.87,18.6,5.2,6.57,7.93,9.3],"budget":{"food":[4944.0,7253.0,10867.0,14463.0,9064.0,11249.0,14469.0,17654.0,9064.0,11249.0,14469.0,17654.0],"child care":[0.0,23448.0,41712.0,51443.0,0.0,0.0,0.0,0.0,0.0,23448.0,41712.0,51443.0],"medical":[4097.0,10465.0,10655.0,10861.0,7365.0,11654.0,12039.0,12471.0,7365.0,11654.0,12039.0,12471.0],"housing":[23305.0,30181.0,30181.0,36618.0,24651.0,30181.0,30181.0,36618.0,24651.0,30181.0,30181.0,36618.0],"transportation":[8178.0,9464.0,11921.0,13717.0,9464.0,11921.0,13717.0,15357.0,9464.0,11921.0,13717.0,15357.0],"civic":[3456.0,5834.0,7694.0,8762.0,5834.0,7694.0,8762.0,9810.0,5834.0,7694.0,8762.0,9810.0],"internet & mobile":[2004.0,2004.0,2004.0,2004.0,2579.0,2579.0,2579.0,2579.0,2579.0,2579.0,2579.0,2579.0],"other":[4715.0,8573.0,9371.0,10204.0,8573.0,9598.0,10204.0,11424.0,8573.0,9598.0,10204.0,11424.0],"required annual income after taxes":[50697.0,97221.0,124404.0,148071.0,67530.0,84876.0,91951.0,105911.0,67530.0,108324.0,133663.0,157354.0],"annual taxes":[12913.0,23953.0,34819.0,44033.0,14262.0,15086.0,13849.0,15460.0,14130.0,23164.0,31117.0,40161.0],"required annual income before taxes":[63610.0,121175.0,159222.0,192104.0,81792.0,99961.0,105800.0,121371.0,81660.0,131488.0,164780.0,197514.0]},"occupations":[["Management",167440.0],["Business & Financial Operations",106290.0],["Computer & Mathematical",127930.0],["Architecture & Engineering",114700.0],["Life, Physical, & Social Science",106430.0],["Community & Social Service",67380.0],["Legal",174530.0],["Education, Training, & Library",80030.0],["Arts, Design, Entertainment, Sports, & Media",81680.0],["Healthcare Practitioners & Technical",116930.0],["Healthcare Support",44900.0],["Protective Service",68250.0],["Food Preparation & Serving Related",42040.0],["Building & Grounds Cleaning & Maintenance",47220.0],["Personal Care & Service",46570.0],["Sales & Related",63270.0],["Office & Administrative Support",57180.0],["Farming, Fishing, & Forestry",49850.0],["Construction & Extraction",79940.0],["Installation, Maintenance, & Repair",70210.0],["Production",53420.0],["Transportation & Material Moving",51470.0]]},"income":{"household":103960,"family":null,"vintage":2024,"source":"Census ACS via data/census-latest.json"}}</script>
 <script>
-const charts={};
-function safeChart(id,config){if(charts[id])charts[id].destroy();const ctx=document.getElementById(id);if(!ctx)return;charts[id]=new Chart(ctx,config);}
-function switchTab(tabId,btn){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById(tabId).classList.add('active');if(btn)btn.classList.add('active');initCharts(tabId);}
+const D = JSON.parse(document.getElementById('col-data').textContent);
 
-const R='#c0392b',G='#1a7a4c',B='#1a4480',A='#b8860b',P='#7e22ce',M='#d4d0ca';
+/* ── palette ─────────────────────────────────────────────────────────────── */
+const COL = {all:'#1a4480', goods:'#1a7a4c', housing:'#c0392b', utilities:'#b8860b', other:'#7e22ce'};
+const CAT = [['all','All items'],['goods','Goods'],['housing','Housing'],['utilities','Utilities'],['other','Other services']];
+const GC='#e8e5df', TXT='#7a756e', NEUTRAL='#8792a6';
+Chart.defaults.color=TXT; Chart.defaults.borderColor=GC;
+Chart.defaults.font.family="'DM Sans',sans-serif"; Chart.defaults.font.size=11;
+Chart.defaults.plugins.legend.labels.boxWidth=12; Chart.defaults.plugins.legend.labels.padding=14;
+Chart.defaults.responsive=true; Chart.defaults.maintainAspectRatio=false;
 
-const setTxt=(id,t)=>{const e=document.getElementById(id);if(e)e.textContent=t};
-const pct1=n=>(n>=0?'+':'−')+Math.abs(n).toFixed(1)+'%';
+const money=v=>'$'+Math.round(v).toLocaleString();
+const money0=v=>'$'+Math.round(v/1000)+'k';
+const f1=v=>v===null||v===undefined?'—':v.toFixed(1);
+const ord=n=>n+({1:'st',2:'nd',3:'rd'}[n%100>>0>10&&n%100<14?0:n%10]||'th');
 
-// ── Electricity: one source of truth ─────────────────────────────────────────
-// MA_ELEC / US_ELEC are the live EIA residential rates and the ONLY ¢-literals
-// left in this file. update-affordability-dashboard.py string-replaces every
-// "NN.NN¢" it finds with the latest EIA release, so the ¢ must stay INSIDE the
-// quotes for these to keep tracking — parseFloat stops at it. Do not "clean up"
-// the quotes or the rates silently freeze.
-//
-// Every electricity figure on this tab now derives from these two numbers. They
-// were previously retyped by hand in six places plus two chart arrays the updater
-// never touched, which is how the page came to shout "+79% higher than national"
-// directly beside a rate pair that works out to +56.4%. The 79% was the chart's
-// orphaned 31.16/17.45 vintage, stranded when the bot moved the prose and could
-// not reach the arrays.
-//
-// NB: never write a bare "NN.NN" followed by a cent sign anywhere else in this
-// file — comments included. The updater matches that shape, and a stray literal
-// either gets silently rewritten or competes with the two seeds below.
-const MA_ELEC=parseFloat('28.82¢'), US_ELEC=parseFloat('18.44¢');
-const elecPrem=(MA_ELEC-US_ELEC)/US_ELEC*100;
+/** Rank of `st` in `obj`, 1 = largest. */
+function rank(obj, st, key){
+  const vals = Object.entries(obj).filter(([,v]) => (key?v[key]:v) !== null && (key?v[key]:v) !== undefined);
+  vals.sort((a,b) => (key?b[1][key]:b[1]) - (key?a[1][key]:a[1]));
+  return vals.findIndex(([k]) => k === st) + 1;
+}
+function kpi(cls,val,lbl){return '<div class="kpi '+cls+'"><div class="val">'+val+'</div><div class="lbl">'+lbl+'</div></div>';}
+function vOpts(o){o=o||{};return{scales:{y:Object.assign({grid:{color:GC}},o.y||{}),x:Object.assign({grid:{display:false}},o.x||{})},plugins:{legend:{position:'top',display:o.legend!==false}}};}
+function hOpts(o){o=o||{};return{indexAxis:'y',scales:{x:Object.assign({grid:{color:GC}},o.x||{}),y:Object.assign({grid:{display:false}},o.y||{})},plugins:{legend:{position:'top',display:o.legend!==false}}};}
+function refLine(v,label,n,axis){return{label:label,data:Array(n).fill(v),type:'line',borderColor:NEUTRAL,borderDash:[5,4],borderWidth:1.5,pointRadius:0,fill:false};}
 
-// EIA industrial price, February 2026. Deliberately NOT written with a cent sign:
-// at 21.71 it sits inside the updater's 15-to-25 "US residential rate" detection
-// band, and it only escaped being overwritten because the US rate happened to
-// appear more often than it did. Had those counts ever tied, the bot would have
-// pasted the US residential rate over the MA industrial one. Rendering the sign
-// from JS keeps this number out of that contest entirely.
-const MA_INDUSTRIAL=21.71;
-
-// A typical MA household at 600 kWh/month — the same basis update-affordability-
-// dashboard.py uses for its own extra-cost formulas, so the page and the script
-// cannot disagree. The old "$1,216/yr · $101/month" pair was self-consistent with
-// itself but implied an MA-vs-US gap of nearly 17 cents/kWh — a spread that
-// matched no figure anywhere on the page.
-const KWH_MO=600, KWH_YR=7200;
-const extraMo=(MA_ELEC-US_ELEC)/100*KWH_MO, extraYr=(MA_ELEC-US_ELEC)/100*KWH_YR;
-
-// EIA Electric Power Monthly Table 5.6.A, residential, February 2026 snapshot.
-// The updater tracks only Massachusetts and the US average, so these peers are a
-// frozen constant — which is why every month label near them is spelled out in
-// full ("February 2026"). The abbreviated form would be rewritten to the latest
-// EIA period by the updater's /Mmm 20NN/ search, silently re-dating a snapshot
-// these values are not from.
-const PEER_RATES=[{n:'Hawaii',v:39.79},{n:'Maine',v:30.73},{n:'California',v:30.29},
-                  {n:'Rhode Island',v:30.14},{n:'New York',v:28.37},{n:'Connecticut',v:28.30}];
-const LOUISIANA=12.46;   // cheapest state; chart comparator only, not ranked
-const NEW_ENGLAND={'Maine':1,'New Hampshire':1,'Vermont':1,'Massachusetts':1,'Rhode Island':1,'Connecticut':1};
-
-// MA's position is computed from the list the page actually shows, so it cannot
-// contradict it again. It previously read "#2 Massachusetts … Only Hawaii is more
-// expensive" while the same six rows listed Maine, California and Rhode Island all
-// above MA. The bot moved MA 30.21→29.45 and the hand-typed "#2" stayed put — and
-// even at 30.21 it was already below Maine.
-const ranked=PEER_RATES.concat([{n:'Massachusetts',v:MA_ELEC,ma:true}]).sort((a,b)=>b.v-a.v);
-const maRank=ranked.findIndex(s=>s.ma)+1;
-
-// EIA annual average residential price, 2014–2024. The final point is the live
-// rate above, so the chart tracks the headline instead of drifting away from it.
-const ELEC_YRS=['2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'];
-const MA_HIST=[18.8,19.8,21.5,21.8,24.7,25.5,24.5,24.5,30.7,29.2,35.3];
-const US_HIST=[12.5,12.7,12.6,12.9,13.0,13.0,13.2,13.7,15.1,16.2,16.8];
-const elecLbls=ELEC_YRS.concat(['Latest']);
-const maSeries=MA_HIST.concat([MA_ELEC]);
-const usSeries=US_HIST.concat([US_ELEC]);
-
-// Growth since 2014, both sides derived from the series above and shown side by
-// side rather than as a ratio. "+81% · 2x faster than US" was stale in both halves
-// at once: the ratio only worked *because* the numerator was wrong, so correcting
-// one half alone would have left the other lying. On the live rates MA is +56.6%
-// and the US +50.6% — close enough that any "Nx faster" phrasing would flip with
-// the next EIA release.
-const maGrowth=(MA_ELEC/MA_HIST[0]-1)*100, usGrowth=(US_ELEC/US_HIST[0]-1)*100;
-
-// Extra annual cost, derived from the same two series rather than retyped.
-const extraSeries=maSeries.map((v,i)=>Math.round((v-usSeries[i])/100*KWH_YR));
-
-// ── Northeast CPI: verified constants ────────────────────────────────────────
-// BLS CPI-U, Northeast urban, all items, NSA (series CUUR0100SA0) — index levels,
-// not percentages, so every claim below is one division away from the source and
-// they cannot disagree with each other. Nothing auto-updates this page's CPI
-// (scripts/update_cumulative_inflation.py writes tax-budget-dashboard.html only),
-// so refresh these three by hand when BLS publishes.
-//   Old page: "+21.6% since January 2020" (live: +28.4%) sat beside "CPI +22.7%
-//   over 4 years" — arithmetically impossible, since a 4-year rise cannot exceed
-//   the 6.5-year rise that contains it.
-// Month labels are spelled out in full on purpose: the abbreviated form would
-// match the updater's /Mmm 20NN/ EIA-period search and be rewritten.
-const NE_CPI={base:{lbl:'January 2020',v:272.316},prior:{lbl:'June 2025',v:335.078},latest:{lbl:'June 2026',v:349.552}};
-const US_CPI={prior:{lbl:'June 2025',v:322.561},latest:{lbl:'June 2026',v:333.952}};   // CPIAUCNS
-const neCpiYoY=(NE_CPI.latest.v/NE_CPI.prior.v-1)*100;
-const neCpiCum=(NE_CPI.latest.v/NE_CPI.base.v-1)*100;
-const usCpiYoY=(US_CPI.latest.v/US_CPI.prior.v-1)*100;
-
-// ── Real wages: one window, two named series, index levels on both sides ─────
-// The panel read "+21.8% wages / +22.7% CPI / −0.7% real" over "4 years". The
-// ratio was computed correctly; both inputs were wrong, in different ways:
-//   • +22.7% was Northeast CPI June 2021 → June 2026 — a FIVE-year change
-//     (349.552/284.741 = +22.76%) carrying a four-year label. The true four-year
-//     NE CPI rise is +15.65% (May) / +14.06% (June).
-//   • +21.8% matched no published wage series at all — not US AHE (+23.25% over
-//     that same five years), not MA AHE (+19.30%). It has no provenance, so it
-//     could not be repaired in place, only replaced with something sourced.
-// Correcting either half alone would have been worse than leaving it: the CPI
-// fix on its own turns the panel into "+6.7% real", a raise invented out of a
-// wage number nobody can trace.
-//
-// Wage series: Massachusetts total private average hourly earnings, all
-// employees (BLS CES State & Metro; FRED SMU25000000500000003). Chosen over the
-// national CES0500000003 that scripts/update_cumulative_inflation.py already
-// fetches, because this is a Massachusetts page — and the choice is not
-// cosmetic: MA hourly pay grew +10.4% over these four years against the
-// nation's +16.9%, so the national series would credit MA workers with a raise
-// they did not get. Both series here are NSA and compared same-month-to-
-// same-month, which is what makes the NSA CPI (CUUR0100SA0) their right partner
-// and seasonal adjustment unnecessary. No monthly MA-specific CPI is published;
-// Northeast is the closest geography BLS prints, and it is already this tab's
-// series, so the panel and the card above it deflate by the same index.
-//
-// Window: May 2022 → May 2026 — four years, the label the panel always meant,
-// now applied to BOTH sides. May rather than June is the terminal month because
-// the state CES release lags the national one: MA has no June 2026 print yet,
-// and pairing a June CPI against a May wage would rebuild the exact mismatch
-// this replaces. When BLS publishes, move both pairs together or not at all.
-//
-// The sign is robust rather than an artifact of the window: MA hourly pay
-// trails NE CPI over four years (−4.6%), five years (−4.9%) and since January
-// 2020 (−2.8%), and MA average WEEKLY earnings — which count hours, not just
-// the rate — trail it by −7.4% over the same four years. It is the US series
-// that is window-dependent (+1.0% / −0.8% / +2.6%), a second reason not to
-// borrow it for a Massachusetts claim. Nothing below asserts that direction in
-// prose regardless; the verdict line is written from the sign at render time.
-const REAL_WAGE={
-  from:'May 2022', to:'May 2026',
-  cpi: {from:302.939, to:350.338},  // CUUR0100SA0 — NE urban, all items, NSA
-  wage:{from:39.26,   to:43.33},    // SMU25000000500000003 — MA total private AHE, NSA
-};
-const wageNominal=(REAL_WAGE.wage.to/REAL_WAGE.wage.from-1)*100;
-const wageCpi=(REAL_WAGE.cpi.to/REAL_WAGE.cpi.from-1)*100;
-const wageReal=((1+wageNominal/100)/(1+wageCpi/100)-1)*100;
-
-// ── BLS LAUS annual averages (FRED MAUR / UNRATE), mean of monthly SA values ──
-// 2025 is an 11-month mean: BLS published no October 2025 household survey during
-// the shutdown. The old series carried MA 2025 = 4.8, which was December's monthly
-// reading standing in for the year (the true annual average is 4.45) — and 2020's
-// 8.9 understated the COVID spike by nearly half a point.
-const UE_YRS=['2019','2020','2021','2022','2023','2024','2025'];
-const UE_MA=[3.05,9.34,5.32,3.64,3.47,3.98,4.45];
-const UE_US=[3.68,8.10,5.35,3.65,3.62,4.02,4.26];
-
-function initCharts(tab){
-  switch(tab){
-    case 'overview':
-      safeChart('c1',{type:'line',data:{labels:UE_YRS,datasets:[{label:'Massachusetts',data:UE_MA,borderColor:R,backgroundColor:'rgba(192,57,43,0.08)',borderWidth:2.5,fill:true,tension:.4,pointRadius:5},{label:'US Average',data:UE_US,borderColor:M,borderWidth:2,borderDash:[5,3],fill:false,tension:.4,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11}}}},scales:{y:{beginAtZero:true}}}});
-      safeChart('c2',{type:'bar',data:{labels:['Utilities','Healthcare','Housing','Overall','Food','Transport'],datasets:[{data:[166,131,130,108,105,102],backgroundColor:[R,R,A,B,G,G],borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'Index: '+c.raw+' (US = 100)'}}},scales:{x:{min:80,max:180}}}});
-      break;
-    case 'employment':
-      // BLS LAUS, May of 2026 — the same month the tab's anchored rank sentence
-      // cites. Previously December 2025 values, which put MA at 4.8% next to a card
-      // the updater keeps at the current rate.
-      safeChart('c3',{type:'bar',data:{labels:['S. Dakota','N. Dakota','New Hampshire','US Average','Massachusetts','California','DC'],datasets:[{data:[2.1,2.4,3.0,4.3,4.5,5.3,6.1],backgroundColor:[G,G,G,B,R,A,A],borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{min:0,max:7}}}});
-      safeChart('c4',{type:'line',data:{labels:UE_YRS,datasets:[{label:'MA',data:UE_MA,borderColor:R,borderWidth:2.5,fill:false,tension:.4,pointRadius:5},{label:'US',data:UE_US,borderColor:M,backgroundColor:'rgba(0,0,0,0.02)',borderWidth:2,fill:true,tension:.4,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11}}}}}});
-      break;
-    case 'housing':
-      safeChart('c5',{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024','2025'],datasets:[{data:[410,450,550,550,570,615,638],borderColor:B,backgroundColor:'rgba(26,68,128,0.08)',borderWidth:2.5,fill:true,tension:.4,pointRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'$'+v+'K'}}}}});
-      safeChart('c6',{type:'bar',data:{labels:['Springfield','Worcester','Statewide','Essex','Boston','Newburyport'],datasets:[{data:[288,450,638,699,800,1328],backgroundColor:[G,B,A,P,R,'#5a3e28'],borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>'$'+v+'K'}}}}});
-      break;
-    case 'electricity':
-      safeChart('cElec1',{type:'line',data:{labels:elecLbls,datasets:[{label:'Massachusetts',data:maSeries,borderColor:A,backgroundColor:'rgba(184,134,11,0.08)',borderWidth:2.5,fill:true,tension:.4,pointRadius:4},{label:'US Average',data:usSeries,borderColor:G,borderWidth:2,borderDash:[5,5],fill:false,tension:.4,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11}}}},scales:{y:{ticks:{callback:v=>v+'¢'}}}}});
-      // Ranked bars, MA and the US average live, drawn from the same array the
-      // ranking list reads — so the chart's ordering and the list's "#N" cannot
-      // disagree with each other or with the headline.
-      (function(){
-        const bars=ranked.concat([{n:'US Average',v:US_ELEC,us:true},{n:'Louisiana',v:LOUISIANA,us:true}]);
-        safeChart('cElec2',{type:'bar',data:{labels:bars.map(s=>s.n),datasets:[{data:bars.map(s=>s.v),backgroundColor:bars.map(s=>s.ma?A:(s.us?G:'#94a3b8')),borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>v+'¢'}}}}});
-      })();
-      safeChart('cElec3',{type:'doughnut',data:{labels:['Supply (40%)','Distribution (30%)','Public Benefits (17%)','Transmission (13%)'],datasets:[{data:[40,30,17,13],backgroundColor:[B,P,R,A],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});
-      safeChart('cElec4',{type:'bar',data:{labels:elecLbls,datasets:[{data:extraSeries,backgroundColor:'rgba(192,57,43,0.7)',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:v=>'$'+v}}}}});
-      break;
-    case 'inflation':
-      // The trailing point is the latest YoY derived from the index constants above,
-      // so this chart and the "Northeast CPI" card read the same month. It used to
-      // end at 2.8 / 2.4 — January 2026 readings left in place while the card beside
-      // it claimed to be current.
-      (function(){
-        const yrs=['2020','2021','2022','2023','2024','2025'];
-        safeChart('c7',{type:'bar',data:{labels:yrs.concat(['Latest']),datasets:[{label:'Northeast',data:[1.4,4.9,7.1,3.9,3.5,3.3].concat([+neCpiYoY.toFixed(1)]),backgroundColor:R,borderRadius:4},{label:'National',data:[1.2,4.7,8,4.1,2.9,2.7].concat([+usCpiYoY.toFixed(1)]),backgroundColor:M,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:11}}}},scales:{y:{ticks:{callback:v=>v+'%'}}}}});
-      })();
-      break;
-    case 'afford':
-      safeChart('c8',{type:'bar',data:{labels:['Need to be\nComfortable','Median Family\nIncome'],datasets:[{data:[313747,140309],backgroundColor:[R,G],borderRadius:8,barThickness:60}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{max:350000,ticks:{callback:v=>'$'+(v/1000)+'K'}}}}});
-      safeChart('c9',{type:'bar',data:{labels:['Financial Svc','Transport','Healthcare','Housing','Consumption','Income'],datasets:[{data:[12.2,9.67,7.41,6.76,6.1,5.09],backgroundColor:ctx=>ctx.dataIndex===5?G:R,borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{callback:v=>v+'%'}}}}});
-      break;
-  }
+const initialized={};
+function showTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  if(!initialized[id]){initialized[id]=true;INIT[id]();}
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-// Salary bars
-const jobs=[{n:'Management',s:160460},{n:'Computer/Math',s:126150},{n:'Healthcare Prac.',s:115850},{n:'Business/Finance',s:101770},{n:'Education',s:80050},{n:'Construction',s:79120},{n:'Protective Svc',s:66780},{n:'Sales',s:61060},{n:'Office Admin',s:55740},{n:'Production',s:51820},{n:'Transportation',s:50080},{n:'Maintenance',s:46250},{n:'Personal Care',s:44880},{n:'Healthcare Support',s:42970},{n:'Food Service',s:40280}];
-const maxS=160460,thresh=60080,threshPct=(thresh/maxS)*100;
-document.getElementById('salaryBars').innerHTML=jobs.map(j=>{
-  const pct=(j.s/maxS)*100,below=j.s<thresh;
-  return`<div class="bar-item"><div class="bar-head"><span class="bar-label">${j.n}</span><span class="bar-val ${below?'red':'green'}">$${j.s.toLocaleString()}</span></div><div class="bar-track"><div class="bar-fill ${below?'red':'green'}" style="width:${pct}%"></div><div class="bar-threshold" style="left:${threshPct}%"></div></div></div>`;
-}).join('');
+/* ── shared derived figures ──────────────────────────────────────────────── */
+const MA = D.rpp.MA;
+const rPrice = rank(D.rpp,'MA','all');
+const rNom = rank(D.nominal_income,'MA');
+const rReal = rank(D.real_income,'MA');
+const MEDIAN = (D.income && (D.income.family || D.income.household)) || null;
+const MEDIAN_KIND = (D.income && D.income.family) ? 'median family income' : 'median household income';
 
-// ── Prose reads the data, the data is never retyped into the prose ───────────
-const cents=v=>v.toFixed(2)+'¢';
+/* ── THE REAL PICTURE ────────────────────────────────────────────────────── */
+function initReal(){
+  document.getElementById('kpiReal').innerHTML =
+    kpi('blue', f1(MA.all), 'MA Price Level<br>US = 100 &middot; '+ord(rPrice)+' highest') +
+    kpi('green', money(D.nominal_income.MA), 'Per-Capita Income<br>'+ord(rNom)+' nationally') +
+    kpi('green', money(D.real_income.MA), 'Price-Adjusted<br>'+ord(rReal)+' nationally') +
+    kpi('red', f1(MA.utilities), 'Utilities<br>'+ord(rank(D.rpp,'MA','utilities'))+' highest') +
+    kpi('orange', f1(MA.housing), 'Housing<br>'+ord(rank(D.rpp,'MA','housing'))+' highest') +
+    kpi('green', f1(MA.goods), 'Goods<br>'+ord(rank(D.rpp,'MA','goods'))+' highest');
 
-// Electricity
-setTxt('elecMaBig',   cents(MA_ELEC));
-setTxt('elecMaCard',  cents(MA_ELEC));
-setTxt('elecMaProse', cents(MA_ELEC));
-setTxt('elecUsBox',   cents(US_ELEC));
-setTxt('elecUsMega',  cents(US_ELEC));
-setTxt('elecUsProse', cents(US_ELEC));
-setTxt('elecIndCard', cents(MA_INDUSTRIAL));
-setTxt('elecPremBox',   pct1(elecPrem));
-setTxt('elecPremMega',  pct1(elecPrem));
-setTxt('elecPremProse', pct1(elecPrem));
-setTxt('heroElecPrem',  pct1(elecPrem));
-setTxt('elecExtraMo', '$'+Math.round(extraMo));
-setTxt('elecExtraYr', '$'+Math.round(extraYr).toLocaleString());
-setTxt('elecGrowth',   pct1(maGrowth));
-setTxt('elecGrowthUs', pct1(usGrowth));
+  const pts = Object.keys(D.rpp).filter(s=>D.nominal_income[s]&&D.rpp[s].all)
+    .map(s=>({x:D.rpp[s].all, y:D.nominal_income[s], s:s}));
+  const isMA = p=>p.s==='MA';
+  new Chart(document.getElementById('rScatter'),{type:'scatter',data:{datasets:[
+    {label:'States', data:pts.filter(p=>!isMA(p)), backgroundColor:'rgba(135,146,166,.55)', pointRadius:5},
+    {label:'Massachusetts', data:pts.filter(isMA), backgroundColor:'#c0392b', pointRadius:9}
+  ]},options:{plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>c.raw.s+': price '+c.raw.x.toFixed(1)+', income '+money(c.raw.y)}}},
+    scales:{x:{title:{display:true,text:'price level (US = 100)'},grid:{color:GC}},
+            y:{title:{display:true,text:'per-capita personal income'},ticks:{callback:money0},grid:{color:GC}}}}});
 
-// Ranking list + MA's position, both read off `ranked`
-const rl=document.getElementById('elecRankList');
-if(rl) rl.innerHTML=ranked.map((s,i)=>
-  `<div class="alert-item"><strong>#${i+1} ${s.n}:</strong> ${cents(s.v)}/kWh${s.ma?' ←':''}</div>`).join('');
-setTxt('elecRankMega', `Among the ${ranked.length} states shown below, Massachusetts ranks #${maRank}.`);
+  const top = Object.keys(D.nominal_income).sort((a,b)=>D.nominal_income[b]-D.nominal_income[a]).slice(0,10);
+  new Chart(document.getElementById('rIncome'),{type:'bar',data:{labels:top,datasets:[
+    {label:'Nominal', data:top.map(s=>D.nominal_income[s]), backgroundColor:'#1a4480'},
+    {label:'Price-adjusted (chained 2017 $)', data:top.map(s=>D.real_income[s]), backgroundColor:'#8792a6'}
+  ]},options:vOpts({y:{ticks:{callback:money0},beginAtZero:true}})});
 
-// "5 of the 6 priciest states (excl. Hawaii) are in New England" was wrong by the
-// page's own list — Maine, Rhode Island, Connecticut and MA are New England, but
-// California and New York are not, making it 4 of 6. Counted from the data now.
-const exHawaii=ranked.filter(s=>s.n!=='Hawaii');
-setTxt('elecNeNote', `${exHawaii.filter(s=>NEW_ENGLAND[s.n]).length} of the ${exHawaii.length} priciest states listed (excluding Hawaii) are in New England`);
+  new Chart(document.getElementById('rCats'),{type:'bar',data:{
+    labels:CAT.map(c=>c[1]),
+    datasets:[{label:'Massachusetts', data:CAT.map(c=>MA[c[0]]), backgroundColor:CAT.map(c=>COL[c[0]])},
+              refLine(100,'National average',CAT.length)]
+  },options:hOpts({x:{min:60,max:170}})});
 
-// Northeast CPI
-setTxt('neCpiYoY',    neCpiYoY.toFixed(1)+'%');
-setTxt('neCpiYoYMo',  NE_CPI.latest.lbl);
-setTxt('neCpiCum',    pct1(neCpiCum));
-setTxt('neCpiCumBase',NE_CPI.base.lbl);
+  const gap = ((D.nominal_income.MA/D.real_income.MA)).toFixed(2);
+  document.getElementById('insReal').innerHTML =
+    '<strong>Massachusetts is expensive, and it out-earns the expense.</strong> The state\'s price level is '+
+    f1(MA.all)+' against a national 100 &mdash; '+ord(rPrice)+' highest, not first. Per-capita income is '+
+    ord(rNom)+' in the country, and once the BEA deflates that income by the state\'s own price level it is still '+
+    ord(rReal)+'. On the average, the price level does not overwhelm the paycheque. '+
+    'That is not the same as saying living here is easy: an average conceals who is earning it, and the ' +
+    'categories on the right show the burden is concentrated rather than spread. ' +
+    'Goods actually cost <em>less</em> here than the national average ('+f1(MA.goods)+
+    '); utilities cost '+Math.round(MA.utilities-100)+'% more.';
+}
 
-// ── Real wages ───────────────────────────────────────────────────────────────
-// Both halves of the window label are printed next to their own figure, so the
-// "4 years" claim is checkable against the numbers instead of being asserted
-// over them — that mislabel is what hid a five-year CPI change inside a
-// four-year panel for as long as it did.
-const wageWin=REAL_WAGE.from+' → '+REAL_WAGE.to;
-setTxt('wageNominal',  pct1(wageNominal));
-setTxt('wageWindow',   wageWin);
-setTxt('wageCpi',      pct1(wageCpi));
-setTxt('wageCpiWindow',wageWin);
-setTxt('wageRealVal',  pct1(wageReal));
-(function(){
-  // Colour and verdict both follow the sign. The panel used to hardcode red
-  // beside a fixed sentence — "Workers have LESS purchasing power than 4 years
-  // ago" — which would have gone on reading as true no matter what the figures
-  // above it were corrected to. On sourced inputs the gap is in fact much wider
-  // than the −0.7% claimed, but it is stated as a comparison of two measured
-  // rises rather than as a verdict, and a release that closes it must be able to
-  // turn this line around without anyone remembering to edit prose.
-  const el=document.getElementById('wageRealVal');
-  if(el) el.style.color = wageReal<0 ? 'var(--red)' : 'var(--green)';
-  // ±0.25pt is inside what a CES benchmark revision routinely moves, so a
-  // near-tie is reported as a tie rather than called a win for either side.
-  setTxt('wageRealNote', Math.abs(wageReal)<0.25
-    ? 'Massachusetts hourly pay roughly kept pace with Northeast prices over these four years.'
-    : (wageReal<0
-      ? 'Massachusetts hourly pay rose slower than Northeast prices over these four years.'
-      : 'Massachusetts hourly pay rose faster than Northeast prices over these four years.'));
-})();
-setTxt('wageSource','Sources: MA total private average hourly earnings, all employees, NSA '
-  +'(BLS CES, SMU25000000500000003) and Northeast CPI-U, all items, NSA (BLS CUUR0100SA0), '
-  +wageWin+'. Real change = nominal wage growth deflated by CPI over the same two months.');
+/* ── WHAT COSTS MORE ─────────────────────────────────────────────────────── */
+function initCosts(){
+  const ranks = {}; CAT.forEach(([k])=>ranks[k]=rank(D.rpp,'MA',k));
+  document.getElementById('kpiCosts').innerHTML =
+    CAT.map(([k,label])=>kpi(MA[k]>=130?'red':MA[k]>=110?'orange':MA[k]<100?'green':'blue',
+      f1(MA[k]), label+'<br>'+ord(ranks[k])+' of 50')).join('') +
+    kpi('purple', f1(MA.utilities-MA.goods), 'Spread<br>Utilities &minus; Goods');
 
-// The intro asserted "Northeast inflation consistently outpaces national
-// averages. Real wages have declined." Its first half is contradicted by this
-// tab's own chart (2022: NE +7.1% vs US +8.0% — outpaced, not outpacing), and
-// its second was the Real Wage panel's conclusion hardcoded a second time, where
-// it would have quietly survived any correction made to the panel itself. Both
-// halves now read the same constants the cards do, and state values rather than
-// a direction.
-setTxt('inflationIntro',
-  'Northeast inflation is running at '+neCpiYoY.toFixed(1)+'% year over year against '
-  +usCpiYoY.toFixed(1)+'% nationally ('+NE_CPI.latest.lbl+'). Massachusetts hourly pay is '
-  +pct1(wageReal)+' in real terms over the four years to '+REAL_WAGE.to+'.');
-
-// The hero mirrors the Unemployment stat card rather than carrying its own copy.
-// That card is the updater's injection surface — it rewrites the rate and its month
-// label together — so a hero derived from it cannot go stale. The hero previously
-// read "#44 Unemployment Rank", which was false and unfixable-in-place: no 50-state
-// series exists on this page to derive a rank from, so the ranking claim now lives
-// in the Employment tab as a sentence anchored to a named month.
-(function(){
-  let card=null;
-  document.querySelectorAll('#employment .stat-card').forEach(c=>{
-    const l=c.querySelector('.label');
-    if(l&&l.textContent.trim()==='Unemployment') card=c;
+  let html='<thead><tr><th>Category</th><th style="text-align:right">Massachusetts</th><th style="text-align:right">vs US average</th><th style="text-align:right">Rank of 50</th><th>Reading</th></tr></thead><tbody>';
+  CAT.forEach(([k,label])=>{
+    const v=MA[k], d=v-100;
+    const cls=v>=130?'red':v>=110?'yellow':v<100?'green':'blue';
+    const read=v>=130?'Far above national':v>=110?'Above national':v<100?'Below national':'Near national';
+    html+='<tr><td>'+label+'</td><td class="num">'+f1(v)+'</td><td class="num">'+(d>0?'+':'')+d.toFixed(1)+
+      '</td><td class="num">'+ranks[k]+'</td><td><span class="badge '+cls+'">'+read+'</span></td></tr>';
   });
-  if(!card) return;
-  const v=card.querySelector('.value'), s=card.querySelector('.sub');
-  if(v) setTxt('heroUnemp', v.textContent.trim());
-  if(s) setTxt('heroUnempMo', '· '+s.textContent.trim());
-})();
+  document.getElementById('cTable').innerHTML=html+'</tbody>';
 
-initCharts('overview');
+  const peers=['MA','CT','RI','NH','NY','NJ','VT','ME','CA'].filter(s=>D.rpp[s]);
+  new Chart(document.getElementById('cPeers'),{type:'bar',data:{labels:peers,datasets:
+    CAT.filter(c=>c[0]!=='all').map(([k,label])=>({label:label,data:peers.map(s=>D.rpp[s][k]),backgroundColor:COL[k]}))
+    .concat([refLine(100,'National average',peers.length)])
+  },options:vOpts({y:{min:60,max:170}})});
+
+  new Chart(document.getElementById('cTrend'),{type:'line',data:{labels:D.years,datasets:
+    CAT.map(([k,label])=>({label:label,data:D.ma_history[k],borderColor:COL[k],backgroundColor:'transparent',borderWidth:2.5,tension:.25,pointRadius:0}))
+    .concat([refLine(100,'National average',D.years.length)])
+  },options:vOpts({y:{min:80,max:170}})});
+
+  const h=D.ma_history, last=h.all.length-1;
+  const uMin=Math.min.apply(null,h.utilities), uMax=Math.max.apply(null,h.utilities);
+  const uMinYear=D.years[h.utilities.indexOf(uMin)], uMaxYear=D.years[h.utilities.indexOf(uMax)];
+  document.getElementById('insCosts').innerHTML =
+    '<strong>One category is doing the work.</strong> Massachusetts is '+ord(ranks.all)+
+    ' of 50 on overall price level, but '+ord(ranks.utilities)+' on utilities at '+f1(MA.utilities)+
+    ' &mdash; '+Math.round(MA.utilities-100)+'% above the national average, and by far the state\'s most extreme reading. '+
+    'Housing is '+f1(MA.housing)+' ('+ord(ranks.housing)+'). Goods, which is most of what a household buys week to week, is '+
+    f1(MA.goods)+' &mdash; <em>cheaper</em> than the national average, '+ord(ranks.goods)+' of 50. '+
+    '<br><br><strong>Housing has been this expensive for sixteen years. Utilities have not.</strong> '+
+    'Across '+D.years[0]+'&ndash;'+D.years[last]+' the all-items figure barely moves ('+f1(h.all[0])+' to '+
+    f1(h.all[last])+') and housing is close to a flat line, never leaving the '+
+    f1(Math.min.apply(null,h.housing))+'&ndash;'+f1(Math.max.apply(null,h.housing))+
+    ' band. Utilities are the volatile one: '+f1(h.utilities[0])+' in '+D.years[0]+', down to '+
+    f1(uMin)+' by '+uMinYear+' &mdash; barely above the national average &mdash; then back up to a peak of '+
+    f1(uMax)+' in '+uMaxYear+' and '+f1(h.utilities[last])+' today. '+
+    'So the housing premium is a permanent feature of living here, but the utilities premium is something '+
+    'Massachusetts closed once and has since reopened. The '+
+    '<a href="energy-dashboard.html">energy dashboard</a> takes that number apart.';
+}
+
+/* ── ACROSS THE STATE ────────────────────────────────────────────────────── */
+function initGeo(){
+  const M=D.metros, names=Object.keys(M).sort((a,b)=>M[b].all-M[a].all);
+  const hi=names.reduce((a,b)=>M[a].housing>M[b].housing?a:b);
+  const lo=names.reduce((a,b)=>M[a].housing<M[b].housing?a:b);
+  const uMin=Math.min(...names.map(n=>M[n].utilities)), uMax=Math.max(...names.map(n=>M[n].utilities));
+
+  document.getElementById('kpiGeo').innerHTML =
+    kpi('red', f1(M[hi].housing), hi+'<br>Housing') +
+    kpi('green', f1(M[lo].housing), lo+'<br>Housing') +
+    kpi('purple', f1(M[hi].housing-M[lo].housing)+' pts', 'Housing Spread<br>Across MA Metros') +
+    kpi('orange', f1(uMin)+'&ndash;'+f1(uMax), 'Utilities Range<br>Every MA Metro') +
+    kpi('blue', f1(M[names[0]].all), names[0]+'<br>All Items') +
+    kpi('blue', f1(M[names[names.length-1]].all), names[names.length-1]+'<br>All Items');
+
+  new Chart(document.getElementById('gMetro'),{type:'bar',data:{labels:names,datasets:
+    CAT.map(([k,label])=>({label:label,data:names.map(n=>M[n][k]),backgroundColor:COL[k]}))
+    .concat([refLine(100,'National average',names.length)])
+  },options:vOpts({y:{min:60,max:170},x:{ticks:{maxRotation:30}}})});
+
+  const byH=names.slice().sort((a,b)=>M[b].housing-M[a].housing);
+  new Chart(document.getElementById('gHousing'),{type:'bar',data:{labels:byH,datasets:[
+    {label:'Housing price level',data:byH.map(n=>M[n].housing),backgroundColor:byH.map(n=>M[n].housing>=100?'#c0392b':'#1a7a4c')},
+    refLine(100,'National average',byH.length)]},options:hOpts({x:{min:60,max:160}})});
+
+  const byU=names.slice().sort((a,b)=>M[b].utilities-M[a].utilities);
+  new Chart(document.getElementById('gUtil'),{type:'bar',data:{labels:byU,datasets:[
+    {label:'Utilities price level',data:byU.map(n=>M[n].utilities),backgroundColor:'#b8860b'},
+    refLine(100,'National average',byU.length)]},options:hOpts({x:{min:60,max:170}})});
+
+  document.getElementById('insGeo').innerHTML =
+    '<strong>"Expensive Massachusetts" is mostly expensive Boston &mdash; except for the electricity bill.</strong> '+
+    'Housing runs from '+f1(M[hi].housing)+' in '+hi+' down to '+f1(M[lo].housing)+' in '+lo+
+    ', a '+f1(M[hi].housing-M[lo].housing)+'-point spread, and in '+lo+' housing is '+Math.round(100-M[lo].housing)+
+    '% <em>below</em> the national average. Goods barely move at all across the state. '+
+    'Utilities do not vary either &mdash; but they sit between '+f1(uMin)+' and '+f1(uMax)+
+    ' in every single metro, high and flat. Wherever you live in Massachusetts, you pay the same premium to keep the lights on; '+
+    'only the rent negotiates.';
+}
+
+/* ── WHAT IT TAKES ───────────────────────────────────────────────────────── */
+function initNeed(){
+  const L=D.living_wage, need=L.budget['required annual income before taxes'], cols=L.columns;
+  const i=lbl=>cols.indexOf(lbl);
+  const iBoth=i('2 adults (both working), 2 children'), iOne=i('2 adults (1 working), 2 children'), iSingle=i('1 adult');
+
+  document.getElementById('kpiNeed').innerHTML =
+    kpi('blue', money(need[iSingle]), 'Single Adult<br>Income Needed') +
+    kpi('orange', money(need[iOne]), 'Family of 4, 1 Earner<br>Income Needed') +
+    kpi('red', money(need[iBoth]), 'Family of 4, 2 Earners<br>Income Needed') +
+    (MEDIAN ? kpi('green', money(MEDIAN), 'MA '+MEDIAN_KIND.replace('median ','')+'<br>ACS '+(D.income.vintage||'')) : '') +
+    kpi('purple', money(L.budget['child care'][iBoth]), 'Child Care<br>Family of 4, 2 Earners') +
+    kpi('blue', money(L.budget['housing'][iBoth]), 'Housing<br>Family of 4, 2 Earners');
+
+  const ds=[{label:'Income needed before tax',data:need,backgroundColor:cols.map((c,ix)=>
+    MEDIAN&&need[ix]>MEDIAN?'#c0392b':'#1a7a4c')}];
+  if(MEDIAN) ds.push(refLine(MEDIAN,'MA '+MEDIAN_KIND,cols.length));
+  new Chart(document.getElementById('nWage'),{type:'bar',data:{labels:cols,datasets:ds},
+    options:hOpts({x:{beginAtZero:true,ticks:{callback:money0}}})});
+
+  const KEYS=[['housing','Housing','#c0392b'],['child care','Child care','#7e22ce'],['food','Food','#1a7a4c'],
+    ['transportation','Transport','#1a4480'],['medical','Medical','#b8860b'],['other','Other','#8792a6'],
+    ['civic','Civic','#0e7490'],['internet & mobile','Internet & mobile','#be185d'],['annual taxes','Taxes','#4b5563']];
+  const show=[iSingle,i('1 adult, 2 children'),iOne,iBoth];
+  new Chart(document.getElementById('nBudget'),{type:'bar',data:{
+    labels:show.map(x=>cols[x]),
+    datasets:KEYS.filter(k=>L.budget[k[0]]).map(([k,label,c])=>({label:label,data:show.map(x=>L.budget[k][x]),backgroundColor:c}))
+  },options:vOpts({y:{stacked:true,ticks:{callback:money0},beginAtZero:true},x:{stacked:true}})});
+
+  const occ=L.occupations.slice().sort((a,b)=>b[1]-a[1]);
+  const single=need[iSingle];
+  new Chart(document.getElementById('nOcc'),{type:'bar',data:{labels:occ.map(o=>o[0]),datasets:[
+    {label:'Typical annual salary',data:occ.map(o=>o[1]),backgroundColor:occ.map(o=>o[1]>=single?'#1a7a4c':'#c0392b')},
+    refLine(single,'Single adult needs '+money(single),occ.length)]},
+    options:hOpts({x:{beginAtZero:true,ticks:{callback:money0}}})});
+
+  const below=occ.filter(o=>o[1]<single).length;
+  document.getElementById('insNeed').innerHTML =
+    '<strong>The second earner is the whole story.</strong> A Massachusetts family of four needs '+
+    money(need[iOne])+' before tax if one parent works, and '+money(need[iBoth])+
+    ' if both do &mdash; '+money(need[iBoth]-need[iOne])+' <em>more</em> for the two-earner household. '+
+    'The extra is child care: '+money(L.budget['child care'][iBoth])+' a year, which the one-earner household does not pay. '+
+    (MEDIAN ? 'State '+MEDIAN_KIND+' is '+money(MEDIAN)+', which lands between the two. ' : '')+
+    'This is a bare-adequacy budget from MIT &mdash; no savings, no holidays, no debt repayment. '+
+    'It is not the "comfortable" figure this page used to lead with, which came from a private study and carried no source line.';
+
+  document.getElementById('insBudget').innerHTML =
+    '<strong>For families with young children, child care outranks rent.</strong> A two-earner family of four is budgeted '+
+    money(L.budget['child care'][iBoth])+' for child care against '+money(L.budget['housing'][iBoth])+
+    ' for housing &mdash; the childcare bill is '+
+    Math.round((L.budget['child care'][iBoth]/L.budget['housing'][iBoth]-1)*100)+
+    '% larger than the rent. A single parent with two children carries that same '+
+    money(L.budget['child care'][i('1 adult, 2 children')])+' on one income instead of two. '+
+    'That is a cost the price-parity data on the earlier tabs does not capture at all &mdash; '+
+    'the BEA measures what things cost, not which of them a given household is forced to buy. '+
+    'Of the '+occ.length+' occupational groups MIT reports, '+below+' pay a typical salary below what a single adult alone needs.';
+}
+
+/* ── boot ────────────────────────────────────────────────────────────────── */
+const INIT={real:initReal,costs:initCosts,geo:initGeo,need:initNeed};
+
+document.getElementById('heroStats').innerHTML =
+  '<div class="stat-box"><div class="num">'+f1(MA.all)+'</div><div class="lbl">Price Level<br>US = 100</div></div>'+
+  '<div class="stat-box"><div class="num">'+ord(rNom)+'</div><div class="lbl">Per-Capita<br>Income Rank</div></div>'+
+  '<div class="stat-box"><div class="num">'+ord(rReal)+'</div><div class="lbl">After Adjusting<br>For Prices</div></div>'+
+  '<div class="stat-box"><div class="num">'+f1(MA.goods)+'</div><div class="lbl">Goods<br>Cheaper Than US</div></div>'+
+  '<div class="stat-box"><div class="num">'+f1(MA.utilities)+'</div><div class="lbl">Utilities<br>US = 100</div></div>';
+
+document.getElementById('vintage').textContent =
+  'Price parities and income: '+D.meta.rpp_year+' (latest BEA vintage). Living wage: MIT, retrieved '+
+  (D.meta.generated||'').slice(0,10)+'.';
+
+initialized['real']=true;
+initReal();
 </script>
 </body>
 </html>

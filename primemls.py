@@ -16,8 +16,10 @@ HARD-WON LESSONS baked in (see README.md):
   * Sold = StandardStatus eq 'Closed' (the STRING; numeric 'eq 2' 500s).
   * NEVER use $count -- it 500s on this server. Paginate + count client-side.
   * The server 500s on heavy/complex queries and intermittently under load;
-    _get() retries on 500/429/5xx with backoff. Keep result sets bounded
+    every call retries on 403/429/5xx with backoff. Keep result sets bounded
     (by city + date window) and PACE requests -- rate limits are strict.
+  * A block that outlives the retries raises Throttled (not RuntimeError) so
+    callers can treat "the feed shut us out today" as a skip, not a failure.
 """
 import base64
 import json
@@ -58,37 +60,22 @@ _load_dotenv()
 _tok = {"v": None, "exp": 0.0}
 
 
-def get_token():
-    now = time.time()
-    if _tok["v"] and now < _tok["exp"] - 120:
-        return _tok["v"]
-    cid = os.environ["PRIMEMLS_CLIENT_ID"]
-    sec = os.environ["PRIMEMLS_CLIENT_SECRET"]
-    auth = base64.b64encode(f"{cid}:{sec}".encode()).decode()
-    data = f"grant_type=client_credentials&scope={os.environ.get('PRIMEMLS_SCOPE', SCOPE)}".encode()
-    req = urllib.request.Request(
-        os.environ.get("PRIMEMLS_TOKEN_URL", TOKEN_URL),
-        data=data,
-        headers={"Authorization": f"Basic {auth}", "Content-Type": "application/x-www-form-urlencoded",
-                 "User-Agent": UA},
-    )
-    with urllib.request.urlopen(req, timeout=60) as r:
-        t = json.loads(r.read())
-    _tok["v"], _tok["exp"] = t["access_token"], now + t.get("expires_in", 7200)
-    return _tok["v"]
+class Throttled(RuntimeError):
+    """The feed blocked us (403 Cloudflare / 429) and the retries ran out.
+
+    Transient and self-healing — the next run usually gets straight through — so
+    callers should skip rather than fail. Anything else stays a RuntimeError.
+    """
 
 
-def _get(params, max_retries=6):
-    qs = "&".join(f"{k}={urllib.parse.quote(str(v))}" for k, v in params.items())
-    url = f"{os.environ.get('PRIMEMLS_DATA_URL', DATA_URL)}?{qs}"
+def _json_request(build_request, timeout, max_retries=6, what="request"):
+    """urlopen(build_request()) -> parsed JSON, with the retry policy every
+    PrimeMLS endpoint needs. build_request is re-invoked per attempt so each try
+    carries a fresh token/URL."""
     last = None
     for attempt in range(max_retries):
-        req = urllib.request.Request(
-            url, headers={"Authorization": f"Bearer {get_token()}", "Accept": "application/json",
-                          "User-Agent": UA}
-        )
         try:
-            with urllib.request.urlopen(req, timeout=120) as r:
+            with urllib.request.urlopen(build_request(), timeout=timeout) as r:
                 return json.loads(r.read())
         except urllib.error.HTTPError as e:
             last = f"HTTP {e.code}: {e.read().decode('utf-8', 'replace')[:120]}"
@@ -99,14 +86,53 @@ def _get(params, max_retries=6):
                 wait = float(ra) if (ra and ra.isdigit()) else base * (attempt + 1)
                 time.sleep(min(wait, 90))
                 continue
-            raise RuntimeError(f"PrimeMLS {last}")
+            if e.code in (403, 429):
+                raise Throttled(f"PrimeMLS {what} blocked: {last}")
+            raise RuntimeError(f"PrimeMLS {what}: {last}")
         except (urllib.error.URLError, TimeoutError) as e:
             last = str(e)
             if attempt < max_retries - 1:
                 time.sleep(2 ** attempt)
                 continue
-            raise RuntimeError(f"PrimeMLS network error: {last}")
-    raise RuntimeError(f"PrimeMLS unreachable: {last}")
+            raise RuntimeError(f"PrimeMLS network error ({what}): {last}")
+    raise RuntimeError(f"PrimeMLS unreachable ({what}): {last}")
+
+
+def get_token():
+    now = time.time()
+    if _tok["v"] and now < _tok["exp"] - 120:
+        return _tok["v"]
+    cid = os.environ["PRIMEMLS_CLIENT_ID"]
+    sec = os.environ["PRIMEMLS_CLIENT_SECRET"]
+    auth = base64.b64encode(f"{cid}:{sec}".encode()).decode()
+    data = f"grant_type=client_credentials&scope={os.environ.get('PRIMEMLS_SCOPE', SCOPE)}".encode()
+    # The token endpoint sits behind the same Cloudflare edge as the data endpoint,
+    # so it 403s from CI IPs the same way -- but it had no retry at all. One edge
+    # 403 on the very first call killed the 2026-08-05 nightly in 5s with a raw
+    # traceback and exit 1, bypassing the throttle handling entirely.
+    t = _json_request(
+        lambda: urllib.request.Request(
+            os.environ.get("PRIMEMLS_TOKEN_URL", TOKEN_URL),
+            data=data,
+            headers={"Authorization": f"Basic {auth}", "Content-Type": "application/x-www-form-urlencoded",
+                     "User-Agent": UA},
+        ),
+        timeout=60, what="token",
+    )
+    _tok["v"], _tok["exp"] = t["access_token"], now + t.get("expires_in", 7200)
+    return _tok["v"]
+
+
+def _get(params, max_retries=6):
+    qs = "&".join(f"{k}={urllib.parse.quote(str(v))}" for k, v in params.items())
+    url = f"{os.environ.get('PRIMEMLS_DATA_URL', DATA_URL)}?{qs}"
+    return _json_request(
+        lambda: urllib.request.Request(
+            url, headers={"Authorization": f"Bearer {get_token()}", "Accept": "application/json",
+                          "User-Agent": UA}
+        ),
+        timeout=120, max_retries=max_retries, what="query",
+    )
 
 
 def fetch_all(filt, select, page=200, order="CloseDate desc", pace=0.4, max_pages=100000):
