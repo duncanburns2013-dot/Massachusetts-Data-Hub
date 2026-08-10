@@ -172,11 +172,11 @@ footer a:hover{color:var(--gold)}
 <body>
 <div class="hero">
 <h1>Energy Policy &amp; Costs</h1>
-<p class="sub">How green mandates, offshore wind failures, and policy decisions pushed Massachusetts electricity to <span id="heroRate">&#x2014;</span> &#x2014; <span id="heroRank">&#x2014;</span>. Why H.5151 closes just <span id="heroGap">&#x2014;</span> of the gap, and why S.3143's $14.3B claim is mostly accounting.</p>
+<p class="sub">How green mandates, offshore wind failures, and policy decisions pushed Massachusetts electricity to <span id="heroRate">&#x2014;</span> &#x2014; <span id="heroRank">&#x2014;</span>. Why H.5175 closes just <span id="heroGap">&#x2014;</span> of the gap, and why S.3143's $14.3B claim is mostly accounting.</p>
 <div class="hero-stats">
 <div class="hero-stat"><div class="val bad">28.82&#x00A2;</div><div class="lbl">Per kWh (EIA May 2026)</div></div>
 <div class="hero-stat"><div class="val bad">+56%</div><div class="lbl">Above National Avg</div></div>
-<div class="hero-stat"><div class="val bad">128-27</div><div class="lbl">H.5151 House Vote</div></div>
+<div class="hero-stat"><div class="val bad">128-27</div><div class="lbl">H.5175 House Vote</div></div>
 <div class="hero-stat"><div class="val bad">$1.36B</div><div class="lbl">RGGI Carbon Tax Total</div></div>
 <div class="hero-stat"><div class="val bad"><span id="equivHeroStat">&#x2014;</span></div><div class="lbl">Gas/Gal Equivalence</div></div>
 <div class="hero-stat"><div class="val bad">$534K</div><div class="lbl">To Hide Non-Compliance</div></div>
@@ -185,16 +185,14 @@ footer a:hover{color:var(--gold)}
 <nav class="tab-nav">
 <button class="tab-btn active" onclick="switchTab('overview',this)">Overview</button>
 <button class="tab-btn" onclick="switchTab('rates',this)">Rates</button>
-<button class="tab-btn" onclick="switchTab('h5151',this)">H.5151 Exposed</button>
+<button class="tab-btn" onclick="switchTab('legislation',this)">Legislation</button>
 <button class="tab-btn" onclick="switchTab('cutkept',this)">Cut vs Kept</button>
 <button class="tab-btn" onclick="switchTab('wind',this)">Offshore Wind</button>
 <button class="tab-btn" onclick="switchTab('mandates',this)">Mandates</button>
 <button class="tab-btn" onclick="switchTab('money',this)">Follow the Money</button>
 <button class="tab-btn" onclick="switchTab('transparency',this)">Transparency</button>
-<button class="tab-btn new-tab" onclick="switchTab('gasvsutil',this)">&#x26FD; Gas vs Utility</button>
 <button class="tab-btn new-tab" onclick="switchTab('equivalence',this)">&#x2696;&#xFE0F; The Equivalence</button>
 <button class="tab-btn new-tab" onclick="switchTab('boston',this)">&#x1F3D9;&#xFE0F; Boston CAP</button>
-<button class="tab-btn new-tab" onclick="switchTab('s3143',this)">&#x26A1; S.3143 Audit</button>
 </nav>
 <div class="container">
 
@@ -204,7 +202,7 @@ footer a:hover{color:var(--gold)}
 <div class="alert-item">MA residential rate: <strong>28.82&#x00A2;/kWh</strong> &#x2014; national average: 18.44&#x00A2; (EIA May 2026)</div>
 <div class="alert-item">Where that ranks: <strong><span id="alertRank">&#x2014;</span></strong></div>
 <div class="alert-item">Your bill includes hidden costs: <strong>$1.36B RGGI carbon tax, RPS compliance, offshore wind contracts</strong></div>
-<div class="alert-item">H.5151 passed House 128-27 on Feb 26, 2026 &#x2014; <strong>107 pages, 48hr vote, zero public hearings</strong></div>
+<div class="alert-item">H.5175 passed House 128-27 on Feb 26, 2026 &#x2014; <strong>107 pages, 48hr vote, zero public hearings</strong></div>
 <div class="alert-item">Vineyard Wind blade failure (July 2024) &#x2014; debris across <strong>Nantucket beaches</strong>, $10.5M settlement</div>
 <div class="alert-item">Gov. Healey boasted about <strong>blocking two gas pipelines</strong>, then claimed she never stopped them</div>
 <div class="alert-item">State spent <strong>$534K fighting records requests</strong> that exposed zero compliance with its own climate rules</div>
@@ -214,7 +212,7 @@ footer a:hover{color:var(--gold)}
 <div class="stat-card"><div class="label">MA Residential Rate</div><div class="value red">28.82&#x00A2;</div><div class="sub">Per kWh (EIA May 2026)</div></div>
 <div class="stat-card"><div class="label">National Average</div><div class="value green">18.44&#x00A2;</div><div class="sub">Per kWh</div></div>
 <div class="stat-card"><div class="label">Annual Overpayment</div><div class="value red">$747</div><div class="sub">Per household vs US avg</div></div>
-<div class="stat-card"><div class="label">H.5151 Relief</div><div class="value amber">~$150</div><div class="sub">Per year &#x2014; <span id="reliefGapPct">&#x2014;</span> of gap</div></div>
+<div class="stat-card"><div class="label">H.5175 Relief</div><div class="value amber">~$150</div><div class="sub">Per year &#x2014; <span id="reliefGapPct">&#x2014;</span> of gap</div></div>
 <div class="stat-card"><div class="label">FL Rate</div><div class="value green">15.17&#x00A2;</div><div class="sub">Per kWh &#x2014; half of MA</div></div>
 <div class="stat-card"><div class="label">2025 Annual Avg Premium</div><div class="value red">+76%</div><div class="sub">30.48&#x00A2; MA vs 17.30&#x00A2; US &#x2014; full-year EIA</div></div>
 </div>
@@ -267,10 +265,16 @@ footer a:hover{color:var(--gold)}
 </tbody></table><div class="source">Source: EIA Electric Power Monthly Table 5.6.A, October 2025. Residential rate updated to May 2026 (28.82&#x00A2;) in hero stats and overview.</div></div>
 </div>
 
-<!-- ===== H.5151 EXPOSED ===== -->
-<div id="h5151" class="tab-content">
-<h2 class="section-title">H.5151 &#x2014; The $9 Billion Illusion</h2>
-<div class="alert"><h4>&#x26A0;&#xFE0F; Passed House 128-27 on Feb 26, 2026 &#x2014; Published as H.5175</h4><div class="alert-grid">
+<!-- ===== H.5175 EXPOSED ===== -->
+
+
+
+<!-- ===== LEGISLATION (H.5175 + S.3143) ===== -->
+<div id="legislation" class="tab-content">
+<h2 class="section-title">Legislation &#x2014; H.5175 &amp; S.3143</h2>
+<div class="alert"><h4>&#x2696;&#xFE0F; Status &#x2014; in conference committee, not law</h4><p>Both chambers have passed their own version and neither text is in force. <strong>H.5175</strong> (a redraft of H.5151) passed the House <strong>128&#x2013;27 on February 26, 2026</strong>; <strong>S.3143</strong> passed the Senate on <strong>July 1, 2026</strong>. A House&#x2013;Senate conference committee is reconciling them, and under legislative rules those talks may run through 2026. The two differ materially &#x2014; the House bill cuts roughly $1B from Mass Save across 2025&#x2013;2027, while the Senate bill phases out the Gas System Enhancement Plan by 2030 &#x2014; so the savings claims audited below are claims about competing drafts, not about enacted law. Whatever emerges from conference is what will actually reach ratepayers.</p></div>
+<h2 class="section-title">H.5175 &#x2014; The $9 Billion Illusion</h2>
+<div class="alert"><h4>&#x26A0;&#xFE0F; Passed House 128-27 on Feb 26, 2026 &#x2014; Redraft of H.5175</h4><div class="alert-grid">
 <div class="alert-item"><strong>107 pages</strong> released Tuesday. Ways &amp; Means got 45 minutes to review.</div>
 <div class="alert-item"><strong>126 amendments</strong> filed by 5pm Wednesday. Floor vote Thursday past 10pm.</div>
 <div class="alert-item">Claims <strong>$9B in savings</strong> over 10 years. Reality: ~$150/yr per household (<span id="alertGapPct">&#x2014;</span> of gap).</div>
@@ -290,10 +294,10 @@ footer a:hover{color:var(--gold)}
 </div>
 <div class="donut-grid">
 <div class="chart-card" style="text-align:center"><h3>Current Bill &#x2014; $185/mo</h3><div class="chart-area"><canvas id="c4a"></canvas></div></div>
-<div class="chart-card" style="text-align:center"><h3>After H.5151 &#x2014; ~$173/mo</h3><div class="chart-area"><canvas id="c4b"></canvas></div></div>
+<div class="chart-card" style="text-align:center"><h3>After H.5175 &#x2014; ~$173/mo</h3><div class="chart-area"><canvas id="c4b"></canvas></div></div>
 </div>
 <div class="chart-card"><h3>State Comparison &#x2014; Monthly Bill at 600 kWh</h3><div class="chart-area"><canvas id="c4c"></canvas></div><div class="source">Source: EIA May 2026 rates &#x00D7; 600 kWh/month</div></div>
-<div class="nc"><div class="nc-title">NEW COSTS H.5151 ADDS TO FUTURE BILLS:</div>
+<div class="nc"><div class="nc-title">NEW COSTS H.5175 ADDS TO FUTURE BILLS:</div>
 <div class="nc-i">10 GW offshore wind &#x2014; long-term contracts recovered through ratepayer tariffs</div>
 <div class="nc-i">10 GW solar procurement &#x2014; same cost recovery mechanism</div>
 <div class="nc-i">Central Procurement Fund &#x2014; tariff-funded for 30-year contracts</div>
@@ -303,6 +307,68 @@ footer a:hover{color:var(--gold)}
 </div>
 <div class="quote-block">"Somebody who's getting a bill today, tomorrow, next month &#x2014; what are they going to see for relief? It's a lot more down the road."<cite>House Minority Leader Brad Jones (R)</cite></div>
 <div class="verdict red"><h3>This isn't reform. It's a remodel of the same machine.</h3><p>You save $12/month starting 2027. Every new mandate becomes tomorrow's line item.</p></div>
+<h2 class="section-title">S.3143 &#x2014; The Senate's $14.3 Billion Claim, Audited</h2>
+
+<div class="alert"><h4>&#x26A0;&#xFE0F; Released June 24, 2026 &#x2014; Passed the Senate on July 1, 2026</h4><div class="alert-grid">
+<div class="alert-item">Senate claims <strong>$14.3B in ratepayer savings</strong> over 10 years &#x2014; while MA rates sit at <span id="s3143Rate">&#x2014;</span>, <span id="s3143Prem">&#x2014;</span> above national average</div>
+<div class="alert-item">The DPU already <strong>approved 25&#x2013;30% Eversource + 11&#x2013;13% National Grid hikes</strong> in late 2024 &#x2014; none of the $14.3B directly offsets these</div>
+<div class="alert-item">The bill's largest single claim &#x2014; <strong>$7.1B securitization</strong> &#x2014; restructures utility debt, it does not eliminate it. Ratepayers still pay every dollar.</div>
+<div class="alert-item">S.3143 reduces RPS from 3%/yr to 1%/yr for 2027&#x2013;29 and calls a mandate rollback a <strong>"$213M savings"</strong> &#x2014; they created the cost; they are trimming it and claiming credit</div>
+<div class="alert-item">Sen. Barrett, the bill's author, <strong>could not say how much a typical ratepayer would save</strong> or when they would first see relief on their monthly bill</div>
+<div class="alert-item">Mass Save has ballooned from <strong>$200M/yr (2008) to $1.5B/yr (2025)</strong> &#x2014; $16B total &#x2014; bill caps admin at 5% but does not claw back approved budgets</div>
+</div></div>
+
+<div class="stat-row">
+<div class="stat-card"><div class="label">Total Claimed Savings</div><div class="value red">$14.3B</div><div class="sub">Over 10 years &#x2014; all categories</div></div>
+<div class="stat-card"><div class="label">Verified / Documented</div><div class="value green">$2.1B</div><div class="sub">Competitive supplier + GSEP reform</div></div>
+<div class="stat-card"><div class="label">Speculative / Accounting</div><div class="value amber">$9.4B</div><div class="sub">Securitization, investigations, mandate trims</div></div>
+<div class="stat-card"><div class="label">Gap Closed vs US Avg</div><div class="value red">~<span id="s3143GapPct">&#x2014;</span></div><div class="sub">Realistic ~$150/yr of <span id="s3143Overpay">&#x2014;</span>/yr overpayment</div></div>
+<div class="stat-card"><div class="label">MA Rate Right Now</div><div class="value red"><span id="s3143CardRate">&#x2014;</span></div><div class="sub">EIA <span id="s3143CardPeriod">&#x2014;</span> &#x2014; <span id="s3143CardRank">&#x2014;</span></div></div>
+<div class="stat-card"><div class="label">Floor Vote Scheduled</div><div class="value amber">Jul 1</div><div class="sub">2026 &#x2014; Ways &amp; Means polled out June 24, 2026</div></div>
+</div>
+
+<div class="chart-grid">
+<div class="chart-card"><h3>The $14.3B Claim &#x2014; Credibility Breakdown</h3><div class="chart-area"><canvas id="cS3143pie"></canvas></div><div class="source">Source: S.3143 fact sheet (June 24, 2026); @DuncanBurnsMA analysis. Green = documented AGO/DPU data; Amber = plausible, partial; Red = debt restructuring, investigation authorizations, mandate rollbacks.</div></div>
+<div class="chart-card"><h3>Savings Claims by Category &#x2014; $M Over 10 Years</h3><div class="chart-area tall"><canvas id="cS3143cats"></canvas></div><div class="source">Source: S.3143 Senate fact sheet. Color = credibility tier: green = documented, amber = plausible/partial, red = speculative or accounting fiction.</div></div>
+</div>
+
+<div class="chart-grid">
+<div class="chart-card"><h3>Annual Per-Household Reality Check</h3><div class="chart-area"><canvas id="cS3143hh"></canvas></div><div class="source">Source: EIA <span id="s3143SrcPeriod">&#x2014;</span>; S.3143 $14.3B &divide; 2.9M households &divide; 10 yrs = $493/yr claimed; realistic per analysis = ~$150/yr. Even accepting the full claim, MA remains <span id="s3143SrcRank">&#x2014;</span>.</div></div>
+<div class="chart-card"><h3>What S.3143 Doesn't Touch &#x2014; The Structural Cost Drivers</h3><div class="chart-area"><canvas id="cS3143gaps"></canvas></div><div class="source">Source: EIA; RGGI Inc.; DPU rate orders; ISO-NE. These policy-driven costs persist regardless of S.3143 passage.</div></div>
+</div>
+
+<div class="data-card"><h3>S.3143 Savings Claims &#x2014; Line-by-Line Audit</h3>
+<table class="data-table"><thead><tr><th>Provision</th><th>Senate Claim</th><th>Mechanism</th><th>Credibility</th><th>The Catch</th></tr></thead><tbody>
+<tr><td><strong>Competitive Supplier Reform</strong></td><td class="good">$650M</td><td>Rein in predatory suppliers; enhanced AGO enforcement</td><td class="good">&#x2705; Documented</td><td>AGO confirmed $738M in overcharges 2015&#x2013;2024; $81M in 2024 alone. Receipt exists.</td></tr>
+<tr><td><strong>GSEP Gas Line Reform</strong></td><td class="good">$1.46B</td><td>Narrow scope + phase out gas pipe program by 2030</td><td class="good">&#x2705; Documented</td><td>GSEP is 8&#x2013;11% of monthly gas bills. AGO has flagged it for years. Credible and overdue.</td></tr>
+<tr><td><strong>Geothermal (Hospitals/Colleges)</strong></td><td class="good">$130M</td><td>Gas utilities own single-customer geothermal systems</td><td class="good">&#x2705; Documented</td><td>Specific, targeted, aligns with existing multi-customer authority. Solid provision.</td></tr>
+<tr><td><strong>Distribution Planning Reform</strong></td><td class="amber">$1.7B</td><td>Merge overlapping DPU planning proceedings</td><td class="amber">&#x26A0;&#xFE0F; Plausible</td><td>Efficiency gain is real but $1.7B assumes maximum redundancy elimination &#x2014; optimistic.</td></tr>
+<tr><td><strong>Reconciling Charge Reform</strong></td><td class="amber">$750M</td><td>DPU review of usage-based peak charges</td><td class="amber">&#x26A0;&#xFE0F; Plausible</td><td>Depends entirely on DPU action post-passage. No guaranteed outcome.</td></tr>
+<tr><td><strong>Seasonal Procurement Reform</strong></td><td class="amber">$780M</td><td>Flexible procurement windows to dampen seasonal spikes</td><td class="amber">&#x26A0;&#xFE0F; Plausible</td><td>Known fix for years. DPU already had authority to do this. Senate taking credit retroactively.</td></tr>
+<tr><td><strong>DOER Direct Procurement</strong></td><td class="amber">$160M&#x2013;$420M</td><td>Cut utility intermediary fee on energy contracts</td><td class="amber">&#x26A0;&#xFE0F; Plausible</td><td>Wide range ($160M&#x2013;$420M). Lower end is realistic; upper requires full program adoption.</td></tr>
+<tr><td><strong>Renewable Natural Gas</strong></td><td class="amber">$230M</td><td>Utilities transport RNG to large industrial users</td><td class="amber">&#x26A0;&#xFE0F; Plausible</td><td>Depends on RNG supply buildout and industrial uptake. Long-term play with uncertain timeline.</td></tr>
+<tr><td><strong>Third-Party Grid Investment</strong></td><td class="amber">$130M</td><td>Outside investors fund distribution projects</td><td class="amber">&#x26A0;&#xFE0F; Plausible</td><td>Requires a competitive investor market to develop. Unproven in MA regulatory context.</td></tr>
+<tr><td><strong>Net Metering Reduction</strong></td><td class="amber">$75M</td><td>Cut credits for large standalone solar/wind facilities</td><td class="amber">&#x26A0;&#xFE0F; Plausible</td><td>Shifts cost from large commercial facilities. Rooftop solar owners unaffected per bill text.</td></tr>
+<tr><td><strong>Basic Service Markup Investigation</strong></td><td class="highlight">$1B</td><td>DPU investigates $3.4B in supplier overcharges (2015&#x2013;2024)</td><td class="highlight">&#x274C; Speculative</td><td>This is an <em>authorization to investigate</em>, not a guaranteed outcome. Counting an inquiry as a savings projection.</td></tr>
+<tr><td><strong>Securitization</strong></td><td class="highlight">$7.1B</td><td>Utilities refinance grid/storm/gas transition debt at lower rates</td><td class="highlight">&#x274C; Accounting</td><td>Ratepayers still pay every dollar of the debt &#x2014; just at a lower interest rate. This is relative-to-worst-case math, not bill reduction.</td></tr>
+<tr><td><strong>RPS "Right-Sizing"</strong></td><td class="highlight">$213M</td><td>Drop RPS from 3%/yr to 1%/yr for 2027&#x2013;2029</td><td class="highlight">&#x274C; Mandate Rollback</td><td>The legislature created this cost. Reducing a target they set and calling the delta "savings" is circular logic.</td></tr>
+</tbody></table>
+<div class="source">Sources: S.3143 Senate fact sheet (June 24, 2026); AGO Competitive Electric Supply Annual Report (March 2026); EIA; DPU; RGGI Inc.; WBUR; Commonwealth Beacon; WWLP.</div></div>
+
+<div class="alert amber"><h4>&#x1F4CB; What S.3143 Does NOT Address &#x2014; The Structural Cost Drivers Remain</h4><div class="alert-grid">
+<div class="alert-item"><strong>Pipeline blockade legacy:</strong> Rejecting Access Northeast constrained natural gas supply &#x2014; the primary driver of winter price spikes. S.3143 is silent on this.</div>
+<div class="alert-item"><strong>DPU-approved rate hikes already in effect:</strong> Eversource +25&#x2013;30%, National Grid +11&#x2013;13% (late 2024). No provision claws these back or offsets them.</div>
+<div class="alert-item"><strong>RGGI carbon tax:</strong> $1.36B extracted from MA ratepayers since 2008; $200M/yr ongoing and growing. S.3143 does not touch RGGI.</div>
+<div class="alert-item"><strong>RPS compliance costs:</strong> Bill rolls back targets for 3 years but extends the mandate framework. The long-term cost architecture stays fully intact.</div>
+<div class="alert-item"><strong>Mass Save cost explosion:</strong> The 5% admin cap and removal of mandatory performance incentives are genuine reforms &#x2014; but the $350M in already-approved mid-term budget increases are not clawed back.</div>
+<div class="alert-item"><strong>Offshore wind collapse:</strong> S.3143 acknowledges the federal attack on offshore wind and responds by reducing targets. That is managing decline, not solving the supply gap.</div>
+</div></div>
+
+<div class="quote-block">"While he forecast overall savings during a 10-year timeline, Barrett did not describe how much a typical ratepayer could expect to save or when they might first experience noticeable savings in their monthly bills."<cite>WWLP News &#x2014; June 24, 2026</cite></div>
+
+<div class="verdict amber"><h3>The Honest Version: "We're Trying to Slow the Growth of Bills We Helped Make This Expensive"</h3><p>Two provisions &#x2014; competitive supplier reform ($650M) and GSEP gas line reform ($1.46B) &#x2014; are real, documented, and overdue. The rest is a mix of DPU reform authority they already had, debt restructuring framed as savings, mandate rollbacks they're calling consumer relief, and investigation authorizations counted as projected outcomes. S.3143 is better than H.5175. But the $14.3B headline is not a bill reduction. It's a press release.</p></div>
+
+<div class="source" style="margin-top:12px">Sources: S.3143 Senate fact sheet (June 24, 2026); EIA Electric Power Monthly (<span id="s3143FootPeriod">&#x2014;</span>); AGO Competitive Electric Supply Annual Report (March 2026); DPU; RGGI Inc.; WBUR; Commonwealth Beacon; Fall River Reporter; WWLP (June 24, 2026).</div>
 </div>
 
 <!-- ===== CUT VS KEPT ===== -->
@@ -335,7 +401,7 @@ footer a:hover{color:var(--gold)}
 </div>
 <div class="section-title" style="margin-top:24px">The Speed Run &#x2014; 107 Pages in 48 Hours</div>
 <div class="cmp-grid">
-<div class="cmp-row"><div class="cmp-side"><div class="cmp-num red">107</div><div>H.5151 Pages</div></div><div class="cmp-vs">vs</div><div class="cmp-side"><div class="cmp-num blue">45</div><div>Healey's Sections</div></div><div class="cmp-tag">138% LARGER</div></div>
+<div class="cmp-row"><div class="cmp-side"><div class="cmp-num red">107</div><div>H.5175 Pages</div></div><div class="cmp-vs">vs</div><div class="cmp-side"><div class="cmp-num blue">45</div><div>Healey's Sections</div></div><div class="cmp-tag">138% LARGER</div></div>
 <div class="cmp-row"><div class="cmp-side"><div class="cmp-num red">45<span style="font-size:0.9rem"> MIN</span></div><div>Ways &amp; Means Review</div></div><div class="cmp-vs">vs</div><div class="cmp-side"><div class="cmp-num blue">90<span style="font-size:0.9rem"> DAYS</span></div><div>Healey's Timeline</div></div><div class="cmp-tag">99.97% LESS TIME</div></div>
 <div class="cmp-row"><div class="cmp-side"><div class="cmp-num red">48<span style="font-size:0.9rem"> HRS</span></div><div>Public to Floor Vote</div></div><div class="cmp-vs">vs</div><div class="cmp-side"><div class="cmp-num blue">180<span style="font-size:0.9rem"> DAYS</span></div><div>Healey's Timeline</div></div><div class="cmp-tag">90&#x00D7; FASTER</div></div>
 <div class="cmp-row"><div class="cmp-side"><div class="cmp-num red">0</div><div>Public Hearings</div></div><div class="cmp-vs">vs</div><div class="cmp-side"><div class="cmp-num blue">6<span style="font-size:0.9rem"> HRS</span></div><div>Healey's Hearing</div></div><div class="cmp-tag">ZERO PUBLIC INPUT</div></div>
@@ -375,7 +441,7 @@ footer a:hover{color:var(--gold)}
 <div class="alert-item"><strong>Nov 2025:</strong> Plymouth wind turbine &#x2014; <strong>100-foot blade</strong> collapses into cranberry bog</div>
 <div class="alert-item"><strong>2023&#x2013;2024:</strong> Multiple offshore wind contracts <strong>cancelled or renegotiated</strong> at higher prices</div>
 <div class="alert-item">Section 83C guarantees developers <strong>"full cost recovery"</strong> + utilities get 2.75% profit</div>
-<div class="alert-item">H.5151 <strong>expands</strong> to 10 GW offshore wind + adds state co-investment with developers</div>
+<div class="alert-item">H.5175 <strong>expands</strong> to 10 GW offshore wind + adds state co-investment with developers</div>
 </div></div>
 <div class="data-card"><h3>Offshore Wind Projects &#x2014; Who Gets Paid</h3>
 <table class="data-table"><thead><tr><th>Project</th><th>Developer</th><th>Parent Company</th><th>Country</th><th>Status</th></tr></thead><tbody>
@@ -427,7 +493,7 @@ footer a:hover{color:var(--gold)}
 <tr><td class="highlight">Clean Energy / Offshore Wind</td><td class="highlight">~4%</td><td><strong>Ch. 169, Acts of 2008, &#x00A7;83C<br>(as amended St. 2016, c. 188, &#x00A7;12)</strong></td><td>"Full cost recovery" — all PPA costs pass through to ratepayers; utilities receive up to 2.75% remuneration</td></tr>
 <tr><td>RGGI Carbon Pass-Through</td><td>~2%</td><td><strong>M.G.L. c. 21N, &#x00A7;&#x00A7;1&#x2013;9</strong></td><td>Cap-and-trade carbon auction costs — $200M/yr extracted, passed to ratepayers through supply charges</td></tr>
 <tr><td>Transmission Charge</td><td>~13%</td><td><strong>M.G.L. c. 164, &#x00A7;1</strong></td><td>ISO-NE grid fees and capacity market costs — constrained by blocked pipeline infrastructure</td></tr>
-<tr><td>Distribution Charge</td><td>~30%</td><td><strong>M.G.L. c. 164, &#x00A7;1A</strong></td><td>DPU-regulated delivery charge — includes GSEP pipe replacement costs (untouched by H.5151)</td></tr>
+<tr><td>Distribution Charge</td><td>~30%</td><td><strong>M.G.L. c. 164, &#x00A7;1A</strong></td><td>DPU-regulated delivery charge — includes GSEP pipe replacement costs (untouched by H.5175)</td></tr>
 <tr><td>Supply Charge</td><td>~40%</td><td>Market rate</td><td>Actual generation cost — elevated by pipeline constraints (ISO-NE confirms gas dependency drives winter spikes)</td></tr>
 </tbody></table>
 <div class="source">Source: M.G.L. c. 25A &#x00A7;11F; M.G.L. c. 25 &#x00A7;21; Ch. 169/2008 &#x00A7;83C; Ch. 188/2016 &#x00A7;12; M.G.L. c. 21N; M.G.L. c. 164; Eversource/NGrid rate schedules; DPU filings</div>
@@ -443,7 +509,7 @@ footer a:hover{color:var(--gold)}
 <tr class="vote-row-pass"><td>Offshore Wind Expansion</td><td>St. 2016, c. 188</td><td>5,600 MW offshore wind, Section 83C "full cost recovery" codified</td><td class="highlight">157&#x2013;0</td><td class="highlight">39&#x2013;0</td><td class="highlight">Unanimous in both chambers</td></tr>
 <tr class="vote-row-pass"><td>Climate Roadmap Act</td><td>St. 2021, c. 8</td><td>Net zero 2050 legally binding; 5,600 MW additional wind; 2030 sublimits</td><td class="highlight">144&#x2013;14</td><td class="highlight">38&#x2013;2</td><td class="highlight">Near-unanimous; 16 no votes total</td></tr>
 <tr class="vote-row-pass"><td>"Protecting Ratepayers" Act</td><td>St. 2024, c. 239 (&#x00A7;83E)</td><td>5,000 MW storage mandate with guaranteed cost pass-through to ratepayers</td><td class="highlight">125&#x2013;17</td><td class="highlight">38&#x2013;2</td><td class="highlight">19 total no votes — all Republican</td></tr>
-<tr><td>H.5151 &#x2192; H.5175</td><td>194th Session, 2026</td><td>10 GW wind + 10 GW solar mandates; 30-yr contracts; central procurement fund</td><td>128&#x2013;27</td><td>Pending (Sen. Barrett)</td><td>Awaiting Senate version</td></tr>
+<tr><td>H.5175 &#x2192; H.5175</td><td>194th Session, 2026</td><td>10 GW wind + 10 GW solar mandates; 30-yr contracts; central procurement fund</td><td>128&#x2013;27</td><td>Pending (Sen. Barrett)</td><td>Awaiting Senate version</td></tr>
 </tbody></table>
 <div class="source">Source: MA Legislature roll call records; Senate Roll Call #399 (2024); MA General Laws</div>
 </div>
@@ -457,11 +523,11 @@ footer a:hover{color:var(--gold)}
 <tr><td class="highlight">RGGI Carbon Tax</td><td>$1.36B total ($200M/yr)</td><td>Auction costs passed through (M.G.L. c. 21N)</td><td class="highlight">Ratepayers</td></tr>
 <tr><td>Clean Energy Standard</td><td>80% by 2050</td><td>Additional procurement (St. 2021, c. 8)</td><td class="highlight">Ratepayers</td></tr>
 <tr><td>Offshore Wind</td><td>10 GW by 2040</td><td>Full cost recovery PPAs (&#x00A7;83C)</td><td class="highlight">Ratepayers</td></tr>
-<tr><td>Solar Mandate</td><td>10 GW by 2040</td><td>Tariff-funded procurement (H.5151)</td><td class="highlight">Ratepayers</td></tr>
+<tr><td>Solar Mandate</td><td>10 GW by 2040</td><td>Tariff-funded procurement (H.5175)</td><td class="highlight">Ratepayers</td></tr>
 <tr><td>Energy Storage</td><td>5,000 MW by 2035</td><td>Utility rate base (St. 2024, c. 239, &#x00A7;83E)</td><td class="highlight">Ratepayers</td></tr>
 <tr><td>Building Electrification</td><td>No new gas</td><td>Higher electric demand (St. 2021, c. 8)</td><td class="highlight">Ratepayers + Homeowners</td></tr>
 <tr><td>Net-Zero 2050</td><td>Economy-wide neutrality</td><td>$130B&#x2013;$400B+ (M.G.L. c. 21N, &#x00A7;3(b))</td><td class="highlight">Everyone</td></tr>
-</tbody></table><div class="source">Source: MA DOER; DPU filings; Climate Act (2021); Clean Energy and Climate Plan; H.5151 bill text</div></div>
+</tbody></table><div class="source">Source: MA DOER; DPU filings; Climate Act (2021); Clean Energy and Climate Plan; H.5175 bill text</div></div>
 
 <div class="stat-row">
 <div class="stat-card"><div class="label">RGGI Total (2008&#x2013;2025)</div><div class="value red">$1.36B</div><div class="sub">Carbon tax from MA ratepayers</div></div>
@@ -485,7 +551,7 @@ footer a:hover{color:var(--gold)}
 <div class="alert-item">Crawford personally donated <strong>$59,150 to 115 legislators</strong></div>
 <div class="alert-item">Rep. Cusack: <strong>60% of Nov fundraising</strong> = energy industry</div>
 <div class="alert-item">Eversource + National Grid: <strong>$439K lobbying</strong> in H1 2022 alone</div>
-<div class="alert-item">H.5151 <strong>stripped</strong> Healey's proposal to ban utility lobbying cost recovery</div>
+<div class="alert-item">H.5175 <strong>stripped</strong> Healey's proposal to ban utility lobbying cost recovery</div>
 </div></div>
 <div class="data-card"><h3>Green Energy Lobbying Totals (MA Secretary of State Records)</h3>
 <table class="data-table"><thead><tr><th>Entity</th><th>Country</th><th>Lobbying Total</th><th>Primary Firm</th></tr></thead><tbody>
@@ -576,38 +642,7 @@ footer a:hover{color:var(--gold)}
 </div>
 
 <!-- ===== GAS VS UTILITY ===== -->
-<div id="gasvsutil" class="tab-content">
-<h2 class="section-title">&#x26FD; Gasoline vs. Utility Energy &#x2014; A 15-Year Cost Comparison</h2>
-<div class="alert amber"><h4>&#x1F4CA; The Core Finding: Two Very Different Markets</h4><div class="alert-grid">
-<div class="alert-item">MA gasoline tracks the US average within <strong>&#x00B1;3%</strong> &#x2014; a true market price</div>
-<div class="alert-item">MA electricity is <strong>79% above the US average</strong> in 2025, up from 27% in 2010</div>
-<div class="alert-item">MA natural gas rose <strong>97%</strong> (2010&#x2013;2025) vs 30% nationally</div>
-<div class="alert-item">Even the <strong>2022 all-time gas price record</strong> ($3.98/gal) was closer to the US average than MA electricity is today</div>
-</div></div>
-<div class="chart-grid">
-<div class="chart-card"><h3>Regular Gasoline &#x2014; MA vs US Annual Average ($/gal)</h3><div class="chart-area"><canvas id="chartGasMA"></canvas></div><div class="source">Source: EIA Weekly Retail Gasoline Prices, annual averages.</div></div>
-<div class="chart-card"><h3>Residential Electricity &#x2014; MA vs US (&#x00A2;/kWh)</h3><div class="chart-area"><canvas id="chartElecComp"></canvas></div><div class="source">Source: EIA Electric Power Monthly</div></div>
-</div>
-<div class="chart-grid">
-<div class="chart-card"><h3>MA Premium Over US Average &#x2014; All Energy Types (%)</h3><div class="chart-area"><canvas id="chartPremium"></canvas></div><div class="source">All energy types from EIA data.</div></div>
-<div class="chart-card"><h3>NE Diesel vs US &#x2014; Annual Average ($/gal)</h3><div class="chart-area"><canvas id="chartDiesel"></canvas></div><div class="source">Source: EIA Weekly On-Highway Diesel Prices, NE PADD1A vs US.</div></div>
-</div>
-<div class="data-card">
-<h3>Full Price History &#x2014; Real EIA Data &#x00B7; Annual Averages</h3>
-<table class="data-table">
-<thead><tr><th>Year</th><th>Gas US</th><th>Gas MA</th><th>MA&#x00B1;</th><th>Diesel US</th><th>NE Diesel</th><th>NE&#x00B1;</th><th>Elec MA (&#x00A2;)</th><th>Elec US (&#x00A2;)</th><th>Elec&#x00B1;</th></tr></thead>
-<tbody id="priceTableBody"></tbody>
-</table>
-<div class="source">Gasoline/Diesel: EIA (annual averages from weekly data). Electricity: EIA Electric Power Monthly + BLS.</div>
-</div>
-<div class="info-box amber"><h4>&#x26FD; Why Gasoline Stays Close to the US Average</h4><p>Gasoline is a nationally traded commodity priced off crude oil. There is no state legislature that can mandate a premium on crude. When oil fell in 2015&#x2013;16 and again in 2020, MA gasoline fell with it. Utility energy is the opposite: every legislative mandate creates a permanent floor. Rates never fall when markets fall.</p></div>
-<div class="chart-card">
-<h3>Annual Household Total Energy Burden &#x2014; MA vs US ($)</h3>
-<p style="font-size:0.72rem;color:var(--muted);margin-bottom:12px">Electricity (600 kWh/mo) + Natural gas (700 therms/yr) + Gasoline (500 gal/yr)</p>
-<div class="chart-area tall"><canvas id="chartBurden"></canvas></div>
-<div class="source">Computed from EIA annual averages. Hover to see the annual MA overspend.</div>
-</div>
-</div>
+
 
 <!-- ===== THE EQUIVALENCE ===== -->
 <div id="equivalence" class="tab-content">
@@ -706,7 +741,7 @@ footer a:hover{color:var(--gold)}
 <tr><td class="highlight">Renewable Portfolio Standard</td><td><strong>M.G.L. Ch. 25A, &#x00A7;11F</strong></td><td>35%+ renewable by 2030, increasing annually</td><td class="highlight">RPS compliance charges on every bill (~10% of total)</td><td class="highlight">Both support increases</td></tr>
 <tr><td class="highlight">RGGI Participation</td><td><strong>Ch. 21N, &#x00A7;&#x00A7;1&#x2013;9</strong></td><td>Cap-and-trade carbon auction &#x2014; $1.36B extracted since 2008</td><td class="highlight">$200M/yr and rising &#x2014; passed to ratepayers</td><td class="highlight">Both support</td></tr>
 <tr><td>"Protecting Ratepayers" Act</td><td><strong>St. 2024, c. 239, &#x00A7;83E</strong></td><td>5,000 MW storage mandate with guaranteed cost pass-through</td><td class="highlight">Full cost recovery &#x2014; ratepayers pay for all storage contracts</td><td>Healey signed Nov 2024</td></tr>
-<tr><td>H.5151 &#x2192; H.5175</td><td><strong>194th Session, 2026</strong></td><td>10 GW wind + 10 GW solar mandates, 30-yr contract authority</td><td class="highlight">New procurement costs, ratepayer-funded</td><td>Wu praised; Healey proposed</td></tr>
+<tr><td>H.5175 &#x2192; H.5175</td><td><strong>194th Session, 2026</strong></td><td>10 GW wind + 10 GW solar mandates, 30-yr contract authority</td><td class="highlight">New procurement costs, ratepayer-funded</td><td>Wu praised; Healey proposed</td></tr>
 <tr><td>Municipal Aggregation</td><td><strong>M.G.L. c. 164, &#x00A7; 134</strong></td><td>Authorizes BCCE &#x2014; supply-only rate competition</td><td>Real but limited: ~$200/yr, supply only</td><td>Wu's signature program</td></tr>
 <tr><td>BERDO (City Ordinance)</td><td><strong>CBC Ch. VII, &#x00A7;7-2.2</strong></td><td>Large buildings must hit net-zero emissions by 2050</td><td class="highlight">Compliance costs passed to tenants via rent/fees</td><td>Passed Oct 2021 (Janey); Wu enforcing &amp; expanding</td></tr>
 </tbody></table>
@@ -755,7 +790,7 @@ footer a:hover{color:var(--gold)}
 <div class="hyp-arrow">&#x2192;</div>
 <div class="hyp-step b"><div class="st">HEALEY (GOV)</div><div class="sd">Signed Climate Act. Ch. 179, 2022.</div></div>
 <div class="hyp-arrow">&#x2192;</div>
-<div class="hyp-step r"><div class="st">LEGISLATURE (D)</div><div class="sd">H.5151: 10 GW wind, 10 GW solar mandates.</div></div>
+<div class="hyp-step r"><div class="st">LEGISLATURE (D)</div><div class="sd">H.5175: 10 GW wind, 10 GW solar mandates.</div></div>
 </div>
 <div class="hyp-chain" style="margin-top:6px">
 <div class="hyp-step r"><div class="st">WU (MAYOR)</div><div class="sd">BERDO mandate. Gas decommission.</div></div>
@@ -770,76 +805,13 @@ footer a:hover{color:var(--gold)}
 
 
 <!-- ===== S.3143 AUDIT ===== -->
-<div id="s3143" class="tab-content">
-<h2 class="section-title">S.3143 &#x2014; The Senate's $14.3 Billion Claim, Audited</h2>
 
-<div class="alert"><h4>&#x26A0;&#xFE0F; Released June 24, 2026 &#x2014; Senate floor vote was scheduled for July 1, 2026</h4><div class="alert-grid">
-<div class="alert-item">Senate claims <strong>$14.3B in ratepayer savings</strong> over 10 years &#x2014; while MA rates sit at <span id="s3143Rate">&#x2014;</span>, <span id="s3143Prem">&#x2014;</span> above national average</div>
-<div class="alert-item">The DPU already <strong>approved 25&#x2013;30% Eversource + 11&#x2013;13% National Grid hikes</strong> in late 2024 &#x2014; none of the $14.3B directly offsets these</div>
-<div class="alert-item">The bill's largest single claim &#x2014; <strong>$7.1B securitization</strong> &#x2014; restructures utility debt, it does not eliminate it. Ratepayers still pay every dollar.</div>
-<div class="alert-item">S.3143 reduces RPS from 3%/yr to 1%/yr for 2027&#x2013;29 and calls a mandate rollback a <strong>"$213M savings"</strong> &#x2014; they created the cost; they are trimming it and claiming credit</div>
-<div class="alert-item">Sen. Barrett, the bill's author, <strong>could not say how much a typical ratepayer would save</strong> or when they would first see relief on their monthly bill</div>
-<div class="alert-item">Mass Save has ballooned from <strong>$200M/yr (2008) to $1.5B/yr (2025)</strong> &#x2014; $16B total &#x2014; bill caps admin at 5% but does not claw back approved budgets</div>
-</div></div>
-
-<div class="stat-row">
-<div class="stat-card"><div class="label">Total Claimed Savings</div><div class="value red">$14.3B</div><div class="sub">Over 10 years &#x2014; all categories</div></div>
-<div class="stat-card"><div class="label">Verified / Documented</div><div class="value green">$2.1B</div><div class="sub">Competitive supplier + GSEP reform</div></div>
-<div class="stat-card"><div class="label">Speculative / Accounting</div><div class="value amber">$9.4B</div><div class="sub">Securitization, investigations, mandate trims</div></div>
-<div class="stat-card"><div class="label">Gap Closed vs US Avg</div><div class="value red">~<span id="s3143GapPct">&#x2014;</span></div><div class="sub">Realistic ~$150/yr of <span id="s3143Overpay">&#x2014;</span>/yr overpayment</div></div>
-<div class="stat-card"><div class="label">MA Rate Right Now</div><div class="value red"><span id="s3143CardRate">&#x2014;</span></div><div class="sub">EIA <span id="s3143CardPeriod">&#x2014;</span> &#x2014; <span id="s3143CardRank">&#x2014;</span></div></div>
-<div class="stat-card"><div class="label">Floor Vote Scheduled</div><div class="value amber">Jul 1</div><div class="sub">2026 &#x2014; Ways &amp; Means polled out June 24, 2026</div></div>
-</div>
-
-<div class="chart-grid">
-<div class="chart-card"><h3>The $14.3B Claim &#x2014; Credibility Breakdown</h3><div class="chart-area"><canvas id="cS3143pie"></canvas></div><div class="source">Source: S.3143 fact sheet (June 24, 2026); @DuncanBurnsMA analysis. Green = documented AGO/DPU data; Amber = plausible, partial; Red = debt restructuring, investigation authorizations, mandate rollbacks.</div></div>
-<div class="chart-card"><h3>Savings Claims by Category &#x2014; $M Over 10 Years</h3><div class="chart-area tall"><canvas id="cS3143cats"></canvas></div><div class="source">Source: S.3143 Senate fact sheet. Color = credibility tier: green = documented, amber = plausible/partial, red = speculative or accounting fiction.</div></div>
-</div>
-
-<div class="chart-grid">
-<div class="chart-card"><h3>Annual Per-Household Reality Check</h3><div class="chart-area"><canvas id="cS3143hh"></canvas></div><div class="source">Source: EIA <span id="s3143SrcPeriod">&#x2014;</span>; S.3143 $14.3B &divide; 2.9M households &divide; 10 yrs = $493/yr claimed; realistic per analysis = ~$150/yr. Even accepting the full claim, MA remains <span id="s3143SrcRank">&#x2014;</span>.</div></div>
-<div class="chart-card"><h3>What S.3143 Doesn't Touch &#x2014; The Structural Cost Drivers</h3><div class="chart-area"><canvas id="cS3143gaps"></canvas></div><div class="source">Source: EIA; RGGI Inc.; DPU rate orders; ISO-NE. These policy-driven costs persist regardless of S.3143 passage.</div></div>
-</div>
-
-<div class="data-card"><h3>S.3143 Savings Claims &#x2014; Line-by-Line Audit</h3>
-<table class="data-table"><thead><tr><th>Provision</th><th>Senate Claim</th><th>Mechanism</th><th>Credibility</th><th>The Catch</th></tr></thead><tbody>
-<tr><td><strong>Competitive Supplier Reform</strong></td><td class="good">$650M</td><td>Rein in predatory suppliers; enhanced AGO enforcement</td><td class="good">&#x2705; Documented</td><td>AGO confirmed $738M in overcharges 2015&#x2013;2024; $81M in 2024 alone. Receipt exists.</td></tr>
-<tr><td><strong>GSEP Gas Line Reform</strong></td><td class="good">$1.46B</td><td>Narrow scope + phase out gas pipe program by 2030</td><td class="good">&#x2705; Documented</td><td>GSEP is 8&#x2013;11% of monthly gas bills. AGO has flagged it for years. Credible and overdue.</td></tr>
-<tr><td><strong>Geothermal (Hospitals/Colleges)</strong></td><td class="good">$130M</td><td>Gas utilities own single-customer geothermal systems</td><td class="good">&#x2705; Documented</td><td>Specific, targeted, aligns with existing multi-customer authority. Solid provision.</td></tr>
-<tr><td><strong>Distribution Planning Reform</strong></td><td class="amber">$1.7B</td><td>Merge overlapping DPU planning proceedings</td><td class="amber">&#x26A0;&#xFE0F; Plausible</td><td>Efficiency gain is real but $1.7B assumes maximum redundancy elimination &#x2014; optimistic.</td></tr>
-<tr><td><strong>Reconciling Charge Reform</strong></td><td class="amber">$750M</td><td>DPU review of usage-based peak charges</td><td class="amber">&#x26A0;&#xFE0F; Plausible</td><td>Depends entirely on DPU action post-passage. No guaranteed outcome.</td></tr>
-<tr><td><strong>Seasonal Procurement Reform</strong></td><td class="amber">$780M</td><td>Flexible procurement windows to dampen seasonal spikes</td><td class="amber">&#x26A0;&#xFE0F; Plausible</td><td>Known fix for years. DPU already had authority to do this. Senate taking credit retroactively.</td></tr>
-<tr><td><strong>DOER Direct Procurement</strong></td><td class="amber">$160M&#x2013;$420M</td><td>Cut utility intermediary fee on energy contracts</td><td class="amber">&#x26A0;&#xFE0F; Plausible</td><td>Wide range ($160M&#x2013;$420M). Lower end is realistic; upper requires full program adoption.</td></tr>
-<tr><td><strong>Renewable Natural Gas</strong></td><td class="amber">$230M</td><td>Utilities transport RNG to large industrial users</td><td class="amber">&#x26A0;&#xFE0F; Plausible</td><td>Depends on RNG supply buildout and industrial uptake. Long-term play with uncertain timeline.</td></tr>
-<tr><td><strong>Third-Party Grid Investment</strong></td><td class="amber">$130M</td><td>Outside investors fund distribution projects</td><td class="amber">&#x26A0;&#xFE0F; Plausible</td><td>Requires a competitive investor market to develop. Unproven in MA regulatory context.</td></tr>
-<tr><td><strong>Net Metering Reduction</strong></td><td class="amber">$75M</td><td>Cut credits for large standalone solar/wind facilities</td><td class="amber">&#x26A0;&#xFE0F; Plausible</td><td>Shifts cost from large commercial facilities. Rooftop solar owners unaffected per bill text.</td></tr>
-<tr><td><strong>Basic Service Markup Investigation</strong></td><td class="highlight">$1B</td><td>DPU investigates $3.4B in supplier overcharges (2015&#x2013;2024)</td><td class="highlight">&#x274C; Speculative</td><td>This is an <em>authorization to investigate</em>, not a guaranteed outcome. Counting an inquiry as a savings projection.</td></tr>
-<tr><td><strong>Securitization</strong></td><td class="highlight">$7.1B</td><td>Utilities refinance grid/storm/gas transition debt at lower rates</td><td class="highlight">&#x274C; Accounting</td><td>Ratepayers still pay every dollar of the debt &#x2014; just at a lower interest rate. This is relative-to-worst-case math, not bill reduction.</td></tr>
-<tr><td><strong>RPS "Right-Sizing"</strong></td><td class="highlight">$213M</td><td>Drop RPS from 3%/yr to 1%/yr for 2027&#x2013;2029</td><td class="highlight">&#x274C; Mandate Rollback</td><td>The legislature created this cost. Reducing a target they set and calling the delta "savings" is circular logic.</td></tr>
-</tbody></table>
-<div class="source">Sources: S.3143 Senate fact sheet (June 24, 2026); AGO Competitive Electric Supply Annual Report (March 2026); EIA; DPU; RGGI Inc.; WBUR; Commonwealth Beacon; WWLP.</div></div>
-
-<div class="alert amber"><h4>&#x1F4CB; What S.3143 Does NOT Address &#x2014; The Structural Cost Drivers Remain</h4><div class="alert-grid">
-<div class="alert-item"><strong>Pipeline blockade legacy:</strong> Rejecting Access Northeast constrained natural gas supply &#x2014; the primary driver of winter price spikes. S.3143 is silent on this.</div>
-<div class="alert-item"><strong>DPU-approved rate hikes already in effect:</strong> Eversource +25&#x2013;30%, National Grid +11&#x2013;13% (late 2024). No provision claws these back or offsets them.</div>
-<div class="alert-item"><strong>RGGI carbon tax:</strong> $1.36B extracted from MA ratepayers since 2008; $200M/yr ongoing and growing. S.3143 does not touch RGGI.</div>
-<div class="alert-item"><strong>RPS compliance costs:</strong> Bill rolls back targets for 3 years but extends the mandate framework. The long-term cost architecture stays fully intact.</div>
-<div class="alert-item"><strong>Mass Save cost explosion:</strong> The 5% admin cap and removal of mandatory performance incentives are genuine reforms &#x2014; but the $350M in already-approved mid-term budget increases are not clawed back.</div>
-<div class="alert-item"><strong>Offshore wind collapse:</strong> S.3143 acknowledges the federal attack on offshore wind and responds by reducing targets. That is managing decline, not solving the supply gap.</div>
-</div></div>
-
-<div class="quote-block">"While he forecast overall savings during a 10-year timeline, Barrett did not describe how much a typical ratepayer could expect to save or when they might first experience noticeable savings in their monthly bills."<cite>WWLP News &#x2014; June 24, 2026</cite></div>
-
-<div class="verdict amber"><h3>The Honest Version: "We're Trying to Slow the Growth of Bills We Helped Make This Expensive"</h3><p>Two provisions &#x2014; competitive supplier reform ($650M) and GSEP gas line reform ($1.46B) &#x2014; are real, documented, and overdue. The rest is a mix of DPU reform authority they already had, debt restructuring framed as savings, mandate rollbacks they're calling consumer relief, and investigation authorizations counted as projected outcomes. S.3143 is better than H.5151. But the $14.3B headline is not a bill reduction. It's a press release.</p></div>
-
-<div class="source" style="margin-top:12px">Sources: S.3143 Senate fact sheet (June 24, 2026); EIA Electric Power Monthly (<span id="s3143FootPeriod">&#x2014;</span>); AGO Competitive Electric Supply Annual Report (March 2026); DPU; RGGI Inc.; WBUR; Commonwealth Beacon; Fall River Reporter; WWLP (June 24, 2026).</div>
-</div>
 <!-- ===== END S.3143 ===== -->
 
 </div><!-- /container -->
 <footer>
 <a href="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/index.html">&#x2190; Back to Massachusetts Data Hub</a><br>
-<strong>Bills:</strong> <a href="https://malegislature.gov/Bills/194/H5151">H.5151</a> &#x2192; <a href="https://malegislature.gov/Bills/194/H5175">H.5175 (as amended)</a> &#x00B7; <a href="https://malegislature.gov/Bills/194/H5151/Amendments/House">126 House Amendments</a><br>
+<strong>Bills:</strong> <a href="https://malegislature.gov/Bills/194/H5175">H.5175</a> &#x2192; <a href="https://malegislature.gov/Bills/194/H5175">H.5175 (as amended)</a> &#x00B7; <a href="https://malegislature.gov/Bills/194/H5175/Amendments/House">126 House Amendments</a><br>
 <strong>Sources:</strong> EIA &#x00B7; ISO-NE &#x00B7; MA DOER &#x00B7; DPU &#x00B7; BOEM &#x00B7; RGGI Inc. &#x00B7; OCPF &#x00B7; ProPublica &#x00B7; MA Sec. of State Lobbying DB &#x00B7; DPU 25-200 &#x00B7; ISO-NE Market Monitor Primer (May 2025)<br>
 <a href="https://x.com/DuncanBurnsMA">@DuncanBurnsMA</a> &#x00B7; <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">GitHub</a> &#x00B7; EIA data through <span id="footPeriod">&#x2014;</span> &#x00B7; #mapoli
 </footer>
@@ -944,7 +916,7 @@ const EIA_PERIOD=(()=>{
 })();
 
 const OVERPAY=Math.round((MA_RATE-US_RATE)/100*KWH_YR);
-// Realistic H.5151 relief, from the bill-text analysis plotted in c1b
+// Realistic H.5175 relief, from the bill-text analysis plotted in c1b
 // (Mass Save cut $80 + ACP rebates $40 + net metering $30). Named once here so
 // every "gap closed" percentage derives from the same number.
 const RELIEF_HH=150;
@@ -1102,7 +1074,7 @@ function initCharts(tab){
     safeChart('chartBillBreak',{type:'doughnut',data:{labels:['Supply (~40%)','Distribution (~30%)','Renewable/RPS (~10%)','Energy Efficiency (~7%)','Transition (~8%)','RGGI/Other (~5%)'],datasets:[{data:[40,30,10,7,8,5],backgroundColor:[C.blue,C.navy,C.red,C.amber,'#7e22ce','#374151'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:10}}}}});
     safeChart('chartGapTime',{type:'line',data:{labels:YEARS,datasets:[{label:'MA (¢/kWh)',data:ELEC_MA,borderColor:C.red,backgroundColor:'rgba(192,57,43,0.08)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:3},{label:'US Avg (¢/kWh)',data:ELEC_US,borderColor:C.green,borderWidth:2,tension:0.4,pointRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:true,labels:{font:{size:9}}}}}});
   }
-  if(tab==='h5151'){
+  if(tab==='legislation'){
     // Bar 1 reads OVERPAY rather than a literal: this chart plotted a frozen $922
     // while its own caption and the card beside it said $765.
     safeChart('c1a',{type:'bar',data:{labels:['Annual Overpayment','Their Claim','Realistic Relief'],datasets:[{data:[OVERPAY,310,RELIEF_HH],backgroundColor:[C.red,C.blue,C.green],borderRadius:5}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/yr'}}}}});
@@ -1121,7 +1093,7 @@ function initCharts(tab){
     safeChart('chartRGGISpend',{type:'doughnut',data:{labels:['Clean Energy Programs','GHG Reduction','Direct Bill Relief','Admin/Other'],datasets:[{data:[45,25,15,15],backgroundColor:[C.navy,C.blue,C.green,C.muted],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:10}}}}});
   }
   if(tab==='money'){ /* no charts to init */ }
-  if(tab==='s3143'){
+  if(tab==='legislation'){
     safeChart('cS3143pie',{type:'doughnut',data:{labels:['Verified / Documented ($2.1B)','Plausible / Partial ($2.5B)','Speculative / Accounting ($9.7B)'],datasets:[{data:[2110,2465,9725],backgroundColor:[C.green,C.amber,C.red],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:10}},tooltip:{callbacks:{label:c=>'$'+c.parsed.toLocaleString()+'M over 10 yrs'}}}}});
     safeChart('cS3143cats',{type:'bar',data:{labels:['Securitization','Distrib. Planning','Basic Service Probe','GSEP Gas Reform','Seasonal Procure.','Reconciling Chgs','Competitive Suppliers','RNG','DOER Procure.','Third-Party Grid','Geothermal','Net Metering','RPS Rollback'],datasets:[{label:'$M claimed',data:[7100,1700,1000,1460,780,750,650,230,420,130,130,75,213],backgroundColor:[C.red,C.amber,C.red,C.green,C.amber,C.amber,C.green,C.amber,C.amber,C.amber,C.green,C.amber,C.red],borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.x.toLocaleString()+'M'}}},scales:{x:{ticks:{font:{size:8},color:C.muted,callback:v=>'$'+v.toLocaleString()+'M'},grid:{color:'rgba(0,0,0,0.04)'}},y:{ticks:{font:{size:8},color:C.muted},grid:{display:false}}}}});
     safeChart('cS3143hh',{type:'bar',data:{labels:['Current Overpayment vs US','Senate Claim Per HH/yr','Realistic Relief','Gap Still Remaining'],datasets:[{data:[819,493,150,669],backgroundColor:[C.red,C.blue,C.green,C.red],borderRadius:5}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/yr per household'}}}}});
