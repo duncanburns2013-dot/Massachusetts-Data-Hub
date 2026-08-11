@@ -288,6 +288,17 @@ footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1p
       <tr><td><strong>Municipal (~220)</strong></td><td>$5.0B</td><td>$716M</td><td class="highlight">$4.2B</td><td class="highlight">14.4%</td></tr>
       <tr><td><strong>All Entities</strong></td><td>$56.1B</td><td>$3.3B</td><td class="highlight">$52.8B</td><td class="highlight">5.9%</td></tr>
     </tbody></table><div class="source">Source: PERAC OPEB Summary (May 2024); ACFR FY2024</div></div>
+
+  <h2 class="section-title">The FY2027 Budget Cuts the Deposit and Raises the Promise</h2>
+  <div class="alert"><h4>⚠️ Pre-funding down 27% in three years — while benefits are enhanced</h4><div class="alert-grid">
+    <div class="alert-item">Line <strong>1595-6152</strong>, the State Retiree Benefits Trust Fund deposit, has been cut every year: <strong>$550M → $550M → $450M → $400M</strong> (FY24 → FY27). That is <strong>−27%</strong>, or <strong>−$150M a year</strong>.</div>
+    <div class="alert-item">The same budget <strong>creates a reserve to fund enhanced cost-of-living adjustments</strong> for pension retirees out of excess investment gains, and raises the post-retirement earnings cap by <strong>$10,000</strong>.</div>
+    <div class="alert-item">So the Commonwealth is <strong>reducing pre-funding of its worst-funded liability</strong> (OPEB, 15.6% funded) while <strong>adding to its largest one</strong> (pensions, $42.1B unfunded).</div>
+    <div class="alert-item">Neither move appears in the budget&rsquo;s &ldquo;no new taxes or fees&rdquo; framing. Both land on future budgets, not this one.</div>
+  </div></div>
+  <div class="chart-card" style="margin-bottom:22px"><h3>State Retiree Benefits Trust Fund — Annual Deposit ($M)</h3><div class="chart-area"><canvas id="chartSRBT"></canvas></div><div class="source">Source: enacted General Appropriations Acts FY2024–FY2027, line 1595-6152, via the official mass.gov GAA export (<em>gaabudgets.xlsx</em>), retrieved 2026-08-11. FY2027 signed 9 July 2026 with no vetoes.</div></div>
+
+  <div class="info-box"><h4>Where the annual pension appropriation is — and is not</h4><p>The Commonwealth&rsquo;s ~$4.9B annual pension appropriation does <strong>not</strong> appear as a line item in the General Appropriations Act. It moves by transfer to the Pension Liability Fund, outside the appropriations act, so searching the GAA line-item tables for it returns nothing. That absence is a quirk of budget mechanics, not a cut — do not read it as one.</p></div>
 </div>
 
 <!-- TOTAL DEBT -->
@@ -395,6 +406,9 @@ function initMunicipal(){
 function initOPEB(){
   safeChart('chartOPEB',{type:'bar',data:{labels:['State OPEB','Municipal','All Entities'],datasets:[{label:'Total Liability',data:[16.2,5,56.1],backgroundColor:RED,borderRadius:6,barPercentage:0.5},{label:'Assets',data:[2.5,0.716,3.3],backgroundColor:NAVY,borderRadius:6,barPercentage:0.5}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{title:{display:true,text:'$Billions'},grid:GRID}}}});
   safeChart('chartOPEBvsPension',{type:'bar',data:{labels:['SERS','MTRS','State OPEB','Muni OPEB','All OPEB'],datasets:[{label:'Funded %',data:[72.5,60.4,15.6,14.4,5.9],backgroundColor:[GOLD,RED,DARKRED,DARKRED+'CC',DARKRED+'99'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,max:100,grid:GRID}}}});
+  // State Retiree Benefits Trust Fund deposit, GAA line 1595-6152, FY24-FY27 enacted.
+  // Source: official mass.gov GAA export gaabudgets.xlsx, retrieved 2026-08-11.
+  safeChart('chartSRBT',{type:'bar',data:{labels:['FY24','FY25','FY26','FY27'],datasets:[{label:'SRBT deposit ($M)',data:[550,550,450,400],backgroundColor:[NAVY,NAVY,GOLD,DARKRED],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:'$ Millions'},grid:GRID,ticks:{callback:v=>'$'+v+'M'}}}}});
 }
 function initDebt(){
   safeChart('chartDebtBreak',{type:'doughnut',data:{labels:['Bonded ($48.0B)','Pensions ($42.1B)','OPEB ($13.7B)','MBTA P+O ($3.8B)'],datasets:[{data:[48,42.1,13.7,3.8],backgroundColor:[NAVY,RED,GOLD,PURPLE]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});

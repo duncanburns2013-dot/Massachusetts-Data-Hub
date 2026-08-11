@@ -515,14 +515,97 @@ JSON, not the HTML.
 CPS and ACS disagree by ~$9K on the same concept. Carry both and cite which one any
 given chart uses — this is exactly the kind of thing a hostile reader finds first.
 
-**Known defect to fix:** `tax-budget-dashboard.html` (lines ~517 and ~564) labels
-$113,900 as "Census 2024 ACS". That is wrong — $113,900 is the **CPS** figure; ACS says
-$104,828. Also line ~184 of that file states property taxes average "$7,732/year" with
-no fiscal year label, against the FY2026 DLS figure of $8,113.
+**~~Known defect to fix~~ — FIXED 2026-08-11.** `tax-budget-dashboard.html` labelled
+$113,900 as "Census 2024 ACS"; it is the **CPS** figure and is now labelled "Census CPS
+ASEC (2024)" in both places, with the $104,828 ACS comparator named inline. The same file
+carried an unlabelled "$7,732/year" property tax figure; the hero stat, the prose and the
+stat card now read **$8,113 (FY2026)**. The FY2025 county table keeps its own FY2025
+source line — it was already labelled correctly and its county figures are FY2025.
+
+The `chartIncomeReal` cross-state bar series still uses 113,900 for MA. Left alone
+deliberately: the other seven states' vintage is undocumented, and swapping MA to ACS
+without knowing theirs would trade a labelling error for a comparability error. **Open
+item:** establish the vintage of the other states, then make all eight consistent.
 
 **Never use a median as an allocation divisor.** Per-household shares must sum back to
 the statewide pool, which only works with the mean. The reconciliation panel on the
 burden dashboard checks this.
+
+---
+
+## 🏛️ State Budget — the scope reconciliation
+
+> **Read this before quoting any Massachusetts budget total.** Three different numbers
+> circulate for the same fiscal year. They are all correct; they are different scopes.
+> Quoting one without naming its scope is how the same year ends up with three answers.
+
+The official GAA workbooks split every account into four types. The **headline figure the
+press release and the media quote is the first three, and excludes Intragovernmental
+Service Spending.**
+
+| Account type | FY24 | FY25 | FY26 GAA | FY26 *proj.* | **FY27 GAA** |
+|---|---:|---:|---:|---:|---:|
+| Budgetary Direct Appropriations | 53.384 | 54.749 | 57.905 | 61.661 | **60.292** |
+| Section 2E Consolidated Transfer | 1.940 | 2.245 | 2.290 | 2.452 | **2.288** |
+| Budgetary Retained Revenues | 0.739 | 0.724 | 0.779 | 0.764 | **0.836** |
+| Intragovernmental Service Spending | 0.737 | 0.787 | 0.853 | 0.838 | **0.901** |
+| **All four types** | 56.800 | 58.505 | 61.826 | 65.715 | **64.317** |
+| **HEADLINE SCOPE** (first three) | 56.063 | 57.718 | 60.974 | 64.877 | **63.416** |
+
+$B. Source: official mass.gov GAA export `gaabudgets.xlsx`. ✅ Verified Aug 2026.
+
+**Proof the definition is right, not inferred:** 60.292 + 2.288 + 0.836 = **$63.416B**,
+matching `summary-fy-27-enacted-budget-summary.csv`'s Total row of **$63,416,035,478** to
+the dollar, and the press release's "$63.42 billion".
+
+### FY2027 enacted — key figures
+
+| Figure | Value | Source | Verified |
+|---|---|---|---|
+| FY2027 GAA, headline scope | **$63.416B** (+4.01% over FY26) | H.5555, signed 9 Jul 2026 | ✅ Aug 2026 |
+| **Governor's vetoes** | **$0 — none.** Signed the conference report untouched | Globe / CommonWealth Beacon, 9 Jul 2026 | ✅ Aug 2026 |
+| Votes | Senate 39–1, House 142–6 | State House News | ✅ Aug 2026 |
+| Chapter 70 | **$7,658,399,506** (+$793.5M, +11.6%) — *final year of the SOA ramp* | `sect3.xlsx` | ✅ Aug 2026 |
+| — municipal / regional split | $6,695,466,289 / $962,933,217 | same | ✅ Aug 2026 |
+| Unrestricted General Government Aid | **$1,363,109,516** (+$40M, +3.0%) | same | ✅ Aug 2026 |
+| SpEd Circuit Breaker | $654.6M (+35.0%); $806.6M incl. Fair Share supp. | `gaabudgets.xlsx` | ✅ Aug 2026 |
+| Fair Share surtax deployed | ~$2.7B (~64% education / ~36% transportation) | MTF | ✅ Aug 2026 |
+| Emergency Assistance family shelter | $259.9M (−6.0%; was $325.3M in FY24) | `gaabudgets.xlsx` | ✅ Aug 2026 |
+| State Retiree Benefits Trust (OPEB) deposit | **$400M**, down from $550M in FY24 (−27%) | line 1595-6152 | ✅ Aug 2026 |
+| Line items in `tax-budget-dashboard.html` | 860, **all 860 verified against the official GAA** | `gaa1.xlsx` diff | ✅ Aug 2026 |
+
+### ⚠️ Enacted ≠ spent — the supplemental gap
+
+Like-for-like (identical 913-account universe, headline scope, inter-fund transfer lines
+excluded from both sides):
+
+| FY | Enacted | Actual / projected | Overrun |
+|---|---:|---:|---:|
+| FY24 | 55.870 | 55.958 | +0.2% |
+| FY25 | 57.567 | 63.303 | **+10.0%** |
+| FY26 | 60.956 | 64.859 (proj.) | **+6.4%** |
+| FY27 | 63.400 | — not begun | — |
+
+Plotted as `h5Outturn` on `tax-budget-dashboard.html`.
+
+> **Do not compute this by summing `gaaspend.xlsx` raw.** That file contains inter-fund
+> transfer accounts — `1595-0029` (GF → Education & Transportation Fund) alone is **$5.3B**
+> in FY25 — which were never appropriated and appear on only one side. Summing raw
+> overstates the FY25 "overrun" as +25.7% instead of the true +10.0%. Exclude accounts whose
+> description begins *Transfer* or *XFR*, and restrict to accounts present in both workbooks.
+
+### ⚠️ Local-aid CSV ingestion gotcha
+
+`summary-fy-27-local-aid-aid-to-municipalities.csv` carries a **`Total Municipal Aid`
+footer row inside the data body**, plus a blank row before it. A naive `read_csv().sum()`
+double-counts it and reports Chapter 70 at **$13.39B instead of $6.70B** — a 100%
+overstatement. Filter out any row whose municipality name contains "Total" before
+aggregating. The per-town figures themselves are correct.
+
+Note also that the municipal CSV **omits regional school districts** (Triton, Pentucket,
+Whittier and the rest). Regional Ch70 flows to the *district*, not the member towns, which
+is why Newbury, Rowley, West Newbury and Salisbury show only $13K–$19K of Chapter 70 and
+are effectively UGGA-only. Use `sect3.xlsx` when districts matter.
 
 ---
 
@@ -674,6 +757,7 @@ Migration off the old repos is complete — the paths below are the real ones in
 
 | Date | What Changed | Updated By |
 |------|-------------|------------|
+| 2026-08-11 | **FY2027 enacted-budget review against the official mass.gov GAA exports.** Diffed all 860 `LINE_ITEMS` in `tax-budget-dashboard.html` against `gaa1.xlsx`: **zero amount mismatches** — the H.5555 conference data the dashboard was built on *is* the enacted law, because Healey signed with no vetoes. Fixed one account-code typo (`8910-0702` → `8910-8702`). Relabelled the tab, headings, sources and the `FY27_H5555` constant (now `FY27_GAA = 63.416`) from "conference report" to enacted GAA, and replaced the stale "heads to Gov. Healey's desk" line. Added the **scope reconciliation table** above — the headline total excludes Intragovernmental Service Spending — plus FY2027 key figures, the enacted-vs-actual supplemental gap (new `h5Outturn` chart), and the local-aid CSV footer-row gotcha. Added the OPEB finding to `pension-dashboard.html`: the SRBT deposit (line 1595-6152) is down 27% since FY24 while the budget creates a pension COLA reserve. Cleared both long-standing defects — CPS/ACS mislabel and the unlabelled $7,732 property tax figure (now $8,113, FY2026). | Claude + Duncan |
 | 2026-02-05 | Initial creation — all data compiled from prior chats | Claude + Duncan |
 | 2026-08-01 | Refreshed the manual dashboards. Commercial RE → Q2 2026 (C&W Boston 19.0%, US 20.1%; Colliers 23.7%; CBRE 18.7%; Trepp office delinquency 11.57%). Tax & Budget verified already current (FY2027 H.5555 enacted $63.4B, signed 2026-07-09, parsed July 2026). Healthcare held at the 2024 MA/US pair with KFF's 2025 national figure ($26,993) noted, since no MA 2025 comparator is published. Made the CPI badge and immigration hero self-stamping so they can't go stale again. | Claude + Duncan |
 | 2026-08-01 | Repo audit. Reconciled this file against the live API feeds it had drifted from: ACS figures → vintage 2024, MA median income $104,800 → $103,960, MLS 5-yr table → `mls-history.json` values, NH → PrimeMLS 2026-08-01, IRS cumulative 86,382/$12.1B → 184,719/$24.7B (matching the live dashboard). Split the trailing-12-month window out from calendar 2025, recorded the CBP FY2025 methodology break and the BLS state-JOLTS discontinuation, corrected the dashboard registry. Marked API-fed rows 🔄. | Claude + Duncan |
