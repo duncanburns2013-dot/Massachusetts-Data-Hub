@@ -407,7 +407,13 @@ if missing:
 FROZEN_REGIONS = (
     # The by-sector table and the industrial-rate alert above it are pinned to
     # their Oct-2025 vintage and labelled as such on the page.
-    r'<!-- NEW: Industrial rate premium -->.*?(?=<!-- ===== H\.5151)',
+    #
+    # Terminated on the next section divider, whatever it is called. This used to
+    # end at `<!-- ===== H.5151`, so when the bill was renumbered to H.5175 on
+    # 2026-08-10 the lookahead stopped matching and this guard killed every run
+    # from 2026-08-10 on -- the electricity feed went down over an editorial
+    # rename. A structural anchor cannot be broken by renaming a bill.
+    r'<!-- NEW: Industrial rate premium -->.*?(?=<!-- ===== )',
     # Annual history: every past year's rate legitimately lives here.
     r'const ELEC_(?:MA|US) = \[[^\]]*\]',
 )
