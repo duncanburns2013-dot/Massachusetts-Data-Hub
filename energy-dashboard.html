@@ -138,7 +138,29 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .equiv-bar-label{width:170px;font-size:0.72rem;color:var(--muted);line-height:1.4;flex-shrink:0}
 .equiv-bar-track{flex:1;position:relative;height:34px;background:var(--border);border-radius:5px;overflow:visible}
 .equiv-bar-fill{height:100%;border-radius:5px;display:flex;align-items:center;padding-left:8px;font-size:0.75rem;font-weight:700;position:relative;transition:width 0.5s ease}
-.equiv-price-tag{position:absolute;right:calc(100% + 6px);top:50%;transform:translateY(-50%);font-family:monospace;font-size:0.8rem;font-weight:700;white-space:nowrap}
+/* The value sits just past the END of the fill, in the empty part of the track.
+   It used to be `right: calc(100% + 6px)` -- anchored off the fill's LEFT edge,
+   which puts it outside the track entirely and on top of the label column. Every
+   row collided; the longest label ("All-Time MA Record (Jun 2022)") was
+   unreadable. When a bar runs too close to full for the value to fit outside,
+   .is-inside flips it within the fill instead. */
+/* Ink, not the series color. These were painted in each bar's own hue -- pale
+   green and amber sitting on the pale track -- which is why the numbers were
+   hard to read even where nothing overlapped. The bar carries the identity; the
+   number only has to be legible, and the track is light in both positions. */
+.equiv-price-tag{position:absolute;left:calc(100% + 8px);top:50%;transform:translateY(-50%);font-family:monospace;font-size:0.8rem;font-weight:700;white-space:nowrap;color:#0f2942 !important}
+.equiv-price-tag.is-inside{left:auto;right:8px}
+/* Under ~640px a fixed 170px label column leaves the track at ~87px, which is
+   too narrow to compare three bars in even when nothing overlaps. Stack the
+   label above its bar and give the track the full width. */
+@media(max-width:640px){
+  .equiv-bar-row{flex-direction:column;align-items:stretch;gap:4px;margin-bottom:14px}
+  .equiv-bar-label{width:auto}
+  /* flex:none is load-bearing. The track carries `flex:1`, and once the row
+     turns into a column that resolves to flex-basis:0 along the VERTICAL axis,
+     which beats height:34px and collapses every bar to zero height. */
+  .equiv-bar-track{width:100%;flex:none;height:34px}
+}
 .breakdown-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;border-left:4px solid}
 .breakdown-item.elec{border-color:var(--red)}.breakdown-item.gas{border-color:var(--amber)}
 .equiv-prog{height:6px;background:var(--border);border-radius:3px;margin-top:8px}
@@ -653,7 +675,7 @@ footer a:hover{color:var(--gold)}
 <div style="font-size:0.95rem;opacity:0.85;margin-bottom:20px;line-height:1.65;max-width:380px">MA utility mandates cost the average household <strong style="color:#fca5a5"><span id="equivTotalPremium">&#x2014;</span>/yr</strong> more than the US average. To generate that same extra burden through gasoline alone (<span id="equivGallonsYr">&#x2014;</span> gal/yr), prices would need to reach:</div>
 <div class="big-price"><span id="equivBigPrice">&#x2014;</span></div>
 <div class="sub-price">per gallon</div>
-<div style="margin-top:16px;font-size:0.8rem;opacity:0.7;line-height:1.6"><span id="equivPctAbove">&#x2014;</span> above today's MA price of <span id="equivGasToday">&#x2014;</span><br><span id="equivVsRecord">&#x2014;</span> the <strong style="color:#fbbf24">all-time US record</strong> of <span id="equivRecord">&#x2014;</span> (June 2022)</div>
+<div style="margin-top:16px;font-size:0.8rem;opacity:0.7;line-height:1.6"><span id="equivPctAbove">&#x2014;</span> above today's MA price of <span id="equivGasToday">&#x2014;</span><br><span id="equivVsRecord">&#x2014;</span> the <strong style="color:#fbbf24">all-time MA record</strong> of <span id="equivRecord">&#x2014;</span> (<span id="equivRecordWhen">&#x2014;</span>)</div>
 </div>
 <div>
 <div style="font-size:0.65rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;font-family:monospace">PRICE GAUGE &#x2014; $/GALLON &#x00B7; SCALE: $0&#x2013;<span id="equivScaleHi2">&#x2014;</span></div>
@@ -1060,6 +1082,7 @@ setTxt('equivGasToday',perGal(MA_GAS_TODAY));
 // that could one day be false.
 setTxt('equivVsRecord',isNaN(REQUIRED_PRICE)?'':perGal(Math.abs(REQUIRED_PRICE-GAS_RECORD))+(REQUIRED_PRICE>=GAS_RECORD?' above':' below'));
 setTxt('equivRecord',perGal(GAS_RECORD));
+setTxt('equivRecordWhen',GAS_RECORD_WHEN);
 setTxt('equivScaleHi',perGal(MAX_SCALE));
 setTxt('equivScaleHi2','$'+MAX_SCALE);
 setTxt('equivRecord2',perGal(GAS_RECORD));
@@ -1192,13 +1215,29 @@ function buildGauge(){
   const gc=document.getElementById('gaugeContainer');
   if(!gc)return;
   gc.innerHTML='';
-  const prices=[{label:'MA Gas Today',val:MA_GAS_TODAY,color:'#7fd8a6'},{label:'All-Time US Record (Jun 2022)',val:GAS_RECORD,color:'#fbbf24'},{label:'Required to Match MA Mandate Premium',val:REQUIRED_PRICE,color:'#fca5a5'}];
+  // Record label follows GAS_RECORD, which is Massachusetts' own weekly high --
+  // it read "All-Time US Record" while carrying the MA figure.
+  const prices=[{label:'MA Gas Today',val:MA_GAS_TODAY,color:'#7fd8a6'},{label:'All-Time MA Record ('+GAS_RECORD_WHEN+')',val:GAS_RECORD,color:'#fbbf24'},{label:'Required to Match MA Mandate Premium',val:REQUIRED_PRICE,color:'#fca5a5'}];
   const maxV=MAX_SCALE;
   prices.forEach(p=>{
     const pct=(p.val/maxV)*100;
     const row=document.createElement('div');row.className='equiv-bar-row';
     row.innerHTML=`<div class="equiv-bar-label">${p.label}</div><div class="equiv-bar-track"><div class="equiv-bar-fill" style="width:${pct}%;background:${p.color};color:#0f2942"><div class="equiv-price-tag" style="color:${p.color}">$${p.val.toFixed(2)}</div></div></div>`;
     gc.appendChild(row);
+  });
+  // Flip any value that does not fit outside its bar to the inside, decided by
+  // MEASURING rather than by a percentage. The track is responsive -- at 250px
+  // a 35px tag needs 17% of headroom, at 500px it needs 9% -- so any fixed
+  // threshold is right at one width and wrong at every other. $6.65 of an $8
+  // scale cleared a 86% cutoff and still overflowed by a pixel.
+  gc.querySelectorAll('.equiv-bar-row').forEach(row=>{
+    const track=row.querySelector('.equiv-bar-track');
+    const tag=row.querySelector('.equiv-price-tag');
+    if(!track||!tag)return;
+    tag.classList.remove('is-inside');
+    if(tag.getBoundingClientRect().right>track.getBoundingClientRect().right-2){
+      tag.classList.add('is-inside');
+    }
   });
   const refLine=document.createElement('div');refLine.style.cssText='margin-top:8px;padding:8px 0;border-top:2px dashed rgba(255,255,255,0.3);font-size:0.68rem;color:rgba(255,255,255,0.5);text-align:center';refLine.textContent='Scale: $0 – $'+MAX_SCALE.toFixed(2)+'/gallon';gc.appendChild(refLine);
 }
@@ -1208,11 +1247,26 @@ function buildEquivBars(){
   if(!eb)return;
   // Labels and widths both derive from the values, so a bar's caption can never
   // disagree with the bar itself.
-  const items=[{label:'MA Gas Today',val:MA_GAS_TODAY,color:C.green},{label:'All-Time US Record',val:GAS_RECORD,color:C.amber,note:' (Jun 2022)'},{label:'Required to Match MA Utility Mandate Premium',val:REQUIRED_PRICE,color:C.red}]
+  const items=[{label:'MA Gas Today',val:MA_GAS_TODAY,color:C.green},{label:'All-Time MA Record',val:GAS_RECORD,color:C.amber,note:' ('+GAS_RECORD_WHEN+')'},{label:'Required to Match MA Utility Mandate Premium',val:REQUIRED_PRICE,color:C.red}]
     .map(it=>Object.assign(it,{pct:it.val/MAX_SCALE*100,label:it.label+' — $'+it.val.toFixed(2)+'/gal'+(it.note||'')}));
   const refPct=GAS_RECORD/MAX_SCALE*100;
   eb.innerHTML=items.map(it=>`<div class="equiv-bar-row"><div class="equiv-bar-label">${it.label}</div><div class="equiv-bar-track" style="position:relative"><div class="equiv-bar-fill" style="width:${it.pct}%;background:${it.color};color:#fff"><span style="margin-left:6px">$${it.val.toFixed(2)}</span></div><div style="position:absolute;left:${refPct}%;top:0;bottom:0;width:2px;background:${C.amber};opacity:0.6"></div></div></div>`).join('');
 }
+
+// The inside/outside decision is measured, so it has to be re-measured when the
+// track changes width. Without this, resizing to a narrow window leaves the
+// widest value hanging off the end of its bar until the tab is switched away
+// and back.
+(function(){
+  let t;
+  window.addEventListener('resize',function(){
+    clearTimeout(t);
+    t=setTimeout(function(){
+      if(document.getElementById('gaugeContainer') &&
+         document.getElementById('gaugeContainer').children.length) buildGauge();
+    },150);
+  });
+})();
 
 initCharts('overview');
 </script>
