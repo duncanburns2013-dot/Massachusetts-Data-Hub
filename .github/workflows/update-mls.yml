@@ -117,14 +117,34 @@ jobs:
             git add data/mls-history.json
           fi
           git commit -m "Auto-update: MLS PIN figures $(date -u +'%Y-%m-%d')"
-          # Retry push up to 5 times, rebasing on each rejection (handles concurrent pushes)
+          # Retry push, rebasing on each rejection. Two outcomes have to be told
+          # apart, because the old loop treated them the same and could only fail:
+          #
+          #  * The rebase APPLIES cleanly -- someone pushed unrelated work while we
+          #    were fetching. Retry the push; that is what the loop is for.
+          #
+          #  * The rebase CONFLICTS -- another run of this same workflow already
+          #    published MLS figures for this window. Every file we touch is
+          #    regenerated wholesale from the same API, so a conflict here is never
+          #    a merge to resolve: both sides are the same day's data, and the other
+          #    side is already on main. Rebasing five times just hits the identical
+          #    conflict five times, fails the job, and reports a data problem that
+          #    does not exist (2026-08-11, id 31487693391). Abort and skip.
+          #
+          # A queued run cannot avoid this by waiting: actions/checkout takes the
+          # SHA the run was created at, so a run that queues behind another still
+          # starts from a base that has since moved.
           for attempt in 1 2 3 4 5; do
             if git push; then
               echo "Push succeeded on attempt $attempt"
               exit 0
             fi
             echo "Push attempt $attempt rejected - pulling latest and rebasing"
-            git pull --rebase origin main
+            if ! git pull --rebase origin main; then
+              git rebase --abort || true
+              echo "::notice::Another run already published MLS figures for this window (rebase conflicts on generated files). Its output is this run's output, so nothing is lost - skipping."
+              exit 0
+            fi
           done
           echo "::error::Push failed after 5 attempts"
           exit 1

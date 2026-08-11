@@ -66,7 +66,16 @@ jobs:
               exit 0
             fi
             echo "Push attempt $attempt rejected - pulling latest and rebasing"
-            git pull --rebase origin main
+            if ! git pull --rebase origin main; then
+              # A CONFLICT here is not a merge to resolve: every file this workflow
+              # commits is regenerated wholesale, so both sides are the same window's
+              # data and the other side is already on main. Rebasing again just hits
+              # the same conflict until the loop gives up and reports a data problem
+              # that does not exist. Abort and skip. (Seen on update-mls, 2026-08-11.)
+              git rebase --abort || true
+              echo "::notice::Another run already published this window's data (rebase conflicts on generated files) - skipping, nothing lost."
+              exit 0
+            fi
           done
           echo "::error::Push failed after 5 attempts"
           exit 1
