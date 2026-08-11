@@ -1106,12 +1106,24 @@ if all(_appr_cells):
         md, n = re.subn(prev_pat, lambda m: m.group(0) + "\n" + appr_row, md, count=1, flags=re.MULTILINE)
         md_changes.append((f"MASTER_DATA MA {YEAR} appreciation row (inserted)", n > 0))
 
+# The MA indicator table gained a column on 2026-08-10: it is now
+#   | Metric | Calendar 2025 | Trailing 12mo (as of YYYY-MM-DD) | Source |
+# These three regexes wrote into the SECOND column, which was the only value
+# column before that. They stopped matching and the run failed -- correctly.
+#
+# The fix is NOT to relax them past the extra column: everything this script
+# produces is a trailing-365-day figure, so relaxed patterns would write live
+# values into "Calendar 2025" and re-create exactly the conflation that
+# restructure was made to end (see the note under the table). They target the
+# THIRD column, and the header carries the as-of date they were written on.
+_TRAIL = r"(\| {metric} \| [^|]*\| )[^|]*(\| MLS PIN)"
+
 # MA Avg DOM
 if results["ma"]["sf"]["avg_dom"] is not None:
     md = md_replace(
         md,
-        r"(\| Avg DOM \| )\d+(?:\.\d+)? days(\s*\| MLS PIN)",
-        rf"\g<1>{fmt_dom(results['ma']['sf']['avg_dom'])} days\g<2>",
+        _TRAIL.format(metric="Avg DOM"),
+        rf"\g<1>{fmt_dom(results['ma']['sf']['avg_dom'])} days \g<2>",
         "MASTER_DATA MA DOM",
     )
 
@@ -1119,18 +1131,49 @@ if results["ma"]["sf"]["avg_dom"] is not None:
 if results["ma"]["sf"]["sp_lp_pct"] is not None:
     md = md_replace(
         md,
-        r"(\| SP/LP Ratio \| )\d+\.\d+%(\s*\| MLS PIN)",
-        rf"\g<1>{results['ma']['sf']['sp_lp_pct']}%\g<2>",
+        _TRAIL.format(metric="SP/LP Ratio"),
+        rf"\g<1>{results['ma']['sf']['sp_lp_pct']}% \g<2>",
         "MASTER_DATA MA SP/LP",
     )
 
 # MA Units Sold (trailing-12mo count)
 md = md_replace(
     md,
-    r"(\| Units Sold \| )[\d,]+(\s*\| MLS PIN)",
-    rf"\g<1>{results['ma']['sf']['count']:,}\g<2>",
+    _TRAIL.format(metric="Units Sold"),
+    rf"\g<1>{results['ma']['sf']['count']:,} \g<2>",
     "MASTER_DATA MA Units Sold",
 )
+
+# MA Median Price — the fourth row of the same table, which no rule owned, so it
+# has sat at "—" since the column was added.
+if results["ma"]["sf"]["median_price"] is not None:
+    md = md_replace(
+        md,
+        _TRAIL.format(metric="Median Price"),
+        rf"\g<1>{_money_full(results['ma']['sf']['median_price'])} \g<2>",
+        "MASTER_DATA MA Median Price",
+    )
+
+# The column heading states the date those trailing figures were pulled. Written
+# every run, or the table would carry today's numbers under an older as-of.
+md = md_replace(
+    md,
+    r"(\| Trailing 12mo \(as of )\d{4}-\d{2}-\d{2}(\) \|)",
+    rf"\g<1>{TODAY.isoformat()}\g<2>",
+    "MASTER_DATA trailing-window as-of",
+)
+
+# The prose restatement of the same window, directly above the table. Hand-typed
+# and already a day stale; "do not transcribe" applies to this script too.
+_live_cells = [results[s]["sf"]["avg_price"] for s in ("ma", "essex", "boston")]
+if all(v is not None for v in _live_cells):
+    md = md_replace(
+        md,
+        r"(As of \*\*)[A-Z][a-z]+ \d+, \d{4}(\*\*: MA )\$[\d,]+( · Essex )\$[\d,]+( ·\n?Boston )\$[\d,]+",
+        rf"\g<1>{footer_date}\g<2>{_money_full(_live_cells[0])}"
+        rf"\g<3>{_money_full(_live_cells[1])}\g<4>{_money_full(_live_cells[2])}",
+        "MASTER_DATA live-window prose",
+    )
 
 # Haverhill Condo median
 md = md_replace(
@@ -1148,13 +1191,13 @@ md = md_replace(
     "MASTER_DATA Haverhill SF median",
 )
 
-# Update "Last Updated" date at top of MASTER_DATA.md
-md = md_replace(
-    md,
-    r"(> \*\*Last Updated:\*\* )[A-Z][a-z]+ \d+, \d{4}",
-    rf"\g<1>{footer_date}",
-    "MASTER_DATA Last Updated",
-)
+# No stamp is written at the top of the file. That header was "Last Updated" and
+# is now "Last Reviewed" -- a different claim. This file describes itself as a
+# reference for HAND-VERIFIED figures, so a nightly job stamping it every time it
+# rewrites four table cells would assert a human review that never happened, and
+# would make the one date telling you when a person last checked the hand-entered
+# figures track the bot instead. The rows this script owns carry their own as-of
+# date in the column heading; that is the honest stamp.
 
 
 # ---------- WRITE FILES ----------
