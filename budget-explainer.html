@@ -321,6 +321,40 @@ h3{font-size:.88rem;font-weight:700;color:var(--navy);margin-bottom:12px}
   .mv-val{font-size:.68rem}
 }
 
+/* ---------- funding split + the local chain ---------- */
+.split{display:flex;height:64px;border-radius:8px;overflow:hidden;border:1px solid var(--border);margin:24px 0 10px}
+.split div{display:flex;flex-direction:column;justify-content:center;padding:0 20px;color:#fff}
+.split .tax{background:var(--navy);flex:44.9}
+.split .other{background:#6f7f8f;flex:18.5}
+.split .lbl{font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.split .amt{font-family:'DM Serif Display',Georgia,serif;font-size:1.4rem;line-height:1.1}
+.split-key{display:flex;justify-content:space-between;font-size:.74rem;color:var(--muted);flex-wrap:wrap;gap:10px}
+.vs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:26px 0}
+.vs > div{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 22px}
+.vs .k{font-size:.63rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.vs .v{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.6rem,3.4vw,2.2rem);line-height:1;color:var(--navy)}
+.vs .v.muted{color:var(--muted)}
+.vs .s{font-size:.78rem;color:var(--muted);margin-top:8px;line-height:1.5}
+.chain{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:26px 0 10px}
+.step{position:relative;padding:20px 22px 20px 26px;background:var(--card);border:1px solid var(--border);border-right:none}
+.step:last-child{border-right:1px solid var(--border);border-radius:0 12px 12px 0}
+.step:first-child{border-radius:12px 0 0 12px}
+.step::after{content:'';position:absolute;right:-11px;top:50%;transform:translateY(-50%) rotate(45deg);
+  width:20px;height:20px;background:var(--card);border-top:1px solid var(--border);border-right:1px solid var(--border);z-index:2}
+.step:last-child::after{display:none}
+.step .n{font-family:'IBM Plex Mono',monospace;font-size:.64rem;letter-spacing:.1em;color:var(--gold);font-weight:600;margin-bottom:8px}
+.step h4{font-size:.84rem;color:var(--navy);margin-bottom:7px;font-weight:700}
+.step p{font-size:.79rem;color:var(--muted);line-height:1.55;margin:0}
+.step b{color:var(--text)}
+@media (max-width:900px){
+  .chain{grid-template-columns:1fr}
+  .step{border-right:1px solid var(--border);border-bottom:none;border-radius:0}
+  .step:first-child{border-radius:12px 12px 0 0}
+  .step:last-child{border-radius:0 0 12px 12px;border-bottom:1px solid var(--border)}
+  .step::after{right:auto;left:50%;top:auto;bottom:-11px;transform:translateX(-50%) rotate(135deg)}
+  .vs{grid-template-columns:1fr}
+}
+
 /* ---------- town lookup: the one number on this page that is about the reader ---- */
 .town{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px 26px 22px;margin-top:24px}
 .town-input{position:relative}
@@ -341,6 +375,29 @@ h3{font-size:.88rem;font-weight:700;color:var(--navy);margin-bottom:12px}
   padding:9px 16px;font-size:.88rem;color:var(--text);font-family:inherit;
 }
 .town-list button:hover,.town-list button.hi{background:rgba(15,41,66,.07)}
+.town-count{font-size:.72rem;color:var(--muted);margin-top:10px;font-family:'IBM Plex Mono',monospace}
+.db-wrap{margin-top:16px;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.db-scroll{max-height:400px;overflow-y:auto}
+table.db{width:100%;border-collapse:collapse;font-size:.85rem;margin:0}
+table.db thead th{
+  position:sticky;top:0;z-index:2;background:var(--card);
+  border-bottom:1px solid var(--border);padding:11px 14px;
+  font-size:.64rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);
+  font-weight:600;cursor:pointer;user-select:none;white-space:nowrap;
+}
+table.db thead th:hover{color:var(--navy)}
+table.db thead th[aria-sort]{color:var(--navy)}
+table.db thead th .ar{opacity:.4;margin-left:5px;font-size:.7rem}
+table.db thead th[aria-sort] .ar{opacity:1}
+table.db th.n,table.db td.n{text-align:right}
+table.db tbody td{padding:9px 14px;border-bottom:1px solid var(--border)}
+table.db tbody tr:last-child td{border-bottom:none}
+table.db tbody tr{cursor:pointer}
+table.db tbody tr:hover{background:rgba(15,41,66,.04)}
+table.db tbody tr.sel{background:rgba(201,168,76,.13)}
+table.db td.n{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
+table.db td.zero{color:var(--red)}
+.db-empty{padding:22px 14px;color:var(--muted);font-size:.86rem}
 .town-out{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
 .town-out .k{font-size:.63rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
 .town-out .v{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.25rem,2.6vw,1.7rem);color:var(--navy);font-variant-numeric:tabular-nums;line-height:1.1}
@@ -652,6 +709,81 @@ tr:last-child td{border-bottom:none}
     </div>
   </section>
 
+  <!-- ══ how it reaches a household ══ -->
+  <section class="chapter">
+    <div class="chapter-grid">
+      <div class="stamp">
+        <div class="stamp-when mono">Your household</div>
+        <div class="stamp-what">How any of this reaches you</div>
+      </div>
+      <div>
+        <div class="measure">
+          <h2>What a $63.4 billion budget actually costs you</h2>
+          <p>The tempting arithmetic is $63.4&nbsp;billion divided by 2.83&nbsp;million households, which gives $22,410. That number is real but it is <strong>not what a household pays</strong>, and anyone quoting it that way is wrong. Massachusetts does not raise $63.4&nbsp;billion from Massachusetts households.</p>
+        </div>
+
+        <div class="split">
+          <div class="tax"><span class="lbl">State taxes</span><span class="amt">$44.9B</span></div>
+          <div class="other"><span class="lbl">Federal &amp; other</span><span class="amt">$18.5B</span></div>
+        </div>
+        <div class="split-key">
+          <span>Consensus tax revenue for FY2027, including $2.7B of surtax</span>
+          <span>Federal reimbursement (mostly MassHealth), fees, departmental revenue</span>
+        </div>
+
+        <div class="vs">
+          <div>
+            <div class="k">Spending per household</div>
+            <div class="v muted">$22,410</div>
+            <div class="s">$63.416B ÷ 2,829,804 households. The figure usually quoted — and the one that overstates your share.</div>
+          </div>
+          <div>
+            <div class="k">State taxes per household</div>
+            <div class="v">$15,867</div>
+            <div class="s">$44.9B ÷ the same households. Closer to what Massachusetts actually collects, though it still includes business taxes households do not pay directly.</div>
+          </div>
+        </div>
+
+        <div class="measure">
+          <p>So roughly <strong>$6,500 per household</strong> of that budget is not Massachusetts tax money at all. That is the honest correction, and it cuts against the alarming version of this story.</p>
+          <h3 style="margin-top:26px">Where it does reach you: the local chain</h3>
+          <p>State income and sales tax rates did not move. What moves is your <strong>property tax</strong>, and the state budget is one input into it.</p>
+        </div>
+
+        <div class="chain">
+          <div class="step">
+            <div class="n">01</div>
+            <h4>The state sends aid</h4>
+            <p><b>$9.02&nbsp;billion</b> goes to cities and towns — $7.658B of Chapter&nbsp;70 school aid, restricted to schools, plus $1.363B of unrestricted UGGA.</p>
+          </div>
+          <div class="step">
+            <div class="n">02</div>
+            <h4>Aid grows slower than costs</h4>
+            <p>UGGA rose <b>3.0%</b>. Municipal wages, health insurance, energy and special education generally rise faster. The difference is a gap in the town budget.</p>
+          </div>
+          <div class="step">
+            <div class="n">03</div>
+            <h4>Proposition 2&frac12; caps the fix</h4>
+            <p>A town may raise its total levy by only <b>2.5% a year</b>, plus new construction. Anything beyond that needs a ballot override.</p>
+          </div>
+          <div class="step">
+            <div class="n">04</div>
+            <h4>It lands on your bill</h4>
+            <p>The statewide average single-family bill is <b>$8,113</b>, on an average assessed value of $742,986 — an effective rate of 1.092%.</p>
+          </div>
+        </div>
+
+        <div class="measure">
+          <div class="callout">
+            <div class="k">Being fair about this</div>
+            <p>State aid is one input among several. Towns also control their own headcount, contracts and service levels, and a town whose costs outrun its aid has usually made local choices too. The claim here is narrow and defensible: <strong>aid rising 3.0% against faster-rising municipal costs puts upward pressure on the property tax</strong>, which is the tax households feel most directly and the one no state budget headline mentions.</p>
+          </div>
+          <p style="margin-top:22px">And the overrun? A supplemental appropriation does <strong>not</strong> raise your rate in-year — it is paid from revenue arriving above benchmark, or from reserves. What it does is spend money that could have gone to the stabilisation fund or to tax relief, and it lifts the base that next year's budget grows from. The cost is deferred, not billed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ══ 5 ══ what it sets up -->
   <section class="chapter">
     <div class="chapter-grid">
@@ -673,22 +805,26 @@ tr:last-child td{border-bottom:none}
           </div>
         </div>
 
-        <div class="two-up" style="margin-top:34px;align-items:start">
-        <div>
-        <h3>What did your town actually get?</h3>
+        <h3 style="margin-top:36px">What did your town actually get?</h3>
         <p style="font-size:.93rem">Every city and town in the Commonwealth, straight from the enacted budget's own local aid schedule. Chapter&nbsp;70 is school aid; UGGA is the unrestricted money a town can spend on anything.</p>
         <div class="town">
           <div class="town-input">
-            <input type="text" id="tSearch" placeholder="Start typing a city or town&hellip;" autocomplete="off"
-                   role="combobox" aria-expanded="false" aria-controls="tList" aria-label="Search for a Massachusetts city or town">
-            <div class="town-list" id="tList" role="listbox"></div>
+            <input type="text" id="tSearch" placeholder="Search all 352 cities and towns&hellip;" autocomplete="off"
+                   aria-controls="tBody" aria-label="Filter the local aid table by city or town">
           </div>
-          <div class="town-quick">
-            <button class="mark" data-t="Newburyport">Newburyport</button>
-            <button class="mark" data-t="Newbury">Newbury</button>
-            <button class="mark" data-t="Haverhill">Haverhill</button>
-            <button class="mark" data-t="Lawrence">Lawrence</button>
-            <button class="mark" data-t="Boston">Boston</button>
+          <div class="town-count" id="tCount"></div>
+          <div class="db-wrap">
+            <div class="db-scroll">
+              <table class="db">
+                <thead><tr>
+                  <th data-k="0">Municipality<span class="ar">&#9650;</span></th>
+                  <th class="n" data-k="1">Chapter 70<span class="ar">&#9650;</span></th>
+                  <th class="n" data-k="2">UGGA<span class="ar">&#9650;</span></th>
+                  <th class="n" data-k="3">Total<span class="ar">&#9650;</span></th>
+                </tr></thead>
+                <tbody id="tBody"></tbody>
+              </table>
+            </div>
           </div>
           <div class="town-out">
             <div><div class="k">Chapter 70</div><div class="v" id="tC70">&mdash;</div></div>
@@ -698,13 +834,6 @@ tr:last-child td{border-bottom:none}
           <div class="town-split"><span class="c70" id="tSplitA" style="width:0"></span><span class="ugga" id="tSplitB" style="width:0"></span></div>
           <div class="town-legend"><span><i style="background:var(--navy)"></i>Chapter 70</span><span><i style="background:var(--gold)"></i>UGGA</span></div>
           <div class="town-verdict" id="tVerdict">Pick a town to see its FY2027 local aid.</div>
-        </div>
-        </div>
-        <div>
-          <h3>The line worth watching</h3>
-          <p style="font-size:.93rem">The State Retiree Benefits Trust deposit has fallen from <strong>$550M in FY2024 to $400M</strong> now &mdash; down 27% &mdash; while the same budget creates a reserve to enhance pension cost-of-living adjustments. Pre-funding falls on the worse-funded promise while the larger one grows. Neither move appears in the &ldquo;no new taxes or fees&rdquo; framing, and both land on future budgets rather than this one.</p>
-          <p style="font-size:.93rem;color:var(--muted)">Full detail on the <a href="pension-dashboard.html">pensions &amp; OPEB dashboard</a>.</p>
-        </div>
         </div>
 
         <h3 style="margin-top:30px">Where the money actually moved</h3>
@@ -717,6 +846,9 @@ tr:last-child td{border-bottom:none}
           </div>
           <div id="mvRows"></div>
           <button class="chip" id="mvMore" aria-expanded="false" style="margin-top:12px">Show all 17 changes</button>
+          <div class="callout" style="margin-top:22px"><div class="k">The line worth watching</div>
+            <p>The State Retiree Benefits Trust deposit has fallen from <strong>$550M in FY2024 to $400M</strong> now &mdash; down 27% &mdash; while the same budget creates a reserve to enhance pension cost-of-living adjustments. Pre-funding falls on the worse-funded promise while the larger one grows. Neither move appears in the &ldquo;no new taxes or fees&rdquo; framing, and both land on future budgets rather than this one. Full detail on the <a href="pension-dashboard.html">pensions &amp; OPEB dashboard</a>.</p>
+          </div>
           <p style="font-size:.76rem;color:var(--muted);margin-top:16px">Accounting restructurings are excluded, because they are not policy changes: the Student Opportunity Act reserve folding into Chapter&nbsp;70, the C3 childcare move to line 3000-1045, the Free Community College renumbering, and the payroll split at every sheriff&rsquo;s office. A raw sort would show those as the largest cuts in the budget, and they are not cuts at all.</p>
         </div>
       </div>
@@ -944,83 +1076,110 @@ tr:last-child td{border-bottom:none}
      Aid' footer row in the source CSV is dropped -- summing it in doubles every
      statewide figure. */
   const TOWNS=[["Abington",15164118,2543535],["Acton",0,1863871],["Acushnet",7640852,1949437],["Adams",12393,2972046],["Agawam",27760200,4748876],["Alford",0,19755],["Amesbury",10270009,2518604],["Amherst",6703939,10742250],["Andover",16197960,2405773],["Aquinnah",0,4942],["Arlington",21226373,9725663],["Ashburnham",0,1026326],["Ashby",0,563777],["Ashfield",93683,240366],["Ashland",12447058,1782579],["Athol",0,3374596],["Attleboro",63226636,7365329],["Auburn",16115849,2225253],["Avon",4488051,890728],["Ayer",0,989670],["Barnstable",26894457,2860364],["Barre",0,1153149],["Becket",76923,122470],["Bedford",7054469,1506457],["Belchertown",15052600,2202637],["Bellingham",10967237,2208493],["Belmont",13660219,2954341],["Berkley",4414688,793873],["Berlin",0,268381],["Bernardston",0,374201],["Beverly",16388255,7517287],["Billerica",22129264,7495264],["Blackstone",162423,1758565],["Blandford",77586,164650],["Bolton",3547,273529],["Boston",254265561,238832800],["Bourne",6146375,1930058],["Boxborough",32909,341189],["Boxford",2161403,646869],["Boylston",54141,452196],["Braintree",22754750,7351732],["Brewster",1547125,541797],["Bridgewater",190196,4698296],["Brimfield",1831387,505652],["Brockton",288027232,26733675],["Brookfield",2002366,634889],["Brookline",18876413,8248159],["Buckland",7677,392157],["Burlington",11059876,3404965],["Cambridge",23847887,27485600],["Canton",10034440,2801859],["Carlisle",1625134,298842],["Carver",11067283,1884965],["Charlemont",120531,224499],["Charlton",0,1877795],["Chatham",0,218671],["Chelmsford",16278424,6530816],["Chelsea",131827785,10480663],["Cheshire",0,784729],["Chester",115723,231256],["Chesterfield",108282,178402],["Chicopee",101370278,14690104],["Chilmark",0,10271],["Clarksburg",2235621,463576],["Clinton",22950682,3022739],["Cohasset",3556395,683328],["Colrain",8760,369316],["Concord",4818025,1535715],["Conway",669446,231978],["Cummington",59811,108284],["Dalton",337786,1454668],["Danvers",10648870,3699772],["Dartmouth",11780277,3313971],["Dedham",10556123,4215220],["Deerfield",1265859,625499],["Dennis",0,749316],["Devens",308558,0],["Dighton",0,1006728],["Douglas",9358683,957448],["Dover",1227551,268267],["Dracut",28733489,4541548],["Dudley",11040,2294423],["Dunstable",0,324094],["Duxbury",7763410,1184780],["East Bridgewater",13677749,1942155],["East Brookfield",221080,373731],["East Longmeadow",16046736,1889133],["Eastham",588199,212821],["Easthampton",9308822,3596880],["Easton",12037547,2860639],["Edgartown",1331177,107292],["Egremont",0,85265],["Erving",629866,91704],["Essex",0,323850],["Everett",128092523,8896291],["Fairhaven",10285363,2899688],["Fall River",250598336,30311887],["Falmouth",10478249,1886971],["Fitchburg",92786527,10891647],["Florida",579687,65428],["Foxborough",10485512,1951989],["Framingham",93930862,12805692],["Franklin",31218083,3249613],["Freetown",16860,1232817],["Gardner",33019774,5410325],["Georgetown",6189672,936657],["Gill",0,312007],["Gloucester",12634061,5145300],["Goshen",111470,104540],["Gosnold",0,2906],["Grafton",14015088,2051844],["Granby",5029860,1134491],["Granville",139520,207959],["Great Barrington",0,984179],["Greenfield",17009024,4060650],["Groton",0,1023199],["Groveland",65470,943533],["Hadley",1528446,592804],["Halifax",3735263,1173275],["Hamilton",0,876877],["Hampden",0,885063],["Hancock",475796,74114],["Hanover",8471971,2723346],["Hanson",40519,1653958],["Hardwick",10500,596051],["Harvard",2555491,1888710],["Harwich",0,600968],["Hatfield",1012456,406165],["Haverhill",96427042,12631775],["Hawley",32248,55848],["Heath",0,108138],["Hingham",9996377,2088302],["Hinsdale",104923,287694],["Holbrook",13156698,1901826],["Holden",14521,2488649],["Holland",1080634,264664],["Holliston",9981860,2010745],["Holyoke",110598472,12907079],["Hopedale",6585260,844902],["Hopkinton",11540499,1074296],["Hubbardston",0,584753],["Hudson",14243100,2591902],["Hull",4288024,2703927],["Huntington",436448,441506],["Ipswich",4776506,2076268],["Kingston",6227857,1268350],["Lakeville",119449,1080918],["Lancaster",0,1239018],["Lanesborough",7201,446050],["Lawrence",332192248,25025399],["Lee",2392845,806456],["Leicester",11665327,2227817],["Lenox",1533843,691157],["Leominster",76157655,7375535],["Leverett",437488,232185],["Lexington",20399075,2077091],["Leyden",0,106546],["Lincoln",1535658,885065],["Littleton",5511890,938351],["Longmeadow",8220391,1822393],["Lowell",275966413,32129298],["Ludlow",15369913,3925759],["Lunenburg",9485250,1379895],["Lynn",327335160,28543765],["Lynnfield",6850530,1363434],["Malden",70838845,16033345],["Manchester",0,303296],["Mansfield",20854717,2905080],["Marblehead",7390439,1519992],["Marion",1305942,306812],["Marlborough",52707503,7015713],["Marshfield",16701173,2833228],["Mashpee",5435000,530463],["Mattapoisett",1154853,538494],["Maynard",6186200,2018737],["Medfield",7630178,1877600],["Medford",19272206,15481152],["Medway",11703987,1591897],["Melrose",13911036,6565933],["Mendon",38052,541272],["Merrimac",36094,1085679],["Methuen",72676678,7061567],["Middleborough",23585325,3203133],["Middlefield",13290,68447],["Middleton",2046759,730663],["Milford",55270258,3967606],["Millbury",9513233,2284226],["Millis",5441676,1354807],["Millville",73662,525106],["Milton",13473284,4158597],["Monroe",170066,23574],["Monson",7992519,1673688],["Montague",0,1835167],["Monterey",0,62827],["Montgomery",32160,112580],["Mount Washington",13818,38298],["Nahant",663225,488793],["Nantucket",5099197,164754],["Natick",15344137,4945886],["Needham",15595834,2336345],["New Ashford",123072,26586],["New Bedford",271241737,29304918],["New Braintree",0,170079],["New Marlborough",0,80154],["New Salem",0,134698],["Newbury",16934,680239],["Newburyport",6510535,3284344],["Newton",32235914,7775197],["Norfolk",4034619,1256145],["North Adams",16898002,5620292],["North Andover",13775969,2713690],["North Attleborough",22877567,3747647],["North Brookfield",5136726,1020822],["North Reading",8429947,2300058],["Northampton",9019229,5652463],["Northborough",4904088,1469794],["Northbridge",16692113,2722108],["Northfield",0,466004],["Norton",14044622,2693320],["Norwell",5882618,1395727],["Norwood",19086531,5975737],["Oak Bluffs",2115129,115314],["Oakham",0,249172],["Orange",7131555,2060834],["Orleans",516774,244347],["Otis",0,52837],["Oxford",12686783,2639303],["Palmer",12360019,2570647],["Paxton",0,701204],["Peabody",39044161,9301050],["Pelham",358213,205641],["Pembroke",15014594,2190549],["Pepperell",0,1924965],["Peru",91030,146801],["Petersham",727308,149346],["Phillipston",0,239206],["Pittsfield",69313721,11021593],["Plainfield",83804,65819],["Plainville",3291813,996428],["Plymouth",31322417,5211885],["Plympton",1239805,310775],["Princeton",0,387398],["Provincetown",341239,190112],["Quincy",49152393,24411163],["Randolph",32003795,6676064],["Raynham",0,1496959],["Reading",12931313,4182317],["Rehoboth",0,1367802],["Revere",108436838,13173039],["Richmond",573273,141962],["Rochester",2609552,559178],["Rockland",20241858,3394721],["Rockport",1809026,580439],["Rowe",163075,6808],["Rowley",18508,705581],["Royalston",0,231251],["Russell",255579,317089],["Rutland",0,1203237],["Salem",32898737,8855991],["Salisbury",15791,834470],["Sandisfield",0,47849],["Sandwich",8403816,1505108],["Saugus",16641482,4731013],["Savoy",537259,148251],["Scituate",7665955,2610570],["Seekonk",8599658,1614375],["Sharon",11913046,1839438],["Sheffield",17905,320385],["Shelburne",0,336365],["Sherborn",1011345,291675],["Shirley",0,1677021],["Shrewsbury",23420930,3670563],["Shutesbury",688342,220354],["Somerset",11280197,2005670],["Somerville",23366282,31969231],["South Hadley",11417059,3356200],["Southampton",2819438,826761],["Southborough",3671623,595699],["Southbridge",36441720,4493349],["Southwick",220059,1623513],["Spencer",34709,2890852],["Springfield",583158575,48173698],["Sterling",0,906609],["Stockbridge",0,133878],["Stoneham",8291383,4770974],["Stoughton",31998924,4147850],["Stow",0,560707],["Sturbridge",5431034,1016754],["Sudbury",6593364,1844049],["Sunderland",954756,650137],["Sutton",6197181,1021896],["Swampscott",6109390,1693333],["Swansea",11637498,2433954],["Taunton",109617416,10825630],["Templeton",11493,1786443],["Tewksbury",15173007,3632693],["Tisbury",1794439,144948],["Tolland",0,25295],["Topsfield",1720627,798842],["Townsend",0,1689527],["Truro",493226,48806],["Tyngsborough",8308620,1269103],["Tyringham",72676,17792],["Upton",39979,705562],["Uxbridge",10361060,1791384],["Wakefield",9949023,4355758],["Wales",1221948,304407],["Walpole",11377480,3314307],["Waltham",27305086,12338203],["Ware",14934620,2210665],["Wareham",17155112,2586488],["Warren",12223,1157477],["Warwick",401664,162970],["Washington",37233,120686],["Watertown",8964426,8526784],["Wayland",8378020,1196422],["Webster",24259540,3184965],["Wellesley",11568736,1764077],["Wellfleet",342443,89557],["Wendell",0,222676],["Wenham",0,559309],["West Boylston",3503475,1034739],["West Bridgewater",7286583,854844],["West Brookfield",328719,628377],["West Newbury",13151,392506],["West Springfield",47772002,4624697],["West Stockbridge",0,127852],["West Tisbury",0,249185],["Westborough",13452856,1554403],["Westfield",46092037,8076169],["Westford",19692829,2777115],["Westhampton",527648,189015],["Westminster",0,859011],["Weston",5291459,521886],["Westport",6077452,1600442],["Westwood",8250386,988753],["Weymouth",31745663,11205022],["Whately",367983,175574],["Whitman",174351,3106130],["Wilbraham",0,1901052],["Williamsburg",892871,390769],["Williamstown",0,1238478],["Wilmington",13051370,3224984],["Winchendon",14590171,2157341],["Winchester",12084323,1962563],["Windsor",28984,133896],["Winthrop",10768036,5371254],["Woburn",16125949,7704762],["Worcester",437762216,53065990],["Worthington",514362,162814],["Wrentham",4317997,1225180],["Yarmouth",0,1695986]];
-  var STATE_C70 = 6695466289, STATE_UGGA = 1363109505;
-  var tIn = document.getElementById('tSearch'), tList = document.getElementById('tList');
+  var tIn = document.getElementById('tSearch'), tBody = document.getElementById('tBody');
   var tC70 = document.getElementById('tC70'), tUgga = document.getElementById('tUgga');
   var tTot = document.getElementById('tTot'), tVer = document.getElementById('tVerdict');
   var tA = document.getElementById('tSplitA'), tB = document.getElementById('tSplitB');
-  var hi = -1, shown = [];
+  var tCount = document.getElementById('tCount');
+  var heads = [].slice.call(document.querySelectorAll('table.db thead th'));
+
+  // rows as [name, c70, ugga, total] so the sort key is just an index
+  var ROWS = TOWNS.map(function(t){ return [t[0], t[1], t[2], t[1] + t[2]]; });
+  var sortK = 0, sortAsc = true, filtered = ROWS.slice(), selected = null;
 
   function usd(n){ return '$' + Math.round(n).toLocaleString('en-US'); }
 
-  function townPick(name){
-    var row = TOWNS.filter(function(t){ return t[0] === name; })[0];
-    if (!row) return;
-    var c70 = row[1], ugga = row[2], tot = c70 + ugga;
-    tC70.textContent = usd(c70);
-    tUgga.textContent = usd(ugga);
-    tTot.textContent = usd(tot);
-    tA.style.width = (c70 / tot * 100) + '%';
-    tB.style.width = (ugga / tot * 100) + '%';
+  function townShow(r){
+    selected = r[0];
+    tC70.textContent = usd(r[1]);
+    tUgga.textContent = usd(r[2]);
+    tTot.textContent = usd(r[3]);
+    tA.style.width = (r[1] / r[3] * 100) + '%';
+    tB.style.width = (r[2] / r[3] * 100) + '%';
 
     var msg;
-    if (c70 < 100000){
-      msg = '<b>' + row[0] + ' receives almost no Chapter 70 directly.</b> Its school aid goes to the '
-          + 'regional district it belongs to, not to the town, so nearly all of its state money is UGGA '
-          + '— which rose 3.0% this year. Towns in this position are the most property-tax-dependent '
-          + 'in the Commonwealth, and the gap gets closed at town meeting under Proposition 2½.';
-    } else if (ugga > c70){
-      msg = 'Unusually, ' + row[0] + ' receives more unrestricted aid than school aid — ' + usd(ugga)
-          + ' of UGGA against ' + usd(c70) + ' of Chapter 70.';
+    if (r[1] < 100000){
+      msg = '<b>' + r[0] + ' receives almost no Chapter 70 directly.</b> Its school aid goes to the '
+          + 'regional district it belongs to rather than to the town, so nearly all of its state money '
+          + 'is UGGA — which rose 3.0% this year. Towns in this position lean hardest on the '
+          + 'property tax, and the gap gets closed at town meeting under Proposition 2½.';
+    } else if (r[2] > r[1]){
+      msg = r[0] + ' is unusual: it receives more unrestricted aid than school aid — ' + usd(r[2])
+          + ' of UGGA against ' + usd(r[1]) + ' of Chapter 70.';
     } else {
-      var share = (c70 / tot * 100).toFixed(0);
-      msg = share + '% of ' + row[0] + '’s state aid is Chapter 70 school money, which is restricted to '
-          + 'schools. The ' + usd(ugga) + ' of UGGA is the part the town can actually spend on anything else.';
+      msg = Math.round(r[1] / r[3] * 100) + '% of ' + r[0] + '’s state aid is Chapter 70 school '
+          + 'money, which is restricted to schools. The ' + usd(r[2]) + ' of UGGA is the part the town '
+          + 'can actually spend on anything else.';
     }
     tVer.innerHTML = msg;
-    tIn.value = row[0];
-    townClose();
+    paintSel();
   }
 
-  function townClose(){ tList.classList.remove('open'); tIn.setAttribute('aria-expanded','false'); hi = -1; }
+  function paintSel(){
+    [].slice.call(tBody.querySelectorAll('tr')).forEach(function(tr){
+      tr.classList.toggle('sel', tr.getAttribute('data-n') === selected);
+    });
+  }
 
-  function townRender(q){
-    q = (q || '').trim().toLowerCase();
-    if (!q){ townClose(); return; }
-    shown = TOWNS.filter(function(t){ return t[0].toLowerCase().indexOf(q) === 0; }).slice(0, 40);
-    if (!shown.length) shown = TOWNS.filter(function(t){ return t[0].toLowerCase().indexOf(q) > -1; }).slice(0, 40);
-    if (!shown.length){ townClose(); return; }
-    tList.innerHTML = shown.map(function(t, i){
-      return '<button type="button" role="option" data-n="' + t[0] + '"' + (i === hi ? ' class="hi"' : '') + '>' + t[0] + '</button>';
+  function townDraw(){
+    if (!filtered.length){
+      tBody.innerHTML = '<tr><td colspan="4" class="db-empty">No municipality matches that search.</td></tr>';
+      tCount.textContent = '0 of ' + ROWS.length + ' municipalities';
+      return;
+    }
+    tBody.innerHTML = filtered.map(function(r){
+      return '<tr data-n="' + r[0] + '"><td>' + r[0] + '</td>'
+           + '<td class="n' + (r[1] < 100000 ? ' zero' : '') + '">' + usd(r[1]) + '</td>'
+           + '<td class="n">' + usd(r[2]) + '</td>'
+           + '<td class="n">' + usd(r[3]) + '</td></tr>';
     }).join('');
-    tList.classList.add('open');
-    tIn.setAttribute('aria-expanded','true');
+    tCount.textContent = filtered.length === ROWS.length
+      ? ROWS.length + ' municipalities — 351 cities and towns, plus Devens'
+      : filtered.length + ' of ' + ROWS.length + ' municipalities';
+    paintSel();
   }
 
-  tIn.addEventListener('input', function(){ hi = -1; townRender(tIn.value); });
-  tIn.addEventListener('focus', function(){ if (tIn.value) townRender(tIn.value); });
-  tList.addEventListener('click', function(e){
-    var b = e.target.closest('button');
-    if (b) townPick(b.getAttribute('data-n'));
+  function townSort(){
+    filtered.sort(function(a, b){
+      var x = a[sortK], y = b[sortK], c;
+      c = (typeof x === 'string') ? x.localeCompare(y) : x - y;
+      return sortAsc ? c : -c;
+    });
+    heads.forEach(function(h, i){
+      if (i === sortK) h.setAttribute('aria-sort', sortAsc ? 'ascending' : 'descending');
+      else h.removeAttribute('aria-sort');
+      h.querySelector('.ar').innerHTML = (i === sortK && !sortAsc) ? '&#9660;' : '&#9650;';
+    });
+    townDraw();
+  }
+
+  function townFilter(){
+    var q = (tIn.value || '').trim().toLowerCase();
+    filtered = q ? ROWS.filter(function(r){ return r[0].toLowerCase().indexOf(q) > -1; }) : ROWS.slice();
+    townSort();
+  }
+
+  tIn.addEventListener('input', townFilter);
+  heads.forEach(function(h, i){
+    h.setAttribute('tabindex', '0');
+    function go(){
+      var k = +h.getAttribute('data-k');
+      if (k === sortK) sortAsc = !sortAsc;
+      else { sortK = k; sortAsc = (k === 0); }   // names A-Z, money biggest-first
+      townSort();
+    }
+    h.addEventListener('click', go);
+    h.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); go(); } });
   });
-  tIn.addEventListener('keydown', function(e){
-    if (e.key === 'ArrowDown' || e.key === 'ArrowUp'){
-      e.preventDefault();
-      if (!shown.length) return;
-      hi = e.key === 'ArrowDown' ? Math.min(hi + 1, shown.length - 1) : Math.max(hi - 1, 0);
-      townRender(tIn.value);
-    } else if (e.key === 'Enter'){
-      e.preventDefault();
-      if (shown.length) townPick(shown[hi > -1 ? hi : 0][0]);
-    } else if (e.key === 'Escape'){ townClose(); }
+  tBody.addEventListener('click', function(e){
+    var tr = e.target.closest('tr');
+    if (!tr || !tr.getAttribute('data-n')) return;
+    var r = ROWS.filter(function(x){ return x[0] === tr.getAttribute('data-n'); })[0];
+    if (r) townShow(r);
   });
-  document.addEventListener('click', function(e){
-    if (!e.target.closest('.town-input')) townClose();
-  });
-  [].slice.call(document.querySelectorAll('.town-quick .mark')).forEach(function(b){
-    b.addEventListener('click', function(){ townPick(b.getAttribute('data-t')); });
-  });
-  townPick('Newburyport');
+
+  townFilter();
+  townShow(ROWS.filter(function(r){ return r[0] === 'Newburyport'; })[0]);
 })();
 </script>
 </body>
