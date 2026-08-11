@@ -41,6 +41,15 @@ jobs:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
         run: python update-energy-dashboard.py
 
+      # Gasoline, diesel and residential natural gas. These were hand-typed until
+      # 2026-08 and every series had drifted -- worst, the Equivalence tab was
+      # billing gasoline at the 2025 annual average ($2.97) while Massachusetts
+      # paid $4.22. Weekly retail data, so this runs on the same monthly cadence
+      # as the electricity pull rather than waiting on EIA's monthly calendar.
+      - name: Update fuel prices
+        env:
+          EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
+        run: python update-fuel-prices.py
 
       - name: Update tax-budget dashboard
         env:

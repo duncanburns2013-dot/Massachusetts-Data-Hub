@@ -698,12 +698,16 @@ footer a:hover{color:var(--gold)}
 <div class="tl-wrap">
 <div style="font-family:'DM Serif Display',Georgia,serif;font-size:1.1rem;color:var(--navy);margin-bottom:12px">How the utility premium compounds over time</div>
 <div class="tl-i"><div class="tl-date">2010</div><div class="tl-ev b">MA extra burden: ~$537/yr</div><div class="tl-desc">Electricity 27% above national avg. Gas pipeline intact.</div></div>
-<div class="tl-i"><div class="tl-date">2015&#x2013;2017</div><div class="tl-ev r">Gas spike then crash &#x2014; utility rates keep climbing</div><div class="tl-desc">Gasoline fell from $3.40 &#x2192; $2.11 and back. MA electricity rose through the entire cycle.</div></div>
+<!-- Every figure in this timeline is now written from the GAS_MA array at render
+     time. Typed by hand it claimed a $3.40->$2.11 swing the series never had, a
+     2022 peak of $3.98 against an actual $5.15, and a 2025 discount to the US
+     that has since inverted. A timeline of live prices cannot be hand-kept. -->
+<div class="tl-i"><div class="tl-date">2015&#x2013;2017</div><div class="tl-ev r">Gas spike then crash &#x2014; utility rates keep climbing</div><div class="tl-desc">Gasoline fell from <span id="tlHi14">&#x2014;</span> to <span id="tlLo16">&#x2014;</span> and back. MA electricity rose through the entire cycle.</div></div>
 <div class="tl-i"><div class="tl-date">2017</div><div class="tl-ev r">Pipeline blocked &#x2014; natural gas premium widens</div><div class="tl-desc">Access Northeast killed. MA nat gas supply constrained.</div></div>
-<div class="tl-i"><div class="tl-date">2022</div><div class="tl-ev r">Record gas prices &#x2014; still can't match utility premium</div><div class="tl-desc">MA gasoline hit $3.98/gal. Yet the utility mandate premium was already larger.</div></div>
-<div class="tl-i pos"><div class="tl-date">2025</div><div class="tl-ev g">Gasoline below national average &#x2014; utilities at record high</div><div class="tl-desc">MA gasoline is $0.13 cheaper than the US average. MA electricity is 79% more expensive. The market delivered relief. Policy did not.</div></div>
+<div class="tl-i"><div class="tl-date">2022</div><div class="tl-ev r">Record gas prices &#x2014; still can't match utility premium</div><div class="tl-desc">MA gasoline peaked at <span id="tlPeak22">&#x2014;</span>/gal, the highest week on record. Yet the utility mandate premium was already larger.</div></div>
+<div class="tl-i" id="tlNowItem"><div class="tl-date" id="tlNowDate">&#x2014;</div><div class="tl-ev r" id="tlNowHead">&#x2014;</div><div class="tl-desc" id="tlNowDesc">&#x2014;</div></div>
 </div>
-<div class="verdict amber"><h3>Gasoline would need to reach <span id="equivVerdictPrice">&#x2014;</span>/gal<span id="equivVerdictRecord"> </span>to impose the burden MA utility mandates already impose today.</h3><p>The market delivered affordable gasoline. Policy blocked affordable electricity.</p></div>
+<div class="verdict amber"><h3>Gasoline would need to reach <span id="equivVerdictPrice">&#x2014;</span>/gal<span id="equivVerdictRecord"> </span>to impose the burden MA utility mandates already impose today.</h3><p id="equivVerdictSub">&#x2014;</p></div>
 </div>
 
 <!-- ===== BOSTON 2030 CLIMATE ACTION PLAN ===== -->
@@ -833,18 +837,32 @@ function switchTab(id,btn){
 }
 const C={red:'#c0392b',red2:'rgba(192,57,43,0.15)',green:'#1a7a4c',green2:'rgba(26,122,76,0.12)',blue:'#1a4480',blue2:'rgba(26,68,128,0.12)',amber:'#b8860b',amber2:'rgba(184,134,11,0.12)',navy:'#0f2942',gold:'#c9a84c',muted:'#7a756e',bg:'#f8f7f4'};
 const YEARS = ['2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'];
-const GAS_US = [2.788,3.527,3.644,3.527,3.368,2.43,2.14,2.42,2.72,2.60,2.17,3.01,3.97,3.53,3.31,3.09];
-const GAS_MA = [2.821,3.548,3.669,3.574,3.410,2.47,2.17,2.44,2.75,2.63,2.19,3.04,3.98,3.53,3.27,2.97];
-const DIESEL_US = [3.083,3.842,3.971,3.923,3.830,2.710,2.296,2.647,3.179,3.055,2.547,3.265,5.02,4.17,3.82,3.59];
-const DIESEL_NE = [3.156,3.986,4.100,4.059,3.988,2.838,2.424,2.787,3.349,3.219,2.712,3.504,5.28,4.46,4.05,3.77];
+// Fuel series are annual averages of EIA's own weekly retail workbooks, written
+// by update-fuel-prices.py. They were hand-typed until 2026-08 and every one of
+// them had drifted: GAS_US was 9-13c low in ELEVEN of sixteen years, DIESEL_NE
+// 2021 was out by 28c, and GAS_MA 2025 read 2.97 against EIA's 3.131. Do not
+// retype these — re-run the script.
+const GAS_US = [2.835,3.576,3.68,3.575,3.437,2.52,2.25,2.528,2.813,2.691,2.258,3.1,4.059,3.635,3.424,3.224];
+const GAS_MA = [2.802,3.592,3.717,3.617,3.48,2.462,2.221,2.511,2.823,2.664,2.234,3.013,4.099,3.593,3.387,3.131];
+const DIESEL_US = [2.992,3.84,3.968,3.922,3.825,2.707,2.304,2.65,3.178,3.056,2.551,3.287,4.989,4.214,3.76,3.66];
+const DIESEL_NE = [3.085,3.978,4.128,4.079,4.007,2.892,2.38,2.69,3.237,3.131,2.723,3.228,5.272,4.514,4.065,3.963];
 const ELEC_MA = [14.59,14.67,14.91,15.83,17.39,19.83,19.0,20.06,21.61,21.92,21.97,22.89,25.97,29.61,29.35,30.48];
 const ELEC_US = [11.54,11.72,11.88,12.13,12.52,12.65,12.55,12.89,12.87,13.01,13.15,13.66,15.04,16.0,16.48,17.3];
 // Residential natural gas, $/therm, annual averages aligned to YEARS. Hoisted to
 // module scope (they used to be local to the gas-vs-utility tab) because the
 // Equivalence model now derives its natural-gas premium from these rather than
 // repeating a hand-typed $945.
-const MA_NG = [1.45,1.58,1.35,1.32,1.42,1.28,1.22,1.29,1.38,1.36,1.26,1.68,2.28,2.54,2.58,2.60];
-const US_NG = [1.00,1.10,1.02,1.06,1.13,1.00,0.97,1.06,1.14,1.10,0.97,1.30,1.74,1.84,1.90,1.25];
+// EIA publishes residential gas in $/Mcf; these are converted at 10.37 therms per
+// Mcf (1 Mcf ~= 1.037 MMBtu). Also hand-typed and also wrong: US_NG 2025 read
+// 1.25 against EIA's 1.80, which alone doubled the natural-gas premium below.
+const MA_NG = [1.43,1.36,1.29,1.36,1.43,1.23,1.26,1.33,1.49,1.45,1.42,1.59,2.1,1.95,2.05,2.47];
+const US_NG = [1.24,1.21,1.16,1.17,1.25,1.19,1.17,1.25,1.23,1.22,1.22,1.43,1.72,1.67,1.65,1.8];
+
+// Current retail prices, not annual averages. MA_GAS_TODAY used to read
+// GAS_MA[last] -- the 2025 ANNUAL AVERAGE -- and call it "today", so the whole
+// Equivalence tab was billing gasoline at $2.97 while Massachusetts was paying
+// $4.22. An annual average is never a current price; keep these separate.
+const FUEL_NOW = {asOf:'2026-08-03', gasMA:4.223, gasUS:4.211, dieselNE:5.549};
 
 // The household consumption conventions this page bills against.
 const KWH_YR=7200;      // 600 kWh/mo, annualized
@@ -972,19 +990,24 @@ setTxt('yrRangeGap',yrRange);
 // the page uses.
 //
 // The natural-gas leg is NOT a constant either: it falls out of the MA_NG/US_NG
-// series above at the page's 700-therm convention —
-// (2.60 − 1.25) × 700 = $945, exactly the figure that was hand-typed here.
+// series above at the page's 700-therm convention. It read $945 on the old
+// hand-typed arrays, whose US 2025 value was 55c/therm too low; on EIA's own
+// figures the premium is (2.47 − 1.80) × 700 ≈ $469. The formula was always
+// right — it was being fed a wrong number, which is the failure mode a derived
+// figure is supposed to prevent and cannot when its inputs are typed by hand.
 const NG_PREMIUM=Math.round((MA_NG[MA_NG.length-1]-US_NG[US_NG.length-1])*THERMS_YR);
 const TOTAL_PREMIUM=OVERPAY+NG_PREMIUM;
 const ELEC_PER_GAL=OVERPAY/GALLONS_YR;
 const NG_PER_GAL=NG_PREMIUM/GALLONS_YR;
 const TOTAL_PER_GAL=ELEC_PER_GAL+NG_PER_GAL;
-const MA_GAS_TODAY=GAS_MA[GAS_MA.length-1];
+const MA_GAS_TODAY=FUEL_NOW.gasMA;
 const REQUIRED_PRICE=MA_GAS_TODAY+TOTAL_PER_GAL;
-// All-time US retail gasoline record: $5.01/gal, June 2022 (AAA national
-// average). A fact about a past moment, so it is a constant — not a live
-// superlative that could quietly go stale.
-const GAS_RECORD=5.01;
+// Massachusetts' own all-time weekly high: $5.151/gal, week of 2022-06-13 (EIA
+// EMM_EPM0_PTE_SMA_DPG). A fact about a past moment, so it is a constant. This
+// was the $5.01 AAA *national* record — the wrong comparator on a page whose
+// every other figure is Massachusetts, and 14c below the state's real peak.
+const GAS_RECORD=5.151;
+const GAS_RECORD_WHEN='June 2022';
 // Gauge/bar scale. Grows if the required price ever exceeds it, so a bar can
 // never overflow its track.
 const MAX_SCALE=Math.max(8,Math.ceil(REQUIRED_PRICE));
@@ -995,6 +1018,38 @@ const GALLONS_EQUIV=Math.round(MONTHLY_EXTRA/MA_GAS_TODAY);
 
 const money=v=>isNaN(v)?'':'$'+Math.round(v).toLocaleString();
 const perGal=v=>isNaN(v)?'':'$'+v.toFixed(2);
+
+// ── Timeline, derived ───────────────────────────────────────────────────────
+// Reads the same arrays every chart on this tab reads, so no item can describe a
+// price the series does not contain.
+(function(){
+  var iy=function(y){return YEARS.indexOf(String(y));};
+  setTxt('tlHi14',perGal(GAS_MA[iy(2014)]));
+  setTxt('tlLo16',perGal(GAS_MA[iy(2016)]));
+  setTxt('tlPeak22',perGal(GAS_RECORD));
+
+  // The "today" item states where the current price actually sits rather than
+  // asserting a direction. The old fixed 2025 entry said gasoline was 13c below
+  // the US average and called it relief; MA has since crossed above the US and
+  // the price is near its record, so a hand-written verdict here inverts.
+  var vsUS=FUEL_NOW.gasMA-FUEL_NOW.gasUS;
+  var pctOfRecord=FUEL_NOW.gasMA/GAS_RECORD*100;
+  setTxt('tlNowDate',FUEL_NOW.asOf);
+  setTxt('tlNowHead','MA gasoline '+perGal(FUEL_NOW.gasMA)+' — utilities still the larger burden');
+  setTxt('tlNowDesc',
+    'Gasoline is within '+Math.round(100-pctOfRecord)+'% of its '+GAS_RECORD_WHEN+
+    ' record of '+perGal(GAS_RECORD)+', and '+perGal(Math.abs(vsUS))+
+    (vsUS>=0?' above':' below')+' the US average. Even at that price the utility '+
+    'mandate premium of '+money(TOTAL_PREMIUM)+'/yr is the bigger line on a '+
+    'household budget — which is the point: it does not fall when fuel does.');
+
+  // The subtitle used to read "the market delivered affordable gasoline", which
+  // was only ever true while the array said $2.97. Stated as the comparison the
+  // tab actually makes, it holds whichever way fuel moves.
+  setTxt('equivVerdictSub', REQUIRED_PRICE>GAS_RECORD
+    ? 'That is above anything Massachusetts drivers have ever paid at the pump.'
+    : 'Gasoline has been that expensive before. The utility premium has never gone away.');
+})();
 
 setTxt('equivTotalPremium',money(TOTAL_PREMIUM));
 setTxt('equivGallonsYr',GALLONS_YR.toLocaleString());
