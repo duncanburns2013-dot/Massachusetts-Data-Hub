@@ -8,6 +8,15 @@
 <meta property="og:title" content="The Opening Figure — Massachusetts FY2027 Budget Explainer">
 <meta property="og:description" content="The budget was signed at $63.4 billion. The last two didn't stop there.">
 <meta property="og:type" content="article">
+<meta property="og:url" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/budget-explainer.html">
+<meta property="og:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-explainer.png">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1260">
+<meta property="og:image:alt" content="FY2025 was enacted at $57.6 billion and spent $63.3 billion. FY2027 will spend an amount not yet knowable.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The budget was signed at $63.4 billion. That’s the opening figure.">
+<meta name="twitter:description" content="Massachusetts enacts a budget in July and then raises it all year. FY2025 was enacted at $57.6B and spent $63.3B.">
+<meta name="twitter:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-explainer.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -23,7 +32,7 @@
   --text:#1a1a1a; --muted:#7a756e;
   --navy:#0f2942; --gold:#c9a84c; --red:#c0392b; --green:#1a7a4c;
   --rule:#d8d3ca;
-  --measure:660px;
+  --measure:760px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -36,7 +45,7 @@ body{
 .mono{font-family:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
 
 /* ---------- shared rhythm ---------- */
-.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 24px}
 .measure{max-width:var(--measure)}
 p{font-size:1.02rem;margin-bottom:1.1em}
 p:last-child{margin-bottom:0}
@@ -190,7 +199,15 @@ h3{font-size:.88rem;font-weight:700;color:var(--navy);margin-bottom:12px}
 .stack-total .verdict b{color:var(--red);font-weight:600}
 
 /* ---------- year bars ---------- */
-.years{margin-top:34px;display:grid;gap:26px}
+/* 2x2 rather than a stack: four short cards read as a set to be compared, and it
+   halves the height of the tallest section on the page. */
+.years{margin-top:34px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.year.wide{grid-column:1 / -1}
+.year.note{background:transparent;border:none;border-left:3px solid var(--gold);border-radius:0;
+  padding:4px 0 4px 18px;display:flex;align-items:center}
+.year.note p{font-size:.88rem;color:var(--muted);line-height:1.6}
+.year.note b{color:var(--text);font-weight:600}
+@media (max-width:820px){.years{grid-template-columns:1fr}}
 .year{
   background:var(--card);border:1px solid var(--border);border-radius:14px;
   padding:22px 24px;
@@ -201,7 +218,7 @@ h3{font-size:.88rem;font-weight:700;color:var(--navy);margin-bottom:12px}
 .year-verdict.over{color:var(--red)}
 .year-verdict.ontarget{color:var(--green)}
 .year-verdict.open{color:var(--muted)}
-.bar-row{display:grid;grid-template-columns:96px 1fr 124px;gap:12px;align-items:center;margin-bottom:9px}
+.bar-row{display:grid;grid-template-columns:80px minmax(0,1fr) 112px;gap:10px;align-items:center;margin-bottom:9px}
 .bar-row:last-of-type{margin-bottom:0}
 .bar-lbl{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);text-align:right}
 .bar-track{height:26px;position:relative;background:rgba(0,0,0,.035);border-radius:3px;overflow:visible}
@@ -289,9 +306,9 @@ h3{font-size:.88rem;font-weight:700;color:var(--navy);margin-bottom:12px}
 .mv-name{font-size:.79rem;text-align:right;color:var(--text);line-height:1.3}
 .mv-name span{display:block;font-family:'IBM Plex Mono',monospace;font-size:.64rem;color:var(--muted)}
 .mv-track{position:relative;height:19px}
-.mv-track::before{content:'';position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--rule)}
+.mv-track::before{content:'';position:absolute;left:30%;top:-3px;bottom:-3px;width:1px;background:var(--rule)}
 .mv-fill{position:absolute;top:0;height:100%;border-radius:2px;transition:width .45s cubic-bezier(.22,.75,.3,1),left .45s cubic-bezier(.22,.75,.3,1)}
-.mv-fill.up{background:var(--red);left:50%}
+.mv-fill.up{background:var(--red);left:30%}
 .mv-fill.down{background:var(--green)}
 .mv-val{font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-variant-numeric:tabular-nums}
 .mv-val.up{color:var(--red)}
@@ -303,6 +320,44 @@ h3{font-size:.88rem;font-weight:700;color:var(--navy);margin-bottom:12px}
   .mv-name span{font-size:.6rem}
   .mv-val{font-size:.68rem}
 }
+
+/* ---------- town lookup: the one number on this page that is about the reader ---- */
+.town{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px 26px 22px;margin-top:24px}
+.town-input{position:relative}
+.town input{
+  width:100%;font-family:'DM Sans',sans-serif;font-size:1.02rem;
+  padding:14px 16px;border:1px solid var(--border);border-radius:9px;
+  background:var(--bg);color:var(--text);
+}
+.town input:focus{outline:2px solid var(--navy);outline-offset:1px;border-color:var(--navy)}
+.town-list{
+  position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:20;
+  background:var(--card);border:1px solid var(--border);border-radius:9px;
+  max-height:232px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,.1);display:none;
+}
+.town-list.open{display:block}
+.town-list button{
+  display:block;width:100%;text-align:left;border:none;background:none;cursor:pointer;
+  padding:9px 16px;font-size:.88rem;color:var(--text);font-family:inherit;
+}
+.town-list button:hover,.town-list button.hi{background:rgba(15,41,66,.07)}
+.town-out{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+.town-out .k{font-size:.63rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.town-out .v{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.25rem,2.6vw,1.7rem);color:var(--navy);font-variant-numeric:tabular-nums;line-height:1.1}
+.town-out .v.gold{color:#8a6d1f}
+.town-split{display:flex;height:15px;border-radius:3px;overflow:hidden;margin-top:16px;background:rgba(0,0,0,.05)}
+.town-split .c70{background:var(--navy)}
+.town-split .ugga{background:var(--gold)}
+.town-legend{display:flex;gap:18px;margin-top:9px;font-size:.7rem;color:var(--muted);flex-wrap:wrap}
+.town-legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px}
+.town-verdict{margin-top:16px;padding-top:15px;border-top:1px solid var(--border);font-size:.85rem;color:var(--text)}
+.town-verdict b{color:var(--red)}
+.town-quick{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+@media (max-width:620px){.town-out{grid-template-columns:1fr;gap:12px}}
+
+/* ---------- two-up prose, so wide screens stop wasting half the page ---------- */
+.two-up{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(22px,3.4vw,46px);align-items:start}
+@media (max-width:820px){.two-up{grid-template-columns:1fr}}
 
 /* ---------- callout + table ---------- */
 .callout{
@@ -494,7 +549,11 @@ tr:last-child td{border-bottom:none}
             </div>
           </article>
 
-          <article class="year">
+          <article class="year note">
+            <p><b>FY2024 landed almost exactly on budget.</b> The overrun is a pattern, not a law &mdash; and a page that pretended otherwise would be doing the same thing it&rsquo;s complaining about. But two of the last three years ran over, one of them by ten percent.</p>
+          </article>
+
+          <article class="year wide">
             <div class="year-head">
               <div class="year-fy">FY2027</div>
               <div class="year-verdict open">Floor known · ceiling unknown</div>
@@ -513,9 +572,7 @@ tr:last-child td{border-bottom:none}
 
         </div>
 
-        <div class="measure">
-          <p style="margin-top:26px">FY2024 landed almost exactly on budget. That matters: the overrun is a pattern, not a law, and a page that pretended otherwise would be doing the same thing it's complaining about. But two of the last three years ran over, one of them by ten percent.</p>
-        </div>
+
       </div>
     </div>
   </section>
@@ -527,10 +584,12 @@ tr:last-child td{border-bottom:none}
         <div class="stamp-when mono">The mechanism</div>
         <div class="stamp-what">Supplemental appropriations</div>
       </div>
-      <div class="measure">
+      <div>
         <h2>The gap is closed by bills nobody writes about</h2>
-        <p>A supplemental budget is a separate bill, passed during the fiscal year, that adds to appropriations already made. They are routine and frequently justified — caseloads move, snow falls, federal reimbursements shift, collective bargaining settles. Nothing about them is secret.</p>
-        <p>What's true is simply that they arrive <strong>after</strong> the story has been filed. The July budget gets the front page and the phrase <em>no new taxes</em>. The $5.7&nbsp;billion that followed it in FY2025 arrived in pieces, across months, each too small and too technical to cover.</p>
+        <div class="two-up">
+          <p>A supplemental budget is a separate bill, passed during the fiscal year, that adds to appropriations already made. They are routine and frequently justified — caseloads move, snow falls, federal reimbursements shift, collective bargaining settles. Nothing about them is secret.</p>
+          <p>What's true is simply that they arrive <strong>after</strong> the story has been filed. The July budget gets the front page and the phrase <em>no new taxes</em>. The $5.7&nbsp;billion that followed it in FY2025 arrived in pieces, across months, each too small and too technical to cover.</p>
+        </div>
         <div class="callout">
           <div class="k">The practical test</div>
           <p>When you next read a state budget figure, ask which of two things it is: what was appropriated in July, or what was spent by June. Almost every number in circulation is the first. Almost every number that matters is the second.</p>
@@ -601,14 +660,51 @@ tr:last-child td{border-bottom:none}
         <div class="stamp-what">What this budget sets up</div>
       </div>
       <div>
-        <div class="measure">
-          <h2>Two things in this budget only bite next year</h2>
-          <h3>Chapter 70 has reached the end of its ramp</h3>
-          <p>School aid rises $793.5&nbsp;million to <strong>$7.658&nbsp;billion</strong>, up 11.6% — the largest single increase in the budget. It is also the <strong>final year</strong> of the Student Opportunity Act's seven-year schedule. That increase is a completion payment, not a new rate of growth. From FY2028 the ramp is gone, and the budget simultaneously reconvenes the Foundation Budget Review Commission to re-examine the formula. Districts that built recurring costs on it are looking at a step down.</p>
+        <h2>Two things in this budget only bite next year</h2>
+        <div class="two-up">
+          <div>
+            <h3>Chapter 70 has reached the end of its ramp</h3>
+            <p>School aid rises $793.5&nbsp;million to <strong>$7.658&nbsp;billion</strong>, up 11.6% — the largest single increase in the budget. It is also the <strong>final year</strong> of the Student Opportunity Act's seven-year schedule. That increase is a completion payment, not a new rate of growth. From FY2028 the ramp is gone, and the budget simultaneously reconvenes the Foundation Budget Review Commission to re-examine the formula. Districts that built recurring costs on it are looking at a step down.</p>
+          </div>
+          <div>
+            <h3>Local aid rose 3.0%, and your tax bill is set locally</h3>
+            <p>Unrestricted General Government Aid — the money towns can spend on anything — rose $40&nbsp;million to $1.363&nbsp;billion, or <strong>3.0%</strong>. That roughly tracks inflation, so it does not close the gap between what municipal services cost and what towns collect. That gap is closed at town meeting, under Proposition 2&frac12;.</p>
+            <p>Which is why <em>record local aid</em> and <em>a higher property tax bill</em> are both true about the same year. The statewide average single-family bill is <strong>$8,113</strong>.</p>
+          </div>
+        </div>
 
-          <h3 style="margin-top:26px">Local aid rose 3.0%, and your tax bill is set locally</h3>
-          <p>Unrestricted General Government Aid — the money towns can spend on anything — rose $40&nbsp;million to $1.363&nbsp;billion, or <strong>3.0%</strong>. That roughly tracks inflation, which means it does not close the gap between what municipal services cost and what towns collect. That gap is closed at town meeting, under Proposition 2½.</p>
-          <p>This is why <em>record local aid</em> and <em>a higher property tax bill</em> are both true statements about the same year. The statewide average single-family bill is <strong>$8,113</strong>.</p>
+        <div class="two-up" style="margin-top:34px;align-items:start">
+        <div>
+        <h3>What did your town actually get?</h3>
+        <p style="font-size:.93rem">Every city and town in the Commonwealth, straight from the enacted budget's own local aid schedule. Chapter&nbsp;70 is school aid; UGGA is the unrestricted money a town can spend on anything.</p>
+        <div class="town">
+          <div class="town-input">
+            <input type="text" id="tSearch" placeholder="Start typing a city or town&hellip;" autocomplete="off"
+                   role="combobox" aria-expanded="false" aria-controls="tList" aria-label="Search for a Massachusetts city or town">
+            <div class="town-list" id="tList" role="listbox"></div>
+          </div>
+          <div class="town-quick">
+            <button class="mark" data-t="Newburyport">Newburyport</button>
+            <button class="mark" data-t="Newbury">Newbury</button>
+            <button class="mark" data-t="Haverhill">Haverhill</button>
+            <button class="mark" data-t="Lawrence">Lawrence</button>
+            <button class="mark" data-t="Boston">Boston</button>
+          </div>
+          <div class="town-out">
+            <div><div class="k">Chapter 70</div><div class="v" id="tC70">&mdash;</div></div>
+            <div><div class="k">Unrestricted (UGGA)</div><div class="v gold" id="tUgga">&mdash;</div></div>
+            <div><div class="k">Total state aid</div><div class="v" id="tTot">&mdash;</div></div>
+          </div>
+          <div class="town-split"><span class="c70" id="tSplitA" style="width:0"></span><span class="ugga" id="tSplitB" style="width:0"></span></div>
+          <div class="town-legend"><span><i style="background:var(--navy)"></i>Chapter 70</span><span><i style="background:var(--gold)"></i>UGGA</span></div>
+          <div class="town-verdict" id="tVerdict">Pick a town to see its FY2027 local aid.</div>
+        </div>
+        </div>
+        <div>
+          <h3>The line worth watching</h3>
+          <p style="font-size:.93rem">The State Retiree Benefits Trust deposit has fallen from <strong>$550M in FY2024 to $400M</strong> now &mdash; down 27% &mdash; while the same budget creates a reserve to enhance pension cost-of-living adjustments. Pre-funding falls on the worse-funded promise while the larger one grows. Neither move appears in the &ldquo;no new taxes or fees&rdquo; framing, and both land on future budgets rather than this one.</p>
+          <p style="font-size:.93rem;color:var(--muted)">Full detail on the <a href="pension-dashboard.html">pensions &amp; OPEB dashboard</a>.</p>
+        </div>
         </div>
 
         <h3 style="margin-top:30px">Where the money actually moved</h3>
@@ -620,9 +716,9 @@ tr:last-child td{border-bottom:none}
             <span style="font-size:.72rem;color:var(--muted)">Red = increase &nbsp;·&nbsp; Green = cut</span>
           </div>
           <div id="mvRows"></div>
+          <button class="chip" id="mvMore" aria-expanded="false" style="margin-top:12px">Show all 17 changes</button>
           <p style="font-size:.76rem;color:var(--muted);margin-top:16px">Accounting restructurings are excluded, because they are not policy changes: the Student Opportunity Act reserve folding into Chapter&nbsp;70, the C3 childcare move to line 3000-1045, the Free Community College renumbering, and the payroll split at every sheriff&rsquo;s office. A raw sort would show those as the largest cuts in the budget, and they are not cuts at all.</p>
         </div>
-        <p class="measure" style="font-size:.82rem;color:var(--muted)">The OPEB line is worth watching. That deposit has fallen from $550M in FY2024 to $400M now — down 27% — while the same budget creates a reserve to enhance pension cost-of-living adjustments. Pre-funding falls on the worse-funded promise while the larger one grows.</p>
       </div>
     </div>
   </section>
@@ -800,16 +896,19 @@ tr:last-child td{border-bottom:none}
   ];
   var mvRows = document.getElementById('mvRows');
   var byD = document.getElementById('mvDollar'), byP = document.getElementById('mvPct');
-  var mode = 'd';
+  var mode = 'd', mvOpen = false;
 
   function drawMovers(){
     var key = mode;
-    var rows = MOVERS.slice().sort(function(a,b){ return b[key] - a[key]; });
-    var max = Math.max.apply(null, rows.map(function(r){ return Math.abs(r[key]); }));
+    var all = MOVERS.slice().sort(function(a,b){ return b[key] - a[key]; });
+    // scale on the full set so the bars do not rescale when the list expands
+    var rows = mvOpen ? all : all.slice(0, 10);
+    var max = Math.max.apply(null, all.map(function(r){ return Math.abs(r[key]); }));
     mvRows.innerHTML = rows.map(function(r){
-      var v = r[key], w = Math.abs(v) / max * 50;   // half-width each side of centre
+      // one shared scale; 70% of the track for increases, 30% for cuts, axis at 30%
+      var v = r[key], w = Math.abs(v) / max * 70;
       var up = v >= 0;
-      var style = up ? 'left:50%;width:' + w + '%' : 'left:' + (50 - w) + '%;width:' + w + '%';
+      var style = up ? 'left:30%;width:' + w + '%' : 'left:' + Math.max(0, 30 - w) + '%;width:' + Math.min(w, 30) + '%';
       var label = key === 'd'
         ? (up ? '+' : '−') + '$' + Math.abs(v).toFixed(1) + 'M'
         : (up ? '+' : '−') + Math.abs(v).toFixed(1) + '%';
@@ -827,9 +926,101 @@ tr:last-child td{border-bottom:none}
     byP.setAttribute('aria-pressed', m === 'p' ? 'true' : 'false');
     drawMovers();
   }
+  var mvMore = document.getElementById('mvMore');
+  mvMore.addEventListener('click', function(){
+    mvOpen = !mvOpen;
+    mvMore.setAttribute('aria-expanded', mvOpen ? 'true' : 'false');
+    mvMore.textContent = mvOpen ? 'Show the top 10 only' : 'Show all 17 changes';
+    drawMovers();
+  });
   byD.addEventListener('click', function(){ setMode('d'); });
   byP.addEventListener('click', function(){ setMode('p'); });
   drawMovers();
+
+  /* ---- town lookup ----
+     Every municipality from the enacted local aid schedule. 352 entries: the
+     Commonwealth's 351 cities and towns plus Devens, the MassDevelopment
+     enterprise zone, which the schedule funds separately. The 'Total Municipal
+     Aid' footer row in the source CSV is dropped -- summing it in doubles every
+     statewide figure. */
+  const TOWNS=[["Abington",15164118,2543535],["Acton",0,1863871],["Acushnet",7640852,1949437],["Adams",12393,2972046],["Agawam",27760200,4748876],["Alford",0,19755],["Amesbury",10270009,2518604],["Amherst",6703939,10742250],["Andover",16197960,2405773],["Aquinnah",0,4942],["Arlington",21226373,9725663],["Ashburnham",0,1026326],["Ashby",0,563777],["Ashfield",93683,240366],["Ashland",12447058,1782579],["Athol",0,3374596],["Attleboro",63226636,7365329],["Auburn",16115849,2225253],["Avon",4488051,890728],["Ayer",0,989670],["Barnstable",26894457,2860364],["Barre",0,1153149],["Becket",76923,122470],["Bedford",7054469,1506457],["Belchertown",15052600,2202637],["Bellingham",10967237,2208493],["Belmont",13660219,2954341],["Berkley",4414688,793873],["Berlin",0,268381],["Bernardston",0,374201],["Beverly",16388255,7517287],["Billerica",22129264,7495264],["Blackstone",162423,1758565],["Blandford",77586,164650],["Bolton",3547,273529],["Boston",254265561,238832800],["Bourne",6146375,1930058],["Boxborough",32909,341189],["Boxford",2161403,646869],["Boylston",54141,452196],["Braintree",22754750,7351732],["Brewster",1547125,541797],["Bridgewater",190196,4698296],["Brimfield",1831387,505652],["Brockton",288027232,26733675],["Brookfield",2002366,634889],["Brookline",18876413,8248159],["Buckland",7677,392157],["Burlington",11059876,3404965],["Cambridge",23847887,27485600],["Canton",10034440,2801859],["Carlisle",1625134,298842],["Carver",11067283,1884965],["Charlemont",120531,224499],["Charlton",0,1877795],["Chatham",0,218671],["Chelmsford",16278424,6530816],["Chelsea",131827785,10480663],["Cheshire",0,784729],["Chester",115723,231256],["Chesterfield",108282,178402],["Chicopee",101370278,14690104],["Chilmark",0,10271],["Clarksburg",2235621,463576],["Clinton",22950682,3022739],["Cohasset",3556395,683328],["Colrain",8760,369316],["Concord",4818025,1535715],["Conway",669446,231978],["Cummington",59811,108284],["Dalton",337786,1454668],["Danvers",10648870,3699772],["Dartmouth",11780277,3313971],["Dedham",10556123,4215220],["Deerfield",1265859,625499],["Dennis",0,749316],["Devens",308558,0],["Dighton",0,1006728],["Douglas",9358683,957448],["Dover",1227551,268267],["Dracut",28733489,4541548],["Dudley",11040,2294423],["Dunstable",0,324094],["Duxbury",7763410,1184780],["East Bridgewater",13677749,1942155],["East Brookfield",221080,373731],["East Longmeadow",16046736,1889133],["Eastham",588199,212821],["Easthampton",9308822,3596880],["Easton",12037547,2860639],["Edgartown",1331177,107292],["Egremont",0,85265],["Erving",629866,91704],["Essex",0,323850],["Everett",128092523,8896291],["Fairhaven",10285363,2899688],["Fall River",250598336,30311887],["Falmouth",10478249,1886971],["Fitchburg",92786527,10891647],["Florida",579687,65428],["Foxborough",10485512,1951989],["Framingham",93930862,12805692],["Franklin",31218083,3249613],["Freetown",16860,1232817],["Gardner",33019774,5410325],["Georgetown",6189672,936657],["Gill",0,312007],["Gloucester",12634061,5145300],["Goshen",111470,104540],["Gosnold",0,2906],["Grafton",14015088,2051844],["Granby",5029860,1134491],["Granville",139520,207959],["Great Barrington",0,984179],["Greenfield",17009024,4060650],["Groton",0,1023199],["Groveland",65470,943533],["Hadley",1528446,592804],["Halifax",3735263,1173275],["Hamilton",0,876877],["Hampden",0,885063],["Hancock",475796,74114],["Hanover",8471971,2723346],["Hanson",40519,1653958],["Hardwick",10500,596051],["Harvard",2555491,1888710],["Harwich",0,600968],["Hatfield",1012456,406165],["Haverhill",96427042,12631775],["Hawley",32248,55848],["Heath",0,108138],["Hingham",9996377,2088302],["Hinsdale",104923,287694],["Holbrook",13156698,1901826],["Holden",14521,2488649],["Holland",1080634,264664],["Holliston",9981860,2010745],["Holyoke",110598472,12907079],["Hopedale",6585260,844902],["Hopkinton",11540499,1074296],["Hubbardston",0,584753],["Hudson",14243100,2591902],["Hull",4288024,2703927],["Huntington",436448,441506],["Ipswich",4776506,2076268],["Kingston",6227857,1268350],["Lakeville",119449,1080918],["Lancaster",0,1239018],["Lanesborough",7201,446050],["Lawrence",332192248,25025399],["Lee",2392845,806456],["Leicester",11665327,2227817],["Lenox",1533843,691157],["Leominster",76157655,7375535],["Leverett",437488,232185],["Lexington",20399075,2077091],["Leyden",0,106546],["Lincoln",1535658,885065],["Littleton",5511890,938351],["Longmeadow",8220391,1822393],["Lowell",275966413,32129298],["Ludlow",15369913,3925759],["Lunenburg",9485250,1379895],["Lynn",327335160,28543765],["Lynnfield",6850530,1363434],["Malden",70838845,16033345],["Manchester",0,303296],["Mansfield",20854717,2905080],["Marblehead",7390439,1519992],["Marion",1305942,306812],["Marlborough",52707503,7015713],["Marshfield",16701173,2833228],["Mashpee",5435000,530463],["Mattapoisett",1154853,538494],["Maynard",6186200,2018737],["Medfield",7630178,1877600],["Medford",19272206,15481152],["Medway",11703987,1591897],["Melrose",13911036,6565933],["Mendon",38052,541272],["Merrimac",36094,1085679],["Methuen",72676678,7061567],["Middleborough",23585325,3203133],["Middlefield",13290,68447],["Middleton",2046759,730663],["Milford",55270258,3967606],["Millbury",9513233,2284226],["Millis",5441676,1354807],["Millville",73662,525106],["Milton",13473284,4158597],["Monroe",170066,23574],["Monson",7992519,1673688],["Montague",0,1835167],["Monterey",0,62827],["Montgomery",32160,112580],["Mount Washington",13818,38298],["Nahant",663225,488793],["Nantucket",5099197,164754],["Natick",15344137,4945886],["Needham",15595834,2336345],["New Ashford",123072,26586],["New Bedford",271241737,29304918],["New Braintree",0,170079],["New Marlborough",0,80154],["New Salem",0,134698],["Newbury",16934,680239],["Newburyport",6510535,3284344],["Newton",32235914,7775197],["Norfolk",4034619,1256145],["North Adams",16898002,5620292],["North Andover",13775969,2713690],["North Attleborough",22877567,3747647],["North Brookfield",5136726,1020822],["North Reading",8429947,2300058],["Northampton",9019229,5652463],["Northborough",4904088,1469794],["Northbridge",16692113,2722108],["Northfield",0,466004],["Norton",14044622,2693320],["Norwell",5882618,1395727],["Norwood",19086531,5975737],["Oak Bluffs",2115129,115314],["Oakham",0,249172],["Orange",7131555,2060834],["Orleans",516774,244347],["Otis",0,52837],["Oxford",12686783,2639303],["Palmer",12360019,2570647],["Paxton",0,701204],["Peabody",39044161,9301050],["Pelham",358213,205641],["Pembroke",15014594,2190549],["Pepperell",0,1924965],["Peru",91030,146801],["Petersham",727308,149346],["Phillipston",0,239206],["Pittsfield",69313721,11021593],["Plainfield",83804,65819],["Plainville",3291813,996428],["Plymouth",31322417,5211885],["Plympton",1239805,310775],["Princeton",0,387398],["Provincetown",341239,190112],["Quincy",49152393,24411163],["Randolph",32003795,6676064],["Raynham",0,1496959],["Reading",12931313,4182317],["Rehoboth",0,1367802],["Revere",108436838,13173039],["Richmond",573273,141962],["Rochester",2609552,559178],["Rockland",20241858,3394721],["Rockport",1809026,580439],["Rowe",163075,6808],["Rowley",18508,705581],["Royalston",0,231251],["Russell",255579,317089],["Rutland",0,1203237],["Salem",32898737,8855991],["Salisbury",15791,834470],["Sandisfield",0,47849],["Sandwich",8403816,1505108],["Saugus",16641482,4731013],["Savoy",537259,148251],["Scituate",7665955,2610570],["Seekonk",8599658,1614375],["Sharon",11913046,1839438],["Sheffield",17905,320385],["Shelburne",0,336365],["Sherborn",1011345,291675],["Shirley",0,1677021],["Shrewsbury",23420930,3670563],["Shutesbury",688342,220354],["Somerset",11280197,2005670],["Somerville",23366282,31969231],["South Hadley",11417059,3356200],["Southampton",2819438,826761],["Southborough",3671623,595699],["Southbridge",36441720,4493349],["Southwick",220059,1623513],["Spencer",34709,2890852],["Springfield",583158575,48173698],["Sterling",0,906609],["Stockbridge",0,133878],["Stoneham",8291383,4770974],["Stoughton",31998924,4147850],["Stow",0,560707],["Sturbridge",5431034,1016754],["Sudbury",6593364,1844049],["Sunderland",954756,650137],["Sutton",6197181,1021896],["Swampscott",6109390,1693333],["Swansea",11637498,2433954],["Taunton",109617416,10825630],["Templeton",11493,1786443],["Tewksbury",15173007,3632693],["Tisbury",1794439,144948],["Tolland",0,25295],["Topsfield",1720627,798842],["Townsend",0,1689527],["Truro",493226,48806],["Tyngsborough",8308620,1269103],["Tyringham",72676,17792],["Upton",39979,705562],["Uxbridge",10361060,1791384],["Wakefield",9949023,4355758],["Wales",1221948,304407],["Walpole",11377480,3314307],["Waltham",27305086,12338203],["Ware",14934620,2210665],["Wareham",17155112,2586488],["Warren",12223,1157477],["Warwick",401664,162970],["Washington",37233,120686],["Watertown",8964426,8526784],["Wayland",8378020,1196422],["Webster",24259540,3184965],["Wellesley",11568736,1764077],["Wellfleet",342443,89557],["Wendell",0,222676],["Wenham",0,559309],["West Boylston",3503475,1034739],["West Bridgewater",7286583,854844],["West Brookfield",328719,628377],["West Newbury",13151,392506],["West Springfield",47772002,4624697],["West Stockbridge",0,127852],["West Tisbury",0,249185],["Westborough",13452856,1554403],["Westfield",46092037,8076169],["Westford",19692829,2777115],["Westhampton",527648,189015],["Westminster",0,859011],["Weston",5291459,521886],["Westport",6077452,1600442],["Westwood",8250386,988753],["Weymouth",31745663,11205022],["Whately",367983,175574],["Whitman",174351,3106130],["Wilbraham",0,1901052],["Williamsburg",892871,390769],["Williamstown",0,1238478],["Wilmington",13051370,3224984],["Winchendon",14590171,2157341],["Winchester",12084323,1962563],["Windsor",28984,133896],["Winthrop",10768036,5371254],["Woburn",16125949,7704762],["Worcester",437762216,53065990],["Worthington",514362,162814],["Wrentham",4317997,1225180],["Yarmouth",0,1695986]];
+  var STATE_C70 = 6695466289, STATE_UGGA = 1363109505;
+  var tIn = document.getElementById('tSearch'), tList = document.getElementById('tList');
+  var tC70 = document.getElementById('tC70'), tUgga = document.getElementById('tUgga');
+  var tTot = document.getElementById('tTot'), tVer = document.getElementById('tVerdict');
+  var tA = document.getElementById('tSplitA'), tB = document.getElementById('tSplitB');
+  var hi = -1, shown = [];
+
+  function usd(n){ return '$' + Math.round(n).toLocaleString('en-US'); }
+
+  function townPick(name){
+    var row = TOWNS.filter(function(t){ return t[0] === name; })[0];
+    if (!row) return;
+    var c70 = row[1], ugga = row[2], tot = c70 + ugga;
+    tC70.textContent = usd(c70);
+    tUgga.textContent = usd(ugga);
+    tTot.textContent = usd(tot);
+    tA.style.width = (c70 / tot * 100) + '%';
+    tB.style.width = (ugga / tot * 100) + '%';
+
+    var msg;
+    if (c70 < 100000){
+      msg = '<b>' + row[0] + ' receives almost no Chapter 70 directly.</b> Its school aid goes to the '
+          + 'regional district it belongs to, not to the town, so nearly all of its state money is UGGA '
+          + '— which rose 3.0% this year. Towns in this position are the most property-tax-dependent '
+          + 'in the Commonwealth, and the gap gets closed at town meeting under Proposition 2½.';
+    } else if (ugga > c70){
+      msg = 'Unusually, ' + row[0] + ' receives more unrestricted aid than school aid — ' + usd(ugga)
+          + ' of UGGA against ' + usd(c70) + ' of Chapter 70.';
+    } else {
+      var share = (c70 / tot * 100).toFixed(0);
+      msg = share + '% of ' + row[0] + '’s state aid is Chapter 70 school money, which is restricted to '
+          + 'schools. The ' + usd(ugga) + ' of UGGA is the part the town can actually spend on anything else.';
+    }
+    tVer.innerHTML = msg;
+    tIn.value = row[0];
+    townClose();
+  }
+
+  function townClose(){ tList.classList.remove('open'); tIn.setAttribute('aria-expanded','false'); hi = -1; }
+
+  function townRender(q){
+    q = (q || '').trim().toLowerCase();
+    if (!q){ townClose(); return; }
+    shown = TOWNS.filter(function(t){ return t[0].toLowerCase().indexOf(q) === 0; }).slice(0, 40);
+    if (!shown.length) shown = TOWNS.filter(function(t){ return t[0].toLowerCase().indexOf(q) > -1; }).slice(0, 40);
+    if (!shown.length){ townClose(); return; }
+    tList.innerHTML = shown.map(function(t, i){
+      return '<button type="button" role="option" data-n="' + t[0] + '"' + (i === hi ? ' class="hi"' : '') + '>' + t[0] + '</button>';
+    }).join('');
+    tList.classList.add('open');
+    tIn.setAttribute('aria-expanded','true');
+  }
+
+  tIn.addEventListener('input', function(){ hi = -1; townRender(tIn.value); });
+  tIn.addEventListener('focus', function(){ if (tIn.value) townRender(tIn.value); });
+  tList.addEventListener('click', function(e){
+    var b = e.target.closest('button');
+    if (b) townPick(b.getAttribute('data-n'));
+  });
+  tIn.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp'){
+      e.preventDefault();
+      if (!shown.length) return;
+      hi = e.key === 'ArrowDown' ? Math.min(hi + 1, shown.length - 1) : Math.max(hi - 1, 0);
+      townRender(tIn.value);
+    } else if (e.key === 'Enter'){
+      e.preventDefault();
+      if (shown.length) townPick(shown[hi > -1 ? hi : 0][0]);
+    } else if (e.key === 'Escape'){ townClose(); }
+  });
+  document.addEventListener('click', function(e){
+    if (!e.target.closest('.town-input')) townClose();
+  });
+  [].slice.call(document.querySelectorAll('.town-quick .mark')).forEach(function(b){
+    b.addEventListener('click', function(){ townPick(b.getAttribute('data-t')); });
+  });
+  townPick('Newburyport');
 })();
 </script>
 </body>
