@@ -193,6 +193,7 @@ price here or there. Values below are the cache as of its 2026-07-17 generation.
 | 2023 | $755,209 | $813,741 | $1,082,495 | $1,113,346 |
 | 2024 | $809,407 | $870,718 | $1,132,849 | $1,234,212 |
 | 2025 | $853,462 | $896,083 | $1,299,708 | $1,325,883 |
+| 2026 | $865,196 | $905,834 | $1,307,723 | $1,246,719 |
 
 - **5-Year Growth (2021→2025):** MA +28.8%, Newburyport +40.8%, Essex +25.6%, Boston +19.6%
 - **Note:** These are AVERAGES (skewed by luxury); Warren Group MEDIANS used for affordability analysis
@@ -200,17 +201,17 @@ price here or there. Values below are the cache as of its 2026-07-17 generation.
 #### Live trailing-12-month window (changes daily — do not transcribe)
 
 The dashboards' last column is **not calendar 2026** — it is a rolling trailing-12-month
-window rewritten every day. As of **August 10, 2026**: MA $865,182 · Essex $905,975 ·
-Boston $1,308,841. Quote it with its as-of date or not at all.
+window rewritten every day. As of **August 11, 2026**: MA $865,196 · Essex $905,834 ·
+Boston $1,307,723. Quote it with its as-of date or not at all.
 
 ### Massachusetts — Market Indicators
 
-| Metric | Calendar 2025 | Trailing 12mo (as of 2026-08-10) | Source |
+| Metric | Calendar 2025 | Trailing 12mo (as of 2026-08-11) | Source |
 |--------|--------------|----------------------------------|--------|
-| Avg DOM | 35.6 days | 37.5 days | MLS PIN 🔄 |
-| SP/LP Ratio | 101.18% | — | MLS PIN 🔄 |
-| Units Sold | 38,870 | 39,323 | MLS PIN 🔄 |
-| Median Price | $670,000 | — | MLS PIN 🔄 |
+| Avg DOM | 35.6 days | 38 days | MLS PIN 🔄 |
+| SP/LP Ratio | 101.18% | 100.93% | MLS PIN 🔄 |
+| Units Sold | 38,870 | 39,455 | MLS PIN 🔄 |
+| Median Price | $670,000 | $676,000 | MLS PIN 🔄 |
 
 > Earlier revisions listed the trailing-12-month figures under a "2025" heading —
 > most recently "Units Sold 39,323 ✅ Feb 2026", which is the live window, not the
@@ -223,7 +224,7 @@ Boston $1,308,841. Quote it with its as-of date or not at all.
 | Median household income | $88,326 | Census QuickFacts ACS 2020-2024 | ✅ Feb 2026 |
 | MA median household income | $103,960 | ACS 2024 (5-yr), `data/census-latest.json` | 🔄 Jul 2026 |
 | Condo median (Haverhill) | $390,000 | MLS | ✅ Feb 2026 |
-| SF median (Haverhill) | $607,750 | MLS | ✅ Feb 2026 |
+| SF median (Haverhill) | $605,500 | MLS | ✅ Feb 2026 |
 | Income needed for condo | ~$86K | Calc: 6.5%, 20% down, 28% DTI | ✅ Feb 2026 |
 | Income needed for SF | ~$124K | Calc: 6.5%, 20% down, 28% DTI | ✅ Feb 2026 |
 
