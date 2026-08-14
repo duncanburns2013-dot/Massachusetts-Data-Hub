@@ -50,6 +50,29 @@ nav button.active{color:var(--navy);border-bottom-color:var(--gold)}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.03)}
 .card h3{font-size:.82rem;font-weight:700;color:var(--navy);margin-bottom:10px}
 .chart-wrap{position:relative;height:280px}.chart-wrap.tall{height:340px}
+/* ---------------------------------------------------------------------------
+   These four rules are ported verbatim from education-boston.html and
+   education-merrimack-valley.html, which share this stylesheet. This page was
+   already WRITING all three classes -- 7 .insight callouts, 4 .card.full, 1
+   .chart-wrap.short -- and had none of the rules, so every one of them silently
+   rendered as its unstyled default: the callouts as plain body text, the
+   full-width cards squeezed into one grid column, the short chart at 280px.
+   Nothing here is invented; every custom property they use was already defined
+   in :root above. Keep the three files' shared vocabulary in sync -- markup that
+   names a class the sheet does not define fails quietly, which is how this sat.
+   --------------------------------------------------------------------------- */
+.card.full{grid-column:1/-1}
+.chart-wrap.short{height:240px}
+.insight{margin-top:12px;padding:12px 14px;background:var(--surface2);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;font-size:.76rem;line-height:1.6;color:var(--text)}
+.insight strong{color:var(--navy)}
+/* Not used on this page yet, but carried so the vocabulary matches its two
+   siblings -- adding a badge or a table here should not need a CSS trip. */
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.62rem;font-weight:700;letter-spacing:.03em;white-space:nowrap}
+.badge.red{background:var(--red-bg);color:var(--red)}
+.badge.green{background:var(--green-bg);color:var(--green)}
+.badge.yellow,.badge.amber{background:var(--amber-bg);color:var(--amber)}
+.badge.blue{background:var(--blue-bg);color:var(--blue)}
+.table-wrap{overflow-x:auto}
 .callout{background:var(--blue-bg);border:1px solid rgba(26,68,128,.12);border-radius:12px;padding:16px 18px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start;border-left:4px solid var(--blue)}
 .callout.red,.callout.warn{background:var(--red-bg);border-left-color:var(--red);border-color:rgba(192,57,43,.12)}
 .callout.amber{background:var(--amber-bg);border-left-color:var(--amber);border-color:rgba(184,134,11,.15)}
