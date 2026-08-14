@@ -100,7 +100,9 @@ tr:hover{background:rgba(15,41,66,.02)}
 <div class="stat-row">
 <div class="stat-box"><div class="num">42%</div><div class="lbl">ELA Proficient<br>Grades 3-8</div></div>
 <div class="stat-box"><div class="num">41%</div><div class="lbl">Math Proficient<br>Grades 3-8</div></div>
-<div class="stat-box"><div class="num">$21,886</div><div class="lbl">Per Pupil<br>Spending</div></div>
+<!-- DESE State Total, FY2024: in-district $22,413.93, total $23,165.11. This read
+     $21,886 with no year or basis named, which matched neither. -->
+<div class="stat-box"><div class="num">$23,165</div><div class="lbl">Per Pupil<br>Total, FY2024</div></div>
 <div class="stat-box"><div class="num">-6.4%</div><div class="lbl">Traditional<br>Public School</div></div>
 </div>
 </div>
@@ -298,16 +300,28 @@ tr:hover{background:rgba(15,41,66,.02)}
 <!-- ═══ SPENDING ═══ -->
 <div class="tab" id="spending">
 <div class="kpi-grid">
-<div class="kpi green"><div class="val">$21,886</div><div class="lbl">Per-Pupil<br>Spending 2024</div></div>
+<div class="kpi green"><div class="val">$23,165</div><div class="lbl">Total Per-Pupil<br>FY2024</div></div>
 <div class="kpi yellow"><div class="val">+27%</div><div class="lbl">Above Required<br>Minimum</div></div>
 <div class="kpi red"><div class="val">42%</div><div class="lbl">Students<br>Proficient ELA</div></div>
 <div class="kpi orange"><div class="val">No Gain</div><div class="lbl">Achievement<br>Despite Spending</div></div>
 </div>
 <div class="grid grid-2">
-<div class="card full">
-<h3>Per-Pupil Spending vs. Achievement (2022-2025)</h3>
-<div class="chart-wrap tall"><canvas id="spendChart"></canvas></div>
-<div class="insight"><strong>Money isn't the answer:</strong> Spending increased from $19,712 to $22,500 (+14%), yet ELA proficiency barely moved (39%→42%) and Math stayed flat at 41%.</div>
+<!-- These were one chart with two y-axes: dollars on the left, percent on the
+     right. A dual axis lets you place the two series wherever you like relative
+     to each other by picking the scales, so "spending rose while scores did not"
+     became a claim the reader had to take on trust. Split, each series has one
+     axis and the comparison is the reader's to make.
+     They also cover different spans, which the single chart hid: DESE has
+     published per-pupil expenditure through FY2024, while MCAS runs to 2025. -->
+<div class="card">
+<h3>Per-Pupil Spending, FY2022&ndash;FY2024</h3>
+<div class="chart-wrap"><canvas id="spendTrend"></canvas></div>
+<div class="source">DESE Per-Pupil Expenditure, in-district basis. FY2024 is the latest year DESE has published.</div>
+</div>
+<div class="card">
+<h3>MCAS Proficiency, 2022&ndash;2025</h3>
+<div class="chart-wrap"><canvas id="spendProf"></canvas></div>
+<div class="insight"><strong>Money isn't the answer:</strong> In-district per-pupil spending rose from $19,712 to $22,414 across FY2022&ndash;FY2024, a 13.7% increase. Over the same stretch ELA proficiency moved 39%&rarr;42% and math did not move at all.</div>
 </div>
 <div class="card">
 <h3>Per-Pupil Expenditure, FY2024</h3>
@@ -523,19 +537,27 @@ scales:{x:{beginAtZero:true,max:50,ticks:{callback:v=>v+'%'},grid:{color:GC}},y:
 }
 
 function initSpending(){
-new Chart(document.getElementById('spendChart'),{type:'line',data:{
+// FY2024 is DESE's published State Total for in-district per-pupil expenditure
+// ($22,413.93 — profiles.doe.mass.edu/statereport/ppx.aspx). It read $21,886
+// here, which matched neither DESE measure, while the card directly below plotted
+// the correct figure: one tab, two different numbers for the same year.
+// The old series also carried a 2025 point ($22,500) for a year DESE has not
+// published per-pupil expenditure for, so it is gone rather than guessed at.
+new Chart(document.getElementById('spendTrend'),{type:'line',data:{
+labels:['FY2022','FY2023','FY2024'],
+datasets:[{label:'In-district per pupil',data:[19712,21256,22414],borderColor:C.g,
+backgroundColor:'rgba(46,204,113,0.2)',fill:true,tension:.3,pointRadius:4}]
+},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+scales:{y:{min:18000,max:24000,ticks:{callback:v=>'$'+(v/1000)+'k'},grid:{color:GC}},
+x:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('spendProf'),{type:'line',data:{
 labels:['2022','2023','2024','2025'],
 datasets:[
-{label:'Per-Pupil Spending',data:[19712,21256,21886,22500],borderColor:C.g,
-backgroundColor:'rgba(46,204,113,0.2)',fill:true,yAxisID:'y'},
-{label:'ELA %',data:[39,39,39,42],borderColor:C.b,borderWidth:3,yAxisID:'y1'},
-{label:'Math %',data:[41,41,41,41],borderColor:C.r,borderWidth:3,yAxisID:'y1'}
+{label:'ELA',data:[39,39,39,42],borderColor:C.b,borderWidth:3,tension:.3,pointRadius:4},
+{label:'Math',data:[41,41,41,41],borderColor:C.r,borderWidth:3,tension:.3,pointRadius:4}
 ]},options:{responsive:true,maintainAspectRatio:false,
-scales:{y:{type:'linear',position:'left',min:18000,max:24000,
-ticks:{callback:v=>'$'+(v/1000)+'k'},grid:{color:GC}},
-y1:{type:'linear',position:'right',min:30,max:50,
-ticks:{callback:v=>v+'%'},grid:{display:false}},
-x:{grid:{display:false}}}}});
+scales:{y:{min:30,max:50,ticks:{callback:v=>v+'%'},grid:{color:GC}},x:{grid:{display:false}}}}});
 
 new Chart(document.getElementById('spendPPX'),{type:'bar',data:{
 labels:['In-district','Total (incl. out-of-district)'],
