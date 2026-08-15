@@ -268,6 +268,11 @@ tr:hover{background:rgba(15,41,66,.02)}
 <div class="chart-wrap short"><canvas id="absChange"></canvas></div>
 <div class="insight"><strong>Improving, slowly, everywhere:</strong> Every group improved, but the state moved only 0.9 points in a year. English learners improved most at 2.1 points; white students least at 0.5.</div>
 </div>
+<div class="card full">
+<h3>2025-26 Year to Date &mdash; Through March</h3>
+<div class="chart-wrap"><canvas id="absYTD"></canvas></div>
+<div class="source"><strong>Not comparable to the completed years above.</strong> Chronic absenteeism counts students who have missed 10% or more of the days they were enrolled. It is measured against days elapsed, so a figure taken in March covers roughly two-thirds of a school year and will not equal the same cohort's year-end rate. Read this as where the year stands, not as this year against last. DESE student attendance report, 2026 (March).</div>
+</div>
 </div>
 </div>
 
@@ -411,6 +416,9 @@ if(id==='gaps') initGaps();
 const ST_GROUPS=['All','High Needs','Low Income','English Learners','Disability','Asian','Black','Hispanic','Multi-Race','White'];
 const ST_ABSENT=[18.8,25.9,28.9,27.8,26.5,10.9,20.7,29.5,19.3,13.9];
 const ST_ABSENT_CHG=[-0.9,-1.3,-1.4,-2.1,-1.0,-0.9,-1.8,-1.8,-1.3,-0.5];
+// SY2025-26 through March, "Chronically Absent (10% or more)" — the same measure
+// as ST_ABSENT, but a partial year. DESE student attendance report, 2026 (March).
+const ST_ABSENT_YTD=[16.8,23.3,26.2,24.7,24.1,10.0,18.0,26.5,17.0,12.4];
 const ST_GRAD=[89.3,83.5,82.9,71.1,78.7,95.8,86.6,80.5,89.3,93.4];
 const ST_DROP=[1.8,3.0,3.1,6.5,2.6,0.4,2.1,3.7,1.7,1.0];
 
@@ -443,6 +451,16 @@ labels:ST_GROUPS,
 datasets:[{data:ST_ABSENT_CHG,backgroundColor:C.g}]
 },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
 scales:{y:{max:0,min:-2.5,ticks:{callback:v=>v+'pt'},grid:{color:GC}},x:{grid:{display:false}}}}});
+
+// SY2025-26 through March (DESE student attendance report). Plotted on its own,
+// NOT as a second series beside the completed years: the measure accumulates
+// against days elapsed, so a March figure is structurally lower than a June one
+// and putting them on shared axes would read as a year-over-year improvement
+// that has not been demonstrated.
+new Chart(document.getElementById('absYTD'),{type:'bar',data:{
+labels:ST_GROUPS,
+datasets:[{data:ST_ABSENT_YTD,backgroundColor:ST_ABSENT_YTD.map(v=>v>=25?C.r:v>=18?C.o:C.g)}]
+},options:Object.assign(bOpts(35,true),{plugins:{legend:{display:false}}})});
 }
 
 function initGraduation(){
