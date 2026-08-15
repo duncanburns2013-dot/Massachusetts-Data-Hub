@@ -366,17 +366,22 @@ tr:hover td{background:var(--surface)}
      than letting the word "encounters" carry two meanings across one page. -->
 <div id="m-ports" class="tab" data-section="massachusetts">
 <div class="callout"><div class="ico">ℹ</div><div class="text"><strong>What this tab is, and is not.</strong> These are CBP encounters <em>recorded in Massachusetts</em> — people found inadmissible by Office of Field Operations officers at a Massachusetts port of entry, essentially Logan and the seaports. Massachusetts has no land border, and every row in the state file confirms it: all are logged under region &ldquo;Other&rdquo; and all under Title 8. <strong>This is not border crossings, and it is not a count of people who settled here.</strong> It is who CBP turned around at the door.</div></div>
+<!-- All four bars are the SAME ten months, Oct-Jul. The first version of this
+     card plotted three full years against a 10-month FY26 and then described the
+     result as a rise, which measured the calendar as much as the trend. On equal
+     windows the shape reverses: FY25 is the outlier, and FY26 is a partial
+     recovery that is still below both FY23 and FY24. -->
 <div class="kpi-row">
-<div class="kpi" style="border-color:#bfdbfe"><div class="val" style="color:var(--blue)">2,836</div><div class="lbl">FY2026 to date<br>Oct–Jul, 10 months</div></div>
-<div class="kpi" style="border-color:#fecaca"><div class="val" style="color:var(--accent)">1,916</div><div class="lbl">FY2025<br>full year</div></div>
-<div class="kpi" style="border-color:#e9d5ff"><div class="val" style="color:var(--purple)">#17</div><div class="lbl">MA rank<br>of 47 states</div></div>
+<div class="kpi" style="border-color:#bfdbfe"><div class="val" style="color:var(--blue)">2,836</div><div class="lbl">FY2026<br>Oct–Jul</div></div>
+<div class="kpi" style="border-color:#fecaca"><div class="val" style="color:var(--accent)">−53%</div><div class="lbl">FY2025 drop<br>vs FY2024</div></div>
+<div class="kpi" style="border-color:#fed7aa"><div class="val" style="color:var(--amber)">−15%</div><div class="lbl">FY2026 still below<br>FY2023</div></div>
 <div class="kpi" style="border-color:#a7f3d0"><div class="val" style="color:var(--green)">93%</div><div class="lbl">Single adults<br>FY2026</div></div>
 </div>
 <div class="grid grid-2">
 <div class="card full">
-<h3>CBP Encounters Recorded in Massachusetts, by Fiscal Year</h3>
+<h3>CBP Encounters Recorded in Massachusetts — Oct–Jul, Each Year</h3>
 <div class="chart-wrap"><canvas id="ch-ma-cbp-fy"></canvas></div>
-<p class="src">FY2026 is <strong>10 months</strong> (Oct 2025–Jul 2026) and has already passed the FY2025 full-year total, so the rise is real rather than an artefact of the partial year. The bar is still short a quarter of its year and is marked accordingly.</p>
+<p class="src"><strong>FY2025 is the anomaly, not FY2026.</strong> Encounters at Massachusetts ports fell 53% in FY2025, then rose 88% in FY2026 — which recovers about 78% of the ground lost, leaving them 12% below FY2024 and 15% below FY2023. Quoting the FY25&rarr;FY26 jump on its own makes a rebound off a collapsed base look like growth. Every bar is the same ten months, Oct&ndash;Jul, so none of this is the partial year talking.</p>
 </div>
 <div class="card">
 <h3>Top Citizenships at MA Ports, FY2026</h3>
@@ -757,13 +762,16 @@ data:[415200,519940,977230,458080,1734680,2378940,2475670,2135000,443671,115762]
 
     // ── CBP encounters recorded in Massachusetts ──────────────────────────────
     // CBP nationwide encounters, state breakdown, FY23-FY26 through July.
-    // FY26 is 10 of 12 months and marked with an asterisk in the label, the
-    // same convention the national encounters chart uses for a partial year.
+    // Every bar is Oct-Jul so the four years are directly comparable. The full-year
+    // figures (4,038 / 3,757 / 1,916 / 2,836-to-date) are NOT used here: charting
+    // three complete years beside a 10-month one measures the calendar as much as
+    // the trend, and on equal windows FY25 reads as the outlier rather than FY26
+    // as a rise.
     case 'm-ports':
       new Chart(document.getElementById('ch-ma-cbp-fy'),{type:'bar',data:{
-        labels:['FY23','FY24','FY25','FY26*'],
-        datasets:[{label:'Encounters recorded in MA',data:[4038,3757,1916,2836],
-          backgroundColor:[W,W,W,B]}]
+        labels:['FY23','FY24','FY25','FY26'],
+        datasets:[{label:'Encounters recorded in MA, Oct–Jul',data:[3332,3209,1507,2836],
+          backgroundColor:[W,W,R,B]}]
       },options:{responsive:true,maintainAspectRatio:false,
         plugins:{legend:{display:false}},
         scales:{y:{beginAtZero:true,ticks:{color:'#334155'},grid:{color:GC}},
