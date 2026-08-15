@@ -185,14 +185,14 @@ tr:hover td{background:var(--surface)}
 <tr><td><strong>USBP Releases</strong></td><td>Low</td><td>Low</td><td style="color:var(--accent);font-weight:700">62K+/mo</td><td style="color:var(--green);font-weight:700">0/mo (7 mos)</td></tr>
 </table>
 <p class="src">*Obama includes "returns" (voluntary). Interior-only: Obama ~1.5-2M | Trump ~0.5M | Biden ~0.15-0.6M. Trump 2.0 ICE est. from MPI FY2025.<br>
-†The first three encounter columns are multi-year totals on a <em>total</em> (USBP + OFO) basis; the Trump 2.0 cell is not the same quantity. CBP's FY2025 and FY2026 releases publish Border Patrol apprehensions only and omit the OFO port-of-entry component, so no total-encounters figure has been published for FY2025 and no like-for-like total comparison can be made. The 84% is Border Patrol apprehensions at the Southwest border, FY2025 (237,538) against FY2024 (1,530,523) — a fall of 84.5% on that narrower basis. A comparison on the total basis would not necessarily give the same number.</p>
+†The first three encounter columns are multi-year totals on a <em>total</em> (USBP + OFO) basis; the Trump 2.0 cell is the Border Patrol component only, so it is the narrower quantity. The 84% is Border Patrol apprehensions at the Southwest border, FY2025 (237,538) against FY2024 (1,530,523) — a fall of 84.5% on that basis. On the total basis, now that CBP's SBO export supplies the OFO component for both years, FY2025 (443,671) against FY2024 (2,135,005) is a fall of 79.2% — a real difference, which is why the two are labelled separately rather than mixed.</p>
 </div>
 <div class="card">
 <h3>The Math</h3>
 <div class="callout callout-red"><strong>Under Biden:</strong> ~10.8M encountered nationwide. ~600K interior removals. = ~7.4M net stayed in the US.</div>
 <div class="callout callout-blue"><strong>Census Vintage 2025 (Jan 2026):</strong> NIM peaked at 2.7M in 2024, then plunged to 1.3M in 2025. Projected ~321K for 2026. US pop growth slowed to 0.5%.</div>
 <div class="callout callout-yellow"><strong>Trump 2.0:</strong> FY2025 Southwest Border apprehensions fell to 237,538 — <strong>lowest since 1970</strong> — down 84% from 1,530,523 in FY2024 (CBP). USBP recorded zero releases for eight consecutive months as of DHS's January 2026 statement.</div>
-<div class="callout callout-green"><strong>FY2026 so far:</strong> Oct 2025–Jun 2026 = <strong>71,580</strong> Border Patrol apprehensions at the Southwest border (87,853 nationwide) over the fiscal year's first 9 months. Within that span the monthly Southwest total has risen from 7,988 in Oct 2025 to 9,848 in Jun 2026. CBP has not published the OFO port-of-entry component for FY2026, so no total-encounter figure exists for the year (CBP monthly tables, summed).</div>
+<div class="callout callout-green"><strong>FY2026 so far:</strong> Oct 2025–Jul 2026 = <strong>80,882</strong> Border Patrol apprehensions at the Southwest border (99,159 nationwide) over the fiscal year's first 10 months. Within that span the monthly Southwest total has risen from 7,988 in Oct 2025 to 9,295 in Jul 2026, peaking at 10,007 in May. Adding the 34,880 port-of-entry inadmissibles recorded by the Office of Field Operations gives <strong>115,762</strong> total Southwest encounters so far this fiscal year (CBP SBO encounters export, FY23–FY26 through July).</div>
 </div>
 </div>
 </div>
@@ -202,9 +202,9 @@ tr:hover td{background:var(--surface)}
 <h3>Southwest Land Border Encounters by Fiscal Year</h3>
 <div class="chart-wrap tall"><canvas id="ch-encounters"></canvas></div>
 <p class="src"><strong>Two different measures — read them separately.</strong> <em>Total encounters</em> = Border Patrol apprehensions between ports of entry <em>plus</em> Office of Field Operations (OFO) inadmissibles at ports of entry. <em>USBP encounters</em> counts the Border Patrol component only, and is therefore always the smaller of the two. Comparing a USBP bar to a total bar is not like-for-like.<br>
-<strong>Why the total series stops at FY2024:</strong> CBP's monthly releases for FY2025 and FY2026 publish Border Patrol apprehensions only and no longer report the OFO component, so no total-encounter figure has been published for FY2025 onward. The gap is left empty rather than filled with the USBP number.<br>
+<strong>The total series now runs to FY2026.</strong> It previously stopped at FY2024, on the understanding that CBP's monthly releases had dropped the OFO component. CBP's own SBO encounters export does carry it: 206,133 OFO inadmissibles in FY2025 and 34,880 so far in FY2026, giving totals of 443,671 and 115,762. The export reproduces the already-plotted FY2023 and FY2024 totals to within OHSS's rounding, so these are the same measure continued rather than a second series spliced on.<br>
 <strong>Sources:</strong> FY2017–FY2024 totals and FY2017–FY2023 USBP — DHS Office of Homeland Security Statistics, KHSM CBP Encounters (<a href="https://ohss.dhs.gov/khsm/cbp-encounters">ohss.dhs.gov/khsm/cbp-encounters</a>), Southwest Land Border series, rounded by OHSS to the nearest 10; last updated Feb 2025 and currently ending at FY2024. FY2024–FY2026 USBP — CBP monthly tables, summed (<a href="https://www.cbp.gov/newsroom/stats/nationwide-encounters-fy2025">FY2025</a>, <a href="https://www.cbp.gov/newsroom/stats/nationwide-encounters">FY2026</a>). The two sources agree where they overlap: OHSS puts FY2024 USBP at 1,530,520, CBP's own months sum to 1,530,523.<br>
-<strong>Caveats:</strong> FY2020–FY2023 encounters include Title 42 expulsions (Mar 2020–May 2023); a person expelled and re-crossing was counted each time, which inflates those years relative to FY2024 onward. FY2025 = full year (Oct 2024–Sep 2025). FY2026* = Oct 2025–Jun 2026 only, 9 of 12 months, so its bar is a partial year and not comparable to the full years beside it.</p>
+<strong>Caveats:</strong> FY2020–FY2023 encounters include Title 42 expulsions (Mar 2020–May 2023); a person expelled and re-crossing was counted each time, which inflates those years relative to FY2024 onward. FY2025 = full year (Oct 2024–Sep 2025). FY2026* = Oct 2025–Jul 2026 only, 10 of 12 months, so its bar is a partial year and not comparable to the full years beside it.</p>
 </div>
 <div class="callout callout-green" style="margin-top:.6rem"><strong>FY2025 Final:</strong> Southwest Border total apprehensions of 237,538 — lowest since 1970, and 84% below FY2024's 1,530,523 (CBP monthly totals, summed). Zero releases by USBP across May–Nov 2025, the seven months DHS reported at the time.</div>
 </div>
@@ -582,21 +582,35 @@ function initChart(id){
     case 'n-encounters':
       // Two DIFFERENT measures, deliberately kept as two series. Never merge them.
       //  - Total encounters = USBP apprehensions + OFO port-of-entry inadmissibles
-      //    (+ Title 42 expulsions Mar 2020-May 2023). CBP/OHSS publish it only to FY2024.
+      //    (+ Title 42 expulsions Mar 2020-May 2023).
       //  - USBP encounters  = the Border Patrol component alone. Published every year.
-      // CBP stopped publishing the OFO component with FY2025, so the total series ends
-      // at FY24 (null, not zero). Do NOT extend it with the USBP-only numbers: USBP is a
-      // strict subset, and splicing them exaggerates the FY24->FY25 fall.
+      // The standing warning here still holds and is the reason this note exists:
+      // do NOT extend the total series with USBP-only numbers. USBP is a strict
+      // subset, and splicing them exaggerates the FY24->FY25 fall (79.2% on the
+      // total basis vs 84.5% on the USBP basis).
+      // What changed 2026-08-15: the total no longer STOPS at FY24. It was null
+      // for FY25/FY26 because CBP's monthly HTML tables show only the Border
+      // Patrol row, but CBP's SBO encounters CSV export carries Office of Field
+      // Operations for both years. FY25/FY26 are filled from that export, on the
+      // same basis — it reproduces the FY23 and FY24 totals already plotted.
       // Sources: total + USBP FY17-FY23 = OHSS KHSM (rounded to nearest 10);
       // USBP FY24-FY26 = CBP monthly tables (exact). See the note under the chart.
       new Chart(document.getElementById('ch-encounters'),{type:'bar',data:{
         labels:['FY17','FY18','FY19','FY20','FY21','FY22','FY23','FY24','FY25','FY26*'],
         datasets:[
           {label:'Total SW Border encounters (USBP + OFO)',
-           data:[415200,519940,977230,458080,1734680,2378940,2475670,2135000,null,null],
+           // FY25 and FY26 were null on the belief that CBP had stopped publishing the OFO
+// component. It has not: CBP's own SBO encounters export (sbo-encounters-fy23-
+// fy26-jul.csv, downloaded 2026-08-15) carries Office of Field Operations rows
+// for both years. Filled from it — FY25 237,538 USBP + 206,133 OFO = 443,671;
+// FY26 80,882 + 34,880 = 115,762 through July.
+// The basis checks out against what was already here: the export reproduces
+// FY23 at 2,475,669 against the 2,475,670 plotted, and FY24 at 2,135,005
+// against 2,135,000, so these are the same quantity and not a spliced series.
+data:[415200,519940,977230,458080,1734680,2378940,2475670,2135000,443671,115762],
            backgroundColor:W},
           {label:'USBP SW Border encounters (Border Patrol only)',
-           data:[303920,396580,851510,400650,1659210,2206440,2045840,1530523,237538,71580],
+           data:[303920,396580,851510,400650,1659210,2206440,2045840,1530523,237538,80882],
            backgroundColor:B}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
