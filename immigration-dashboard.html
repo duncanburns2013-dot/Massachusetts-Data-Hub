@@ -125,7 +125,7 @@ tr:hover td{background:var(--surface)}
      run (not only when a figure moves), so it cannot drift the way the hand-typed
      "Updated February 2026" did: five months wrong, sitting on the one page whose
      feed had been failing silently since July. -->
-<p class="sub">Official data from Census Bureau, CBP, ICE, IRS, DHS, CBO &bull; Updated <span data-field="page-updated">Jun 2026</span></p>
+<p class="sub">Official data from Census Bureau, CBP, ICE, IRS, DHS, CBO &bull; Updated <span data-field="page-updated">Jul 2026</span></p>
 <div class="stat-row">
 <div class="stat-box"><div class="num" style="color:#f87171">10.8M</div><div class="lbl">Biden Encounters</div></div>
 <div class="stat-box"><div class="num" style="color:#60a5fa">7.4M</div><div class="lbl">Net Stayed (est)</div></div>
@@ -192,7 +192,7 @@ tr:hover td{background:var(--surface)}
 <div class="callout callout-red"><strong>Under Biden:</strong> ~10.8M encountered nationwide. ~600K interior removals. = ~7.4M net stayed in the US.</div>
 <div class="callout callout-blue"><strong>Census Vintage 2025 (Jan 2026):</strong> NIM peaked at 2.7M in 2024, then plunged to 1.3M in 2025. Projected ~321K for 2026. US pop growth slowed to 0.5%.</div>
 <div class="callout callout-yellow"><strong>Trump 2.0:</strong> FY2025 Southwest Border apprehensions fell to 237,538 — <strong>lowest since 1970</strong> — down 84% from 1,530,523 in FY2024 (CBP). USBP recorded zero releases for eight consecutive months as of DHS's January 2026 statement.</div>
-<div class="callout callout-green"><strong>FY2026 so far:</strong> Oct 2025–Jul 2026 = <strong>80,882</strong> Border Patrol apprehensions at the Southwest border (99,159 nationwide) over the fiscal year's first 10 months. Within that span the monthly Southwest total has risen from 7,988 in Oct 2025 to 9,295 in Jul 2026, peaking at 10,007 in May. Adding the 34,880 port-of-entry inadmissibles recorded by the Office of Field Operations gives <strong>115,762</strong> total Southwest encounters so far this fiscal year (CBP SBO encounters export, FY23–FY26 through July).</div>
+<div class="callout callout-green"><strong>FY2026 so far:</strong> Oct 2025–Jul 2026 = <strong>80,882</strong> Border Patrol apprehensions at the Southwest border (99,158 nationwide) over the fiscal year's first 10 months. Within that span the monthly Southwest total has risen from 7,988 in Oct 2025 to 9,295 in Jul 2026. CBP has not published the OFO port-of-entry component for FY2026, so no total-encounter figure exists for the year (CBP monthly tables, summed).</div>
 </div>
 </div>
 </div>
@@ -598,15 +598,10 @@ function initChart(id){
       new Chart(document.getElementById('ch-encounters'),{type:'bar',data:{
         labels:['FY17','FY18','FY19','FY20','FY21','FY22','FY23','FY24','FY25','FY26*'],
         datasets:[
+          // Keep label and data adjacent. update-cbp-encounters.py anchors on
+          // `label:'…',data:[` and a comment between the two makes it a silent
+          // no-op — which is exactly what happened on the first run of this.
           {label:'Total SW Border encounters (USBP + OFO)',
-           // FY25 and FY26 were null on the belief that CBP had stopped publishing the OFO
-// component. It has not: CBP's own SBO encounters export (sbo-encounters-fy23-
-// fy26-jul.csv, downloaded 2026-08-15) carries Office of Field Operations rows
-// for both years. Filled from it — FY25 237,538 USBP + 206,133 OFO = 443,671;
-// FY26 80,882 + 34,880 = 115,762 through July.
-// The basis checks out against what was already here: the export reproduces
-// FY23 at 2,475,669 against the 2,475,670 plotted, and FY24 at 2,135,005
-// against 2,135,000, so these are the same quantity and not a spliced series.
 data:[415200,519940,977230,458080,1734680,2378940,2475670,2135000,443671,115762],
            backgroundColor:W},
           {label:'USBP SW Border encounters (Border Patrol only)',

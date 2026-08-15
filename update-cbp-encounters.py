@@ -41,6 +41,8 @@ series 1, without re-doing that reconciliation.
 
 No API key needed.
 """
+import csv
+import glob
 import json
 import os
 import re
@@ -54,8 +56,9 @@ from urllib.request import urlopen, Request
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 IMMIGRATION_HTML = os.path.join(BASE_DIR, "immigration-dashboard.html")
 
-# The dataset label to write into. Must stay in sync with the chart.
+# The dataset labels to write into. Must stay in sync with the chart.
 USBP_LABEL = "USBP SW Border encounters (Border Patrol only)"
+TOTAL_LABEL = "Total SW Border encounters (USBP + OFO)"
 # The row on CBP's pages that this series is defined as.
 CBP_ROW = "Southwest Border Total Apprehensions"
 CBP_NATIONWIDE_ROW = "Nationwide Total Apprehensions"
@@ -192,27 +195,134 @@ def fmt_month(mi, yr):
     return f"{MONTH_FULL[mi]} {yr}"
 
 
+# ---------------------------------------------------------------------------
+# CSV export — preferred source when one is present
+# ---------------------------------------------------------------------------
+# CBP's public data portal serves a CSV export that carries BOTH components,
+# which the monthly HTML tables below do not: those show the Border Patrol row
+# only, which is why this dashboard spent months asserting that CBP had stopped
+# publishing the Office of Field Operations figure. It had not.
+#
+# The export cannot be fetched. The portal is a Tableau embed whose workbook name
+# carries the month (CBPNationwideEncountersJULFY26), so the URL moves every
+# release, and public.tableau.com answers the .csv endpoint with an AWS WAF
+# captcha. So: drop the download in data/_raw_cbp/ and this reads it. No export
+# present, and it falls through to scraping exactly as before.
+CSV_DIR = os.path.join(BASE_DIR, "data", "_raw_cbp")
+SBO_GLOB = "sbo-encounters-*.csv"          # southwest border only, by component
+NATIONWIDE_GLOB = "nationwide-encounters-*-aor.csv"
+
+# The dashboard's two series are defined by component. Both count every encounter
+# type the component records -- for USBP that is apprehensions plus the Title 42
+# expulsions of Mar 2020-May 2023, which is what makes the published FY2023 total
+# 2,045,838 rather than the 1,496,067 apprehensions alone.
+USBP_COMPONENT = "U.S. Border Patrol"
+OFO_COMPONENT = "Office of Field Operations"
+
+# The chart's earlier years come from DHS OHSS, rounded to the nearest 10, and the
+# note under it says so. The export covers FY2023 too, and writing that year from
+# it changes a published 2,045,840 to 2,045,838 — a two-count "correction" that
+# does nothing but put two sources inside one series and make the footnote false.
+# Only write the years the page already attributes to CBP.
+MIN_CBP_FY = 2024
+# The two series have DIFFERENT OHSS coverage, so they have different first
+# CBP-sourced years. OHSS publishes the USBP component through FY2023 and the
+# total through FY2024, so the total may only be written from FY2025 on. Sharing
+# one cutoff rewrote a published 2,135,000 as 2,135,005 — same two-count
+# non-correction as FY23, one series over.
+MIN_CBP_TOTAL_FY = 2025
+
+
+def _newest(pattern):
+    hits = glob.glob(os.path.join(CSV_DIR, pattern))
+    return max(hits, key=os.path.getmtime) if hits else None
+
+
+def read_csv_export():
+    """{fy: {'usbp','ofo','months'}} from the newest SBO export, or None."""
+    path = _newest(SBO_GLOB)
+    if not path:
+        return None, None
+    print(f"  CSV export: {os.path.basename(path)}")
+    per = {}
+    with open(path, encoding="utf-8-sig", newline="") as f:
+        for row in csv.DictReader(f):
+            try:
+                n = int(row["Encounter Count"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            # "2026 (FYTD)" is a partial year; keep the number, drop the suffix.
+            fy = int(row["Fiscal Year"].split()[0])
+            d = per.setdefault(fy, {"usbp": 0, "ofo": 0, "months": {}})
+            comp = row.get("Component", "")
+            if comp == USBP_COMPONENT:
+                d["usbp"] += n
+                mo = row.get("Month (abbv)", "").strip().title()
+                d["months"][mo] = d["months"].get(mo, 0) + n
+            elif comp == OFO_COMPONENT:
+                d["ofo"] += n
+    for fy in sorted(per):
+        d = per[fy]
+        print(f"    FY{fy}: USBP {d['usbp']:,}  OFO {d['ofo']:,}  "
+              f"total {d['usbp'] + d['ofo']:,}  ({len(d['months'])} months)")
+
+    nat = {}
+    npath = _newest(NATIONWIDE_GLOB)
+    if npath:
+        with open(npath, encoding="utf-8-sig", newline="") as f:
+            for row in csv.DictReader(f):
+                if row.get("Component") != USBP_COMPONENT:
+                    continue
+                try:
+                    nat[int(row["Fiscal Year"].split()[0])] = \
+                        nat.get(int(row["Fiscal Year"].split()[0]), 0) + int(row["Encounter Count"])
+                except (KeyError, TypeError, ValueError):
+                    continue
+        print(f"  nationwide export: {os.path.basename(npath)}")
+    return per, nat
+
+
 def main():
     print("=== CBP Border Patrol SW-border update ===\n")
 
+    csv_per, csv_nat = read_csv_export()
+    if csv_per:
+        print("  using the CSV export (carries OFO; the HTML tables do not).\n")
+
     fetched, blocked = {}, 0
-    for fy, url in sorted(FY_PAGES.items()):
-        print(f"  FY{fy}: {url}")
-        try:
-            got = fy_total(url)
-        except Blocked as e:
-            print(f"    !! blocked by the source: {e}")
-            blocked += 1
-            continue
-        except Exception as e:
-            print(f"    !! fetch/parse failed: {e}")
-            got = None
-        if not got:
-            print(f"    !! could not read '{CBP_ROW}' -- FY{fy} left as published")
-            continue
-        total, n, first, last, _ = got
-        print(f"    {total:,} across {n} month(s): {fmt_month(*first)} - {fmt_month(*last)}")
-        fetched[fy] = got
+    if csv_per:
+        # Shape the export into what the rest of this script already consumes.
+        FYM = {m: i for i, m in enumerate(
+            ["Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"], 1)}
+        for fy, d in sorted(csv_per.items()):
+            if fy < MIN_CBP_FY:
+                continue
+            got_months = sorted(((FYM[m], m) for m in d["months"] if m in FYM))
+            if not got_months:
+                continue
+            cal = lambda mi: fy - 1 if mi <= 3 else fy      # Oct-Dec fall in the prior calendar year
+            monthly = [(mi, cal(mi), d["months"][m]) for mi, m in got_months]
+            fetched[fy] = (d["usbp"], len(got_months),
+                           (got_months[0][0], cal(got_months[0][0])),
+                           (got_months[-1][0], cal(got_months[-1][0])), monthly)
+    else:
+        for fy, url in sorted(FY_PAGES.items()):
+            print(f"  FY{fy}: {url}")
+            try:
+                got = fy_total(url)
+            except Blocked as e:
+                print(f"    !! blocked by the source: {e}")
+                blocked += 1
+                continue
+            except Exception as e:
+                print(f"    !! fetch/parse failed: {e}")
+                got = None
+            if not got:
+                print(f"    !! could not read '{CBP_ROW}' -- FY{fy} left as published")
+                continue
+            total, n, first, last, _ = got
+            print(f"    {total:,} across {n} month(s): {fmt_month(*first)} - {fmt_month(*last)}")
+            fetched[fy] = got
 
     if not fetched:
         # Being shut out is not the same as the page having changed shape under
@@ -233,11 +343,17 @@ def main():
         return 1
 
     # Chart labels tell us which slot each FY occupies; never assume a position.
-    lm = re.search(r"labels:\s*\[([^\]]*)\]", html[max(0, m.start() - 600):m.start()])
+    # Search back to the LAST labels: before the dataset rather than a fixed byte
+    # window — a 600-char lookback broke the moment a comment was added above the
+    # series, which is a silent "NOT updated" for a reason that has nothing to do
+    # with the data. re.findall gives every match in the preceding text; the last
+    # one is the chart this dataset belongs to.
+    _before = re.findall(r"labels:\s*\[([^\]]*)\]", html[:m.start()])
+    lm = _before[-1] if _before else None
     if not lm:
         print("  !! chart labels not found -- NOT updated")
         return 1
-    labels = [x.strip().strip("'\"") for x in lm.group(1).split(",")]
+    labels = [x.strip().strip("'\"") for x in lm.split(",")]
     if len(labels) != len(current):
         print(f"  !! {len(labels)} labels vs {len(current)} values -- NOT updated")
         return 1
@@ -258,6 +374,40 @@ def main():
         print("  USBP series updated.")
     else:
         print("  USBP series already current.")
+
+    # ---- total (USBP + OFO) series -----------------------------------------
+    # Only the CSV export carries OFO, so this runs only on that path. The two
+    # series are NOT interchangeable: USBP is a strict subset, and filling the
+    # total with USBP-only numbers overstates the FY24->FY25 fall (84.5% instead
+    # of 79.2%). That is why the cells sat null rather than being approximated.
+    if csv_per:
+        tm, tcur = find_chart_data(html, TOTAL_LABEL)
+        if not tm:
+            print(f"  !! no dataset labelled '{TOTAL_LABEL}' -- total series NOT updated")
+        elif len(labels) != len(tcur):
+            print(f"  !! {len(labels)} labels vs {len(tcur)} total values -- NOT updated")
+        else:
+            tvals = list(tcur)
+            for fy, d in sorted(csv_per.items()):
+                if fy < MIN_CBP_TOTAL_FY:
+                    continue
+                want = {f"FY{str(fy)[-2:]}", f"FY{str(fy)[-2:]}*"}
+                idx = next((i for i, l in enumerate(labels) if l in want), None)
+                if idx is None:
+                    continue
+                tot = d["usbp"] + d["ofo"]
+                if not d["ofo"]:
+                    # No OFO rows for this year: leave whatever is published
+                    # rather than write a USBP-only figure into a total series.
+                    continue
+                if str(tot) != tvals[idx]:
+                    print(f"  {labels[idx]} total: {tvals[idx]} -> {tot:,}")
+                    tvals[idx] = str(tot)
+            if tvals != tcur:
+                html = html[:tm.start()] + tm.group(1) + ",".join(tvals) + tm.group(3) + html[tm.end():]
+                print("  Total series updated.")
+            else:
+                print("  Total series already current.")
 
     # Prose is derived from what was just fetched, not retyped by hand.
     cur_fy = max(fetched)
