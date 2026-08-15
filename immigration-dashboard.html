@@ -155,6 +155,7 @@ tr:hover td{background:var(--surface)}
 <button onclick="showTab('m-cumulative',this)">Cumulative</button>
 <button onclick="showTab('m-projection',this)">2030 Projection</button>
 <button onclick="showTab('m-concentration',this)">Concentration</button>
+<button onclick="showTab('m-ports',this)">CBP at MA Ports</button>
 <button onclick="showTab('m-reasons',this)">Why Leave</button>
 </nav>
 </div>
@@ -353,6 +354,42 @@ tr:hover td{background:var(--surface)}
 </table>
 </div>
 </div>
+</div>
+
+<!-- ══ CBP encounters recorded in Massachusetts ══
+     From the state breakdown of CBP's nationwide encounters export. Every
+     Massachusetts row carries Land Border Region = "Other" and Title 8 — there
+     is no land border here, so these are Office of Field Operations encounters
+     at Massachusetts ports of entry, overwhelmingly Logan. That is a different
+     thing from the Southwest-border series on the national tabs and a different
+     thing again from how many people settle here, and the tab says so rather
+     than letting the word "encounters" carry two meanings across one page. -->
+<div id="m-ports" class="tab" data-section="massachusetts">
+<div class="callout"><div class="ico">ℹ</div><div class="text"><strong>What this tab is, and is not.</strong> These are CBP encounters <em>recorded in Massachusetts</em> — people found inadmissible by Office of Field Operations officers at a Massachusetts port of entry, essentially Logan and the seaports. Massachusetts has no land border, and every row in the state file confirms it: all are logged under region &ldquo;Other&rdquo; and all under Title 8. <strong>This is not border crossings, and it is not a count of people who settled here.</strong> It is who CBP turned around at the door.</div></div>
+<div class="kpi-row">
+<div class="kpi" style="border-color:#bfdbfe"><div class="val" style="color:var(--blue)">2,836</div><div class="lbl">FY2026 to date<br>Oct–Jul, 10 months</div></div>
+<div class="kpi" style="border-color:#fecaca"><div class="val" style="color:var(--accent)">1,916</div><div class="lbl">FY2025<br>full year</div></div>
+<div class="kpi" style="border-color:#e9d5ff"><div class="val" style="color:var(--purple)">#17</div><div class="lbl">MA rank<br>of 47 states</div></div>
+<div class="kpi" style="border-color:#a7f3d0"><div class="val" style="color:var(--green)">93%</div><div class="lbl">Single adults<br>FY2026</div></div>
+</div>
+<div class="grid grid-2">
+<div class="card full">
+<h3>CBP Encounters Recorded in Massachusetts, by Fiscal Year</h3>
+<div class="chart-wrap"><canvas id="ch-ma-cbp-fy"></canvas></div>
+<p class="src">FY2026 is <strong>10 months</strong> (Oct 2025–Jul 2026) and has already passed the FY2025 full-year total, so the rise is real rather than an artefact of the partial year. The bar is still short a quarter of its year and is marked accordingly.</p>
+</div>
+<div class="card">
+<h3>Top Citizenships at MA Ports, FY2026</h3>
+<div class="chart-wrap tall"><canvas id="ch-ma-cbp-cit"></canvas></div>
+<p class="src">&ldquo;Other&rdquo; is CBP's own residual category, not a country — it is the largest single bar and is left labelled as CBP publishes it.</p>
+</div>
+<div class="card">
+<h3>Who They Are, FY2026</h3>
+<div class="chart-wrap tall"><canvas id="ch-ma-cbp-dem"></canvas></div>
+<p class="src">FMUA = family-unit adults. UAC = unaccompanied children. 2,629 of 2,836 encounters were single adults.</p>
+</div>
+</div>
+<p class="src" style="margin-top:14px"><strong>Source:</strong> CBP Nationwide Encounters, state breakdown (nationwide-encounters-fy23-fy26-jul-state.csv), FY2023–FY2026 through July. Counts are encounters, not people: one person encountered twice counts twice.</p>
 </div>
 
 <div id="m-reasons" class="tab" data-section="massachusetts">
@@ -716,6 +753,38 @@ data:[415200,519940,977230,458080,1734680,2378940,2475670,2135000,443671,115762]
         datasets:[{label:'Shelter Families',data:[1309,412,287,245,198,176,165,142,138,121],backgroundColor:R}]
       },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
         scales:{x:{grid:{color:GC},ticks:{color:'#334155'}},y:{grid:{display:false},ticks:{color:'#334155',font:{size:10}}}}}});
+      break;
+
+    // ── CBP encounters recorded in Massachusetts ──────────────────────────────
+    // CBP nationwide encounters, state breakdown, FY23-FY26 through July.
+    // FY26 is 10 of 12 months and marked with an asterisk in the label, the
+    // same convention the national encounters chart uses for a partial year.
+    case 'm-ports':
+      new Chart(document.getElementById('ch-ma-cbp-fy'),{type:'bar',data:{
+        labels:['FY23','FY24','FY25','FY26*'],
+        datasets:[{label:'Encounters recorded in MA',data:[4038,3757,1916,2836],
+          backgroundColor:[W,W,W,B]}]
+      },options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false}},
+        scales:{y:{beginAtZero:true,ticks:{color:'#334155'},grid:{color:GC}},
+          x:{grid:{display:false},ticks:{color:'#334155'}}}}});
+
+      new Chart(document.getElementById('ch-ma-cbp-cit'),{type:'bar',data:{
+        labels:['Other','China','India','Brazil','Russia','Philippines','Colombia','Mexico','Canada','Ukraine'],
+        datasets:[{label:'FY2026 encounters',data:[1048,572,517,197,75,69,60,59,57,46],
+          backgroundColor:P}]
+      },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+        plugins:{legend:{display:false}},
+        scales:{x:{beginAtZero:true,ticks:{color:'#334155'},grid:{color:GC}},
+          y:{grid:{display:false},ticks:{color:'#334155'}}}}});
+
+      new Chart(document.getElementById('ch-ma-cbp-dem'),{type:'bar',data:{
+        labels:['Single adults','Family-unit adults','Accompanied minors','Unaccompanied children'],
+        datasets:[{label:'FY2026 encounters',data:[2629,162,24,21],backgroundColor:[B,G,Y,R]}]
+      },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+        plugins:{legend:{display:false}},
+        scales:{x:{beginAtZero:true,ticks:{color:'#334155'},grid:{color:GC}},
+          y:{grid:{display:false},ticks:{color:'#334155'}}}}});
       break;
     case 'm-reasons':
       new Chart(document.getElementById('ch-poll-leave'),{type:'doughnut',data:{
