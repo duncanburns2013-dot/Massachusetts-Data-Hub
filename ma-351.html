@@ -43,7 +43,13 @@
 </style>
 </head>
 <body>
-  <iframe src="ma-351-3d-map.html" title="351 - every town in Massachusetts in 3D"
+  <!--
+    The ?v= is a cache buster and it matters here. The map is ~5MB, so browsers
+    hold onto it hard, and an update looks like "it didn't go live" even after a
+    successful deploy. BUMP THIS whenever ma-351-3d-map.html changes - it should
+    match the build stamp shown in the map's bottom-right corner.
+  -->
+  <iframe src="ma-351-3d-map.html?v=20260816-1252" title="351 - every town in Massachusetts in 3D"
           allow="fullscreen" loading="eager"></iframe>
   <noscript>
     <div class="fallback">
