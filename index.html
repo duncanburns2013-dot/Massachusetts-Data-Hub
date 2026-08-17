@@ -69,15 +69,6 @@ body::after{
 }
 @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 .hero .sub{opacity:0.5;font-size:0.88rem;font-weight:400;max-width:640px;margin:0 auto 36px;line-height:1.65;letter-spacing:0.01em;animation:fadeIn 0.5s 0.2s ease both}
-.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:920px;margin:0 auto;animation:fadeIn 0.5s 0.3s ease both}
-.hero-stat{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:20px 14px;text-align:center;backdrop-filter:blur(4px);transition:all 0.3s;cursor:default}
-.hero-stat:hover{background:rgba(255,255,255,0.08);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
-.hero-stat .val{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.3rem,3vw,1.8rem);font-weight:400}
-.hero-stat .lbl{font-size:0.62rem;opacity:0.4;margin-top:4px;text-transform:uppercase;letter-spacing:0.08em;font-weight:600}
-.hero-stat .val.yellow{color:var(--duckling)}
-.hero-stat .val.green{color:#6fcf97}
-.hero-stat .val.red{color:#ff8a80}
-.hero-stat .val.cranberry{color:#e8a87c}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 .tab-nav{display:flex;justify-content:center;background:rgba(11,30,48,0.95);border-bottom:1px solid rgba(255,255,255,0.06);overflow-x:auto;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);scrollbar-width:none}
 .tab-nav::-webkit-scrollbar{display:none}
@@ -207,8 +198,8 @@ footer a:hover{color:var(--duckling)}
 .grid .card:nth-child(14){transition-delay:0.65s}
 .grid .card:nth-child(15){transition-delay:0.7s}
 @media(max-width:960px){.grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:768px){.hero{padding:48px 16px 36px}.hero-stats{grid-template-columns:repeat(2,1fr)}.main-content{padding:20px 16px 40px}.grid-wrap{padding:16px}.share-bar{gap:8px}.share-btn{padding:7px 12px;font-size:0.68rem}}
-@media(max-width:540px){.hero-stats{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.grid-wrap{padding:12px}}
+@media(max-width:768px){.hero{padding:48px 16px 36px}.main-content{padding:20px 16px 40px}.grid-wrap{padding:16px}.share-bar{gap:8px}.share-btn{padding:7px 12px;font-size:0.68rem}}
+@media(max-width:540px){.grid{grid-template-columns:1fr}.grid-wrap{padding:12px}}
 </style>
 </head>
 <body>
@@ -216,12 +207,6 @@ footer a:hover{color:var(--duckling)}
   <div class="hero-alert"><span class="pulse"></span> Economic Crisis Dashboard</div>
   <h1>Massachusetts Data Hub</h1>
   <p class="sub">Interactive dashboards tracking the Commonwealth's affordability crisis, housing market, tax burden, pension liabilities, energy costs, and political influence &mdash; built exclusively from official government sources.</p>
-  <div class="hero-stats">
-    <div class="hero-stat"><div class="val red">#41</div><div class="lbl">Tax Competitiveness</div></div>
-    <div class="hero-stat"><div class="val red">#44</div><div class="lbl">Unemployment Rank</div></div>
-    <div class="hero-stat"><div class="val cranberry">$313K</div><div class="lbl">"Comfortable" Income Needed</div></div>
-    <div class="hero-stat"><div class="val yellow">15</div><div class="lbl">Live Dashboards</div></div>
-  </div>
 </div>
 <nav class="tab-nav">
   <a href="#explainers" class="active">Start Here</a>
