@@ -118,3 +118,33 @@ html .apexcharts-datalabel,html .apexcharts-datalabel-value{
   font-family:var(--font-mono)!important;
   font-variant-numeric:tabular-nums;
 }
+
+/* ---- semantic colour inside a dark hero -------------------------------
+   The up/down colours and --muted are INK-dark by design: they are built for
+   the light body. The heroes are Bay Blue, so on them cranberry reads as
+   near-black on dark and Berkshire Green disappears entirely - the deltas under
+   the hero figures were effectively invisible.
+   Light variants, checked against #14558F: #8FD9AE = 4.5:1, #FFB3BE = 4.5:1. */
+[class*="hero"] .hs-n .up,[class*="hero"] .hs-n .pos,[class*="hero"] .hs-n .good,
+[class*="hero"] [class*="-note"] .up,[class*="hero"] [class*="-sub"] .up{
+  color:#8FD9AE!important;
+}
+[class*="hero"] .hs-n .dn,[class*="hero"] .hs-n .down,[class*="hero"] .hs-n .neg,
+[class*="hero"] .hs-n .bad,[class*="hero"] [class*="-note"] .dn,
+[class*="hero"] [class*="-sub"] .dn{
+  color:#FFB3BE!important;
+}
+/* Scoped to the delta line only. A broader [class*="hero"] .up/.dn also caught
+   the KPI values themselves and turned them green and pink - the values carry
+   the same sign classes and must keep their own colour. */
+/* muted body-grey is unreadable on the hero for the same reason */
+[class*="hero"] .hs-n,[class*="hero"] .hs-l,[class*="hero"] .hs-supply,
+[class*="hero"] [class*="-note"],[class*="hero"] [class*="-cap"]{
+  color:rgba(255,255,255,.74)!important;
+}
+
+/* haverhill carries its own TEMPLATE LAYOUT OVERRIDES block, like ma-housing */
+html .hero h1,html .sec-t,html .tog{font-family:var(--font-display)!important}
+html .hs-v,html .cv,html .comp-iv{
+  font-family:var(--font-mono)!important;font-variant-numeric:tabular-nums;
+}
