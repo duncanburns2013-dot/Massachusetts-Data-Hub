@@ -21,24 +21,24 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-:root{--navy:#1e335e;--navy-l:#2a4a7a;--navy-d:#0f1b33;--ice:#c9ebfc;--ice-l:#e3f4fe;--ice-d:#9fd4f4;--neon-red:#dc2626;--neon-green:#059669;--neon-purple:#7c3aed;--neon-blue:#1d4ed8;--neon-yellow:#ca8a04;--neon-yellow:#ca8a04;--neon-orange:#ea580c;--bg:#f5f2ec;--card:#ffffff;--card-b:rgba(30,51,94,0.03);--ink:#1a2030;--mid:#5a6374;--muted:#8e95a2;--border:#ddd8d0}
+:root{--navy:#14558F;--navy-l:#2a4a7a;--navy-d:#0f1b33;--ice:#c9ebfc;--ice-l:#e3f4fe;--ice-d:#9fd4f4;--neon-red:#dc2626;--neon-green:#059669;--neon-purple:#7c3aed;--neon-blue:#14558F;--neon-yellow:#B07C20;--neon-yellow:#B07C20;--neon-orange:#ea580c;--bg:#f5f2ec;--card:#ffffff;--card-b:rgba(30,51,94,0.03);--ink:#14558F;--mid:#5a6374;--muted:#8e95a2;--border:#ddd8d0}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
 .container{max-width:1140px;margin:0 auto;padding:0 24px}
 
-.hero{background:linear-gradient(135deg,#1e335e 0%,#152744 60%,#1a2f52 100%);position:relative;overflow:hidden}
+.hero{background:linear-gradient(135deg,#14558F 0%,#0F4478 60%,#14558F 100%);position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 75% 15%,rgba(0,212,255,0.08) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 15% 85%,rgba(168,85,247,0.06) 0%,transparent 50%);pointer-events:none}
 .hero::after{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none}
 .hero-inner{position:relative;z-index:1;max-width:1140px;margin:0 auto;padding:44px 28px 52px}
 .hero-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
 .hero-badge{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.22em;color:var(--neon-blue);font-weight:600;display:flex;align-items:center;gap:8px}
-.hero-badge::before{content:'';width:7px;height:7px;background:#1d4ed8;border-radius:50%;box-shadow:0 0 8px var(--neon-blue);animation:pulse 2s ease-in-out infinite}
+.hero-badge::before{content:'';width:7px;height:7px;background:#14558F;border-radius:50%;box-shadow:0 0 8px var(--neon-blue);animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .hero-date{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.25)}
 .hero h1{font-size:clamp(2rem,5vw,3rem);font-weight:900;line-height:1.08;margin-bottom:6px;letter-spacing:-0.02em;color:#fff}
 .hero h1 span{color:var(--ice)}
 .hero-sub{font-size:0.85rem;color:rgba(255,255,255,0.4);max-width:520px;font-weight:300;margin-bottom:36px}
-.hero-line{width:100%;height:1px;background:linear-gradient(90deg,#1d4ed8,rgba(124,58,237,0.4) 50%,transparent);margin-bottom:28px}
+.hero-line{width:100%;height:1px;background:linear-gradient(90deg,#14558F,rgba(124,58,237,0.4) 50%,transparent);margin-bottom:28px}
 .hero-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:0}
 .hs{padding:0 18px;border-right:1px solid rgba(255,255,255,0.06);text-align:center}
 .hs:first-child{padding-left:0}.hs:last-child{border-right:none;padding-right:0}
@@ -51,8 +51,8 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);line-
 .nav-inner{display:flex;gap:3px;max-width:1140px;margin:0 auto;padding:9px 24px;overflow-x:auto}
 .nav-inner::-webkit-scrollbar{display:none}
 .tog{padding:7px 15px;border:1px solid transparent;border-radius:6px;font-family:'Outfit',sans-serif;font-size:0.78rem;font-weight:500;cursor:pointer;color:var(--mid);background:none;transition:all 0.2s;white-space:nowrap}
-.tog:hover{color:#1a2030;background:rgba(30,51,94,0.04)}
-.tog.active{background:#1e335e;color:#fff;border-color:#1e335e}
+.tog:hover{color:#14558F;background:rgba(30,51,94,0.04)}
+.tog.active{background:#14558F;color:#fff;border-color:#14558F}
 
 .panel{display:none;padding:32px 0}
 .panel.active{display:block;animation:fadeUp .35s cubic-bezier(.22,1,.36,1)}
@@ -60,11 +60,11 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);line-
 /* ---- The Band panel -------------------------------------------------------
    Series colors are NOT the page's --neon-* set. Those were picked to look
    bright on white, not to be told apart: run through the CVD checks, cranberry
-   #680A1D also sits below the mark lightness band. #9B1B32 / #14558F validate
+   #680A1D also sits below the mark lightness band. #A81733 / #14558F validate
    all-pairs (worst CVD dE 15.7, normal-vision 24.8, both >= 3:1 on the card).
    Near markets are a recessive gray outline on purpose -- context, not a peer,
    and it keeps the palette to the two series that actually carry the argument. */
-:root{--sub:#9B1B32;--abut:#14558F;--nearc:#8e95a2;--sub-soft:rgba(155,27,50,.10)}
+:root{--sub:#A81733;--abut:#14558F;--nearc:#8e95a2;--sub-soft:rgba(155,27,50,.10)}
 .band-lede{font-size:1.14rem;line-height:1.5;margin:22px 0 26px;padding-left:16px;
   border-left:4px solid var(--sub);color:var(--ink);max-width:70ch}
 .band-lede em{font-style:normal;background:var(--sub-soft);padding:0 .22em;font-weight:600}
@@ -99,7 +99,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);line-
 .mark-ring{fill:none;stroke:var(--ink);stroke-width:2;opacity:0;pointer-events:none}
 .cleg{display:flex;gap:14px;flex-wrap:wrap;font-size:.7rem;color:var(--mid)}
 .cleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
-.sw-subject{background:#9B1B32}.sw-abutter{background:#14558F}
+.sw-subject{background:#A81733}.sw-abutter{background:#14558F}
 .sw-near{background:#8e95a2;opacity:.5}
 .band-tip{position:absolute;pointer-events:none;opacity:0;transition:opacity .12s;
   background:var(--ink);color:#fff;border-radius:7px;padding:9px 11px;font-size:.76rem;
@@ -111,7 +111,7 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);line-
 .tile-sub{background:var(--card);border:1px solid var(--card-b);border-radius:12px;padding:18px}
 @media (max-width:640px){.band-controls{gap:6px}.metric{padding:5px 11px;font-size:.73rem}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.sec-t{font-size:1.3rem;font-weight:800;margin-bottom:3px;color:#1a2030}
+.sec-t{font-size:1.3rem;font-weight:800;margin-bottom:3px;color:#14558F}
 .sec-d{color:var(--muted);font-size:0.82rem;margin-bottom:18px}
 
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-bottom:18px}
@@ -120,13 +120,13 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);line-
 .card.w2{grid-column:span 2}
 .cl{font-size:0.54rem;text-transform:uppercase;letter-spacing:0.09em;color:var(--muted);font-weight:600;margin-bottom:3px}
 .cv{font-size:1.3rem;font-weight:800;margin-bottom:7px}
-.cv.blue{color:var(--neon-blue)}.cv.green{color:var(--neon-green)}.cv.red{color:var(--neon-red)}.cv.amber{color:#ca8a04}.cv.purple{color:var(--neon-purple)}.cv.orange{color:var(--neon-orange)}
+.cv.blue{color:var(--neon-blue)}.cv.green{color:var(--neon-green)}.cv.red{color:var(--neon-red)}.cv.amber{color:#B07C20}.cv.purple{color:var(--neon-purple)}.cv.orange{color:var(--neon-orange)}
 .cg{display:grid;grid-template-columns:1fr 1fr;gap:5px}
 .cm{background:#f5f2ec;padding:5px 7px;border-radius:5px}
 .cm-l{font-size:0.5rem;text-transform:uppercase;color:var(--muted);letter-spacing:0.04em}
 .cm-v{font-size:0.8rem;font-weight:600;color:var(--ink)}
 .up{color:var(--neon-red)}.dn{color:var(--neon-green)}
-.bl{border-left:3px solid #1d4ed8}.rl{border-left:3px solid var(--neon-red)}.gl{border-left:3px solid var(--neon-green)}.al{border-left:3px solid var(--neon-yellow)}.pl{border-left:3px solid var(--neon-purple)}
+.bl{border-left:3px solid #14558F}.rl{border-left:3px solid var(--neon-red)}.gl{border-left:3px solid var(--neon-green)}.al{border-left:3px solid var(--neon-yellow)}.pl{border-left:3px solid var(--neon-purple)}
 
 .cb{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px}
 .ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:6px}
@@ -141,10 +141,10 @@ table{width:100%;border-collapse:collapse;font-size:0.78rem}
 th,td{padding:8px 8px;text-align:left;border-bottom:1px solid var(--border)}
 th{font-size:0.55rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);font-weight:600;background:#f9f7f3}
 tr:hover td{background:rgba(30,51,94,0.02)}
-td:first-child{font-weight:600;color:#1e335e}
+td:first-child{font-weight:600;color:#14558F}
 
 .comp{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:18px}
-.comp-t{text-align:center;font-size:1rem;font-weight:700;color:#1a2030;margin-bottom:14px}
+.comp-t{text-align:center;font-size:1rem;font-weight:700;color:#14558F;margin-bottom:14px}
 .comp-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
 .comp-i{text-align:center}
 .comp-il{font-size:0.52rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:3px}
@@ -153,8 +153,8 @@ td:first-child{font-weight:600;color:#1e335e}
 
 .afford{background:linear-gradient(135deg,rgba(0,212,255,0.05),rgba(168,85,247,0.06));border:1px solid rgba(201,235,252,0.1);border-radius:12px;padding:22px;margin-bottom:18px}
 
-.footer{background:#1e335e;padding:24px;text-align:center}
-.footer::before{content:'';display:block;width:100%;height:1px;background:linear-gradient(90deg,transparent,#1d4ed8,#7c3aed,transparent);margin-bottom:20px}
+.footer{background:#14558F;padding:24px;text-align:center}
+.footer::before{content:'';display:block;width:100%;height:1px;background:linear-gradient(90deg,transparent,#14558F,#7c3aed,transparent);margin-bottom:20px}
 .footer p{font-size:0.75rem;color:var(--muted);margin-bottom:3px}
 
 @media(max-width:768px){
@@ -169,8 +169,8 @@ td:first-child{font-weight:600;color:#1e335e}
 
 
 /* ══ TEMPLATE LAYOUT OVERRIDES ══ */
-body{font-family:'DM Sans',system-ui,sans-serif !important;background:#f8f7f4 !important;color:#1a1a1a}
-.hero{background:#0f2942 !important;padding:0 !important}
+body{font-family:'DM Sans',system-ui,sans-serif !important;background:#E9EBEA !important;color:#0B1113}
+.hero{background:#14558F !important;padding:0 !important}
 .hero::before{background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,0.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(139,26,26,0.1) 0%,transparent 50%) !important}
 .hero::after{display:none !important}
 .hero-inner{text-align:center !important;padding:56px 24px 42px !important;max-width:1000px !important;margin:0 auto !important}
@@ -179,38 +179,42 @@ body{font-family:'DM Sans',system-ui,sans-serif !important;background:#f8f7f4 !i
 .hero-badge::before{display:none !important}
 .hero-date{font-size:0.65rem !important;color:rgba(255,255,255,0.35) !important}
 .hero h1{font-family:'DM Serif Display',Georgia,serif !important;font-size:clamp(1.6rem,4.5vw,2.6rem) !important;font-weight:400 !important;text-align:center !important;margin-bottom:8px !important}
-.hero h1 span{color:#c9a84c !important}
+.hero h1 span{color:#B07C20 !important}
 .hero-sub{text-align:center !important;opacity:0.65 !important;font-size:0.85rem !important;max-width:700px !important;margin:0 auto 8px !important}
 .hero-line{display:none !important}
 .hero-stats{display:grid !important;grid-template-columns:repeat(6,1fr) !important;gap:10px !important;max-width:1000px !important;margin:0 auto !important}
 .hs{background:rgba(255,255,255,0.06) !important;border:1px solid rgba(255,255,255,0.08) !important;border-radius:10px !important;padding:18px 10px !important;text-align:center !important}
 .hs:first-child,.hs:last-child,.hs:nth-child(3),.hs:nth-child(4),.hs:nth-child(5),.hs:nth-child(6){border:1px solid rgba(255,255,255,0.08) !important}
 .hs-l{font-size:0.65rem !important;opacity:0.55 !important;letter-spacing:0.08em !important;color:#fff !important}
-.hs-v{font-family:'DM Serif Display',Georgia,serif !important;font-size:clamp(1.2rem,3vw,1.7rem) !important;font-weight:400 !important;color:#e8a87c !important}
-.hs-v.blue,.hs-v.green,.hs-v.red,.hs-v.orange{color:#e8a87c !important}
+.hs-v{font-family:'DM Serif Display',Georgia,serif !important;font-size:clamp(1.2rem,3vw,1.7rem) !important;font-weight:400 !important;color:#B07C20 !important}
+.hs-v.blue,.hs-v.green,.hs-v.red,.hs-v.orange{color:#B07C20 !important}
 .hs-n{font-size:0.6rem !important;opacity:0.4 !important;color:#fff !important}
-.nav{background:#fff !important;border-bottom:1px solid #e8e5df !important;position:sticky !important;top:0 !important;z-index:100 !important;box-shadow:0 1px 3px rgba(0,0,0,0.04) !important}
+.nav{background:#fff !important;border-bottom:1px solid #CDD3D1 !important;position:sticky !important;top:0 !important;z-index:100 !important;box-shadow:0 1px 3px rgba(0,0,0,0.04) !important}
 .nav-inner{justify-content:center !important;max-width:1200px !important;margin:0 auto !important}
-.tog{font-family:'DM Sans',system-ui,sans-serif !important;padding:15px 22px !important;font-size:0.78rem !important;font-weight:600 !important;border:none !important;background:none !important;color:#7a756e !important;border-bottom:2px solid transparent !important;border-radius:0 !important;text-transform:uppercase !important;letter-spacing:0.06em !important}
-.tog:hover{color:#1a1a1a !important;background:rgba(0,0,0,0.02) !important}
-.tog.active{color:#0f2942 !important;background:none !important;border-color:transparent !important;border-bottom:2px solid #c9a84c !important}
-.sec-t{font-family:'DM Serif Display',Georgia,serif !important;font-size:1.35rem !important;font-weight:400 !important;color:#0f2942 !important}
-.sec-d{color:#7a756e !important}
-.crd{border-radius:14px !important;border:1px solid #e8e5df !important;box-shadow:0 1px 3px rgba(0,0,0,0.03) !important;background:#fff !important}
-.crd h3{font-size:0.85rem !important;font-weight:700 !important;color:#0f2942 !important}
-.cl{font-size:0.65rem !important;color:#7a756e !important;text-transform:uppercase !important;letter-spacing:0.1em !important}
+.tog{font-family:'DM Sans',system-ui,sans-serif !important;padding:15px 22px !important;font-size:0.78rem !important;font-weight:600 !important;border:none !important;background:none !important;color:#5A6467 !important;border-bottom:2px solid transparent !important;border-radius:0 !important;text-transform:uppercase !important;letter-spacing:0.06em !important}
+.tog:hover{color:#0B1113 !important;background:rgba(0,0,0,0.02) !important}
+.tog.active{color:#14558F !important;background:none !important;border-color:transparent !important;border-bottom:2px solid #B07C20 !important}
+.sec-t{font-family:'DM Serif Display',Georgia,serif !important;font-size:1.35rem !important;font-weight:400 !important;color:#14558F !important}
+.sec-d{color:#5A6467 !important}
+.crd{border-radius:14px !important;border:1px solid #CDD3D1 !important;box-shadow:0 1px 3px rgba(0,0,0,0.03) !important;background:#fff !important}
+.crd h3{font-size:0.85rem !important;font-weight:700 !important;color:#14558F !important}
+.cl{font-size:0.65rem !important;color:#5A6467 !important;text-transform:uppercase !important;letter-spacing:0.1em !important}
 .cv{font-family:'DM Serif Display',Georgia,serif !important;font-size:2rem !important;font-weight:400 !important}
-.comp{border-radius:14px !important;border:1px solid #e8e5df !important;background:#fff !important}
-.comp-t{font-size:0.85rem !important;color:#0f2942 !important;font-weight:700 !important}
+.comp{border-radius:14px !important;border:1px solid #CDD3D1 !important;background:#fff !important}
+.comp-t{font-size:0.85rem !important;color:#14558F !important;font-weight:700 !important}
 .comp-iv{font-family:'DM Serif Display',Georgia,serif !important;font-weight:400 !important}
-.afford{border-radius:14px !important;border:1px solid #e8e5df !important;background:#fff !important}
-th{border-bottom:2px solid #0f2942 !important;color:#0f2942 !important;font-size:0.68rem !important;text-transform:uppercase !important;letter-spacing:0.08em !important}
-td{border-bottom:1px solid #e8e5df !important}
-.footer{background:#fff !important;border-top:1px solid #e8e5df !important}
-.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !important}
+.afford{border-radius:14px !important;border:1px solid #CDD3D1 !important;background:#fff !important}
+th{border-bottom:2px solid #14558F !important;color:#14558F !important;font-size:0.68rem !important;text-transform:uppercase !important;letter-spacing:0.08em !important}
+td{border-bottom:1px solid #CDD3D1 !important}
+.footer{background:#fff !important;border-top:1px solid #CDD3D1 !important}
+.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !important}
 @media(max-width:768px){.hero-stats{grid-template-columns:repeat(3,1fr) !important}.g2{grid-template-columns:1fr !important}}
 @media(max-width:480px){.hero-stats{grid-template-columns:repeat(2,1fr) !important}.tog{padding:10px 12px !important;font-size:0.65rem !important}}
 </style>
+<!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+
 </head>
 <body>
 <header class="hero"><div class="hero-inner">
@@ -250,7 +254,7 @@ td{border-bottom:1px solid #e8e5df !important}
 <div class="card al"><div class="cl">Days on Market</div><div class="cv amber" id="c-sf-dom-val">—</div><div class="cg"><div class="cm"><div class="cm-l yr-first">—</div><div class="cm-v" id="c-sf-dom-first">—</div></div><div class="cm"><div class="cm-l">Change</div><div class="cm-v" id="c-sf-dom-chg">—</div></div></div></div>
 <div class="card pl"><div class="cl">Months Supply</div><div class="cv purple" id="c-sf-supply-val">—</div><div class="cg"><div class="cm"><div class="cm-l yr-first">—</div><div class="cm-v" id="c-sf-supply-first">—</div></div><div class="cm"><div class="cm-l">Balanced</div><div class="cm-v">4-6 mo</div></div></div></div>
 </div>
-<div class="cb"><div class="ch"><div class="ct">Average Sale Price — 13 Year Trend</div><div class="cleg"><div class="li"><span class="ld" style="background:#1d4ed8"></span>Haverhill</div><div class="li"><span class="ld" style="background:#7c3aed"></span>Essex County</div><div class="li"><span class="ld" style="background:#dc2626"></span>Massachusetts</div></div></div><div class="ca"><canvas id="c-sf-price"></canvas></div></div>
+<div class="cb"><div class="ch"><div class="ct">Average Sale Price — 13 Year Trend</div><div class="cleg"><div class="li"><span class="ld" style="background:#14558F"></span>Haverhill</div><div class="li"><span class="ld" style="background:#7c3aed"></span>Essex County</div><div class="li"><span class="ld" style="background:#dc2626"></span>Massachusetts</div></div></div><div class="ca"><canvas id="c-sf-price"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">$/SqFt Comparison</div></div><div class="ca"><canvas id="c-sf-sqft"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">Days on Market</div></div><div class="ca"><canvas id="c-sf-dom"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">12-Month Sales Volume</div></div><div class="ca"><canvas id="c-sf-vol"></canvas></div></div>
@@ -363,7 +367,7 @@ td{border-bottom:1px solid #e8e5df !important}
 <div class="panel" id="p-compare"><div class="container">
 <div class="sec-t">Compare All Markets</div>
 <p class="sec-d">Haverhill SF, Condo & MF vs. Essex County SF vs. Massachusetts SF</p>
-<div class="cb"><div class="ch"><div class="ct">Sale Price — All Markets (13 Years)</div><div class="cleg"><div class="li"><span class="ld" style="background:#dc2626"></span>MA SF</div><div class="li"><span class="ld" style="background:#7c3aed"></span>Essex SF</div><div class="li"><span class="ld" style="background:#1d4ed8"></span>Haverhill SF</div><div class="li"><span class="ld" style="background:#059669"></span>Haverhill Condo</div><div class="li"><span class="ld" style="background:#ea580c"></span>Haverhill MF</div></div></div><div class="ca"><canvas id="c-all-price"></canvas></div></div>
+<div class="cb"><div class="ch"><div class="ct">Sale Price — All Markets (13 Years)</div><div class="cleg"><div class="li"><span class="ld" style="background:#dc2626"></span>MA SF</div><div class="li"><span class="ld" style="background:#7c3aed"></span>Essex SF</div><div class="li"><span class="ld" style="background:#14558F"></span>Haverhill SF</div><div class="li"><span class="ld" style="background:#059669"></span>Haverhill Condo</div><div class="li"><span class="ld" style="background:#ea580c"></span>Haverhill MF</div></div></div><div class="ca"><canvas id="c-all-price"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">$/SqFt — All Markets</div></div><div class="ca"><canvas id="c-all-sqft"></canvas></div></div>
 <div class="cb"><div class="ch"><div class="ct">Days on Market — SF Comparison</div></div><div class="ca"><canvas id="c-all-dom"></canvas></div></div>
 <div class="comp"><div class="comp-t">Trailing 12-Month Snapshot — ending <span class="data-window">—</span></div><div class="comp-g" id="snap-grid"></div></div>
@@ -374,9 +378,9 @@ td{border-bottom:1px solid #e8e5df !important}
 <div class="sec-t">Affordability Analysis</div>
 <p class="sec-d">30yr @ 6.5%, 20% down, 28% DTI</p>
 <div class="afford"><div class="comp-t">Haverhill — The Affordability Advantage</div><div class="comp-g">
-<div class="comp-i"><div class="comp-il">Local Median Income</div><div class="comp-iv" style="color:#1d4ed8" id="af-local">—</div><div class="comp-in" id="af-local-src">—</div></div>
+<div class="comp-i"><div class="comp-il">Local Median Income</div><div class="comp-iv" style="color:#14558F" id="af-local">—</div><div class="comp-in" id="af-local-src">—</div></div>
 <div class="comp-i"><div class="comp-il">MA Median Income</div><div class="comp-iv" style="color:var(--neon-red)" id="af-ma-median">—</div><div class="comp-in" id="af-ma-median-src">—</div></div>
-<div class="comp-i"><div class="comp-il">SF Income Needed</div><div class="comp-iv" style="color:#ca8a04" id="af-sf-income">—</div><div class="comp-in">For a <span id="af-sf-price">—</span> home</div></div>
+<div class="comp-i"><div class="comp-il">SF Income Needed</div><div class="comp-iv" style="color:#B07C20" id="af-sf-income">—</div><div class="comp-in">For a <span id="af-sf-price">—</span> home</div></div>
 <div class="comp-i"><div class="comp-il">Condo Income</div><div class="comp-iv" style="color:var(--neon-green)" id="af-co-income">—</div><div class="comp-in">For a <span id="af-co-price">—</span> condo</div></div>
 </div></div>
 <div class="cards">
@@ -403,8 +407,8 @@ td{border-bottom:1px solid #e8e5df !important}
 
 <script>
 var Y=['\'14','\'15','\'16','\'17','\'18','\'19','\'20','\'21','\'22','\'23','\'24','\'25','\'26'];
-var BL='#1d4ed8',GR='#059669',RD='#dc2626',PR='#7c3aed',AM='#eab308',OR='#ea580c';
-Chart.defaults.color='#8e95a2';Chart.defaults.borderColor='#e8e4dd';Chart.defaults.font.family="'Outfit',sans-serif";
+var BL='#14558F',GR='#059669',RD='#A81733',PR='#46527A',AM='#eab308',OR='#ea580c';
+Chart.defaults.color='#8A9391';Chart.defaults.borderColor='#e8e4dd';Chart.defaults.font.family="'Outfit',sans-serif";
 var kF=function(v){return'$'+(v/1000)+'K'};
 
 // HAVERHILL DATA
@@ -451,7 +455,7 @@ var es={price:[445129.43,456876.02,469813.18,509954.92,530414.43,550830.58,62295
 
 var ma={price:[430803.52,441342.30,447884.88,475680.97,500658.79,516280.96,577521.80,662660.43,720966.50,755208.94,809406.58,853462.01,865516.99],sqft:[208.03,219.37,219.13,231.82,244.63,251.56,272.67,315.94,343.59,355.78,389.07,391.70,395.91],dom:[81.20,80.10,72.00,54.90,49.50,51.30,43.60,28.10,27.50,31.60,31.90,35.60,37.50]};
 
-function mkOpts(yFmt,noLeg){return{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:!noLeg,position:'top',labels:{boxWidth:8,padding:10,color:'#6b7280'}}},scales:{y:{ticks:{callback:yFmt,color:'#8e95a2'},grid:{color:'#ece8e1'}},x:{ticks:{color:'#8e95a2'},grid:{display:false}}}}}
+function mkOpts(yFmt,noLeg){return{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:!noLeg,position:'top',labels:{boxWidth:8,padding:10,color:'#5A6467'}}},scales:{y:{ticks:{callback:yFmt,color:'#8A9391'},grid:{color:'#ece8e1'}},x:{ticks:{color:'#8A9391'},grid:{display:false}}}}}
 
 // SF CHARTS (with benchmarks)
 new Chart(document.getElementById('c-sf-price'),{type:'line',data:{labels:Y,datasets:[
@@ -479,7 +483,7 @@ new Chart(document.getElementById('c-sf-vol'),{type:'bar',data:{labels:Y,dataset
 new Chart(document.getElementById('c-sf-inv'),{type:'bar',data:{labels:Y,datasets:[
 {label:'Listings',data:sf.inv,backgroundColor:BL+'40',borderColor:BL,borderWidth:2,borderRadius:4,yAxisID:'y'},
 {label:'Mo Supply',data:sf.supply,type:'line',borderColor:AM,borderWidth:3,tension:0.3,pointRadius:4,pointBackgroundColor:AM,yAxisID:'y1'}
-]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:8,padding:10,color:'#6b7280'}}},scales:{y:{position:'left',title:{display:true,text:'Listings',font:{size:10},color:'#8e95a2'},grid:{color:'#ece8e1'},ticks:{color:'#8e95a2'}},y1:{position:'right',grid:{display:false},title:{display:true,text:'Months',font:{size:10},color:'#8e95a2'},ticks:{color:'#8e95a2'}},x:{grid:{display:false},ticks:{color:'#8e95a2'}}}}});
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:8,padding:10,color:'#5A6467'}}},scales:{y:{position:'left',title:{display:true,text:'Listings',font:{size:10},color:'#8A9391'},grid:{color:'#ece8e1'},ticks:{color:'#8A9391'}},y1:{position:'right',grid:{display:false},title:{display:true,text:'Months',font:{size:10},color:'#8A9391'},ticks:{color:'#8A9391'}},x:{grid:{display:false},ticks:{color:'#8A9391'}}}}});
 
 // CONDO CHARTS
 new Chart(document.getElementById('c-co-price'),{type:'line',data:{labels:Y,datasets:[{data:co.price,borderColor:GR,backgroundColor:GR+'15',borderWidth:3,tension:0.3,fill:true,pointRadius:3,pointBackgroundColor:GR}]},options:mkOpts(kF,true)});
@@ -688,7 +692,7 @@ var MEDIAN_SRC = 'ACS 2024 (5-yr)';
   var SNAP = [
     { label: 'MA Statewide SF', color: 'var(--neon-red)', a: ma },
     { label: 'Essex County SF', color: 'var(--neon-purple)', a: es },
-    { label: 'Haverhill SF', color: '#1d4ed8', a: sf },
+    { label: 'Haverhill SF', color: '#14558F', a: sf },
     { label: 'Haverhill Condo', color: 'var(--neon-green)', a: co },
     { label: 'Haverhill MF', color: '#ea580c', a: mf }
   ];
@@ -829,7 +833,7 @@ var BAND = /*@band@*/{"town":"Haverhill","headline":"Haverhill is the second-che
               full: function (v) { return Math.round(v) + '% closed over ask'; } }
   };
   var metric = 'median';
-  var COLOR = { subject: '#9B1B32', abutter: '#14558F', near: '#8e95a2' };
+  var COLOR = { subject: '#A81733', abutter: '#14558F', near: '#8A9391' };
   var SVGNS = 'http://www.w3.org/2000/svg';
 
   // ---- tooltip. Town names come from MLS, so textContent only, never innerHTML.

@@ -274,6 +274,10 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
 @media(max-width:760px){#cardShot{background-image:none}}
 /* WATERMARK:END */
 </style>
+<!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+
 </head>
 <body>
 <div class="wrap">
@@ -1915,7 +1919,7 @@ function updateChart(base){
       {type:'bar', label:'NH advantage, all layers ($)',
        data: rows.map(r => r.ma.grand - r.nh.grand),
        /* red where NH is cheaper, MA blue where Massachusetts is */
-       backgroundColor: rows.map(r => (r.ma.grand-r.nh.grand)>=0 ? '#C0392B' : '#14558F'),
+       backgroundColor: rows.map(r => (r.ma.grand-r.nh.grand)>=0 ? '#A81733' : '#14558F'),
        order:2},
       {type:'line', label:'NH advantage, Layer 1 only ($)',
        data: rows.map(r => r.ma.vT - r.nh.vT),
@@ -1931,13 +1935,13 @@ function updateChart(base){
       responsive:true, maintainAspectRatio:false,
       scales:{
         x:{grid:{display:false}, ticks:{font:{family:"'IBM Plex Mono'",size:11}, color:'#3A4757'}},
-        y:{grid:{color:'#C2C7BA'}, border:{display:false},
+        y:{grid:{color:'#CDD3D1'}, border:{display:false},
            title:{display:true, text:'Annual NH advantage', font:{family:"'Public Sans'",size:11,weight:'600'}, color:'#3A4757'},
            ticks:{callback:v=>'$'+(v/1000).toFixed(0)+'k', font:{family:"'IBM Plex Mono'",size:11}, color:'#3A4757'}}
       },
       plugins:{
-        legend:{position:'bottom', labels:{boxWidth:11, boxHeight:11, font:{family:"'Public Sans'",size:12}, color:'#16202E', padding:14}},
-        tooltip:{backgroundColor:'#16202E', bodyFont:{family:"'IBM Plex Mono'",size:12},
+        legend:{position:'bottom', labels:{boxWidth:11, boxHeight:11, font:{family:"'Public Sans'",size:12}, color:'#0B1113', padding:14}},
+        tooltip:{backgroundColor:'#0B1113', bodyFont:{family:"'IBM Plex Mono'",size:12},
           callbacks:{label: c => c.dataset.label+': '+fmt(c.parsed.y)}}
       }
     }
@@ -2005,7 +2009,7 @@ $('btnLink').addEventListener('click', () => navigator.clipboard.writeText(locat
   .then(()=>toast('Permalink copied')).catch(()=>toast('Copy failed')));
 $('btnPng').addEventListener('click', () => {
   toast('Rendering…');
-  html2canvas($('cardShot'), {backgroundColor:'#E9EBE4', scale:2}).then(c => {
+  html2canvas($('cardShot'), {backgroundColor:'#E9EBEA', scale:2}).then(c => {
     const a=document.createElement('a'); a.download='ma-vs-nh-burden.png';
     a.href=c.toDataURL('image/png'); a.click(); toast('PNG downloaded');
   }).catch(()=>toast('Render failed'));

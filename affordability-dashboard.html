@@ -77,6 +77,10 @@ tr:hover{background:rgba(15,41,66,.02)}
 @media(max-width:480px){.hero .stat-row{grid-template-columns:repeat(2,1fr)}.kpi-grid{grid-template-columns:1fr}nav button{padding:10px 10px;font-size:.65rem}}
 
 </style>
+<!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+
 </head>
 <body>
 
@@ -210,9 +214,9 @@ BEA real per-capita personal income (chained 2017 dollars) &middot; BEA per-capi
 const D = JSON.parse(document.getElementById('col-data').textContent);
 
 /* ── palette ─────────────────────────────────────────────────────────────── */
-const COL = {all:'#1a4480', goods:'#1a7a4c', housing:'#c0392b', utilities:'#b8860b', other:'#7e22ce'};
+const COL = {all:'#14558F', goods:'#2A6B44', housing:'#A81733', utilities:'#B07C20', other:'#46527A'};
 const CAT = [['all','All items'],['goods','Goods'],['housing','Housing'],['utilities','Utilities'],['other','Other services']];
-const GC='#e8e5df', TXT='#7a756e', NEUTRAL='#8792a6';
+const GC='#CDD3D1', TXT='#5A6467', NEUTRAL='#8A9391';
 Chart.defaults.color=TXT; Chart.defaults.borderColor=GC;
 Chart.defaults.font.family="'DM Sans',sans-serif"; Chart.defaults.font.size=11;
 Chart.defaults.plugins.legend.labels.boxWidth=12; Chart.defaults.plugins.legend.labels.padding=14;
@@ -267,15 +271,15 @@ function initReal(){
   const isMA = p=>p.s==='MA';
   new Chart(document.getElementById('rScatter'),{type:'scatter',data:{datasets:[
     {label:'States', data:pts.filter(p=>!isMA(p)), backgroundColor:'rgba(135,146,166,.55)', pointRadius:5},
-    {label:'Massachusetts', data:pts.filter(isMA), backgroundColor:'#c0392b', pointRadius:9}
+    {label:'Massachusetts', data:pts.filter(isMA), backgroundColor:'#A81733', pointRadius:9}
   ]},options:{plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>c.raw.s+': price '+c.raw.x.toFixed(1)+', income '+money(c.raw.y)}}},
     scales:{x:{title:{display:true,text:'price level (US = 100)'},grid:{color:GC}},
             y:{title:{display:true,text:'per-capita personal income'},ticks:{callback:money0},grid:{color:GC}}}}});
 
   const top = Object.keys(D.nominal_income).sort((a,b)=>D.nominal_income[b]-D.nominal_income[a]).slice(0,10);
   new Chart(document.getElementById('rIncome'),{type:'bar',data:{labels:top,datasets:[
-    {label:'Nominal', data:top.map(s=>D.nominal_income[s]), backgroundColor:'#1a4480'},
-    {label:'Price-adjusted (chained 2017 $)', data:top.map(s=>D.real_income[s]), backgroundColor:'#8792a6'}
+    {label:'Nominal', data:top.map(s=>D.nominal_income[s]), backgroundColor:'#14558F'},
+    {label:'Price-adjusted (chained 2017 $)', data:top.map(s=>D.real_income[s]), backgroundColor:'#8A9391'}
   ]},options:vOpts({y:{ticks:{callback:money0},beginAtZero:true}})});
 
   new Chart(document.getElementById('rCats'),{type:'bar',data:{
@@ -368,12 +372,12 @@ function initGeo(){
 
   const byH=names.slice().sort((a,b)=>M[b].housing-M[a].housing);
   new Chart(document.getElementById('gHousing'),{type:'bar',data:{labels:byH,datasets:[
-    {label:'Housing price level',data:byH.map(n=>M[n].housing),backgroundColor:byH.map(n=>M[n].housing>=100?'#c0392b':'#1a7a4c')},
+    {label:'Housing price level',data:byH.map(n=>M[n].housing),backgroundColor:byH.map(n=>M[n].housing>=100?'#A81733':'#2A6B44')},
     refLine(100,'National average',byH.length)]},options:hOpts({x:{min:60,max:160}})});
 
   const byU=names.slice().sort((a,b)=>M[b].utilities-M[a].utilities);
   new Chart(document.getElementById('gUtil'),{type:'bar',data:{labels:byU,datasets:[
-    {label:'Utilities price level',data:byU.map(n=>M[n].utilities),backgroundColor:'#b8860b'},
+    {label:'Utilities price level',data:byU.map(n=>M[n].utilities),backgroundColor:'#B07C20'},
     refLine(100,'National average',byU.length)]},options:hOpts({x:{min:60,max:170}})});
 
   document.getElementById('insGeo').innerHTML =
@@ -401,13 +405,13 @@ function initNeed(){
     kpi('blue', money(L.budget['housing'][iBoth]), 'Housing<br>Family of 4, 2 Earners');
 
   const ds=[{label:'Income needed before tax',data:need,backgroundColor:cols.map((c,ix)=>
-    MEDIAN&&need[ix]>MEDIAN?'#c0392b':'#1a7a4c')}];
+    MEDIAN&&need[ix]>MEDIAN?'#A81733':'#2A6B44')}];
   if(MEDIAN) ds.push(refLine(MEDIAN,'MA '+MEDIAN_KIND,cols.length));
   new Chart(document.getElementById('nWage'),{type:'bar',data:{labels:cols,datasets:ds},
     options:hOpts({x:{beginAtZero:true,ticks:{callback:money0}}})});
 
-  const KEYS=[['housing','Housing','#c0392b'],['child care','Child care','#7e22ce'],['food','Food','#1a7a4c'],
-    ['transportation','Transport','#1a4480'],['medical','Medical','#b8860b'],['other','Other','#8792a6'],
+  const KEYS=[['housing','Housing','#A81733'],['child care','Child care','#46527A'],['food','Food','#2A6B44'],
+    ['transportation','Transport','#14558F'],['medical','Medical','#B07C20'],['other','Other','#8A9391'],
     ['civic','Civic','#0e7490'],['internet & mobile','Internet & mobile','#be185d'],['annual taxes','Taxes','#4b5563']];
   const show=[iSingle,i('1 adult, 2 children'),iOne,iBoth];
   new Chart(document.getElementById('nBudget'),{type:'bar',data:{
@@ -418,7 +422,7 @@ function initNeed(){
   const occ=L.occupations.slice().sort((a,b)=>b[1]-a[1]);
   const single=need[iSingle];
   new Chart(document.getElementById('nOcc'),{type:'bar',data:{labels:occ.map(o=>o[0]),datasets:[
-    {label:'Typical annual salary',data:occ.map(o=>o[1]),backgroundColor:occ.map(o=>o[1]>=single?'#1a7a4c':'#c0392b')},
+    {label:'Typical annual salary',data:occ.map(o=>o[1]),backgroundColor:occ.map(o=>o[1]>=single?'#2A6B44':'#A81733')},
     refLine(single,'Single adult needs '+money(single),occ.length)]},
     options:hOpts({x:{beginAtZero:true,ticks:{callback:money0}}})});
 

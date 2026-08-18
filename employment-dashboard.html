@@ -117,6 +117,10 @@ footer a:hover{color:var(--gold)}
 @media(max-width:768px){.hero-stats{grid-template-columns:repeat(2,1fr)}.chart-grid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.container{padding:16px}}
 @media(max-width:480px){.hero-stats{grid-template-columns:1fr 1fr}.stat-row{grid-template-columns:1fr}.tab-btn{padding:10px 10px;font-size:0.65rem}}
 </style>
+<!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+
 </head>
 <body>
 
@@ -849,9 +853,9 @@ function switchTab(tabId, btn) {
 }
 
 // Chart palette
-var R='#c0392b', G='#1a7a4c', B='#1a4480', Y='#b8860b', P='#7e22ce';
-Chart.defaults.color='#7a756e';
-Chart.defaults.borderColor='#e8e5df';
+var R='#A81733', G='#2A6B44', B='#14558F', Y='#B07C20', P='#46527A';
+Chart.defaults.color='#5A6467';
+Chart.defaults.borderColor='#CDD3D1';
 Chart.defaults.font.family="'DM Sans',system-ui,sans-serif";
 var charts={};
 function sc(id,cfg){

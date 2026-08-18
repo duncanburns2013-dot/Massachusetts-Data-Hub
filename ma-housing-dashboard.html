@@ -34,8 +34,8 @@
             --accent: #c8a44e;
             --accent-bright: #e4be5a;
             --accent-dim: #a08338;
-            --signal-red: #c23b22;
-            --signal-green: #2d8a56;
+            --signal-red: #A81733;
+            --signal-green: #2A6B44;
             --signal-blue: #2d6bc4;
             --signal-amber: #c08c20;
             --card-bg: #ffffff;
@@ -256,8 +256,8 @@
         .town-name { font-size: 0.78rem; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
         .town-price { font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
         .town-badge { display: inline-block; font-size: 0.65rem; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
-        .town-badge.up { background: #fef2f2; color: var(--signal-red); }
-        .town-badge.down { background: #f0fdf4; color: var(--signal-green); }
+        .town-badge.up { background: #FBEDEF; color: var(--signal-red); }
+        .town-badge.down { background: #EEF5F0; color: var(--signal-green); }
         .town-meta { margin-top: 6px; font-size: 0.7rem; color: var(--ink-muted); }
         
         .summary-box { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 28px; margin-bottom: 28px; }
@@ -272,7 +272,7 @@
         .summary-val.yellow { color: var(--signal-amber); }
         .summary-note { font-size: 0.7rem; color: var(--ink-muted); margin-top: 2px; }
         
-        .afford-box { background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%); border: 1px solid #fde047; border-radius: 14px; padding: 28px; margin-bottom: 28px; }
+        .afford-box { background: linear-gradient(135deg, #FAF5E6 0%, #F6EED6 100%); border: 1px solid #D9B441; border-radius: 14px; padding: 28px; margin-bottom: 28px; }
         
         .footer { background: var(--ink); color: #fff; padding: 32px 24px; text-align: center; position: relative; overflow: hidden; }
         .footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
@@ -295,8 +295,8 @@
     
 
 /* ══ TEMPLATE LAYOUT OVERRIDES ══ */
-body{font-family:'DM Sans',system-ui,sans-serif !important;background:#f8f7f4 !important;color:#1a1a1a}
-.hero{background:#0f2942 !important;text-align:center !important;padding:56px 24px 42px !important}
+body{font-family:'DM Sans',system-ui,sans-serif !important;background:#E9EBEA !important;color:#0B1113}
+.hero{background:#14558F !important;text-align:center !important;padding:56px 24px 42px !important}
 .hero::before{background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,0.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(139,26,26,0.1) 0%,transparent 50%) !important}
 .hero::after{display:none !important}
 .hero-bg{display:none !important}
@@ -314,42 +314,42 @@ body{font-family:'DM Sans',system-ui,sans-serif !important;background:#f8f7f4 !i
 .hero-stat{background:rgba(255,255,255,0.06) !important;border:1px solid rgba(255,255,255,0.08) !important;border-radius:10px !important;padding:18px 10px !important;text-align:center !important}
 .hero-stat:first-child,.hero-stat:last-child{border:1px solid rgba(255,255,255,0.08) !important}
 .hs-label{font-size:0.65rem !important;opacity:0.55 !important;text-transform:uppercase !important;letter-spacing:0.08em !important;color:#fff !important}
-.hs-val{font-family:'DM Serif Display',Georgia,serif !important;font-size:clamp(1.2rem,3vw,1.7rem) !important;font-weight:400 !important;color:#e8a87c !important}
-.hs-val.gold{color:#e8a87c !important}
+.hs-val{font-family:'DM Serif Display',Georgia,serif !important;font-size:clamp(1.2rem,3vw,1.7rem) !important;font-weight:400 !important;color:#B07C20 !important}
+.hs-val.gold{color:#B07C20 !important}
 .hs-note{font-size:0.6rem !important;opacity:0.4 !important}
-nav{background:#fff !important;border-bottom:1px solid #e8e5df !important;position:sticky !important;top:0 !important;z-index:100 !important;box-shadow:0 1px 3px rgba(0,0,0,0.04) !important}
+nav{background:#fff !important;border-bottom:1px solid #CDD3D1 !important;position:sticky !important;top:0 !important;z-index:100 !important;box-shadow:0 1px 3px rgba(0,0,0,0.04) !important}
 .nav-inner{justify-content:flex-start !important;max-width:1200px !important;margin:0 auto !important;flex-wrap:nowrap !important;overflow-x:auto !important}
 @media (min-width: 1240px) { .nav-inner { justify-content: center !important; } }
-.nav-btn{font-family:'DM Sans',system-ui,sans-serif !important;padding:15px 14px !important;font-size:0.78rem !important;font-weight:600 !important;border:none !important;background:none !important;color:#7a756e !important;border-bottom:2px solid transparent !important;border-radius:0 !important;text-transform:uppercase !important;letter-spacing:0.05em !important;transition:all 0.25s !important;flex-shrink:0 !important}
-.nav-btn:hover{color:#1a1a1a !important;background:rgba(0,0,0,0.02) !important}
-.nav-btn.active{color:#0f2942 !important;background:none !important;border-bottom-color:#c9a84c !important}
-.section-title{font-family:'DM Serif Display',Georgia,serif !important;font-size:1.35rem !important;font-weight:400 !important;color:#0f2942 !important}
-.card{border-radius:14px !important;border:1px solid #e8e5df !important;box-shadow:0 1px 3px rgba(0,0,0,0.03) !important}
-.card-label{font-size:0.65rem !important;font-weight:600 !important;text-transform:uppercase !important;letter-spacing:0.1em !important;color:#7a756e !important}
+.nav-btn{font-family:'DM Sans',system-ui,sans-serif !important;padding:15px 14px !important;font-size:0.78rem !important;font-weight:600 !important;border:none !important;background:none !important;color:#5A6467 !important;border-bottom:2px solid transparent !important;border-radius:0 !important;text-transform:uppercase !important;letter-spacing:0.05em !important;transition:all 0.25s !important;flex-shrink:0 !important}
+.nav-btn:hover{color:#0B1113 !important;background:rgba(0,0,0,0.02) !important}
+.nav-btn.active{color:#14558F !important;background:none !important;border-bottom-color:#B07C20 !important}
+.section-title{font-family:'DM Serif Display',Georgia,serif !important;font-size:1.35rem !important;font-weight:400 !important;color:#14558F !important}
+.card{border-radius:14px !important;border:1px solid #CDD3D1 !important;box-shadow:0 1px 3px rgba(0,0,0,0.03) !important}
+.card-label{font-size:0.65rem !important;font-weight:600 !important;text-transform:uppercase !important;letter-spacing:0.1em !important;color:#5A6467 !important}
 .card-val{font-family:'DM Serif Display',Georgia,serif !important;font-size:2rem !important;font-weight:400 !important}
-.card-metric-label{font-size:0.62rem !important;color:#7a756e !important;text-transform:uppercase !important;letter-spacing:0.05em !important}
-.chart-box{border-radius:14px !important;border:1px solid #e8e5df !important;box-shadow:0 1px 3px rgba(0,0,0,0.03) !important}
-.chart-title{font-size:0.85rem !important;font-weight:700 !important;color:#0f2942 !important}
-.data-table th{border-bottom:2px solid #0f2942 !important;color:#0f2942 !important;font-size:0.68rem !important;text-transform:uppercase !important;letter-spacing:0.08em !important}
-.data-table td{border-bottom:1px solid #e8e5df !important}
-.summary-title{font-family:'DM Serif Display',Georgia,serif !important;color:#0f2942 !important}
+.card-metric-label{font-size:0.62rem !important;color:#5A6467 !important;text-transform:uppercase !important;letter-spacing:0.05em !important}
+.chart-box{border-radius:14px !important;border:1px solid #CDD3D1 !important;box-shadow:0 1px 3px rgba(0,0,0,0.03) !important}
+.chart-title{font-size:0.85rem !important;font-weight:700 !important;color:#14558F !important}
+.data-table th{border-bottom:2px solid #14558F !important;color:#14558F !important;font-size:0.68rem !important;text-transform:uppercase !important;letter-spacing:0.08em !important}
+.data-table td{border-bottom:1px solid #CDD3D1 !important}
+.summary-title{font-family:'DM Serif Display',Georgia,serif !important;color:#14558F !important}
 .summary-val{font-family:'DM Serif Display',Georgia,serif !important;font-weight:400 !important}
-.town{border-radius:14px !important;border:1px solid #e8e5df !important}
-.town-name{color:#0f2942 !important}
-footer,.footer{background:#fff !important;border-top:1px solid #e8e5df !important;color:#7a756e !important}
-footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !important}
+.town{border-radius:14px !important;border:1px solid #CDD3D1 !important}
+.town-name{color:#14558F !important}
+footer,.footer{background:#fff !important;border-top:1px solid #CDD3D1 !important;color:#5A6467 !important}
+footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !important}
 @media(max-width:768px){.hero{padding:36px 16px 30px !important}.hero-stats{grid-template-columns:repeat(3,1fr) !important}}
 @media(max-width:480px){.hero-stats{grid-template-columns:repeat(2,1fr) !important}}
 
     /* ── ApexCharts visual polish ── */
     .chart-area { height: 340px; position: relative; }
-    .apexcharts-tooltip { box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important; border-radius: 8px !important; border: 1px solid #e8e5df !important; }
-    .apexcharts-tooltip-title { background: #0f2942 !important; color: #fff !important; font-family: 'DM Sans', sans-serif !important; font-weight: 600 !important; font-size: 0.75rem !important; letter-spacing: 0.05em !important; text-transform: uppercase !important; padding: 8px 12px !important; }
-    .apexcharts-legend-text { font-family: 'DM Sans', sans-serif !important; font-size: 0.78rem !important; font-weight: 500 !important; color: #4a4a4a !important; }
-    .apexcharts-xaxis-label, .apexcharts-yaxis-label { font-family: 'DM Sans', sans-serif !important; font-size: 0.72rem !important; fill: #7a756e !important; }
+    .apexcharts-tooltip { box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important; border-radius: 8px !important; border: 1px solid #CDD3D1 !important; }
+    .apexcharts-tooltip-title { background: #14558F !important; color: #fff !important; font-family: 'DM Sans', sans-serif !important; font-weight: 600 !important; font-size: 0.75rem !important; letter-spacing: 0.05em !important; text-transform: uppercase !important; padding: 8px 12px !important; }
+    .apexcharts-legend-text { font-family: 'DM Sans', sans-serif !important; font-size: 0.78rem !important; font-weight: 500 !important; color: #3E4A4D !important; }
+    .apexcharts-xaxis-label, .apexcharts-yaxis-label { font-family: 'DM Sans', sans-serif !important; font-size: 0.72rem !important; fill: #5A6467 !important; }
     .apexcharts-datalabel { font-family: 'DM Sans', sans-serif !important; font-weight: 700 !important; }
     .chart-box { position: relative; overflow: hidden; }
-    .chart-box::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:linear-gradient(180deg, #c9a84c 0%, #0f2942 100%); border-radius: 14px 0 0 14px; opacity:0.7; }
+    .chart-box::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:linear-gradient(180deg, #B07C20 0%, #14558F 100%); border-radius: 14px 0 0 14px; opacity:0.7; }
     @media(max-width:768px){.chart-area{height:300px}}
     .data-table th, .data-table td { padding: 8px 10px !important; font-size: 0.78rem !important; }
     .data-table { font-size: 0.78rem; }
@@ -360,12 +360,16 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
     .card.wide { grid-column: auto !important; }
     /* Affordability comparison stat row */
     .afford-compare { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:14px; margin: 18px 0 28px; }
-    .afford-stat { background:#fff; border:1px solid #e8e5df; border-radius:14px; padding:18px 20px; }
-    .afford-stat-label { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.1em; color:#7a756e; font-weight:600; margin-bottom:6px; }
-    .afford-stat-val { font-family:'DM Serif Display',Georgia,serif; font-size:1.65rem; color:#0f2942; line-height:1.1; }
-    .afford-stat-sub { font-size:0.78rem; color:#7a756e; margin-top:4px; }
-    .afford-stat .gap-up { color:#c23b22; } .afford-stat .gap-dn { color:#2d8a56; }
+    .afford-stat { background:#fff; border:1px solid #CDD3D1; border-radius:14px; padding:18px 20px; }
+    .afford-stat-label { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.1em; color:#5A6467; font-weight:600; margin-bottom:6px; }
+    .afford-stat-val { font-family:'DM Serif Display',Georgia,serif; font-size:1.65rem; color:#14558F; line-height:1.1; }
+    .afford-stat-sub { font-size:0.78rem; color:#5A6467; margin-top:4px; }
+    .afford-stat .gap-up { color:#A81733; } .afford-stat .gap-dn { color:#2A6B44; }
     </style>
+<!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+
 </head>
 <body>
     <header class="hero">
@@ -676,7 +680,7 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
         nbpt:  { price:[587791.01,596385.88,598947.94,664974.21,676765.23,755965.48,821451.90,941914.36,1077706.52,1113346.18,1234211.96,1325882.79,1236212.40], sqft:[281.65,294.53,298.95,319.30,330.62,339.43,378.64,455.01,495.06,534.06,574.16,581.39,580.32], dom:[69.40,71.20,77.00,64.00,45.90,49.60,44.00,27.00,26.80,27.20,32.50,33.90,34.00], units:[178,192,200,180,204,240,208,185,156,125,131,141,126], supply:[null,null,null,null,null,null,null,null,null,null,null,null,3.24] }
     };
     
-    const C = { ma:'#2d6bc4', boston:'#c23b22', essex:'#2d8a56', nbpt:'#c08c20', gold:'#c9a84c', navy:'#0f2942', red:'#c23b22', amber:'#c08c20', purple:'#6b5ce7', teal:'#14b8a6', orange:'#d46a2e' };
+    const C = { ma:'#14558F', boston:'#A81733', essex:'#2A6B44', nbpt:'#B07C20', gold:'#B07C20', navy:'#14558F', red:'#A81733', amber:'#B07C20', purple:'#6b5ce7', teal:'#14b8a6', orange:'#d46a2e' };
     
     const baseOpts = {
         chart: {
@@ -684,9 +688,9 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
             toolbar: { show: false },
             zoom: { enabled: false },
             animations: { enabled: true, easing: 'easeOutCubic', speed: 900, animateGradually: { enabled: true, delay: 80 }, dynamicAnimation: { enabled: true, speed: 400 } },
-            dropShadow: { enabled: true, top: 4, left: 0, blur: 8, color: '#0f2942', opacity: 0.08 }
+            dropShadow: { enabled: true, top: 4, left: 0, blur: 8, color: '#14558F', opacity: 0.08 }
         },
-        grid: { borderColor: '#e8e5df', strokeDashArray: 3, xaxis: { lines: { show: false } }, padding: { left: 8, right: 8 } },
+        grid: { borderColor: '#CDD3D1', strokeDashArray: 3, xaxis: { lines: { show: false } }, padding: { left: 8, right: 8 } },
         legend: { position: 'top', horizontalAlign: 'right', fontSize: '12px', fontWeight: 600, markers: { width: 10, height: 10, radius: 4 }, itemMargin: { horizontal: 10, vertical: 4 } },
         tooltip: { theme: 'light', shared: true, intersect: false, style: { fontSize: '12px' }, x: { show: true } },
         dataLabels: { enabled: false }
@@ -888,14 +892,14 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
     const gnPrev = k => { const a = townTrends[k]; return a[a.length-2]; };
     const gnPrices = gnTowns.map(t => gnLast(t.key));
     const gnNames = gnTowns.map(t => t.name);
-    const gnColors = ["#c08c20", "#6b5ce7", "#2d6bc4", "#2d8a56", "#d46a2e", "#14b8a6"];
+    const gnColors = ["#B07C20", "#6b5ce7", "#14558F", "#2A6B44", "#d46a2e", "#14b8a6"];
     new ApexCharts(document.querySelector('#gnbpt-chart'), {
         ...baseOpts, chart: { ...baseOpts.chart, type: 'bar', height: 340 },
         series: [{ name: 'Avg Sale Price', data: gnPrices }],
         colors: gnColors,
         plotOptions: { bar: { horizontal: true, borderRadius: 6, borderRadiusApplication: 'end', distributed: true, barHeight: '70%', dataLabels: { position: 'top' } } },
         fill: { type: 'gradient', gradient: { shade:'light', type:'horizontal', shadeIntensity:0.4, opacityFrom:1, opacityTo:0.7, stops:[0,100] } },
-        dataLabels: { enabled: true, formatter: fmtMoney, offsetX: 50, style: { colors: ['#0f2942'], fontWeight: 700, fontSize: '12px' } },
+        dataLabels: { enabled: true, formatter: fmtMoney, offsetX: 50, style: { colors: ['#14558F'], fontWeight: 700, fontSize: '12px' } },
         legend: { show: false },
         xaxis: { categories: gnNames, labels: { formatter: fmtMoney }, axisBorder: { show: false }, axisTicks: { show: false } },
         yaxis: { labels: { style: { fontWeight: 600 } } },
@@ -908,9 +912,9 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
     new ApexCharts(document.querySelector('#gnbpt-yoy-chart'), {
         ...baseOpts, chart: { ...baseOpts.chart, type: 'bar', height: 340 },
         series: [{ name: 'YoY %', data: gnYoy }],
-        plotOptions: { bar: { horizontal: true, borderRadius: 6, borderRadiusApplication: 'end', barHeight: '60%', colors: { ranges: [{ from: -100, to: 0, color: '#2d8a56' }, { from: 0, to: 100, color: '#c23b22' }] }, dataLabels: { position: 'top' } } },
+        plotOptions: { bar: { horizontal: true, borderRadius: 6, borderRadiusApplication: 'end', barHeight: '60%', colors: { ranges: [{ from: -100, to: 0, color: '#2A6B44' }, { from: 0, to: 100, color: '#A81733' }] }, dataLabels: { position: 'top' } } },
         fill: { type: 'gradient', gradient: { shade:'light', type:'horizontal', opacityFrom: 1, opacityTo: 0.75, stops:[0,100] } },
-        dataLabels: { enabled: true, formatter: v => (v>0?'+':'') + v.toFixed(0) + '%', offsetX: 28, style: { colors: ['#0f2942'], fontWeight: 700, fontSize: '12px' } },
+        dataLabels: { enabled: true, formatter: v => (v>0?'+':'') + v.toFixed(0) + '%', offsetX: 28, style: { colors: ['#14558F'], fontWeight: 700, fontSize: '12px' } },
         legend: { show: false },
         xaxis: { categories: gnNames, labels: { formatter: v => Math.round(v) + '%' }, axisBorder: { show: false }, axisTicks: { show: false } },
         yaxis: { labels: { style: { fontWeight: 600 } } },
@@ -997,7 +1001,7 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
         colors: [C.boston, C.ma],
         plotOptions: { bar: { borderRadius: 6, columnWidth: '60%' } },
         fill: { type: 'gradient', gradient: { shade:'light', type:'vertical', shadeIntensity:0.5, opacityFrom:1, opacityTo:0.7, stops:[0,100] } },
-        dataLabels: { enabled: true, formatter: v => '$' + Math.round(v/1000) + 'K', offsetY: -22, style: { fontSize: '11px', fontWeight: 700, colors: ['#0f2942'] } },
+        dataLabels: { enabled: true, formatter: v => '$' + Math.round(v/1000) + 'K', offsetY: -22, style: { fontSize: '11px', fontWeight: 700, colors: ['#14558F'] } },
         xaxis: { categories: ['Massachusetts','Boston','Essex County','Newburyport'], axisBorder: { show: false }, axisTicks: { show: false } },
         yaxis: { labels: { formatter: v => '$' + Math.round(v/1000) + 'K' } },
         tooltip: { ...baseOpts.tooltip, y: { formatter: v => '$' + Math.round(v).toLocaleString() } },
@@ -1012,10 +1016,10 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
         plotOptions: { bar: {
             horizontal: true, borderRadius: 8, barHeight: '60%', distributed: true,
             colors: { backgroundBarColors: ['#f3efe8'], backgroundBarOpacity: 1, backgroundBarRadius: 8,
-                ranges: [{ from: 0, to: 1.2, color: '#2d8a56' }, { from: 1.2, to: 2, color: '#c08c20' }, { from: 2, to: 10, color: '#c23b22' }] }
+                ranges: [{ from: 0, to: 1.2, color: '#2A6B44' }, { from: 1.2, to: 2, color: '#B07C20' }, { from: 2, to: 10, color: '#A81733' }] }
         } },
         fill: { type: 'gradient', gradient: { shade:'light', type:'horizontal', shadeIntensity:0.4, opacityFrom:1, opacityTo:0.7, stops:[0,100] } },
-        dataLabels: { enabled: true, formatter: v => v.toFixed(2) + '× median', offsetX: 50, style: { colors: ['#0f2942'], fontWeight: 700, fontSize: '13px' } },
+        dataLabels: { enabled: true, formatter: v => v.toFixed(2) + '× median', offsetX: 50, style: { colors: ['#14558F'], fontWeight: 700, fontSize: '13px' } },
         xaxis: { categories: ['Massachusetts','Boston','Essex County','Newburyport'], labels: { formatter: v => v.toFixed(1) + '×' }, axisBorder: { show: false }, axisTicks: { show: false }, max: Math.max(...gapMultiples)*1.25 },
         yaxis: { labels: { style: { fontWeight: 600 } } },
         legend: { show: false },
@@ -1034,7 +1038,7 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
         colors: [C.boston, C.ma],
         plotOptions: { bar: { borderRadius: 6, columnWidth: '60%' } },
         fill: { type: 'gradient', gradient: { shade:'light', type:'vertical', shadeIntensity:0.5, opacityFrom:1, opacityTo:0.7, stops:[0,100] } },
-        dataLabels: { enabled: true, formatter: v => '$' + v.toLocaleString(), offsetY: -22, style: { fontSize: '11px', fontWeight: 700, colors: ['#0f2942'] } },
+        dataLabels: { enabled: true, formatter: v => '$' + v.toLocaleString(), offsetY: -22, style: { fontSize: '11px', fontWeight: 700, colors: ['#14558F'] } },
         xaxis: { categories: ['Massachusetts','Boston','Essex County','Newburyport'], axisBorder: { show: false }, axisTicks: { show: false } },
         yaxis: { labels: { formatter: v => '$' + v.toLocaleString() } },
         tooltip: { ...baseOpts.tooltip, y: { formatter: v => '$' + v.toLocaleString() + ' /mo' } }
@@ -1075,7 +1079,7 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
         for (const m of PT_METRICS) sf[m] = d[g][m].slice(-years5.length);
         pt[g] = { sf: sf, co: dpt[g].co, mf: dpt[g].mf };
     }
-    const ptColors = { ma: '#2d6bc4', boston: '#c23b22', essex: '#2d8a56', nbpt: '#c08c20' };
+    const ptColors = { ma: '#14558F', boston: '#A81733', essex: '#2A6B44', nbpt: '#B07C20' };
     const ptLabels = { ma: 'Massachusetts', boston: 'Boston', essex: 'Essex County', nbpt: 'Newburyport' };
     let currentPT = 'sf';
     let ptCharts = {};
@@ -1139,9 +1143,9 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
     
     document.querySelectorAll('.pt-tog').forEach(btn => {
         btn.addEventListener('click', () => {
-            document.querySelectorAll('.pt-tog').forEach(b => { b.classList.remove('active'); b.style.background = '#fff'; b.style.color = '#0f2942'; b.style.borderColor = '#ddd8d0'; });
+            document.querySelectorAll('.pt-tog').forEach(b => { b.classList.remove('active'); b.style.background = '#fff'; b.style.color = '#14558F'; b.style.borderColor = '#ddd8d0'; });
             btn.classList.add('active');
-            btn.style.background = '#0f2942'; btn.style.color = '#fff'; btn.style.borderColor = '#0f2942';
+            btn.style.background = '#14558F'; btn.style.color = '#fff'; btn.style.borderColor = '#14558F';
             currentPT = btn.dataset.pt;
             // Was four inline updateVal() calls reading pt[g][currentPT].price[4] out
             // of the never-updated `pt` literal — which is how a toggle click used to
@@ -1218,7 +1222,7 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
     const pdBuckets = priceDist.meta.buckets;
     const pdYears   = priceDist.meta.year_labels;
     // Gradient: cool (cheap) → warm (expensive). 8 stops.
-    const pdColors = ['#2d6bc4','#3a85b8','#5da06f','#92a04a','#c9a84c','#d68b3a','#c23b22','#7d1d12'];
+    const pdColors = ['#14558F','#3a85b8','#5da06f','#92a04a','#B07C20','#d68b3a','#A81733','#7d1d12'];
     let pdGeo = 'ma';
     let pdCharts = {};
 
@@ -1337,10 +1341,10 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
         btn.addEventListener('click', () => {
             document.querySelectorAll('.pd-geo').forEach(b => {
                 b.classList.remove('active');
-                b.style.background = '#fff'; b.style.color = '#0f2942'; b.style.borderColor = '#ddd8d0';
+                b.style.background = '#fff'; b.style.color = '#14558F'; b.style.borderColor = '#ddd8d0';
             });
             btn.classList.add('active');
-            btn.style.background = '#0f2942'; btn.style.color = '#fff'; btn.style.borderColor = '#0f2942';
+            btn.style.background = '#14558F'; btn.style.color = '#fff'; btn.style.borderColor = '#14558F';
             pdGeo = btn.dataset.geo;
             pdRender();
         });
@@ -1457,10 +1461,10 @@ footer a,.footer a{color:#0f2942 !important;border-bottom:1px solid #c9a84c !imp
         btn.addEventListener('click', () => {
             document.querySelectorAll('.hh-mode').forEach(b => {
                 b.classList.remove('active');
-                b.style.background = '#fff'; b.style.color = '#0f2942'; b.style.borderColor = '#ddd8d0';
+                b.style.background = '#fff'; b.style.color = '#14558F'; b.style.borderColor = '#ddd8d0';
             });
             btn.classList.add('active');
-            btn.style.background = '#0f2942'; btn.style.color = '#fff'; btn.style.borderColor = '#0f2942';
+            btn.style.background = '#14558F'; btn.style.color = '#fff'; btn.style.borderColor = '#14558F';
             hhMode = btn.dataset.mode;
             hhRender();
         });

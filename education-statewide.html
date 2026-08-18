@@ -22,7 +22,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
 
-:root{--bg:#f8f7f4;--surface:#ffffff;--surface2:#f8f7f4;--border:#e8e5df;--text:#1a1a1a;--muted:#7a756e;--accent:#1a4480;--accent2:#1a7a4c;--red:#c0392b;--green:#1a7a4c;--blue:#1a4480;--amber:#b8860b;--purple:#7e22ce;--navy:#0f2942;--gold:#c9a84c;--red-bg:rgba(192,57,43,0.06);--blue-bg:rgba(26,68,128,0.06);--green-bg:rgba(26,122,76,0.06);--amber-bg:rgba(184,134,11,0.06);--purple-bg:rgba(126,34,206,0.06)}
+:root{--bg:#E9EBEA;--surface:#ffffff;--surface2:#E9EBEA;--border:#CDD3D1;--text:#0B1113;--muted:#5A6467;--accent:#14558F;--accent2:#2A6B44;--red:#A81733;--green:#2A6B44;--blue:#14558F;--amber:#b8860b;--purple:#7e22ce;--navy:#14558F;--gold:#B07C20;--red-bg:rgba(192,57,43,0.06);--blue-bg:rgba(26,68,128,0.06);--green-bg:rgba(26,122,76,0.06);--amber-bg:rgba(184,134,11,0.06);--purple-bg:rgba(126,34,206,0.06)}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
 .hero{background:var(--navy);color:#fff;padding:2.5rem 1.5rem 2rem;text-align:center;position:relative;overflow:hidden}
@@ -31,7 +31,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .hero .sub{opacity:.65;font-size:.78rem;margin-bottom:1.2rem;position:relative;max-width:600px;margin-left:auto;margin-right:auto}
 .hero .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;max-width:800px;margin:0 auto;position:relative}
 .hero .stat-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:12px 8px;min-width:auto}
-.hero .stat-box .num{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.1rem,2.5vw,1.5rem);font-weight:400;color:#e8a87c}
+.hero .stat-box .num{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.1rem,2.5vw,1.5rem);font-weight:400;color:#B07C20}
 .hero .stat-box .lbl{font-size:.58rem;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.5);margin-top:.2rem;font-weight:500}
 nav{display:flex;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.04);justify-content:center}
 nav button{padding:13px 16px;font-size:.72rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);white-space:nowrap;border-bottom:2px solid transparent;transition:all .25s;text-transform:uppercase;letter-spacing:.05em;font-family:'DM Sans',system-ui,sans-serif}
@@ -91,6 +91,10 @@ tr:hover{background:rgba(15,41,66,.02)}
 @media(max-width:480px){.hero .stat-row{grid-template-columns:repeat(2,1fr)}.kpi-grid{grid-template-columns:1fr}nav button{padding:10px 10px;font-size:.65rem}}
 
 </style>
+<!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+
 </head>
 <body>
 
@@ -376,13 +380,13 @@ Dashboard created February 2026
 </footer>
 
 <script>
-Chart.defaults.color='#a3aed0';
-Chart.defaults.borderColor='#3d4566';
+Chart.defaults.color='#8A9391';
+Chart.defaults.borderColor='#3E4A4D';
 Chart.defaults.font.family="'DM Sans',sans-serif";
 Chart.defaults.plugins.legend.labels.boxWidth=12;
 Chart.defaults.plugins.legend.labels.padding=16;
-const C={r:'#ff5757',o:'#ff9f43',b:'#4da6ff',g:'#2ecc71',p:'#c084fc',c:'#22d3ee',y:'#fbbf24',pk:'#f472b6',w:'#a3b8d8'};
-const GC='#353b58';
+const C={r:'#A81733',o:'#B07C20',b:'#14558F',g:'#2A6B44',p:'#46527A',c:'#5C97CC',y:'#D9B441',pk:'#CE6A78',w:'#8A9391'};
+const GC='#3E4A4D';
 const initialized={};
 
 function showTab(id,btn){
@@ -564,7 +568,7 @@ function initSpending(){
 new Chart(document.getElementById('spendTrend'),{type:'line',data:{
 labels:['FY2022','FY2023','FY2024'],
 datasets:[{label:'In-district per pupil',data:[19712,21256,22414],borderColor:C.g,
-backgroundColor:'rgba(46,204,113,0.2)',fill:true,tension:.3,pointRadius:4}]
+backgroundColor:'rgba(42,107,68,0.2)',fill:true,tension:.3,pointRadius:4}]
 },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
 scales:{y:{min:18000,max:24000,ticks:{callback:v=>'$'+(v/1000)+'k'},grid:{color:GC}},
 x:{grid:{display:false}}}}});

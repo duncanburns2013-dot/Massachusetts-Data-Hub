@@ -28,9 +28,9 @@
    the figures: a ledger voice for ledger content.
    ========================================================================== */
 :root{
-  --bg:#f8f7f4; --card:#fff; --border:#e8e5df;
-  --text:#1a1a1a; --muted:#7a756e;
-  --navy:#0f2942; --gold:#c9a84c; --red:#c0392b; --green:#1a7a4c;
+  --bg:#E9EBEA; --card:#fff; --border:#CDD3D1;
+  --text:#0B1113; --muted:#5A6467;
+  --navy:#14558F; --gold:#B07C20; --red:#A81733; --green:#2A6B44;
   --rule:#d8d3ca;
   --measure:760px;
 }
@@ -401,7 +401,7 @@ table.db td.zero{color:var(--red)}
 .town-out{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
 .town-out .k{font-size:.63rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
 .town-out .v{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.25rem,2.6vw,1.7rem);color:var(--navy);font-variant-numeric:tabular-nums;line-height:1.1}
-.town-out .v.gold{color:#8a6d1f}
+.town-out .v.gold{color:#E7CE8E}
 .town-split{display:flex;height:15px;border-radius:3px;overflow:hidden;margin-top:16px;background:rgba(0,0,0,.05)}
 .town-split .c70{background:var(--navy)}
 .town-split .ugga{background:var(--gold)}
@@ -422,7 +422,7 @@ table.db td.zero{color:var(--red)}
   border-radius:0 10px 10px 0;padding:20px 22px;margin:26px 0;
 }
 .callout p{font-size:.95rem}
-.callout .k{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#8a6d1f;margin-bottom:8px}
+.callout .k{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#E7CE8E;margin-bottom:8px}
 table{width:100%;border-collapse:collapse;margin:22px 0;font-size:.88rem}
 th,td{padding:11px 12px;text-align:left;border-bottom:1px solid var(--border)}
 th{font-size:.66rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:600}
@@ -451,6 +451,10 @@ tr:last-child td{border-bottom:none}
   .device-bar,.device-val,.seg,.bar-fill{transition:none!important}
 }
 </style>
+<!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+
 </head>
 <body>
 

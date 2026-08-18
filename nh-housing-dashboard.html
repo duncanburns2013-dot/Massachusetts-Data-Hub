@@ -25,8 +25,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap">
 <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.49.1/dist/apexcharts.min.js"></script>
 <style>
-#nhr{--bg:#f8f7f4;--navy:#0f2942;--gold:#c9a84c;--peach:#e8a87c;--ink:#1a1a1a;--muted:#7a756e;--border:#e8e5df;--card:#fff;
-  --red:#c23b22;--green:#2d8a56;--blue:#2d6bc4;--amber:#c08c20;--purple:#6b5ce7;
+#nhr{--bg:#E9EBEA;--navy:#14558F;--gold:#B07C20;--peach:#B07C20;--ink:#0B1113;--muted:#5A6467;--border:#CDD3D1;--card:#fff;
+  --red:#c23b22;--green:#2d8a56;--blue:#2d6bc4;--amber:#c08c20;--purple:#46527A;
   font-family:'DM Sans',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;max-width:1200px;margin:0 auto}
 #nhr *{margin:0;padding:0;box-sizing:border-box}
 #nhr .serif{font-family:'DM Serif Display',Georgia,serif;font-weight:400}
@@ -88,6 +88,10 @@
 @media(max-width:768px){#nhr .hero-stats{grid-template-columns:repeat(2,1fr)}#nhr .section{padding:28px 14px}}
 @media(max-width:480px){#nhr .hero-stats{grid-template-columns:1fr 1fr}}
 </style>
+<!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+
 
 <div id="nhr">
   <header class="hero"><div class="hero-inner">
@@ -111,8 +115,8 @@
 // For Squarespace / production, point this at the published JSON:
 // const DATA_URL = "data/nh-figures.json";
 const DATA_URL = window.NH_DATA_URL || "data/nh-figures.json";
-const NAVY='#0f2942', GOLD='#c9a84c';
-const COLORS={ 'NH Statewide':'#2d6bc4','Portsmouth':'#c23b22','Salem':'#2d8a56','Derry':'#c08c20','Windham':'#6b5ce7' };
+const NAVY='#14558F', GOLD='#B07C20';
+const COLORS={ 'NH Statewide':'#14558F','Portsmouth':'#A81733','Salem':'#2A6B44','Derry':'#B07C20','Windham':'#46527A' };
 const MARKETS=[
   {key:'NH Statewide',id:'statewide',label:'NH Statewide'},
   {key:'Portsmouth',id:'portsmouth',label:'Portsmouth'},
@@ -136,7 +140,7 @@ function barChart(el,cats,data,colors,fmt){
   new ApexCharts(el,{...baseOpts,
     chart:{...baseOpts.chart,type:'bar',height:320},
     series:[{name:'',data:data}],
-    colors:['#0f2942'],
+    colors:['#14558F'],
     plotOptions:{bar:{borderRadius:5,distributed:Array.isArray(colors),columnWidth:'62%'}},
     ...(Array.isArray(colors)?{colors:colors}:{}),
     legend:{show:false},
@@ -219,7 +223,7 @@ function affordSection(data){
   const rows=MARKETS.map(m=>({m,md:data.markets[m.key]})).filter(x=>x.md).map(({m,md})=>{
     const need=inc(md.median_sale);const gap=NHMI-need;
     return `<tr><td>${m.label}</td><td>${money(md.median_sale)}</td><td>${money(md.median_sale*0.2)}</td><td>${moneyFull(need)}</td>
-      <td style="color:${gap>=0?'#2d8a56':'#c23b22'};font-weight:600">${gap>=0?'✓ within reach':'−'+money(Math.abs(gap))+' short'}</td></tr>`;
+      <td style="color:${gap>=0?'#2A6B44':'#A81733'};font-weight:600">${gap>=0?'✓ within reach':'−'+money(Math.abs(gap))+' short'}</td></tr>`;
   }).join('');
   sec.innerHTML=`
     <div class="section-title">Affordability</div>

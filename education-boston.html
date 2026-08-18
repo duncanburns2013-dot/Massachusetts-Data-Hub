@@ -77,6 +77,10 @@ tr:hover{background:rgba(15,41,66,.02)}
 @media(max-width:480px){.hero .stat-row{grid-template-columns:repeat(2,1fr)}.kpi-grid{grid-template-columns:1fr}nav button{padding:10px 10px;font-size:.65rem}}
 
 </style>
+<!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+
 </head>
 <body>
 
@@ -311,16 +315,16 @@ Boston District Code: 00350000 | Dashboard created Feb 2026. Compare with <a hre
 </footer>
 
 <script>
-Chart.defaults.color='#7a756e';
-Chart.defaults.borderColor='#e8e5df';
+Chart.defaults.color='#5A6467';
+Chart.defaults.borderColor='#CDD3D1';
 Chart.defaults.font.family="'DM Sans',sans-serif";
 Chart.defaults.font.size=11;
 Chart.defaults.plugins.legend.labels.boxWidth=12;
 Chart.defaults.plugins.legend.labels.padding=16;
 // Series palette, keyed to the page's own light-theme variables. Boston is red
 // throughout; w is the neutral used for the state comparison series.
-const C={r:'#c0392b',o:'#e07a1f',b:'#1a4480',g:'#1a7a4c',p:'#7e22ce',c:'#0e7490',y:'#b8860b',pk:'#be185d',w:'#8792a6'};
-const GC='#e8e5df';
+const C={r:'#A81733',o:'#e07a1f',b:'#14558F',g:'#2A6B44',p:'#46527A',c:'#0e7490',y:'#B07C20',pk:'#be185d',w:'#8A9391'};
+const GC='#CDD3D1';
 const initialized={};
 
 function showTab(id,btn){
@@ -362,7 +366,7 @@ plugins:{legend:{position:'bottom'}}}});
 new Chart(document.getElementById('overviewAll'),{type:'bar',data:{
 labels:['ELA 3-8','Math 3-8','Science 5&8','ELA Gr.10','Math Gr.10','Science Gr.10','Civics Gr.8'],
 datasets:[
-{label:'Boston',data:[29,28,22,40,38,33,23],backgroundColor:'rgba(192,57,43,0.85)'},
+{label:'Boston',data:[29,28,22,40,38,33,23],backgroundColor:'rgba(168,23,51,0.85)'},
 {label:'State',data:[42,41,42,51,45,46,39],backgroundColor:'rgba(135,146,166,0.65)'},
 {label:'Gap',data:[-13,-13,-20,-11,-7,-13,-16],backgroundColor:'rgba(224,122,31,0.6)',type:'bar'}
 ]},options:{responsive:true,maintainAspectRatio:false,
@@ -381,7 +385,7 @@ new Chart(document.getElementById('gradeMath'),{type:'bar',data:{labels:grades,d
 {label:'State',data:[44,43,40,41,39,38,45],backgroundColor:C.w}
 ]},options:bOpts(60,true)});
 new Chart(document.getElementById('gradeScoreELA'),{type:'line',data:{labels:grades,datasets:[
-{label:'Boston',data:[488,485,488,485,485,483,492],borderColor:C.r,backgroundColor:'rgba(192,57,43,0.15)',fill:true,tension:.3,borderWidth:3},
+{label:'Boston',data:[488,485,488,485,485,483,492],borderColor:C.r,backgroundColor:'rgba(168,23,51,0.15)',fill:true,tension:.3,borderWidth:3},
 {label:'State Baseline (500)',data:[500,500,500,500,500,500,500],borderColor:C.w,borderDash:[5,5],pointRadius:0}
 ]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:475,max:510,grid:{color:GC}},x:{grid:{display:false}}}}});
 new Chart(document.getElementById('gradeScoreMath'),{type:'line',data:{labels:grades,datasets:[
@@ -443,10 +447,10 @@ backgroundColor:function(ctx){var v=ctx.raw;return v>=50?C.g:v>=45?C.y:C.r;}},
 new Chart(document.getElementById('growthRace'),{type:'bar',data:{
 labels:['White','Asian','Multi-Race','All','Black','Hispanic','Am. Indian'],
 datasets:[
-{label:'ELA SGP (3-8)',data:[53.1,53.3,51.7,48.7,46.7,47.2,46.9],backgroundColor:'rgba(192,57,43,0.75)'},
+{label:'ELA SGP (3-8)',data:[53.1,53.3,51.7,48.7,46.7,47.2,46.9],backgroundColor:'rgba(168,23,51,0.75)'},
 {label:'Math SGP (3-8)',data:[52.8,56.0,51.2,49.9,47.5,49.1,46.6],backgroundColor:'rgba(224,122,31,0.75)'},
-{label:'ELA SGP (HS)',data:[52.1,51.8,50.7,49.6,47.3,49.8,null],backgroundColor:'rgba(26,68,128,0.75)'},
-{label:'Math SGP (HS)',data:[60.1,64.2,60.8,57.8,55.2,56.9,null],backgroundColor:'rgba(26,122,76,0.75)'}
+{label:'ELA SGP (HS)',data:[52.1,51.8,50.7,49.6,47.3,49.8,null],backgroundColor:'rgba(20,85,143,0.75)'},
+{label:'Math SGP (HS)',data:[60.1,64.2,60.8,57.8,55.2,56.9,null],backgroundColor:'rgba(42,107,68,0.75)'}
 ]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:40,max:70,grid:{color:GC}},x:{grid:{display:false}}}}});
 }
 
@@ -467,7 +471,7 @@ datasets:[
 {label:'Elem/Middle 2025',data:[26.3,29.5,31.6,24.5,35.5],backgroundColor:C.o},
 {label:'Elem/Middle 2024',data:[27.4,30.6,32.6,25.4,37.1],backgroundColor:'rgba(224,122,31,0.35)'},
 {label:'High School 2025',data:[36.1,39.7,40.4,35.1,48.1],backgroundColor:C.r},
-{label:'High School 2024',data:[38.3,41.5,42.2,35.2,50.5],backgroundColor:'rgba(192,57,43,0.35)'}
+{label:'High School 2024',data:[38.3,41.5,42.2,35.2,50.5],backgroundColor:'rgba(168,23,51,0.35)'}
 ]},options:bOpts(55,true)});
 }
 
@@ -476,7 +480,7 @@ new Chart(document.getElementById('gradRace'),{type:'bar',data:{
 labels:['Asian','White','Multi-Race','Black','All','Hispanic','EL'],
 datasets:[
 {label:'2024 Rate',data:[91.7,88.7,80.2,79.3,79.7,75.6,68.1],backgroundColor:C.b},
-{label:'2023 Rate',data:[93.3,87.3,79.8,78.2,80.5,77.5,69.3],backgroundColor:'rgba(26,68,128,0.35)'}
+{label:'2023 Rate',data:[93.3,87.3,79.8,78.2,80.5,77.5,69.3],backgroundColor:'rgba(20,85,143,0.35)'}
 ]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:55,max:100,ticks:{callback:function(v){return v+'%'}},grid:{color:GC}},x:{grid:{display:false}}}}});
 new Chart(document.getElementById('gradSpecial'),{type:'bar',data:{
 labels:['All Students','Low Income','High Needs','Disability','EL/Former EL'],

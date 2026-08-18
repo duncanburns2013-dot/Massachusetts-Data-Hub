@@ -23,27 +23,27 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#ffffff;--surface:#f8fafc;--surface2:#f1f5f9;
-  --border:#e2e8f0;--border2:#cbd5e1;
-  --text:#0f172a;--text2:#1e293b;--muted:#64748b;
-  --accent:#dc2626;--blue:#2563eb;--green:#059669;--yellow:#d97706;
-  --purple:#7c3aed;--cyan:#0891b2;--rose:#e11d48;
+  --bg:#ffffff;--surface:#E9EBEA;--surface2:#E9EBEA;
+  --border:#e2e8f0;--border2:#CDD3D1;
+  --text:#0F4478;--text2:#1e293b;--muted:#64748b;
+  --accent:#dc2626;--blue:#2563eb;--green:#2A6B44;--yellow:#d97706;
+  --purple:#7c3aed;--cyan:#0891b2;--rose:#A81733;
 }
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 .hero{text-align:center;padding:2.5rem 2rem 1.8rem;
-  background:linear-gradient(135deg,#1e3a5f 0%,#0f172a 40%,#1a1a2e 70%,#2d1b3d 100%);color:#fff;position:relative}
+  background:linear-gradient(135deg,#14558F 0%,#0F4478 40%,#14558F 70%,#0F4478 100%);color:#fff;position:relative}
 .hero::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:4px;
   background:linear-gradient(90deg,var(--accent),var(--blue),var(--purple))}
 .hero h1{font-family:'Instrument Serif',serif;font-size:2.6rem;font-weight:400;
   letter-spacing:-1px;margin-bottom:.3rem}
-.hero .sub{color:#94a3b8;font-size:.8rem;letter-spacing:.3px;margin-bottom:1.6rem;font-weight:300}
+.hero .sub{color:#8A9391;font-size:.8rem;letter-spacing:.3px;margin-bottom:1.6rem;font-weight:300}
 .hero .stat-row{display:flex;flex-wrap:wrap;justify-content:center;gap:.7rem}
 .hero .stat-box{background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);
   border:1px solid rgba(255,255,255,0.15);border-radius:14px;padding:.9rem 1.3rem;min-width:135px;
   transition:transform .2s ease,background .2s ease}
 .hero .stat-box:hover{transform:translateY(-2px);background:rgba(255,255,255,0.15)}
 .hero .stat-box .num{font-family:'Instrument Serif',serif;font-size:1.7rem;font-weight:400;line-height:1.1}
-.hero .stat-box .lbl{font-size:.58rem;text-transform:uppercase;letter-spacing:2px;color:#94a3b8;margin-top:.25rem;font-weight:500}
+.hero .stat-box .lbl{font-size:.58rem;text-transform:uppercase;letter-spacing:2px;color:#8A9391;margin-top:.25rem;font-weight:500}
 .section-toggle{display:flex;justify-content:center;gap:.5rem;padding:1rem 2rem;
   background:var(--surface);border-bottom:1px solid var(--border)}
 .section-toggle button{padding:.55rem 1.5rem;border:2px solid var(--border);border-radius:100px;
@@ -117,6 +117,10 @@ tr:hover td{background:var(--surface)}
   nav button{min-width:80px;font-size:.6rem;padding:.7rem .3rem}
 }
 </style>
+<!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+
 </head>
 <body>
 <div class="hero">
@@ -130,8 +134,8 @@ tr:hover td{background:var(--surface)}
 <div class="stat-box"><div class="num" style="color:#f87171">10.8M</div><div class="lbl">Biden Encounters</div></div>
 <div class="stat-box"><div class="num" style="color:#60a5fa">7.4M</div><div class="lbl">Net Stayed (est)</div></div>
 <div class="stat-box"><div class="num" style="color:#34d399">-84%</div><div class="lbl">SW Border Patrol, FY25 v FY24</div></div>
-<div class="stat-box"><div class="num" style="color:#fbbf24">137K</div><div class="lbl">MA Residents Left</div></div>
-<div class="stat-box"><div class="num" style="color:#c084fc">$1.83B</div><div class="lbl">MA Shelter Cost</div></div>
+<div class="stat-box"><div class="num" style="color:#D9B441">137K</div><div class="lbl">MA Residents Left</div></div>
+<div class="stat-box"><div class="num" style="color:#46527A">$1.83B</div><div class="lbl">MA Shelter Cost</div></div>
 </div>
 </div>
 <div class="section-toggle">
@@ -570,17 +574,17 @@ Data compiled February 2026 &bull; All data from official government sources &bu
 
 <script>
 Chart.defaults.color='#475569';
-Chart.defaults.borderColor='#e2e8f0';
+Chart.defaults.borderColor='#CDD3D1';
 Chart.defaults.font.family="'DM Sans',sans-serif";
 Chart.defaults.font.size=11;
 Chart.defaults.font.weight=500;
 Chart.defaults.plugins.legend.labels.boxWidth=10;
 Chart.defaults.plugins.legend.labels.padding=16;
 Chart.defaults.plugins.legend.labels.usePointStyle=true;
-Chart.defaults.plugins.tooltip.backgroundColor='#0f172a';
-Chart.defaults.plugins.tooltip.titleColor='#f8fafc';
-Chart.defaults.plugins.tooltip.bodyColor='#e2e8f0';
-Chart.defaults.plugins.tooltip.borderColor='#334155';
+Chart.defaults.plugins.tooltip.backgroundColor='#0B1113';
+Chart.defaults.plugins.tooltip.titleColor='#E9EBEA';
+Chart.defaults.plugins.tooltip.bodyColor='#CDD3D1';
+Chart.defaults.plugins.tooltip.borderColor='#3E4A4D';
 Chart.defaults.plugins.tooltip.borderWidth=1;
 Chart.defaults.plugins.tooltip.cornerRadius=8;
 Chart.defaults.plugins.tooltip.padding=10;
@@ -592,8 +596,8 @@ Chart.defaults.elements.point.radius=4;
 Chart.defaults.elements.point.hoverRadius=6;
 Chart.defaults.elements.line.tension=0.3;
 
-var R='#dc2626',B='#2563eb',G='#059669',Y='#d97706',P='#7c3aed',C='#0891b2',W='#94a3b8';
-var GC='#f1f5f9';
+var R='#A81733',B='#14558F',G='#2A6B44',Y='#d97706',P='#46527A',C='#0891b2',W='#8A9391';
+var GC='#E9EBEA';
 var charts={};
 var currentSection='national';
 
@@ -651,10 +655,10 @@ data:[415200,519940,977230,458080,1734680,2378940,2475670,2135000,443671,115762]
            backgroundColor:B}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
-        plugins:{legend:{position:'bottom',labels:{boxWidth:12,color:'#334155'}},
+        plugins:{legend:{position:'bottom',labels:{boxWidth:12,color:'#3E4A4D'}},
           tooltip:{callbacks:{label:function(c){
             return c.dataset.label+': '+(c.parsed.y===null?'not published':c.parsed.y.toLocaleString())}}}},
-        scales:{y:{ticks:{callback:function(v){return(v/1000000).toFixed(1)+'M'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}}}});
+        scales:{y:{ticks:{callback:function(v){return(v/1000000).toFixed(1)+'M'},color:'#3E4A4D'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#3E4A4D'}}}}});
       break;
     case 'n-inout':
       new Chart(document.getElementById('ch-inout-in'),{type:'doughnut',data:{
@@ -666,17 +670,17 @@ data:[415200,519940,977230,458080,1734680,2378940,2475670,2135000,443671,115762]
         labels:['Title 42','Border Removals','Interior Removals'],
         datasets:[{label:'Removed',data:[2800000,700000,600000],backgroundColor:[G,B,P]}]
       },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
-        scales:{x:{ticks:{callback:function(v){return(v/1000000).toFixed(1)+'M'},color:'#334155'},grid:{color:GC}},y:{grid:{display:false},ticks:{color:'#334155'}}}}});
+        scales:{x:{ticks:{callback:function(v){return(v/1000000).toFixed(1)+'M'},color:'#3E4A4D'},grid:{color:GC}},y:{grid:{display:false},ticks:{color:'#3E4A4D'}}}}});
       break;
     case 'n-census':
       new Chart(document.getElementById('ch-census'),{type:'bar',data:{
         labels:['2020','2021','2022','2023','2024'],
         datasets:[
-          {label:'Original (Vintage 2023)',data:[477000,706000,1010000,1145000,null],backgroundColor:'#cbd5e1'},
+          {label:'Original (Vintage 2023)',data:[477000,706000,1010000,1145000,null],backgroundColor:'#CDD3D1'},
           {label:'Revised (Vintage 2025)',data:[818000,1041000,2020000,2358000,2700000],backgroundColor:function(ctx){return ctx.index>=3?R:Y}}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return(v/1000000).toFixed(1)+'M'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}}}});
+        scales:{y:{ticks:{callback:function(v){return(v/1000000).toFixed(1)+'M'},color:'#3E4A4D'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#3E4A4D'}}}}});
       break;
     case 'n-nosedive':
       var el=document.getElementById('ch-nosedive'),cx=el.getContext('2d');
@@ -692,7 +696,7 @@ data:[415200,519940,977230,458080,1734680,2378940,2475670,2135000,443671,115762]
             borderColor:Y,backgroundColor:Y,pointRadius:8,pointStyle:'triangle',showLine:false}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return(v/1000000).toFixed(1)+'M'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}}}});
+        scales:{y:{ticks:{callback:function(v){return(v/1000000).toFixed(1)+'M'},color:'#3E4A4D'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#3E4A4D'}}}}});
       break;
     case 'm-overview':
       new Chart(document.getElementById('ch-ma-overview'),{type:'bar',data:{
@@ -702,7 +706,7 @@ data:[415200,519940,977230,458080,1734680,2378940,2475670,2135000,443671,115762]
           {label:'Immigrants Arrived',data:[1762,72892,74610,90217,56600],backgroundColor:B}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return(v/1000)+'K'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}}}});
+        scales:{y:{ticks:{callback:function(v){return(v/1000)+'K'},color:'#3E4A4D'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#3E4A4D'}}}}});
       break;
     case 'm-annual':
       new Chart(document.getElementById('ch-ma-annual'),{type:'bar',data:{
@@ -710,10 +714,10 @@ data:[415200,519940,977230,458080,1734680,2378940,2475670,2135000,443671,115762]
         datasets:[
           {label:'Domestic',data:[-1762,-48000,-35400,-19200,-33340],backgroundColor:R},
           {label:'International',data:[1762,72892,74610,90217,56600],backgroundColor:B},
-          {label:'Net Total',data:[6034,30092,44010,75517,27460],type:'line',borderColor:'#0f172a',pointBackgroundColor:'#0f172a',borderWidth:2,pointRadius:5}
+          {label:'Net Total',data:[6034,30092,44010,75517,27460],type:'line',borderColor:'#0B1113',pointBackgroundColor:'#0B1113',borderWidth:2,pointRadius:5}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return(v/1000)+'K'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}}}});
+        scales:{y:{ticks:{callback:function(v){return(v/1000)+'K'},color:'#3E4A4D'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#3E4A4D'}}}}});
       break;
     case 'm-cumulative':
       var el2=document.getElementById('ch-ma-cumulative'),cx2=el2.getContext('2d');
@@ -727,7 +731,7 @@ data:[415200,519940,977230,458080,1734680,2378940,2475670,2135000,443671,115762]
           {label:'Residents Left',data:[0,-1762,-49762,-85162,-104362,-137702],borderColor:R,backgroundColor:gR,fill:true,borderWidth:3}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return(v/1000)+'K'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}}}});
+        scales:{y:{ticks:{callback:function(v){return(v/1000)+'K'},color:'#3E4A4D'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#3E4A4D'}}}}});
       break;
     case 'm-projection':
       new Chart(document.getElementById('ch-ma-projection'),{type:'line',data:{
@@ -740,24 +744,24 @@ data:[415200,519940,977230,458080,1734680,2378940,2475670,2135000,443671,115762]
           {label:'Seat Loss (6.79M)',data:[6.79,6.79,6.79,6.79,6.79,6.79],borderColor:'#ef4444',backgroundColor:'transparent',borderWidth:2,borderDash:[6,4],pointRadius:0}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{min:6.5,max:7.5,ticks:{callback:function(v){return v+'M'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}}}});
+        scales:{y:{min:6.5,max:7.5,ticks:{callback:function(v){return v+'M'},color:'#3E4A4D'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#3E4A4D'}}}}});
       break;
     case 'm-concentration':
       new Chart(document.getElementById('ch-foreignborn'),{type:'bar',data:{
         labels:['Chelsea','Revere','Lawrence','Lynn','Everett','Malden','Framingham','Waltham','Brockton','Lowell','Boston','Quincy','Somerville','Methuen','Worcester','Springfield'],
         datasets:[{label:'Foreign-Born %',data:[46,44,45,37,46,41,33,26,34,30,28,33,24,24,25,10],backgroundColor:B}]
       },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
-        scales:{x:{max:50,ticks:{callback:function(v){return v+'%'},color:'#334155'},grid:{color:GC}},y:{grid:{display:false},ticks:{color:'#334155',font:{size:10}}}}}});
+        scales:{x:{max:50,ticks:{callback:function(v){return v+'%'},color:'#3E4A4D'},grid:{color:GC}},y:{grid:{display:false},ticks:{color:'#3E4A4D',font:{size:10}}}}}});
       new Chart(document.getElementById('ch-multilingual'),{type:'bar',data:{
         labels:['Lawrence','Chelsea','Revere','Everett','Lynn','Framingham','Brockton','Lowell','Malden','Waltham'],
         datasets:[{label:'Multilingual %',data:[78.1,70.6,56.3,63.4,53.5,45.0,46.5,43.3,50.9,32.3],backgroundColor:P}]
       },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
-        scales:{x:{max:85,ticks:{callback:function(v){return v+'%'},color:'#334155'},grid:{color:GC}},y:{grid:{display:false},ticks:{color:'#334155',font:{size:10}}}}}});
+        scales:{x:{max:85,ticks:{callback:function(v){return v+'%'},color:'#3E4A4D'},grid:{color:GC}},y:{grid:{display:false},ticks:{color:'#3E4A4D',font:{size:10}}}}}});
       new Chart(document.getElementById('ch-shelter-cities'),{type:'bar',data:{
         labels:['Boston','Worcester','Springfield','Lynn','Brockton','Lowell','Chelsea','Lawrence','Revere','Framingham'],
         datasets:[{label:'Shelter Families',data:[1309,412,287,245,198,176,165,142,138,121],backgroundColor:R}]
       },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
-        scales:{x:{grid:{color:GC},ticks:{color:'#334155'}},y:{grid:{display:false},ticks:{color:'#334155',font:{size:10}}}}}});
+        scales:{x:{grid:{color:GC},ticks:{color:'#3E4A4D'}},y:{grid:{display:false},ticks:{color:'#3E4A4D',font:{size:10}}}}}});
       break;
 
     // ── CBP encounters recorded in Massachusetts ──────────────────────────────
@@ -774,8 +778,8 @@ data:[415200,519940,977230,458080,1734680,2378940,2475670,2135000,443671,115762]
           backgroundColor:[W,W,R,B]}]
       },options:{responsive:true,maintainAspectRatio:false,
         plugins:{legend:{display:false}},
-        scales:{y:{beginAtZero:true,ticks:{color:'#334155'},grid:{color:GC}},
-          x:{grid:{display:false},ticks:{color:'#334155'}}}}});
+        scales:{y:{beginAtZero:true,ticks:{color:'#3E4A4D'},grid:{color:GC}},
+          x:{grid:{display:false},ticks:{color:'#3E4A4D'}}}}});
 
       new Chart(document.getElementById('ch-ma-cbp-cit'),{type:'bar',data:{
         labels:['Other','China','India','Brazil','Russia','Philippines','Colombia','Mexico','Canada','Ukraine'],
@@ -783,32 +787,32 @@ data:[415200,519940,977230,458080,1734680,2378940,2475670,2135000,443671,115762]
           backgroundColor:P}]
       },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
         plugins:{legend:{display:false}},
-        scales:{x:{beginAtZero:true,ticks:{color:'#334155'},grid:{color:GC}},
-          y:{grid:{display:false},ticks:{color:'#334155'}}}}});
+        scales:{x:{beginAtZero:true,ticks:{color:'#3E4A4D'},grid:{color:GC}},
+          y:{grid:{display:false},ticks:{color:'#3E4A4D'}}}}});
 
       new Chart(document.getElementById('ch-ma-cbp-dem'),{type:'bar',data:{
         labels:['Single adults','Family-unit adults','Accompanied minors','Unaccompanied children'],
         datasets:[{label:'FY2026 encounters',data:[2629,162,24,21],backgroundColor:[B,G,Y,R]}]
       },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
         plugins:{legend:{display:false}},
-        scales:{x:{beginAtZero:true,ticks:{color:'#334155'},grid:{color:GC}},
-          y:{grid:{display:false},ticks:{color:'#334155'}}}}});
+        scales:{x:{beginAtZero:true,ticks:{color:'#3E4A4D'},grid:{color:GC}},
+          y:{grid:{display:false},ticks:{color:'#3E4A4D'}}}}});
       break;
     case 'm-reasons':
       new Chart(document.getElementById('ch-poll-leave'),{type:'doughnut',data:{
         labels:['Seriously Considered (25%)','Weighed From Time to Time (28%)','Not Considered (47%)'],
         datasets:[{data:[25,28,47],backgroundColor:[R,'#f59e0b','#d1d5db'],borderWidth:2,borderColor:'#fff'}]
-      },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11},padding:12,color:'#334155'}}}}});
+      },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11},padding:12,color:'#3E4A4D'}}}}});
       new Chart(document.getElementById('ch-domestic-outflow'),{type:'bar',data:{
         labels:['Florida','New Hampshire','Texas','Vermont','Tennessee','N. Carolina','Connecticut','California'],
         datasets:[{label:'Net Loss',data:[-11254,-9024,-3263,-2540,-2330,-1700,-1676,-1910],backgroundColor:R}]
       },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
-        scales:{x:{grid:{color:GC},ticks:{color:'#334155',callback:function(v){return v.toLocaleString()}}},y:{grid:{display:false},ticks:{color:'#334155',font:{size:11}}}},plugins:{legend:{display:false}}}});
+        scales:{x:{grid:{color:GC},ticks:{color:'#3E4A4D',callback:function(v){return v.toLocaleString()}}},y:{grid:{display:false},ticks:{color:'#3E4A4D',font:{size:11}}}},plugins:{legend:{display:false}}}});
       new Chart(document.getElementById('ch-reasons'),{type:'bar',data:{
         labels:['Taxes','Housing Costs','Healthcare','Traffic / QoL'],
-        datasets:[{label:'Importance',data:[100,95,85,70],backgroundColor:[R,'#e11d48','#be123c','#9f1239']}]
+        datasets:[{label:'Importance',data:[100,95,85,70],backgroundColor:[R,'#A81733','#be123c','#9f1239']}]
       },options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
-        scales:{x:{max:110,grid:{color:GC},ticks:{color:'#334155'}},y:{grid:{display:false},ticks:{color:'#334155'}}},plugins:{legend:{display:false}}}});
+        scales:{x:{max:110,grid:{color:GC},ticks:{color:'#3E4A4D'}},y:{grid:{display:false},ticks:{color:'#3E4A4D'}}},plugins:{legend:{display:false}}}});
       break;
     case 'f-overview':
       new Chart(document.getElementById('ch-fiscal-mismatch'),{type:'bar',data:{
@@ -818,7 +822,7 @@ data:[415200,519940,977230,458080,1734680,2378940,2475670,2135000,443671,115762]
           {label:'Illegal/Undocumented',data:[1200,-9200],backgroundColor:R}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return(v>=0?'+':'')+('$')+Math.abs(v/1000)+'B'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}}}});
+        scales:{y:{ticks:{callback:function(v){return(v>=0?'+':'')+('$')+Math.abs(v/1000)+'B'},color:'#3E4A4D'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#3E4A4D'}}}}});
       break;
     case 'f-legal':
       new Chart(document.getElementById('ch-legal-illegal'),{type:'bar',data:{
@@ -828,7 +832,7 @@ data:[415200,519940,977230,458080,1734680,2378940,2475670,2135000,443671,115762]
           {label:'Illegal/Undocumented',data:[1600,400,1400,10600,1200,-9200],backgroundColor:R}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return'$'+Math.abs(v/1000)+'B'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{maxRotation:45,color:'#334155'}}}}});
+        scales:{y:{ticks:{callback:function(v){return'$'+Math.abs(v/1000)+'B'},color:'#3E4A4D'},grid:{color:GC}},x:{grid:{display:false},ticks:{maxRotation:45,color:'#3E4A4D'}}}}});
       break;
     case 'f-shelter':
       new Chart(document.getElementById('ch-shelter-timeline'),{type:'bar',data:{
@@ -836,7 +840,7 @@ data:[415200,519940,977230,458080,1734680,2378940,2475670,2135000,443671,115762]
         datasets:[{label:'Spending ($M)',data:[60,375,894,978,276],
           backgroundColor:[W,Y,R,'#b91c1c',G]}]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return'$'+v+'M'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}}}});
+        scales:{y:{ticks:{callback:function(v){return'$'+v+'M'},color:'#3E4A4D'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#3E4A4D'}}}}});
       new Chart(document.getElementById('ch-shelter-families'),{type:'line',data:{
         labels:['Jan 22','Jul 22','Jan 23','Jul 23','Nov 23','Jan 24','Apr 24','Jul 24','Oct 24','Jan 25','Apr 25','Jul 25','Nov 25'],
         datasets:[
@@ -850,15 +854,15 @@ data:[415200,519940,977230,458080,1734680,2378940,2475670,2135000,443671,115762]
             borderColor:'rgba(217,119,6,0.5)',borderDash:[8,4],borderWidth:2,pointRadius:0,fill:false}
         ]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return v>=1000?(v/1000).toFixed(1)+'K':v},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155',maxRotation:45}}}}});
+        scales:{y:{ticks:{callback:function(v){return v>=1000?(v/1000).toFixed(1)+'K':v},color:'#3E4A4D'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#3E4A4D',maxRotation:45}}}}});
       break;
     case 'f-whopays':
       new Chart(document.getElementById('ch-whopays'),{type:'bar',data:{
         labels:['Bottom 20%\n(<$25K)','20-40%\n($25-50K)','40-60%\n($50-75K)','60-80%\n($75-125K)','Top 20%\n($125K+)'],
         datasets:[{label:'% of Income',data:[2.1,1.4,0.9,0.5,0.13],
-          backgroundColor:[R,'#e11d48',Y,B,G]}]
+          backgroundColor:[R,'#A81733',Y,B,G]}]
       },options:{responsive:true,maintainAspectRatio:false,
-        scales:{y:{ticks:{callback:function(v){return v+'%'},color:'#334155'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#334155'}}},plugins:{legend:{display:false}}}});
+        scales:{y:{ticks:{callback:function(v){return v+'%'},color:'#3E4A4D'},grid:{color:GC}},x:{grid:{display:false},ticks:{color:'#3E4A4D'}}},plugins:{legend:{display:false}}}});
       break;
   }
 }

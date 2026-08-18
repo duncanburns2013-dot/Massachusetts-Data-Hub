@@ -82,6 +82,10 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
 @media(max-width:768px){.summary-row{grid-template-columns:repeat(2,1fr)}.grid-2,.grid-3{grid-template-columns:1fr}.tabs{gap:2px}.tab-btn{padding:10px 12px;font-size:.65rem}}
 @media(max-width:480px){.summary-row{grid-template-columns:1fr}}
 </style>
+<!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+
 </head>
 <body>
 
@@ -272,8 +276,8 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
 
 <script>
 function sw(e,id){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));e.currentTarget.classList.add('active');document.getElementById('t-'+id).classList.add('active');if(!window._c)window._c={};if(!window._c[id]){window._c[id]=true;go(id)}}
-var B='#2563eb',R='#dc2626',G='#16a34a',Y='#d97706',P='#7c3aed',NV='#0f2942',GD='#c9a84c';
-Chart.defaults.color='#6b7280';Chart.defaults.borderColor='#e5e7eb';Chart.defaults.font.family="'DM Sans',sans-serif";
+var B='#14558F',R='#A81733',G='#16a34a',Y='#d97706',P='#46527A',NV='#14558F',GD='#B07C20';
+Chart.defaults.color='#5A6467';Chart.defaults.borderColor='#e5e7eb';Chart.defaults.font.family="'DM Sans',sans-serif";
 
 function go(t){switch(t){
 case 'overview':
