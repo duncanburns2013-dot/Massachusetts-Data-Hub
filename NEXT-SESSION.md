@@ -110,6 +110,62 @@ Roughly one defect per three pages. If you have not looked, you do not know.
 5. **Deploy** to Vercel. Domain is on their nameservers, no project connected.
    **Ask before pushing or deploying. Never push unasked.**
 
+## The front page below the instrument — rebuilt 2026-08-19
+
+The instrument itself is approved and must not change. Everything under it was
+rebuilt on a live WebGL field.
+
+**What is there now**
+- `assets/ma351-field.js` (50KB) — all 351 municipalities as simplified
+  polygons, Douglas-Peucker at tol 0.0042, 4.9% of the original 108,907
+  vertices, cos-corrected aspect 1.613. Extracted from `data/ma351.js` (2.3MB).
+  Verified against the instrument's own readout: min 2.18 Hancock, median
+  12.44, max 20.50 Wendell.
+- A three.js point cloud in `index.html`: 27,446 points laid along every
+  boundary, one draw call, custom GLSL, cursor-repulsion in the vertex shader,
+  scroll-driven threshold reveal west to east.
+- The 21 cards are now 19 index rows. No cards, no emoji, no eyebrow, no
+  coloured rail, no animated rainbow.
+
+**Traps this cost, do not rediscover**
+- three.js **frustum-culls Points using the raw attribute positions**. The
+  vertex shader relocates every point into world space, so the computed
+  bounding sphere is meaningless and the entire cloud vanishes with no error.
+  `frustumCulled = false`.
+- Size the field from panel **width**. Deriving it from panel height feeds back
+  on itself, because the padding that creates the band is part of that height.
+- A diverging ramp puts the median at its lightest point and most of the state
+  sits near the median. Mix an ink floor into the fragment colour or the middle
+  of Massachusetts renders light-on-light and disappears. Same failure the
+  instrument solved by drawing boundaries instead of implying them.
+- Only boundary **vertices** reads as a scatter, not a state. Walk each edge and
+  lay points at fixed spacing.
+- The Claude browser pane suspends rAF, so a WebGL loop never advances there and
+  `drawCalls` reads 0. Force a render and read pixels, or use headless.
+
+**Skills that changed the answer** (load these before design work here)
+`impeccable:impeccable` → its `bolder` playbook and `reference/craft-floor.md`.
+The craft floor names cards-of-icon-plus-heading-plus-text as the lazy page
+structure, bans eyebrows above a heading outright, and calls a coloured
+border-left over 1px the most recognisable tell of AI-generated UI. Run its
+detector when done: `node <impeccable>/scripts/detect.mjs --json index.html`.
+
+**The award research, so it does not have to be redone**
+- Explore Primland — scroll-driven camera glide over real terrain, fog layers.
+- Oryzo — scroll drives camera depth, not 2D parallax.
+- Cartier — scroll moves between scenes; GLSL + GSAP + Lenis.
+- Hubtown — cursor-reveal over a live WebGL hero.
+- Shopify Editions — particle-dispersing type, depth-layered panels on scroll.
+- Codrops WebGL gallery — `step(uProgress, normalized_index)` grid reveal.
+- 29 of 47 Q1-2026 Awwwards SOTD winners ran three.js; the consistent stack is
+  three.js + GSAP ScrollTrigger. Jurors test on real devices, so a hero that
+  drops to 18fps fails regardless of how it looks.
+
+**Still open here**
+- `Last refreshed` in the turn band is hardcoded; nothing writes it.
+- The sources strip and footer at the very bottom were not touched.
+- Frame rate of the field has not been measured on Duncan's machine.
+
 ## CUT — decided and removed. Do not rebuild these.
 
 Every one of these was decided in conversation. If a decision only lives in a
