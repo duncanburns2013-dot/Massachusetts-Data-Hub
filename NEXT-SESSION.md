@@ -53,7 +53,8 @@ Roughly one defect per three pages. If you have not looked, you do not know.
   the directory. Cards have a full-height rule that widens on hover.
 - The Invasion and All Things Boston folded in. Peoples Audit and HHS-MA-DOGE
   stay separate (one is a Vite build, one is a deliberate aesthetic exception).
-- Boston Payroll is deliberately EXEMPT from the theme — dark neon interactive.
+- Boston Payroll's dark-neon dot-matrix interactive is **CUT** (2026-08-19).
+  Not exempt, not embedded, not standalone — gone. See CUT, below.
 - Every page is reachable from the directory. Verified, zero orphans.
 
 ## What is next, in order
@@ -65,10 +66,12 @@ Roughly one defect per three pages. If you have not looked, you do not know.
      carry all 24). ATB went 65 → 89 canvases. The two pages had **disjoint
      class vocabularies**, so incoming markup was translated to ATB's
      (kg/kpi/v/lb, g g2, cd, cw, co, tw) and its palette namespaced as EC/EGC.
-   - `boston-payroll.html` → renamed to `boston-payroll-interactive.html`, the
-     path ATB's iframe already asked for. **That file never existed: the Payroll
-     tab was shipping a 404 error page.** It is now a real panel (617px content
-     in a 640px frame, measured), stripped of the page chrome ATB already prints.
+   - `boston-payroll.html` — built as a panel, then **CUT the same day** on
+     Duncan's instruction (it had already been decided in another session; this
+     handoff was stale and said to build it). Worth keeping the finding: ATB's
+     Payroll tab had been iframing `boston-payroll-interactive.html`, **a file
+     that never existed, so the tab was shipping a 404 error page.** That is
+     now gone along with the panel.
    - `the-invasion.html` → **fourth section of `immigration-dashboard.html`**
      ("Money Trail", `i-` prefix, 8 panels). Both files defined `.card`,
      `.callout`, `.container`, `.grid-2`, `.grid-3`, `.num`, `.tab`, `.active`,
@@ -100,15 +103,26 @@ Roughly one defect per three pages. If you have not looked, you do not know.
      invisible on screen.** All five hero labels are 1.92:1; `10.8M` 2.19:1;
      `7.4M` 2.38:1. Only `-84%` (3.14) and `137K` (3.04) scrape past. This is
      the documented Bay-Blue hero trap and it is the worst instance found.
-   - `boston-payroll-interactive.html` is already fixed (was 1.31–4.35:1,
-     now 4.81–7.06:1). Its **veterans dots remain 2.63:1** against the panel
-     ground, under the 3:1 WCAG asks of a graphical object — a series-colour
-     decision, left for this pass.
+   - (The payroll panel's own 1.31:1 source caption is moot — the panel is cut.)
    - The sub-tab bars sitewide are plain `<button>`s with no
      `role="tablist"`/`aria-selected`. Fix them together, not page by page.
 4. **SEO** (`searchfit-seo` skill) — the site is currently invisible to search.
 5. **Deploy** to Vercel. Domain is on their nameservers, no project connected.
    **Ask before pushing or deploying. Never push unasked.**
+
+## CUT — decided and removed. Do not rebuild these.
+
+Every one of these was decided in conversation. If a decision only lives in a
+chat, the next session cannot see it — write it here the same day.
+
+| What | When | Note |
+|---|---|---|
+| Cold-open intro on `index.html` | 2026-08-18 | "No website does this." It is a splash screen however well argued. |
+| Footage bedded under the instrument | 2026-08-17 | Tested twice. Defocused = invisible; sharp = competes. |
+| Boston payroll dot-matrix interactive | 2026-08-19 | Panel, iframe and `boston-payroll-interactive.html` all removed. |
+| `budget-explainer.html` + its card | 2026-08-19 | Removed. Only inbound link was its own card. |
+
+Recover any of them from git if a decision reverses: `git checkout aaa05a2 -- <path>`.
 
 ## Traps already paid for — do not rediscover these
 
