@@ -3,16 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Boston City Payroll — Where the Positions Went</title>
+<title>Boston City Payroll — interactive panel</title>
+<!-- Embedded as a panel in all-things-boston.html (Payroll tab). Kept as its own document so its dark ground and its bare body/h1/.src rules cannot reach ATB, which uses .src for source captions. -->
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'DM Sans',system-ui,sans-serif;background:#0F4478;color:#e2e8f0;min-height:100vh;overflow-x:hidden}
-.wrap{max-width:1100px;margin:0 auto;padding:28px 20px}
-h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.6rem,4vw,2.4rem);text-align:center;color:#fff;font-weight:400;margin-bottom:4px}
-.sub{text-align:center;color:#64748b;font-size:.85rem;margin-bottom:24px}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#0F4478;color:#e2e8f0;overflow-x:hidden}
+.wrap{max-width:1100px;margin:0 auto;padding:18px 20px 22px}
 .year-control{text-align:center;margin-bottom:28px;padding:16px;background:#1e293b;border-radius:14px;border:1px solid #3E4A4D}
-.year-control label{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:#64748b;font-weight:600;display:block;margin-bottom:8px}
+.year-control label{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:#94A3B8;font-weight:600;display:block;margin-bottom:8px}
 .year-display{font-family:'DM Serif Display',Georgia,serif;font-size:3rem;color:#B07C20;margin-bottom:10px;transition:all .2s}
 input[type=range]{-webkit-appearance:none;width:100%;max-width:500px;height:6px;border-radius:3px;background:linear-gradient(to right,#3E4A4D,#B07C20);outline:none;cursor:pointer}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#B07C20;border:3px solid #0F4478;cursor:grab;box-shadow:0 0 10px rgba(201,168,76,.4)}
@@ -28,14 +27,17 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 .dot.dei{background:#22c55e}
 .dot.vet{background:#ef4444}
 .dot.police{background:#3b82f6}
-.dei-color{color:#22c55e}.vet-color{color:#ef4444}.police-color{color:#3b82f6}
+/* Text variants: the small labels sit at 10-13px on #0F4478 / #1e293b, where
+   the saturated series hues run 2.6-4.4:1. The dots above keep those hues -
+   the mark carries identity, the text only has to be readable. */
+.dei-color{color:#8FD9AE}.vet-color{color:#FFB3BE}.police-color{color:#8FB9DC}
 
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:20px}
 .stat-card{background:#1e293b;border:1px solid #3E4A4D;border-radius:12px;padding:16px;text-align:center;transition:all .3s}
 .stat-card .sv{font-family:'DM Serif Display',Georgia,serif;font-size:1.8rem;font-weight:400;transition:all .3s}
-.stat-card .sl{font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:#64748b;margin-top:4px;line-height:1.4;font-weight:600}
+.stat-card .sl{font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:#94A3B8;margin-top:4px;line-height:1.4;font-weight:600}
 .divider{height:1px;background:#3E4A4D;margin:20px 0}
-.src{text-align:center;font-size:.65rem;color:#475569;font-style:italic;margin-top:16px}
+.src{text-align:center;font-size:.65rem;color:#A8B6C8;font-style:italic;margin-top:16px}
 
 @media(max-width:600px){
 .dots-section{flex-direction:column}
@@ -50,13 +52,12 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 </head>
 <body>
 <div class="wrap">
-<h1>City of Boston Employee Payroll</h1>
-<p class="sub">Where the positions went — drag the slider to watch it happen</p>
 
 <div class="year-control">
-<label>Select Year</label>
+<label for="yearSlider">Select Year</label>
 <div class="year-display" id="yearLabel">CY2019</div>
-<input type="range" id="yearSlider" min="0" max="5" value="0" step="1">
+<input type="range" id="yearSlider" min="0" max="5" value="0" step="1"
+       aria-label="Payroll year" aria-describedby="yearLabel">
 </div>
 
 <div class="dots-section">
