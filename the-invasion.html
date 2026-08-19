@@ -28,20 +28,20 @@
   
   <style>
     :root {
-      --cream: #FFFDF9;
-      --warm-white: #FAF8F5;
-      --navy: #1a2744;
-      --navy-light: #2d3a52;
-      --crimson: #9c1b1f;
-      --crimson-light: #c42a2f;
-      --gold: #c9a227;
-      --gold-dark: #a8871f;
-      --teal: #1a5f5f;
-      --gray-100: #f5f4f2;
-      --gray-200: #e8e6e1;
-      --gray-300: #d4d1ca;
-      --gray-500: #8a8780;
-      --gray-700: #4a4845;
+      --cream: #E9EBEA;
+      --warm-white: #FFFFFF;
+      --navy: #14558F;
+      --navy-light: #0F4478;
+      --crimson: #680A1D;
+      --crimson-light: #A81733;
+      --gold: #B07C20;
+      --gold-dark: #8A6118;
+      --teal: #2A6B44;
+      --gray-100: #EFF1F0;
+      --gray-200: #CDD3D1;
+      --gray-300: #BCC3C1;
+      --gray-500: #8A9391;
+      --gray-700: #3E4A4D;
     }
     
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -49,7 +49,7 @@
     body {
       font-family: 'Source Sans 3', -apple-system, sans-serif;
       background: var(--cream);
-      color: var(--navy);
+      color: #0B1113;
       line-height: 1.6;
       font-size: 16px;
     }
@@ -981,10 +981,10 @@
       display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .6px;
       padding: 3px 8px; white-space: nowrap; text-transform: uppercase;
     }
-    .tier-0 { background: #e6efe6; color: #1f5f1f; }
-    .tier-1 { background: #fdf1d8; color: var(--gold-dark); }
-    .tier-2 { background: #e6eef5; color: #1a4d7a; }
-    .tier-3 { background: #f7e2e2; color: var(--crimson); }
+    .tier-0 { background: #EEF5F0; color: #2A6B44; }
+    .tier-1 { background: #FAF5E6; color: var(--gold-dark); }
+    .tier-2 { background: #E8EFF6; color: #14558F; }
+    .tier-3 { background: #FBEDEF; color: var(--crimson); }
     .exp-pager { display: flex; gap: 10px; align-items: center; justify-content: space-between; margin-top: 14px; font-size: 13px; }
     .exp-pager button {
       font-family: inherit; font-size: 12px; font-weight: 700; letter-spacing: 1px;
@@ -1076,9 +1076,9 @@
       text-align: center; font-size: 10.5px; font-weight: 700; letter-spacing: .9px;
       padding: 6px 8px; text-transform: uppercase;
     }
-    .led-yes { background: #e6efe6; color: #1f5f1f; }
-    .led-part { background: #fdf1d8; color: var(--gold-dark); }
-    .led-no { background: #f7e2e2; color: var(--crimson); }
+    .led-yes { background: #EEF5F0; color: #2A6B44; }
+    .led-part { background: #FAF5E6; color: var(--gold-dark); }
+    .led-no { background: #FBEDEF; color: var(--crimson); }
     .led-unk { background: var(--gray-100); color: var(--gray-500); }
     .led-score {
       display: flex; align-items: baseline; gap: 10px;
@@ -1198,8 +1198,8 @@
           <svg class="shift-svg" viewBox="0 0 900 340" role="img"
                aria-label="Stacked bar chart of Massachusetts emergency shelter and HomeBASE rental assistance spending, fiscal years 2022 to 2027"></svg>
           <div class="shift-legend">
-            <span><i class="shift-key" style="background:#9c1b1f"></i>Emergency Assistance shelter (7004-0101)</span>
-            <span><i class="shift-key" style="background:#c9a227"></i>HomeBASE rental assistance (7004-0108)</span>
+            <span><i class="shift-key" style="background:#680A1D"></i>Emergency Assistance shelter (7004-0101)</span>
+            <span><i class="shift-key" style="background:#B07C20"></i>HomeBASE rental assistance (7004-0108)</span>
           </div>
           <p class="shift-caption">FY22–FY25 are actual spending; FY26–FY27 are enacted appropriations. Shelter spending has fallen steeply as the caseload dropped — but <strong>Share&nbsp;%</strong> shows HomeBASE taking a growing slice of what remains, and <strong>Indexed</strong> shows the two lines moving in opposite directions from the same FY22 baseline.</p>
         </div>
@@ -1475,9 +1475,9 @@
           <div class="evid-bar" id="evidBar"></div>
           <div class="evid-key">
             <div><i style="background:#2f7d32"></i><span><strong>Immigrant/refugee programs</strong> — Office for Refugees &amp; Immigrants, citizenship, resettlement, Afghan refugee services.</span></div>
-            <div><i style="background:#c9a227"></i><span><strong>Family shelter &amp; housing reserves</strong> — shelter and immigrant housing reserve line items.</span></div>
+            <div><i style="background:#B07C20"></i><span><strong>Family shelter &amp; housing reserves</strong> — shelter and immigrant housing reserve line items.</span></div>
             <div><i style="background:#2f6ea5"></i><span><strong>MassHealth claims</strong> — community health centres billing for all patients. Largest single line is <em>MassHealth Senior Care</em>.</span></div>
-            <div><i style="background:#9c1b1f"></i><span><strong>Name-match false positives</strong> — a dentist, a daycare and individuals whose names contain "MIRA".</span></div>
+            <div><i style="background:#680A1D"></i><span><strong>Name-match false positives</strong> — a dentist, a daycare and individuals whose names contain "MIRA".</span></div>
           </div>
           <p style="font-size:14px;margin-top:16px;padding-top:14px;border-top:1px solid var(--gray-200);">
             <strong>Bottom line:</strong> <span id="evidCore">—</span> of the $228.6M is spending on identifiable immigrant, refugee or shelter programs. The rest is ordinary healthcare billing and filter noise. Use the <strong>Category</strong> filter below to isolate each tier.
@@ -2250,7 +2250,7 @@
       { fy: 'FY26', shelter: 276,  home: 57,   kind: 'enacted', note: 'Caseload capped; shelter budget cut' },
       { fy: 'FY27', shelter: 259.9,home: 82.3, kind: 'enacted', note: 'Shelter down 6%, HomeBASE up 44%' }
     ];
-    var C_SHELTER = '#9c1b1f', C_HOME = '#c9a227';
+    var C_SHELTER = '#680A1D', C_HOME = '#B07C20';
     var svg = document.querySelector('.shift-svg');
     var tip = document.getElementById('shiftTip');
     var mode = 'dollars';
@@ -2288,7 +2288,7 @@
       for (var g = 0; g <= 4; g++) {
         var gv = max / 4 * g;
         var gy = y(gv);
-        svg.appendChild(ns('line', { x1: padL, x2: W - padR, y1: gy, y2: gy, stroke: '#e8e6e1', 'stroke-width': 1 }));
+        svg.appendChild(ns('line', { x1: padL, x2: W - padR, y1: gy, y2: gy, stroke: '#CDD3D1', 'stroke-width': 1 }));
         var lab = ns('text', { x: padL - 10, y: gy + 4, 'text-anchor': 'end', class: 'shift-axis' });
         lab.textContent = mode === 'share' ? Math.round(gv) + '%'
                         : mode === 'index' ? Math.round(gv)
@@ -2343,7 +2343,7 @@
         svg.appendChild(g);
       });
 
-      svg.appendChild(ns('line', { x1: padL, x2: W - padR, y1: padT + plotH, y2: padT + plotH, stroke: '#1a2744', 'stroke-width': 1.5 }));
+      svg.appendChild(ns('line', { x1: padL, x2: W - padR, y1: padT + plotH, y2: padT + plotH, stroke: '#14558F', 'stroke-width': 1.5 }));
     }
 
     document.querySelectorAll('.shift-mode').forEach(function (b) {
@@ -2448,9 +2448,9 @@
       if (!el) return;
       LOBBY.forEach(function (r) { r.total = r.salaries + r.entity + r.expenses; });
       var max = Math.max.apply(null, LOBBY.map(function (r) { return r.total; }));
-      var C = [['salaries', '#1a2744', 'In-house lobbyist salaries'],
-               ['entity', '#c9a227', 'Isaacson Political Consulting'],
-               ['expenses', '#9c1b1f', 'Disclosed expenses']];
+      var C = [['salaries', '#14558F', 'In-house lobbyist salaries'],
+               ['entity', '#B07C20', 'Isaacson Political Consulting'],
+               ['expenses', '#680A1D', 'Disclosed expenses']];
       el.innerHTML = LOBBY.map(function (r) {
         var segs = C.map(function (c) {
           var w = r[c[0]] / max * 100;
@@ -2583,7 +2583,7 @@
     var DATA = null, loading = false, rows = [], view = [];
     var sortKey = 'amount', sortDir = -1, page = 0, PER = 50;
     var TIER_NAME = ['Immigrant/refugee', 'Shelter reserve', 'MassHealth', 'False positive'];
-    var TIER_COLOR = ['#2f7d32', '#c9a227', '#2f6ea5', '#9c1b1f'];
+    var TIER_COLOR = ['#2f7d32', '#B07C20', '#2f6ea5', '#680A1D'];
 
     function loadExplorer() {
       if (DATA || loading) return;
