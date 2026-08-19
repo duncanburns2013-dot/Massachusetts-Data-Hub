@@ -374,7 +374,7 @@ footer a:hover{color:var(--duckling)}
       <p class="turn-l">Computed at runtime from official sources</p>
       <dl class="turn-figs">
         <div><dt>Municipalities</dt><dd>351</dd></div>
-        <div><dt>Dashboards</dt><dd>20</dd></div>
+        <div><dt>Dashboards</dt><dd id="turn-dash">22</dd></div>
         <div><dt>Live data feeds</dt><dd>14</dd></div>
         <div><dt>Last refreshed</dt><dd id="turn-upd">18 Aug 2026</dd></div>
       </dl>
@@ -391,7 +391,6 @@ footer a:hover{color:var(--duckling)}
     <div class="grid-wrap">
     <div class="grid">
       <a href="the-invasion.html" class="card c-cranberry rv"><div class="card-top"><div class="card-icon cranberry">&#x1F4B8;</div><span class="badge">Live</span></div><div class="card-name">The Invasion &mdash; The Taxpayer Cost</div><div class="card-desc">Where the FY27 budget moved the shelter money: emergency shelter winding down while HomeBASE rental assistance climbs. Vendors, organisations and the paper trail.</div><div class="card-foot"><div class="tags"><span class="tag">MA Budget</span><span class="tag">OCPF</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="education-boston.html" class="card c-green rv"><div class="card-top"><div class="card-icon green">&#x1F393;</div><span class="badge">Live</span></div><div class="card-name">Boston Public Schools</div><div class="card-desc">MCAS performance, achievement gaps, enrolment, absenteeism, graduation and per-pupil spending across Boston, benchmarked against the state.</div><div class="card-foot"><div class="tags"><span class="tag">DESE</span><span class="tag">MCAS</span></div><div class="arrow">&rarr;</div></div></a>
       <a href="boston-payroll.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F465;</div><span class="badge">Live</span></div><div class="card-name">City of Boston Employee Payroll</div><div class="card-desc">Where the positions went &mdash; DEI and equity roles against police officers and veterans services, year by year.</div><div class="card-foot"><div class="tags"><span class="tag">Boston ACFR</span></div><div class="arrow">&rarr;</div></div></a>
       <a href="budget-explainer.html" class="card c-cranberry rv"><div class="card-top"><div class="card-icon cranberry">&#x1F4D8;</div><span class="badge">Live</span></div><div class="card-name">FY2027 Budget &mdash; Explainer</div><div class="card-desc">Massachusetts enacts a budget in July and raises it all year. How the gap opens, who closes it, and the Chapter 70 cliff waiting in FY2028.</div><div class="card-foot"><div class="tags"><span class="tag">MA Budget</span></div><div class="arrow">&rarr;</div></div></a>
       <a href="tax-burden-nh-comparison.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x2696;</div><span class="badge">Live</span></div><div class="card-name">Same House, Same Income &mdash; MA vs NH</div><div class="card-desc">The five layers of tax a household actually pays, compared side by side across the state line.</div><div class="card-foot"><div class="tags"><span class="tag">DOR</span><span class="tag">NH DRA</span></div><div class="arrow">&rarr;</div></div></a>
@@ -443,6 +442,15 @@ footer a:hover{color:var(--duckling)}
 <script>
 const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis')})},{threshold:0.04,rootMargin:'0px 0px -15px 0px'});
 document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+// The turn band is labelled "computed at runtime". The dashboard count is the
+// one figure on it this page actually owns, so count the cards instead of
+// printing a number that goes stale the next time one is added or folded in.
+// Separate-site cards (b-ext) are not dashboards on this hub.
+(function(){
+  var sec=document.getElementById('dashboards'); if(!sec) return;
+  var n=sec.querySelectorAll('.card').length - sec.querySelectorAll('.badge.b-ext').length;
+  var el=document.getElementById('turn-dash'); if(el && n>0) el.textContent=n;
+})();
 var SHARE_URL='https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/';
 // Share copy stays generic on purpose. It used to quote live figures - "#41",
 // "$313K", "#1 in nation" - plus a hard dashboard count, none of which any feed
