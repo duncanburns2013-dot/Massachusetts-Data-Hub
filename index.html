@@ -221,6 +221,28 @@ footer a:hover{color:var(--duckling)}
   color:var(--muted);text-decoration:none;opacity:.75;transition:opacity .2s}
 .stage-more:hover{opacity:1;color:var(--cranberry)}
 @media (max-width:800px){.stage{height:78vh}.site-nav{display:none}}
+
+/* ---- the turn: instrument -> directory -----------------------------------
+   The stage ended and the card grid began with nothing between them, so the
+   page just stopped. This band is the hinge: it states what the site is once,
+   at size, and hands the reader down. Deliberately empty of ornament - the
+   footage test earlier proved that anything behind content here either
+   disappears or fights it. */
+.turn{position:relative;padding:clamp(80px,11vw,150px) clamp(24px,5vw,90px);
+  background:linear-gradient(180deg,var(--bg) 0%,#DFE3E2 55%,var(--bg) 100%);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  text-align:center}
+.turn-l{font-family:var(--font-mono);font-size:10px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--berk-ink);margin:0 0 22px}
+.turn-h{font-family:var(--font-display);font-weight:700;
+  font-size:clamp(26px,3.6vw,54px);line-height:1.08;letter-spacing:-.03em;
+  color:var(--ink);margin:0 auto;max-width:20ch}
+.turn-h em{font-style:normal;color:var(--cranberry)}
+.turn-go{display:inline-block;margin-top:34px;font-family:var(--font-mono);
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+  text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:6px;
+  transition:color .2s,border-color .2s}
+.turn-go:hover{color:var(--cranberry);border-color:var(--cranberry)}
 </style>
 <!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
 <link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
@@ -242,13 +264,13 @@ footer a:hover{color:var(--duckling)}
 </header>
 <section class="stage">
   <iframe class="instr" src="instrument.html?embed=1" title="Massachusetts, all 351 municipalities" loading="eager"></iframe>
-  <a class="stage-more" href="#dashboards">Twenty dashboards below</a>
 </section>
-<nav class="tab-nav">
-  <a href="#dashboards" class="active">Dashboards</a>
-  <a href="MASTER_DATA.md">Data Reference</a>
-  <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub" target="_blank">GitHub &nearr;</a>
-</nav>
+
+<section class="turn">
+  <p class="turn-l">Every figure on this site is computed at runtime from an official source.</p>
+  <h2 class="turn-h">The instrument shows you <em>where</em>.<br>The dashboards show you <em>why</em>.</h2>
+  <a class="turn-go" href="#dashboards">Twenty dashboards</a>
+</section>
 <div class="main-content">
   <section id="dashboards">
     <div class="sec-head rv">
