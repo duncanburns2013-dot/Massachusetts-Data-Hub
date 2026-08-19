@@ -13,6 +13,11 @@
      properly, not from a loud face. -->
 <link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
 <style>
+/* embed mode: when the instrument is the hero of index.html, that page owns
+   the masthead and nav, so ours would be a duplicate sitting on top. */
+html.embed .wordmark,html.embed .head nav{display:none}
+html.embed .head{padding-top:0}
+
 :root{
   /* The three OFFICIAL Massachusetts colours, signed into law 2005:
      Bay Blue = Cape Cod Bay, Berkshire Green = the mountains and the
@@ -259,6 +264,7 @@ try{
   console.warn('[mdh] SDF text unavailable — labels remain in the DOM',e);
 }
 
+if(location.search.indexOf('embed')>=0)document.documentElement.classList.add('embed');
 const boot=document.getElementById('boot'),bootbar=document.getElementById('bootbar'),
       ro=document.getElementById('ro'),labelLayer=document.getElementById('labels');
 const fail=m=>{boot.classList.add('fail');boot.innerHTML=`<div><p>${m}</p></div>`;};
