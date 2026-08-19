@@ -271,6 +271,56 @@ footer a:hover{color:var(--duckling)}
 .turn-go:hover{color:var(--cranberry);border-color:var(--cranberry)}
 @media (max-width:900px){.turn-in{grid-template-columns:1fr}.turn-side{border-left:0;
   border-top:2px solid var(--cranberry);padding:20px 0 0}}
+
+/* ---- the directory ---------------------------------------------------------
+   The cards were flat white rectangles with a 3px bar, on a grid fixed at three
+   columns inside a 1200px cap - so on a wide display they were small, identical
+   and static. The complaint was that nothing happens on the page or the cards,
+   and it was correct.
+   The rule now runs the FULL height of the card and is the thing that moves:
+   it widens and the card lifts toward the reader. One gesture, not six. */
+.grid{display:grid;gap:clamp(14px,1.4vw,22px);
+  grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}
+.card{position:relative;display:flex;flex-direction:column;gap:10px;
+  background:var(--card);border:1px solid var(--border);border-radius:3px;
+  padding:22px 24px 18px 26px;text-decoration:none;overflow:hidden;isolation:isolate;
+  transition:transform .34s cubic-bezier(.2,.8,.2,1),box-shadow .34s cubic-bezier(.2,.8,.2,1),
+             border-color .34s}
+.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--bay-blue);transition:width .34s cubic-bezier(.2,.8,.2,1),opacity .34s}
+.card.c-cranberry::before{background:var(--cranberry)}
+.card.c-green::before{background:var(--berkshire)}
+.card.c-blue::before{background:var(--bay-blue)}
+.card::after{content:'';position:absolute;inset:0;z-index:-1;opacity:0;
+  background:linear-gradient(115deg,rgba(20,85,143,.05),transparent 62%);
+  transition:opacity .34s}
+.card:hover{transform:translateY(-4px);border-color:transparent;
+  box-shadow:0 2px 4px rgba(11,17,19,.05),0 14px 34px -10px rgba(11,17,19,.22)}
+.card:hover::before{width:7px}
+.card:hover::after{opacity:1}
+.card:focus-visible{outline:2px solid var(--cranberry);outline-offset:3px}
+.card-name{font-family:var(--font-display);font-weight:700;font-size:18px;
+  letter-spacing:-.022em;line-height:1.18;color:var(--ink)}
+.card-desc{font-family:var(--font-text);font-size:13.5px;line-height:1.5;color:var(--muted);flex:1}
+.card-also{font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;
+  color:var(--berk-ink);border-top:1px dashed var(--border);padding-top:9px;margin-top:2px}
+.card-also b{font-weight:600;color:var(--ink)}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin-top:4px}
+.tag{font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);background:rgba(11,17,19,.04);border:1px solid var(--border);
+  border-radius:2px;padding:3px 6px}
+.arrow{font-size:15px;color:var(--muted);transition:transform .34s cubic-bezier(.2,.8,.2,1),color .34s}
+.card:hover .arrow{transform:translateX(5px);color:var(--cranberry)}
+.badge{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--berk-ink);background:rgba(42,107,68,.09);border:1px solid rgba(42,107,68,.2);
+  border-radius:20px;padding:3px 8px}
+.badge.b-ext{color:var(--muted);background:rgba(11,17,19,.04);border-color:var(--border)}
+.card--ext{background:linear-gradient(180deg,#FFFFFF,#F6F8F7)}
+@media (prefers-reduced-motion:reduce){
+  .card,.card::before,.card::after,.arrow{transition:none}
+  .card:hover{transform:none}
+}
 </style>
 <!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
 <link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
@@ -317,7 +367,10 @@ footer a:hover{color:var(--duckling)}
     </div>
     <div class="grid-wrap">
     <div class="grid">
-      <a href="immigration-dashboard.html" class="card c-cranberry rv"><div class="card-top"><div class="card-icon cranberry">&#x1F6C2;</div><span class="badge">Live</span></div><div class="card-name">Immigration &mdash; National + Massachusetts</div><div class="card-desc">Border encounters, net international migration, deportation math, Census revisions, fiscal impact (Cato/NASEM), MA shelter crisis, H-1B data, and city-level concentration analysis.</div><div class="card-foot"><div class="tags"><span class="tag">CBP</span><span class="tag">Census</span><span class="tag">ICE</span><span class="tag">CBO</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="all-things-boston.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F3D9;</div><span class="badge">Live</span></div><div class="card-name">All Things Boston</div><div class="card-desc">City budget, employee payroll, FBI crime, BPS education, ICE enforcement, commercial real estate, housing, 311 and pension obligations &mdash; all from official city data.</div><div class="card-also">Also inside: <b>City of Boston Employee Payroll</b></div><div class="card-foot"><div class="tags"><span class="tag">Boston ACFR</span><span class="tag">BPD</span><span class="tag">BPS</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="https://duncanburns2013-dot.github.io/The-Peoples-Audit/" class="card c-green rv card--ext" target="_blank" rel="noopener"><div class="card-top"><div class="card-icon green">&#x1F5F3;</div><span class="badge b-ext">Separate site</span></div><div class="card-name">The Peoples Audit</div><div class="card-desc">Massachusetts lobbying registrations, firm-by-firm spending and legislative roll-call records, sourced from the Secretary of the Commonwealth.</div><div class="card-foot"><div class="tags"><span class="tag">MA SoS</span><span class="tag">Roll calls</span></div><div class="arrow">&nearr;</div></div></a>
+      <a href="https://duncanburns2013-dot.github.io/HHS-MA-DOGE/" class="card c-cranberry rv card--ext" target="_blank" rel="noopener"><div class="card-top"><div class="card-icon cranberry">&#x1F50D;</div><span class="badge b-ext">Separate site</span></div><div class="card-name">HHS &mdash; MA DOGE</div><div class="card-desc">Healthcare fraud, contracting and lobbying investigation. Its own site, with its own look.</div><div class="card-foot"><div class="tags"><span class="tag">HHS</span><span class="tag">OIG</span></div><div class="arrow">&nearr;</div></div></a>
+      <a href="immigration-dashboard.html" class="card c-cranberry rv"><div class="card-top"><div class="card-icon cranberry">&#x1F6C2;</div><span class="badge">Live</span></div><div class="card-name">Immigration &mdash; National + Massachusetts</div><div class="card-desc">Border encounters, net international migration, deportation math, Census revisions, fiscal impact (Cato/NASEM), MA shelter crisis, H-1B data, and city-level concentration analysis.</div><div class="card-also">Also inside: <b>The Invasion &mdash; The Taxpayer Cost</b></div><div class="card-foot"><div class="tags"><span class="tag">CBP</span><span class="tag">Census</span><span class="tag">ICE</span><span class="tag">CBO</span></div><div class="arrow">&rarr;</div></div></a>
       <a href="ma-housing-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F3E0;</div><span class="badge">Live</span></div><div class="card-name">Massachusetts Housing Market</div><div class="card-desc">Statewide, Boston, Essex County, and Greater Newburyport. Median prices, DOM, SP/LP ratios, 5-year MLS trends, and affordability calculations.</div><div class="card-foot"><div class="tags"><span class="tag">Warren Group</span><span class="tag">MLS PIN</span><span class="tag">Census ACS</span></div><div class="arrow">&rarr;</div></div></a>
       <a href="nh-housing-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F3D4;&#xFE0F;</div><span class="badge">Live</span></div><div class="card-name">New Hampshire Housing Market</div><div class="card-desc">Statewide market data with regional breakdowns. Median prices, average sales, DOM, sell-through rates, and SP/LP ratios.</div><div class="card-foot"><div class="tags"><span class="tag">Paragon MLS</span></div><div class="arrow">&rarr;</div></div></a>
       <a href="haverhill-market-report.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F4CB;</div><span class="badge">Live</span></div><div class="card-name">Haverhill Market Report</div><div class="card-desc">Deep dive into Haverhill's SF and condo markets. Affordability analysis comparing median income ($88K) to income needed for homeownership.</div><div class="card-foot"><div class="tags"><span class="tag">MLS</span><span class="tag">Census QuickFacts</span></div><div class="arrow">&rarr;</div></div></a>
