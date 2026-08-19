@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Massachusetts Data Hub — the instrument</title>
+<!-- Adobe Fonts kit irk1bar — Halyard (Darden Studio) in its three optical sizes
+     + IBM Plex Mono. Weight ranges parsed from the kit's own @font-face blocks:
+     halyard-display / -text / -micro all ship 100-700 + 900, plex-mono 100-800,
+     each with italics. No single-weight traps, nothing synthesised.
+     Wood type was tried and read as a default "editorial AI" look; the identity
+     here comes from the state's own colours and from using optical sizes
+     properly, not from a loud face. -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<style>
+:root{
+  /* The three OFFICIAL Massachusetts colours, signed into law 2005:
+     Bay Blue = Cape Cod Bay, Berkshire Green = the mountains and the
+     Connecticut River Valley, Cranberry = the crop. Used by meaning, not
+     decoration: blue is below the median, cranberry above, green is the land
+     the whole thing stands on — which is exactly the tinted mid-neutral the
+     ramp was missing. */
+  --bay:#14558F; --berk:#388557; --cran:#680A1D;
+  /* official Berkshire Green is 3.4:1 on this ground - fine for a fill,
+     fails as text. This is the same hue taken down to 5.3:1. */
+  --berk-ink:#2A6B44;
+  /* cool slate, not cream, not black — all three were tried and rejected */
+  --bg:#C6CDCC; --panel:#B6BEBD; --ink:#0B1113; --ink2:#3E4A4D; --faint:#6C7679;
+  --line:rgba(11,17,19,.24);
+  --pad:clamp(16px,2.6vw,34px);
+  /* One grotesk, three optical sizes, plus a mono for every measured figure.
+     Display sets the question, Text is read, Micro is drawn for the 9-12px
+     chrome where a display cut would clog. An instrument's readout is
+     monospaced, so every number the thing measures is Plex Mono. */
+  --display:'halyard-display',system-ui,sans-serif;
+  --text:'halyard-text',system-ui,sans-serif;
+  /* The chrome was set in Halyard MICRO, on the reasoning that an optical size
+     cut for 9-12px is the technically correct choice at 9-12px. It is — and it
+     is also the blandest cut in the family by design: a micro face earns its
+     legibility by opening up and stripping out character, which is exactly why
+     the controls read as a default UI font. Correctness lost to personality.
+     The chrome is Text now; Micro is gone. */
+  --ui:'halyard-text',system-ui,sans-serif;
+  --mono:'ibm-plex-mono',ui-monospace,SFMono-Regular,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-variant-numeric:tabular-nums;
+     overflow:hidden;-webkit-font-smoothing:antialiased}
+canvas{display:block;position:fixed;inset:0}
+::selection{background:var(--cran);color:#fff}
+:focus-visible{outline:2px solid var(--cran);outline-offset:3px}
+html{caret-color:var(--cran)}
+
+.shell{position:fixed;inset:0;z-index:5;pointer-events:none;
+       display:flex;flex-direction:column;justify-content:space-between}
+
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;
+      padding:var(--pad);flex-wrap:wrap}
+/* The question is the hero; the masthead is a masthead. Halyard Display is cut
+   for large sizes, so it takes negative tracking without closing up. */
+/* The masthead was shrunk earlier so the question could be the hero, and it
+   ended up a grey-black afterthought. It carries the state's own colour now,
+   which buys prominence without restarting that fight - the question lives in
+   the 3D scene, this lives on the surface, so they no longer compete on size. */
+.wordmark{font-family:var(--display);font-weight:700;color:var(--cran);
+          font-size:clamp(25px,3.3vw,48px);line-height:.94;
+          letter-spacing:-.028em;max-width:13ch}
+.wordmark span{display:block;font-family:var(--ui);font-weight:700;
+               font-size:clamp(9.5px,.85vw,11px);
+               letter-spacing:.19em;text-transform:uppercase;color:var(--berk-ink);
+               margin-top:11px;max-width:none}
+.head nav{pointer-events:auto;display:flex;gap:clamp(10px,1.8vw,24px);
+          font-family:var(--ui);
+          font-size:11px;letter-spacing:.17em;text-transform:uppercase;font-weight:600}
+.head nav a{color:var(--ink2);text-decoration:none;padding-bottom:3px;border-bottom:1.5px solid transparent}
+.head nav a:hover{color:var(--ink)}
+.head nav a[aria-current]{color:var(--cran);border-bottom-color:var(--cran)}
+
+/* when the question is engraved into the scene, the DOM copy steps aside and the
+   corner keeps only the quiet annotation beneath it */
+.q-in-scene .ask h1{display:none}
+.q-in-scene .ask p{margin-top:0}
+
+/* ---- kinetic headline ---- */
+.ask{padding:0 var(--pad) 14px;max-width:660px}
+.ask h1{font-family:var(--display);font-weight:700;
+        font-size:clamp(26px,3.1vw,48px);line-height:1.03;letter-spacing:-.031em}
+.ask h1 .w{display:inline-block;overflow:hidden;vertical-align:bottom}
+.ask h1 .w i{display:inline-block;font-style:normal;
+  transform:translateY(105%);transition:transform .62s cubic-bezier(.22,1,.28,1)}
+.ask h1.in .w i{transform:none}
+.ask p{margin-top:13px;font-family:var(--text);font-size:15px;line-height:1.52;
+  color:var(--ink2);max-width:52ch;
+  opacity:0;transform:translateY(9px);transition:opacity .5s .22s,transform .5s .22s}
+.ask p.in{opacity:1;transform:none}
+/* the measured line: every figure the instrument reports is monospaced */
+.ask .ans{font-family:var(--mono);font-weight:500;font-size:12px;letter-spacing:-.01em;
+  color:var(--cran);margin-top:14px;opacity:0;transition:opacity .5s .34s}
+.ask .ans.in{opacity:1}
+
+.foot{display:flex;flex-direction:column}
+.controls{pointer-events:auto;padding:var(--pad);display:flex;gap:26px;
+          align-items:flex-end;justify-content:space-between;flex-wrap:wrap}
+.group{display:flex;flex-direction:column;gap:8px}
+/* These are panel legends on an instrument, so they are set like one — mono,
+   which also separates them from the chip labels they sit above */
+.group>b{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--berk-ink);font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+button.chip{font:inherit;font-family:var(--ui);font-size:12.5px;font-weight:600;
+  letter-spacing:-.004em;padding:8px 15px;
+  border:1.5px solid var(--line);background:rgba(255,255,255,.55);color:var(--ink2);
+  cursor:pointer;border-radius:2px;transition:.15s;white-space:nowrap}
+button.chip:hover{border-color:var(--ink);color:var(--ink)}
+button.chip[aria-pressed="true"]{background:var(--bay);border-color:var(--bay);color:#fff}
+button.chip[data-muted="true"]{opacity:.5}
+button.chip[data-muted="true"]:hover{opacity:1}
+.legend{font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.14em;
+        text-transform:uppercase;color:var(--faint);
+        display:flex;align-items:center;gap:9px}
+/* must stay in step with STOPS in the script */
+.ramp{width:170px;height:6px;background:linear-gradient(90deg,
+  #08243D,#14558F,#5C97CC,#ADB5AA,#CE6A78,#A81733,#680A1D)}
+
+/* ---- projected labels ---- */
+.labels{position:fixed;inset:0;z-index:4;pointer-events:none}
+.lbl{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;
+  font-family:var(--ui);font-size:10.5px;letter-spacing:.06em;color:var(--faint);
+  opacity:0;transition:opacity .4s}
+.lbl.axis{font-weight:700;font-size:10.5px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--ink2)}
+.lbl.name{text-align:center;line-height:1.2}
+/* a town name is a name (Micro, cut for this size); its value is a measurement */
+.lbl.name b{display:block;font-family:var(--ui);font-weight:700;
+  font-size:12.5px;letter-spacing:-.004em;color:var(--ink)}
+.lbl.name s{display:block;text-decoration:none;font-family:var(--mono);
+  font-size:10px;font-weight:500;letter-spacing:-.02em;
+  color:var(--cran);margin-top:2px}
+.lbl.show{opacity:1}
+
+.readout{position:fixed;z-index:20;pointer-events:none;opacity:0;transition:opacity .12s;
+  transform:translate(-50%,calc(-100% - 14px));background:var(--ink);color:#EDF0EE;
+  padding:9px 13px;white-space:nowrap;border-radius:2px}
+.readout b{display:block;font-size:14px;font-weight:700;letter-spacing:-.012em}
+.readout i{display:block;font-style:normal;font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:#8E9A93;margin-top:3px}
+.readout u{display:block;text-decoration:none;font-family:var(--mono);font-weight:500;
+  font-size:11.5px;letter-spacing:-.02em;color:#FFB48F;margin-top:7px}
+
+.boot{position:fixed;inset:0;z-index:60;background:var(--bg);display:grid;place-items:center;
+      text-align:center;transition:opacity .5s;padding:30px}
+.boot p{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink2)}
+.boot .bar{width:190px;height:2px;background:var(--line);margin:14px auto 0;overflow:hidden}
+.boot .bar i{display:block;height:100%;width:0;background:var(--cran);transition:width .25s}
+.boot.fail p{color:var(--cran);letter-spacing:.02em;text-transform:none;font-size:14px;max-width:52ch}
+
+/* ---- the survey: the entrance counts the state into existence ---- */
+.survey{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:15;
+  text-align:center;pointer-events:none;transition:opacity .6s}
+/* the count is the instrument reading itself out — mono, so the digits do not
+   reflow as it climbs from 0 to 351 */
+.survey em{display:block;font-family:var(--mono);font-weight:500;font-style:normal;
+  font-size:clamp(54px,8vw,116px);line-height:.9;letter-spacing:-.045em;
+  color:var(--ink)}
+.survey span{display:block;margin-top:14px;font-family:var(--ui);font-size:10px;
+  font-weight:600;letter-spacing:.34em;text-transform:uppercase;color:var(--ink2)}
+body.arrived .survey{opacity:0}
+
+/* everything else holds its breath until the survey finishes */
+.wordmark,.head nav,.ask,.controls{opacity:0;transition:opacity .7s cubic-bezier(.2,.8,.2,1),
+  transform .7s cubic-bezier(.2,.8,.2,1)}
+.wordmark{transform:translateY(14px)}
+.head nav{transform:translateY(-8px)}
+.ask,.controls{transform:translateY(16px)}
+body.arrived .wordmark,body.arrived .head nav,
+body.arrived .ask,body.arrived .controls{opacity:1;transform:none}
+body.arrived .wordmark{transition-delay:.05s}
+body.arrived .ask{transition-delay:.18s}
+body.arrived .controls{transition-delay:.28s}
+body.arrived .head nav{transition-delay:.38s}
+
+@media (prefers-reduced-motion:reduce){
+  .survey{display:none}
+  .wordmark,.head nav,.ask,.controls{opacity:1;transform:none;transition:none}
+}
+@media (max-width:800px){.head nav{display:none}.legend{display:none}}
+</style>
+</head>
+<body>
+
+<div class="labels" id="labels"></div>
+
+<div class="shell">
+  <header class="head">
+    <div class="wordmark">Massachusetts Data Hub<span>351 towns · one instrument</span></div>
+    <nav>
+      <a href="#" aria-current="page">The Instrument</a><a href="#">Dashboards</a>
+      <a href="#">Films</a><a href="#">Method</a><a href="#">Support</a>
+    </nav>
+  </header>
+
+  <div class="foot">
+  <div class="ask">
+    <h1 id="q"></h1>
+    <p id="qs"></p>
+    <div class="ans" id="ans"></div>
+  </div>
+
+  <div class="controls">
+    <div class="group"><b>The question</b><div class="chips" id="views"></div></div>
+    <div class="group"><b>Measured by</b><div class="chips" id="metrics"></div></div>
+    <div class="legend"><span>Below</span><span class="ramp"></span><span>Above median</span></div>
+  </div>
+  </div>
+</div>
+
+<div class="readout" id="ro"><b></b><i></i><u></u></div>
+<div class="survey" id="survey"><em id="surveyN">0</em><span>towns surveyed</span></div>
+<div class="boot" id="boot"><div>
+  <p id="bootmsg">Casting 351 towns</p><div class="bar"><i id="bootbar"></i></div>
+</div></div>
+
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/",
+  "troika-three-text":"https://esm.sh/troika-three-text?external=three"
+}}
+</script>
+
+<script src="data/ma351.js"></script>
+<script src="preset.js" onerror="void 0"></script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+import * as BGU from 'three/addons/utils/BufferGeometryUtils.js';
+
+/* ---- SDF text -----------------------------------------------------------
+   Labels stop being HTML floating above the canvas and become objects inside
+   the scene, so a town can pass in front of its own neighbour's name and the
+   type takes whatever grade, depth of field and grain the scene gets later.
+
+   The fonts are the SAME Adobe faces the chrome uses: the Typekit kit offers
+   three formats per face and the third is real OpenType, which troika parses.
+   No substitute face, no split identity.
+
+   useWorker:false is REQUIRED. troika builds glyph SDFs in a blob Web Worker
+   which never starts from a CDN origin, and it fails silently — sync() just
+   never resolves and no text ever appears, with no error thrown. */
+const F_UI  ='https://use.typekit.net/af/c1ad38/00000000000000007761c7f5/31/a?subset_id=2&fvd=n7&v=3';
+const F_MONO='https://use.typekit.net/af/e12557/00000000000000007735943a/31/a?subset_id=2&fvd=n5&v=3';
+let SDF=null;
+try{
+  SDF=await import('troika-three-text');
+  SDF.configureTextBuilder({useWorker:false});
+}catch(e){
+  console.warn('[mdh] SDF text unavailable — labels remain in the DOM',e);
+}
+
+const boot=document.getElementById('boot'),bootbar=document.getElementById('bootbar'),
+      ro=document.getElementById('ro'),labelLayer=document.getElementById('labels');
+const fail=m=>{boot.classList.add('fail');boot.innerHTML=`<div><p>${m}</p></div>`;};
+const T=(window.MA351||[]).filter(t=>t.g&&t.g.length);
+if(!T.length){fail('The town geometry did not load.');throw new Error('no data');}
+
+// declared before the build, because the build's completion callback reads them
+const FRONT=12;                       // how many get named in the ranked view
+let rankFront=[],pendingHeadline=['','',''];
+const surveyN=document.getElementById('surveyN');
+const ENTRY={start:0,dur:2700,running:false,done:false};
+const reduceMo=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ================= COLOUR — full spectrum, high chroma ================= */
+// Diverging around the statewide median, not a rainbow: a viewer can rank
+// "how blue" and "how red" without the legend, and the midpoint means something.
+// midpoint is deliberately darker than the page surface — at #E4DED0 the
+// mid-range towns disappeared into the background
+// Built from the state's own three colours: Bay Blue below the median, Cranberry
+// above, Berkshire Green as the centre.
+//
+// The centre is the whole fix. A diverging ramp is lightest at its midpoint and
+// most of Massachusetts sits near the median, so the old near-white #CFC7B4
+// centre (L*~81) sat ~5 points off the page ground and ~200 towns dissolved into
+// it. A green-grey at L*~72 is ~14 points below the ground instead — a clearly
+// TINTED neutral rather than an almost-white one, which is the second fix the
+// notes called for. Lightness still peaks at the centre and falls monotonically
+// to both ends, so it stays a legitimate diverging scale and not a rainbow.
+// The two poles are the official hexes exactly. The stops between them are NOT
+// tints of the poles — cranberry is dark and low-chroma, so tinting it produced a
+// dusty pink that read as washed out. They are pushed back up in chroma while
+// staying inside the blue/cranberry hue families.
+const STOPS=[[0,'#08243D'],[.167,'#14558F'],[.333,'#5C97CC'],[.5,'#ADB5AA'],
+             [.667,'#CE6A78'],[.833,'#A81733'],[1,'#680A1D']]
+  .map(([p,h])=>[p,new THREE.Color(h)]);
+// no-data has to sit outside the ramp entirely, so it reads as absence, not as
+// a middling value — flat grey, no blue or cranberry cast
+const NODATA=new THREE.Color('#B7BCB8');
+function ramp(n,out){
+  if(n==null)return out.copy(NODATA);
+  n=Math.min(Math.max(n,0),1);
+  for(let i=1;i<STOPS.length;i++){
+    if(n<=STOPS[i][0]){
+      const [p0,c0]=STOPS[i-1],[p1,c1]=STOPS[i];
+      return out.copy(c0).lerp(c1,(n-p0)/(p1-p0));
+    }
+  }
+  return out.copy(STOPS[STOPS.length-1][1]);
+}
+
+/* ================= METRICS ================= */
+const usd=v=>'$'+Math.round(v).toLocaleString();
+const METRICS={
+  rate  :{lab:'Residential rate',  fmt:v=>'$'+v.toFixed(2),unit:'per $1,000'},
+  comm  :{lab:'Commercial rate',   fmt:v=>'$'+v.toFixed(2),unit:'per $1,000'},
+  burden:{lab:'Taken per resident',fmt:usd,unit:'per resident'},
+  price :{lab:'Median sale',       fmt:v=>v>=1e6?'$'+(v/1e6).toFixed(2)+'M':usd(v),unit:'median sale'},
+  income:{lab:'Household income',  fmt:usd,unit:'median household'}
+};
+for(const k in METRICS){
+  const M=METRICS[k];
+  const a=T.map(t=>t.v[k]).filter(v=>typeof v==='number'&&isFinite(v)).sort((x,y)=>x-y);
+  M.lo=a[0];M.hi=a[a.length-1];M.med=a[Math.floor(a.length/2)];M.ceil=a[Math.floor(a.length*.97)];
+  M.norm=v=>v==null?null:Math.min(Math.max((v-M.lo)/(M.ceil-M.lo),0),1);
+  // diverging position: 0 = far below the median, .5 = at it, 1 = far above
+  M.dnorm=v=>{
+    if(v==null)return null;
+    const span=v>=M.med?Math.max(M.ceil-M.med,1e-9):Math.max(M.med-M.lo,1e-9);
+    return Math.min(Math.max(.5+.5*(v-M.med)/span,0),1);
+  };
+  /* Colour by RANK, not by magnitude.
+     Every one of these measures is skewed by a handful of outliers — a few resort
+     towns, a few industrial rates — so a linear scale pins ~300 of the 351 towns
+     inside 0.45-0.60 of the ramp and the state renders as one neutral cloud. That,
+     not the outline, is the real reason most towns could not be told apart.
+     Percentile spreads the towns evenly across the whole ramp and still puts the
+     median exactly at the midpoint, so "red is above the median" stays true.
+     Magnitude is not lost — height still carries it, linearly. Colour answers
+     "where does this town rank among 351", height answers "by how much". */
+  M.pnorm=v=>{
+    if(v==null)return null;
+    if(a.length<2)return .5;
+    let lo=0,hi=a.length;
+    while(lo<hi){const mid=(lo+hi)>>1;if(a[mid]<v)lo=mid+1;else hi=mid;}
+    return lo/(a.length-1);
+  };
+  const rk=T.filter(t=>t.v[k]!=null).sort((x,y)=>y.v[k]-x.v[k]);
+  M.top=rk[0];M.bot=rk[rk.length-1];
+}
+// years of income per house — computed once, used for the affordability ramp
+const YRS=T.map(t=>(t.v.price!=null&&t.v.income!=null)?t.v.price/Math.max(t.v.income,1):null)
+  .filter(v=>v!=null).sort((a,b)=>a-b);
+const YRS_LO=YRS[0], YRS_MED=YRS[Math.floor(YRS.length/2)], YRS_HI=YRS[Math.floor(YRS.length*.97)];
+// same rank scale for the affordability ramp — this measure is the worst offender,
+// with Provincetown at 58 years of income against a median nearer 8
+const yrsPct=v=>{
+  if(v==null||YRS.length<2)return null;
+  let lo=0,hi=YRS.length;
+  while(lo<hi){const mid=(lo+hi)>>1;if(YRS[mid]<v)lo=mid+1;else hi=mid;}
+  return lo/(YRS.length-1);
+};
+
+const VIEWS={
+  place :{lab:'Where does it fall?',q:'Where does it fall?',
+    s:m=>`Every municipality standing in its own place, raised by ${m.lab.toLowerCase()}. Red is above the statewide median, blue below.`,
+    // only the map earns free orbit — it is the one view whose meaning survives
+    // being looked at from an angle
+    pol:[.14,1.40],
+    // z=7.6 put this 23.3 degrees off-axis against a 17 degree half-FOV — off the
+    // bottom of frame entirely; 4.8 brought it back but landed it on top of the
+    // control strip. 3.9 sits in the empty band between the state's southern
+    // edge (Nantucket is the southernmost land, at z~3.24) and the chrome.
+    q3:{p:[0,.012,3.9],flat:true},
+    cam:{p:[0.6,15.6,10.6],t:[0,0,0],fov:34}},
+  rank  :{lab:'Who charges the most?',q:'Who charges the most?',
+    s:m=>`All 351 towns torn out of the map and stood in one line, highest on the left. ${m.lab}.`,
+    // Long lens, near-orthographic: a ranking has to be read, and perspective
+    // makes bar heights lie about each other.
+    // The line is 15.75 units wide and 4.44 tall with labels to 4.86. At fov 12
+    // the horizontal extent is 2·d·tan(6°)·aspect, so d=40 framed only ~14.9
+    // units and clipped both ends of the ranking — which is the whole point of it.
+    // d=52 fits the line with margin; the target sits low so the descent lands
+    // just above the headline block instead of running behind it.
+    // Full orbit, same as before. Max raised past the old 1.40 because this
+    // view's own camera sits at 1.479 — the old ceiling was below its own
+    // starting angle, so the first drag would have snapped it.
+    pol:[.14,1.50],
+    // stands upright here: flat on the ground it would be edge-on to this camera
+    q3:{p:[0,5.95,0],flat:false},
+    cam:{p:[0,6.4,52],t:[0,1.62,0],fov:12}},
+  afford:{lab:'Can people afford to live there?',q:'Can people afford to live there?',
+    s:()=>'Each town placed by what a house costs against what a household earns. Read straight down: right is dearer, up is richer.',
+    // Straight overhead: a scatter read at an angle is not a scatter.
+    // The plot is AFF_EXT (14.74) across and its axis labels sit a further 1.5
+    // out, so the frame has to hold ~17.7 units. At fov 15 that needs
+    // d = 17.7 / (2·tan(7.5°)) ≈ 67. At d=50 the top and bottom of the scatter —
+    // the richest and poorest towns, the entire point — fell off the screen.
+    // The copy says "read straight down" — so the camera is not allowed to
+    // disagree with it. Orbiting the scatter to a grazing angle turned 351 flat
+    // plates into a thicket of overlapping edges and destroyed both axes.
+    // The old global clamp also started at .14, which fought this view's own
+    // near-zero polar angle the moment anyone touched the mouse.
+    // Full orbit. Restricting this was my call and it was the wrong one twice —
+    // the overlap it was guarding against was really the mark size, and that is
+    // fixed at the source now. The only thing kept from that attempt is the
+    // lower bound of 0: this view's own camera sits at a polar angle of ~0.0002,
+    // and the old global floor of 0.14 would snap it the instant anyone dragged.
+    // Full orbit. Restricting this was my call and it was wrong twice - the
+    // overlap it guarded against was really the mark size, fixed at the source.
+    // The lower bound of 0 is kept: this view's camera sits at a polar angle of
+    // ~0.0002 and the old global floor of 0.14 snapped it on the first drag.
+    pol:[0,1.45],
+    q3:{p:[0,.012,8.6],flat:true},
+    /* At d=68 the plot (14.74 tall) filled almost the whole 17.9-unit frame, so
+       the price axis and the income minimum projected BELOW the control strip and
+       were suppressed by the underUI rule - not off screen, hidden. Only the
+       income maximum survived, which is why a lone "$149,321+" was showing.
+       d=78 buys the margin, and the target lifts the plot so it sits centred in
+       the space actually available above the chips, not centred in the frame. */
+    // The camera's z MUST stay just past the target's z. Looking straight down,
+    // the up-vector is nearly parallel to the view direction; the 0.01 offset is
+    // what keeps that out of the singularity. Moving the target to z=1.3 while
+    // leaving the camera at z=0.01 flipped the sign of the view direction and
+    // rolled the entire plot 180 degrees - red and blue swapped sides.
+    cam:{p:[0,78,1.31],t:[0,0,1.3],fov:15}}
+};
+
+/* ================= SCENE ================= */
+const SCALE=11;
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(innerWidth,innerHeight);
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
+document.body.appendChild(renderer.domElement);
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color('#C6CDCC');
+scene.fog=new THREE.Fog('#C6CDCC',40,84);
+scene.environment=new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(),0.04).texture;
+
+const camera=new THREE.PerspectiveCamera(34,innerWidth/innerHeight,0.1,240);
+camera.position.set(1.4,10.5,15);
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.enableDamping=true;controls.dampingFactor=.055;controls.enablePan=false;
+// the flattened views sit 60–90 units out on a long lens; a 48 cap silently
+// dragged the camera back in and broke their framing
+controls.minDistance=6;controls.maxDistance=120;
+controls.minPolarAngle=.14;controls.maxPolarAngle=1.4;
+controls.target.set(0,.4,0);
+
+/* The shadow map was spending its whole 2048 on a 38-unit square to light a
+   state that spans 11. Tightening the frustum to just past the state's own
+   extent and doubling the map is a ~13x gain in shadow texel density for one
+   extra megabyte — that is where contact shadows between neighbouring towns
+   come from, and contact shadow is what tells the eye these are objects
+   sitting on a surface rather than colours painted on one. */
+const key=new THREE.DirectionalLight('#FFF6E8',2.35);
+key.position.set(-9,17,9);key.castShadow=true;
+key.shadow.mapSize.set(4096,4096);key.shadow.camera.near=1;key.shadow.camera.far=60;
+const S=7.6;Object.assign(key.shadow.camera,{left:-S,right:S,top:S,bottom:-S});
+key.shadow.bias=-0.00016;key.shadow.normalBias=.012;scene.add(key);
+// ambient pulled down: at .8 it was filling every crevice back in and flattening
+// the relief the key light had just created
+scene.add(new THREE.HemisphereLight('#F2F7FF','#93A09E',.52));
+const rim=new THREE.DirectionalLight('#BFD6F0',.62);rim.position.set(10,6,-11);scene.add(rim);
+// a low, cool bounce from the camera side to keep the south-facing chamfers from
+// going dead — the chamfer only earns its keep if something is there to catch
+const fill=new THREE.DirectionalLight('#DCE6EA',.34);fill.position.set(4,3,14);scene.add(fill);
+
+/* ---- TEST: the statue at the horizon ------------------------------------
+   Testing one question only — does real footage behind this instrument read as
+   depth, or as clutter? A heavily defocused still answers that without waiting
+   on video decode, which is unreliable under headless virtual time. If it reads,
+   the still becomes a VideoTexture; if it clutters, the idea dies here.
+   fog:false because the plate sits far beyond fog.far and would otherwise wash
+   out to the background colour entirely. */
+/* Footage under the instrument was TESTED AND REJECTED — see BUILD-NOTES.
+   Two attempts: a backdrop plane (invisible, this camera has no horizon in
+   frame) and the film mapped onto the ground itself (visible only as a faint
+   tonal shift). Defocused enough not to compete with 351 coloured solids,
+   drawn boundaries, engraved type and labels, it contributes nothing; sharp
+   enough to read, it fights all of them. Ground stays clean. */
+const ground=new THREE.Mesh(new THREE.CircleGeometry(46,90),
+  new THREE.MeshStandardMaterial({color:'#B7BFBE',roughness:.98,metalness:0}));
+ground.rotation.x=-Math.PI/2;ground.position.y=-.002;ground.receiveShadow=true;scene.add(ground);
+
+const AFF_EXT=SCALE*1.34;          // scatter half-extent, shared by layout/grid/labels
+const grid=new THREE.GridHelper(AFF_EXT,13,0x9a9484,0xc0b9a8);
+grid.material.transparent=true;grid.material.opacity=0;grid.position.y=.004;scene.add(grid);
+
+/* ================= BUILD ================= */
+let minx=1e9,maxx=-1e9,miny=1e9,maxy=-1e9;
+const K=Math.cos(42.1*Math.PI/180);
+for(const t of T)for(const r of t.g)for(const p of r){
+  const x=p[0]*K,y=p[1];
+  if(x<minx)minx=x;if(x>maxx)maxx=x;if(y<miny)miny=y;if(y>maxy)maxy=y;}
+const gcx=(minx+maxx)/2,gcy=(miny+maxy)/2,gspan=Math.max(maxx-minx,maxy-miny);
+
+const pieces=[],raycastable=[],tmpC=new THREE.Color();
+
+/* ---- municipal boundaries ----------------------------------------------
+   ~200 towns sit near the median, the ramp's lightest point, so the middle of
+   the state rendered light-on-light and vanished. Every good choropleth draws
+   its boundaries rather than implying them, so every town gets one.
+
+   The darkening is done by ALPHA, not by picking a darker hex. The canvas uses
+   ACESFilmicToneMapping, so any lightness relationship computed in CSS space is
+   remapped before it reaches the screen — that is what killed the last attempt.
+   Blending happens in the framebuffer AFTER tone mapping, so compositing black
+   at low alpha darkens whatever is underneath no matter what the curve did to it.
+
+   One shared material, so opacity is animated once for all 351.               */
+const EDGE=new THREE.LineBasicMaterial({color:0x000000,transparent:true,
+  opacity:0,depthWrite:false});
+const outlines=[];
+
+/* Real chamfers instead of razor-edged extrusions.
+   A zero-bevel extrusion has one perfectly sharp 90° edge, which catches no
+   light at all — that is the single biggest reason 351 towns read as a diagram
+   rather than as 351 physical objects. A chamfer gives every town a lit rim that
+   changes with the light, which is what a shaded render is actually made of.
+   bevelSize is kept small: it insets the top face, and MA has genuinely thin
+   towns whose geometry would self-intersect if the chamfer were wider than the
+   feature. The build audit reports anything that triangulates to nothing. */
+/* ---- baked occlusion --------------------------------------------------
+   Rendered offline in Blender/Cycles from this exact geometry (same K, gcx,
+   gcy, gspan, SCALE and bevel), top-down orthographic over the state's own
+   extent, via an AO node at a fixed 0.22-unit distance. Live three.js lighting
+   cannot produce contact occlusion between 351 neighbouring solids at any
+   sane cost; this is the thing that separates "object" from "diagram".
+
+   Sampled by WORLD position, planar, so it needs no UVs at all. That also
+   means it is only correct while a town is standing on its home square — in
+   the ranked line and the scatter the towns move and the sample would smear,
+   so AO_ON is animated to 0 there, exactly like the outlines.               */
+const PLATE_EXTENT=11.22;               // printed by the bake script
+const AO_TEX=new THREE.TextureLoader().load('assets/ao_rate.png');
+AO_TEX.colorSpace=THREE.NoColorSpace;   // this is data, not a colour
+AO_TEX.wrapS=AO_TEX.wrapT=THREE.ClampToEdgeWrapping;
+const AO_ON={value:0};
+function injectAO(shader){
+  shader.uniforms.aoPlate={value:AO_TEX};
+  shader.uniforms.aoAmt=AO_ON;
+  shader.uniforms.aoExtent={value:PLATE_EXTENT};
+  shader.vertexShader='varying vec3 vWPos;\n'+shader.vertexShader.replace(
+    '#include <worldpos_vertex>',
+    '#include <worldpos_vertex>\n  vWPos=(modelMatrix*vec4(transformed,1.0)).xyz;');
+  // three only emits <worldpos_vertex> when something needs it; make sure it does
+  if(shader.vertexShader.indexOf('vWPos=')<0){
+    shader.vertexShader=shader.vertexShader.replace('}\n$','')
+      .replace(/void main\(\) \{/,'void main() {')
+      .replace('#include <project_vertex>',
+        '#include <project_vertex>\n  vWPos=(modelMatrix*vec4(transformed,1.0)).xyz;');
+  }
+  shader.fragmentShader='uniform sampler2D aoPlate;uniform float aoAmt;uniform float aoExtent;\nvarying vec3 vWPos;\n'
+    +shader.fragmentShader.replace(
+      '#include <color_fragment>',
+      `#include <color_fragment>
+  if(aoAmt>0.001){
+    vec2 aoUv=(vWPos.xz+aoExtent*0.5)/aoExtent;
+    if(aoUv.x>0.0&&aoUv.x<1.0&&aoUv.y>0.0&&aoUv.y<1.0){
+      float occ=texture2D(aoPlate,aoUv).r;
+      diffuseColor.rgb*=mix(1.0,occ,aoAmt);
+    }
+  }`);
+}
+
+const BT=0.018;                       // chamfer along the extrusion axis
+const EXTRUDE={depth:1-2*BT,bevelEnabled:true,bevelThickness:BT,bevelSize:0.004,
+               bevelOffset:0,bevelSegments:1,curveSegments:1};
+
+function buildTown(t){
+  const shapes=[],segs=[];
+  for(const ring of t.g){
+    if(ring.length<3)continue;
+    const proj=p=>[((p[0]*K-gcx)/gspan)*SCALE,((p[1]-gcy)/gspan)*SCALE];
+    shapes.push(new THREE.Shape(ring.map(p=>new THREE.Vector2(...proj(p)))));
+    // the boundary is drawn from the SAME rings, then put through the SAME
+    // rotate/translate below — it cannot drift from the solid it outlines.
+    // z=1 is the far face of the depth-1 extrusion, which rotateX turns into
+    // the top face, so the line rides the town's top at any height.
+    for(let i=0,n=ring.length;i<n;i++){
+      const a=proj(ring[i]),b=proj(ring[(i+1)%n]);
+      segs.push(a[0],a[1],1,b[0],b[1],1);
+    }
+  }
+  if(!shapes.length)return;
+  const geos=shapes.map(s=>new THREE.ExtrudeGeometry(s,EXTRUDE));
+  let geo=geos.length===1?geos[0]:(BGU.mergeGeometries(geos,false)||geos[0]);
+  // A bevel adds BT at BOTH ends, so the raw extrusion spans -BT .. depth+BT.
+  // Push it back down so the town still stands on y=0 and its top is exactly 1,
+  // which is what every hTgt in the layouts assumes.
+  geo.translate(0,0,BT);
+  geo.computeBoundingBox();
+  // read the top off the geometry rather than assuming z=1 — the bevel decides it
+  const topZ=geo.boundingBox.max.z;
+  for(let i=2;i<segs.length;i+=3)segs[i]=topZ;
+  geo.rotateX(-Math.PI/2);
+  geo.computeBoundingBox();
+  const bb=geo.boundingBox;
+  const cxm=(bb.min.x+bb.max.x)/2,czm=(bb.min.z+bb.max.z)/2;
+  const w=bb.max.x-bb.min.x,d=bb.max.z-bb.min.z;
+  geo.translate(-cxm,0,-czm);geo.computeVertexNormals();
+
+  const mat=new THREE.MeshStandardMaterial({color:'#E7DFCE',roughness:.42,metalness:.06});
+  mat.onBeforeCompile=injectAO;
+  mat.customProgramCacheKey=()=>'ao';
+  const mesh=new THREE.Mesh(geo,mat);
+  mesh.castShadow=mesh.receiveShadow=true;mesh.userData.t=t;
+
+  const og=new THREE.BufferGeometry();
+  og.setAttribute('position',new THREE.Float32BufferAttribute(segs,3));
+  og.rotateX(-Math.PI/2);og.translate(-cxm,0,-czm);
+  const oline=new THREE.LineSegments(og,EDGE);
+  // a child of the mesh, so it inherits position and the (sNow,hNow,sNow) scale
+  // for free and stays welded to its town through every layout change
+  mesh.add(oline);outlines.push(oline);
+  t.home=new THREE.Vector3(cxm,0,czm);
+  // a town's true footprint is useless as a chart marker — slivers vanish, Plymouth dominates
+  t.fit=1/Math.max(w,d,1e-4);
+  t.mesh=mesh;t.mat=mat;
+  t.pos=new THREE.Vector3(cxm,0,czm);t.tgt=t.pos.clone();t.vel=new THREE.Vector3();
+  t.hNow=.02;t.hTgt=.02;t.hVel=0;t.arm=0;   // arm=0 until the survey line reaches it
+  t.sNow=1;t.sTgt=1;t.sVel=0;
+  t.col=new THREE.Color('#E7DFCE');t.colTgt=t.col.clone();
+  mesh.position.copy(t.pos);mesh.scale.set(1,t.hNow,1);
+  scene.add(mesh);pieces.push(t);raycastable.push(mesh);
+}
+let bi=0;
+(function buildSlice(){
+  const end=Math.min(bi+30,T.length);
+  for(;bi<end;bi++)buildTown(T[bi]);
+  bootbar.style.width=Math.round(bi/T.length*100)+'%';
+  if(bi<T.length)setTimeout(buildSlice,0);
+  else{
+    // build audit: a town that triangulated to nothing is an invisible town
+    const bad=[],thin=[];
+    for(const t of pieces){
+      const g=t.mesh.geometry, n=g.getAttribute('position')?.count||0;
+      g.computeBoundingBox();
+      const bb=g.boundingBox, w=bb.max.x-bb.min.x, d=bb.max.z-bb.min.z;
+      if(n<12||!isFinite(w)||w<=0||d<=0)bad.push(t.n);
+      else if(Math.max(w,d)<0.035)thin.push(t.n);
+    }
+    window.__AUDIT={source:T.length,built:pieces.length,
+      missingFromPayload:T.length-pieces.length,degenerate:bad,tiny:thin};
+    // dev export: lets a headless probe read hTgt / hNow / arm per town instead
+    // of guessing which of the three is wrong from a screenshot
+    window.__PIECES=pieces;window.__CAM=camera;window.__VIEW=()=>view;
+    window.__CTRL=controls;window.__ENTRY=ENTRY;
+    window.__ENTRY=ENTRY;window.__FRAMES=0;
+    console.log('BUILD AUDIT',JSON.stringify(window.__AUDIT));
+    // arm the entrance BEFORE the first apply, so the copy is deferred once
+    // rather than being set here and re-set on arrival (the two reveals raced)
+    if(!reduceMo){ENTRY.start=performance.now()+260;ENTRY.running=true;}
+    apply(true);
+    boot.style.opacity=0;setTimeout(()=>boot.remove(),520);
+    if(reduceMo){                       // no survey: just be there
+      for(const t of pieces)t.arm=1;
+      surveyN.textContent=pieces.length;
+      document.body.classList.add('arrived');
+      setHeadline(...pendingHeadline);
+      ENTRY.done=true;
+    }
+    animate();}
+})();
+
+/* ================= LAYOUTS ================= */
+// deep-linkable: #rank, #afford/price, … so a view can be sent to someone
+function fromHash(){
+  const [v,m]=location.hash.replace('#','').split('/');
+  if(v&&VIEWS[v])view=v;
+  if(m&&METRICS[m])metric=m;
+}
+let view='place',metric='rate';
+fromHash();
+// dev harness: preset.js may set an opening view so each state can be
+// rendered headlessly and actually looked at. Absent in production.
+if(window.PRESET_VIEW&&VIEWS[window.PRESET_VIEW])view=window.PRESET_VIEW;
+if(window.PRESET_METRIC&&METRICS[window.PRESET_METRIC])metric=window.PRESET_METRIC;
+addEventListener('hashchange',()=>{fromHash();apply(false);});
+/* FRONT, rankFront and pendingHeadline are declared above, before the build */
+
+function layout(){
+  const M=METRICS[metric];
+  if(view==='place'){
+    for(const t of pieces){
+      t.tgt.set(t.home.x,0,t.home.z);t.sTgt=1;
+      const n=M.norm(t.v[metric]);
+      // Low relief. Tall columns turn the map into a skyline in which the tall
+      // towns hide every short neighbour behind them — which reads as missing towns.
+      t.hTgt=n==null?.02:.035+n*.62;
+      ramp(M.pnorm(t.v[metric]),t.colTgt);
+    }
+  }else if(view==='rank'){
+    const ranked=[...pieces].sort((a,b)=>{
+      const av=a.v[metric],bv=b.v[metric];
+      if(av==null)return 1;if(bv==null)return -1;return bv-av;});
+    // 351 anonymous sticks is a dump, not an answer. The twelve that actually hold
+    // the record stand forward and get named; the rest are the field behind them.
+    // one line, all 351, highest on the left. The story is the descent across the
+    // whole state — the top twelve are within $2.70 of each other and say nothing.
+    rankFront=ranked;
+    const W=0.045;
+    ranked.forEach((t,i)=>{
+      t.rank=i+1;
+      const v=t.v[metric];
+      const n=v==null?null:(v-M.lo)/Math.max(M.hi-M.lo,1e-9);   // true range, not clipped
+      t.tgt.set((i-(ranked.length-1)/2)*W,0,0);
+      t.sTgt=t.fit*W*0.82;
+      t.hTgt=n==null?.02:.04+n*4.4;
+      ramp(M.pnorm(v),t.colTgt);
+    });
+  }else{
+    const P=METRICS.price,I=METRICS.income;
+    /* Both axes are money, and money is log-distributed. On a linear axis the
+       median town sits far left, most of the 351 pile into one corner and fuse
+       into a single mass while the right two thirds of the plot stay empty —
+       the same skew that made the COLOUR unreadable, now acting on POSITION.
+       A log axis spreads them without lying: "right is dearer, up is richer"
+       stays exactly true, and the end labels are still real dollar figures. */
+    const logn=(M,v)=>{
+      if(v==null)return null;
+      const a=Math.log(Math.max(M.lo,1)),b=Math.log(Math.max(M.ceil,1));
+      return Math.min(Math.max((Math.log(Math.max(v,1))-a)/(b-a),0),1);
+    };
+    for(const t of pieces){
+      const p=logn(P,t.v.price),inc=logn(I,t.v.income);
+      if(p==null||inc==null){t.tgt.set(t.home.x*.2,-3,t.home.z*.2);t.hTgt=.02;
+        t.sTgt=t.fit*.5;t.colTgt.copy(NODATA);continue;}
+      t.tgt.set((p-.5)*AFF_EXT,0,-(inc-.5)*AFF_EXT);
+      // t.fit normalises every town to 1 unit across, so sTgt IS the mark's width
+      // in plot units. At 1.17 on a 14.74-unit plot each of 351 marks covered 8%
+      // of the width and the dense middle became a solid raft of overlapping
+      // plates whose outlines read as a scribble. A scatter this crowded needs
+      // SMALLER marks, not bigger ones.
+      t.sTgt=t.fit*.70;   // camera moved 68 -> 78, so the marks hold their size
+      // years of gross household income to buy the median house, diverged at the state median
+      const yrs=t.v.price/Math.max(t.v.income,1);
+      // read from overhead, so height is invisible and would only add fake depth;
+      // the years-of-income gap is carried entirely by colour here
+      t.hTgt=.05;
+      ramp(yrsPct(yrs),t.colTgt);
+    }
+  }
+}
+
+/* ---- camera flight ---- */
+const camFrom=new THREE.Vector3(),camTo=new THREE.Vector3(),
+      tgtFrom=new THREE.Vector3(),tgtTo=new THREE.Vector3();
+let flyT=1,fovFrom=34,fovTo=34;
+function flyTo(cam,instant){
+  camFrom.copy(camera.position);camTo.set(...cam.p);
+  tgtFrom.copy(controls.target);tgtTo.set(...cam.t);
+  fovFrom=camera.fov;fovTo=cam.fov??34;
+  if(instant){                       // opening state: be there, don't fly to it
+    camera.position.copy(camTo);controls.target.copy(tgtTo);
+    camera.fov=fovTo;camera.updateProjectionMatrix();
+    controls.update();flyT=1;
+  }else flyT=0;
+}
+
+/* ---- kinetic headline ---- */
+const qEl=document.getElementById('q'),qsEl=document.getElementById('qs'),ansEl=document.getElementById('ans');
+function setHeadline(text,sub,ans){
+  qEl.classList.remove('in');qsEl.classList.remove('in');ansEl.classList.remove('in');
+  qEl.innerHTML=text.split(' ').map((w,i)=>
+    `<span class="w"><i style="transition-delay:${i*46}ms">${w}</i></span>`).join(' ');
+  qsEl.textContent=sub;ansEl.textContent=ans;
+  // Forced reflow, not nested rAF. This is called from inside the render loop on
+  // arrival, where queued rAF callbacks raced the capture and the copy never showed.
+  void qEl.offsetWidth;
+  qEl.classList.add('in');qsEl.classList.add('in');ansEl.classList.add('in');
+}
+
+/* ---- projected labels ---- */
+const anchors=[];
+function makeLabel(cls){const d=document.createElement('div');d.className='lbl '+cls;
+  labelLayer.appendChild(d);return d;}
+
+/* every label lives in here, so a rebuild is one clear + rebuild */
+const LBL3=new THREE.Group();scene.add(LBL3);
+
+/* ---- the question, set into the ground -------------------------------------
+   The question stops being a caption in the corner and becomes an inscription
+   the instrument stands on — read at a slant, like a plaque seen from standing
+   height, rather than floating in front of the picture.
+
+   It cannot be flat in every view. The map and the scatter are both looked at
+   from above, so a flat inscription reads. The ranked line is viewed almost
+   horizontally: text lying on the ground there is edge-on and compresses to a
+   smear, so in that view alone it stands up and faces the camera. Honest to each
+   view's own geometry rather than uniform for its own sake. */
+const F_DISPLAY='https://use.typekit.net/af/15c69a/00000000000000007761c7e2/31/a?subset_id=2&fvd=n7&v=3';
+let qText=null;
+if(SDF){
+  qText=new SDF.Text();
+  qText.font=F_DISPLAY;
+  qText.fontSize=.55;
+  qText.color='#0B1113';
+  qText.anchorX='center';qText.anchorY='middle';
+  qText.textAlign='center';
+  qText.maxWidth=12;
+  qText.letterSpacing=-.028;
+  qText.material.fog=false;
+  qText.material.depthWrite=false;
+  scene.add(qText);
+  window.__Q=qText;
+  document.documentElement.classList.add('q-in-scene');
+}
+const LBL_PX=13;                       // on-screen height of a primary label
+function mkT(txt,font,size,color,y,track){
+  const t=new SDF.Text();
+  t.text=txt;t.font=font;t.fontSize=size;t.color=color;
+  t.anchorX='center';t.anchorY='middle';t.position.y=y;
+  if(track)t.letterSpacing=track;
+  // labels sit on top of the marks they name rather than z-fighting with them
+  t.material.depthWrite=false;
+  // a label is an instrument reading, not part of the weather — without this the
+  // scatter's labels sat 64% of the way into the fog and went grey
+  t.material.fog=false;
+  t.sync();
+  return t;
+}
+function clearL3(){
+  for(const c of [...LBL3.children]){
+    LBL3.remove(c);
+    c.traverse(o=>{if(o.dispose)o.dispose();});
+  }
+}
+// a town's name and its measurement, stacked — the name in the UI face, the
+// figure in the mono, exactly as they are everywhere else on the page
+function nameLabel(primary,secondary,v){
+  if(SDF){
+    const g=new THREE.Group();
+    g.add(mkT(primary,F_UI,1,'#0B1113',.52));
+    g.add(mkT(secondary,F_MONO,.78,'#680A1D',-.40));
+    LBL3.add(g);anchors.push({obj:g,v});
+  }else{
+    const el=makeLabel('name');
+    el.innerHTML=`<b>${primary}</b><s>${secondary}</s>`;
+    anchors.push({el,v});
+  }
+}
+function axisLabel(txt,v,dim){
+  if(SDF){
+    const g=new THREE.Group();
+    g.add(mkT(dim?txt:txt.toUpperCase(),F_UI,dim?.8:.84,
+      dim?'#6C7679':'#3E4A4D',0,dim?0:.18));
+    LBL3.add(g);anchors.push({obj:g,v});
+  }else{
+    const el=makeLabel(dim?'':'axis');el.textContent=txt;
+    anchors.push({el,v});
+  }
+}
+
+function rebuildAnchors(){
+  anchors.length=0;labelLayer.innerHTML='';clearL3();
+  if(view==='rank'){
+    const M=METRICS[metric],N=rankFront.length;
+    // Adjacent ranks sit ~4px apart on screen, so labelling #1/#2/#3 guarantees a
+    // pile-up no vertical stagger can fix. Only the two ends and the middle get
+    // named; every other town is one hover away.
+    [0,Math.floor(N/2),N-1].forEach(idx=>{
+      const t=rankFront[idx];if(!t)return;
+      nameLabel(t.n,`${M.fmt(t.v[metric])} · #${t.rank}`,
+        new THREE.Vector3(t.tgt.x,t.hTgt+.42,0));
+    });
+    // was y=-.55, which is UNDER the ground plane — fine as an HTML overlay,
+    // invisible the moment it became a real object. It now sits on the ground
+    // just in front of the line, where an axis caption belongs.
+    axisLabel(`median ${M.fmt(M.med)}`,new THREE.Vector3(0,.05,1.7));
+  }else if(view==='afford'){
+    const P=METRICS.price,I=METRICS.income,H=AFF_EXT/2;
+    const ax=(txt,x,z,cls='axis')=>
+      axisLabel(txt,new THREE.Vector3(x,.05,z),cls==='');
+    // axes stop at the 97th percentile, so the top end is a "+" bucket, not a max
+    // The price axis moves ABOVE the plot. Below it there is only the control
+    // strip, and anything there is hidden by design. Top-centre is the one band
+    // of the frame that is free - masthead sits left, nav sits right.
+    ax('Median sale →',0,-8.2);
+    ax(METRICS.price.fmt(P.lo),-H,-8.2,'');
+    ax(METRICS.price.fmt(P.ceil)+'+',H,-8.2,'');
+    // name the towns at the extremes — an unlabelled red slab tells you nothing
+    const rated=pieces.filter(t=>t.v.price!=null&&t.v.income!=null)
+      .map(t=>({t,yrs:t.v.price/Math.max(t.v.income,1)}))
+      .sort((a,b)=>b.yrs-a.yrs);
+    [...rated.slice(0,5),...rated.slice(-3)].forEach(({t,yrs})=>{
+      nameLabel(t.n,`${yrs.toFixed(1)} yrs of income`,
+        new THREE.Vector3(t.tgt.x,t.hTgt+.42,t.tgt.z));
+    });
+    // "→" on a vertical axis pointed at the wrong axis, but "↑" is not in the
+    // Adobe Fonts subset and rendered as tofu. The sub-copy already says "up is
+    // richer", so the title carries no arrow rather than a broken one.
+    ax('Household income',-H-2.4,0);
+    // The scale figures sit just INSIDE the grid's left edge. Outside it they
+    // land at x<540 low in the frame, which is the exclusion zone guarding the
+    // copy block - the minimum was being suppressed there, correctly, because it
+    // would have collided with "Each town placed by...". The corner of the plot
+    // they now occupy is empty (cheap towns with low incomes are sparse).
+    ax(usd(I.lo),-H+0.85,H,'');
+    ax(usd(I.ceil)+'+',-H+0.85,-H,'');
+  }
+}
+
+function apply(instant){
+  const M=METRICS[metric],V=VIEWS[view];
+  layout();
+  if(instant)for(const t of pieces){
+    t.pos.copy(t.tgt);t.hNow=t.hTgt*(t.arm||0)||.012;t.sNow=t.sTgt;t.col.copy(t.colTgt);
+    t.mesh.position.copy(t.pos);t.mesh.scale.set(t.sNow,t.hNow,t.sNow);t.mat.color.copy(t.col);
+  }
+  // each view owns how far it may be orbited, because each view's claim is only
+  // true from a certain range of angles
+  controls.minPolarAngle=V.pol?V.pol[0]:.14;
+  controls.maxPolarAngle=V.pol?V.pol[1]:1.40;
+  /* Fog is depth cueing for the MAP, which is viewed from ~19 units. The
+     flattened views sit at 52 and 68, which put the entire plot deep into a
+     40–84 fog and drained it — that grey wash on the scatter was not the
+     palette, it was distance haze applied to a chart that has no depth to cue.
+     Pushed out of range for those views rather than switched off, so the map's
+     own falloff is untouched. */
+  const flat=view!=='place';
+  scene.fog.near=flat?400:40;
+  scene.fog.far =flat?800:84;
+  if(qText&&V.q3){
+    qText.text=V.q;
+    qText.position.set(...V.q3.p);
+    qText.rotation.x=V.q3.flat?-Math.PI/2:0;
+    qText.sync();
+  }
+  flyTo(V.cam,instant);
+  rebuildAnchors();
+  const want='#'+view+(view==='afford'?'':'/'+metric);
+  if(location.hash!==want)history.replaceState(null,'',want);
+  pendingHeadline=[V.q,V.s(M),
+    view==='afford'
+      ? `Median sale ${METRICS.price.fmt(METRICS.price.med)}   ·   median household income ${usd(METRICS.income.med)}`
+      : `${M.top.n} ${M.fmt(M.top.v[metric])}   ·   median ${M.fmt(M.med)}   ·   ${M.bot.n} ${M.fmt(M.bot.v[metric])}`];
+  // during the entrance the copy waits for the survey to finish
+  if(!ENTRY.running||ENTRY.done)setHeadline(...pendingHeadline);
+  document.querySelectorAll('#metrics .chip').forEach(b=>{
+    b.dataset.muted=String(view==='afford');
+    b.setAttribute('aria-pressed',String(b.dataset.k===metric&&view!=='afford'));});
+  document.querySelectorAll('#views .chip').forEach(b=>
+    b.setAttribute('aria-pressed',String(b.dataset.k===view)));
+}
+
+/* ================= CONTROLS ================= */
+const vwrap=document.getElementById('views');
+for(const k in VIEWS){const b=document.createElement('button');
+  b.className='chip';b.dataset.k=k;b.textContent=VIEWS[k].lab;b.setAttribute('aria-pressed','false');
+  b.onclick=()=>{view=k;apply(false);};vwrap.appendChild(b);}
+const mwrap=document.getElementById('metrics');
+for(const k in METRICS){const b=document.createElement('button');
+  b.className='chip';b.dataset.k=k;b.textContent=METRICS[k].lab;b.setAttribute('aria-pressed','false');
+  b.onclick=()=>{metric=k;if(view==='afford')view='place';apply(false);};mwrap.appendChild(b);}
+
+/* ================= HOVER ================= */
+const ray=new THREE.Raycaster(),ptr=new THREE.Vector2(-9,-9);
+let hovered=null,pointerOn=false;
+renderer.domElement.addEventListener('pointermove',e=>{
+  ptr.set((e.clientX/innerWidth)*2-1,-(e.clientY/innerHeight)*2+1);pointerOn=true;});
+renderer.domElement.addEventListener('pointerleave',()=>{pointerOn=false;});
+
+/* ================= LOOP ================= */
+/* ---- the survey line: an instrument drawing the state, west to east ---- */
+const sweep=new THREE.Mesh(
+  new THREE.PlaneGeometry(0.055,30),
+  new THREE.MeshBasicMaterial({color:'#680A1D',transparent:true,opacity:.85,side:THREE.DoubleSide}));
+sweep.rotation.x=-Math.PI/2; sweep.rotation.z=Math.PI/2; sweep.position.y=.02;
+sweep.visible=false; scene.add(sweep);
+const clock=new THREE.Clock(),proj=new THREE.Vector3(),toCam=new THREE.Vector3();
+const OM=9.4,ZE=.88, WHITE=new THREE.Color('#ffffff');
+/* Fixed-timestep simulation, variable render.
+   The loop used to integrate one step of `Math.min(clock.getDelta(),.05)` per
+   frame. That clamp silently turns a low frame rate into slow motion: under
+   headless capture the loop gets ~3 frames in 30s, so the springs advanced 0.15s
+   of simulated time and every bar still stood at its 0.012 floor while its label
+   sat at hTgt — which reads exactly like "the labels and the geometry disagree
+   about scale". They never disagreed. hNow simply had not arrived yet, and no
+   camera tweak could have fixed it.
+   The same bug hits any real device that drops frames. Now the sim advances by
+   wall-clock in fixed sub-steps, with a catch-up ceiling so a tab returning from
+   the background settles instead of freezing or exploding. */
+const FIXED=1/60, MAXCATCH=1.5, MAXSTEPS=Math.ceil(MAXCATCH/FIXED)+2;
+
+/* rAF is not a reliable heartbeat. Headless capture delivers ~4 callbacks in 30
+   seconds and then stops, and a throttled or backgrounded real tab does the same
+   — the instrument freezes mid-entrance and never arrives. The build loop already
+   learned this once and moved to setTimeout; the render loop needs the same
+   safety net. rAF stays the primary driver when it is healthy; the watchdog only
+   fires when it has gone quiet. clock.getDelta() makes the two paths safe to mix,
+   because whichever one ticks consumes exactly the time since the last tick. */
+let lastTick=-1e9;
+function animate(){requestAnimationFrame(animate);tick();}
+// 150ms threshold: a healthy 60fps tab is 17ms and even a struggling 30fps one is
+// 33ms, so this never double-drives a working page — it costs nothing until rAF
+// actually goes quiet. 100ms is also cheap enough for software rasterisation.
+setInterval(()=>{if(performance.now()-lastTick>150)tick();},100);
+
+function tick(){
+  window.__FRAMES=(window.__FRAMES|0)+1;
+  const now=performance.now();lastTick=now;
+  const k=OM*OM,c=2*ZE*OM;
+  let acc=Math.min(clock.getDelta(),MAXCATCH);
+  const dt=acc;                       // the whole slice, for non-spring easing
+
+  /* ---- entrance: survey the state into existence ---- */
+  if(ENTRY.running&&!ENTRY.done){
+    const p=Math.min(1,Math.max(0,(now-ENTRY.start)/ENTRY.dur));
+    // a plotter travels at a constant rate; easing made the count spike to 341
+    // in the first frame and then crawl, which reads as a glitch, not a survey
+    const e=p<.08?p*p/.08*.5+p*.5:p;
+    const x=-8.4+e*17.2;
+    sweep.visible=p<1; sweep.position.x=x;
+    sweep.material.opacity=.85*Math.min(1,(1-p)*3.2);
+    let landed=0;
+    for(const t of pieces){ if(t.arm||t.home.x<=x){t.arm=1;landed++;} }
+    surveyN.textContent=landed;
+    if(p>=1){
+      ENTRY.done=true; sweep.visible=false;
+      for(const t of pieces)t.arm=1;
+      surveyN.textContent=pieces.length;
+      document.body.classList.add('arrived');
+      setHeadline(...pendingHeadline);
+    }
+  }
+
+  // --- simulate: fixed sub-steps until this frame's wall-clock slice is spent
+  for(let guard=0;acc>1e-6&&guard<MAXSTEPS;guard++){
+    const h=Math.min(FIXED,acc);acc-=h;
+    for(const t of pieces){
+      t.vel.x+=(-k*(t.pos.x-t.tgt.x)-c*t.vel.x)*h;
+      t.vel.y+=(-k*(t.pos.y-t.tgt.y)-c*t.vel.y)*h;
+      t.vel.z+=(-k*(t.pos.z-t.tgt.z)-c*t.vel.z)*h;
+      t.pos.addScaledVector(t.vel,h);
+      const hT=t.hTgt*(t.arm||0)+(hovered===t?.5:0);
+      t.hVel+=(-k*(t.hNow-hT)-c*t.hVel)*h;t.hNow=Math.max(.012,t.hNow+t.hVel*h);
+      t.sVel+=(-k*(t.sNow-t.sTgt)-c*t.sVel)*h;t.sNow=Math.max(.02,t.sNow+t.sVel*h);
+    }
+  }
+  // --- present: one write pass over the meshes, once per frame
+  for(const t of pieces){
+    t.mesh.position.copy(t.pos);t.mesh.scale.set(t.sNow,t.hNow,t.sNow);
+    t.col.lerp(t.colTgt,Math.min(1,dt*5.5));
+    t.mat.color.copy(hovered===t?tmpC.copy(t.col).lerp(WHITE,.45):t.col);
+  }
+
+  if(flyT<1){
+    flyT=Math.min(1,flyT+dt/1.25);
+    const e=1-Math.pow(1-flyT,4);
+    camera.position.lerpVectors(camFrom,camTo,e);
+    controls.target.lerpVectors(tgtFrom,tgtTo,e);
+    camera.fov=fovFrom+(fovTo-fovFrom)*e;camera.updateProjectionMatrix();
+  }
+  const wantGrid=(view==='afford')?.5:0;
+  grid.material.opacity+=(wantGrid-grid.material.opacity)*Math.min(1,dt*4);
+  // Boundaries belong to the map AND to the scatter. I first switched them off in
+  // the scatter assuming a dot-sized mark makes an outline into noise; the
+  // opposite is true — without an edge the dense middle of the plot fuses into
+  // one pale cloud and most towns cannot be seen at all. They stay off only in
+  // the ranked line, where a town really is ~2px of solid colour.
+  const wantEdge=(ENTRY.done||reduceMo)
+    ? (view==='place'?.38 : view==='afford'?.34 : 0) : 0;
+  // the plate is a planar bake of the map layout, so it is only valid there
+  const wantAO=(view==='place'&&(ENTRY.done||reduceMo))?.85:0;
+  AO_ON.value+=(wantAO-AO_ON.value)*Math.min(1,dt*3.2);
+  EDGE.opacity+=(wantEdge-EDGE.opacity)*Math.min(1,dt*3.2);
+
+  if(pointerOn){ray.setFromCamera(ptr,camera);
+    const hit=ray.intersectObjects(raycastable,false)[0];
+    hovered=hit?hit.object.userData.t:null;}
+  else hovered=null;
+
+  for(const a of anchors){
+    proj.copy(a.v).project(camera);
+    // the ends of a ranking are the whole point, so their labels get pulled back
+    // inside the viewport rather than being allowed to clip off the edge
+    const x=Math.min(Math.max((proj.x*.5+.5)*innerWidth,86),innerWidth-86),
+          y=(-proj.y*.5+.5)*innerHeight;
+    // the chrome owns the bottom strip and the lower-left headline block —
+    // a label that lands under either is unreadable, so it just doesn't show
+    const underUI = y > innerHeight-118 || (x < 540 && y > innerHeight-300);
+    const show = proj.z<1 && flyT>.55 && !underUI;
+    if(a.obj){
+      a.obj.visible=show;
+      if(show){
+        // Float the label a little toward the camera. As a DOM overlay it always
+        // won; as a real object it sits exactly where the mark is and the mark
+        // in front of it wins — which buried Hancock's figure behind the last
+        // bars of the ranking. This lifts it clear without moving it on screen.
+        toCam.subVectors(camera.position,a.v).normalize();
+        a.obj.position.copy(a.v).addScaledVector(toCam,.42);
+        // billboard, so a label reads flat-on however the instrument is orbited
+        a.obj.quaternion.copy(camera.quaternion);
+        // hold a constant on-screen size: these views sit anywhere from 15 to 68
+        // units out on lenses from 12° to 34°, so a fixed world size would swing
+        // between illegible and enormous
+        const d=camera.position.distanceTo(a.v);
+        a.obj.scale.setScalar(2*d*Math.tan(camera.fov*Math.PI/360)/innerHeight*LBL_PX);
+      }
+    }else{
+      a.el.classList.toggle('show',show);
+      a.el.style.left=x+'px';
+      a.el.style.top=y+'px';
+    }
+  }
+
+  if(hovered){
+    proj.set(hovered.pos.x,hovered.hNow,hovered.pos.z).project(camera);
+    ro.style.opacity=1;
+    ro.style.left=((proj.x*.5+.5)*innerWidth)+'px';
+    ro.style.top=((-proj.y*.5+.5)*innerHeight)+'px';
+    const M=METRICS[metric];
+    ro.querySelector('b').textContent=hovered.n+(view==='rank'&&hovered.rank?`  · #${hovered.rank}`:'');
+    ro.querySelector('i').textContent=(hovered.c?hovered.c+' County':'')+
+      (hovered.pop!=null?' · '+hovered.pop.toLocaleString()+' people':'');
+    // the figure wears the town's own place on the scale, lifted toward white so it
+    // stays legible on the dark chip — a fixed orange said nothing about the value
+    ro.querySelector('u').style.color='#'+
+      tmpC.copy(hovered.colTgt).lerp(WHITE,.42).getHexString();
+    ro.querySelector('u').textContent=view==='afford'
+      ? (hovered.v.price!=null&&hovered.v.income!=null
+          ? METRICS.price.fmt(hovered.v.price)+' against '+usd(hovered.v.income)
+          : 'not reported')
+      : (hovered.v[metric]!=null?M.fmt(hovered.v[metric])+'  '+M.unit:'not reported');
+  }else ro.style.opacity=0;
+
+  controls.update();
+  renderer.render(scene,camera);
+}
+addEventListener('resize',()=>{
+  camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);});
+</script>
+</body>
+</html>
