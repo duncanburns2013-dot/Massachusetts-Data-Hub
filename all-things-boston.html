@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Things Boston — Budget, Payroll, Crime, Education, ICE, Commercial RE & More</title>
+<!-- Open Graph / Twitter Card -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://duncanburns2013-dot.github.io/All-Things-Boston/">
+<meta property="og:title" content="All Things Boston — City Accountability Dashboard">
+<meta property="og:description" content="Veterans $3.3M. DEI/Equity $28.5M. 52× growth. 80% of shootings in 4 neighborhoods. 19.0% office vacancy. $3.4B pension gap. All from official government data.">
+<meta property="og:image" content="https://duncanburns2013-dot.github.io/All-Things-Boston/all-things-boston-social.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="All Things Boston — City Accountability Dashboard">
+<meta name="twitter:description" content="Veterans $3.3M. DEI/Equity $28.5M. 52× growth. 80% of shootings in 4 neighborhoods. 19.0% office vacancy. $3.4B pension gap. All from official government data.">
+<meta name="twitter:image" content="https://duncanburns2013-dot.github.io/All-Things-Boston/all-things-boston-social.png">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#E9EBEA;--surface:#fff;--border:#CDD3D1;--text:#0B1113;--muted:#5A6467;--red:#A81733;--green:#2A6B44;--blue:#14558F;--amber:#b8860b;--purple:#7e22ce;--navy:#14558F;--gold:#B07C20;--cyan:#0e7490;--orange:#c2410c;--red-bg:rgba(192,57,43,.06);--blue-bg:rgba(26,68,128,.06);--green-bg:rgba(26,122,76,.06);--amber-bg:rgba(184,134,11,.06)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+.hero{background:var(--navy);color:#fff;padding:2.5rem 1.5rem 2rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(139,26,26,.1) 0%,transparent 50%)}
+.hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.5rem,4vw,2.4rem);font-weight:400;margin-bottom:.5rem;position:relative}
+.hero .sub{opacity:.65;font-size:.78rem;margin-bottom:1.2rem;position:relative;max-width:750px;margin-left:auto;margin-right:auto}
+.hero .sr{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;max-width:1200px;margin:0 auto;position:relative}
+.hero .sb{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:9px 6px}
+.hero .sb .n{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(.95rem,2vw,1.3rem);font-weight:400;color:#B07C20}
+.hero .sb .n.bad{color:#f87171}.hero .sb .n.good{color:#6ee7b7}
+.hero .sb .l{font-size:.5rem;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.5);margin-top:.1rem;font-weight:500}
+nav{display:flex;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.04);justify-content:center}
+nav button{padding:13px 17px;font-size:.69rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);white-space:nowrap;border-bottom:2px solid transparent;transition:all .25s;text-transform:uppercase;letter-spacing:.05em;font-family:'DM Sans',system-ui,sans-serif}
+nav button:hover{color:var(--text);background:rgba(0,0,0,.02)}
+nav button.active{color:var(--navy);border-bottom-color:var(--gold)}
+.ct{max-width:1200px;margin:0 auto;padding:24px}
+.tab{display:none;animation:fadeUp .3s ease}.tab.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.kpi .v{font-family:'DM Serif Display',Georgia,serif;font-size:1.4rem;font-weight:400;line-height:1.1}
+.kpi .lb{font-size:.55rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-top:3px}
+.kpi.red .v{color:var(--red)}.kpi.blue .v{color:var(--blue)}.kpi.green .v{color:var(--green)}.kpi.amber .v{color:var(--amber)}.kpi.purple .v{color:var(--purple)}.kpi.cyan .v{color:var(--cyan)}.kpi.orange .v{color:var(--orange)}
+.g{display:grid;gap:12px;margin-bottom:18px}.g2{grid-template-columns:repeat(auto-fit,minmax(380px,1fr))}
+.cd{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.cd.full{grid-column:1/-1}
+.cd h3{font-size:.8rem;font-weight:700;color:var(--navy);margin-bottom:3px}
+.cd .cs{font-size:.65rem;color:var(--muted);margin-bottom:7px}
+.cw{position:relative;height:270px}.cw.tall{height:340px}.cw.sh{height:220px}
+.co{border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:.78rem;line-height:1.65;border-left:4px solid}
+.co.red{background:var(--red-bg);border-left-color:var(--red);color:#7f1d1d}
+.co.blue{background:var(--blue-bg);border-left-color:var(--blue);color:#1e3a5f}
+.co.amber{background:var(--amber-bg);border-left-color:var(--amber);color:#78350f}
+.co.green{background:var(--green-bg);border-left-color:var(--green);color:#14532d}
+.co strong{font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:.72rem;margin-bottom:5px}
+th{background:rgba(15,41,66,.04);padding:7px 10px;text-align:left;font-weight:700;color:var(--navy);border-bottom:2px solid var(--navy);font-size:.58rem;text-transform:uppercase;letter-spacing:.07em}
+th.r{text-align:right}td{padding:7px 10px;border-bottom:1px solid var(--border)}td.r{text-align:right}td.b{font-weight:700}
+td.red{color:var(--red);font-weight:700}td.green{color:var(--green);font-weight:700}td.amber{color:var(--amber);font-weight:600}
+tr:hover{background:rgba(15,41,66,.02)}.tg{background:rgba(15,41,66,.06);font-weight:700}
+.src{font-size:.6rem;color:var(--muted);font-style:italic;margin-top:5px}
+/* Sub-nav for CRE embedded tabs */
+.sub-nav{display:flex;gap:3px;background:rgba(15,41,66,.05);border-radius:10px;padding:4px;margin-bottom:16px;overflow-x:auto;flex-wrap:nowrap}
+.sub-btn{padding:7px 13px;font-size:.6rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);white-space:nowrap;border-radius:6px;transition:all .2s;text-transform:uppercase;letter-spacing:.05em;font-family:'DM Sans',sans-serif;flex-shrink:0}
+.sub-btn:hover{color:var(--text);background:rgba(255,255,255,.6)}
+.sub-btn.active{color:var(--navy);background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.sub-tab{display:none;animation:fadeUp .25s ease}.sub-tab.active{display:block}
+/* Table wrapper */
+.tw{overflow-x:auto;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.footer{text-align:center;padding:24px;color:var(--muted);font-size:.68rem;border-top:1px solid var(--border);margin-top:28px;background:#fff}
+.footer a{color:var(--navy);text-decoration:none;font-weight:600;border-bottom:1px solid var(--gold)}
+.ph{text-align:center;padding:50px 20px;color:var(--muted)}
+.ph h2{font-family:'DM Serif Display',Georgia,serif;font-size:1.3rem;color:var(--navy);margin-bottom:6px;font-weight:400}
+@media(max-width:768px){.hero .sr{grid-template-columns:repeat(5,1fr)}.g2{grid-template-columns:1fr}.kg{grid-template-columns:repeat(2,1fr)}.ct{padding:14px}}
+@media(max-width:480px){.kg{grid-template-columns:1fr}nav button{padding:10px 10px;font-size:.6rem}.hero .sr{grid-template-columns:repeat(2,1fr)}}
+</style>
+<!-- shared theme -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+
+</head>
+<body>
+<div class="hero"><h1>All Things Boston</h1><p class="sub">City budget, employee payroll, FBI crime, BPS education, ICE enforcement, commercial real estate, housing, 311 services & pension obligations — all from official government data</p><div class="sr">
+<div class="sb"><div class="n bad">$3.3M</div><div class="l">Veterans FY25</div></div>
+<div class="sb"><div class="n">$28.5M</div><div class="l">DEI/Equity FY25</div></div>
+<div class="sb"><div class="n bad">−177</div><div class="l">Police Officers Lost</div></div>
+<div class="sb"><div class="n">429</div><div class="l">DEI Employees '25</div></div>
+<div class="sb"><div class="n">80%</div><div class="l">Shootings 4 Hoods</div></div>
+<div class="sb"><div class="n bad">0/12</div><div class="l">BPS HS Ach Pts</div></div>
+<div class="sb"><div class="n">5,100+</div><div class="l">ICE Arrests '25</div></div>
+<div class="sb"><div class="n bad">19.0%</div><div class="l">Office Vacancy Q2'26</div></div>
+<div class="sb"><div class="n bad">11.2d</div><div class="l">Mattapan 311 Wait</div></div>
+<div class="sb"><div class="n bad">$3.4B</div><div class="l">Pension+OPEB Gap</div></div>
+</div></div>
+
+<nav>
+<button class="active" onclick="showTab('budget',this)">Budget</button>
+<button onclick="showTab('dei',this)">DEI Depts</button>
+<button onclick="showTab('payroll',this)">Payroll</button>
+<button onclick="showTab('crime',this)">Crime</button>
+<button onclick="showTab('education',this)">Education</button>
+<button onclick="showTab('ice',this)">ICE</button>
+<button onclick="showTab('cre',this)">Commercial RE</button>
+<button onclick="showTab('housing',this)">Housing</button>
+<button onclick="showTab('svc311',this)">311 Services</button>
+<button onclick="showTab('pension',this)">Pension/OPEB</button>
+</nav>
+
+<div class="ct">
+
+<!-- BUDGET -->
+<div class="tab active" id="budget">
+<div class="co red"><strong>Key Finding:</strong> Veterans Services flatlined at $2.5M–$3.3M since FY2019 while combined DEI/equity departments went from $548K to <strong>$28.5M</strong> — a 52× increase. Veterans is budgeted ~$4.7M yearly then slashed in half. All figures are General Fund actual expenditures verified page-by-page from the city's own ACFRs.</div>
+<div class="kg"><div class="kpi red"><div class="v">$3.3M</div><div class="lb">Veterans FY25<br>Budget $4.85M</div></div><div class="kpi green"><div class="v">$28.5M</div><div class="lb">DEI/Equity FY25<br>Up from $548K</div></div><div class="kpi blue"><div class="v">$3.6M</div><div class="lb">New Bostonians<br>Up 785%</div></div><div class="kpi amber"><div class="v">$4.74B</div><div class="lb">Total City FY25</div></div><div class="kpi purple"><div class="v">52×</div><div class="lb">DEI Growth</div></div><div class="kpi orange"><div class="v">+41%</div><div class="lb">Budget Growth</div></div></div>
+<div class="g g2"><div class="cd full"><h3>Veterans Services vs. Combined DEI/Equity (FY2019–FY2025)</h3><p class="cs">General Fund actual expenditures, budgetary basis — $thousands. Verified against ACFR expenditure schedules.</p><div class="cw tall"><canvas id="c1"></canvas></div></div></div>
+<div class="g g2"><div class="cd"><h3>Veterans: Original Budget vs Final Budget vs Actual</h3><p class="cs">Systematically cut every year before spending begins</p><div class="cw"><canvas id="c2"></canvas></div></div><div class="cd"><h3>Office of New Bostonians — Growth</h3><div class="cw"><canvas id="c3"></canvas></div></div></div>
+<div class="g g2"><div class="cd"><h3>Total City Expenditures ($B)</h3><div class="cw"><canvas id="c4"></canvas></div></div><div class="cd"><h3>DEI vs Veterans as % of Budget</h3><div class="cw"><canvas id="c5"></canvas></div></div></div>
+<div class="cd"><h3>Year-by-Year (Corrected, ACFR-Verified)</h3><table><thead><tr><th>FY</th><th>Mayor</th><th class="r">Veterans Actual</th><th class="r">DEI/Equity Combined</th><th class="r">New Bostonians</th><th class="r">City Total</th></tr></thead><tbody>
+<tr><td>2019</td><td>Walsh</td><td class="r b">$2,937K</td><td class="r">$548K</td><td class="r">$412K</td><td class="r">$3.35B</td></tr>
+<tr><td>2020</td><td>Walsh</td><td class="r b">$2,901K</td><td class="r">$567K</td><td class="r">$673K</td><td class="r">$3.45B</td></tr>
+<tr><td>2021</td><td>Walsh→Wu</td><td class="r b">$2,608K</td><td class="r">$658K</td><td class="r">$1,121K</td><td class="r">$3.58B</td></tr>
+<tr><td>2022</td><td>Wu</td><td class="r b">$2,556K</td><td class="r green">$7,969K</td><td class="r">$1,692K</td><td class="r">$3.78B</td></tr>
+<tr><td>2023</td><td>Wu</td><td class="r red">$2,463K</td><td class="r green">$10,296K</td><td class="r">$2,954K</td><td class="r">$4.09B</td></tr>
+<tr><td>2024</td><td>Wu</td><td class="r b">$2,725K</td><td class="r green">$13,413K</td><td class="r">$2,840K</td><td class="r">$4.37B</td></tr>
+<tr><td>2025</td><td>Wu</td><td class="r b">$3,298K</td><td class="r green">$28,475K</td><td class="r">$3,646K</td><td class="r">$4.74B</td></tr>
+</tbody></table><p class="src">Source: City of Boston ACFRs FY2020–FY2025, Schedule of Expenditures Compared to Budget (Budgetary Basis). FY2019 from prior-year columns. DEI combined = Tier 1 + Tier 2 departments (see DEI Depts tab for breakdown).</p></div>
+</div>
+
+<!-- DEI BREAKDOWN -->
+<div class="tab" id="dei">
+<div class="co amber"><strong>Methodology:</strong> Every department name and dollar amount below is copied verbatim from the City of Boston ACFR expenditure schedules. Departments are presented in two tiers: <strong>Tier 1</strong> (equity & identity offices with no operational service-delivery mission) and <strong>Tier 2</strong> (equity-adjacent departments with operational missions but explicit DEI framing). Readers can evaluate each tier independently.</div>
+<div class="g g2"><div class="cd full"><h3>Combined DEI/Equity Departments — Stacked by Year</h3><p class="cs">Each color = one department. Tier 1 (solid) + Tier 2 (hatched). Veterans red line for reference.</p><div class="cw tall"><canvas id="d1"></canvas></div></div></div>
+<div class="g g2"><div class="cd"><h3>FY2025 — Where the $28.5M Goes</h3><div class="cw"><canvas id="d2"></canvas></div></div><div class="cd"><h3>Top Department Growth (FY2022–FY2025)</h3><div class="cw"><canvas id="d3"></canvas></div></div></div>
+<div class="cd"><h3>TIER 1 — Equity & Identity Offices ($thousands, actual expenditures)</h3><p class="cs">Exact department names from ACFR expenditure schedules</p>
+<table><thead><tr><th>Department (ACFR Name)</th><th class="r">FY19</th><th class="r">FY20</th><th class="r">FY21</th><th class="r">FY22</th><th class="r">FY23</th><th class="r">FY24</th><th class="r">FY25</th></tr></thead><tbody>
+<tr><td class="b">Office of Equity</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">3,290</td><td class="r">881</td><td class="r">2,415</td><td class="r">3,212</td></tr>
+<tr><td>Office of Civil Rights <span style="font-size:.6rem;color:var(--muted)">(→ Fair Housing & Equity in FY25)</span></td><td class="r">291</td><td class="r">227</td><td class="r">192</td><td class="r">501</td><td class="r">405</td><td class="r">391</td><td class="r">671</td></tr>
+<tr><td>Office of Diversity</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">254</td><td class="r">—</td><td class="r">—</td><td class="r">—</td></tr>
+<tr><td>Office of Resiliency & Racial Equity</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">1,740</td><td class="r">896</td><td class="r">—</td><td class="r">—</td></tr>
+<tr><td>Language & Community Access</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">717</td><td class="r">1,748</td><td class="r">2,178</td><td class="r">2,160</td></tr>
+<tr><td>Participatory Budgeting</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">2,000</td><td class="r">1,951</td><td class="r">2,130</td></tr>
+<tr><td>Black Male Advancement</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">1,397</td><td class="r">1,763</td><td class="r">1,900</td></tr>
+<tr><td>Office of Food Justice</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">1,003</td><td class="r">1,272</td><td class="r">1,327</td></tr>
+<tr><td>LGBTQ+ Advancement</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">477</td><td class="r">721</td><td class="r">745</td></tr>
+<tr><td>Supplier Diversity</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">1,113</td><td class="r">1,563</td></tr>
+<tr><td>Women's Commission</td><td class="r">257</td><td class="r">340</td><td class="r">466</td><td class="r">749</td><td class="r">355</td><td class="r">527</td><td class="r">639</td></tr>
+<tr class="tg"><td class="b">Tier 1 Subtotal</td><td class="r green b">548</td><td class="r green b">567</td><td class="r green b">658</td><td class="r green b">7,251</td><td class="r green b">9,162</td><td class="r green b">12,331</td><td class="r green b">14,347</td></tr>
+</tbody></table></div>
+<div class="cd"><h3>TIER 2 — Equity-Adjacent / Operational Mission ($thousands)</h3><p class="cs">Departments with equity framing but also perform operational functions</p>
+<table><thead><tr><th>Department (ACFR Name)</th><th class="r">FY19</th><th class="r">FY20</th><th class="r">FY21</th><th class="r">FY22</th><th class="r">FY23</th><th class="r">FY24</th><th class="r">FY25</th></tr></thead><tbody>
+<tr><td>Police Accountability & Transparancy <span style="font-size:.6rem;color:var(--muted)">[sic — ACFR spelling]</span></td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">718</td><td class="r">1,134</td><td class="r">1,082</td><td class="r">1,151</td></tr>
+<tr><td>Office of Workforce Development</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">6,496</td></tr>
+<tr><td>Office of Eco Opp & Inclusion</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">—</td><td class="r">6,481</td></tr>
+<tr class="tg"><td class="b">Tier 2 Subtotal</td><td class="r b">0</td><td class="r b">0</td><td class="r b">0</td><td class="r b">718</td><td class="r b">1,134</td><td class="r b">1,082</td><td class="r green b">14,128</td></tr>
+</tbody></table></div>
+<div class="cd"><h3>Combined Total + Veterans Comparison</h3>
+<table><thead><tr><th>Category</th><th class="r">FY19</th><th class="r">FY20</th><th class="r">FY21</th><th class="r">FY22</th><th class="r">FY23</th><th class="r">FY24</th><th class="r">FY25</th></tr></thead><tbody>
+<tr class="tg"><td class="b" style="color:var(--green)">Tier 1 + Tier 2 Combined</td><td class="r green b">548</td><td class="r green b">567</td><td class="r green b">658</td><td class="r green b">7,969</td><td class="r green b">10,296</td><td class="r green b">13,413</td><td class="r green b">28,475</td></tr>
+<tr class="tg"><td class="b" style="color:var(--red)">Veterans Services Department</td><td class="r red b">2,937</td><td class="r red b">2,901</td><td class="r red b">2,608</td><td class="r red b">2,556</td><td class="r red b">2,463</td><td class="r red b">2,725</td><td class="r red b">3,298</td></tr>
+<tr><td>Office of New Bostonians <span style="font-size:.6rem;color:var(--muted)">(separate — not included in DEI totals)</span></td><td class="r">412</td><td class="r">673</td><td class="r">1,121</td><td class="r">1,692</td><td class="r">2,954</td><td class="r">2,840</td><td class="r">3,646</td></tr>
+</tbody></table>
+<p class="src">Source: City of Boston Annual Comprehensive Financial Reports (ACFRs), FY2020 through FY2025, Schedule of Expenditures Compared to Budget (Budgetary Basis). FY2019 figures from prior-year comparative columns. All department names exactly as printed. "—" = department did not exist or had zero General Fund expenditure. "Transparancy" [sic] is the city's own misspelling in the ACFR.</p></div>
+</div>
+
+<!-- PAYROLL -->
+<div class="tab" id="payroll">
+<div class="co red"><strong>Key Finding:</strong> DEI-adjacent headcount: <strong>46 → 429 employees</strong> (CY2019→CY2025). Police <strong>lost 177 officers</strong> (3,271→3,094). Veterans stuck at 12–17. BPS Inclusion positions alone (220 staff, $19.8M) exceed the entire Veterans department by 6×.</div>
+<div class="kg"><div class="kpi red"><div class="v">429</div><div class="lb">DEI Employees<br>CY2025</div></div><div class="kpi green"><div class="v">15</div><div class="lb">Veterans<br>Employees</div></div><div class="kpi blue"><div class="v">3,094</div><div class="lb">Police<br>CY2025</div></div><div class="kpi amber"><div class="v">$2.46B</div><div class="lb">Total Payroll</div></div><div class="kpi purple"><div class="v">−177</div><div class="lb">Police Lost<br>Since '19</div></div><div class="kpi orange"><div class="v">+383</div><div class="lb">DEI Added<br>Since '19</div></div></div>
+<div class="g g2"><div class="cd full"><h3>Interactive: Drag the Slider (2019 → 2025)</h3><p class="cs">Each dot = 1 city employee</p><iframe src="boston-payroll-interactive.html" style="width:100%;height:680px;border:none;border-radius:8px;background:#0F4478" loading="lazy"></iframe></div></div>
+<div class="g g2"><div class="cd"><h3>Headcount: DEI vs Police vs Veterans</h3><div class="cw tall"><canvas id="p1"></canvas></div></div><div class="cd"><h3>Payroll ($M): DEI vs Police vs Veterans</h3><div class="cw tall"><canvas id="p2"></canvas></div></div></div>
+<div class="g g2"><div class="cd"><h3>DEI Headcount Breakdown (CY2025)</h3><div class="cw"><canvas id="p3"></canvas></div></div><div class="cd"><h3>Total City Payroll</h3><div class="cw"><canvas id="p4"></canvas></div></div></div>
+<div class="cd"><h3>Staffing Summary</h3><table><thead><tr><th>Year</th><th class="r">Total Emp</th><th class="r">Total Pay</th><th class="r">Police</th><th class="r">Police Pay</th><th class="r">DEI Staff</th><th class="r">DEI Pay</th><th class="r">Vet Staff</th></tr></thead><tbody>
+<tr><td>CY2019</td><td class="r">23,312</td><td class="r">$1.80B</td><td class="r">3,271</td><td class="r">$416M</td><td class="r">46</td><td class="r">$2.0M</td><td class="r">15</td></tr>
+<tr><td>CY2020</td><td class="r">21,858</td><td class="r">$1.82B</td><td class="r">3,142</td><td class="r">$416M</td><td class="r">47</td><td class="r">$2.4M</td><td class="r">13</td></tr>
+<tr><td>CY2021</td><td class="r">22,552</td><td class="r">$1.87B</td><td class="r">3,094</td><td class="r">$409M</td><td class="r">78</td><td class="r">$5.0M</td><td class="r">12</td></tr>
+<tr><td>CY2022</td><td class="r">23,204</td><td class="r">$1.93B</td><td class="r">3,040</td><td class="r">$406M</td><td class="r">86</td><td class="r">$6.2M</td><td class="r">16</td></tr>
+<tr><td>CY2024</td><td class="r">25,530</td><td class="r">$2.42B</td><td class="r b">3,491</td><td class="r">$578M</td><td class="r green">413</td><td class="r green">$29.1M</td><td class="r">17</td></tr>
+<tr><td>CY2025</td><td class="r">25,397</td><td class="r">$2.46B</td><td class="r red">3,094</td><td class="r">$535M</td><td class="r green">429</td><td class="r green">$34.2M</td><td class="r">15</td></tr>
+</tbody></table><p class="src">Source: City of Boston Employee Earnings Reports CY2019–CY2025 (data.boston.gov).</p></div>
+</div>
+
+<!-- CRIME -->
+<div class="tab" id="crime">
+<div class="co red"><strong>80% of all Boston shootings (2018–2025) concentrated in 4 neighborhoods:</strong> Dorchester, Roxbury, Mattapan, and Jamaica Plain — predominantly non-white communities. 80% of victims are Black. The city spends $28.5M on equity offices while the actual violence is packed into these same neighborhoods.</div>
+<div class="kg"><div class="kpi red"><div class="v">80%</div><div class="lb">Shootings in<br>4 Neighborhoods</div></div><div class="kpi amber"><div class="v">80%</div><div class="lb">Victims<br>Are Black</div></div><div class="kpi green"><div class="v">1.9</div><div class="lb">MA Homicide<br>/100K (#2)</div></div><div class="kpi blue"><div class="v">31</div><div class="lb">Homicides<br>2025</div></div><div class="kpi purple"><div class="v">−30%</div><div class="lb">Shootings vs<br>5yr Avg</div></div><div class="kpi cyan"><div class="v">19%</div><div class="lb">Boston Share<br>MA Crime</div></div></div>
+<div class="g g2"><div class="cd"><h3>Shooting Victims by Neighborhood (2024)</h3><p class="cs">BPD data. 4 neighborhoods = ~85% of all shootings.</p><div class="cw"><canvas id="cr1"></canvas></div></div><div class="cd"><h3>Boston Homicide Trend (2019–2025)</h3><p class="cs">2024 historic low (24), 2025 uptick (31, +36%)</p><div class="cw"><canvas id="cr2"></canvas></div></div></div>
+<div class="g g2"><div class="cd"><h3>Boston vs MA vs National — Rates/100K (2024)</h3><div class="cw"><canvas id="cr3"></canvas></div></div><div class="cd"><h3>National Violent Crime Trend (2016–2024)</h3><div class="cw"><canvas id="cr4"></canvas></div></div></div>
+<div class="g g2"><div class="cd"><h3>Boston Homicide Victims vs Population</h3><p class="cs">22% of pop, 80% of victims</p><div class="cw"><canvas id="cr5"></canvas></div></div><div class="cd"><h3>MA Homicide Offenders vs Population</h3><p class="cs">FBI SRS 2021–25, n=427</p><div class="cw"><canvas id="cr6"></canvas></div></div></div>
+<div class="g g2"><div class="cd"><h3>Boston Share of MA Crime by Type</h3><p class="cs">9% of pop, 19% of violent crime</p><div class="cw"><canvas id="cr7"></canvas></div></div><div class="cd"><h3>MA YoY Change (2024 vs 2023)</h3><div class="cw"><canvas id="cr8"></canvas></div></div></div>
+<div class="cd"><h3>Crime Summary (2024)</h3><table><thead><tr><th>Type</th><th class="r">MA</th><th class="r">Boston</th><th class="r">Bos %</th><th class="r">MA Rate</th><th class="r">Bos Rate</th><th class="r">Natl</th></tr></thead><tbody><tr><td class="b">Homicide</td><td class="r">132</td><td class="r">25</td><td class="r">18.9%</td><td class="r green">1.9</td><td class="r">3.8</td><td class="r">5.0</td></tr><tr><td class="b">Rape</td><td class="r">1,920</td><td class="r">202</td><td class="r">10.5%</td><td class="r green">27.3</td><td class="r">30.9</td><td class="r">36.0</td></tr><tr><td class="b">Robbery</td><td class="r">2,406</td><td class="r">762</td><td class="r red">31.7%</td><td class="r">34.2</td><td class="r red">116.5</td><td class="r">65.0</td></tr><tr><td class="b">Agg Assault</td><td class="r">16,813</td><td class="r">2,504</td><td class="r">14.9%</td><td class="r">239.1</td><td class="r red">382.9</td><td class="r">253.0</td></tr><tr class="tg"><td class="b">Total</td><td class="r b">21,271</td><td class="r b">3,493</td><td class="r b">16.4%</td><td class="r green b">302.5</td><td class="r b">534.1</td><td class="r b">359.1</td></tr></tbody></table><p class="src">Source: FBI UCR 2024, Mass.gov EOPSS, BPD, Vera Institute, Boston Globe</p></div>
+</div>
+
+<!-- EDUCATION -->
+<div class="tab" id="education">
+<div class="co red"><strong>BPS earned 0/12 HS achievement points — every subject declined.</strong> Trails state by 11–20 pts. 26.3% chronic absenteeism. Grad rate fell to 79.7%. ~$27K per pupil.</div>
+<div class="kg"><div class="kpi red"><div class="v">0/12</div><div class="lb">HS Achievement</div></div><div class="kpi amber"><div class="v">26.3%</div><div class="lb">Chronic Absent</div></div><div class="kpi blue"><div class="v">29%</div><div class="lb">ELA Prof 3-8</div></div><div class="kpi purple"><div class="v">28%</div><div class="lb">Math Prof 3-8</div></div><div class="kpi orange"><div class="v">79.7%</div><div class="lb">Grad Rate</div></div><div class="kpi cyan"><div class="v">~$27K</div><div class="lb">Per Pupil</div></div></div>
+<div class="g g2"><div class="cd"><h3>BPS vs State — MCAS (2025)</h3><div class="cw"><canvas id="e1"></canvas></div></div><div class="cd"><h3>HS ELA Decline by Group</h3><div class="cw"><canvas id="e2"></canvas></div></div></div>
+<div class="g g2"><div class="cd"><h3>Accountability Points</h3><div class="cw"><canvas id="e3"></canvas></div></div><div class="cd"><h3>Grad Rate by Race</h3><div class="cw"><canvas id="e4"></canvas></div></div></div>
+<div class="g g2"><div class="cd"><h3>Chronic Absenteeism</h3><div class="cw"><canvas id="e5"></canvas></div></div><div class="cd"><h3>Scaled Scores by Grade — ELA</h3><div class="cw"><canvas id="e6"></canvas></div></div></div>
+<p class="src">Full 7-tab analysis → <a href="education-boston.html" style="color:var(--navy);font-weight:600;border-bottom:1px solid var(--gold)">Education — Boston</a></p>
+</div>
+
+<!-- ICE -->
+<div class="tab" id="ice">
+<div class="co blue"><strong>Boston is a sanctuary city under Wu.</strong> ICE ERO Boston arrests ~3× YoY in 2025. AOR covers all 6 New England states.</div>
+<div class="kg"><div class="kpi red"><div class="v">5,100+</div><div class="lb">Arrests Jan–Oct</div></div><div class="kpi amber"><div class="v">~3×</div><div class="lb">YoY Increase</div></div><div class="kpi blue"><div class="v">1,500+</div><div class="lb">Peak Sep</div></div><div class="kpi purple"><div class="v">Brazil</div><div class="lb">Top Nation 25%</div></div></div>
+<div class="g g2"><div class="cd"><h3>Monthly Arrests (2025)</h3><div class="cw"><canvas id="i1"></canvas></div></div><div class="cd"><h3>By Nationality</h3><div class="cw"><canvas id="i2"></canvas></div></div></div>
+<div class="g g2"><div class="cd"><h3>2024 vs 2025</h3><div class="cw"><canvas id="i3"></canvas></div></div><div class="cd"><h3>AOR Coverage</h3><div class="cw"><canvas id="i4"></canvas></div></div></div>
+<div class="cd"><h3>Major Operations</h3><table><thead><tr><th>Operation</th><th class="r">Arrests</th><th>Date</th></tr></thead><tbody><tr><td class="b">March Enhanced</td><td class="r b">370</td><td>Mar 18–23</td></tr><tr><td class="b">Op Patriot</td><td class="r b">1,461</td><td>May 2025</td></tr><tr><td class="b">Op Patriot 2.0</td><td class="r b">1,400+</td><td>Sep 2025</td></tr></tbody></table><p class="src">Source: ICE ERO Boston, UC Berkeley, Globe, GBH</p></div>
+</div>
+
+<!-- COMMERCIAL RE — FULLY INTEGRATED SUB-TABS -->
+<div class="tab" id="cre">
+<div class="co red"><strong>Office vacancy reached 19.0% in Q2 2026 (from &lt;8% pre-COVID) — a fifth straight quarterly rise, though the smallest in over a year — the H2 2025 stabilization proved fragile. Distressed sales at 31–62% below prior value. Commercial assessments declined FY2026 for first time in a decade. Full 7-section deep-dive below.</strong></div>
+<div class="kg">
+<div class="kpi red"><div class="v">19.0%</div><div class="lb">Office Vacancy<br>Q2 2026 C&W</div></div>
+<div class="kpi amber"><div class="v">11.0%</div><div class="lb">CMBS Delinq<br>(Office)</div></div>
+<div class="kpi red"><div class="v">−$0.8B</div><div class="lb">Comm Values<br>FY2026</div></div>
+<div class="kpi blue"><div class="v">62.4%</div><div class="lb">Comm Tax Share<br>↓ from 63.6%</div></div>
+<div class="kpi orange"><div class="v">−58%</div><div class="lb">Bank CRE<br>Lending</div></div>
+<div class="kpi green"><div class="v">67.6mo</div><div class="lb">MLS Comm<br>Supply</div></div>
+</div>
+
+<div class="sub-nav">
+<button class="sub-btn active" onclick="showSubTab('cre-overview',this)">Overview</button>
+<button class="sub-btn" onclick="showSubTab('cre-vacancy',this)">Vacancy</button>
+<button class="sub-btn" onclick="showSubTab('cre-recovery',this)">Downtown Recovery</button>
+<button class="sub-btn" onclick="showSubTab('cre-cmbs',this)">CMBS &amp; Distress</button>
+<button class="sub-btn" onclick="showSubTab('cre-sales',this)">Property Sales</button>
+<button class="sub-btn" onclick="showSubTab('cre-tax',this)">Tax Impact</button>
+<button class="sub-btn" onclick="showSubTab('cre-mls',this)">MLS PIN Comm.</button>
+</div>
+
+<div class="sub-tab active" id="cre-overview">
+<div class="g g2"><div class="cd"><h3>Office Vacancy Trajectory (Boston)</h3><p class="cs">C&W quarterly data 2019–Q1 2026</p><div class="cw"><canvas id="ov1"></canvas></div></div><div class="cd"><h3>Vacancy by Source — Q1 2026</h3><p class="cs">Different brokerages, different methodologies — same trend</p><div class="cw"><canvas id="ov2"></canvas></div></div></div>
+<div class="co blue"><strong>Q1 2026 setback:</strong> After two quarters of stabilization in H2 2025, vacancy rose 30 bps QoQ. Downtown at 19.9%, suburbs at 20.5% — now exceeding the metro average. 1.6M SF of new leasing activity, with 1.0M+ SF in downtown. Class B inventory continues to struggle. Construction pipeline at 20-year low: only 750K SF under construction, all build-to-suit.</div>
+</div>
+
+<div class="sub-tab" id="cre-vacancy">
+<div class="g g2"><div class="cd"><h3>Class A vs. Class B Vacancy</h3><p class="cs">Flight-to-quality gap widening</p><div class="cw"><canvas id="vc1"></canvas></div></div><div class="cd"><h3>Boston vs. Peer Cities — Q1 2026</h3><p class="cs">Boston faring better than SF, Austin, Seattle</p><div class="cw"><canvas id="vc2"></canvas></div></div></div>
+<div class="g g2">
+<div class="cd"><div style="font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px">Class A Vacancy</div><div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--amber)">~16%</div><div style="font-size:.68rem;color:var(--muted);margin-top:4px">Pre-COVID: 7% · Trend: Stabilizing</div></div>
+<div class="cd"><div style="font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px">Class B Vacancy</div><div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--red)">~22%</div><div style="font-size:.68rem;color:var(--muted);margin-top:4px">Pre-COVID: 8.3% · Rents off 15%+</div></div>
+<div class="cd"><div style="font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px">Suburban Clusters</div><div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--red)">20.5%</div><div style="font-size:.68rem;color:var(--muted);margin-top:4px">Q1 2026 · Now exceeds metro avg</div></div>
+</div>
+</div>
+
+<div class="sub-tab" id="cre-recovery">
+<div class="g g2"><div class="cd"><h3>Downtown Boston Vacancy — Recovery Arc</h3><p class="cs">From 28.5% pandemic peak, 6-quarter recovery, Q1 2026 uptick</p><div class="cw"><canvas id="dr1"></canvas></div></div><div class="cd"><h3>Recovery Indicators</h3><p class="cs">Mixed signals — leasing up, but vacancy ticking higher</p><div class="cw"><canvas id="dr2"></canvas></div></div></div>
+<div class="g g2">
+<div class="cd"><div style="font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px">Peak Vacancy (Mid-2024)</div><div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--red)">28.5%</div></div>
+<div class="cd"><div style="font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px">Q4 2025</div><div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--green)">25.2%</div><div style="font-size:.68rem;color:var(--muted);margin-top:4px">−3.3 pp from peak</div></div>
+<div class="cd"><div style="font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px">Q1 2026</div><div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--amber)">19.9%</div><div style="font-size:.68rem;color:var(--muted);margin-top:4px">Downtown · +20 bps QoQ</div></div>
+<div class="cd"><div style="font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px">Q1 New Leasing</div><div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--blue)">1.6M SF</div><div style="font-size:.68rem;color:var(--muted);margin-top:4px">Downtown: 1.0M+ SF</div></div>
+</div>
+</div>
+
+<div class="sub-tab" id="cre-cmbs">
+<div class="g g2"><div class="cd"><h3>CMBS Office Delinquency — Historic High</h3><p class="cs">Office sector spiraling vs. overall CRE</p><div class="cw"><canvas id="cm1"></canvas></div></div><div class="cd"><h3>CRE Loan Maturities ($B)</h3><p class="cs">$950B matured in 2025 — refinancing at higher rates</p><div class="cw"><canvas id="cm2"></canvas></div></div></div>
+<div class="g g2">
+<div class="cd"><div style="font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px">Office CMBS Delinquency</div><div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--red)">11.57%</div><div style="font-size:.68rem;color:var(--muted);margin-top:4px">Trepp, June 2026 &middot; End of 2024 — up from 1.6% pre-COVID</div></div>
+<div class="cd"><div style="font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px">All CRE CMBS</div><div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--amber)">6.57%</div><div style="font-size:.68rem;color:var(--muted);margin-top:4px">Up from 4.51% end of 2023</div></div>
+<div class="cd"><div style="font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px">Bank CRE Lending</div><div style="font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--red)">−58%</div><div style="font-size:.68rem;color:var(--muted);margin-top:4px">vs pre-pandemic · Office: −65%</div></div>
+</div>
+</div>
+
+<div class="sub-tab" id="cre-sales">
+<div class="g g2"><div class="cd"><h3>Distressed Sale Discounts</h3><p class="cs">Major Boston office transactions, 2024–2025</p><div class="cw"><canvas id="sa1"></canvas></div></div><div class="cd"><h3>Sale Price per SF — Peer Comparison</h3><p class="cs">Boston sinking toward Philadelphia tier</p><div class="cw"><canvas id="sa2"></canvas></div></div></div>
+<div class="tw"><table><thead><tr><th>Property</th><th class="r">Sale Price</th><th class="r">Prior Value</th><th class="r">Discount</th><th>Notes</th></tr></thead><tbody>
+<tr><td class="b">One Lincoln Street</td><td class="r">$440M</td><td class="r">$640M</td><td class="r red">−31%</td><td>State Street anchor</td></tr>
+<tr><td class="b">100 Federal Street</td><td class="r">$230M</td><td class="r">$415M</td><td class="r red">−45%</td><td>Post-pandemic distress</td></tr>
+<tr><td class="b">One Post Office Square</td><td class="r">$200M</td><td class="r">$395M</td><td class="r red">−49%</td><td>2024 transaction</td></tr>
+<tr><td class="b">One Boston Place</td><td class="r">$112M</td><td class="r">$293M</td><td class="r red">−62%</td><td>Winthrop Sq area</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="sub-tab" id="cre-tax">
+<div class="g g2"><div class="cd"><h3>Assessed Values — FY2019–FY2026</h3><p class="cs">Commercial peaked FY2025, now declining. Residential keeps climbing.</p><div class="cw"><canvas id="tx1"></canvas></div></div><div class="cd"><h3>Commercial Share of Tax Base</h3><p class="cs">Dropping from 63.6% peak — shifting burden to homeowners</p><div class="cw"><canvas id="tx2"></canvas></div></div></div>
+<div class="tw"><table><thead><tr><th>Year</th><th class="r">Commercial $B</th><th class="r">Residential $B</th><th class="r">Comm. Share</th><th class="r">Comm. YoY</th></tr></thead><tbody>
+<tr><td>FY2019</td><td class="r">$107.2B</td><td class="r">$67.3B</td><td class="r">61.4%</td><td class="r">—</td></tr>
+<tr><td>FY2020</td><td class="r">$107.9B</td><td class="r">$61.0B</td><td class="r">63.9%</td><td class="r green">+0.7%</td></tr>
+<tr><td>FY2022</td><td class="r">$120.0B</td><td class="r">$70.1B</td><td class="r">63.1%</td><td class="r green">+3.7%</td></tr>
+<tr><td>FY2024</td><td class="r">$134.6B</td><td class="r">$77.1B</td><td class="r amber">63.6% ← peak</td><td class="r green">+4.4%</td></tr>
+<tr><td>FY2025</td><td class="r">$137.1B</td><td class="r">$79.6B</td><td class="r">63.3%</td><td class="r green">+1.9%</td></tr>
+<tr><td>FY2026</td><td class="r">$136.3B</td><td class="r">$82.1B</td><td class="r red">62.4%</td><td class="r red">−0.6%</td></tr>
+</tbody></table></div>
+<p class="src">Source: Boston Assessing Dept FY2016–FY2026. Boston collects ~73% of revenue from property taxes. The 1.2pp shift in commercial share represents billions in burden moving to residential taxpayers.</p>
+</div>
+
+<div class="sub-tab" id="cre-mls">
+<div class="kg">
+<div class="kpi red"><div class="v">9</div><div class="lb">Closed YTD 2026<br>vs 16 in 2025</div></div>
+<div class="kpi amber"><div class="v">$2.29M</div><div class="lb">Avg Sale Price<br>2026 YTD</div></div>
+<div class="kpi blue"><div class="v">214</div><div class="lb">Active Listings<br>2026</div></div>
+<div class="kpi red"><div class="v">67.6mo</div><div class="lb">Months Supply<br>6–9 = balanced</div></div>
+<div class="kpi green"><div class="v">38</div><div class="lb">12-Mo Sold<br>42 in 2022</div></div>
+</div>
+<div class="co amber"><strong>Heavy oversupply:</strong> 214 active listings against 38 closed sales (trailing 12 months) = 68-month supply. Balanced commercial markets run 6–9 months. Average DOM has risen from 80 days in 2022 to 110 in 2026. Small sample — mix heavily weighted by individual large transactions.</div>
+<div class="g g2"><div class="cd"><h3>Avg Sale Price (2022–2026)</h3><p class="cs">Small sample — mix-weighted, not apples-to-apples</p><div class="cw"><canvas id="ml1"></canvas></div></div><div class="cd"><h3>Active Listings vs. Closed Sales</h3><p class="cs">The supply-demand gap</p><div class="cw"><canvas id="ml2"></canvas></div></div></div>
+<div class="tw"><table><thead><tr><th>Metric</th><th class="r">2022</th><th class="r">2023</th><th class="r">2024</th><th class="r">2025</th><th class="r">2026</th></tr></thead><tbody>
+<tr><td>Closed Sales YTD</td><td class="r">14</td><td class="r">12</td><td class="r">15</td><td class="r">16</td><td class="r red">9</td></tr>
+<tr><td>Avg Sale Price</td><td class="r">$726K</td><td class="r">$1,957K</td><td class="r">$623K</td><td class="r">$1,387K</td><td class="r">$2,292K</td></tr>
+<tr><td>Avg DOM</td><td class="r">80</td><td class="r">77</td><td class="r">101</td><td class="r red">131</td><td class="r">110</td></tr>
+<tr><td>Active Listings</td><td class="r">175</td><td class="r">232</td><td class="r">236</td><td class="r">230</td><td class="r">214</td></tr>
+<tr><td>Months Supply</td><td class="r">50.0</td><td class="r">71.4</td><td class="r">60.3</td><td class="r">58.7</td><td class="r red">67.6</td></tr>
+<tr><td>12-Mo Sold</td><td class="r">42</td><td class="r">39</td><td class="r">47</td><td class="r">47</td><td class="r red">38</td></tr>
+</tbody></table></div>
+<p class="src">Source: MLS PIN Five-Year Sub-Report, Boston area, commercial-use property, as of May 3, 2026. Full standalone → <a href="commercial-re-dashboard.html" style="color:var(--navy);font-weight:600;border-bottom:1px solid var(--gold)">commercial-re-dashboard.html</a></p>
+</div>
+</div><!-- /CRE tab -->
+
+<!-- HOUSING -->
+<div class="tab" id="housing">
+<div class="co amber"><strong>Boston residential market is shifting.</strong> Condo months supply hit 5.58 — approaching balanced market (6.0) for the first time since 2019. Condos now selling 1.4% below list price. Single family avg sale price up 55% since 2018 but volume down 19%. Average rent $3,781/mo, up 29% since 2018.</div>
+<div class="kg"><div class="kpi red"><div class="v">$1.26M</div><div class="lb">Avg SF Sale<br>2026 YTD</div></div><div class="kpi blue"><div class="v">$1.25M</div><div class="lb">Avg Condo Sale<br>2026 YTD</div></div><div class="kpi amber"><div class="v">$1.45M</div><div class="lb">Avg Multi Sale<br>2026 YTD</div></div><div class="kpi purple"><div class="v">$3,781</div><div class="lb">Avg Rent/Mo<br>2026 YTD</div></div><div class="kpi green"><div class="v">5.58</div><div class="lb">Condo Months<br>Supply</div></div><div class="kpi orange"><div class="v">−19%</div><div class="lb">SF Volume<br>Since 2018</div></div></div>
+<div class="g g2"><div class="cd"><h3>Average Sale Price — All Types (2018–2026)</h3><p class="cs">Boston MLS PIN YTD sold data</p><div class="cw"><canvas id="h1"></canvas></div></div><div class="cd"><h3>Condo Months Supply — Approaching Buyer's Market</h3><p class="cs">6.0 = balanced market. Boston condos at 5.58.</p><div class="cw"><canvas id="h2"></canvas></div></div></div>
+<div class="g g2"><div class="cd"><h3>Average Rent ($/Mo) — Boston</h3><p class="cs">MLS PIN leased data. COVID dip 2021, then snap-back.</p><div class="cw"><canvas id="h3"></canvas></div></div><div class="cd"><h3>Days to Offer — Market Speed</h3><p class="cs">Lower = hotter market. All types slowing.</p><div class="cw"><canvas id="h4"></canvas></div></div></div>
+<div class="g g2"><div class="cd"><h3>Closed Units YTD — Volume Declining</h3><div class="cw"><canvas id="h5"></canvas></div></div><div class="cd"><h3>Condo Listing Inventory (May 14 snapshot)</h3><p class="cs">Inventory nearly doubled since 2022</p><div class="cw"><canvas id="h6"></canvas></div></div></div>
+<div class="g g2"><div class="cd"><h3>Residential vs. Commercial Tax Rate ($/1,000 assessed value)</h3><p class="cs">Residential climbing as commercial share erodes — diverging lines, converging burden</p><div class="cw"><canvas id="h7"></canvas></div></div><div class="cd"><h3>Annual Tax Bill — Owner at $800K Assessment</h3><p class="cs">Rate × $800K constant basis. Pure rate impact, appreciation excluded. FY2026 estimated.</p><div class="cw"><canvas id="h8"></canvas></div></div></div>
+<div class="co amber"><strong>The homeowner number:</strong> At FY2019's rate of $10.56, an $800K home cost <strong>$8,448/year</strong> in property taxes. At FY2025's $11.58 rate it's <strong>$9,264</strong> — a $816 increase on the same assessed value. The estimated FY2026 rate of $12.40 (driven by the $800M commercial assessment decline) pushes that to <strong>$9,920</strong> — a <strong>~$1,472 cumulative hike (+17.4%) since FY2019</strong>, purely from the rate, before any appreciation in your home's value. Source: Boston Assessing Dept.</div>
+<div class="cd"><h3>Boston Property Tax Rates by Fiscal Year</h3>
+<table><thead><tr><th>Fiscal Year</th><th class="r">Residential Rate<br><span style="font-weight:400;font-size:.6rem">$/1,000 AV</span></th><th class="r">Commercial Rate<br><span style="font-weight:400;font-size:.6rem">$/1,000 AV</span></th><th class="r">Est. Bill<br><span style="font-weight:400;font-size:.6rem">$800K home</span></th><th class="r">Resi YoY</th></tr></thead><tbody>
+<tr><td>FY2019</td><td class="r">$10.56</td><td class="r">$25.36</td><td class="r">$8,448</td><td class="r">—</td></tr>
+<tr><td>FY2020</td><td class="r">$10.88</td><td class="r">$25.69</td><td class="r">$8,704</td><td class="r red">+3.0%</td></tr>
+<tr><td>FY2021</td><td class="r">$10.56</td><td class="r">$24.92</td><td class="r">$8,448</td><td class="r green">−2.9%</td></tr>
+<tr><td>FY2022</td><td class="r">$10.74</td><td class="r">$25.21</td><td class="r">$8,592</td><td class="r red">+1.7%</td></tr>
+<tr><td>FY2023</td><td class="r">$10.74</td><td class="r">$24.68</td><td class="r">$8,592</td><td class="r">flat</td></tr>
+<tr><td>FY2024</td><td class="r">$10.88</td><td class="r">$24.41</td><td class="r">$8,704</td><td class="r red">+1.3%</td></tr>
+<tr><td>FY2025</td><td class="r b">$11.58</td><td class="r">$24.17</td><td class="r b">$9,264</td><td class="r red">+6.4%</td></tr>
+<tr><td>FY2026 (est.)</td><td class="r red">~$12.40</td><td class="r green">~$23.80</td><td class="r red">~$9,920</td><td class="r red">~+7.1%</td></tr>
+</tbody></table>
+<p class="src">Source: Boston Assessing Department, annual tax rate classification hearings FY2019–FY2025. FY2026 estimated based on FY2026 assessment data and levy calculation. Residential exemption not applied — rates shown are gross class rates. Actual bills for owner-occupants who claim the exemption are lower.</p></div>
+<table><thead><tr><th>Year</th><th class="r">SF Avg Sale</th><th class="r">SF Units</th><th class="r">Condo Avg</th><th class="r">Condo Units</th><th class="r">Multi Avg</th><th class="r">Rent/Mo</th></tr></thead><tbody>
+<tr><td>2018</td><td class="r">$813K</td><td class="r">242</td><td class="r">$889K</td><td class="r">1,361</td><td class="r">$989K</td><td class="r">$2,934</td></tr>
+<tr><td>2019</td><td class="r">$896K</td><td class="r">265</td><td class="r">$814K</td><td class="r">1,254</td><td class="r">$1.18M</td><td class="r">$2,940</td></tr>
+<tr><td>2020</td><td class="r">$1.03M</td><td class="r">206</td><td class="r">$939K</td><td class="r">1,318</td><td class="r">$1.32M</td><td class="r">$3,032</td></tr>
+<tr><td>2021</td><td class="r">$1.07M</td><td class="r">310</td><td class="r">$888K</td><td class="r">1,909</td><td class="r">$1.11M</td><td class="r">$2,782</td></tr>
+<tr><td>2022</td><td class="r">$1.11M</td><td class="r">286</td><td class="r">$1.00M</td><td class="r">1,679</td><td class="r">$1.33M</td><td class="r">$3,243</td></tr>
+<tr><td>2023</td><td class="r">$992K</td><td class="r">225</td><td class="r">$1.05M</td><td class="r">1,141</td><td class="r">$1.20M</td><td class="r">$3,601</td></tr>
+<tr><td>2024</td><td class="r">$1.09M</td><td class="r">217</td><td class="r">$1.10M</td><td class="r">1,047</td><td class="r">$1.32M</td><td class="r">$3,687</td></tr>
+<tr><td>2025</td><td class="r">$1.32M</td><td class="r">210</td><td class="r">$1.14M</td><td class="r">1,131</td><td class="r">$1.37M</td><td class="r">$3,713</td></tr>
+<tr><td>2026</td><td class="r b">$1.26M</td><td class="r red">195</td><td class="r b">$1.25M</td><td class="r red">1,040</td><td class="r b">$1.45M</td><td class="r b">$3,781</td></tr>
+</tbody></table><p class="src">Source: MLS Property Information Network (MLS PIN), Boston MA Area Market Review. YTD as of May 14 each year.</p></div>
+</div>
+
+<!-- 311 SERVICES -->
+<div class="tab" id="svc311">
+<div class="co red"><strong>Service Equity Gap:</strong> The same 4 neighborhoods absorbing 80% of Boston's shootings also wait <strong>3–4× longer</strong> for basic 311 services. Mattapan residents wait 11.2 days on average; Back Bay waits 3.1. The city spends $28.5M on equity offices while service delivery to minority neighborhoods is measurably slower. Source: data.boston.gov 311 open dataset.</div>
+<div class="kg">
+<div class="kpi red"><div class="v">138K</div><div class="lb">Total Requests<br>FY2024</div></div>
+<div class="kpi red"><div class="v">11.2d</div><div class="lb">Mattapan Avg<br>Resolution</div></div>
+<div class="kpi green"><div class="v">3.1d</div><div class="lb">Back Bay Avg<br>Resolution</div></div>
+<div class="kpi amber"><div class="v">3.6×</div><div class="lb">Service Speed<br>Disparity</div></div>
+<div class="kpi purple"><div class="v">+62%</div><div class="lb">Rodent Complaints<br>Since 2019</div></div>
+<div class="kpi orange"><div class="v">14%</div><div class="lb">Unresolved<br>&gt;30 Days</div></div>
+</div>
+
+<div class="g g2">
+<div class="cd full"><h3>Average 311 Resolution Time by Neighborhood (Days)</h3><p class="cs">Sorted worst to best. Red = the 4 neighborhoods with 80% of shootings. Same neighborhoods, slowest service.</p><div class="cw tall"><canvas id="s4"></canvas></div></div>
+</div>
+<div class="g g2">
+<div class="cd"><h3>311 Complaints by Neighborhood (FY2024, thousands)</h3><p class="cs">Red = high-violence neighborhoods. Dorchester alone = 25% of all requests.</p><div class="cw tall"><canvas id="s1"></canvas></div></div>
+<div class="cd"><h3>Top Request Categories (FY2024)</h3><p class="cs">Pothole, trash, and rodent = 43% of all 311 calls</p><div class="cw tall"><canvas id="s2"></canvas></div></div>
+</div>
+<div class="g g2">
+<div class="cd"><h3>Annual 311 Requests (2019–2025)</h3><p class="cs">COVID dip 2020, steady climb since. +14% vs 2019.</p><div class="cw"><canvas id="s3"></canvas></div></div>
+<div class="cd"><h3>Rodent Activity Complaints (2019–2024)</h3><p class="cs">+62% since 2019 — citywide infestation crisis</p><div class="cw"><canvas id="s5"></canvas></div></div>
+</div>
+<div class="g g2">
+<div class="cd"><h3>Unresolved Requests by Type (&gt;30 Days, FY2024)</h3><p class="cs">Graffiti and streetlights hardest to close</p><div class="cw"><canvas id="s6"></canvas></div></div>
+<div class="cd"><h3>Service Gap vs. Violence Concentration</h3><p class="cs">Resolution time (days) vs shooting share (%) — same neighborhoods, both highest</p><div class="cw"><canvas id="s7"></canvas></div></div>
+</div>
+
+<div class="cd"><h3>311 Service Equity by Neighborhood (FY2024)</h3>
+<table><thead><tr><th>Neighborhood</th><th class="r">FY2024 Requests</th><th class="r">Avg Resolution (Days)</th><th class="r">Shootings 2024</th><th class="r">Median HH Income</th></tr></thead><tbody>
+<tr><td class="b red">Dorchester</td><td class="r">35,012</td><td class="r red">9.1</td><td class="r red">61</td><td class="r">$52K</td></tr>
+<tr><td class="b red">Roxbury</td><td class="r">16,204</td><td class="r red">9.8</td><td class="r red">31</td><td class="r">$40K</td></tr>
+<tr><td class="b red">Mattapan</td><td class="r">7,412</td><td class="r red">11.2</td><td class="r red">19</td><td class="r">$48K</td></tr>
+<tr><td class="b amber">Jamaica Plain</td><td class="r">9,518</td><td class="r amber">5.6</td><td class="r amber">12</td><td class="r">$74K</td></tr>
+<tr><td>South End</td><td class="r">12,018</td><td class="r">4.2</td><td class="r">4</td><td class="r">$91K</td></tr>
+<tr><td>East Boston</td><td class="r">10,892</td><td class="r">7.1</td><td class="r">6</td><td class="r">$56K</td></tr>
+<tr><td>Allston/Brighton</td><td class="r">8,134</td><td class="r">5.8</td><td class="r">3</td><td class="r">$68K</td></tr>
+<tr><td>Hyde Park</td><td class="r">4,521</td><td class="r">7.8</td><td class="r">4</td><td class="r">$62K</td></tr>
+<tr><td>West Roxbury</td><td class="r">5,187</td><td class="r green">3.8</td><td class="r">1</td><td class="r">$98K</td></tr>
+<tr><td>Back Bay</td><td class="r">8,213</td><td class="r green">3.1</td><td class="r">0</td><td class="r">$116K</td></tr>
+<tr><td>Beacon Hill</td><td class="r">2,814</td><td class="r green">2.7</td><td class="r">0</td><td class="r">$134K</td></tr>
+</tbody></table>
+<p class="src">Source: data.boston.gov 311 Service Requests open dataset (FY2024). Resolution time = calendar days from open to closed. Shooting data: BPD. Income: U.S. Census ACS 2023. Red rows = the 4 neighborhoods with 80% of shootings.</p></div>
+</div>
+
+<!-- PENSION / OPEB -->
+<div class="tab" id="pension">
+<div class="co red"><strong>Long-Term Liability Crisis:</strong> Boston's unfunded pension + OPEB obligations total <strong>$3.4 billion</strong> — 1,030× the Veterans budget, 119× the DEI spending. The Boston Retirement System is at 85.8% funded (better than most peers) but OPEB has <strong>zero trust assets</strong>. Every new hire adds to obligations the city is still catching up on. Annual pension payment alone ($484M) exceeds 10% of the total city budget.</div>
+<div class="kg">
+<div class="kpi amber"><div class="v">85.8%</div><div class="lb">Pension Funded<br>FY2025</div></div>
+<div class="kpi red"><div class="v">$1.3B</div><div class="lb">Pension Unfunded<br>Liability</div></div>
+<div class="kpi red"><div class="v">$484M</div><div class="lb">Annual Pension<br>Payment FY25</div></div>
+<div class="kpi red"><div class="v">$2.1B</div><div class="lb">OPEB Actuarial<br>Liability</div></div>
+<div class="kpi purple"><div class="v">0%</div><div class="lb">OPEB Trust<br>Funded</div></div>
+<div class="kpi orange"><div class="v">$3.4B</div><div class="lb">Combined<br>Shortfall</div></div>
+</div>
+
+<div class="g g2">
+<div class="cd"><h3>Boston Retirement System — Funded Ratio (FY2019–FY2025)</h3><p class="cs">Improving trend — but still $1.3B short of fully funded</p><div class="cw"><canvas id="pp1"></canvas></div></div>
+<div class="cd"><h3>Unfunded Pension Liability ($B)</h3><p class="cs">Markets helped FY2021; FY2022 pullback hurt; gradual improvement since</p><div class="cw"><canvas id="pp2"></canvas></div></div>
+</div>
+<div class="g g2">
+<div class="cd"><h3>Annual Pension Contributions ($M)</h3><p class="cs">+24% since FY2019. Crowding out other spending.</p><div class="cw"><canvas id="pp3"></canvas></div></div>
+<div class="cd"><h3>OPEB — Actuarial Liability vs. Trust Assets</h3><p class="cs">$2.1B liability. Zero in trust. Pure pay-as-you-go.</p><div class="cw"><canvas id="pp4"></canvas></div></div>
+</div>
+<div class="g g2">
+<div class="cd"><h3>Boston vs. Peer Cities — Pension Funded Ratio</h3><p class="cs">Boston is actually among the better-funded major city systems</p><div class="cw"><canvas id="pp5"></canvas></div></div>
+<div class="cd"><h3>Where the FY2025 Dollar Goes — Budget Reality</h3><p class="cs">Pension & OPEB are the budget's silent majority</p><div class="cw"><canvas id="pp6"></canvas></div></div>
+</div>
+
+<div class="cd"><h3>Boston Retirement System — Historical Actuarial Data</h3>
+<table><thead><tr><th>Fiscal Year</th><th class="r">Actuarial Assets</th><th class="r">Actu. Liability</th><th class="r">Unfunded $B</th><th class="r">Funded Ratio</th><th class="r">Annual Payment</th></tr></thead><tbody>
+<tr><td>FY2019</td><td class="r">$5.8B</td><td class="r">$8.0B</td><td class="r red">$2.2B</td><td class="r amber">74.4%</td><td class="r">$390M</td></tr>
+<tr><td>FY2020</td><td class="r">$6.1B</td><td class="r">$8.1B</td><td class="r red">$2.0B</td><td class="r amber">76.8%</td><td class="r">$405M</td></tr>
+<tr><td>FY2021</td><td class="r">$7.2B</td><td class="r">$8.4B</td><td class="r amber">$1.6B</td><td class="r green">82.3%</td><td class="r">$420M</td></tr>
+<tr><td>FY2022</td><td class="r">$6.8B</td><td class="r">$8.6B</td><td class="r red">$2.0B</td><td class="r amber">76.5%</td><td class="r">$438M</td></tr>
+<tr><td>FY2023</td><td class="r">$7.3B</td><td class="r">$8.7B</td><td class="r amber">$1.7B</td><td class="r amber">79.2%</td><td class="r">$455M</td></tr>
+<tr><td>FY2024</td><td class="r">$7.8B</td><td class="r">$8.8B</td><td class="r amber">$1.4B</td><td class="r green">83.1%</td><td class="r">$470M</td></tr>
+<tr><td>FY2025</td><td class="r">$8.2B</td><td class="r">$9.0B</td><td class="r amber">$1.3B</td><td class="r green">85.8%</td><td class="r">$484M</td></tr>
+</tbody></table>
+<p class="src">Source: City of Boston ACFRs FY2020–FY2025; Boston Retirement System Annual Actuarial Valuations. OPEB data: Boston ACFR Notes to Financial Statements (Other Post-Employment Benefits). Assumed rate of return: 7.0%. Full-funding target: FY2030.</p></div>
+
+<div class="cd"><h3>OPEB Summary</h3>
+<table><thead><tr><th>Item</th><th class="r">Amount</th><th>Notes</th></tr></thead><tbody>
+<tr><td class="b">Actuarial OPEB Liability</td><td class="r red">$2,100M</td><td>Health/life benefits for retirees — lifetime obligation</td></tr>
+<tr><td class="b">Trust Fund Assets</td><td class="r red">$0</td><td>No pre-funding. Boston operates pay-as-you-go.</td></tr>
+<tr><td class="b">OPEB Funded Ratio</td><td class="r red">0%</td><td>vs. pension at 85.8% — OPEB is entirely unfunded</td></tr>
+<tr><td class="b">Annual OPEB Payment (FY2025)</td><td class="r amber">~$180M</td><td>Pay-as-you-go actual claims; rising as workforce ages</td></tr>
+<tr><td class="b">Total Unfunded (Pension + OPEB)</td><td class="r red">$3.4B</td><td>$1.3B pension + $2.1B OPEB</td></tr>
+<tr><td class="b">Compared to DEI Spending FY25</td><td class="r red">119× larger</td><td>$3.4B gap vs. $28.5M DEI budget</td></tr>
+<tr><td class="b">Compared to Veterans Dept FY25</td><td class="r red">1,030× larger</td><td>$3.4B gap vs. $3.3M Veterans actual</td></tr>
+</tbody></table>
+<p class="src">Source: Boston ACFR Notes to Financial Statements. OPEB liability calculated on actuarial basis per GASB 75. No OPEB trust established as of FY2025. Many peer cities have also failed to pre-fund OPEB; Boston is not unique but the liability is real.</p></div>
+</div>
+
+</div><!-- /ct -->
+
+<div class="footer">Data compiled May 2026 · Budget: Boston ACFRs FY2020–FY2025 · Payroll: data.boston.gov · Crime: FBI UCR, BPD, EOPSS · Education: DESE MCAS · ICE: ERO, UC Berkeley · CRE: C&W, Trepp, Boston Assessing · 311: data.boston.gov open dataset · Pension/OPEB: Boston Retirement System, ACFRs<br><a href="https://github.com/duncanburns2013-dot/All-Things-Boston">GitHub</a> · <a href="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/">MA Data Hub</a></div>
+
+<script>
+Chart.defaults.font.family="'DM Sans',sans-serif";Chart.defaults.font.size=11;Chart.defaults.plugins.legend.labels.boxWidth=12;Chart.defaults.plugins.legend.labels.padding=14;
+var G='rgba(0,0,0,.06)',I={};
+var C={r:'#A81733',g:'#2A6B44',b:'#14558F',am:'#b8860b',p:'#7e22ce',cy:'#0e7490',o:'#c2410c',pk:'#be185d',sl:'#64748b',li:'#65a30d',te:'#0d9488',ind:'#4f46e5',ro:'#be123c',sk:'#0284c7',rA:'rgba(192,57,43,.12)',gA:'rgba(26,122,76,.12)',bA:'rgba(26,68,128,.12)',amA:'rgba(184,134,11,.12)'};
+var nv='#14558F',gd='#B07C20';
+
+function showTab(id,btn){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  if(!I[id]){I[id]=1;init(id);}
+}
+function showSubTab(id,btn){
+  var wrap=btn.closest('.tab');
+  wrap.querySelectorAll('.sub-tab').forEach(function(t){t.classList.remove('active')});
+  wrap.querySelectorAll('.sub-btn').forEach(function(b){b.classList.remove('active')});
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if(!I[id]){I[id]=1;init(id);}
+}
+function sc(id,cfg){var e=Chart.getChart(id);if(e)e.destroy();return new Chart(document.getElementById(id),cfg);}
+function pct(v){return v+'%';}function dlr(v){return '$'+(v/1000).toFixed(0)+'M';}
+
+function init(id){
+var Y=['FY19','FY20','FY21','FY22','FY23','FY24','FY25'];
+var vet=[2937,2901,2608,2556,2463,2725,3298];
+var dei=[548,567,658,7969,10296,13413,28475];
+
+// ---- BUDGET ----
+if(id==='budget'){
+sc('c1',{type:'line',data:{labels:Y,datasets:[{label:'DEI/Equity (Tier 1+2)',data:dei,borderColor:C.g,backgroundColor:C.gA,fill:1,tension:.3,borderWidth:3,pointRadius:5},{label:'Veterans Services Dept',data:vet,borderColor:C.r,backgroundColor:C.rA,fill:1,tension:.3,borderWidth:3,pointRadius:5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top',labels:{font:{size:12,weight:'bold'}}}},scales:{y:{ticks:{callback:dlr},grid:{color:G},beginAtZero:1},x:{grid:{display:0}}}}});
+sc('c2',{type:'bar',data:{labels:Y,datasets:[{label:'Original Budget',data:[4700,4700,4600,4750,4750,4800,4850],backgroundColor:'rgba(26,68,128,.15)',borderRadius:4},{label:'Final Budget',data:[2960,2960,2790,2700,2650,2800,4847],backgroundColor:C.b,borderRadius:4},{label:'Actual',data:vet,backgroundColor:C.r,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{ticks:{callback:function(v){return'$'+v/1000+'M'}},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('c3',{type:'line',data:{labels:Y,datasets:[{data:[412,673,1121,1692,2954,2840,3646],borderColor:C.b,backgroundColor:C.bA,fill:1,tension:.3,borderWidth:3,pointRadius:5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{ticks:{callback:function(v){return'$'+v/1000+'M'}},grid:{color:G},beginAtZero:1},x:{grid:{display:0}}}}});
+sc('c4',{type:'bar',data:{labels:Y,datasets:[{data:[3.35,3.45,3.58,3.78,4.09,4.37,4.74],backgroundColor:C.b,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{ticks:{callback:function(v){return'$'+v+'B'}},grid:{color:G},min:3},x:{grid:{display:0}}}}});
+sc('c5',{type:'line',data:{labels:Y,datasets:[{label:'DEI %',data:[.016,.016,.018,.211,.252,.307,.601],borderColor:C.g,backgroundColor:C.gA,fill:1,tension:.3,borderWidth:3,pointRadius:5},{label:'Veterans %',data:[.088,.084,.073,.068,.060,.062,.070],borderColor:C.r,backgroundColor:C.rA,fill:1,tension:.3,borderWidth:3,pointRadius:5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{ticks:{callback:function(v){return(v*100).toFixed(2)+'%'}},grid:{color:G}},x:{grid:{display:0}}}}});
+}
+
+// ---- DEI ----
+if(id==='dei'){
+sc('d1',{type:'bar',data:{labels:Y,datasets:[
+{label:'Office of Equity',data:[0,0,0,3290,881,2415,3212],backgroundColor:C.g},
+{label:'Office of Workforce Dev',data:[0,0,0,0,0,0,6496],backgroundColor:C.li},
+{label:'Office of Eco Opp & Inclusion',data:[0,0,0,0,0,0,6481],backgroundColor:'#a3e635'},
+{label:'Language & Community Access',data:[0,0,0,717,1748,2178,2160],backgroundColor:C.b},
+{label:'Participatory Budgeting',data:[0,0,0,0,2000,1951,2130],backgroundColor:C.p},
+{label:'Black Male Advancement',data:[0,0,0,0,1397,1763,1900],backgroundColor:C.am},
+{label:'Office of Resiliency & Racial Equity',data:[0,0,0,1740,896,0,0],backgroundColor:C.o},
+{label:'Supplier Diversity',data:[0,0,0,0,0,1113,1563],backgroundColor:C.te},
+{label:'Office of Food Justice',data:[0,0,0,0,1003,1272,1327],backgroundColor:C.cy},
+{label:'Police Accountability & Transparancy',data:[0,0,0,718,1134,1082,1151],backgroundColor:C.ro},
+{label:'LGBTQ+ Advancement',data:[0,0,0,0,477,721,745],backgroundColor:C.pk},
+{label:'Fair Housing / Civil Rights',data:[291,227,192,501,405,391,671],backgroundColor:C.sl},
+{label:"Women's Commission",data:[257,340,466,749,355,527,639],backgroundColor:C.ind},
+{label:'Office of Diversity',data:[0,0,0,254,0,0,0],backgroundColor:'#78716c'}
+]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top',labels:{boxWidth:10,padding:6,font:{size:9}}}},scales:{x:{stacked:1,grid:{display:0}},y:{stacked:1,ticks:{callback:dlr},grid:{color:G}}}}});
+sc('d2',{type:'doughnut',data:{labels:['Workforce Dev','Eco Opp & Inclusion','Office of Equity','Language Access','Participatory Budget','Black Male Adv','Supplier Diversity','Food Justice','Police Acct [sic]','LGBTQ+','Fair Housing','Women\'s Comm'],datasets:[{data:[6496,6481,3212,2160,2130,1900,1563,1327,1151,745,671,639],backgroundColor:[C.li,'#a3e635',C.g,C.b,C.p,C.am,C.te,C.cy,C.ro,C.pk,C.sl,C.ind]}]},options:{responsive:1,maintainAspectRatio:0,cutout:'45%',plugins:{legend:{position:'right',labels:{boxWidth:9,font:{size:9}}}}}});
+sc('d3',{type:'line',data:{labels:['FY22','FY23','FY24','FY25'],datasets:[
+{label:'Workforce Dev',data:[0,0,0,6496],borderColor:C.li,borderWidth:2.5,pointRadius:4,tension:.3},
+{label:'Eco Opp & Inclusion',data:[0,0,0,6481],borderColor:'#a3e635',borderWidth:2.5,pointRadius:4,tension:.3},
+{label:'Office of Equity',data:[3290,881,2415,3212],borderColor:C.g,borderWidth:2.5,pointRadius:4,tension:.3},
+{label:'Language Access',data:[717,1748,2178,2160],borderColor:C.b,borderWidth:2.5,pointRadius:4,tension:.3},
+{label:'Part. Budgeting',data:[0,2000,1951,2130],borderColor:C.p,borderWidth:2.5,pointRadius:4,tension:.3}
+]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top',labels:{boxWidth:10,font:{size:9}}}},scales:{y:{ticks:{callback:dlr},grid:{color:G}},x:{grid:{display:0}}}}});
+}
+
+// ---- PAYROLL ----
+if(id==='payroll'){
+var PY=['CY19','CY20','CY21','CY22','CY24','CY25'];
+sc('p1',{type:'line',data:{labels:PY,datasets:[{label:'Police',data:[3271,3142,3094,3040,3491,3094],borderColor:C.b,borderWidth:3,pointRadius:5,tension:.3},{label:'DEI-Adjacent',data:[46,47,78,86,413,429],borderColor:C.g,borderWidth:3,pointRadius:5,tension:.3},{label:'Veterans',data:[15,13,12,16,17,15],borderColor:C.r,borderWidth:3,pointRadius:5,tension:.3}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{grid:{color:G}},x:{grid:{display:0}}}}});
+sc('p2',{type:'line',data:{labels:PY,datasets:[{label:'Police $M',data:[416,416,409,406,578,535],borderColor:C.b,borderWidth:3,pointRadius:5,tension:.3},{label:'DEI $M',data:[2,2.4,5,6.2,29.1,34.2],borderColor:C.g,borderWidth:3,pointRadius:5,tension:.3},{label:'Veterans $M',data:[.9,.9,.9,1,1.1,1.2],borderColor:C.r,borderWidth:3,pointRadius:5,tension:.3}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{ticks:{callback:function(v){return'$'+v+'M'}},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('p3',{type:'doughnut',data:{labels:['Henderson K-12 Inclusion','Workforce Dev','Higginson Inclusion','Office of Equity','Equity (BPS)','Immigrant Adv','Black Male','Supplier Div','Fair Housing','Food Justice','LGBTQ+','Women\'s'],datasets:[{data:[166,78,54,31,20,17,14,14,13,10,6,5],backgroundColor:[C.r,C.li,C.o,C.g,C.am,C.b,C.am,C.te,C.sl,C.cy,C.pk,C.ind]}]},options:{responsive:1,maintainAspectRatio:0,cutout:'40%',plugins:{legend:{position:'right',labels:{boxWidth:9,font:{size:9}}}}}});
+sc('p4',{type:'bar',data:{labels:PY,datasets:[{data:[1797,1820,1867,1931,2420,2456],backgroundColor:C.b,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{ticks:{callback:function(v){return'$'+v/1000+'B'}},grid:{color:G},min:1700},x:{grid:{display:0}}}}});
+}
+
+// ---- CRIME ----
+if(id==='crime'){
+sc('cr1',{type:'bar',data:{labels:['Dorchester','Roxbury','Mattapan','Jamaica Plain','All Others'],datasets:[{data:[61,31,19,12,7],backgroundColor:[C.r,C.r,C.r,C.o,C.sl],borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{grid:{color:G}},x:{grid:{display:0}}}}});
+sc('cr2',{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024','2025'],datasets:[{data:[41,55,40,41,37,24,31],borderColor:C.r,backgroundColor:C.rA,fill:1,tension:.3,borderWidth:3,pointRadius:5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{min:15,max:60,grid:{color:G}},x:{grid:{display:0}}}}});
+sc('cr3',{type:'bar',data:{labels:['Homicide','Rape','Robbery','Assault'],datasets:[{label:'Boston',data:[3.8,30.9,116.5,382.9],backgroundColor:C.r,borderRadius:4},{label:'MA',data:[1.9,27.3,34.2,239.1],backgroundColor:C.b,borderRadius:4},{label:'National',data:[5,36,65,253],backgroundColor:C.sl,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{grid:{color:G}},x:{grid:{display:0}}}}});
+sc('cr4',{type:'line',data:{labels:['2016','2017','2018','2019','2020','2021','2022','2023','2024'],datasets:[{label:'National',data:[386.3,382.9,368.9,366.7,387.8,395.7,380.7,379.5,359.1],borderColor:C.r,backgroundColor:C.rA,fill:1,tension:.3,borderWidth:3,pointRadius:4},{label:'MA',data:[340,335,325,320,345,350,330,325,303],borderColor:C.b,backgroundColor:C.bA,fill:1,tension:.3,borderWidth:3,pointRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{min:270,max:420,grid:{color:G}},x:{grid:{display:0}}}}});
+sc('cr5',{type:'bar',data:{labels:['Black','White','Hispanic','Asian'],datasets:[{label:'Population %',data:[22,44,19,11],backgroundColor:C.b,borderRadius:4},{label:'Homicide Victims %',data:[80,5,12,3],backgroundColor:C.r,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{max:90,ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('cr6',{type:'bar',data:{labels:['Black','White','Asian'],datasets:[{label:'Population %',data:[9,68.9,7.2],backgroundColor:C.b,borderRadius:4},{label:'Offenders %',data:[45.2,52.5,2.3],backgroundColor:C.r,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{max:80,ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('cr7',{type:'bar',data:{labels:['Homicide','Rape','Robbery','Assault','Total'],datasets:[{label:'Boston Share',data:[18.9,10.5,31.7,14.9,16.4],backgroundColor:[C.am,C.g,C.r,C.am,C.b],borderRadius:4},{label:'Pop Share (9%)',data:[9,9,9,9,9],type:'line',borderColor:C.sl,borderDash:[5,5],pointRadius:0,borderWidth:1.5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{max:40,ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('cr8',{type:'bar',data:{labels:['Homicide','Rape','Robbery','Assault','Total'],datasets:[{data:[-11.4,-1.8,-8.6,-5.7,-4.4],backgroundColor:C.g,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0}}}}});
+}
+
+// ---- EDUCATION ----
+if(id==='education'){
+sc('e1',{type:'bar',data:{labels:['ELA 3-8','Math 3-8','Sci 5&8','ELA HS','Math HS','Sci HS','Civics'],datasets:[{label:'Boston',data:[29,28,22,40,38,33,23],backgroundColor:C.r,borderRadius:4},{label:'State',data:[42,41,42,51,45,46,39],backgroundColor:C.sk,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{max:60,ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('e2',{type:'bar',data:{labels:['All','EL','Black','Hispanic','EconDis','Sped'],datasets:[{data:[-2.9,-3.9,-3.9,-2.5,-2.7,-1.8],backgroundColor:C.r,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{ticks:{callback:function(v){return v+' pts'}},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('e3',{type:'bar',data:{labels:['ELA','Math','Sci','ELA Grw','Math Grw','EL Prof','Absent'],datasets:[{label:'Non-HS',data:[2,2,2,2,2,3,3],backgroundColor:C.b,borderRadius:4},{label:'HS (0/4)',data:[0,0,0,2,3,4,4],backgroundColor:function(c){return[0,0,0,2,3,4,4][c.dataIndex]===0?C.r:C.g},borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{max:5,grid:{color:G},ticks:{stepSize:1}},x:{grid:{display:0}}}}});
+sc('e4',{type:'bar',data:{labels:['Asian','White','Multi','Black','All','Hisp','EL','Disab'],datasets:[{data:[91.7,88.7,80.2,79.3,79.7,75.6,68.1,63.8],backgroundColor:function(c){var v=c.raw;return v>=85?C.g:v>=75?C.am:C.r},borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{min:55,max:100,ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('e5',{type:'bar',data:{labels:['AmInd','Disab','Hisp','LowInc','Black','All','Multi','Asian'],datasets:[{label:'K-8',data:[41,35.5,32.7,31.6,27.2,26.3,26,9.9],backgroundColor:C.o,borderRadius:4},{label:'HS',data:[52,48.1,42.9,40.4,39.3,36.1,38.4,15.6],backgroundColor:C.r,borderRadius:4}]},options:{indexAxis:'y',responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{x:{max:55,ticks:{callback:pct},grid:{color:G}},y:{grid:{display:0}}}}});
+sc('e6',{type:'line',data:{labels:['Gr3','Gr4','Gr5','Gr6','Gr7','Gr8','Gr10'],datasets:[{label:'Boston',data:[488,485,488,485,485,483,492],borderColor:C.r,backgroundColor:C.rA,fill:1,tension:.3,borderWidth:3},{label:'500',data:[500,500,500,500,500,500,500],borderColor:C.sl,borderDash:[5,5],pointRadius:0}]},options:{responsive:1,maintainAspectRatio:0,scales:{y:{min:475,max:510,grid:{color:G}},x:{grid:{display:0}}}}});
+}
+
+// ---- ICE ----
+if(id==='ice'){
+sc('i1',{type:'bar',data:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct'],datasets:[{data:[280,310,520,380,1500,350,320,340,1500,400],backgroundColor:function(c){return[280,310,520,380,1500,350,320,340,1500,400][c.dataIndex]>1e3?C.r:C.b},borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{grid:{color:G}},x:{grid:{display:0}}}}});
+sc('i2',{type:'bar',data:{labels:['Brazil','Guatemala','Dom.Rep.','El Salvador','Haiti','Honduras','Other'],datasets:[{data:[780,450,380,320,280,240,650],backgroundColor:[C.g,C.b,C.p,C.o,C.cy,C.pk,C.sl],borderRadius:4}]},options:{indexAxis:'y',responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{x:{grid:{color:G}},y:{grid:{display:0}}}}});
+sc('i3',{type:'bar',data:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct'],datasets:[{label:'2025',data:[280,310,520,380,1500,350,320,340,1500,400],backgroundColor:C.r,borderRadius:4},{label:'2024',data:[95,100,170,125,160,115,105,110,120,130],backgroundColor:C.sl,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{grid:{color:G}},x:{grid:{display:0}}}}});
+sc('i4',{type:'doughnut',data:{labels:['MA','CT','RI','ME','NH','VT'],datasets:[{data:[45,18,12,10,9,6],backgroundColor:[C.r,C.b,C.p,C.g,C.am,C.cy]}]},options:{responsive:1,maintainAspectRatio:0,cutout:'45%',plugins:{legend:{position:'right',labels:{boxWidth:10,font:{size:10}}}}}});
+}
+
+// ---- CRE MAIN TAB — bootstrap the default sub-tab ----
+if(id==='cre'){
+  if(!I['cre-overview']){I['cre-overview']=1;init('cre-overview');}
+}
+
+// ---- CRE SUB-TABS ----
+if(id==='cre-overview'){
+sc('ov1',{type:'line',data:{labels:["Q4'19","Q2'20","Q4'20","Q2'21","Q4'21","Q2'22","Q4'22","Q2'23","Q4'23","Q2'24","Q4'24","Q2'25","Q4'25","Q1'26"],datasets:[{label:'Boston Office Vacancy',data:[7.5,9.2,11.8,13.5,14.2,15.1,15.8,16.4,17.1,17.5,17.8,18.0,18.2,18.5],borderColor:C.r,backgroundColor:C.rA,fill:1,tension:.3,pointRadius:3,borderWidth:2.5},{label:'Pre-COVID (7.5%)',data:Array(14).fill(7.5),borderColor:C.sl,borderDash:[5,5],pointRadius:0,borderWidth:1.5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{min:0,max:22,ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0},ticks:{maxRotation:45,font:{size:9}}}}}});
+sc('ov2',{type:'bar',data:{labels:['C&W\nOverall','Downtown','Suburban','Colliers\nAvail.','CBRE','National\nAvg'],datasets:[{data:[18.5,19.9,20.5,23.9,18.6,20.5],backgroundColor:[C.r,C.am,C.r,C.p,C.b,C.sl],borderRadius:5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{beginAtZero:1,max:28,ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0}}}}});
+}
+if(id==='cre-vacancy'){
+sc('vc1',{type:'bar',data:{labels:['Pre-COVID','Q1 2026'],datasets:[{label:'Class A',data:[7,16],backgroundColor:[C.b+'99',C.am],borderRadius:6},{label:'Class B',data:[8.3,22],backgroundColor:[C.b+'44',C.r],borderRadius:6}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:1,max:26,ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('vc2',{type:'bar',data:{labels:['Manhattan','Boston','National','SF','Austin','Seattle'],datasets:[{data:[13.6,18.5,20.5,25.2,27.3,27.2],backgroundColor:[C.g,C.am,C.b,C.r,C.r,C.r],borderRadius:5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{beginAtZero:1,max:32,ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0}}}}});
+}
+if(id==='cre-recovery'){
+sc('dr1',{type:'line',data:{labels:['Q2\'24\n(Peak)','Q3\'24','Q4\'24','Q1\'25','Q2\'25','Q3\'25','Q4\'25','Q1\'26'],datasets:[{label:'Downtown Vacancy',data:[28.5,28.0,27.3,26.7,26.1,25.6,25.2,19.9],borderColor:nv,backgroundColor:nv+'18',fill:1,tension:.3,pointRadius:6,borderWidth:3,pointBackgroundColor:function(ctx){return ctx.dataIndex===7?C.r:C.g}}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{min:15,max:30,ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('dr2',{type:'bar',data:{labels:['Vacancy Drop\nfrom Peak','Sublease Drop\nYoY (pp)','Q1 Leasing\n(M SF)','Industrial Leasing\n+% vs 2024'],datasets:[{data:[3.3,1.0,1.6,36],backgroundColor:[C.g,C.g,C.b,C.b],borderRadius:5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{beginAtZero:1,grid:{color:G}},x:{grid:{display:0}}}}});
+}
+if(id==='cre-cmbs'){
+sc('cm1',{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024'],datasets:[{label:'Office CMBS',data:[1.6,3.2,2.8,2.5,5.8,11.01],borderColor:C.r,backgroundColor:C.rA,fill:1,tension:.3,pointRadius:5,borderWidth:2.5},{label:'All CRE CMBS',data:[2.3,5.1,4.2,3.1,4.51,6.57],borderColor:C.am,backgroundColor:C.amA,fill:1,tension:.3,pointRadius:5,borderWidth:2.5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:1,max:13,ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('cm2',{type:'bar',data:{labels:['2025','2026','2027','2028'],datasets:[{data:[950,600,400,350],backgroundColor:[C.r,C.am,C.am,C.b],borderRadius:5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0},tooltip:{callbacks:{label:function(c){return'$'+c.raw+'B'}}}},scales:{y:{beginAtZero:1,ticks:{callback:function(v){return'$'+v+'B'}},grid:{color:G}},x:{grid:{display:0}}}}});
+}
+if(id==='cre-sales'){
+sc('sa1',{type:'bar',data:{labels:['One Lincoln','100 Federal','One Post Office Sq','One Boston Place'],datasets:[{data:[31,45,49,62],backgroundColor:[C.am,C.r,C.r,C.r],borderRadius:5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0},tooltip:{callbacks:{label:function(c){return c.raw+'% discount'}}}},scales:{y:{beginAtZero:1,max:70,ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('sa2',{type:'bar',data:{labels:['Manhattan','Bay Area','Natl Avg','Boston','Philadelphia'],datasets:[{data:[498,392,192,175,95],backgroundColor:[C.g,C.g,C.b,C.am,C.r],borderRadius:5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0},tooltip:{callbacks:{label:function(c){return'$'+c.raw+'/sq ft'}}}},scales:{y:{beginAtZero:1,ticks:{callback:function(v){return'$'+v}},grid:{color:G}},x:{grid:{display:0}}}}});
+}
+if(id==='cre-tax'){
+sc('tx1',{type:'bar',data:{labels:['FY19','FY20','FY21','FY22','FY23','FY24','FY25','FY26'],datasets:[{label:'Commercial ($B)',data:[107.2,107.9,115.7,120.0,128.9,134.6,137.1,136.3],backgroundColor:nv+'cc',borderRadius:4},{label:'Residential ($B)',data:[67.3,61.0,67.3,70.1,75.1,77.1,79.6,82.1],backgroundColor:gd+'99',borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:1,ticks:{callback:function(v){return'$'+v+'B'}},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('tx2',{type:'line',data:{labels:['FY19','FY20','FY21','FY22','FY23','FY24','FY25','FY26'],datasets:[{data:[61.4,63.9,63.2,63.1,63.2,63.6,63.3,62.4],borderColor:C.r,backgroundColor:C.rA,fill:1,tension:.3,pointRadius:5,borderWidth:3,pointBackgroundColor:function(ctx){return ctx.dataIndex===7?C.r:nv}}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{min:60,max:65,ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0}}}}});
+}
+if(id==='cre-mls'){
+var MY=['2022','2023','2024','2025','2026'];
+sc('ml1',{type:'line',data:{labels:MY,datasets:[{data:[726,1957,623,1387,2292],borderColor:gd,backgroundColor:gd+'20',borderWidth:2.5,tension:.3,fill:1,pointRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0},tooltip:{callbacks:{label:function(c){return'$'+c.raw+'K'}}}},scales:{y:{ticks:{callback:function(v){return'$'+v+'K'}},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('ml2',{type:'bar',data:{labels:MY,datasets:[{label:'Active Listings',data:[175,232,236,230,214],backgroundColor:C.r,borderRadius:4},{label:'12-Mo Closed',data:[42,39,47,47,38],backgroundColor:C.b,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{beginAtZero:1,grid:{color:G}},x:{grid:{display:0}}}}});
+}
+
+// ---- HOUSING ----
+if(id==='housing'){
+var HY=['2018','2019','2020','2021','2022','2023','2024','2025','2026'];
+sc('h1',{type:'line',data:{labels:HY,datasets:[{label:'Single Family',data:[813,896,1025,1068,1112,992,1095,1324,1256],borderColor:C.r,borderWidth:3,pointRadius:4,tension:.3},{label:'Condo',data:[889,814,939,888,1003,1054,1099,1139,1250],borderColor:C.b,borderWidth:3,pointRadius:4,tension:.3},{label:'Multi Family',data:[989,1178,1317,1110,1329,1204,1317,1370,1453],borderColor:C.g,borderWidth:3,pointRadius:4,tension:.3}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{ticks:{callback:function(v){return'$'+v+'K'}},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('h2',{type:'line',data:{labels:HY,datasets:[{label:'Months Supply',data:[1.95,2.56,2.16,2.94,1.95,2.72,3.52,4.78,5.58],borderColor:C.r,backgroundColor:C.rA,fill:1,borderWidth:3,pointRadius:5,tension:.3},{label:'Balanced (6.0)',data:[6,6,6,6,6,6,6,6,6],borderColor:C.sl,borderDash:[5,5],pointRadius:0,borderWidth:1.5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{min:0,max:8,grid:{color:G}},x:{grid:{display:0}}}}});
+sc('h3',{type:'line',data:{labels:HY,datasets:[{data:[2934,2940,3032,2782,3243,3601,3687,3713,3781],borderColor:C.p,backgroundColor:'rgba(126,34,206,.12)',fill:1,borderWidth:3,pointRadius:5,tension:.3}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{ticks:{callback:function(v){return'$'+v}},grid:{color:G},min:2500},x:{grid:{display:0}}}}});
+sc('h4',{type:'line',data:{labels:HY,datasets:[{label:'SF',data:[36,37,31,31,26,44,30,37,33],borderColor:C.r,borderWidth:2.5,pointRadius:4,tension:.3},{label:'Condo',data:[34,42,44,48,37,41,40,45,49],borderColor:C.b,borderWidth:2.5,pointRadius:4,tension:.3},{label:'Multi',data:[29,36,46,39,37,40,35,35,40],borderColor:C.g,borderWidth:2.5,pointRadius:4,tension:.3}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{grid:{color:G}},x:{grid:{display:0}}}}});
+sc('h5',{type:'bar',data:{labels:HY,datasets:[{label:'SF',data:[242,265,206,310,286,225,217,210,195],backgroundColor:C.r,borderRadius:4},{label:'Condo',data:[1361,1254,1318,1909,1679,1141,1047,1131,1040],backgroundColor:C.b,borderRadius:4},{label:'Multi',data:[208,222,183,239,235,171,190,187,169],backgroundColor:C.g,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{grid:{color:G}},x:{grid:{display:0}}}}});
+sc('h6',{type:'bar',data:{labels:HY,datasets:[{data:[736,955,799,1165,934,899,1029,1441,1595],backgroundColor:C.b,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{grid:{color:G}},x:{grid:{display:0}}}}});
+var TY=['FY19','FY20','FY21','FY22','FY23','FY24','FY25','FY26*'];
+sc('h7',{type:'line',data:{labels:TY,datasets:[
+  {label:'Residential Rate ($/1K)',data:[10.56,10.88,10.56,10.74,10.74,10.88,11.58,12.40],borderColor:C.r,backgroundColor:C.rA,fill:1,tension:.3,borderWidth:3,pointRadius:5},
+  {label:'Commercial Rate ($/1K)',data:[25.36,25.69,24.92,25.21,24.68,24.41,24.17,23.80],borderColor:C.b,backgroundColor:C.bA,fill:1,tension:.3,borderWidth:2.5,pointRadius:4}
+]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{min:8,ticks:{callback:function(v){return'$'+v.toFixed(2)}},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('h8',{type:'bar',data:{labels:TY,datasets:[{
+  label:'Annual Tax Bill — $800K Home',
+  data:[8448,8704,8448,8592,8592,8704,9264,9920],
+  backgroundColor:function(c){var d=[8448,8704,8448,8592,8592,8704,9264,9920];return d[c.dataIndex]>=9500?C.r:d[c.dataIndex]>=8900?C.am:C.b},
+  borderRadius:4
+}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0},tooltip:{callbacks:{label:function(c){return'$'+c.raw.toLocaleString()+'/yr'}}}},scales:{y:{min:7800,ticks:{callback:function(v){return'$'+v.toLocaleString()}},grid:{color:G}},x:{grid:{display:0}}}}});
+}
+
+// ---- 311 SERVICES ----
+if(id==='svc311'){
+// s4: Resolution time by neighborhood (the headline chart — sorted worst to best)
+var sNeighs=['Mattapan','Roxbury','Dorchester','Hyde Park','East Boston','Allston/Brighton','Jamaica Plain','South End','Charlestown','West Roxbury','Back Bay','Beacon Hill'];
+var sRes=[11.2,9.8,9.1,7.8,7.1,5.8,5.6,4.2,4.4,3.8,3.1,2.7];
+var sColors=sNeighs.map(function(n){return['Mattapan','Roxbury','Dorchester','Jamaica Plain'].indexOf(n)>=0?C.r:n==='Back Bay'||n==='Beacon Hill'||n==='West Roxbury'?C.g:C.am});
+sc('s4',{type:'bar',data:{labels:sNeighs,datasets:[{data:sRes,backgroundColor:sColors,borderRadius:4},{label:'Citywide Avg (6.8d)',data:Array(12).fill(6.8),type:'line',borderColor:C.sl,borderDash:[5,5],pointRadius:0,borderWidth:1.5}]},options:{indexAxis:'y',responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0},tooltip:{callbacks:{label:function(c){return c.raw+' days'}}}},scales:{x:{min:0,max:13,ticks:{callback:function(v){return v+'d'}},grid:{color:G}},y:{grid:{display:0}}}}});
+// s1: complaints by neighborhood
+sc('s1',{type:'bar',data:{labels:['Dorchester','Roxbury','South End','East Boston','Jamaica Plain','Back Bay','Allston/Bri','Mattapan','West Rox','Hyde Park','Charlestown','Other'],datasets:[{data:[35.0,16.2,12.0,10.9,9.5,8.2,8.1,7.4,5.2,4.5,3.8,17.2],backgroundColor:function(c){var n=['Dorchester','Roxbury','South End','East Boston','Jamaica Plain','Back Bay','Allston/Bri','Mattapan','West Rox','Hyde Park','Charlestown','Other'];return['Dorchester','Roxbury','Mattapan','Jamaica Plain'].indexOf(n[c.dataIndex])>=0?C.r:C.b},borderRadius:4}]},options:{indexAxis:'y',responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0},tooltip:{callbacks:{label:function(c){return c.raw.toFixed(1)+'K requests'}}}},scales:{x:{ticks:{callback:function(v){return v+'K'}},grid:{color:G}},y:{grid:{display:0}}}}});
+// s2: categories
+sc('s2',{type:'bar',data:{labels:['Pothole/Road','Trash/Recycling','Rodent Activity','Streetlight','Parking','Graffiti','Heat/Hot Water','Illegal Dumping'],datasets:[{data:[25.0,19.0,16.2,14.0,12.0,8.5,7.0,7.0],backgroundColor:[C.b,C.g,C.r,C.am,C.p,C.o,C.cy,C.sl],borderRadius:4}]},options:{indexAxis:'y',responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0},tooltip:{callbacks:{label:function(c){return c.raw.toFixed(1)+'K'}}}},scales:{x:{ticks:{callback:function(v){return v+'K'}},grid:{color:G}},y:{grid:{display:0}}}}});
+// s3: annual trend
+sc('s3',{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024','2025'],datasets:[{data:[121000,96000,108000,119000,127000,138000,132000],borderColor:C.b,backgroundColor:C.bA,fill:1,tension:.3,borderWidth:3,pointRadius:5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{min:80000,ticks:{callback:function(v){return(v/1000).toFixed(0)+'K'}},grid:{color:G}},x:{grid:{display:0}}}}});
+// s5: rodent trend
+sc('s5',{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024'],datasets:[{data:[10000,9800,12200,14800,15600,16234],borderColor:C.r,backgroundColor:C.rA,fill:1,tension:.3,borderWidth:3,pointRadius:5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{min:8000,ticks:{callback:function(v){return(v/1000).toFixed(0)+'K'}},grid:{color:G}},x:{grid:{display:0}}}}});
+// s6: unresolved by type
+sc('s6',{type:'bar',data:{labels:['Graffiti','Streetlight','Heat/Hot Water','Pothole','Rodent','Trash','Overall'],datasets:[{data:[31,28,22,18,14,8,14],backgroundColor:function(c){var d=[31,28,22,18,14,8,14];return d[c.dataIndex]>20?C.r:d[c.dataIndex]>12?C.am:C.g},borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0}}}}});
+// s7: service gap vs violence (grouped bar — same 4 neighborhoods)
+sc('s7',{type:'bar',data:{labels:['Dorchester','Roxbury','Mattapan','Jamaica Plain'],datasets:[{label:'Avg Resolution (Days)',data:[9.1,9.8,11.2,5.6],backgroundColor:C.r,borderRadius:4},{label:'Shooting Share (%)',data:[61,31,19,12],backgroundColor:C.am,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{grid:{color:G}},x:{grid:{display:0}}}}});
+}
+
+// ---- PENSION / OPEB ----
+if(id==='pension'){
+var PFY=['FY19','FY20','FY21','FY22','FY23','FY24','FY25'];
+// pp1: funded ratio
+sc('pp1',{type:'line',data:{labels:PFY,datasets:[{label:'Funded Ratio',data:[74.4,76.8,82.3,76.5,79.2,83.1,85.8],borderColor:C.g,backgroundColor:C.gA,fill:1,tension:.3,borderWidth:3,pointRadius:5},{label:'100% Fully Funded',data:[100,100,100,100,100,100,100],borderColor:C.sl,borderDash:[5,5],pointRadius:0,borderWidth:1.5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{min:65,max:105,ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0}}}}});
+// pp2: unfunded liability
+sc('pp2',{type:'bar',data:{labels:PFY,datasets:[{data:[2.2,2.0,1.6,2.0,1.7,1.4,1.3],backgroundColor:function(c){var d=[2.2,2.0,1.6,2.0,1.7,1.4,1.3];return d[c.dataIndex]>1.8?C.r:d[c.dataIndex]>1.5?C.am:C.g},borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{min:0,max:2.6,ticks:{callback:function(v){return'$'+v+'B'}},grid:{color:G}},x:{grid:{display:0}}}}});
+// pp3: annual payments
+sc('pp3',{type:'bar',data:{labels:PFY,datasets:[{data:[390,405,420,438,455,470,484],backgroundColor:C.b,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{min:350,ticks:{callback:function(v){return'$'+v+'M'}},grid:{color:G}},x:{grid:{display:0}}}}});
+// pp4: OPEB liability vs assets
+sc('pp4',{type:'bar',data:{labels:['OPEB Actuarial\nLiability','OPEB Trust\nAssets','Annual OPEB\nPayment'],datasets:[{data:[2100,0,180],backgroundColor:[C.r,C.g,C.am],borderRadius:5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0},tooltip:{callbacks:{label:function(c){return'$'+c.raw+'M'}}}},scales:{y:{beginAtZero:1,ticks:{callback:function(v){return'$'+v+'M'}},grid:{color:G}},x:{grid:{display:0}}}}});
+// pp5: peer city comparison (horizontal bar)
+sc('pp5',{type:'bar',data:{labels:['Chicago','Philadelphia','NYC','National Avg','Los Angeles','Boston'],datasets:[{data:[48.5,47.3,71.2,73.0,75.1,85.8],backgroundColor:function(c){var d=[48.5,47.3,71.2,73.0,75.1,85.8];return d[c.dataIndex]<60?C.r:d[c.dataIndex]<78?C.am:C.g},borderRadius:4}]},options:{indexAxis:'y',responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0},tooltip:{callbacks:{label:function(c){return c.raw+'% funded'}}}},scales:{x:{min:30,max:100,ticks:{callback:pct},grid:{color:G}},y:{grid:{display:0}}}}});
+// pp6: FY2025 budget reality
+sc('pp6',{type:'bar',data:{labels:['Pension Payment','OPEB Pay-As-Go','Education (excl. DEI)','Police','OPEB Liability\n(Unfunded)','DEI/Equity','OPEB+Pension Gap','Veterans'],datasets:[{data:[484,180,1200,535,2100,28.5,3400,3.3],backgroundColor:[C.am,C.o,C.b,C.b,C.r,C.g,C.r,C.r],borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0},tooltip:{callbacks:{label:function(c){return'$'+c.raw+'M'}}}},scales:{y:{type:'logarithmic',ticks:{callback:function(v){if([1,3,10,30,100,300,1000,3000].indexOf(v)>=0)return'$'+v+'M';return ''}},grid:{color:G}},x:{grid:{display:0}}}}});
+}
+}// end init
+
+I['budget']=1;init('budget');
+</script>
+</body>
+</html>
