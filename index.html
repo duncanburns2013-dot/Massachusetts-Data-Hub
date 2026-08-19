@@ -243,6 +243,34 @@ footer a:hover{color:var(--duckling)}
   text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:6px;
   transition:color .2s,border-color .2s}
 .turn-go:hover{color:var(--cranberry);border-color:var(--cranberry)}
+
+/* the band asserted that every figure is computed from an official source and
+   then showed no figures. It carries them now - centred type on a gradient was
+   the plainest arrangement available, and it was asserting rather than proving */
+.turn{position:relative;padding:clamp(70px,9vw,130px) clamp(24px,5vw,90px);
+  background:linear-gradient(180deg,var(--bg) 0%,#DFE3E2 60%,var(--bg) 100%);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.turn-in{max-width:1560px;margin:0 auto;display:grid;gap:clamp(28px,4vw,72px);
+  grid-template-columns:1.25fr .75fr;align-items:end}
+.turn-h{font-family:var(--font-display);font-weight:700;margin:0;
+  font-size:clamp(28px,4.2vw,64px);line-height:1.04;letter-spacing:-.034em;color:var(--ink)}
+.turn-h em{font-style:normal;color:var(--cranberry)}
+.turn-side{border-left:2px solid var(--cranberry);padding-left:clamp(16px,1.6vw,26px)}
+.turn-l{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--berk-ink);margin:0 0 18px}
+.turn-figs{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:14px 22px}
+.turn-figs div{margin:0}
+.turn-figs dt{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted)}
+.turn-figs dd{margin:2px 0 0;font-family:var(--font-mono);font-weight:600;
+  font-size:clamp(17px,1.5vw,23px);letter-spacing:-.03em;color:var(--bay-blue)}
+.turn-go{display:inline-block;margin-top:26px;font-family:var(--font-mono);
+  font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
+  text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:5px;
+  transition:color .2s,border-color .2s}
+.turn-go:hover{color:var(--cranberry);border-color:var(--cranberry)}
+@media (max-width:900px){.turn-in{grid-template-columns:1fr}.turn-side{border-left:0;
+  border-top:2px solid var(--cranberry);padding:20px 0 0}}
 </style>
 <!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
 <link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
@@ -267,9 +295,19 @@ footer a:hover{color:var(--duckling)}
 </section>
 
 <section class="turn">
-  <p class="turn-l">Every figure on this site is computed at runtime from an official source.</p>
-  <h2 class="turn-h">The instrument shows you <em>where</em>.<br>The dashboards show you <em>why</em>.</h2>
-  <a class="turn-go" href="#dashboards">Twenty dashboards</a>
+  <div class="turn-in">
+    <h2 class="turn-h">The instrument shows you <em>where</em>.<br>The dashboards show you <em>why</em>.</h2>
+    <div class="turn-side">
+      <p class="turn-l">Computed at runtime from official sources</p>
+      <dl class="turn-figs">
+        <div><dt>Municipalities</dt><dd>351</dd></div>
+        <div><dt>Dashboards</dt><dd>20</dd></div>
+        <div><dt>Live data feeds</dt><dd>14</dd></div>
+        <div><dt>Last refreshed</dt><dd id="turn-upd">18 Aug 2026</dd></div>
+      </dl>
+      <a class="turn-go" href="#dashboards">Open the dashboards</a>
+    </div>
+  </div>
 </section>
 <div class="main-content">
   <section id="dashboards">
