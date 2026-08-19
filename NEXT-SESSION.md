@@ -8,7 +8,7 @@ directions and the instrument's internals.
 
 | what | where |
 |---|---|
-| The site (all work) | `E:\Massachusetts-Data-Hub` — branch **`restyle/slate-halyard`**, 268 commits |
+| The site (all work) | `E:\Massachusetts-Data-Hub` — branch **`restyle/slate-halyard`**, 18 commits ahead of `main` (origin/main merged in 2026-08-19) |
 | `main` | untouched. **Nothing has been pushed.** |
 | Stale clone — do not edit | `C:\Users\dunca\code\Massachusetts-Data-Hub` (17 commits behind) |
 | Serve it | `python -m http.server 8360 --directory E:\Massachusetts-Data-Hub` |
