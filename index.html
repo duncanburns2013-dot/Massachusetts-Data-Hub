@@ -344,6 +344,79 @@ footer a:hover{color:var(--duckling)}
 .card-also>span{color:var(--muted);text-transform:uppercase;letter-spacing:.14em;font-size:9px}
 .card-also a{color:var(--berk-ink);text-decoration:none;transition:color .2s}
 .card-also a:hover{color:var(--cranberry)}
+
+/* ============================================================================
+   TWO EFFECTS. No layout, copy or markup changes.
+   ========================================================================== */
+
+/* ---- 1. liquid type ------------------------------------------------------ */
+.turn-h{position:relative}
+.turn-h canvas.lq{position:absolute;left:0;top:0;width:100%;height:100%;
+  pointer-events:none;display:block}
+/* the real heading only goes transparent once a frame has actually painted */
+.turn-h.lq-on{color:transparent}
+.turn-h.lq-on em{color:transparent}
+
+/* ---- 2. magnetic cards --------------------------------------------------- */
+.grid{perspective:1400px;perspective-origin:50% 40%}
+.card{
+  transform-style:preserve-3d;
+  will-change:transform;
+  transition:transform .5s cubic-bezier(.19,1,.22,1),
+             box-shadow .5s cubic-bezier(.19,1,.22,1),
+             border-color .4s;
+}
+.card.mg{
+  transform:
+    rotateX(calc(var(--ry,0) * -7deg))
+    rotateY(calc(var(--rx,0) *  7deg))
+    translate3d(0,-6px,34px);
+  transition:transform .16s cubic-bezier(.22,.61,.36,1),
+             box-shadow .3s ease, border-color .3s;
+  box-shadow:
+    0 34px 70px -18px rgba(11,17,19,.42),
+    0 6px 18px -6px rgba(11,17,19,.22);
+  border-color:rgba(11,17,19,.28);
+  z-index:3;
+}
+/* specular sheen that tracks the pointer across the card face */
+.card .sheen{
+  position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:4;
+  opacity:0;transition:opacity .3s ease;
+  background:
+    radial-gradient(340px circle at var(--mx,50%) var(--my,50%),
+      rgba(255,255,255,.62), rgba(255,255,255,.10) 34%, transparent 62%);
+  mix-blend-mode:soft-light;
+}
+.card.mg .sheen{opacity:1}
+/* a second, coloured pass so the card glows in its own subject colour */
+.card .sheen::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),
+    var(--glow,rgba(20,85,143,.30)), transparent 60%);
+  mix-blend-mode:multiply;opacity:.5;
+}
+.card.c-blue{--glow:rgba(20,85,143,.30)}
+.card.c-green{--glow:rgba(56,133,87,.28)}
+.card.c-cranberry{--glow:rgba(104,10,29,.30)}
+.card.c-purple{--glow:rgba(108,92,231,.28)}
+.card.c-red{--glow:rgba(205,13,13,.26)}
+.card.c-gray{--glow:rgba(11,17,19,.20)}
+/* the arrow leans out of the card as it tilts */
+.card.mg .arrow{transform:translate3d(0,0,26px) scale(1.12);
+  background:var(--duckling);color:var(--navy)}
+
+@media (prefers-reduced-motion: reduce){
+  .turn-h.lq-on{color:var(--ink)}
+  .turn-h.lq-on em{color:var(--cranberry)}
+  .turn-h canvas.lq{display:none}
+  .card,.card.mg{transform:none!important;transition:none}
+  .card .sheen{display:none}
+}
+@media (hover:none){
+  .card .sheen{display:none}
+}
+
 </style>
 <!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
 <link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
@@ -468,6 +541,272 @@ function shareOn(p){
   };
   if(p==='em'){window.location.href=urls[p]}else{window.open(urls[p],'_blank','width=600,height=500')}
 }
+</script>
+
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"}}
+</script>
+<script type="module">
+/* ===========================================================================
+   EFFECT 1 - LIQUID TYPE
+   The headline becomes a texture, then a fragment shader liquefies it with
+   domain-warped fbm and splits the channels by the amount of distortion. Scroll
+   settles it to crisp type; the cursor keeps driving ripples through it.
+   ========================================================================= */
+import * as THREE from 'three';
+
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var h = document.querySelector('.turn-h');
+  if (!h) return;
+
+  var cv = document.createElement('canvas');
+  cv.className = 'lq'; cv.setAttribute('aria-hidden','true');
+  h.appendChild(cv);
+
+  var renderer, tex, mesh, scene, cam, W=0, H=0, ready=false, painted=false;
+
+  function makeTexture(){
+    var r = h.getBoundingClientRect();
+    W = Math.ceil(r.width); H = Math.ceil(r.height);
+    if (!W || !H) return null;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var off = document.createElement('canvas');
+    off.width = Math.ceil(W*dpr); off.height = Math.ceil(H*dpr);
+    var o = off.getContext('2d');
+    o.setTransform(dpr,0,0,dpr,0,0);
+    o.textBaseline = 'top';
+
+    var cs = getComputedStyle(h);
+    var fontPx = parseFloat(cs.fontSize);
+    var lh = parseFloat(cs.lineHeight) || fontPx*1.05;
+    var fam = cs.fontFamily, wt = cs.fontWeight;
+    /* canvas ignores CSS letter-spacing; the heading is set at -0.03em and
+       without this the line runs wider than its box and the last word clips */
+    if ('letterSpacing' in o) o.letterSpacing = cs.letterSpacing;
+
+    var ink = cs.color;
+    var emEl = h.querySelector('em');
+    var accent = emEl ? getComputedStyle(emEl).color : '#680A1D';
+    var LINES = [
+      [['The instrument shows you ', ink], ['where', accent], ['.', ink]],
+      [['The dashboards show you ', ink], ['why', accent], ['.', ink]]
+    ];
+    function widest(px){
+      o.font = wt+' '+px+'px '+fam;
+      var m=0;
+      for (var i=0;i<LINES.length;i++){ var w=0;
+        for (var j=0;j<LINES[i].length;j++) w += o.measureText(LINES[i][j][0]).width;
+        if (w>m) m=w; }
+      return m;
+    }
+    var wMax = widest(fontPx);
+    if (wMax > W-2){ fontPx = Math.max(12, fontPx*(W-2)/wMax); lh = fontPx*1.06; }
+    o.font = wt+' '+fontPx+'px '+fam;
+
+    var y = Math.max(0,(H - lh*LINES.length)/2);
+    for (var i=0;i<LINES.length;i++){
+      var x = 0;
+      for (var j=0;j<LINES[i].length;j++){
+        o.fillStyle = LINES[i][j][1];
+        o.fillText(LINES[i][j][0], x, y);
+        x += o.measureText(LINES[i][j][0]).width;
+      }
+      y += lh;
+    }
+    var t = new THREE.CanvasTexture(off);
+    t.minFilter = THREE.LinearFilter; t.magFilter = THREE.LinearFilter;
+    t.generateMipmaps = false;
+    return t;
+  }
+
+  var U = {
+    uTex:{value:null}, uProg:{value:0}, uTime:{value:0},
+    uMouse:{value:new THREE.Vector2(-9,-9)}, uAspect:{value:1}, uHover:{value:0}
+  };
+
+  var FRAG = `
+    precision highp float;
+    uniform sampler2D uTex;
+    uniform float uProg, uTime, uAspect, uHover;
+    uniform vec2 uMouse;
+    varying vec2 vUv;
+
+    float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
+    float vnoise(vec2 p){
+      vec2 i=floor(p), f=fract(p);
+      vec2 u=f*f*(3.0-2.0*f);
+      return mix(mix(hash(i),hash(i+vec2(1,0)),u.x),
+                 mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x),u.y);
+    }
+    float fbm(vec2 p){
+      float v=0.0, a=0.5;
+      for(int k=0;k<5;k++){ v+=a*vnoise(p); p*=2.02; a*=0.5; }
+      return v;
+    }
+
+    void main(){
+      vec2 uv = vUv;
+      float settle = smoothstep(0.0, 1.0, uProg);
+      /* Amplitude is scaled to the LETTER, not the box. At 0.075 of a 950px box
+         it displaced ~70px on 60px type and the words melted into each other. */
+      float amp = (1.0 - settle) * 0.026;
+
+      vec2 q = vec2(fbm(uv*5.0 + uTime*0.11),
+                    fbm(uv*5.0 + 7.3 - uTime*0.09));
+      vec2 warp = (q - 0.5) * amp;
+      /* and it pours up into place rather than only smearing sideways */
+      warp.y += (1.0 - settle) * 0.045;
+
+      /* cursor ripple keeps working after it has settled */
+      vec2 ap = vec2(uv.x*uAspect, uv.y);
+      vec2 am = vec2(uMouse.x*uAspect, uMouse.y);
+      float d = distance(ap, am);
+      float fall = exp(-d*11.0) * uHover;
+      vec2 dir = normalize(ap - am + vec2(1e-5));
+      float rip = sin(d*46.0 - uTime*5.2) * fall * 0.028;
+      warp += dir * rip;
+
+      /* chromatic split scales with how distorted this pixel is */
+      float split = length(warp)*2.6 + fall*0.010;
+      vec4 cr = texture2D(uTex, uv + warp + vec2( split, 0.0));
+      vec4 cg = texture2D(uTex, uv + warp);
+      vec4 cb = texture2D(uTex, uv + warp - vec2( split, 0.0));
+      float a = max(cr.a, max(cg.a, cb.a));
+      if (a < 0.004) discard;
+      vec3 col = vec3(cr.r, cg.g, cb.b);
+      /* the ripple crest catches a little light */
+      col += vec3(0.55,0.60,0.66) * fall * 0.30;
+      gl_FragColor = vec4(col, a);
+    }`;
+
+  function build(){
+    tex = makeTexture();
+    if (!tex) return;
+    U.uTex.value = tex;
+    U.uAspect.value = W/Math.max(1,H);
+    if (!renderer){
+      renderer = new THREE.WebGLRenderer({canvas:cv, alpha:true, antialias:true});
+      renderer.setClearAlpha(0);
+      scene = new THREE.Scene();
+      cam = new THREE.OrthographicCamera(-0.5,0.5,0.5,-0.5,0,1);
+      mesh = new THREE.Mesh(new THREE.PlaneGeometry(1,1),
+        new THREE.ShaderMaterial({
+          uniforms:U, transparent:true, depthTest:false, depthWrite:false,
+          vertexShader:`varying vec2 vUv; void main(){ vUv=uv;
+            gl_Position=vec4(position.xy*2.0,0.0,1.0); }`,
+          fragmentShader:FRAG
+        }));
+      mesh.frustumCulled = false;
+      scene.add(mesh);
+    }
+    renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
+    renderer.setSize(W,H,false);
+    ready = true;
+  }
+
+  var prog = 0;
+  function measure(){
+    var r = h.getBoundingClientRect(), vh = innerHeight;
+    /* fully settled by the time the band has risen to 45% of the viewport, so
+       at any normal reading position the type is crisp. The previous attempt
+       topped out at 0.81 and never resolved, which is why it stayed a smear. */
+    prog = Math.max(0, Math.min(1, (vh - r.top) / (vh * 0.55)));
+  }
+  window.__LQ = { p:function(){ return prog; }, ready:function(){ return ready; } };
+
+  var hover = 0, hoverT = 0;
+  h.addEventListener('pointermove', function(e){
+    var r = h.getBoundingClientRect();
+    U.uMouse.value.set((e.clientX-r.left)/r.width, 1-(e.clientY-r.top)/r.height);
+    hoverT = 1;
+  }, {passive:true});
+  h.addEventListener('pointerleave', function(){ hoverT = 0; }, {passive:true});
+
+  var clock = new THREE.Clock();
+  (function loop(){
+    requestAnimationFrame(loop);
+    if (!ready) return;
+    var r = h.getBoundingClientRect();
+    if (r.bottom < -160 || r.top > innerHeight + 160) return;
+    if (!painted){ painted = true; h.classList.add('lq-on'); }
+    var dt = Math.min(clock.getDelta(), .05);
+    U.uTime.value += dt;
+    U.uProg.value += (prog - U.uProg.value) * Math.min(1, dt*6.5);
+    hover += (hoverT - hover) * Math.min(1, dt*5.0);
+    U.uHover.value = hover;
+    renderer.render(scene, cam);
+  })();
+
+  function boot(){ build(); measure(); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(boot);
+  else addEventListener('load', boot);
+  addEventListener('scroll', measure, {passive:true});
+  var rt; addEventListener('resize', function(){ clearTimeout(rt);
+    rt = setTimeout(function(){ ready=false; build(); measure(); }, 180); }, {passive:true});
+})();
+</script>
+
+<script>
+/* ===========================================================================
+   EFFECT 2 - MAGNETIC CARDS
+   Real 3D tilt toward the pointer on a perspective grid, with a specular sheen
+   that tracks across the face and a glow in the card's own subject colour.
+   One listener on the grid, rAF-throttled.
+   ========================================================================= */
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!matchMedia('(hover: hover)').matches) return;
+  var grid = document.querySelector('#dashboards .grid');
+  if (!grid) return;
+
+  var cards = grid.querySelectorAll('.card');
+  cards.forEach(function(c){
+    var sh = document.createElement('span');
+    sh.className = 'sheen'; sh.setAttribute('aria-hidden','true');
+    c.appendChild(sh);
+  });
+
+  var raf = 0, pending = null, current = null;
+  function apply(){
+    raf = 0;
+    if (!pending) return;
+    var c = pending.card, r = pending.rect, x = pending.x, y = pending.y;
+    var nx = (x - r.left) / r.width, ny = (y - r.top) / r.height;
+    c.style.setProperty('--rx', (nx*2-1).toFixed(3));
+    c.style.setProperty('--ry', (ny*2-1).toFixed(3));
+    c.style.setProperty('--mx', (nx*100).toFixed(1)+'%');
+    c.style.setProperty('--my', (ny*100).toFixed(1)+'%');
+  }
+
+  grid.addEventListener('pointermove', function(e){
+    var c = e.target.closest ? e.target.closest('.card') : null;
+    if (!c){ return; }
+    if (current && current !== c) clear(current);
+    if (current !== c){ current = c; c.classList.add('mg'); }
+    pending = { card:c, rect:c.getBoundingClientRect(), x:e.clientX, y:e.clientY };
+    if (!raf) raf = requestAnimationFrame(apply);
+  }, {passive:true});
+
+  function clear(c){
+    c.classList.remove('mg');
+    c.style.removeProperty('--rx'); c.style.removeProperty('--ry');
+  }
+  grid.addEventListener('pointerleave', function(){
+    if (current){ clear(current); current = null; }
+  }, {passive:true});
+  cards.forEach(function(c){
+    c.addEventListener('pointerleave', function(){
+      if (current === c){ clear(c); current = null; }
+    }, {passive:true});
+  });
+  window.__MG = { cards: cards.length,
+                  force:function(i,nx,ny){ var c=cards[i]; c.classList.add('mg');
+                    c.style.setProperty('--rx',(nx*2-1).toFixed(3));
+                    c.style.setProperty('--ry',(ny*2-1).toFixed(3));
+                    c.style.setProperty('--mx',(nx*100)+'%');
+                    c.style.setProperty('--my',(ny*100)+'%'); } };
+})();
 </script>
 </body>
 </html>
