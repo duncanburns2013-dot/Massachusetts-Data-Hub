@@ -162,11 +162,11 @@ body::after{
 .tag{font-size:0.62rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:rgba(11,17,19,0.05);color:rgba(11,17,19,0.6);border:1px solid rgba(11,17,19,0.05)}
 .arrow{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(11,17,19,0.05);color:var(--duckling);font-size:13px;font-weight:700;flex-shrink:0;transition:all 0.3s}
 .card:hover .arrow{background:var(--duckling);color:var(--navy);transform:translateX(3px)}
-.info-box{background:rgba(56,133,87,0.06);border:1px solid rgba(56,133,87,0.15);border-left:4px solid var(--berkshire);border-radius:14px;padding:22px 24px;margin-bottom:26px}
-.info-box h4{color:#2A6B44;font-size:0.85rem;font-weight:700;margin-bottom:8px}
-.info-box p{font-size:0.82rem;color:rgba(11,17,19,0.72);line-height:1.6}
-.info-box a{color:#14558F;font-weight:600;text-decoration:none;border-bottom:1px solid var(--duckling)}
-.info-box a:hover{color:var(--duckling)}
+
+
+
+
+
 .share-bar{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px}
 .share-label{font-size:0.68rem;font-weight:600;color:rgba(11,17,19,0.54);text-transform:uppercase;letter-spacing:0.08em}
 .share-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-size:0.72rem;font-weight:600;text-decoration:none;color:#0B1113;transition:all 0.3s;border:1px solid rgba(11,17,19,0.07);cursor:pointer;background:rgba(11,17,19,0.04);backdrop-filter:blur(4px)}
@@ -286,8 +286,8 @@ footer a:hover{color:var(--duckling)}
   padding:22px 24px 18px 26px;text-decoration:none;overflow:hidden;isolation:isolate;
   transition:transform .34s cubic-bezier(.2,.8,.2,1),box-shadow .34s cubic-bezier(.2,.8,.2,1),
              border-color .34s}
-.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
-  background:var(--bay-blue);transition:width .34s cubic-bezier(.2,.8,.2,1),opacity .34s}
+.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:7px;
+  background:var(--bay-blue);transform:scaleX(.43);transform-origin:left center;transition:transform .34s cubic-bezier(.2,.8,.2,1),opacity .34s}
 .card.c-cranberry::before{background:var(--cranberry)}
 .card.c-green::before{background:var(--berkshire)}
 .card.c-blue::before{background:var(--bay-blue)}
@@ -296,7 +296,7 @@ footer a:hover{color:var(--duckling)}
   transition:opacity .34s}
 .card:hover{transform:translateY(-4px);border-color:transparent;
   box-shadow:0 2px 4px rgba(11,17,19,.05),0 14px 34px -10px rgba(11,17,19,.22)}
-.card:hover::before{width:7px}
+.card:hover::before{transform:scaleX(1)}
 .card:hover::after{opacity:1}
 .card:focus-visible{outline:2px solid var(--cranberry);outline-offset:3px}
 .card-name{font-family:var(--font-display);font-weight:700;font-size:18px;
@@ -457,6 +457,12 @@ footer{color:rgba(11,17,19,.80)}
 .turn-side{transform:translate3d(calc(var(--tx,0)*9px),calc(var(--ty,0)*6px + var(--sy2,0px)),0)}
 .turn-h,.turn-side{transition:transform .5s cubic-bezier(.19,1,.22,1)}
 .turn.live .turn-h,.turn.live .turn-side{transition:transform .14s linear}
+
+/* the card rail animated its width, which lays out on every frame of every
+   hover across 21 cards. Same 3px-to-7px result, done on the compositor. */
+.card::before{width:7px;transform:scaleX(.43);transform-origin:left center;
+  transition:transform .34s cubic-bezier(.2,.8,.2,1),opacity .34s}
+.card:hover::before{width:7px;transform:scaleX(1)}
 
 /* ---- 5. cards: real pixel displacement on hover ------------------------- */
 .card.warp{filter:url(#cardwarp)}
