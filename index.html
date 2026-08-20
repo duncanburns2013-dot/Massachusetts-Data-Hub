@@ -206,7 +206,7 @@ footer a:hover{color:var(--duckling)}
   align-items:center;justify-content:space-between;gap:24px;
   padding:18px clamp(18px,3vw,40px);pointer-events:none}
 .site-head .wm{pointer-events:auto;font-family:var(--font-display);font-weight:700;
-  font-size:clamp(17px,1.5vw,23px);letter-spacing:-.028em;color:var(--cranberry);
+  font-size:clamp(22px,2.2vw,34px);letter-spacing:-.03em;color:var(--cranberry);
   text-decoration:none;line-height:1}
 .site-nav{pointer-events:auto;display:flex;gap:clamp(12px,1.8vw,26px);
   font-family:var(--font-text);font-size:11px;font-weight:600;letter-spacing:.16em;
@@ -527,7 +527,7 @@ footer{
 }
 
 
-/* ---- Films and About: the same section shell as the sources block -------- */
+/* ---- Videos and About: the same section shell as the sources block ------- */
 .panel-sec{position:relative;z-index:1;margin:56px auto 0;max-width:1560px;padding:0 24px}
 .panel-in{
   background:rgba(255,255,255,.52);
@@ -584,7 +584,7 @@ footer{
   <nav class="site-nav">
     <a href="instrument.html">The Instrument</a>
     <a href="#dashboards">Dashboards</a>
-    <a href="#films">Films</a>
+    <a href="#videos">Videos</a>
     <a href="#about">About</a>
     
     <a href="MASTER_DATA.md">Method</a>
@@ -642,13 +642,13 @@ footer{
     </div>
     </div>
   </section>
-  <section id="films" class="panel-sec rv">
+  <section id="videos" class="panel-sec rv">
   <div class="panel-in">
-    <h4>Films<i class="panel-n">6</i></h4>
+    <h4>Videos<i class="panel-n">6</i></h4>
     <span class="panel-ramp" aria-hidden="true"></span>
     <p class="panel-lede">Short documentary and commentary pieces built from the
     same sourced figures as the dashboards.</p>
-    <p class="panel-note" id="films-note">Not linked yet. The films exist as
+    <p class="panel-note" id="videos-note">Not linked yet. The videos exist as
     finished cuts; they need their published URLs before they can be listed
     here, so this section is deliberately empty rather than filled with
     placeholders.</p>
@@ -766,9 +766,15 @@ import * as THREE from 'three';
     var fontPx = parseFloat(cs.fontSize);
     var lh = parseFloat(cs.lineHeight) || fontPx*1.05;
     var fam = cs.fontFamily, wt = cs.fontWeight;
-    /* canvas ignores CSS letter-spacing; the heading is set at -0.03em and
-       without this the line runs wider than its box and the last word clips */
-    if ('letterSpacing' in o) o.letterSpacing = cs.letterSpacing;
+    /* Canvas resets letterSpacing every time `font` is assigned, so it has to be
+       re-applied after each one. Setting it first silently discarded it: the
+       line measured 792px against the DOM's 734px, which tripped the fit-to-box
+       shrink and scaled the type down on top of the wrong tracking. */
+    var TRACK = ('letterSpacing' in o) ? cs.letterSpacing : null;
+    function setFont(px){
+      o.font = wt + ' ' + px + 'px ' + fam;
+      if (TRACK !== null) o.letterSpacing = TRACK;
+    }
 
     var ink = cs.color;
     var emEl = h.querySelector('em');
@@ -778,7 +784,7 @@ import * as THREE from 'three';
       [['The dashboards show you ', ink], ['why', accent], ['.', ink]]
     ];
     function widest(px){
-      o.font = wt+' '+px+'px '+fam;
+      setFont(px);
       var m=0;
       for (var i=0;i<LINES.length;i++){ var w=0;
         for (var j=0;j<LINES[i].length;j++) w += o.measureText(LINES[i][j][0]).width;
@@ -787,7 +793,7 @@ import * as THREE from 'three';
     }
     var wMax = widest(fontPx);
     if (wMax > W-2){ fontPx = Math.max(12, fontPx*(W-2)/wMax); lh = fontPx*1.06; }
-    o.font = wt+' '+fontPx+'px '+fam;
+    setFont(fontPx);
 
     var y = Math.max(0,(H - lh*LINES.length)/2);
     for (var i=0;i<LINES.length;i++){

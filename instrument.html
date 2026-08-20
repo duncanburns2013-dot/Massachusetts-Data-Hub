@@ -204,7 +204,7 @@ body.arrived .head nav{transition-delay:.38s}
     <a class="wordmark" href="index.html">Massachusetts Data Hub<span>351 towns · one instrument</span></a>
     <nav>
       <a href="index.html" aria-current="page">The Instrument</a><a href="index.html#dashboards">Dashboards</a>
-<a href="index.html#films">Films</a>
+<a href="index.html#videos">Videos</a>
 <a href="index.html#about">About</a>
       <a href="MASTER_DATA.md">Method</a>
     </nav>
@@ -399,6 +399,9 @@ const VIEWS={
     pol:[.14,1.50],
     // stands upright here: flat on the ground it would be edge-on to this camera
     q3:{p:[0,5.95,0],flat:false},
+    // the line is 15.75 wide; the first and last town's labels sit outside it,
+    // so the frame has to hold about 18.6 for the ends to stay on screen
+    ext:18.6,
     cam:{p:[0,6.4,52],t:[0,1.62,0],fov:12}},
   afford:{lab:'Can people afford to live there?',q:'Can people afford to live there?',
     s:()=>'Each town placed by what a house costs against what a household earns. Read straight down: right is dearer, up is richer.',
@@ -434,6 +437,7 @@ const VIEWS={
     // what keeps that out of the singularity. Moving the target to z=1.3 while
     // leaving the camera at z=0.01 flipped the sign of the view direction and
     // rolled the entire plot 180 degrees - red and blue swapped sides.
+    ext:17.7,
     cam:{p:[0,78,1.31],t:[0,0,1.3],fov:15}}
 };
 
@@ -758,6 +762,20 @@ function layout(){
   }
 }
 
+/* ---- fitting a declared extent into the current frame ----
+   A view may declare `ext`: the width in world units it has to hold, labels and
+   all. The horizontal extent of a perspective frame is 2*d*tan(fov/2)*aspect,
+   so a short window needs more distance for the same width. This pushes the
+   camera back only as far as the aspect requires and never pulls it closer than
+   the distance the view was authored at. */
+function framed(V){
+  if(!V.ext) return V.cam;
+  const half = (V.cam.fov ?? 34) * Math.PI / 360;
+  const need = V.ext / (2 * Math.tan(half) * Math.max(0.2, camera.aspect));
+  if(need <= V.cam.p[2]) return V.cam;
+  return {p:[V.cam.p[0], V.cam.p[1], need], t:V.cam.t, fov:V.cam.fov};
+}
+
 /* ---- camera flight ---- */
 const camFrom=new THREE.Vector3(),camTo=new THREE.Vector3(),
       tgtFrom=new THREE.Vector3(),tgtTo=new THREE.Vector3();
@@ -942,7 +960,7 @@ function apply(instant){
     qText.rotation.x=V.q3.flat?-Math.PI/2:0;
     qText.sync();
   }
-  flyTo(V.cam,instant);
+  flyTo(framed(V),instant);
   rebuildAnchors();
   const want='#'+view+(view==='afford'?'':'/'+metric);
   if(location.hash!==want)history.replaceState(null,'',want);
@@ -1145,7 +1163,11 @@ function tick(){
 }
 addEventListener('resize',()=>{
   camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth,innerHeight);});
+  renderer.setSize(innerWidth,innerHeight);
+  /* the required distance depends on aspect, so a reshape has to re-fit */
+  const V=VIEWS[view];
+  if(V&&V.ext&&flyT>=1){const c=framed(V);camera.position.z=c.p[2];controls.update();}
+});
 </script>
 </body>
 </html>
