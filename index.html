@@ -38,7 +38,7 @@ body::before{
     radial-gradient(ellipse 50% 40% at 60% 30%,rgba(56,133,87,0.08),transparent 45%),
     radial-gradient(ellipse 40% 30% at 40% 70%,rgba(246,197,27,0.05),transparent 40%);
   background-size:200% 200%;
-  animation:bgDrift 20s ease-in-out infinite;
+  animation:none;
 }
 @keyframes bgDrift{
   0%{background-position:0% 0%}
@@ -417,6 +417,37 @@ footer a:hover{color:var(--duckling)}
   .card .sheen{display:none}
 }
 
+
+/* ---- 3. background: domain-warped flow field, one shader pass ------------ */
+#flow{
+  position:fixed;inset:0;z-index:0;pointer-events:none;display:block;
+  width:100%;height:100%;opacity:0;transition:opacity 1.4s ease;
+}
+#flow.on{opacity:1}
+@media (prefers-reduced-motion: reduce){ #flow{display:none} }
+
+/* the section grounds were fully opaque, so nothing behind them could be seen.
+   Same colours, carried at alpha, so the field reads through them. */
+.turn{
+  background:linear-gradient(180deg,
+    rgba(233,235,234,.70) 0%, rgba(223,227,226,.34) 55%, rgba(233,235,234,.58) 100%);
+}
+/* the field tints the ground just enough to push the smallest muted labels
+   under 4.5:1. Measured against the darkest tint the shader can output, not
+   guessed: figure label 4.13, band label 4.34, section sub 4.25, footer 3.89. */
+.turn-l{color:#3E4A4D}
+.turn-figs dt{color:#3E4A4D}
+.sec-head p{color:rgba(11,17,19,.82)}
+footer{color:rgba(11,17,19,.80)}
+
+.grid-wrap{
+  background:linear-gradient(170deg,
+    rgba(20,85,143,.09),rgba(56,133,87,.05),rgba(246,197,27,.04),
+    rgba(104,10,29,.07),rgba(20,85,143,.05),rgba(56,133,87,.08),
+    rgba(246,197,27,.04),rgba(104,10,29,.06));
+  background-size:300% 300%;
+}
+
 </style>
 <!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
 <link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
@@ -424,6 +455,7 @@ footer a:hover{color:var(--duckling)}
 
 </head>
 <body>
+<canvas id="flow" aria-hidden="true"></canvas>
 <!-- The instrument is the hero: full viewport, its own document, so the 351-town
      payload and its WebGL stay isolated from this page. embed=1 suppresses its
      masthead and nav because this page supplies them. -->
@@ -806,6 +838,137 @@ import * as THREE from 'three';
                     c.style.setProperty('--ry',(ny*2-1).toFixed(3));
                     c.style.setProperty('--mx',(nx*100)+'%');
                     c.style.setProperty('--my',(ny*100)+'%'); } };
+})();
+</script>
+
+<script type="module">
+/* ===========================================================================
+   EFFECT 3 - DOMAIN-WARPED FLOW FIELD
+   One full-screen fragment shader. fbm warped by fbm warped again, evolving in
+   time, tinted on the instrument's ramp. The cursor bends the field.
+   ========================================================================= */
+import * as THREE from 'three';
+
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var cv = document.getElementById('flow');
+  if (!cv) return;
+
+  var renderer;
+  try{ renderer = new THREE.WebGLRenderer({canvas:cv, alpha:true, antialias:false}); }
+  catch(e){ return; }
+  renderer.setClearAlpha(0);
+
+  var U = {
+    uTime:{value:0}, uRes:{value:new THREE.Vector2(1,1)},
+    uMouse:{value:new THREE.Vector2(-9,-9)}, uForce:{value:0}
+  };
+
+  var mat = new THREE.ShaderMaterial({
+    uniforms:U, transparent:true, depthTest:false, depthWrite:false,
+    vertexShader:`void main(){ gl_Position = vec4(position.xy*2.0, 0.0, 1.0); }`,
+    fragmentShader:`
+      precision highp float;
+      uniform float uTime, uForce;
+      uniform vec2 uRes, uMouse;
+
+      float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
+      float vnoise(vec2 p){
+        vec2 i=floor(p), f=fract(p);
+        vec2 u=f*f*(3.0-2.0*f);
+        return mix(mix(hash(i),hash(i+vec2(1,0)),u.x),
+                   mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x),u.y);
+      }
+      float fbm(vec2 p){
+        float v=0.0, a=0.5;
+        for(int k=0;k<6;k++){ v+=a*vnoise(p); p=p*2.03+vec2(11.3,7.7); a*=0.5; }
+        return v;
+      }
+      /* the instrument's diverging ramp */
+      vec3 ramp(float t){
+        vec3 c0=vec3(0.071,0.275,0.498), c1=vec3(0.239,0.510,0.737),
+             c2=vec3(0.561,0.725,0.839), c3=vec3(0.812,0.780,0.706),
+             c4=vec3(0.949,0.651,0.353), c5=vec3(0.863,0.318,0.153),
+             c6=vec3(0.557,0.043,0.133);
+        float u=clamp(t,0.0,1.0)*6.0;
+        if(u<1.0)return mix(c0,c1,u);
+        if(u<2.0)return mix(c1,c2,u-1.0);
+        if(u<3.0)return mix(c2,c3,u-2.0);
+        if(u<4.0)return mix(c3,c4,u-3.0);
+        if(u<5.0)return mix(c4,c5,u-4.0);
+        return mix(c5,c6,u-5.0);
+      }
+
+      void main(){
+        vec2 uv = gl_FragCoord.xy / uRes;
+        vec2 p = uv * vec2(uRes.x/uRes.y, 1.0) * 2.4;
+        float t = uTime * 0.045;
+
+        /* the cursor drags the field toward it */
+        vec2 mp = uMouse * vec2(uRes.x/uRes.y, 1.0) * 2.4;
+        vec2 toM = p - mp;
+        float md = length(toM);
+        p -= normalize(toM + 1e-5) * (uForce / (md*md + 0.35));
+
+        /* domain warping: fbm of an fbm of an fbm */
+        vec2 q = vec2(fbm(p + vec2(0.0, t)),
+                      fbm(p + vec2(5.2, 1.3) - t));
+        vec2 r = vec2(fbm(p + 3.4*q + vec2(1.7, 9.2) + t*0.7),
+                      fbm(p + 3.4*q + vec2(8.3, 2.8) - t*0.6));
+        float f = fbm(p + 3.2*r);
+
+        /* bands, so it reads as flow rather than as fog */
+        float band = fract(f*2.6 + t*1.4);
+        band = smoothstep(0.42, 0.5, band) * smoothstep(0.86, 0.62, band);
+
+        float shade = clamp(f*1.25 - 0.10, 0.0, 1.0);
+        vec3 col = ramp(shade);
+
+        float a = (band*0.30 + 0.10) * smoothstep(0.0, 0.35, f);
+        a *= 0.30;                                  /* it is a ground, not a subject */
+        gl_FragColor = vec4(col, a);
+      }`
+  });
+
+  var scene = new THREE.Scene();
+  var quad = new THREE.Mesh(new THREE.PlaneGeometry(2,2), mat);
+  quad.frustumCulled = false;
+  scene.add(quad);
+  var cam = new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+
+  function resize(){
+    var w = innerWidth, h = innerHeight;
+    renderer.setPixelRatio(Math.min(devicePixelRatio||1, 1.5));
+    renderer.setSize(w,h,false);
+    U.uRes.value.set(w * renderer.getPixelRatio(), h * renderer.getPixelRatio());
+  }
+  resize();
+  addEventListener('resize', resize, {passive:true});
+
+  var want = 0;
+  addEventListener('pointermove', function(e){
+    U.uMouse.value.set(e.clientX/innerWidth, 1 - e.clientY/innerHeight);
+    want = 0.55;
+  }, {passive:true});
+  addEventListener('pointerleave', function(){ want = 0; }, {passive:true});
+
+  var hidden = false;
+  document.addEventListener('visibilitychange', function(){ hidden = document.hidden; });
+
+  var clock = new THREE.Clock(), first = true, frames = 0;
+  (function loop(){
+    requestAnimationFrame(loop);
+    if (hidden) return;
+    var dt = Math.min(clock.getDelta(), 0.05);
+    U.uTime.value += dt;
+    U.uForce.value += (want - U.uForce.value) * Math.min(1, dt*3);
+    renderer.render(scene, cam);
+    frames++;
+    if (first){ first = false; cv.classList.add('on'); }
+  })();
+
+  window.__FLOW = { info:function(){ return {frames:frames, on:cv.classList.contains('on'),
+                     size:U.uRes.value.x+'x'+U.uRes.value.y}; } };
 })();
 </script>
 </body>
