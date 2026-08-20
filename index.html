@@ -95,7 +95,8 @@
   content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
   background:linear-gradient(180deg,#12467F,#3D82BC,#8FB9D6,#CFC7B4,#F2A65A,#DC5127,#8E0B22);
   transform-origin:top center;
-}.turn-figs{grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:18px 26px}.turn-figs dt{color:var(--muted)}.turn-figs dd{font-size:clamp(18px,1.6vw,25px)}/* ---- section head: the heading carries itself, no label above it ---- */
+}.turn-figs{grid-template-columns:1fr 1fr;gap:18px 26px}
+@media (max-width:820px){.turn-figs{grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}}.turn-figs dt{color:var(--muted)}.turn-figs dd{font-size:clamp(18px,1.6vw,25px)}/* ---- section head: the heading carries itself, no label above it ---- */
 .sec-head{margin-bottom:34px;padding-bottom:0;border-bottom:0}.sec-head h2{
   font-family:var(--font-display);font-weight:700;
   font-size:clamp(24px,2.5vw,40px);letter-spacing:-.035em;color:var(--ink);
@@ -205,6 +206,58 @@
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
 }
 @media (prefers-reduced-motion: reduce){.grid-wrap::after{opacity:.22}}
+
+/* the masthead had no ground of its own, so headings scrolled straight under
+   the wordmark. It takes a plate once the stage is behind you. */
+.site-head{transition:background .3s,backdrop-filter .3s,box-shadow .3s}
+.site-head.docked{
+  background:rgba(233,235,234,.86);
+  backdrop-filter:blur(14px) saturate(1.05);
+  -webkit-backdrop-filter:blur(14px) saturate(1.05);
+  box-shadow:0 1px 0 rgba(11,17,19,.07);
+}
+
+/* Green, not neutral grey. The state's own colour carries the chrome: muted
+   copy, chip borders, rules and the count all sit on the Berkshire hue instead
+   of a colourless grey that belongs to no one. */
+:root{
+  --muted:#4F6357;
+  --rule:rgba(56,133,87,.20);
+  --chip-bg:rgba(56,133,87,.07);
+  --chip-br:rgba(56,133,87,.30);
+}
+.sec-head .sec-sub{color:#4F6357}
+.sec-head .sec-n{color:var(--berk-ink)}
+.row{border-top-color:var(--rule)}
+.row-desc{color:#25332B}
+.src{
+  color:#33473C;
+  background:var(--chip-bg);
+  border-color:var(--chip-br);
+}
+.row-state{background:rgba(56,133,87,.10);border-color:rgba(56,133,87,.38)}
+.row-state.is-snap{color:#4F6357;background:rgba(79,99,87,.09);border-color:rgba(79,99,87,.30)}
+.row-state.is-ext{color:var(--bay-blue);background:rgba(20,85,143,.08);border-color:rgba(20,85,143,.30)}
+.turn-figs dt{color:#4F6357}
+.site-nav a{color:#4F6357}
+.turn-go{color:#4F6357;border-bottom-color:var(--chip-br)}
+
+/* the readings carry more weight: the name is the thing you are choosing */
+.row{padding:clamp(30px,2.9vw,44px) 0}
+.row-name{font-size:clamp(23px,2.35vw,40px);letter-spacing:-.036em}
+.row:hover .row-name{color:var(--cranberry)}
+.row-desc{font-size:clamp(13.5px,1vw,15.5px)}
+
+/* the field's readout: what ground the reading you are pointing at covers */
+.scope-tag{
+  position:absolute;left:clamp(18px,2.4vw,38px);z-index:4;pointer-events:none;
+  font-family:var(--font-mono);font-size:11px;font-weight:600;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--berk-ink);
+  opacity:0;transform:translateY(6px);
+  transition:opacity .28s ease,transform .28s ease;
+}
+.scope-tag.on{opacity:1;transform:none}
+.turn-h{font-size:clamp(32px,4.6vw,80px)}
 </style>
 <!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
 <link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
@@ -246,27 +299,27 @@
 <div class="main-content">
   <section id="dashboards">
     <div class="sec-head"><h2>Dashboards<i class="sec-n" id="sec-n">19</i></h2><p class="sec-sub">All analyses built from official government data.</p><span class="sec-ramp" aria-hidden="true"></span></div>
-    <div class="grid-wrap"><canvas class="field" id="field" aria-hidden="true"></canvas>
+    <div class="grid-wrap"><canvas class="field" id="field" aria-hidden="true"></canvas><span class="scope-tag" id="scopeTag" aria-hidden="true"></span>
     <div class="index">
-<a class="row rv" href="tax-burden-nh-comparison.html"><span class="row-main"><span class="row-name">Same House, Same Income &mdash; MA vs NH</span><span class="row-desc">The five layers of tax a household actually pays, compared side by side across the state line.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">DOR</span><span class="src">NH DRA</span></span></a>
-<a class="row rv" href="ma-351-3d-map.html"><span class="row-main"><span class="row-name">351 &mdash; Every Municipality</span><span class="row-desc">What each town charges per $1,000 of assessed value, in three dimensions, with a guided tour.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">DLS</span><span class="src">MLS PIN</span></span></a>
-<a class="row rv" href="all-things-boston.html"><span class="row-main"><span class="row-name">All Things Boston</span><span class="row-desc">City budget, employee payroll, FBI crime, BPS education, ICE enforcement, commercial real estate, housing, 311 and pension obligations &mdash; all from official city data.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">Boston ACFR</span><span class="src">BPD</span><span class="src">BPS</span></span></a>
-<a class="row rv" href="immigration-dashboard.html"><span class="row-main"><span class="row-name">Immigration &mdash; National + Massachusetts</span><span class="row-desc">Border encounters, net international migration, deportation math, Census revisions, fiscal impact (Cato/NASEM), MA shelter crisis, H-1B data, city-level concentration analysis, and the FY27 money trail — the shelter-to-HomeBASE shift, the raw vendor payment record and the lobbying behind it.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">CBP</span><span class="src">Census</span><span class="src">ICE</span><span class="src">CBO</span><span class="src">OCPF</span></span></a>
-<a class="row rv" href="ma-housing-dashboard.html"><span class="row-main"><span class="row-name">Massachusetts Housing Market</span><span class="row-desc">Statewide, Boston, Essex County, and Greater Newburyport. Median prices, DOM, SP/LP ratios, 5-year MLS trends, and affordability calculations.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">Warren Group</span><span class="src">MLS PIN</span><span class="src">Census ACS</span></span></a>
-<a class="row rv" href="nh-housing-dashboard.html"><span class="row-main"><span class="row-name">New Hampshire Housing Market</span><span class="row-desc">Statewide market data with regional breakdowns. Median prices, average sales, DOM, sell-through rates, and SP/LP ratios.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">Paragon MLS</span></span></a>
-<a class="row rv" href="haverhill-market-report.html"><span class="row-main"><span class="row-name">Haverhill Market Report</span><span class="row-desc">Deep dive into Haverhill's SF and condo markets. Affordability analysis comparing median income ($88K) to income needed for homeownership.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">MLS</span><span class="src">Census QuickFacts</span></span></a>
-<a class="row rv" href="affordability-dashboard.html"><span class="row-main"><span class="row-name">What It Costs to Live in Massachusetts</span><span class="row-desc">What is actually expensive here and what is not. BEA price parities by state and metro, price-adjusted income rankings, and the MIT living wage by household type.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">BEA</span><span class="src">MIT Living Wage</span><span class="src">Census ACS</span></span></a>
-<a class="row rv" href="education-statewide.html"><span class="row-main"><span class="row-name">MA Education &mdash; Statewide</span><span class="row-desc">Enrollment shifts (traditional &minus;6.4%, vocational +18%, homeschool +56%), per-pupil spending, MCAS proficiency, Gateway Cities vs. wealthy towns.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">DESE</span><span class="src">MCAS</span></span></a>
-<a class="row rv" href="education-merrimack-valley.html"><span class="row-main"><span class="row-name">Merrimack Valley Education</span><span class="row-desc">Haverhill, Methuen, and Lawrence comparison. MCAS scores, spending gaps, ELL populations, and district-level performance analysis.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">DESE</span><span class="src">MassINC</span></span></a>
-<a class="row rv" href="healthcare-dashboard.html"><span class="row-main"><span class="row-name">All Things Insurance</span><span class="row-desc">Health, homeowners, auto, MassHealth, and licensing. 2026 DOI rate decisions (7.1&ndash;12.2%), $3.6B home market, FAIR Plan 8.7% share, auto carrier market share, and insurance cost vs. income growth.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">DOI</span><span class="src">CHIA</span><span class="src">KFF</span><span class="src">CAR</span></span></a>
-<a class="row rv" href="employment-dashboard.html"><span class="row-main"><span class="row-name">Employment &amp; Labor Market</span><span class="row-desc">JOLTS data, NFP revisions (&minus;911K), hiring recession analysis, openings rate at 3.9% (Feb 2026: 6.9M), and the healthcare employment mask.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">BLS JOLTS</span><span class="src">BLS CES</span></span></a>
-<a class="row rv" href="commercial-re-dashboard.html"><span class="row-main"><span class="row-name">Boston Commercial Real Estate</span><span class="row-desc">Office vacancy trajectory (7.5% &rarr; 23.9%), CMBS delinquencies, major sale discounts (31&ndash;62%), and property tax revenue impact.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">Trepp</span><span class="src">C&amp;W</span><span class="src">Colliers</span></span></a>
-<a class="row rv" href="ma-351.html"><span class="row-main"><span class="row-name">351 &mdash; Every Town in 3D</span><span class="row-desc">A spinnable Massachusetts where every municipality rises by what it charges. Tax rate, real burden per resident, median home price and the business rate premium, town by town, with a guided tour.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">DLS</span><span class="src">MLS PIN</span><span class="src">MassGIS</span></span></a>
-<a class="row rv" href="tax-burden-dashboard.html"><span class="row-main"><span class="row-name">The Five Layers &mdash; MA &amp; NH Total Burden</span><span class="row-desc">What a household actually pays across all five layers &mdash; billed, withheld on your behalf, embedded in prices, collected through the meter, deferred to later. Massachusetts and New Hampshire each get a full breakdown, then a Compare tab puts them side by side. Every contested assumption is a control, not a buried constant.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">IRS</span><span class="src">DOR</span><span class="src">DLS</span><span class="src">CBO</span><span class="src">DPU</span><span class="src">Census</span></span></a>
-<a class="row rv" href="tax-budget-dashboard.html"><span class="row-main"><span class="row-name">Tax Burden, Budget &amp; Cost of Living</span><span class="row-desc">Income tax + 4% surtax, property tax burden, the enacted $63.4B FY2027 budget line by line, state rankings, and BEA/BLS cost-of-living analysis showing MA's purchasing power erosion.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">BEA</span><span class="src">BLS</span><span class="src">Census</span><span class="src">DOR</span><span class="src">EIA</span></span></a>
-<a class="row rv" href="pension-dashboard.html"><span class="row-main"><span class="row-name">Pensions &amp; Unfunded Liabilities</span><span class="row-desc">$55.8B unfunded (pension + OPEB). PRIT Fund ($105B), 23-year time series, demographic collapse (1.3 workers/retiree), 99 municipal systems, $4.9B FY26 taxpayer cost.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">ACFR</span><span class="src">PERAC</span><span class="src">PPD</span><span class="src">PRIT</span></span></a>
-<a class="row rv" href="energy-dashboard.html"><span class="row-main"><span class="row-name">Energy Policy &amp; Carbon Tax</span><span class="row-desc">RGGI carbon tax ($1.36B total, $200M in 2025), highest electricity costs in contiguous US, rate comparison vs. neighbors, and spending allocation analysis.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">EIA</span><span class="src">RGGI Inc</span><span class="src">ISO-NE</span></span></a>
-<a class="row rv" href="pay-to-play-dashboard.html"><span class="row-main"><span class="row-name">Pay-to-Play &amp; Lobbying</span><span class="row-desc">4,298 OCPF donations ($822K) from top lobbying firms, 82.3% at exact $200 cap, OpenSecrets sector rankings, healthcare case study, nonprofit loopholes.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">OCPF</span><span class="src">OpenSecrets</span><span class="src">SOC</span></span></a>
+<a class="row rv" data-scope="BORDER" href="tax-burden-nh-comparison.html"><span class="row-main"><span class="row-name">Same House, Same Income &mdash; MA vs NH</span><span class="row-desc">The five layers of tax a household actually pays, compared side by side across the state line.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">DOR</span><span class="src">NH DRA</span></span></a>
+<a class="row rv" data-scope="*" href="ma-351-3d-map.html"><span class="row-main"><span class="row-name">351 &mdash; Every Municipality</span><span class="row-desc">What each town charges per $1,000 of assessed value, in three dimensions, with a guided tour.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">DLS</span><span class="src">MLS PIN</span></span></a>
+<a class="row rv" data-scope="Boston" href="all-things-boston.html"><span class="row-main"><span class="row-name">All Things Boston</span><span class="row-desc">City budget, employee payroll, FBI crime, BPS education, ICE enforcement, commercial real estate, housing, 311 and pension obligations &mdash; all from official city data.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">Boston ACFR</span><span class="src">BPD</span><span class="src">BPS</span></span></a>
+<a class="row rv" data-scope="Boston,Chelsea,Everett,Lynn,Lawrence,Lowell,Brockton,Springfield,Worcester,Revere,Malden" href="immigration-dashboard.html"><span class="row-main"><span class="row-name">Immigration &mdash; National + Massachusetts</span><span class="row-desc">Border encounters, net international migration, deportation math, Census revisions, fiscal impact (Cato/NASEM), MA shelter crisis, H-1B data, city-level concentration analysis, and the FY27 money trail — the shelter-to-HomeBASE shift, the raw vendor payment record and the lobbying behind it.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">CBP</span><span class="src">Census</span><span class="src">ICE</span><span class="src">CBO</span><span class="src">OCPF</span></span></a>
+<a class="row rv" data-scope="*" href="ma-housing-dashboard.html"><span class="row-main"><span class="row-name">Massachusetts Housing Market</span><span class="row-desc">Statewide, Boston, Essex County, and Greater Newburyport. Median prices, DOM, SP/LP ratios, 5-year MLS trends, and affordability calculations.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">Warren Group</span><span class="src">MLS PIN</span><span class="src">Census ACS</span></span></a>
+<a class="row rv" data-scope="BORDER" href="nh-housing-dashboard.html"><span class="row-main"><span class="row-name">New Hampshire Housing Market</span><span class="row-desc">Statewide market data with regional breakdowns. Median prices, average sales, DOM, sell-through rates, and SP/LP ratios.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">Paragon MLS</span></span></a>
+<a class="row rv" data-scope="Haverhill" href="haverhill-market-report.html"><span class="row-main"><span class="row-name">Haverhill Market Report</span><span class="row-desc">Deep dive into Haverhill's SF and condo markets. Affordability analysis comparing median income ($88K) to income needed for homeownership.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">MLS</span><span class="src">Census QuickFacts</span></span></a>
+<a class="row rv" data-scope="*" href="affordability-dashboard.html"><span class="row-main"><span class="row-name">What It Costs to Live in Massachusetts</span><span class="row-desc">What is actually expensive here and what is not. BEA price parities by state and metro, price-adjusted income rankings, and the MIT living wage by household type.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">BEA</span><span class="src">MIT Living Wage</span><span class="src">Census ACS</span></span></a>
+<a class="row rv" data-scope="*" href="education-statewide.html"><span class="row-main"><span class="row-name">MA Education &mdash; Statewide</span><span class="row-desc">Enrollment shifts (traditional &minus;6.4%, vocational +18%, homeschool +56%), per-pupil spending, MCAS proficiency, Gateway Cities vs. wealthy towns.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">DESE</span><span class="src">MCAS</span></span></a>
+<a class="row rv" data-scope="Haverhill,Methuen,Lawrence" href="education-merrimack-valley.html"><span class="row-main"><span class="row-name">Merrimack Valley Education</span><span class="row-desc">Haverhill, Methuen, and Lawrence comparison. MCAS scores, spending gaps, ELL populations, and district-level performance analysis.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">DESE</span><span class="src">MassINC</span></span></a>
+<a class="row rv" data-scope="*" href="healthcare-dashboard.html"><span class="row-main"><span class="row-name">All Things Insurance</span><span class="row-desc">Health, homeowners, auto, MassHealth, and licensing. 2026 DOI rate decisions (7.1&ndash;12.2%), $3.6B home market, FAIR Plan 8.7% share, auto carrier market share, and insurance cost vs. income growth.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">DOI</span><span class="src">CHIA</span><span class="src">KFF</span><span class="src">CAR</span></span></a>
+<a class="row rv" data-scope="*" href="employment-dashboard.html"><span class="row-main"><span class="row-name">Employment &amp; Labor Market</span><span class="row-desc">JOLTS data, NFP revisions (&minus;911K), hiring recession analysis, openings rate at 3.9% (Feb 2026: 6.9M), and the healthcare employment mask.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">BLS JOLTS</span><span class="src">BLS CES</span></span></a>
+<a class="row rv" data-scope="Boston" href="commercial-re-dashboard.html"><span class="row-main"><span class="row-name">Boston Commercial Real Estate</span><span class="row-desc">Office vacancy trajectory (7.5% &rarr; 23.9%), CMBS delinquencies, major sale discounts (31&ndash;62%), and property tax revenue impact.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">Trepp</span><span class="src">C&amp;W</span><span class="src">Colliers</span></span></a>
+<a class="row rv" data-scope="*" href="ma-351.html"><span class="row-main"><span class="row-name">351 &mdash; Every Town in 3D</span><span class="row-desc">A spinnable Massachusetts where every municipality rises by what it charges. Tax rate, real burden per resident, median home price and the business rate premium, town by town, with a guided tour.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">DLS</span><span class="src">MLS PIN</span><span class="src">MassGIS</span></span></a>
+<a class="row rv" data-scope="*" href="tax-burden-dashboard.html"><span class="row-main"><span class="row-name">The Five Layers &mdash; MA &amp; NH Total Burden</span><span class="row-desc">What a household actually pays across all five layers &mdash; billed, withheld on your behalf, embedded in prices, collected through the meter, deferred to later. Massachusetts and New Hampshire each get a full breakdown, then a Compare tab puts them side by side. Every contested assumption is a control, not a buried constant.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">IRS</span><span class="src">DOR</span><span class="src">DLS</span><span class="src">CBO</span><span class="src">DPU</span><span class="src">Census</span></span></a>
+<a class="row rv" data-scope="*" href="tax-budget-dashboard.html"><span class="row-main"><span class="row-name">Tax Burden, Budget &amp; Cost of Living</span><span class="row-desc">Income tax + 4% surtax, property tax burden, the enacted $63.4B FY2027 budget line by line, state rankings, and BEA/BLS cost-of-living analysis showing MA's purchasing power erosion.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">BEA</span><span class="src">BLS</span><span class="src">Census</span><span class="src">DOR</span><span class="src">EIA</span></span></a>
+<a class="row rv" data-scope="*" href="pension-dashboard.html"><span class="row-main"><span class="row-name">Pensions &amp; Unfunded Liabilities</span><span class="row-desc">$55.8B unfunded (pension + OPEB). PRIT Fund ($105B), 23-year time series, demographic collapse (1.3 workers/retiree), 99 municipal systems, $4.9B FY26 taxpayer cost.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">ACFR</span><span class="src">PERAC</span><span class="src">PPD</span><span class="src">PRIT</span></span></a>
+<a class="row rv" data-scope="*" href="energy-dashboard.html"><span class="row-main"><span class="row-name">Energy Policy &amp; Carbon Tax</span><span class="row-desc">RGGI carbon tax ($1.36B total, $200M in 2025), highest electricity costs in contiguous US, rate comparison vs. neighbors, and spending allocation analysis.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">EIA</span><span class="src">RGGI Inc</span><span class="src">ISO-NE</span></span></a>
+<a class="row rv" data-scope="Boston" href="pay-to-play-dashboard.html"><span class="row-main"><span class="row-name">Pay-to-Play &amp; Lobbying</span><span class="row-desc">4,298 OCPF donations ($822K) from top lobbying firms, 82.3% at exact $200 cap, OpenSecrets sector rankings, healthcare case study, nonprofit loopholes.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">OCPF</span><span class="src">OpenSecrets</span><span class="src">SOC</span></span></a>
 </div>
     Official Data Sources</h4>
     <p>BLS (LAUS, CES, OES, CPI) &middot; BEA (SAINC, SAPCE, RPP) &middot; Census Bureau (ACS, QuickFacts) &middot; CBP &middot; ICE &middot; CBO &middot; EIA &middot; MA DOR &middot; MA DLS &middot; DOI &middot; DESE &middot; CHIA &middot; CAR &middot; KFF &middot; Warren Group &middot; MLS PIN &middot; Paragon MLS &middot; Tax Foundation &middot; ITEP &middot; MIT Living Wage Calculator &middot; PERAC &middot; PRIT Fund &middot; Public Plans Database &middot; OCPF &middot; OpenSecrets &middot; RGGI Inc &middot; ISO-NE. See <a href="MASTER_DATA.md">MASTER_DATA.md</a> for full citations.</p>
@@ -336,12 +389,16 @@ if (cv && wrap && window.MA_FIELD) {
      state; a continuous outline of all 351 municipalities does read, and it is
      still one buffer and one draw call. */
   const STEP = 0.0022;                       // normalised units between points
+  const townOf = [];
+  let curTown = '';
   function emit(x, y, tv){
     pos.push(x, y, 0); rate.push(tv);
     thr.push(x * 0.78 + Math.random() * 0.22);
+    townOf.push(curTown);
   }
   for (const entry of F.t) {
     const tv = entry[0], polys = entry[1];
+    curTown = entry[2];
     for (const poly of polys) {
       const n = poly.length / 2;
       for (let i = 0; i < n; i++) {
@@ -363,6 +420,7 @@ if (cv && wrap && window.MA_FIELD) {
   geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
   geo.setAttribute('aRate',    new THREE.Float32BufferAttribute(rate, 1));
   geo.setAttribute('aThresh',  new THREE.Float32BufferAttribute(thr, 1));
+  geo.setAttribute('aSel', new THREE.Float32BufferAttribute(new Float32Array(N).fill(1), 1));
 
   const U = {
     uProgress:{value: REDUCE ? 1 : 0},
@@ -379,11 +437,12 @@ if (cv && wrap && window.MA_FIELD) {
     vertexShader:`
       attribute float aRate;
       attribute float aThresh;
+      attribute float aSel;
       uniform float uProgress,uTime,uForce,uSpanX,uSpanY,uTopY,uSize;
       uniform vec2 uMouse;
-      varying float vRate,vOn,vWy;
+      varying float vRate,vOn,vWy,vSel;
       void main(){
-        vRate=aRate;
+        vRate=aRate;vSel=aSel;
         vOn=smoothstep(aThresh-0.12,aThresh+0.03,uProgress);
         vec2 n=position.xy;
         vec2 p=vec2((n.x-0.5)*uSpanX, uTopY-n.y*uSpanY);
@@ -393,12 +452,12 @@ if (cv && wrap && window.MA_FIELD) {
         p+=normalize(d)*min(uForce/(dist*dist+0.015),0.22);
         vWy=p.y;
         gl_Position=projectionMatrix*modelViewMatrix*vec4(p,0.0,1.0);
-        gl_PointSize=(1.0+abs(aRate)*1.5)*uSize*(0.45+0.55*vOn);
+        gl_PointSize=(1.0+abs(aRate)*1.5)*uSize*(0.45+0.55*vOn)*(aSel>1.5?2.1:1.0);
       }`,
     fragmentShader:`
       precision highp float;
       uniform float uFadeHi,uFadeLo;
-      varying float vRate,vOn,vWy;
+      varying float vRate,vOn,vWy,vSel;
       vec3 ramp(float t){
         vec3 c0=vec3(0.071,0.275,0.498),c1=vec3(0.239,0.510,0.737),
              c2=vec3(0.561,0.725,0.839),c3=vec3(0.812,0.780,0.706),
@@ -417,9 +476,10 @@ if (cv && wrap && window.MA_FIELD) {
         float a=smoothstep(0.5,0.14,length(q));
         if(a<=0.002)discard;
         float fade=smoothstep(uFadeLo,uFadeHi,vWy);
-        float al=a*vOn*fade*0.95;
+        float al=a*vOn*fade*0.95*(vSel>1.5?1.0:(vSel<0.5?0.24:0.62));
         if(al<=0.002)discard;
         vec3 col=mix(vec3(0.13,0.17,0.19),ramp(vRate),0.46+0.54*abs(vRate));
+        if(vSel>1.5) col=mix(col,vec3(0.16,0.52,0.34),0.30);   /* selected ground reads green */
         gl_FragColor=vec4(col,al);
       }`
   });
@@ -494,6 +554,61 @@ if (cv && wrap && window.MA_FIELD) {
   resize();onScroll();
   const away=new THREE.Vector2(99,99);
   const clock=new THREE.Clock();
+
+  /* ---- the directory drives the field ----------------------------------
+     Every point knows which town it belongs to. Pointing at a reading writes a
+     selection mask into an attribute and the shader isolates that ground:
+     selected towns brighten and grow, the rest of the state drops back. This
+     is the whole reason the map is on the page. */
+  const selAttr = geo.getAttribute('aSel');
+  const tag = document.getElementById('scopeTag');
+  const NORTH = new Set();                 // border tier, for the NH comparisons
+  (function(){
+    const ys = [];
+    for (const e of F.t) {
+      let miny = 1e9;
+      for (const poly of e[1]) for (let k = 1; k < poly.length; k += 2) miny = Math.min(miny, poly[k]);
+      ys.push([miny, e[2]]);
+    }
+    ys.sort((a, b) => a[0] - b[0]);
+    ys.slice(0, 46).forEach(v => NORTH.add(v[1]));
+  })();
+
+  function applyScope(scope){
+    const sel = selAttr.array;
+    if (!scope || scope === '*') { sel.fill(1); }
+    else {
+      const want = scope === 'BORDER' ? NORTH : new Set(scope.split(','));
+      for (let i = 0; i < N; i++) sel[i] = want.has(townOf[i]) ? 2 : 0;
+    }
+    selAttr.needsUpdate = true;
+  }
+  function scopeLabel(scope){
+    if (!scope || scope === '*') return 'ALL 351 MUNICIPALITIES';
+    if (scope === 'BORDER') return 'THE NEW HAMPSHIRE LINE';
+    const t = scope.split(',');
+    return t.length > 3 ? t.slice(0,3).join(' \u00b7 ') + ' +' + (t.length-3) : t.join(' \u00b7 ');
+  }
+  document.querySelectorAll('.index .row').forEach(row => {
+    const scope = row.getAttribute('data-scope');
+    const enter = () => {
+      applyScope(scope);
+      tag.textContent = scopeLabel(scope);
+      tag.classList.add('on');
+    };
+    const leave = () => { applyScope('*'); tag.classList.remove('on'); };
+    row.addEventListener('pointerenter', enter);
+    row.addEventListener('focus', enter);
+    row.addEventListener('pointerleave', leave);
+    row.addEventListener('blur', leave);
+  });
+  /* park the readout just under the state */
+  function placeTag(){
+    const padTop = parseFloat(getComputedStyle(wrap).paddingTop) || 200;
+    tag.style.top = Math.round(padTop - 34) + 'px';
+  }
+  placeTag(); addEventListener('resize', placeTag, {passive:true});
+
   window.__FIELD={U,N,render:()=>renderer.render(scene,cam),
                   info:()=>({N,W,H,progress:U.uProgress.value,calls:renderer.info.render.calls})};
   (function loop(){
@@ -507,6 +622,17 @@ if (cv && wrap && window.MA_FIELD) {
     renderer.render(scene,cam);
   })();
 }
+</script>
+
+<script>
+/* the masthead takes a plate once the stage is behind you */
+(function(){
+  var head=document.querySelector('.site-head'), stage=document.querySelector('.stage');
+  if(!head||!stage) return;
+  new IntersectionObserver(function(e){
+    head.classList.toggle('docked', !e[0].isIntersecting);
+  },{rootMargin:'-70px 0px 0px 0px'}).observe(stage);
+})();
 </script>
 </body>
 </html>
