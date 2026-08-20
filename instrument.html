@@ -68,6 +68,9 @@ html{caret-color:var(--cran)}
    ended up a grey-black afterthought. It carries the state's own colour now,
    which buys prominence without restarting that fight - the question lives in
    the 3D scene, this lives on the surface, so they no longer compete on size. */
+/* the wordmark is an <a> now (the way home from this page), so it has to be
+   told not to wear default link styling */
+.wordmark{text-decoration:none;display:block}
 .wordmark{font-family:var(--display);font-weight:700;color:var(--cran);
           font-size:clamp(25px,3.3vw,48px);line-height:.94;
           letter-spacing:-.028em;max-width:13ch}
@@ -198,10 +201,10 @@ body.arrived .head nav{transition-delay:.38s}
 
 <div class="shell">
   <header class="head">
-    <div class="wordmark">Massachusetts Data Hub<span>351 towns · one instrument</span></div>
+    <a class="wordmark" href="index.html">Massachusetts Data Hub<span>351 towns · one instrument</span></a>
     <nav>
-      <a href="#" aria-current="page">The Instrument</a><a href="#">Dashboards</a>
-      <a href="#">Films</a><a href="#">Method</a><a href="#">Support</a>
+      <a href="index.html" aria-current="page">The Instrument</a><a href="index.html#dashboards">Dashboards</a>
+      <a href="MASTER_DATA.md">Method</a>
     </nav>
   </header>
 
