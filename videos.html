@@ -16,7 +16,7 @@
   <meta name="twitter:description" content="Official data dashboards covering taxes, housing, education, employment, energy, and more across Massachusetts — all sourced from government data.">
   <meta name="twitter:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Massachusetts Data Hub</title>
+<title>Videos — Massachusetts Data Hub</title>
 <!-- Social Share Card -->
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
@@ -618,77 +618,55 @@ footer::before{
 <link rel="stylesheet" href="assets/hub-theme.css">
 
 </head>
+<style>
+.doc{position:relative;z-index:1;max-width:1560px;margin:0 auto;
+  padding:clamp(90px,11vw,150px) 24px clamp(40px,5vw,70px)}
+.doc-in{background:rgba(255,255,255,.52);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(11,17,19,.07);border-radius:18px;
+  padding:clamp(26px,3vw,44px) clamp(20px,2.6vw,40px)}
+.doc h1{font-family:var(--font-display);font-weight:700;
+  font-size:clamp(30px,4vw,58px);letter-spacing:-.035em;line-height:1.02;
+  color:var(--ink);margin:0;display:flex;align-items:baseline;gap:14px}
+.doc h1 i{font-family:var(--font-mono);font-style:normal;font-weight:600;
+  font-size:.34em;color:var(--bay-blue);letter-spacing:-.02em}
+.doc .ramp{display:block;height:2px;margin:18px 0 24px;border-radius:2px;
+  background:linear-gradient(90deg,#12467F,#3D82BC,#8FB9D6,#CFC7B4,#F2A65A,#DC5127,#8E0B22)}
+.doc .panel-lede{margin:0;font-family:var(--font-text);
+  font-size:clamp(15px,1.2vw,19px);line-height:1.58;color:rgba(11,17,19,.88);max-width:74ch}
+.doc .panel-body{margin:16px 0 0;font-family:var(--font-text);
+  font-size:14.5px;line-height:1.7;color:rgba(11,17,19,.82);max-width:78ch}
+.doc .panel-note{margin:20px 0 0;font-family:var(--font-text);
+  font-size:13px;line-height:1.62;color:rgba(11,17,19,.74);max-width:78ch}
+.doc .panel-note a{color:var(--bay-blue);font-weight:600}
+</style>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="cardwarp" x="-12%" y="-12%" width="124%" height="124%"><feTurbulence id="cardturb" type="fractalNoise" baseFrequency="0.014 0.022" numOctaves="3" seed="7" result="n"/><feDisplacementMap id="carddisp" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
 <canvas id="flow" aria-hidden="true"></canvas>
-<!-- The instrument is the hero: full viewport, its own document, so the 351-town
-     payload and its WebGL stay isolated from this page. embed=1 suppresses its
-     masthead and nav because this page supplies them. -->
 <header class="site-head">
   <a class="wm" href="./">Massachusetts Data Hub</a>
   <nav class="site-nav">
     <a href="instrument.html">The Instrument</a>
     <a href="#dashboards">Dashboards</a>
-    <a href="videos.html">Videos</a>
+    <a href="videos.html" aria-current="page">Videos</a>
     <a href="about.html">About</a>
     
     <a href="MASTER_DATA.md">Method</a>
   </nav>
 </header>
-<section class="stage">
-  <iframe class="instr" src="instrument.html?embed=1" title="Massachusetts, all 351 municipalities" loading="eager"></iframe>
-</section>
-
-<section class="turn">
-  <div class="turn-in">
-    <h2 class="turn-h">The instrument shows you <em>where</em>.<br>The dashboards show you <em>why</em>.</h2>
-    <div class="turn-side">
-      <p class="turn-l">Computed at runtime from official sources</p>
-      <dl class="turn-figs">
-        <div><dt>Municipalities</dt><dd>351</dd></div>
-        <div><dt>Dashboards</dt><dd id="turn-dash">22</dd></div>
-        <div><dt>Live data feeds</dt><dd>14</dd></div>
-        <div><dt>Last refreshed</dt><dd id="turn-upd">18 Aug 2026</dd></div>
-      </dl>
-      <a class="turn-go" href="#dashboards">Open the dashboards</a>
-    </div>
+<main class="doc">
+  <div class="doc-in">
+    
+    <h1>Videos<i>6</i></h1>
+    <span class="ramp" aria-hidden="true"></span>
+    <p class="panel-lede">Short documentary and commentary pieces built from the
+    same sourced figures as the dashboards.</p>
+    <p class="panel-note" id="videos-note">Not linked yet. The videos exist as
+    finished cuts; they need their published URLs before they can be listed
+    here, so this section is deliberately empty rather than filled with
+    placeholders.</p>
+  
   </div>
-</section>
-<div class="main-content">
-  <section id="dashboards">
-    <div class="sec-head rv">
-      <h2>Dashboards</h2>
-      <p>All analyses built from official government data. Click any card to explore.</p>
-    </div>
-    <div class="grid-wrap">
-    <div class="grid">
-      <a href="tax-burden-nh-comparison.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x2696;</div><span class="badge">Live</span></div><div class="card-name">Same House, Same Income &mdash; MA vs NH</div><div class="card-desc">The five layers of tax a household actually pays, compared side by side across the state line.</div><div class="card-foot"><div class="tags"><span class="tag">DOR</span><span class="tag">NH DRA</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="ma-351-3d-map.html" class="card c-green rv"><div class="card-top"><div class="card-icon green">&#x1F5FA;</div><span class="badge">Live</span></div><div class="card-name">351 &mdash; Every Municipality</div><div class="card-desc">What each town charges per $1,000 of assessed value, in three dimensions, with a guided tour.</div><div class="card-foot"><div class="tags"><span class="tag">DLS</span><span class="tag">MLS PIN</span></div><div class="arrow">&rarr;</div></div></a>
-      
-      <div class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F3D9;</div><span class="badge">Live</span></div><a class="card-go" href="all-things-boston.html"><div class="card-name">All Things Boston</div></a><div class="card-desc">City budget, employee payroll, FBI crime, BPS education, ICE enforcement, commercial real estate, housing, 311 and pension obligations &mdash; all from official city data.</div><div class="card-foot"><div class="tags"><span class="tag">Boston ACFR</span><span class="tag">BPD</span><span class="tag">BPS</span></div><div class="arrow">&rarr;</div></div></div>
-      <a href="https://duncanburns2013-dot.github.io/The-Peoples-Audit/" class="card c-green rv card--ext" target="_blank" rel="noopener"><div class="card-top"><div class="card-icon green">&#x1F5F3;</div><span class="badge b-ext">Separate site</span></div><div class="card-name">The Peoples Audit</div><div class="card-desc">Massachusetts lobbying registrations, firm-by-firm spending and legislative roll-call records, sourced from the Secretary of the Commonwealth.</div><div class="card-foot"><div class="tags"><span class="tag">MA SoS</span><span class="tag">Roll calls</span></div><div class="arrow">&nearr;</div></div></a>
-      <a href="https://duncanburns2013-dot.github.io/HHS-MA-DOGE/" class="card c-cranberry rv card--ext" target="_blank" rel="noopener"><div class="card-top"><div class="card-icon cranberry">&#x1F50D;</div><span class="badge b-ext">Separate site</span></div><div class="card-name">HHS &mdash; MA DOGE</div><div class="card-desc">Healthcare fraud, contracting and lobbying investigation. Its own site, with its own look.</div><div class="card-foot"><div class="tags"><span class="tag">HHS</span><span class="tag">OIG</span></div><div class="arrow">&nearr;</div></div></a>
-      <div class="card c-cranberry rv"><div class="card-top"><div class="card-icon cranberry">&#x1F6C2;</div><span class="badge">Live</span></div><a class="card-go" href="immigration-dashboard.html"><div class="card-name">Immigration &mdash; National + Massachusetts</div></a><div class="card-desc">Border encounters, net international migration, deportation math, Census revisions, fiscal impact (Cato/NASEM), MA shelter crisis, H-1B data, city-level concentration analysis, and the FY27 money trail — the shelter-to-HomeBASE shift, the raw vendor payment record and the lobbying behind it.</div><div class="card-foot"><div class="tags"><span class="tag">CBP</span><span class="tag">Census</span><span class="tag">ICE</span><span class="tag">CBO</span><span class="tag">OCPF</span></div><div class="arrow">&rarr;</div></div></div>
-      <a href="ma-housing-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F3E0;</div><span class="badge">Live</span></div><div class="card-name">Massachusetts Housing Market</div><div class="card-desc">Statewide, Boston, Essex County, and Greater Newburyport. Median prices, DOM, SP/LP ratios, 5-year MLS trends, and affordability calculations.</div><div class="card-foot"><div class="tags"><span class="tag">Warren Group</span><span class="tag">MLS PIN</span><span class="tag">Census ACS</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="nh-housing-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F3D4;&#xFE0F;</div><span class="badge">Live</span></div><div class="card-name">New Hampshire Housing Market</div><div class="card-desc">Statewide market data with regional breakdowns. Median prices, average sales, DOM, sell-through rates, and SP/LP ratios.</div><div class="card-foot"><div class="tags"><span class="tag">Paragon MLS</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="haverhill-market-report.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F4CB;</div><span class="badge">Live</span></div><div class="card-name">Haverhill Market Report</div><div class="card-desc">Deep dive into Haverhill's SF and condo markets. Affordability analysis comparing median income ($88K) to income needed for homeownership.</div><div class="card-foot"><div class="tags"><span class="tag">MLS</span><span class="tag">Census QuickFacts</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="affordability-dashboard.html" class="card c-red rv"><div class="card-top"><div class="card-icon red">&#x1F4B0;</div><span class="badge">Live</span></div><div class="card-name">What It Costs to Live in Massachusetts</div><div class="card-desc">What is actually expensive here and what is not. BEA price parities by state and metro, price-adjusted income rankings, and the MIT living wage by household type.</div><div class="card-foot"><div class="tags"><span class="tag">BEA</span><span class="tag">MIT Living Wage</span><span class="tag">Census ACS</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="education-statewide.html" class="card c-green rv"><div class="card-top"><div class="card-icon green">&#x1F393;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">MA Education &mdash; Statewide</div><div class="card-desc">Enrollment shifts (traditional &minus;6.4%, vocational +18%, homeschool +56%), per-pupil spending, MCAS proficiency, Gateway Cities vs. wealthy towns.</div><div class="card-foot"><div class="tags"><span class="tag">DESE</span><span class="tag">MCAS</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="education-merrimack-valley.html" class="card c-green rv"><div class="card-top"><div class="card-icon green">&#x1F4D0;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">Merrimack Valley Education</div><div class="card-desc">Haverhill, Methuen, and Lawrence comparison. MCAS scores, spending gaps, ELL populations, and district-level performance analysis.</div><div class="card-foot"><div class="tags"><span class="tag">DESE</span><span class="tag">MassINC</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="healthcare-dashboard.html" class="card c-purple rv"><div class="card-top"><div class="card-icon purple">&#x1F6E1;&#xFE0F;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">All Things Insurance</div><div class="card-desc">Health, homeowners, auto, MassHealth, and licensing. 2026 DOI rate decisions (7.1&ndash;12.2%), $3.6B home market, FAIR Plan 8.7% share, auto carrier market share, and insurance cost vs. income growth.</div><div class="card-foot"><div class="tags"><span class="tag">DOI</span><span class="tag">CHIA</span><span class="tag">KFF</span><span class="tag">CAR</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="employment-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F4BC;</div><span class="badge">Live</span></div><div class="card-name">Employment &amp; Labor Market</div><div class="card-desc">JOLTS data, NFP revisions (&minus;911K), hiring recession analysis, openings rate at 3.9% (Feb 2026: 6.9M), and the healthcare employment mask.</div><div class="card-foot"><div class="tags"><span class="tag">BLS JOLTS</span><span class="tag">BLS CES</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="commercial-re-dashboard.html" class="card c-gray rv"><div class="card-top"><div class="card-icon gray">&#x1F3E2;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">Boston Commercial Real Estate</div><div class="card-desc">Office vacancy trajectory (7.5% &rarr; 23.9%), CMBS delinquencies, major sale discounts (31&ndash;62%), and property tax revenue impact.</div><div class="card-foot"><div class="tags"><span class="tag">Trepp</span><span class="tag">C&amp;W</span><span class="tag">Colliers</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="ma-351.html" class="card c-cranberry rv"><div class="card-top"><div class="card-icon cranberry">&#x1F5FA;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">351 &mdash; Every Town in 3D</div><div class="card-desc">A spinnable Massachusetts where every municipality rises by what it charges. Tax rate, real burden per resident, median home price and the business rate premium, town by town, with a guided tour.</div><div class="card-foot"><div class="tags"><span class="tag">DLS</span><span class="tag">MLS PIN</span><span class="tag">MassGIS</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="tax-burden-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F9FE;</div><span class="badge">Live</span></div><div class="card-name">The Five Layers &mdash; MA &amp; NH Total Burden</div><div class="card-desc">What a household actually pays across all five layers &mdash; billed, withheld on your behalf, embedded in prices, collected through the meter, deferred to later. Massachusetts and New Hampshire each get a full breakdown, then a Compare tab puts them side by side. Every contested assumption is a control, not a buried constant.</div><div class="card-foot"><div class="tags"><span class="tag">IRS</span><span class="tag">DOR</span><span class="tag">DLS</span><span class="tag">CBO</span><span class="tag">DPU</span><span class="tag">Census</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="tax-budget-dashboard.html" class="card c-cranberry rv"><div class="card-top"><div class="card-icon cranberry">&#x1F3DB;&#xFE0F;</div><span class="badge">Live</span></div><div class="card-name">Tax Burden, Budget &amp; Cost of Living</div><div class="card-desc">Income tax + 4% surtax, property tax burden, the enacted $63.4B FY2027 budget line by line, state rankings, and BEA/BLS cost-of-living analysis showing MA's purchasing power erosion.</div><div class="card-foot"><div class="tags"><span class="tag">BEA</span><span class="tag">BLS</span><span class="tag">Census</span><span class="tag">DOR</span><span class="tag">EIA</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="pension-dashboard.html" class="card c-red rv"><div class="card-top"><div class="card-icon red">&#x1F4B0;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">Pensions &amp; Unfunded Liabilities</div><div class="card-desc">$55.8B unfunded (pension + OPEB). PRIT Fund ($105B), 23-year time series, demographic collapse (1.3 workers/retiree), 99 municipal systems, $4.9B FY26 taxpayer cost.</div><div class="card-foot"><div class="tags"><span class="tag">ACFR</span><span class="tag">PERAC</span><span class="tag">PPD</span><span class="tag">PRIT</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="energy-dashboard.html" class="card c-green rv"><div class="card-top"><div class="card-icon green">&#x26A1;</div><span class="badge">Live</span></div><div class="card-name">Energy Policy &amp; Carbon Tax</div><div class="card-desc">RGGI carbon tax ($1.36B total, $200M in 2025), highest electricity costs in contiguous US, rate comparison vs. neighbors, and spending allocation analysis.</div><div class="card-foot"><div class="tags"><span class="tag">EIA</span><span class="tag">RGGI Inc</span><span class="tag">ISO-NE</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="pay-to-play-dashboard.html" class="card c-purple rv"><div class="card-top"><div class="card-icon purple">&#x1F91D;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">Pay-to-Play &amp; Lobbying</div><div class="card-desc">4,298 OCPF donations ($822K) from top lobbying firms, 82.3% at exact $200 cap, OpenSecrets sector rankings, healthcare case study, nonprofit loopholes.</div><div class="card-foot"><div class="tags"><span class="tag">OCPF</span><span class="tag">OpenSecrets</span><span class="tag">SOC</span></div><div class="arrow">&rarr;</div></div></a>
-    </div>
-    </div>
-  </section>
-  <section class="sources rv"><div class="sources-in"><h4>Official data sources<i class="src-n">27</i></h4><span class="sources-ramp" aria-hidden="true"></span><div class="srcchips"><span class="srcchip">BLS (LAUS, CES, OES, CPI)</span><span class="srcchip">BEA (SAINC, SAPCE, RPP)</span><span class="srcchip">Census Bureau (ACS, QuickFacts)</span><span class="srcchip">CBP</span><span class="srcchip">ICE</span><span class="srcchip">CBO</span><span class="srcchip">EIA</span><span class="srcchip">MA DOR</span><span class="srcchip">MA DLS</span><span class="srcchip">DOI</span><span class="srcchip">DESE</span><span class="srcchip">CHIA</span><span class="srcchip">CAR</span><span class="srcchip">KFF</span><span class="srcchip">Warren Group</span><span class="srcchip">MLS PIN</span><span class="srcchip">Paragon MLS</span><span class="srcchip">Tax Foundation</span><span class="srcchip">ITEP</span><span class="srcchip">MIT Living Wage Calculator</span><span class="srcchip">PERAC</span><span class="srcchip">PRIT Fund</span><span class="srcchip">Public Plans Database</span><span class="srcchip">OCPF</span><span class="srcchip">OpenSecrets</span><span class="srcchip">RGGI Inc</span><span class="srcchip">ISO-NE</span></div><p class="sources-note">See <a href="MASTER_DATA.md">MASTER_DATA.md</a> for full citations.</p></div></section>
-</div>
+</main>
 <footer>
   <div class="share-bar">
     <span class="share-label">Share this data:</span>
@@ -705,326 +683,9 @@ footer::before{
   <span>Massachusetts Data Hub &middot; Compiled by Duncan Burns</span><br>
   <span>All data from official government sources</span>
 </footer>
-<script>
-const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis')})},{threshold:0.04,rootMargin:'0px 0px -15px 0px'});
-document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
-// The turn band is labelled "computed at runtime". The dashboard count is the
-// one figure on it this page actually owns, so count the cards instead of
-// printing a number that goes stale the next time one is added or folded in.
-// Separate-site cards (b-ext) are not dashboards on this hub.
-(function(){
-  var sec=document.getElementById('dashboards'); if(!sec) return;
-  var n=sec.querySelectorAll('.card').length - sec.querySelectorAll('.badge.b-ext').length;
-  var el=document.getElementById('turn-dash'); if(el && n>0) el.textContent=n;
-})();
-var SHARE_URL='https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/';
-// Share copy stays generic on purpose. It used to quote live figures - "#41",
-// "$313K", "#1 in nation" - plus a hard dashboard count, none of which any feed
-// updates. The dashboards behind the link refresh daily, so a card that names
-// their numbers starts drifting the next time those numbers move, and nothing
-// here would catch it. Describe what the hub is, not what it currently says.
-// Same rule as the OG image, which deliberately carries no year.
-var SHARE_TITLE='Massachusetts Data Hub \u2014 interactive dashboards tracking the Commonwealth\'s affordability crisis';
-var SHARE_TEXT='Taxes, housing, energy, healthcare, education and jobs in Massachusetts \u2014 built from official government data and refreshed automatically.';
-function shareOn(p){
-  var u=encodeURIComponent(SHARE_URL),t=encodeURIComponent(SHARE_TITLE),d=encodeURIComponent(SHARE_TEXT);
-  var urls={
-    x:'https://x.com/intent/tweet?text='+encodeURIComponent(SHARE_TITLE+'\n\n')+u,
-    fb:'https://www.facebook.com/sharer/sharer.php?u='+u,
-    li:'https://www.linkedin.com/sharing/share-offsite/?url='+u,
-    rd:'https://reddit.com/submit?url='+u+'&title='+t,
-    em:'mailto:?subject='+t+'&body='+d+'%0A%0A'+u
-  };
-  if(p==='em'){window.location.href=urls[p]}else{window.open(urls[p],'_blank','width=600,height=500')}
-}
-</script>
-
 <script type="importmap">
 {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"}}
 </script>
-<script type="module">
-/* ===========================================================================
-   EFFECT 1 - LIQUID TYPE
-   The headline becomes a texture, then a fragment shader liquefies it with
-   domain-warped fbm and splits the channels by the amount of distortion. Scroll
-   settles it to crisp type; the cursor keeps driving ripples through it.
-   ========================================================================= */
-import * as THREE from 'three';
-
-(function(){
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var h = document.querySelector('.turn-h');
-  if (!h) return;
-
-  var cv = document.createElement('canvas');
-  cv.className = 'lq'; cv.setAttribute('aria-hidden','true');
-  h.appendChild(cv);
-
-  var renderer, tex, mesh, scene, cam, W=0, H=0, ready=false, painted=false;
-
-  function makeTexture(){
-    var r = h.getBoundingClientRect();
-    W = Math.ceil(r.width); H = Math.ceil(r.height);
-    if (!W || !H) return null;
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var off = document.createElement('canvas');
-    off.width = Math.ceil(W*dpr); off.height = Math.ceil(H*dpr);
-    var o = off.getContext('2d');
-    o.setTransform(dpr,0,0,dpr,0,0);
-    o.textBaseline = 'top';
-
-    var cs = getComputedStyle(h);
-    var fontPx = parseFloat(cs.fontSize);
-    var lh = parseFloat(cs.lineHeight) || fontPx*1.05;
-    var fam = cs.fontFamily, wt = cs.fontWeight;
-    /* Canvas resets letterSpacing every time `font` is assigned, so it has to be
-       re-applied after each one. Setting it first silently discarded it: the
-       line measured 792px against the DOM's 734px, which tripped the fit-to-box
-       shrink and scaled the type down on top of the wrong tracking. */
-    var TRACK = ('letterSpacing' in o) ? cs.letterSpacing : null;
-    function setFont(px){
-      o.font = wt + ' ' + px + 'px ' + fam;
-      if (TRACK !== null) o.letterSpacing = TRACK;
-    }
-
-    var ink = cs.color;
-    var emEl = h.querySelector('em');
-    var accent = emEl ? getComputedStyle(emEl).color : '#680A1D';
-    var LINES = [
-      [['The instrument shows you ', ink], ['where', accent], ['.', ink]],
-      [['The dashboards show you ', ink], ['why', accent], ['.', ink]]
-    ];
-    function widest(px){
-      setFont(px);
-      var m=0;
-      for (var i=0;i<LINES.length;i++){ var w=0;
-        for (var j=0;j<LINES[i].length;j++) w += o.measureText(LINES[i][j][0]).width;
-        if (w>m) m=w; }
-      return m;
-    }
-    var wMax = widest(fontPx);
-    if (wMax > W-2){ fontPx = Math.max(12, fontPx*(W-2)/wMax); lh = fontPx*1.06; }
-    setFont(fontPx);
-
-    var y = Math.max(0,(H - lh*LINES.length)/2);
-    for (var i=0;i<LINES.length;i++){
-      var x = 0;
-      for (var j=0;j<LINES[i].length;j++){
-        o.fillStyle = LINES[i][j][1];
-        o.fillText(LINES[i][j][0], x, y);
-        x += o.measureText(LINES[i][j][0]).width;
-      }
-      y += lh;
-    }
-    var t = new THREE.CanvasTexture(off);
-    t.minFilter = THREE.LinearFilter; t.magFilter = THREE.LinearFilter;
-    t.generateMipmaps = false;
-    return t;
-  }
-
-  var U = {
-    uTex:{value:null}, uProg:{value:0}, uTime:{value:0},
-    uMouse:{value:new THREE.Vector2(-9,-9)}, uAspect:{value:1}, uHover:{value:0}
-  };
-
-  var FRAG = `
-    precision highp float;
-    uniform sampler2D uTex;
-    uniform float uProg, uTime, uAspect, uHover;
-    uniform vec2 uMouse;
-    varying vec2 vUv;
-
-    float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
-    float vnoise(vec2 p){
-      vec2 i=floor(p), f=fract(p);
-      vec2 u=f*f*(3.0-2.0*f);
-      return mix(mix(hash(i),hash(i+vec2(1,0)),u.x),
-                 mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x),u.y);
-    }
-    float fbm(vec2 p){
-      float v=0.0, a=0.5;
-      for(int k=0;k<5;k++){ v+=a*vnoise(p); p*=2.02; a*=0.5; }
-      return v;
-    }
-
-    void main(){
-      vec2 uv = vUv;
-      float settle = smoothstep(0.0, 1.0, uProg);
-      /* Amplitude is scaled to the LETTER, not the box. At 0.075 of a 950px box
-         it displaced ~70px on 60px type and the words melted into each other. */
-      float amp = (1.0 - settle) * 0.018;
-
-      vec2 q = vec2(fbm(uv*5.0 + uTime*0.11),
-                    fbm(uv*5.0 + 7.3 - uTime*0.09));
-      vec2 warp = (q - 0.5) * amp;
-      /* and it pours up into place rather than only smearing sideways */
-      warp.y += (1.0 - settle) * 0.045;
-
-      /* cursor ripple keeps working after it has settled */
-      vec2 ap = vec2(uv.x*uAspect, uv.y);
-      vec2 am = vec2(uMouse.x*uAspect, uMouse.y);
-      float d = distance(ap, am);
-      float fall = exp(-d*11.0) * uHover;
-      vec2 dir = normalize(ap - am + vec2(1e-5));
-      float rip = sin(d*46.0 - uTime*5.2) * fall * 0.028;
-      warp += dir * rip;
-
-      /* chromatic split scales with how distorted this pixel is */
-      /* chromatic split on near-black ink only makes dark mud: three offset
-         copies of an almost-black glyph read as a heavy smear, which is what
-         the arriving headline looked like. Kept small; the ripple carries it. */
-      float split = length(warp)*0.65 + fall*0.010;
-      vec4 cr = texture2D(uTex, uv + warp + vec2( split, 0.0));
-      vec4 cg = texture2D(uTex, uv + warp);
-      vec4 cb = texture2D(uTex, uv + warp - vec2( split, 0.0));
-      float a = max(cr.a, max(cg.a, cb.a));
-      /* it arrives faint and gains weight as it settles, so the unresolved
-         state reads as something forming rather than something broken */
-      a *= 0.18 + 0.82 * settle;
-      if (a < 0.004) discard;
-      vec3 col = vec3(cr.r, cg.g, cb.b);
-      /* the ripple crest catches a little light */
-      col += vec3(0.55,0.60,0.66) * fall * 0.30;
-      gl_FragColor = vec4(col, a);
-    }`;
-
-  function build(){
-    tex = makeTexture();
-    if (!tex) return;
-    U.uTex.value = tex;
-    U.uAspect.value = W/Math.max(1,H);
-    if (!renderer){
-      renderer = new THREE.WebGLRenderer({canvas:cv, alpha:true, antialias:true});
-      renderer.setClearAlpha(0);
-      scene = new THREE.Scene();
-      cam = new THREE.OrthographicCamera(-0.5,0.5,0.5,-0.5,0,1);
-      mesh = new THREE.Mesh(new THREE.PlaneGeometry(1,1),
-        new THREE.ShaderMaterial({
-          uniforms:U, transparent:true, depthTest:false, depthWrite:false,
-          vertexShader:`varying vec2 vUv; void main(){ vUv=uv;
-            gl_Position=vec4(position.xy*2.0,0.0,1.0); }`,
-          fragmentShader:FRAG
-        }));
-      mesh.frustumCulled = false;
-      scene.add(mesh);
-    }
-    renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
-    renderer.setSize(W,H,false);
-    ready = true;
-  }
-
-  var prog = 0;
-  function measure(){
-    var r = h.getBoundingClientRect(), vh = innerHeight;
-    if (!r.height) return;
-    /* fully settled by the time the band has risen to 45% of the viewport, so
-       at any normal reading position the type is crisp. The previous attempt
-       topped out at 0.81 and never resolved, which is why it stayed a smear. */
-    /* crisp well before the band reaches the middle of the viewport. At 0.55
-       it was still ~0.89 settled at a normal reading position, and the residual
-       warp plus chromatic split made the line unreadable. */
-    prog = Math.max(0, Math.min(1, (vh - r.top) / (vh * 0.38)));
-  }
-  window.__LQ = { p:function(){ return prog; }, ready:function(){ return ready; } };
-
-  var hover = 0, hoverT = 0;
-  h.addEventListener('pointermove', function(e){
-    var r = h.getBoundingClientRect();
-    U.uMouse.value.set((e.clientX-r.left)/r.width, 1-(e.clientY-r.top)/r.height);
-    hoverT = 1;
-  }, {passive:true});
-  h.addEventListener('pointerleave', function(){ hoverT = 0; }, {passive:true});
-
-  var clock = new THREE.Clock();
-  (function loop(){
-    requestAnimationFrame(loop);
-    if (!ready) return;
-    var r = h.getBoundingClientRect();
-    if (r.bottom < -160 || r.top > innerHeight + 160) return;
-    if (!painted){ painted = true; h.classList.add('lq-on'); }
-    /* measured here rather than only on scroll: a scroll-only measurement can
-       be taken once against a layout that is not final and then never corrected,
-       which is exactly how the headline ended up frozen mid-liquid. */
-    measure();
-    var dt = Math.min(clock.getDelta(), .05);
-    U.uTime.value += dt;
-    U.uProg.value += (prog - U.uProg.value) * Math.min(1, dt*6.5);
-    hover += (hoverT - hover) * Math.min(1, dt*5.0);
-    U.uHover.value = hover;
-    renderer.render(scene, cam);
-  })();
-
-  function boot(){ build(); measure(); }
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(boot);
-  else addEventListener('load', boot);
-  addEventListener('scroll', measure, {passive:true});
-  var rt; addEventListener('resize', function(){ clearTimeout(rt);
-    rt = setTimeout(function(){ ready=false; build(); measure(); }, 180); }, {passive:true});
-})();
-</script>
-
-<script>
-/* ===========================================================================
-   EFFECT 2 - MAGNETIC CARDS
-   Real 3D tilt toward the pointer on a perspective grid, with a specular sheen
-   that tracks across the face and a glow in the card's own subject colour.
-   One listener on the grid, rAF-throttled.
-   ========================================================================= */
-(function(){
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  if (!matchMedia('(hover: hover)').matches) return;
-  var grid = document.querySelector('#dashboards .grid');
-  if (!grid) return;
-
-  var cards = grid.querySelectorAll('.card');
-  cards.forEach(function(c){
-    var sh = document.createElement('span');
-    sh.className = 'sheen'; sh.setAttribute('aria-hidden','true');
-    c.appendChild(sh);
-  });
-
-  var raf = 0, pending = null, current = null;
-  function apply(){
-    raf = 0;
-    if (!pending) return;
-    var c = pending.card, r = pending.rect, x = pending.x, y = pending.y;
-    var nx = (x - r.left) / r.width, ny = (y - r.top) / r.height;
-    c.style.setProperty('--rx', (nx*2-1).toFixed(3));
-    c.style.setProperty('--ry', (ny*2-1).toFixed(3));
-    c.style.setProperty('--mx', (nx*100).toFixed(1)+'%');
-    c.style.setProperty('--my', (ny*100).toFixed(1)+'%');
-  }
-
-  grid.addEventListener('pointermove', function(e){
-    var c = e.target.closest ? e.target.closest('.card') : null;
-    if (!c){ return; }
-    if (current && current !== c) clear(current);
-    if (current !== c){ current = c; c.classList.add('mg'); }
-    pending = { card:c, rect:c.getBoundingClientRect(), x:e.clientX, y:e.clientY };
-    if (!raf) raf = requestAnimationFrame(apply);
-  }, {passive:true});
-
-  function clear(c){
-    c.classList.remove('mg');
-    c.style.removeProperty('--rx'); c.style.removeProperty('--ry');
-  }
-  grid.addEventListener('pointerleave', function(){
-    if (current){ clear(current); current = null; }
-  }, {passive:true});
-  cards.forEach(function(c){
-    c.addEventListener('pointerleave', function(){
-      if (current === c){ clear(c); current = null; }
-    }, {passive:true});
-  });
-  window.__MG = { cards: cards.length,
-                  force:function(i,nx,ny){ var c=cards[i]; c.classList.add('mg');
-                    c.style.setProperty('--rx',(nx*2-1).toFixed(3));
-                    c.style.setProperty('--ry',(ny*2-1).toFixed(3));
-                    c.style.setProperty('--mx',(nx*100)+'%');
-                    c.style.setProperty('--my',(ny*100)+'%'); } };
-})();
-</script>
-
 <script type="module">
 /* ===========================================================================
    EFFECT 3 - DOMAIN-WARPED FLOW FIELD
@@ -1162,146 +823,6 @@ import * as THREE from 'three';
 
   window.__FLOW = { info:function(){ return {frames:frames, on:cv.classList.contains('on'),
                      size:U.uRes.value.x+'x'+U.uRes.value.y}; } };
-})();
-</script>
-
-<script>
-/* ---- 4. turn band: pointer parallax + scroll counter-drift -------------- */
-(function(){
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var band = document.querySelector('.turn');
-  if (!band) return;
-  var raf = 0, tx = 0, ty = 0;
-  function write(){
-    raf = 0;
-    band.style.setProperty('--tx', tx.toFixed(3));
-    band.style.setProperty('--ty', ty.toFixed(3));
-  }
-  band.addEventListener('pointermove', function(e){
-    var r = band.getBoundingClientRect();
-    tx = (e.clientX - r.left)/r.width * 2 - 1;
-    ty = (e.clientY - r.top)/r.height * 2 - 1;
-    band.classList.add('live');
-    if (!raf) raf = requestAnimationFrame(write);
-  }, {passive:true});
-  band.addEventListener('pointerleave', function(){
-    band.classList.remove('live'); tx = 0; ty = 0;
-    if (!raf) raf = requestAnimationFrame(write);
-  }, {passive:true});
-
-  /* the two blocks drift against the scroll at different rates */
-  var sraf = 0;
-  function drift(){
-    sraf = 0;
-    var r = band.getBoundingClientRect();
-    var p = (innerHeight - r.top) / (innerHeight + r.height);   // 0..1 through
-    var d = (p - 0.5) * 2;
-    band.style.setProperty('--sy',  (d * -18).toFixed(1) + 'px');
-    band.style.setProperty('--sy2', (d *  12).toFixed(1) + 'px');
-  }
-  addEventListener('scroll', function(){ if(!sraf) sraf = requestAnimationFrame(drift); }, {passive:true});
-  drift();
-})();
-
-/* ---- 5. cards: animate a real displacement filter on the hovered card --- */
-(function(){
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  if (!matchMedia('(hover: hover)').matches) return;
-  var disp = document.getElementById('carddisp');
-  var turb = document.getElementById('cardturb');
-  if (!disp || !turb) return;
-  var grid = document.querySelector('#dashboards .grid');
-  if (!grid) return;
-
-  var active = null, scale = 0, want = 0, t = 0, raf = 0;
-  function tick(){
-    raf = requestAnimationFrame(tick);
-    t += 0.016;
-    scale += (want - scale) * 0.12;
-    if (scale < 0.05 && want === 0){
-      scale = 0;
-      if (active){ active.classList.remove('warp'); active = null; }
-      cancelAnimationFrame(raf); raf = 0;
-      disp.setAttribute('scale','0');
-      return;
-    }
-    /* drift the noise so the ripple lives instead of sitting still */
-    var f1 = (0.012 + Math.sin(t*0.7)*0.004).toFixed(4);
-    var f2 = (0.020 + Math.cos(t*0.5)*0.005).toFixed(4);
-    turb.setAttribute('baseFrequency', f1 + ' ' + f2);
-    disp.setAttribute('scale', scale.toFixed(2));
-  }
-  grid.addEventListener('pointerover', function(e){
-    var c = e.target.closest ? e.target.closest('.card') : null;
-    if (!c || c === active) return;
-    if (active) active.classList.remove('warp');
-    active = c; c.classList.add('warp');
-    want = 4.2;
-    if (!raf) raf = requestAnimationFrame(tick);
-  }, {passive:true});
-  grid.addEventListener('pointerleave', function(){
-    want = 0;
-    if (!raf) raf = requestAnimationFrame(tick);
-  }, {passive:true});
-})();
-
-/* ---- 7. reveal the sources ramp when the block arrives ----------------- */
-(function(){
-  var secs = document.querySelectorAll('.sources, .panel-sec');
-  if (!secs.length) return;
-  if (!('IntersectionObserver' in window)){
-    secs.forEach(function(x){ x.classList.add('vis'); }); return; }
-  var io = new IntersectionObserver(function(es){
-    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('vis'); io.unobserve(e.target); } });
-  }, {threshold:0.15});
-  secs.forEach(function(x){ io.observe(x); });
-  setTimeout(function(){ secs.forEach(function(x){ x.classList.add('vis'); }); }, 6000);
-})();
-</script>
-
-<script>
-/* ---- the sources chips as a field ----
-   Each chip carries a --lift from 0 to 1 by how close the pointer is. Rects are
-   cached on enter and on resize, so a move is 27 distance checks and no layout
-   reads at all. */
-(function(){
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  if (!matchMedia('(hover: hover)').matches) return;
-  var wrap = document.querySelector('.srcchips');
-  if (!wrap) return;
-  var chips = [].slice.call(wrap.querySelectorAll('.srcchip'));
-  var rects = [], raf = 0, px = 0, py = 0;
-
-  function cache(){
-    rects = chips.map(function(c){
-      var r = c.getBoundingClientRect();
-      return {x:r.left + r.width/2, y:r.top + r.height/2};
-    });
-  }
-  var R = 190;                       /* the reach of the field, in pixels */
-  function paint(){
-    raf = 0;
-    for (var i=0;i<chips.length;i++){
-      var d = Math.hypot(px - rects[i].x, py - rects[i].y);
-      var lift = d > R ? 0 : Math.pow(1 - d/R, 2);
-      chips[i].style.setProperty('--lift', lift.toFixed(3));
-      chips[i].style.color = lift > 0.12
-        ? 'rgba(20,85,143,' + (0.72 + lift*0.28).toFixed(2) + ')'
-        : '';
-    }
-  }
-  wrap.addEventListener('pointerenter', function(){ cache(); wrap.classList.add('live'); }, {passive:true});
-  wrap.addEventListener('pointermove', function(e){
-    if (!rects.length) cache();
-    px = e.clientX; py = e.clientY;
-    if (!raf) raf = requestAnimationFrame(paint);
-  }, {passive:true});
-  wrap.addEventListener('pointerleave', function(){
-    wrap.classList.remove('live');
-    chips.forEach(function(c){ c.style.setProperty('--lift', 0); c.style.color = ''; });
-  }, {passive:true});
-  addEventListener('resize', function(){ rects = []; }, {passive:true});
-  addEventListener('scroll', function(){ rects = []; }, {passive:true});
 })();
 </script>
 </body>
