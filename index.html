@@ -448,6 +448,78 @@ footer{color:rgba(11,17,19,.80)}
   background-size:300% 300%;
 }
 
+
+/* ---- 4. the turn band as a space: three depths ------------------------- */
+.turn{overflow:hidden}
+.turn-in{position:relative}
+.turn-h,.turn-side{will-change:transform}
+.turn-h{transform:translate3d(calc(var(--tx,0)*-14px),calc(var(--ty,0)*-9px + var(--sy,0px)),0)}
+.turn-side{transform:translate3d(calc(var(--tx,0)*9px),calc(var(--ty,0)*6px + var(--sy2,0px)),0)}
+.turn-h,.turn-side{transition:transform .5s cubic-bezier(.19,1,.22,1)}
+.turn.live .turn-h,.turn.live .turn-side{transition:transform .14s linear}
+
+/* ---- 5. cards: real pixel displacement on hover ------------------------- */
+.card.warp{filter:url(#cardwarp)}
+
+/* ---- 7. sources and footer as their own section ------------------------- */
+.sources{
+  position:relative;z-index:1;
+  margin:56px auto 0;max-width:1560px;padding:0 24px;
+}
+.sources-in{
+  background:rgba(255,255,255,.52);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(11,17,19,.07);border-radius:18px;
+  padding:26px clamp(20px,2.4vw,34px) 24px;
+}
+.sources h4{
+  font-family:var(--font-display);font-weight:700;
+  font-size:clamp(15px,1.35vw,20px);letter-spacing:-.02em;color:var(--ink);
+  margin:0;display:flex;align-items:baseline;gap:11px;
+}
+.sources .src-n{
+  font-family:var(--font-mono);font-style:normal;font-weight:600;
+  font-size:.62em;color:var(--bay-blue);letter-spacing:-.02em;
+}
+.sources-ramp{
+  display:block;height:2px;margin:14px 0 18px;border-radius:2px;
+  background:linear-gradient(90deg,#12467F,#3D82BC,#8FB9D6,#CFC7B4,#F2A65A,#DC5127,#8E0B22);
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform 1.1s cubic-bezier(.19,1,.22,1);
+}
+.sources.vis .sources-ramp{transform:scaleX(1)}
+.srcchips{display:flex;flex-wrap:wrap;gap:6px}
+.srcchip{
+  font-family:var(--font-mono);font-size:10px;font-weight:600;
+  letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;
+  padding:5px 10px;border-radius:6px;
+  color:rgba(11,17,19,.78);background:rgba(255,255,255,.72);
+  border:1px solid rgba(11,17,19,.12);
+  transition:transform .3s cubic-bezier(.19,1,.22,1),border-color .3s,color .3s;
+}
+.srcchip:hover{transform:translateY(-2px);border-color:rgba(20,85,143,.45);color:var(--bay-blue)}
+.sources-note{
+  margin:16px 0 0;font-family:var(--font-text);
+  font-size:12.5px;color:rgba(11,17,19,.72);
+}
+.sources-note a{color:var(--bay-blue);font-weight:600}
+
+/* measured on the footer's translucent ground: 3.79:1 against 4.5 */
+.share-label{color:rgba(11,17,19,.80)}
+
+footer{
+  position:relative;z-index:1;margin-top:44px;
+  background:rgba(233,235,234,.58);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-top:1px solid rgba(11,17,19,.08);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .turn-h,.turn-side{transform:none!important}
+  .card.warp{filter:none}
+  .sources-ramp{transform:scaleX(1)}
+}
+
 </style>
 <!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
 <link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
@@ -455,6 +527,7 @@ footer{color:rgba(11,17,19,.80)}
 
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="cardwarp" x="-12%" y="-12%" width="124%" height="124%"><feTurbulence id="cardturb" type="fractalNoise" baseFrequency="0.014 0.022" numOctaves="3" seed="7" result="n"/><feDisplacementMap id="carddisp" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
 <canvas id="flow" aria-hidden="true"></canvas>
 <!-- The instrument is the hero: full viewport, its own document, so the 351-town
      payload and its WebGL stay isolated from this page. embed=1 suppresses its
@@ -520,10 +593,7 @@ footer{color:rgba(11,17,19,.80)}
     </div>
     </div>
   </section>
-  <div class="info-box rv">
-    <h4>&#x1F4CB; Official Data Sources</h4>
-    <p>BLS (LAUS, CES, OES, CPI) &middot; BEA (SAINC, SAPCE, RPP) &middot; Census Bureau (ACS, QuickFacts) &middot; CBP &middot; ICE &middot; CBO &middot; EIA &middot; MA DOR &middot; MA DLS &middot; DOI &middot; DESE &middot; CHIA &middot; CAR &middot; KFF &middot; Warren Group &middot; MLS PIN &middot; Paragon MLS &middot; Tax Foundation &middot; ITEP &middot; MIT Living Wage Calculator &middot; PERAC &middot; PRIT Fund &middot; Public Plans Database &middot; OCPF &middot; OpenSecrets &middot; RGGI Inc &middot; ISO-NE. See <a href="MASTER_DATA.md">MASTER_DATA.md</a> for full citations.</p>
-  </div>
+  <section class="sources rv"><div class="sources-in"><h4>Official data sources<i class="src-n">27</i></h4><span class="sources-ramp" aria-hidden="true"></span><div class="srcchips"><span class="srcchip">BLS (LAUS, CES, OES, CPI)</span><span class="srcchip">BEA (SAINC, SAPCE, RPP)</span><span class="srcchip">Census Bureau (ACS, QuickFacts)</span><span class="srcchip">CBP</span><span class="srcchip">ICE</span><span class="srcchip">CBO</span><span class="srcchip">EIA</span><span class="srcchip">MA DOR</span><span class="srcchip">MA DLS</span><span class="srcchip">DOI</span><span class="srcchip">DESE</span><span class="srcchip">CHIA</span><span class="srcchip">CAR</span><span class="srcchip">KFF</span><span class="srcchip">Warren Group</span><span class="srcchip">MLS PIN</span><span class="srcchip">Paragon MLS</span><span class="srcchip">Tax Foundation</span><span class="srcchip">ITEP</span><span class="srcchip">MIT Living Wage Calculator</span><span class="srcchip">PERAC</span><span class="srcchip">PRIT Fund</span><span class="srcchip">Public Plans Database</span><span class="srcchip">OCPF</span><span class="srcchip">OpenSecrets</span><span class="srcchip">RGGI Inc</span><span class="srcchip">ISO-NE</span></div><p class="sources-note">See <a href="MASTER_DATA.md">MASTER_DATA.md</a> for full citations.</p></div></section>
 </div>
 <footer>
   <div class="share-bar">
@@ -861,7 +931,7 @@ import * as THREE from 'three';
 
   var U = {
     uTime:{value:0}, uRes:{value:new THREE.Vector2(1,1)},
-    uMouse:{value:new THREE.Vector2(-9,-9)}, uForce:{value:0}
+    uMouse:{value:new THREE.Vector2(-9,-9)}, uForce:{value:0}, uStir:{value:0}
   };
 
   var mat = new THREE.ShaderMaterial({
@@ -869,7 +939,7 @@ import * as THREE from 'three';
     vertexShader:`void main(){ gl_Position = vec4(position.xy*2.0, 0.0, 1.0); }`,
     fragmentShader:`
       precision highp float;
-      uniform float uTime, uForce;
+      uniform float uTime, uForce, uStir;
       uniform vec2 uRes, uMouse;
 
       float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
@@ -902,7 +972,7 @@ import * as THREE from 'three';
       void main(){
         vec2 uv = gl_FragCoord.xy / uRes;
         vec2 p = uv * vec2(uRes.x/uRes.y, 1.0) * 2.4;
-        float t = uTime * 0.045;
+        float t = uTime * (0.045 + uStir*0.16);
 
         /* the cursor drags the field toward it */
         vec2 mp = uMouse * vec2(uRes.x/uRes.y, 1.0) * 2.4;
@@ -915,7 +985,7 @@ import * as THREE from 'three';
                       fbm(p + vec2(5.2, 1.3) - t));
         vec2 r = vec2(fbm(p + 3.4*q + vec2(1.7, 9.2) + t*0.7),
                       fbm(p + 3.4*q + vec2(8.3, 2.8) - t*0.6));
-        float f = fbm(p + 3.2*r);
+        float f = fbm(p + (3.2 + uStir*2.4)*r);
 
         /* bands, so it reads as flow rather than as fog */
         float band = fract(f*2.6 + t*1.4);
@@ -945,6 +1015,13 @@ import * as THREE from 'three';
   resize();
   addEventListener('resize', resize, {passive:true});
 
+  /* scroll velocity stirs the field and it settles when you stop */
+  var lastY = scrollY, vel = 0;
+  addEventListener('scroll', function(){
+    vel = Math.min(1.0, Math.abs(scrollY - lastY) / 90);
+    lastY = scrollY;
+  }, {passive:true});
+
   var want = 0;
   addEventListener('pointermove', function(e){
     U.uMouse.value.set(e.clientX/innerWidth, 1 - e.clientY/innerHeight);
@@ -962,6 +1039,8 @@ import * as THREE from 'three';
     var dt = Math.min(clock.getDelta(), 0.05);
     U.uTime.value += dt;
     U.uForce.value += (want - U.uForce.value) * Math.min(1, dt*3);
+    U.uStir.value += (vel - U.uStir.value) * Math.min(1, dt*2.2);
+    vel *= 0.90;
     renderer.render(scene, cam);
     frames++;
     if (first){ first = false; cv.classList.add('on'); }
@@ -969,6 +1048,99 @@ import * as THREE from 'three';
 
   window.__FLOW = { info:function(){ return {frames:frames, on:cv.classList.contains('on'),
                      size:U.uRes.value.x+'x'+U.uRes.value.y}; } };
+})();
+</script>
+
+<script>
+/* ---- 4. turn band: pointer parallax + scroll counter-drift -------------- */
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var band = document.querySelector('.turn');
+  if (!band) return;
+  var raf = 0, tx = 0, ty = 0;
+  function write(){
+    raf = 0;
+    band.style.setProperty('--tx', tx.toFixed(3));
+    band.style.setProperty('--ty', ty.toFixed(3));
+  }
+  band.addEventListener('pointermove', function(e){
+    var r = band.getBoundingClientRect();
+    tx = (e.clientX - r.left)/r.width * 2 - 1;
+    ty = (e.clientY - r.top)/r.height * 2 - 1;
+    band.classList.add('live');
+    if (!raf) raf = requestAnimationFrame(write);
+  }, {passive:true});
+  band.addEventListener('pointerleave', function(){
+    band.classList.remove('live'); tx = 0; ty = 0;
+    if (!raf) raf = requestAnimationFrame(write);
+  }, {passive:true});
+
+  /* the two blocks drift against the scroll at different rates */
+  var sraf = 0;
+  function drift(){
+    sraf = 0;
+    var r = band.getBoundingClientRect();
+    var p = (innerHeight - r.top) / (innerHeight + r.height);   // 0..1 through
+    var d = (p - 0.5) * 2;
+    band.style.setProperty('--sy',  (d * -18).toFixed(1) + 'px');
+    band.style.setProperty('--sy2', (d *  12).toFixed(1) + 'px');
+  }
+  addEventListener('scroll', function(){ if(!sraf) sraf = requestAnimationFrame(drift); }, {passive:true});
+  drift();
+})();
+
+/* ---- 5. cards: animate a real displacement filter on the hovered card --- */
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!matchMedia('(hover: hover)').matches) return;
+  var disp = document.getElementById('carddisp');
+  var turb = document.getElementById('cardturb');
+  if (!disp || !turb) return;
+  var grid = document.querySelector('#dashboards .grid');
+  if (!grid) return;
+
+  var active = null, scale = 0, want = 0, t = 0, raf = 0;
+  function tick(){
+    raf = requestAnimationFrame(tick);
+    t += 0.016;
+    scale += (want - scale) * 0.12;
+    if (scale < 0.05 && want === 0){
+      scale = 0;
+      if (active){ active.classList.remove('warp'); active = null; }
+      cancelAnimationFrame(raf); raf = 0;
+      disp.setAttribute('scale','0');
+      return;
+    }
+    /* drift the noise so the ripple lives instead of sitting still */
+    var f1 = (0.012 + Math.sin(t*0.7)*0.004).toFixed(4);
+    var f2 = (0.020 + Math.cos(t*0.5)*0.005).toFixed(4);
+    turb.setAttribute('baseFrequency', f1 + ' ' + f2);
+    disp.setAttribute('scale', scale.toFixed(2));
+  }
+  grid.addEventListener('pointerover', function(e){
+    var c = e.target.closest ? e.target.closest('.card') : null;
+    if (!c || c === active) return;
+    if (active) active.classList.remove('warp');
+    active = c; c.classList.add('warp');
+    want = 4.2;
+    if (!raf) raf = requestAnimationFrame(tick);
+  }, {passive:true});
+  grid.addEventListener('pointerleave', function(){
+    want = 0;
+    if (!raf) raf = requestAnimationFrame(tick);
+  }, {passive:true});
+})();
+
+/* ---- 7. reveal the sources ramp when the block arrives ----------------- */
+(function(){
+  var sec = document.querySelector('.sources');
+  if (!sec) return;
+  if (!('IntersectionObserver' in window)){ sec.classList.add('vis'); return; }
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('vis'); io.unobserve(e.target); } });
+  }, {threshold:0.15});
+  io.observe(sec);
+  setTimeout(function(){ sec.classList.add('vis'); }, 6000);   // failsafe
 })();
 </script>
 </body>
