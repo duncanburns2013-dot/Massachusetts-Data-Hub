@@ -568,6 +568,15 @@ footer{
 @media (prefers-reduced-motion: reduce){ .panel-ramp{transform:scaleX(1)} }
 
 
+/* ---- every card the same height ----------------------------------------
+   Card heights ran 285 to 366px, an 81px spread, because the descriptions run
+   anywhere from 3 to 7 lines and each grid row only grows to its own tallest
+   card. 1fr rows make every row equal to the tallest, and .card-desc already
+   has flex-grow, so the slack lands between the description and the footer
+   rather than truncating anyone's copy. */
+.grid{grid-auto-rows:1fr}
+.card{height:100%}
+
 /* ---- sources: centred, and a chip field that answers the cursor --------- */
 .sources h4{justify-content:center}
 .srcchips{justify-content:center}
