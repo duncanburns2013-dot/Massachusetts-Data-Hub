@@ -19,13 +19,18 @@
 <title>Massachusetts Data Hub</title>
 <!-- Social Share Card -->
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
-<style>:root{
+<style>
+:root {
   --bay-blue:#14558F;--bay-hover:#104472;--bay-dark:#0A2B48;
   --berkshire:#388557;--duckling:#F6C51B;--cranberry:#680A1D;
   --granite:#535353;--success:#24A850;--warning:#F6B622;--danger:#CD0D0D;
   --card:#ffffff;--border:#e8e5df;--text:#1a1a1a;
   --muted:#7a756e;--navy:#0f2942;--gold:#c9a84c;
-}*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{font-family:'DM Sans',system-ui,sans-serif;background:#E9EBEA;color:#0B1113;line-height:1.65;-webkit-font-smoothing:antialiased}body::before{
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#E9EBEA;color:#0B1113;line-height:1.65;-webkit-font-smoothing:antialiased}
+body::before{
   content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
     radial-gradient(ellipse 80% 60% at 20% 15%,rgba(20,85,143,0.18),transparent 55%),
@@ -34,30 +39,190 @@
     radial-gradient(ellipse 40% 30% at 40% 70%,rgba(246,197,27,0.05),transparent 40%);
   background-size:200% 200%;
   animation:bgDrift 20s ease-in-out infinite;
-}@keyframes bgDrift{
+}
+@keyframes bgDrift{
   0%{background-position:0% 0%}
   33%{background-position:100% 50%}
   66%{background-position:30% 100%}
   100%{background-position:0% 0%}
-}body::after{
+}
+body::after{
   content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.03;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-}.hero,.tab-nav,.main-content,footer{position:relative;z-index:1}@keyframes alertPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,82,82,0.5)}50%{box-shadow:0 0 0 6px rgba(255,82,82,0)}}@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}@keyframes fadeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}.main-content{max-width:1560px;margin:0 auto;padding:32px 24px 48px}@media (max-width:820px){
+}
+.hero,.tab-nav,.main-content,footer{position:relative;z-index:1}
+.hero{padding:56px 24px 44px;text-align:center;border-bottom:1px solid rgba(11,17,19,0.05)}
+.hero-alert{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(205,13,13,0.12);border:1px solid rgba(205,13,13,0.25);color:#ff8a80;
+  border-radius:100px;padding:6px 18px;font-size:0.7rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.1em;margin-bottom:26px;animation:fadeIn 0.5s ease;
+}
+.hero-alert .pulse{width:8px;height:8px;border-radius:50%;background:#ff5252;animation:alertPulse 1.5s ease-in-out infinite}
+@keyframes alertPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,82,82,0.5)}50%{box-shadow:0 0 0 6px rgba(255,82,82,0)}}
+.hero h1{
+  font-family:'DM Serif Display',Georgia,serif;font-size:clamp(2.4rem,6vw,3.8rem);font-weight:400;
+  letter-spacing:-0.02em;margin-bottom:14px;line-height:1.12;
+  background:none;-webkit-background-clip:initial;color:var(--cranberry);
+  
+  animation:fadeIn 0.5s 0.1s ease both;
+}
+@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.hero .sub{opacity:0.5;font-size:0.88rem;font-weight:400;max-width:640px;margin:0 auto 36px;line-height:1.65;letter-spacing:0.01em;animation:fadeIn 0.5s 0.2s ease both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.tab-nav{display:flex;justify-content:center;background:rgba(233,235,234,0.94);border-bottom:1px solid rgba(11,17,19,0.05);overflow-x:auto;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);scrollbar-width:none}
+.tab-nav::-webkit-scrollbar{display:none}
+.tab-nav a{padding:15px 22px;font-size:0.78rem;font-weight:600;color:rgba(11,17,19,0.6);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.25s;text-transform:uppercase;letter-spacing:0.06em}
+.tab-nav a:hover{color:rgba(11,17,19,0.78);background:rgba(11,17,19,0.03)}
+.tab-nav a.active{color:#0B1113;border-bottom-color:var(--duckling)}
+.main-content{max-width:1560px;margin:0 auto;padding:32px 24px 48px}
+/* ---- Explainers: editorial entry points, not reference tools ----------------
+   Deliberately a different shape from .card. The dashboards answer questions you
+   already know to ask; an explainer tells you which question matters. Making it
+   look like a tenth dashboard tile would bury exactly the thing meant to be read
+   first. Grows to a 2-up on wide screens when there is a second one. */
+.feature{
+  display:grid;grid-template-columns:1.15fr .85fr;gap:0;
+  background:linear-gradient(135deg,#FFFFFF 0%,#F1F4F3 100%);
+  border:1px solid rgba(201,168,76,.28);border-radius:16px;overflow:hidden;
+  text-decoration:none;color:#0B1113;position:relative;
+  box-shadow:0 4px 20px rgba(0,0,0,.28);
+  transition:border-color .35s,transform .35s,box-shadow .35s;
+}
+.feature:hover{border-color:rgba(201,168,76,.6);transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.34)}
+.feature:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.feature-body{padding:30px 30px 26px}
+.feature-kicker{
+  font-size:.63rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:12px;
+}
+.feature h3{
+  font-family:'DM Serif Display',Georgia,serif;font-weight:400;
+  font-size:clamp(1.3rem,2.4vw,1.75rem);line-height:1.2;color:#0B1113;margin-bottom:12px;
+}
+.feature p{font-size:.86rem;line-height:1.62;color:rgba(11,17,19,0.66);margin-bottom:18px}
+.feature .go{font-size:.78rem;font-weight:700;color:var(--gold);letter-spacing:.03em}
+/* the pull-quote panel carries the finding itself, so the card argues rather than advertises */
+.feature-pull{
+  border-left:1px solid rgba(255,255,255,.08);
+  padding:30px 28px;display:flex;flex-direction:column;justify-content:center;
+  background:rgba(0,0,0,.16);
+}
+.pull-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:9px 0}
+.pull-row+.pull-row{border-top:1px solid rgba(11,17,19,0.06)}
+.pull-lbl{font-size:.66rem;text-transform:uppercase;letter-spacing:.09em;color:rgba(11,17,19,0.6)}
+.pull-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.3rem;color:#0B1113}
+.pull-val.over{color:#A81733}
+.pull-note{margin-top:14px;font-size:.7rem;color:rgba(11,17,19,0.57);line-height:1.5}
+@media (max-width:820px){
   .feature{grid-template-columns:1fr}
   .feature-pull{border-left:none;border-top:1px solid rgba(11,17,19,0.07);padding:22px 30px 26px}
-}.sec-head{margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(11,17,19,0.07)}.sec-head h2{font-family:'DM Serif Display',Georgia,serif;font-size:1.35rem;font-weight:400;color:rgba(11,17,19,0.88);margin-bottom:4px}.sec-head p{font-size:0.85rem;color:rgba(11,17,19,0.6)}.grid-wrap{
+}
+
+.sec-head{margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(11,17,19,0.07)}
+.sec-head h2{font-family:'DM Serif Display',Georgia,serif;font-size:1.35rem;font-weight:400;color:rgba(11,17,19,0.88);margin-bottom:4px}
+.sec-head p{font-size:0.85rem;color:rgba(11,17,19,0.6)}
+.grid-wrap{
   background:linear-gradient(170deg,rgba(20,85,143,0.16),rgba(56,133,87,0.10),rgba(246,197,27,0.09),rgba(104,10,29,0.12),rgba(20,85,143,0.10),rgba(56,133,87,0.14),rgba(246,197,27,0.08),rgba(104,10,29,0.11));
   background-size:300% 300%;animation:gridGlow 12s ease-in-out infinite;
   border:1px solid rgba(11,17,19,0.05);border-radius:18px;padding:24px;margin-bottom:32px;position:relative;overflow:hidden;
-}@keyframes gridGlow{0%{background-position:0% 0%}25%{background-position:100% 50%}50%{background-position:50% 100%}75%{background-position:0% 50%}100%{background-position:0% 0%}}.grid-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 40% at 10% 10%,rgba(20,85,143,0.08),transparent),radial-gradient(ellipse 40% 50% at 90% 85%,rgba(104,10,29,0.07),transparent);pointer-events:none}.share-bar{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px}.share-label{font-size:0.68rem;font-weight:600;color:rgba(11,17,19,0.54);text-transform:uppercase;letter-spacing:0.08em}.share-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-size:0.72rem;font-weight:600;text-decoration:none;color:#0B1113;transition:all 0.3s;border:1px solid rgba(11,17,19,0.07);cursor:pointer;background:rgba(11,17,19,0.04);backdrop-filter:blur(4px)}.share-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.3);border-color:rgba(11,17,19,0.44);background:rgba(11,17,19,0.07)}.share-btn svg{width:14px;height:14px;fill:currentColor;flex-shrink:0}.share-btn.x:hover{border-color:rgba(11,17,19,0.22);color:#0B1113}.share-btn.fb:hover{border-color:rgba(24,119,242,0.5);color:#14558F}.share-btn.li:hover{border-color:rgba(10,102,194,0.5);color:#14558F}.share-btn.rd:hover{border-color:rgba(255,69,0,0.5);color:#ff8a65}.share-btn.em:hover{border-color:rgba(246,197,27,0.4);color:var(--duckling)}footer{text-align:center;padding:36px 24px;color:rgba(11,17,19,0.57);font-size:0.75rem;border-top:1px solid rgba(11,17,19,0.05)}footer a{color:rgba(11,17,19,0.72);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(246,197,27,0.3)}footer a:hover{color:var(--duckling)}.rv{opacity:0;transform:translateY(14px);transition:opacity 0.5s ease,transform 0.5s ease}.rv.vis{opacity:1;transform:translateY(0)}@media(max-width:960px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:768px){.hero{padding:48px 16px 36px}.main-content{padding:20px 16px 40px}.grid-wrap{padding:16px}.share-bar{gap:8px}.share-btn{padding:7px 12px;font-size:0.68rem}}@media(max-width:540px){.grid{grid-template-columns:1fr}.grid-wrap{padding:12px}}/* ---- front page: instrument as hero -------------------------------------- */
+}
+@keyframes gridGlow{0%{background-position:0% 0%}25%{background-position:100% 50%}50%{background-position:50% 100%}75%{background-position:0% 50%}100%{background-position:0% 0%}}
+.grid-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 40% at 10% 10%,rgba(20,85,143,0.08),transparent),radial-gradient(ellipse 40% 50% at 90% 85%,rgba(104,10,29,0.07),transparent);pointer-events:none}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;position:relative;z-index:1}
+.card{background:#FFFFFF;border:1px solid rgba(11,17,19,0.05);border-radius:14px;padding:26px 22px 20px;text-decoration:none;color:#0B1113;display:flex;flex-direction:column;box-shadow:0 2px 8px rgba(0,0,0,0.2);transition:all 0.4s cubic-bezier(.25,.46,.45,.94);position:relative;overflow:hidden;backdrop-filter:blur(4px)}
+.card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(11,17,19,0.05),transparent 70%);opacity:0;transition:opacity 0.4s}
+.card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0;opacity:0;transition:opacity 0.4s}
+.card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,0.35);border-color:rgba(11,17,19,0.42)}
+.card:hover::before{opacity:1}
+.card:hover::after{opacity:1}
+.card.c-blue::after{background:linear-gradient(90deg,var(--bay-blue),#14558F)}
+.card.c-green::after{background:linear-gradient(90deg,var(--berkshire),#2A6B44)}
+.card.c-cranberry::after{background:linear-gradient(90deg,var(--cranberry),#B07C20)}
+.card.c-purple::after{background:linear-gradient(90deg,#6c5ce7,#a29bfe)}
+.card.c-gray::after{background:linear-gradient(90deg,var(--granite),#999)}
+.card.c-red::after{background:linear-gradient(90deg,var(--danger),#e88)}
+.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-icon{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px;font-size:20px}
+.card-icon.blue{background:rgba(20,85,143,0.3)}
+.card-icon.green{background:rgba(56,133,87,0.25)}
+.card-icon.cranberry{background:rgba(104,10,29,0.3)}
+.card-icon.red{background:rgba(205,13,13,0.2)}
+.card-icon.purple{background:rgba(108,92,231,0.25)}
+.card-icon.gray{background:rgba(11,17,19,0.07)}
+/* "Live" is a promise that a workflow refreshes the page on a schedule, so only
+   the eight auto-fed dashboards may wear it; the seven hand-maintained ones get
+   .badge-snap. All fifteen said Live, including pages untouched since June. */
+.badge{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:3px 10px;border-radius:100px;color:#2A6B44;background:rgba(56,133,87,0.15);border:1px solid rgba(56,133,87,0.25)}
+.badge-snap{color:#5A6467;background:rgba(90,100,103,0.10);border-color:rgba(90,100,103,0.22)}
+.card-name{font-family:'DM Serif Display',Georgia,serif;font-size:1.05rem;font-weight:400;color:#0B1113;line-height:1.3;margin-bottom:10px}
+.card-desc{font-size:0.82rem;font-weight:400;color:rgba(11,17,19,0.63);line-height:1.6;flex-grow:1;margin-bottom:16px}
+.card-foot{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid rgba(11,17,19,0.05)}
+.tags{display:flex;gap:5px;flex-wrap:wrap}
+.tag{font-size:0.62rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:rgba(11,17,19,0.05);color:rgba(11,17,19,0.6);border:1px solid rgba(11,17,19,0.05)}
+.arrow{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(11,17,19,0.05);color:var(--duckling);font-size:13px;font-weight:700;flex-shrink:0;transition:all 0.3s}
+.card:hover .arrow{background:var(--duckling);color:var(--navy);transform:translateX(3px)}
+.info-box{background:rgba(56,133,87,0.06);border:1px solid rgba(56,133,87,0.15);border-left:4px solid var(--berkshire);border-radius:14px;padding:22px 24px;margin-bottom:26px}
+.info-box h4{color:#2A6B44;font-size:0.85rem;font-weight:700;margin-bottom:8px}
+.info-box p{font-size:0.82rem;color:rgba(11,17,19,0.72);line-height:1.6}
+.info-box a{color:#14558F;font-weight:600;text-decoration:none;border-bottom:1px solid var(--duckling)}
+.info-box a:hover{color:var(--duckling)}
+.share-bar{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.share-label{font-size:0.68rem;font-weight:600;color:rgba(11,17,19,0.54);text-transform:uppercase;letter-spacing:0.08em}
+.share-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-size:0.72rem;font-weight:600;text-decoration:none;color:#0B1113;transition:all 0.3s;border:1px solid rgba(11,17,19,0.07);cursor:pointer;background:rgba(11,17,19,0.04);backdrop-filter:blur(4px)}
+.share-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.3);border-color:rgba(11,17,19,0.44);background:rgba(11,17,19,0.07)}
+.share-btn svg{width:14px;height:14px;fill:currentColor;flex-shrink:0}
+.share-btn.x:hover{border-color:rgba(11,17,19,0.22);color:#0B1113}
+.share-btn.fb:hover{border-color:rgba(24,119,242,0.5);color:#14558F}
+.share-btn.li:hover{border-color:rgba(10,102,194,0.5);color:#14558F}
+.share-btn.rd:hover{border-color:rgba(255,69,0,0.5);color:#ff8a65}
+.share-btn.em:hover{border-color:rgba(246,197,27,0.4);color:var(--duckling)}
+footer{text-align:center;padding:36px 24px;color:rgba(11,17,19,0.57);font-size:0.75rem;border-top:1px solid rgba(11,17,19,0.05)}
+footer a{color:rgba(11,17,19,0.72);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(246,197,27,0.3)}
+footer a:hover{color:var(--duckling)}
+.rv{opacity:0;transform:translateY(14px);transition:opacity 0.5s ease,transform 0.5s ease}
+.rv.vis{opacity:1;transform:translateY(0)}
+.grid .card:nth-child(1){transition-delay:0s}
+.grid .card:nth-child(2){transition-delay:0.05s}
+.grid .card:nth-child(3){transition-delay:0.10s}
+.grid .card:nth-child(4){transition-delay:0.15s}
+.grid .card:nth-child(5){transition-delay:0.20s}
+.grid .card:nth-child(6){transition-delay:0.25s}
+.grid .card:nth-child(7){transition-delay:0.30s}
+.grid .card:nth-child(8){transition-delay:0.35s}
+.grid .card:nth-child(9){transition-delay:0.40s}
+.grid .card:nth-child(10){transition-delay:0.45s}
+.grid .card:nth-child(11){transition-delay:0.50s}
+.grid .card:nth-child(12){transition-delay:0.55s}
+.grid .card:nth-child(13){transition-delay:0.6s}
+.grid .card:nth-child(14){transition-delay:0.65s}
+.grid .card:nth-child(15){transition-delay:0.7s}
+@media(max-width:960px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.hero{padding:48px 16px 36px}.main-content{padding:20px 16px 40px}.grid-wrap{padding:16px}.share-bar{gap:8px}.share-btn{padding:7px 12px;font-size:0.68rem}}
+@media(max-width:540px){.grid{grid-template-columns:1fr}.grid-wrap{padding:12px}}
+
+/* ---- front page: instrument as hero -------------------------------------- */
 .site-head{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;
   align-items:center;justify-content:space-between;gap:24px;
-  padding:18px clamp(18px,3vw,40px);pointer-events:none}.site-head .wm{pointer-events:auto;font-family:var(--font-display);font-weight:700;
+  padding:18px clamp(18px,3vw,40px);pointer-events:none}
+.site-head .wm{pointer-events:auto;font-family:var(--font-display);font-weight:700;
   font-size:clamp(17px,1.5vw,23px);letter-spacing:-.028em;color:var(--cranberry);
-  text-decoration:none;line-height:1}.site-nav{pointer-events:auto;display:flex;gap:clamp(12px,1.8vw,26px);
+  text-decoration:none;line-height:1}
+.site-nav{pointer-events:auto;display:flex;gap:clamp(12px,1.8vw,26px);
   font-family:var(--font-text);font-size:11px;font-weight:600;letter-spacing:.16em;
-  text-transform:uppercase}.site-nav a{color:var(--muted);text-decoration:none;padding-bottom:3px;
-  border-bottom:1.5px solid transparent;transition:color .18s,border-color .18s}.site-nav a:hover{color:var(--cranberry);border-bottom-color:var(--cranberry)}.stage{position:relative;height:100vh;width:100%;background:var(--bg)}.stage .instr{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}@media (max-width:800px){.stage{height:78vh}.site-nav{display:none}}/* ---- the turn: instrument -> directory -----------------------------------
+  text-transform:uppercase}
+.site-nav a{color:var(--muted);text-decoration:none;padding-bottom:3px;
+  border-bottom:1.5px solid transparent;transition:color .18s,border-color .18s}
+.site-nav a:hover{color:var(--cranberry);border-bottom-color:var(--cranberry)}
+.stage{position:relative;height:100vh;width:100%;background:var(--bg)}
+.stage .instr{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.stage-more{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;opacity:.75;transition:opacity .2s}
+.stage-more:hover{opacity:1;color:var(--cranberry)}
+@media (max-width:800px){.stage{height:78vh}.site-nav{display:none}}
+
+/* ---- the turn: instrument -> directory -----------------------------------
    The stage ended and the card grid began with nothing between them, so the
    page just stopped. This band is the hinge: it states what the site is once,
    at size, and hands the reader down. Deliberately empty of ornament - the
@@ -66,198 +231,119 @@
 .turn{position:relative;padding:clamp(80px,11vw,150px) clamp(24px,5vw,90px);
   background:linear-gradient(180deg,var(--bg) 0%,#DFE3E2 55%,var(--bg) 100%);
   border-top:1px solid var(--border);border-bottom:1px solid var(--border);
-  text-align:center}.turn-h{font-family:var(--font-display);font-weight:700;
+  text-align:center}
+.turn-l{font-family:var(--font-mono);font-size:10px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--berk-ink);margin:0 0 22px}
+.turn-h{font-family:var(--font-display);font-weight:700;
   font-size:clamp(26px,3.6vw,54px);line-height:1.08;letter-spacing:-.03em;
-  color:var(--ink);margin:0 auto;max-width:20ch}.turn-h em{font-style:normal;color:var(--cranberry)}.turn-go{display:inline-block;margin-top:34px;font-family:var(--font-mono);
+  color:var(--ink);margin:0 auto;max-width:20ch}
+.turn-h em{font-style:normal;color:var(--cranberry)}
+.turn-go{display:inline-block;margin-top:34px;font-family:var(--font-mono);
   font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
   text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:6px;
-  transition:color .2s,border-color .2s}.turn-go:hover{color:var(--cranberry);border-color:var(--cranberry)}/* the band asserted that every figure is computed from an official source and
+  transition:color .2s,border-color .2s}
+.turn-go:hover{color:var(--cranberry);border-color:var(--cranberry)}
+
+/* the band asserted that every figure is computed from an official source and
    then showed no figures. It carries them now - centred type on a gradient was
    the plainest arrangement available, and it was asserting rather than proving */
 .turn{position:relative;padding:clamp(70px,9vw,130px) clamp(24px,5vw,90px);
   background:linear-gradient(180deg,var(--bg) 0%,#DFE3E2 60%,var(--bg) 100%);
-  border-top:1px solid var(--border);border-bottom:1px solid var(--border)}.turn-in{max-width:1560px;margin:0 auto;display:grid;gap:clamp(28px,4vw,72px);
-  grid-template-columns:1.25fr .75fr;align-items:end}.turn-h{font-family:var(--font-display);font-weight:700;margin:0;
-  font-size:clamp(28px,4.2vw,64px);line-height:1.04;letter-spacing:-.034em;color:var(--ink)}.turn-h em{font-style:normal;color:var(--cranberry)}.turn-side{border-left:2px solid var(--cranberry);padding-left:clamp(16px,1.6vw,26px)}.turn-figs{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:14px 22px}.turn-figs div{margin:0}.turn-figs dt{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--muted)}.turn-figs dd{margin:2px 0 0;font-family:var(--font-mono);font-weight:600;
-  font-size:clamp(17px,1.5vw,23px);letter-spacing:-.03em;color:var(--bay-blue)}.turn-go{display:inline-block;margin-top:26px;font-family:var(--font-mono);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.turn-in{max-width:1560px;margin:0 auto;display:grid;gap:clamp(28px,4vw,72px);
+  grid-template-columns:1.25fr .75fr;align-items:end}
+.turn-h{font-family:var(--font-display);font-weight:700;margin:0;
+  font-size:clamp(28px,4.2vw,64px);line-height:1.04;letter-spacing:-.034em;color:var(--ink)}
+.turn-h em{font-style:normal;color:var(--cranberry)}
+.turn-side{border-left:2px solid var(--cranberry);padding-left:clamp(16px,1.6vw,26px)}
+.turn-l{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--berk-ink);margin:0 0 18px}
+.turn-figs{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:14px 22px}
+.turn-figs div{margin:0}
+.turn-figs dt{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted)}
+.turn-figs dd{margin:2px 0 0;font-family:var(--font-mono);font-weight:600;
+  font-size:clamp(17px,1.5vw,23px);letter-spacing:-.03em;color:var(--bay-blue)}
+.turn-go{display:inline-block;margin-top:26px;font-family:var(--font-mono);
   font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
   text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:5px;
-  transition:color .2s,border-color .2s}.turn-go:hover{color:var(--cranberry);border-color:var(--cranberry)}@media (max-width:900px){.turn-in{grid-template-columns:1fr}.turn-side{border-left:0;
-  border-top:2px solid var(--cranberry);padding:20px 0 0}}@media (prefers-reduced-motion:reduce){
+  transition:color .2s,border-color .2s}
+.turn-go:hover{color:var(--cranberry);border-color:var(--cranberry)}
+@media (max-width:900px){.turn-in{grid-template-columns:1fr}.turn-side{border-left:0;
+  border-top:2px solid var(--cranberry);padding:20px 0 0}}
+
+/* ---- the directory ---------------------------------------------------------
+   The cards were flat white rectangles with a 3px bar, on a grid fixed at three
+   columns inside a 1200px cap - so on a wide display they were small, identical
+   and static. The complaint was that nothing happens on the page or the cards,
+   and it was correct.
+   The rule now runs the FULL height of the card and is the thing that moves:
+   it widens and the card lifts toward the reader. One gesture, not six. */
+.grid{display:grid;gap:clamp(14px,1.4vw,22px);
+  grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}
+.card{position:relative;display:flex;flex-direction:column;gap:10px;
+  background:var(--card);border:1px solid var(--border);border-radius:3px;
+  padding:22px 24px 18px 26px;text-decoration:none;overflow:hidden;isolation:isolate;
+  transition:transform .34s cubic-bezier(.2,.8,.2,1),box-shadow .34s cubic-bezier(.2,.8,.2,1),
+             border-color .34s}
+.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--bay-blue);transition:width .34s cubic-bezier(.2,.8,.2,1),opacity .34s}
+.card.c-cranberry::before{background:var(--cranberry)}
+.card.c-green::before{background:var(--berkshire)}
+.card.c-blue::before{background:var(--bay-blue)}
+.card::after{content:'';position:absolute;inset:0;z-index:-1;opacity:0;
+  background:linear-gradient(115deg,rgba(20,85,143,.05),transparent 62%);
+  transition:opacity .34s}
+.card:hover{transform:translateY(-4px);border-color:transparent;
+  box-shadow:0 2px 4px rgba(11,17,19,.05),0 14px 34px -10px rgba(11,17,19,.22)}
+.card:hover::before{width:7px}
+.card:hover::after{opacity:1}
+.card:focus-visible{outline:2px solid var(--cranberry);outline-offset:3px}
+.card-name{font-family:var(--font-display);font-weight:700;font-size:18px;
+  letter-spacing:-.022em;line-height:1.18;color:var(--ink)}
+.card-desc{font-family:var(--font-text);font-size:13.5px;line-height:1.5;color:var(--muted);flex:1}
+.card-also{font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;
+  color:var(--berk-ink);border-top:1px dashed var(--border);padding-top:9px;margin-top:2px}
+.card-also b{font-weight:600;color:var(--ink)}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin-top:4px}
+.tag{font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);background:rgba(11,17,19,.04);border:1px solid var(--border);
+  border-radius:2px;padding:3px 6px}
+.arrow{font-size:15px;color:var(--muted);transition:transform .34s cubic-bezier(.2,.8,.2,1),color .34s}
+.card:hover .arrow{transform:translateX(5px);color:var(--cranberry)}
+.badge{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--berk-ink);background:rgba(42,107,68,.09);border:1px solid rgba(42,107,68,.2);
+  border-radius:20px;padding:3px 8px}
+.badge.b-ext{color:var(--muted);background:rgba(11,17,19,.04);border-color:var(--border)}
+.card--ext{background:linear-gradient(180deg,#FFFFFF,#F6F8F7)}
+@media (prefers-reduced-motion:reduce){
   .card,.card::before,.card::after,.arrow{transition:none}
   .card:hover{transform:none}
-}.turn-h{font-size:clamp(30px,4.35vw,74px);line-height:1.0;letter-spacing:-.042em}.turn-h .ln{display:block;overflow:hidden}.turn-h .lni{display:block}/* the two-line structure only holds where the line fits; below that it wraps
-   rather than pushing the page sideways */
-@media (min-width:821px){.turn-h .lni{white-space:nowrap}}/* the ramp is the instrument's legend, reused as the rule that separates the
-   claim from the figures it rests on */
-.turn-side{border-left:0;position:relative;padding-left:clamp(16px,1.6vw,26px)}.turn-side::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
-  background:linear-gradient(180deg,#12467F,#3D82BC,#8FB9D6,#CFC7B4,#F2A65A,#DC5127,#8E0B22);
-  transform-origin:top center;
-}.turn-figs{grid-template-columns:1fr 1fr;gap:18px 26px}
-@media (max-width:820px){.turn-figs{grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}}.turn-figs dt{color:var(--muted)}.turn-figs dd{font-size:clamp(18px,1.6vw,25px)}/* ---- section head: the heading carries itself, no label above it ---- */
-.sec-head{margin-bottom:34px;padding-bottom:0;border-bottom:0}.sec-head h2{
-  font-family:var(--font-display);font-weight:700;
-  font-size:clamp(24px,2.5vw,40px);letter-spacing:-.035em;color:var(--ink);
-  margin:0;display:flex;align-items:baseline;gap:14px;
-}.sec-head .sec-n{
-  font-family:var(--font-mono);font-style:normal;font-weight:600;
-  font-size:.42em;letter-spacing:-.02em;color:var(--bay-blue);
-}.sec-head .sec-sub{
-  margin:10px 0 0;font-family:var(--font-text);
-  font-size:clamp(13px,.95vw,15px);color:rgba(11,17,19,.66);max-width:62ch;
-}.sec-head .sec-ramp{
-  display:block;height:2px;margin-top:16px;border-radius:2px;
-  background:linear-gradient(90deg,#12467F,#3D82BC,#8FB9D6,#CFC7B4,#F2A65A,#DC5127,#8E0B22);
-}/* ---- the index ----
-   Rows, not cards. A hairline between readings, generous air around each, and
-   the name at the strength the instrument gives its own question. */
-.grid-wrap{
-  background:#E4E7E6;background-image:none;animation:none;
-  border:1px solid rgba(11,17,19,.06);
-  position:relative;overflow:hidden;
-  /* the map is at full strength across its top band; the first reading starts
-     below it so no description sits on the darkest ground */
-  padding:clamp(86px,8.5vw,140px) clamp(18px,2.4vw,38px) 10px;
-}.grid-wrap::before{
-  content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
-  background:linear-gradient(90deg,#E4E7E6 0%,rgba(228,231,230,0) 9%,rgba(228,231,230,0) 91%,#E4E7E6 100%);
-}.grid-wrap .field{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;z-index:0}.index{position:relative;z-index:2}.row{
-  display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.52fr);
-  gap:clamp(20px,3vw,64px);align-items:baseline;
-  padding:clamp(24px,2.4vw,34px) 0;
-  border-top:1px solid rgba(11,17,19,.12);
-  text-decoration:none;color:var(--ink);
-  transition:background .5s cubic-bezier(.22,.61,.36,1);
-}.row:first-child{border-top:0}.row-main{display:block;min-width:0}.row-name{
-  display:block;font-family:var(--font-display);font-weight:700;
-  font-size:clamp(21px,2vw,33px);line-height:1.06;letter-spacing:-.032em;
-  color:var(--ink);
-}.row-desc{
-  display:block;margin-top:9px;max-width:64ch;
-  font-family:var(--font-text);font-size:clamp(13px,.95vw,15px);line-height:1.62;
-  color:rgba(11,17,19,.9);
-}.row-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-width:0}/* the instrument's chip, at directory scale */
-.src{
-  font-family:var(--font-mono);font-size:10px;font-weight:600;
-  letter-spacing:.05em;text-transform:uppercase;
-  padding:4px 9px;border-radius:6px;
-  color:rgba(11,17,19,.72);
-  background:rgba(255,255,255,.78);
-  border:1px solid rgba(11,17,19,.14);
-  white-space:nowrap;
-}/* the state wears the same chip as the sources - it is the same kind of fact,
-   and on its own over the map it was reading at 1.91:1 */
-.row-state{
-  font-family:var(--font-mono);font-size:9.5px;font-weight:700;
-  letter-spacing:.1em;text-transform:uppercase;color:var(--berk-ink);
-  padding:4px 9px;border-radius:6px;white-space:nowrap;
-  background:rgba(255,255,255,.78);border:1px solid rgba(42,107,68,.3);
-}.row-state.is-snap{color:var(--muted);border-color:rgba(90,100,103,.3)}.row-state.is-ext{color:var(--bay-blue);border-color:rgba(20,85,143,.3)}/* the reading you are pointing at comes forward; nothing else moves */
-.row:hover{background:rgba(255,255,255,.5)}.row:hover .row-name{color:var(--cranberry)}.row:focus-visible{outline:2px solid var(--bay-blue);outline-offset:4px;border-radius:6px}/* ---- one authored moment ----
-   Rows resolve as the scroll reaches them: staggered by their own position,
-   exponential ease-out, from a visible default so nothing can be lost if the
-   timeline is unsupported. This is the only motion below the instrument. */
-.rv{opacity:1;transform:none}@supports (animation-timeline: view()){
-  @media (prefers-reduced-motion: no-preference){
-    .turn-h .lni{transform:translate3d(0,105%,0);animation:lnRise linear both;
-      animation-timeline:view();animation-range:entry 8% cover 38%}
-    .turn-h .ln:nth-child(2) .lni{animation-range:entry 15% cover 46%}
-    @keyframes lnRise{to{transform:translate3d(0,0,0)}}
-
-    .turn-side::before{transform:scaleY(0);animation:ruleFill linear both;
-      animation-timeline:view();animation-range:entry 6% cover 40%}
-    @keyframes ruleFill{to{transform:scaleY(1)}}
-
-    .sec-head .sec-sub{
-  margin:10px 0 0;font-family:var(--font-text);
-  font-size:clamp(13px,.95vw,15px);color:rgba(11,17,19,.66);max-width:62ch;
-}
-.sec-head .sec-ramp{transform:scaleX(0);transform-origin:left center;
-      animation:ruleWipe linear both;animation-timeline:view();animation-range:entry 10% cover 34%}
-    @keyframes ruleWipe{to{transform:scaleX(1)}}
-
-    .row{opacity:.0;animation:rowIn linear both;
-      animation-timeline:view();animation-range:entry 4% entry 62%}
-    @keyframes rowIn{
-      from{opacity:0;transform:translate3d(0,26px,0)}
-      to  {opacity:1;transform:none}
-    }
-  }
-}@media (max-width:820px){
-  .row{grid-template-columns:1fr;gap:14px;padding:22px 0}
-  .row-meta{justify-content:flex-start;width:100%}
-  .row-name{font-size:clamp(19px,5.4vw,26px)}
-  .row-desc{max-width:none}
-  .grid-wrap{padding-left:16px;padding-right:16px}
-}@media (prefers-reduced-motion: reduce){
-  .row{transition:none}
-}
-/* the field is the hero of this section, so it gets a band to occupy rather
-   than a sliver: the readings start below it */
-.grid-wrap{padding-top:clamp(200px,46vw,760px)}
-
-/* one grain plate over the whole band so the WebGL field and the flat page
-   ground read as the same material rather than two layers */
-.grid-wrap::after{
-  content:'';position:absolute;inset:0;z-index:3;pointer-events:none;
-  opacity:.42;mix-blend-mode:multiply;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
-}
-@media (prefers-reduced-motion: reduce){.grid-wrap::after{opacity:.22}}
-
-/* the masthead had no ground of its own, so headings scrolled straight under
-   the wordmark. It takes a plate once the stage is behind you. */
-.site-head{transition:background .3s,backdrop-filter .3s,box-shadow .3s}
-.site-head.docked{
-  background:rgba(233,235,234,.86);
-  backdrop-filter:blur(14px) saturate(1.05);
-  -webkit-backdrop-filter:blur(14px) saturate(1.05);
-  box-shadow:0 1px 0 rgba(11,17,19,.07);
 }
 
-/* Green, not neutral grey. The state's own colour carries the chrome: muted
-   copy, chip borders, rules and the count all sit on the Berkshire hue instead
-   of a colourless grey that belongs to no one. */
-:root{
-  --muted:#4F6357;
-  --rule:rgba(56,133,87,.20);
-  --chip-bg:rgba(56,133,87,.07);
-  --chip-br:rgba(56,133,87,.30);
-}
-.sec-head .sec-sub{color:#4F6357}
-.sec-head .sec-n{color:var(--berk-ink)}
-.row{border-top-color:var(--rule)}
-.row-desc{color:#25332B}
-.src{
-  color:#33473C;
-  background:var(--chip-bg);
-  border-color:var(--chip-br);
-}
-.row-state{background:rgba(56,133,87,.10);border-color:rgba(56,133,87,.38)}
-.row-state.is-snap{color:#4F6357;background:rgba(79,99,87,.09);border-color:rgba(79,99,87,.30)}
-.row-state.is-ext{color:var(--bay-blue);background:rgba(20,85,143,.08);border-color:rgba(20,85,143,.30)}
-.turn-figs dt{color:#4F6357}
-.site-nav a{color:#4F6357}
-.turn-go{color:#4F6357;border-bottom-color:var(--chip-br)}
+/* A card with a second destination cannot be one big <a> - nesting links is
+   invalid. The primary link stretches to fill the card; the companion sits
+   above it and is genuinely clickable, because "also inside" was claiming
+   containment that did not exist. */
+.card-go{text-decoration:none;position:static}
+.card-go::after{content:'';position:absolute;inset:0;z-index:1}
+.card-also{position:relative;z-index:2;display:block;text-decoration:none;
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;
+  color:var(--berk-ink);border-top:1px dashed var(--border);
+  padding-top:9px;margin-top:2px;transition:color .2s}
+.card-also b{font-weight:600;color:var(--ink)}
+.card-also:hover{color:var(--cranberry)}
+.card-also:hover b{color:var(--cranberry)}
 
-/* the readings carry more weight: the name is the thing you are choosing */
-.row{padding:clamp(30px,2.9vw,44px) 0}
-.row-name{font-size:clamp(23px,2.35vw,40px);letter-spacing:-.036em}
-.row:hover .row-name{color:var(--cranberry)}
-.row-desc{font-size:clamp(13.5px,1vw,15.5px)}
-
-/* the field's readout: what ground the reading you are pointing at covers */
-.scope-tag{
-  position:absolute;left:clamp(18px,2.4vw,38px);z-index:4;pointer-events:none;
-  font-family:var(--font-mono);font-size:11px;font-weight:600;
-  letter-spacing:.18em;text-transform:uppercase;color:var(--berk-ink);
-  opacity:0;transform:translateY(6px);
-  transition:opacity .28s ease,transform .28s ease;
-}
-.scope-tag.on{opacity:1;transform:none}
-.turn-h{font-size:clamp(32px,4.6vw,80px)}
+/* one subject, one card, several doors - three separate Boston cards read as
+   three subjects when it is one */
+.card-also{position:relative;z-index:2;display:flex;flex-wrap:wrap;gap:4px 14px;
+  align-items:baseline;border-top:1px dashed var(--border);padding-top:9px;margin-top:2px;
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.04em}
+.card-also>span{color:var(--muted);text-transform:uppercase;letter-spacing:.14em;font-size:9px}
+.card-also a{color:var(--berk-ink);text-decoration:none;transition:color .2s}
+.card-also a:hover{color:var(--cranberry)}
 </style>
 <!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
 <link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
@@ -283,9 +369,9 @@
 
 <section class="turn">
   <div class="turn-in">
-    <h2 class="turn-h"><span class="ln"><span class="lni">The instrument shows you <em>where</em>.</span></span><span class="ln"><span class="lni">The dashboards show you <em>why</em>.</span></span></h2>
+    <h2 class="turn-h">The instrument shows you <em>where</em>.<br>The dashboards show you <em>why</em>.</h2>
     <div class="turn-side">
-      
+      <p class="turn-l">Computed at runtime from official sources</p>
       <dl class="turn-figs">
         <div><dt>Municipalities</dt><dd>351</dd></div>
         <div><dt>Dashboards</dt><dd id="turn-dash">22</dd></div>
@@ -298,30 +384,39 @@
 </section>
 <div class="main-content">
   <section id="dashboards">
-    <div class="sec-head"><h2>Dashboards<i class="sec-n" id="sec-n">19</i></h2><p class="sec-sub">All analyses built from official government data.</p><span class="sec-ramp" aria-hidden="true"></span></div>
-    <div class="grid-wrap"><canvas class="field" id="field" aria-hidden="true"></canvas><span class="scope-tag" id="scopeTag" aria-hidden="true"></span>
-    <div class="index">
-<a class="row rv" data-scope="BORDER" href="tax-burden-nh-comparison.html"><span class="row-main"><span class="row-name">Same House, Same Income &mdash; MA vs NH</span><span class="row-desc">The five layers of tax a household actually pays, compared side by side across the state line.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">DOR</span><span class="src">NH DRA</span></span></a>
-<a class="row rv" data-scope="*" href="ma-351-3d-map.html"><span class="row-main"><span class="row-name">351 &mdash; Every Municipality</span><span class="row-desc">What each town charges per $1,000 of assessed value, in three dimensions, with a guided tour.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">DLS</span><span class="src">MLS PIN</span></span></a>
-<a class="row rv" data-scope="Boston" href="all-things-boston.html"><span class="row-main"><span class="row-name">All Things Boston</span><span class="row-desc">City budget, employee payroll, FBI crime, BPS education, ICE enforcement, commercial real estate, housing, 311 and pension obligations &mdash; all from official city data.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">Boston ACFR</span><span class="src">BPD</span><span class="src">BPS</span></span></a>
-<a class="row rv" data-scope="Boston,Chelsea,Everett,Lynn,Lawrence,Lowell,Brockton,Springfield,Worcester,Revere,Malden" href="immigration-dashboard.html"><span class="row-main"><span class="row-name">Immigration &mdash; National + Massachusetts</span><span class="row-desc">Border encounters, net international migration, deportation math, Census revisions, fiscal impact (Cato/NASEM), MA shelter crisis, H-1B data, city-level concentration analysis, and the FY27 money trail — the shelter-to-HomeBASE shift, the raw vendor payment record and the lobbying behind it.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">CBP</span><span class="src">Census</span><span class="src">ICE</span><span class="src">CBO</span><span class="src">OCPF</span></span></a>
-<a class="row rv" data-scope="*" href="ma-housing-dashboard.html"><span class="row-main"><span class="row-name">Massachusetts Housing Market</span><span class="row-desc">Statewide, Boston, Essex County, and Greater Newburyport. Median prices, DOM, SP/LP ratios, 5-year MLS trends, and affordability calculations.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">Warren Group</span><span class="src">MLS PIN</span><span class="src">Census ACS</span></span></a>
-<a class="row rv" data-scope="BORDER" href="nh-housing-dashboard.html"><span class="row-main"><span class="row-name">New Hampshire Housing Market</span><span class="row-desc">Statewide market data with regional breakdowns. Median prices, average sales, DOM, sell-through rates, and SP/LP ratios.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">Paragon MLS</span></span></a>
-<a class="row rv" data-scope="Haverhill" href="haverhill-market-report.html"><span class="row-main"><span class="row-name">Haverhill Market Report</span><span class="row-desc">Deep dive into Haverhill's SF and condo markets. Affordability analysis comparing median income ($88K) to income needed for homeownership.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">MLS</span><span class="src">Census QuickFacts</span></span></a>
-<a class="row rv" data-scope="*" href="affordability-dashboard.html"><span class="row-main"><span class="row-name">What It Costs to Live in Massachusetts</span><span class="row-desc">What is actually expensive here and what is not. BEA price parities by state and metro, price-adjusted income rankings, and the MIT living wage by household type.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">BEA</span><span class="src">MIT Living Wage</span><span class="src">Census ACS</span></span></a>
-<a class="row rv" data-scope="*" href="education-statewide.html"><span class="row-main"><span class="row-name">MA Education &mdash; Statewide</span><span class="row-desc">Enrollment shifts (traditional &minus;6.4%, vocational +18%, homeschool +56%), per-pupil spending, MCAS proficiency, Gateway Cities vs. wealthy towns.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">DESE</span><span class="src">MCAS</span></span></a>
-<a class="row rv" data-scope="Haverhill,Methuen,Lawrence" href="education-merrimack-valley.html"><span class="row-main"><span class="row-name">Merrimack Valley Education</span><span class="row-desc">Haverhill, Methuen, and Lawrence comparison. MCAS scores, spending gaps, ELL populations, and district-level performance analysis.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">DESE</span><span class="src">MassINC</span></span></a>
-<a class="row rv" data-scope="*" href="healthcare-dashboard.html"><span class="row-main"><span class="row-name">All Things Insurance</span><span class="row-desc">Health, homeowners, auto, MassHealth, and licensing. 2026 DOI rate decisions (7.1&ndash;12.2%), $3.6B home market, FAIR Plan 8.7% share, auto carrier market share, and insurance cost vs. income growth.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">DOI</span><span class="src">CHIA</span><span class="src">KFF</span><span class="src">CAR</span></span></a>
-<a class="row rv" data-scope="*" href="employment-dashboard.html"><span class="row-main"><span class="row-name">Employment &amp; Labor Market</span><span class="row-desc">JOLTS data, NFP revisions (&minus;911K), hiring recession analysis, openings rate at 3.9% (Feb 2026: 6.9M), and the healthcare employment mask.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">BLS JOLTS</span><span class="src">BLS CES</span></span></a>
-<a class="row rv" data-scope="Boston" href="commercial-re-dashboard.html"><span class="row-main"><span class="row-name">Boston Commercial Real Estate</span><span class="row-desc">Office vacancy trajectory (7.5% &rarr; 23.9%), CMBS delinquencies, major sale discounts (31&ndash;62%), and property tax revenue impact.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">Trepp</span><span class="src">C&amp;W</span><span class="src">Colliers</span></span></a>
-<a class="row rv" data-scope="*" href="ma-351.html"><span class="row-main"><span class="row-name">351 &mdash; Every Town in 3D</span><span class="row-desc">A spinnable Massachusetts where every municipality rises by what it charges. Tax rate, real burden per resident, median home price and the business rate premium, town by town, with a guided tour.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">DLS</span><span class="src">MLS PIN</span><span class="src">MassGIS</span></span></a>
-<a class="row rv" data-scope="*" href="tax-burden-dashboard.html"><span class="row-main"><span class="row-name">The Five Layers &mdash; MA &amp; NH Total Burden</span><span class="row-desc">What a household actually pays across all five layers &mdash; billed, withheld on your behalf, embedded in prices, collected through the meter, deferred to later. Massachusetts and New Hampshire each get a full breakdown, then a Compare tab puts them side by side. Every contested assumption is a control, not a buried constant.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">IRS</span><span class="src">DOR</span><span class="src">DLS</span><span class="src">CBO</span><span class="src">DPU</span><span class="src">Census</span></span></a>
-<a class="row rv" data-scope="*" href="tax-budget-dashboard.html"><span class="row-main"><span class="row-name">Tax Burden, Budget &amp; Cost of Living</span><span class="row-desc">Income tax + 4% surtax, property tax burden, the enacted $63.4B FY2027 budget line by line, state rankings, and BEA/BLS cost-of-living analysis showing MA's purchasing power erosion.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">BEA</span><span class="src">BLS</span><span class="src">Census</span><span class="src">DOR</span><span class="src">EIA</span></span></a>
-<a class="row rv" data-scope="*" href="pension-dashboard.html"><span class="row-main"><span class="row-name">Pensions &amp; Unfunded Liabilities</span><span class="row-desc">$55.8B unfunded (pension + OPEB). PRIT Fund ($105B), 23-year time series, demographic collapse (1.3 workers/retiree), 99 municipal systems, $4.9B FY26 taxpayer cost.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">ACFR</span><span class="src">PERAC</span><span class="src">PPD</span><span class="src">PRIT</span></span></a>
-<a class="row rv" data-scope="*" href="energy-dashboard.html"><span class="row-main"><span class="row-name">Energy Policy &amp; Carbon Tax</span><span class="row-desc">RGGI carbon tax ($1.36B total, $200M in 2025), highest electricity costs in contiguous US, rate comparison vs. neighbors, and spending allocation analysis.</span></span><span class="row-meta"><span class="row-state">Live</span><span class="src">EIA</span><span class="src">RGGI Inc</span><span class="src">ISO-NE</span></span></a>
-<a class="row rv" data-scope="Boston" href="pay-to-play-dashboard.html"><span class="row-main"><span class="row-name">Pay-to-Play &amp; Lobbying</span><span class="row-desc">4,298 OCPF donations ($822K) from top lobbying firms, 82.3% at exact $200 cap, OpenSecrets sector rankings, healthcare case study, nonprofit loopholes.</span></span><span class="row-meta"><span class="row-state is-snap">Snapshot</span><span class="src">OCPF</span><span class="src">OpenSecrets</span><span class="src">SOC</span></span></a>
-</div>
-    Official Data Sources</h4>
+    <div class="sec-head rv">
+      <h2>Dashboards</h2>
+      <p>All analyses built from official government data. Click any card to explore.</p>
+    </div>
+    <div class="grid-wrap">
+    <div class="grid">
+      <a href="tax-burden-nh-comparison.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x2696;</div><span class="badge">Live</span></div><div class="card-name">Same House, Same Income &mdash; MA vs NH</div><div class="card-desc">The five layers of tax a household actually pays, compared side by side across the state line.</div><div class="card-foot"><div class="tags"><span class="tag">DOR</span><span class="tag">NH DRA</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="ma-351-3d-map.html" class="card c-green rv"><div class="card-top"><div class="card-icon green">&#x1F5FA;</div><span class="badge">Live</span></div><div class="card-name">351 &mdash; Every Municipality</div><div class="card-desc">What each town charges per $1,000 of assessed value, in three dimensions, with a guided tour.</div><div class="card-foot"><div class="tags"><span class="tag">DLS</span><span class="tag">MLS PIN</span></div><div class="arrow">&rarr;</div></div></a>
+      
+      <div class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F3D9;</div><span class="badge">Live</span></div><a class="card-go" href="all-things-boston.html"><div class="card-name">All Things Boston</div></a><div class="card-desc">City budget, employee payroll, FBI crime, BPS education, ICE enforcement, commercial real estate, housing, 311 and pension obligations &mdash; all from official city data.</div><div class="card-foot"><div class="tags"><span class="tag">Boston ACFR</span><span class="tag">BPD</span><span class="tag">BPS</span></div><div class="arrow">&rarr;</div></div></div>
+      <a href="https://duncanburns2013-dot.github.io/The-Peoples-Audit/" class="card c-green rv card--ext" target="_blank" rel="noopener"><div class="card-top"><div class="card-icon green">&#x1F5F3;</div><span class="badge b-ext">Separate site</span></div><div class="card-name">The Peoples Audit</div><div class="card-desc">Massachusetts lobbying registrations, firm-by-firm spending and legislative roll-call records, sourced from the Secretary of the Commonwealth.</div><div class="card-foot"><div class="tags"><span class="tag">MA SoS</span><span class="tag">Roll calls</span></div><div class="arrow">&nearr;</div></div></a>
+      <a href="https://duncanburns2013-dot.github.io/HHS-MA-DOGE/" class="card c-cranberry rv card--ext" target="_blank" rel="noopener"><div class="card-top"><div class="card-icon cranberry">&#x1F50D;</div><span class="badge b-ext">Separate site</span></div><div class="card-name">HHS &mdash; MA DOGE</div><div class="card-desc">Healthcare fraud, contracting and lobbying investigation. Its own site, with its own look.</div><div class="card-foot"><div class="tags"><span class="tag">HHS</span><span class="tag">OIG</span></div><div class="arrow">&nearr;</div></div></a>
+      <div class="card c-cranberry rv"><div class="card-top"><div class="card-icon cranberry">&#x1F6C2;</div><span class="badge">Live</span></div><a class="card-go" href="immigration-dashboard.html"><div class="card-name">Immigration &mdash; National + Massachusetts</div></a><div class="card-desc">Border encounters, net international migration, deportation math, Census revisions, fiscal impact (Cato/NASEM), MA shelter crisis, H-1B data, city-level concentration analysis, and the FY27 money trail — the shelter-to-HomeBASE shift, the raw vendor payment record and the lobbying behind it.</div><div class="card-foot"><div class="tags"><span class="tag">CBP</span><span class="tag">Census</span><span class="tag">ICE</span><span class="tag">CBO</span><span class="tag">OCPF</span></div><div class="arrow">&rarr;</div></div></div>
+      <a href="ma-housing-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F3E0;</div><span class="badge">Live</span></div><div class="card-name">Massachusetts Housing Market</div><div class="card-desc">Statewide, Boston, Essex County, and Greater Newburyport. Median prices, DOM, SP/LP ratios, 5-year MLS trends, and affordability calculations.</div><div class="card-foot"><div class="tags"><span class="tag">Warren Group</span><span class="tag">MLS PIN</span><span class="tag">Census ACS</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="nh-housing-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F3D4;&#xFE0F;</div><span class="badge">Live</span></div><div class="card-name">New Hampshire Housing Market</div><div class="card-desc">Statewide market data with regional breakdowns. Median prices, average sales, DOM, sell-through rates, and SP/LP ratios.</div><div class="card-foot"><div class="tags"><span class="tag">Paragon MLS</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="haverhill-market-report.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F4CB;</div><span class="badge">Live</span></div><div class="card-name">Haverhill Market Report</div><div class="card-desc">Deep dive into Haverhill's SF and condo markets. Affordability analysis comparing median income ($88K) to income needed for homeownership.</div><div class="card-foot"><div class="tags"><span class="tag">MLS</span><span class="tag">Census QuickFacts</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="affordability-dashboard.html" class="card c-red rv"><div class="card-top"><div class="card-icon red">&#x1F4B0;</div><span class="badge">Live</span></div><div class="card-name">What It Costs to Live in Massachusetts</div><div class="card-desc">What is actually expensive here and what is not. BEA price parities by state and metro, price-adjusted income rankings, and the MIT living wage by household type.</div><div class="card-foot"><div class="tags"><span class="tag">BEA</span><span class="tag">MIT Living Wage</span><span class="tag">Census ACS</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="education-statewide.html" class="card c-green rv"><div class="card-top"><div class="card-icon green">&#x1F393;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">MA Education &mdash; Statewide</div><div class="card-desc">Enrollment shifts (traditional &minus;6.4%, vocational +18%, homeschool +56%), per-pupil spending, MCAS proficiency, Gateway Cities vs. wealthy towns.</div><div class="card-foot"><div class="tags"><span class="tag">DESE</span><span class="tag">MCAS</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="education-merrimack-valley.html" class="card c-green rv"><div class="card-top"><div class="card-icon green">&#x1F4D0;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">Merrimack Valley Education</div><div class="card-desc">Haverhill, Methuen, and Lawrence comparison. MCAS scores, spending gaps, ELL populations, and district-level performance analysis.</div><div class="card-foot"><div class="tags"><span class="tag">DESE</span><span class="tag">MassINC</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="healthcare-dashboard.html" class="card c-purple rv"><div class="card-top"><div class="card-icon purple">&#x1F6E1;&#xFE0F;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">All Things Insurance</div><div class="card-desc">Health, homeowners, auto, MassHealth, and licensing. 2026 DOI rate decisions (7.1&ndash;12.2%), $3.6B home market, FAIR Plan 8.7% share, auto carrier market share, and insurance cost vs. income growth.</div><div class="card-foot"><div class="tags"><span class="tag">DOI</span><span class="tag">CHIA</span><span class="tag">KFF</span><span class="tag">CAR</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="employment-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F4BC;</div><span class="badge">Live</span></div><div class="card-name">Employment &amp; Labor Market</div><div class="card-desc">JOLTS data, NFP revisions (&minus;911K), hiring recession analysis, openings rate at 3.9% (Feb 2026: 6.9M), and the healthcare employment mask.</div><div class="card-foot"><div class="tags"><span class="tag">BLS JOLTS</span><span class="tag">BLS CES</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="commercial-re-dashboard.html" class="card c-gray rv"><div class="card-top"><div class="card-icon gray">&#x1F3E2;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">Boston Commercial Real Estate</div><div class="card-desc">Office vacancy trajectory (7.5% &rarr; 23.9%), CMBS delinquencies, major sale discounts (31&ndash;62%), and property tax revenue impact.</div><div class="card-foot"><div class="tags"><span class="tag">Trepp</span><span class="tag">C&amp;W</span><span class="tag">Colliers</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="ma-351.html" class="card c-cranberry rv"><div class="card-top"><div class="card-icon cranberry">&#x1F5FA;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">351 &mdash; Every Town in 3D</div><div class="card-desc">A spinnable Massachusetts where every municipality rises by what it charges. Tax rate, real burden per resident, median home price and the business rate premium, town by town, with a guided tour.</div><div class="card-foot"><div class="tags"><span class="tag">DLS</span><span class="tag">MLS PIN</span><span class="tag">MassGIS</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="tax-burden-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F9FE;</div><span class="badge">Live</span></div><div class="card-name">The Five Layers &mdash; MA &amp; NH Total Burden</div><div class="card-desc">What a household actually pays across all five layers &mdash; billed, withheld on your behalf, embedded in prices, collected through the meter, deferred to later. Massachusetts and New Hampshire each get a full breakdown, then a Compare tab puts them side by side. Every contested assumption is a control, not a buried constant.</div><div class="card-foot"><div class="tags"><span class="tag">IRS</span><span class="tag">DOR</span><span class="tag">DLS</span><span class="tag">CBO</span><span class="tag">DPU</span><span class="tag">Census</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="tax-budget-dashboard.html" class="card c-cranberry rv"><div class="card-top"><div class="card-icon cranberry">&#x1F3DB;&#xFE0F;</div><span class="badge">Live</span></div><div class="card-name">Tax Burden, Budget &amp; Cost of Living</div><div class="card-desc">Income tax + 4% surtax, property tax burden, the enacted $63.4B FY2027 budget line by line, state rankings, and BEA/BLS cost-of-living analysis showing MA's purchasing power erosion.</div><div class="card-foot"><div class="tags"><span class="tag">BEA</span><span class="tag">BLS</span><span class="tag">Census</span><span class="tag">DOR</span><span class="tag">EIA</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="pension-dashboard.html" class="card c-red rv"><div class="card-top"><div class="card-icon red">&#x1F4B0;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">Pensions &amp; Unfunded Liabilities</div><div class="card-desc">$55.8B unfunded (pension + OPEB). PRIT Fund ($105B), 23-year time series, demographic collapse (1.3 workers/retiree), 99 municipal systems, $4.9B FY26 taxpayer cost.</div><div class="card-foot"><div class="tags"><span class="tag">ACFR</span><span class="tag">PERAC</span><span class="tag">PPD</span><span class="tag">PRIT</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="energy-dashboard.html" class="card c-green rv"><div class="card-top"><div class="card-icon green">&#x26A1;</div><span class="badge">Live</span></div><div class="card-name">Energy Policy &amp; Carbon Tax</div><div class="card-desc">RGGI carbon tax ($1.36B total, $200M in 2025), highest electricity costs in contiguous US, rate comparison vs. neighbors, and spending allocation analysis.</div><div class="card-foot"><div class="tags"><span class="tag">EIA</span><span class="tag">RGGI Inc</span><span class="tag">ISO-NE</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="pay-to-play-dashboard.html" class="card c-purple rv"><div class="card-top"><div class="card-icon purple">&#x1F91D;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">Pay-to-Play &amp; Lobbying</div><div class="card-desc">4,298 OCPF donations ($822K) from top lobbying firms, 82.3% at exact $200 cap, OpenSecrets sector rankings, healthcare case study, nonprofit loopholes.</div><div class="card-foot"><div class="tags"><span class="tag">OCPF</span><span class="tag">OpenSecrets</span><span class="tag">SOC</span></div><div class="arrow">&rarr;</div></div></a>
+    </div>
+    </div>
+  </section>
+  <div class="info-box rv">
+    <h4>&#x1F4CB; Official Data Sources</h4>
     <p>BLS (LAUS, CES, OES, CPI) &middot; BEA (SAINC, SAPCE, RPP) &middot; Census Bureau (ACS, QuickFacts) &middot; CBP &middot; ICE &middot; CBO &middot; EIA &middot; MA DOR &middot; MA DLS &middot; DOI &middot; DESE &middot; CHIA &middot; CAR &middot; KFF &middot; Warren Group &middot; MLS PIN &middot; Paragon MLS &middot; Tax Foundation &middot; ITEP &middot; MIT Living Wage Calculator &middot; PERAC &middot; PRIT Fund &middot; Public Plans Database &middot; OCPF &middot; OpenSecrets &middot; RGGI Inc &middot; ISO-NE. See <a href="MASTER_DATA.md">MASTER_DATA.md</a> for full citations.</p>
   </div>
 </div>
@@ -344,6 +439,15 @@
 <script>
 const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis')})},{threshold:0.04,rootMargin:'0px 0px -15px 0px'});
 document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+// The turn band is labelled "computed at runtime". The dashboard count is the
+// one figure on it this page actually owns, so count the cards instead of
+// printing a number that goes stale the next time one is added or folded in.
+// Separate-site cards (b-ext) are not dashboards on this hub.
+(function(){
+  var sec=document.getElementById('dashboards'); if(!sec) return;
+  var n=sec.querySelectorAll('.card').length - sec.querySelectorAll('.badge.b-ext').length;
+  var el=document.getElementById('turn-dash'); if(el && n>0) el.textContent=n;
+})();
 var SHARE_URL='https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/';
 // Share copy stays generic on purpose. It used to quote live figures - "#41",
 // "$313K", "#1 in nation" - plus a hard dashboard count, none of which any feed
@@ -364,275 +468,6 @@ function shareOn(p){
   };
   if(p==='em'){window.location.href=urls[p]}else{window.open(urls[p],'_blank','width=600,height=500')}
 }
-</script>
-
-<script src="assets/ma351-field.js"></script>
-
-
-<script type="importmap">
-{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"}}
-</script>
-<script type="module">
-import * as THREE from 'three';
-
-const cv = document.getElementById('field');
-const wrap = document.querySelector('.grid-wrap');
-if (cv && wrap && window.MA_FIELD) {
-  const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const F = window.MA_FIELD, S = F.s;
-
-  /* every vertex of every municipal boundary, with the town's rate and its own
-     reveal threshold ordered west to east */
-  const pos = [], rate = [], thr = [];
-  /* Walk every boundary EDGE and lay points along it at a fixed spacing. Using
-     only the 5,213 simplified vertices gave a scatter you could not read as a
-     state; a continuous outline of all 351 municipalities does read, and it is
-     still one buffer and one draw call. */
-  const STEP = 0.0022;                       // normalised units between points
-  const townOf = [];
-  let curTown = '';
-  function emit(x, y, tv){
-    pos.push(x, y, 0); rate.push(tv);
-    thr.push(x * 0.78 + Math.random() * 0.22);
-    townOf.push(curTown);
-  }
-  for (const entry of F.t) {
-    const tv = entry[0], polys = entry[1];
-    curTown = entry[2];
-    for (const poly of polys) {
-      const n = poly.length / 2;
-      for (let i = 0; i < n; i++) {
-        const j = (i + 1) % n;
-        const ax = poly[i*2]/S,   ay = poly[i*2+1]/S;
-        const bx = poly[j*2]/S,   by = poly[j*2+1]/S;
-        const len = Math.hypot(bx-ax, by-ay);
-        const steps = Math.max(1, Math.min(160, Math.round(len / STEP)));
-        for (let k = 0; k < steps; k++) {
-          const t = k / steps;
-          emit(ax + (bx-ax)*t, ay + (by-ay)*t, tv);
-        }
-      }
-    }
-  }
-  const N = rate.length;
-
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-  geo.setAttribute('aRate',    new THREE.Float32BufferAttribute(rate, 1));
-  geo.setAttribute('aThresh',  new THREE.Float32BufferAttribute(thr, 1));
-  geo.setAttribute('aSel', new THREE.Float32BufferAttribute(new Float32Array(N).fill(1), 1));
-
-  const U = {
-    uProgress:{value: REDUCE ? 1 : 0},
-    uMouse:{value:new THREE.Vector2(99,99)},
-    uForce:{value:0},
-    uTime:{value:0},
-    uSpanX:{value:2}, uSpanY:{value:1}, uTopY:{value:1},
-    uFadeHi:{value:0.4}, uFadeLo:{value:0.0},
-    uSize:{value:1}
-  };
-
-  const mat = new THREE.ShaderMaterial({
-    uniforms:U, transparent:true, depthWrite:false, depthTest:false,
-    vertexShader:`
-      attribute float aRate;
-      attribute float aThresh;
-      attribute float aSel;
-      uniform float uProgress,uTime,uForce,uSpanX,uSpanY,uTopY,uSize;
-      uniform vec2 uMouse;
-      varying float vRate,vOn,vWy,vSel;
-      void main(){
-        vRate=aRate;vSel=aSel;
-        vOn=smoothstep(aThresh-0.12,aThresh+0.03,uProgress);
-        vec2 n=position.xy;
-        vec2 p=vec2((n.x-0.5)*uSpanX, uTopY-n.y*uSpanY);
-        p.y+=sin(uTime*0.30+n.x*9.0)*uSpanY*0.012;
-        vec2 d=p-uMouse;
-        float dist=max(length(d),0.0015);
-        p+=normalize(d)*min(uForce/(dist*dist+0.015),0.22);
-        vWy=p.y;
-        gl_Position=projectionMatrix*modelViewMatrix*vec4(p,0.0,1.0);
-        gl_PointSize=(1.0+abs(aRate)*1.5)*uSize*(0.45+0.55*vOn)*(aSel>1.5?2.1:1.0);
-      }`,
-    fragmentShader:`
-      precision highp float;
-      uniform float uFadeHi,uFadeLo;
-      varying float vRate,vOn,vWy,vSel;
-      vec3 ramp(float t){
-        vec3 c0=vec3(0.071,0.275,0.498),c1=vec3(0.239,0.510,0.737),
-             c2=vec3(0.561,0.725,0.839),c3=vec3(0.812,0.780,0.706),
-             c4=vec3(0.949,0.651,0.353),c5=vec3(0.863,0.318,0.153),
-             c6=vec3(0.557,0.043,0.133);
-        float u=(t+1.0)*0.5*6.0;
-        if(u<1.0)return mix(c0,c1,u);
-        if(u<2.0)return mix(c1,c2,u-1.0);
-        if(u<3.0)return mix(c2,c3,u-2.0);
-        if(u<4.0)return mix(c3,c4,u-3.0);
-        if(u<5.0)return mix(c4,c5,u-4.0);
-        return mix(c5,c6,u-5.0);
-      }
-      void main(){
-        vec2 q=gl_PointCoord-0.5;
-        float a=smoothstep(0.5,0.14,length(q));
-        if(a<=0.002)discard;
-        float fade=smoothstep(uFadeLo,uFadeHi,vWy);
-        float al=a*vOn*fade*0.95*(vSel>1.5?1.0:(vSel<0.5?0.24:0.62));
-        if(al<=0.002)discard;
-        vec3 col=mix(vec3(0.13,0.17,0.19),ramp(vRate),0.46+0.54*abs(vRate));
-        if(vSel>1.5) col=mix(col,vec3(0.16,0.52,0.34),0.30);   /* selected ground reads green */
-        gl_FragColor=vec4(col,al);
-      }`
-  });
-
-  const scene=new THREE.Scene();
-  const cloud=new THREE.Points(geo,mat);
-  /* the vertex shader relocates every point from raw 0..1 attribute space into
-     world space, so the bounding sphere three.js computes from the attribute is
-     meaningless and culls the whole cloud. */
-  cloud.frustumCulled=false;
-  geo.boundingSphere=new THREE.Sphere(new THREE.Vector3(0,0,0),100);
-  scene.add(cloud);
-  const cam=new THREE.OrthographicCamera(-1,1,1,-1,-1,1);
-  const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:false,alpha:true,powerPreference:'high-performance'});
-  renderer.setClearAlpha(0);
-
-  let W=0,H=0,aspect=1;
-  function resize(){
-    const r=wrap.getBoundingClientRect();
-    W=r.width;H=r.height;
-    if(!W||!H)return;
-    renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));   // capped
-    renderer.setSize(W,H,false);
-    aspect=W/H;
-    cam.left=-aspect;cam.right=aspect;cam.top=1;cam.bottom=-1;
-    cam.updateProjectionMatrix();
-    /* Everything is derived from panel WIDTH, and the band is then sized to the
-       state rather than the other way round. Deriving the state from the band
-       made it a small flag floating in empty space; deriving the band from the
-       panel height fed back on itself, because the padding IS part of the
-       height. Width does not move, so the loop is broken there. */
-    const stateW = W * 0.74;                    // a band, not a full screen
-    const stateH = stateW / F.asp;
-    const padTopPx = stateH * 1.14;
-    if (Math.abs(parseFloat(wrap.style.paddingTop || 0) - padTopPx) > 1) {
-      wrap.style.paddingTop = Math.round(padTopPx) + 'px';
-      const r2 = wrap.getBoundingClientRect();
-      H = r2.height; aspect = W / H;
-      renderer.setSize(W, H, false);
-      cam.left=-aspect;cam.right=aspect;cam.top=1;cam.bottom=-1;cam.updateProjectionMatrix();
-    }
-    const wpp = (2 * aspect) / W, hpp = 2 / H;   // world units per css pixel
-    U.uSpanX.value = stateW * wpp;
-    U.uSpanY.value = stateH * hpp;
-    U.uTopY.value  = 1.0 - stateH * 0.05 * hpp;
-    U.uFadeLo.value = 1.0 - padTopPx * hpp;
-    U.uFadeHi.value = U.uFadeLo.value + stateH * 0.46 * hpp;
-    U.uSize.value=Math.min(3.0,Math.max(1.2,W/700));
-  }
-
-  let mouseIn=false;
-  wrap.addEventListener('pointermove',e=>{
-    if(REDUCE)return;
-    const r=wrap.getBoundingClientRect();
-    U.uMouse.value.set(((e.clientX-r.left)/r.width*2-1)*aspect,
-                       -((e.clientY-r.top)/r.height*2-1));
-    mouseIn=true;
-  },{passive:true});
-  wrap.addEventListener('pointerleave',()=>{mouseIn=false;},{passive:true});
-
-  let target=REDUCE?1:0;
-  function onScroll(){
-    const r=wrap.getBoundingClientRect();
-    target=Math.max(0,Math.min(1,(innerHeight-r.top)/(innerHeight*0.85)));
-  }
-  addEventListener('scroll',onScroll,{passive:true});
-  addEventListener('resize',()=>{resize();onScroll();},{passive:true});
-
-  let visible=false;
-  new IntersectionObserver(es=>{visible=es[0].isIntersecting;},{rootMargin:'250px'}).observe(wrap);
-
-  resize();onScroll();
-  const away=new THREE.Vector2(99,99);
-  const clock=new THREE.Clock();
-
-  /* ---- the directory drives the field ----------------------------------
-     Every point knows which town it belongs to. Pointing at a reading writes a
-     selection mask into an attribute and the shader isolates that ground:
-     selected towns brighten and grow, the rest of the state drops back. This
-     is the whole reason the map is on the page. */
-  const selAttr = geo.getAttribute('aSel');
-  const tag = document.getElementById('scopeTag');
-  const NORTH = new Set();                 // border tier, for the NH comparisons
-  (function(){
-    const ys = [];
-    for (const e of F.t) {
-      let miny = 1e9;
-      for (const poly of e[1]) for (let k = 1; k < poly.length; k += 2) miny = Math.min(miny, poly[k]);
-      ys.push([miny, e[2]]);
-    }
-    ys.sort((a, b) => a[0] - b[0]);
-    ys.slice(0, 46).forEach(v => NORTH.add(v[1]));
-  })();
-
-  function applyScope(scope){
-    const sel = selAttr.array;
-    if (!scope || scope === '*') { sel.fill(1); }
-    else {
-      const want = scope === 'BORDER' ? NORTH : new Set(scope.split(','));
-      for (let i = 0; i < N; i++) sel[i] = want.has(townOf[i]) ? 2 : 0;
-    }
-    selAttr.needsUpdate = true;
-  }
-  function scopeLabel(scope){
-    if (!scope || scope === '*') return 'ALL 351 MUNICIPALITIES';
-    if (scope === 'BORDER') return 'THE NEW HAMPSHIRE LINE';
-    const t = scope.split(',');
-    return t.length > 3 ? t.slice(0,3).join(' \u00b7 ') + ' +' + (t.length-3) : t.join(' \u00b7 ');
-  }
-  document.querySelectorAll('.index .row').forEach(row => {
-    const scope = row.getAttribute('data-scope');
-    const enter = () => {
-      applyScope(scope);
-      tag.textContent = scopeLabel(scope);
-      tag.classList.add('on');
-    };
-    const leave = () => { applyScope('*'); tag.classList.remove('on'); };
-    row.addEventListener('pointerenter', enter);
-    row.addEventListener('focus', enter);
-    row.addEventListener('pointerleave', leave);
-    row.addEventListener('blur', leave);
-  });
-  /* park the readout just under the state */
-  function placeTag(){
-    const padTop = parseFloat(getComputedStyle(wrap).paddingTop) || 200;
-    tag.style.top = Math.round(padTop - 34) + 'px';
-  }
-  placeTag(); addEventListener('resize', placeTag, {passive:true});
-
-  window.__FIELD={U,N,render:()=>renderer.render(scene,cam),
-                  info:()=>({N,W,H,progress:U.uProgress.value,calls:renderer.info.render.calls})};
-  (function loop(){
-    requestAnimationFrame(loop);
-    if(!visible||!W)return;
-    const dt=Math.min(clock.getDelta(),0.05);
-    U.uTime.value+=dt;
-    U.uProgress.value+=(target-U.uProgress.value)*Math.min(1,dt*3.4);
-    U.uForce.value+=((mouseIn?0.013:0)-U.uForce.value)*Math.min(1,dt*5);
-    if(!mouseIn)U.uMouse.value.lerp(away,0.03);
-    renderer.render(scene,cam);
-  })();
-}
-</script>
-
-<script>
-/* the masthead takes a plate once the stage is behind you */
-(function(){
-  var head=document.querySelector('.site-head'), stage=document.querySelector('.stage');
-  if(!head||!stage) return;
-  new IntersectionObserver(function(e){
-    head.classList.toggle('docked', !e[0].isIntersecting);
-  },{rootMargin:'-70px 0px 0px 0px'}).observe(stage);
-})();
 </script>
 </body>
 </html>
