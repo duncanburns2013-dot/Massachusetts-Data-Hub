@@ -1116,13 +1116,16 @@ import * as THREE from 'three';
 
         /* bands, so it reads as flow rather than as fog */
         float band = fract(f*2.6 + t*1.4);
-        band = smoothstep(0.42, 0.5, band) * smoothstep(0.86, 0.62, band);
+        band = smoothstep(0.40, 0.51, band) * smoothstep(0.88, 0.60, band);
 
-        float shade = clamp(f*1.25 - 0.10, 0.0, 1.0);
+        float shade = clamp(f*1.32 - 0.12, 0.0, 1.0);
         vec3 col = ramp(shade);
 
-        float a = (band*0.30 + 0.10) * smoothstep(0.0, 0.35, f);
-        a *= 0.30;                                  /* it is a ground, not a subject */
+        /* the band term carries the contrast, the flat term is only a floor.
+           Growing the first and shrinking the second widens the crest-to-trough
+           span from 0.084 to 0.160 while the quiet areas stay quiet. */
+        float a = (band*0.42 + 0.085) * smoothstep(0.0, 0.35, f);
+        a *= 0.38;                                  /* it is a ground, not a subject */
         gl_FragColor = vec4(col, a);
       }`
   });
