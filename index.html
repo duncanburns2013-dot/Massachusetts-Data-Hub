@@ -344,6 +344,44 @@ footer a:hover{color:var(--duckling)}
 .card-also>span{color:var(--muted);text-transform:uppercase;letter-spacing:.14em;font-size:9px}
 .card-also a{color:var(--berk-ink);text-decoration:none;transition:color .2s}
 .card-also a:hover{color:var(--cranberry)}
+
+/* ============================================================================
+   TWO EFFECTS, ONE PER SECTION. No layout, copy or structure changes.
+   ========================================================================== */
+
+/* ---- 1. the turn band: particle-dispersing type -------------------------- */
+.turn-h{position:relative}
+.turn-h canvas.pt{
+  position:absolute;left:0;top:0;width:100%;height:100%;
+  pointer-events:none;display:block;
+}
+/* the real heading stays in the DOM for screen readers and for any browser that
+   never runs the script; it only goes transparent once the canvas is live */
+.turn-h.pt-on{color:transparent}
+.turn-h.pt-on em{color:transparent}
+
+/* ---- 2. the dashboards: grid-cell step reveal ---------------------------- */
+.card{position:relative}
+.mos{
+  position:absolute;inset:0;z-index:6;pointer-events:none;
+  display:grid;border-radius:inherit;overflow:hidden;
+  grid-template-columns:repeat(var(--mc),1fr);
+  grid-template-rows:repeat(var(--mr),1fr);
+}
+.mos i{
+  display:block;background:#E4E7E6;
+  transform:scale(1.02);
+  transition:opacity .42s cubic-bezier(.22,.61,.36,1),transform .42s cubic-bezier(.22,.61,.36,1);
+}
+.mos.go i{opacity:0;transform:scale(.86)}
+
+@media (prefers-reduced-motion: reduce){
+  .turn-h.pt-on{color:var(--ink)}
+  .turn-h.pt-on em{color:var(--cranberry)}
+  .turn-h canvas.pt{display:none}
+  .mos{display:none}
+}
+
 </style>
 <!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
 <link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
@@ -468,6 +506,210 @@ function shareOn(p){
   };
   if(p==='em'){window.location.href=urls[p]}else{window.open(urls[p],'_blank','width=600,height=500')}
 }
+</script>
+
+<script>
+/* ===========================================================================
+   EFFECT 1 - PARTICLE-DISPERSING TYPE  (turn band)
+   The headline is drawn offscreen in its own face, sampled on a grid, and every
+   lit pixel becomes a particle. Scroll position drives the assembly: scattered
+   at the edge of the band, settled by the middle of it. Colour is read from the
+   render, so the cranberry words stay cranberry.
+   ======================================================================== */
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var h = document.querySelector('.turn-h');
+  if (!h || !h.getContext && !document.createElement('canvas').getContext) return;
+
+  var cv = document.createElement('canvas');
+  cv.className = 'pt';
+  cv.setAttribute('aria-hidden','true');
+  h.appendChild(cv);
+  var ctx = cv.getContext('2d');
+
+  var parts = [], W = 0, H = 0, dpr = 1, ready = false;
+
+  function build(){
+    var r = h.getBoundingClientRect();
+    W = Math.ceil(r.width); H = Math.ceil(r.height);
+    if (!W || !H) return;
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+
+    /* draw the heading offscreen exactly as the DOM would, one line per <br> */
+    var cs = getComputedStyle(h);
+    var off = document.createElement('canvas');
+    off.width = cv.width; off.height = cv.height;
+    var o = off.getContext('2d');
+    o.setTransform(dpr,0,0,dpr,0,0);
+    o.textBaseline = 'top';
+    var fontPx = parseFloat(cs.fontSize);
+    var lh = parseFloat(cs.lineHeight) || fontPx * 1.05;
+    var fam = cs.fontFamily, wt = cs.fontWeight;
+    /* canvas ignores CSS letter-spacing unless told; the heading is set at
+       -0.03em, and without this the drawn line runs wider than the DOM one and
+       the last word is clipped off the canvas */
+    if ('letterSpacing' in o) o.letterSpacing = cs.letterSpacing;
+
+    var ink = cs.color;
+    var emEl = h.querySelector('em');
+    var accent = emEl ? getComputedStyle(emEl).color : '#680A1D';
+
+    /* two lines, each split at the accent word so colour is per-run */
+    var LINES = [
+      [['The instrument shows you ', ink], ['where', accent], ['.', ink]],
+      [['The dashboards show you ', ink], ['why', accent], ['.', ink]]
+    ];
+
+    /* fit: shrink until the widest line sits inside the box */
+    function widest(px){
+      o.font = wt + ' ' + px + 'px ' + fam;
+      var m = 0;
+      for (var i=0;i<LINES.length;i++){
+        var w = 0;
+        for (var j=0;j<LINES[i].length;j++) w += o.measureText(LINES[i][j][0]).width;
+        if (w > m) m = w;
+      }
+      return m;
+    }
+    var wMax = widest(fontPx);
+    if (wMax > W - 2){ fontPx = Math.max(12, fontPx * (W - 2) / wMax); lh = fontPx * 1.06; }
+    o.font = wt + ' ' + fontPx + 'px ' + fam;
+
+    var blockH = lh * LINES.length;
+    var y = Math.max(0, (H - blockH) / 2);
+    for (var i=0;i<LINES.length;i++){
+      var x = 0;
+      for (var j=0;j<LINES[i].length;j++){
+        o.fillStyle = LINES[i][j][1];
+        o.fillText(LINES[i][j][0], x, y);
+        x += o.measureText(LINES[i][j][0]).width;
+      }
+      y += lh;
+    }
+
+    /* sample the render: one particle per lit cell */
+    var img = o.getImageData(0,0,off.width,off.height).data;
+    var step = Math.max(2, Math.round(2.3 * dpr));
+    parts.length = 0;
+    for (var py=0; py<off.height; py+=step){
+      for (var px=0; px<off.width; px+=step){
+        var idx = (py*off.width + px)*4;
+        if (img[idx+3] < 128) continue;
+        var tx = px/dpr, ty = py/dpr;
+        parts.push({
+          tx:tx, ty:ty,
+          /* scattered start: thrown outward from the line it belongs to */
+          sx: tx + (Math.random()-0.5) * W * 0.9,
+          sy: ty + (Math.random()-0.5) * H * 2.6,
+          d: Math.random()*0.38,                  /* per-particle delay */
+          r: img[idx], g: img[idx+1], b: img[idx+2]
+        });
+      }
+    }
+    ready = parts.length > 0;
+    /* the real heading is NOT hidden here. It goes transparent only once a
+       frame has actually been painted, so a suspended rAF or a failed sample
+       can never leave the headline invisible. */
+  }
+
+  var prog = 0;
+  function measure(){
+    var r = h.getBoundingClientRect();
+    var vh = innerHeight;
+    /* 0 while the band is a screen away, 1 once it has risen into place */
+    prog = 1 - Math.max(0, Math.min(1, (r.top - vh*0.18) / (vh*0.62)));
+  }
+
+  function ease(x){ return 1 - Math.pow(1-x, 3); }
+
+  var painted = false;
+  function frame(){
+    requestAnimationFrame(frame);
+    if (!ready) return;
+    var r = h.getBoundingClientRect();
+    if (r.bottom < -200 || r.top > innerHeight + 200){ return; }
+    if (!painted){ painted = true; h.classList.add('pt-on'); }
+    ctx.clearRect(0,0,W,H);
+    for (var i=0;i<parts.length;i++){
+      var p = parts[i];
+      var t = ease(Math.max(0, Math.min(1, (prog - p.d) / (1 - p.d))));
+      var x = p.sx + (p.tx - p.sx) * t;
+      var y = p.sy + (p.ty - p.sy) * t;
+      ctx.globalAlpha = t < 0.04 ? 0 : Math.min(1, t*1.25);
+      ctx.fillStyle = 'rgb('+p.r+','+p.g+','+p.b+')';
+      ctx.fillRect(x, y, 1.7, 1.7);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function boot(){ build(); measure(); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(boot);
+  else addEventListener('load', boot);
+  addEventListener('scroll', measure, {passive:true});
+  var rt; addEventListener('resize', function(){ clearTimeout(rt); rt=setTimeout(boot,180); }, {passive:true});
+  frame();
+})();
+
+/* ===========================================================================
+   EFFECT 2 - GRID-CELL STEP REVEAL  (dashboards)
+   step(uProgress, normalized_cell_index) over a grid, per card: every card
+   assembles out of the page ground in a diagonal sweep as it enters.
+   ======================================================================== */
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var cards = document.querySelectorAll('#dashboards .card');
+  if (!cards.length) return;
+
+  var COLS = 7, ROWS = 5, N = COLS*ROWS;
+  cards.forEach(function(card){
+    /* the existing reveal-on-scroll class would fight this one */
+    card.classList.remove('rv');
+    card.classList.add('vis');
+    var m = document.createElement('span');
+    m.className = 'mos';
+    m.setAttribute('aria-hidden','true');
+    m.style.setProperty('--mc', COLS);
+    m.style.setProperty('--mr', ROWS);
+    var html = '';
+    for (var i=0;i<N;i++) html += '<i></i>';
+    m.innerHTML = html;
+    card.appendChild(m);
+    card._mos = m;
+  });
+
+  function reveal(card){
+    var m = card._mos;
+    if (!m || m._done) return;
+    m._done = true;
+    var cells = m.children;
+    for (var i=0;i<cells.length;i++){
+      var cx = i % COLS, cy = (i / COLS) | 0;
+      /* diagonal sweep, top-left first, with a little scatter */
+      var order = (cx + cy) / (COLS + ROWS - 2);
+      cells[i].style.transitionDelay = (order*0.34 + Math.random()*0.07).toFixed(3) + 's';
+    }
+    requestAnimationFrame(function(){ m.classList.add('go'); });
+    setTimeout(function(){ if (m.parentNode) m.parentNode.removeChild(m); }, 1400);
+  }
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (!e.isIntersecting) return;
+      io.unobserve(e.target);
+      reveal(e.target);
+    });
+  }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
+
+  cards.forEach(function(c){
+    io.observe(c);
+    /* failsafe: these tiles are opaque, so a card must never be able to stay
+       covered because an observer did not fire. Nothing here can hide content
+       for longer than this. */
+    setTimeout(function(){ io.unobserve(c); reveal(c); }, 6000);
+  });
+})();
 </script>
 </body>
 </html>
