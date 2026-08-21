@@ -76,11 +76,6 @@ for vid, kind, desc in VIDEOS:
                              prio='high' if eager else 'auto'))
 GRID = '    <ul class="vgrid">\n' + '\n'.join(cards) + '\n    </ul>'
 
-SIGNOFF = ('    <figure class="vsign">' + '\n' +
-           '      <img src="assets/resistance-mark.webp" width="760" height="561"' + 
-           ' alt="The Massachusetts Resistance" loading="lazy" decoding="async">' + 
-           '    </figure>')
-
 CSS = """
 /* ---- the video wall ------------------------------------------------------
    Posters are local files, so nothing is requested from Google until a visitor
@@ -137,13 +132,6 @@ CSS = """
 .k-par,.k-exp{font-style:normal;font-weight:700}
 .k-par{color:#9A3412}
 .k-exp{color:#0F4577}
-.vsign{margin:30px auto 0;max-width:340px;padding:16px 22px;border-radius:12px;text-align:center;
-  background:radial-gradient(120% 140% at 50% 30%,#0C1012,#04060700 70%),#040607;
-  border:1px solid rgba(11,17,19,.14)}
-.vsign img{width:min(190px,62%);height:auto;display:block;margin:0 auto;
-  mix-blend-mode:screen}
-.vsig{font-family:var(--font-display);font-weight:700;letter-spacing:-.01em;
-  color:var(--cranberry)}
 @media (max-width:520px){ .vgrid{grid-template-columns:1fr} }
 @media (prefers-reduced-motion: reduce){
   .vcard,.vplay{transition:none} .vcard:hover{transform:none}
@@ -181,7 +169,7 @@ s = io.open('videos.html', encoding='utf-8-sig').read().replace('\r\n', '\n')
 
 m = re.search(r'\s*<p class="panel-note" id="videos-note">.*?</p>\n', s, re.S)
 assert m, 'placeholder note not found'
-s = s[:m.start()] + '\n' + GRID + '\n' + SIGNOFF + '\n' + s[m.end():]
+s = s[:m.start()] + '\n' + GRID + '\n' + '\n' + s[m.end():]
 
 s = s.replace('<h1>Videos<i>6</i></h1>', '<h1>Videos<i>%d</i></h1>' % len(VIDEOS))
 assert '<i>%d</i>' % len(VIDEOS) in s, 'count not updated'
