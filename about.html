@@ -680,6 +680,29 @@ footer::before{
   border:1px solid rgba(11,17,19,.07)}
 .abio-face{width:180px;height:180px;border-radius:14px;object-fit:cover;display:block;
   box-shadow:0 6px 22px rgba(11,17,19,.16)}
+.abio-facelink{display:block;width:180px;border-radius:14px;cursor:zoom-in;
+  transition:transform .35s cubic-bezier(.19,1,.22,1),box-shadow .35s}
+.abio-facelink:hover{transform:scale(1.03)}
+.abio-facelink:focus-visible{outline:2px solid var(--bay-blue);outline-offset:3px}
+.lbox{position:fixed;inset:0;z-index:90;display:flex;align-items:center;
+  justify-content:center;padding:24px;opacity:0;transition:opacity .2s;
+  background:rgba(6,9,11,.74);backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);cursor:zoom-out}
+.lbox.on{opacity:1}
+/* capped at the source's own 400px: enlarging past that would only show
+   the compression, and the studio frame exists at no larger size */
+.lbox img{width:min(400px,82vw);height:auto;border-radius:16px;display:block;
+  box-shadow:0 24px 70px rgba(0,0,0,.55);transform:scale(.96);
+  transition:transform .25s cubic-bezier(.19,1,.22,1)}
+.lbox.on img{transform:scale(1)}
+.lbox-x{position:absolute;top:18px;right:20px;width:40px;height:40px;
+  border-radius:10px;border:1px solid rgba(255,255,255,.28);cursor:pointer;
+  background:rgba(255,255,255,.10);color:#fff;font-size:24px;line-height:1;
+  transition:background .2s}
+.lbox-x:hover{background:rgba(255,255,255,.2)}
+@media (prefers-reduced-motion: reduce){
+  .abio-facelink,.lbox,.lbox img{transition:none}
+  .abio-facelink:hover{transform:none} .lbox img{transform:none}}
 .abio-text h2{font-family:var(--font-display);font-weight:700;letter-spacing:-.025em;
   font-size:clamp(21px,2vw,30px);color:var(--cranberry);margin:0 0 10px}
 .abio-text p{font-family:var(--font-text);font-size:14.5px;line-height:1.68;
@@ -730,8 +753,11 @@ footer::before{
     government sources and published so anyone can check the arithmetic.</p>
 
     <section class="abio">
-      <img class="abio-face" src="assets/duncan-burns.jpg" width="400" height="400"
-           alt="Duncan Burns" loading="eager" fetchpriority="high" decoding="async">
+      <a class="abio-facelink" href="assets/duncan-burns.jpg"
+         aria-label="Enlarge the portrait of Duncan Burns">
+        <img class="abio-face" src="assets/duncan-burns.jpg" width="400" height="400"
+             alt="Duncan Burns" loading="eager" fetchpriority="high" decoding="async">
+      </a>
       <div class="abio-text">
         <h2>Duncan Burns</h2>
         <p>A U.S. Air Force veteran and UMass graduate. Operations Manager at
@@ -958,6 +984,47 @@ import * as THREE from 'three';
 
   window.__FLOW = { info:function(){ return {frames:frames, on:cv.classList.contains('on'),
                      size:U.uRes.value.x+'x'+U.uRes.value.y}; } };
+})();
+</script>
+
+<div class="lbox" id="lbox" hidden aria-hidden="true" role="dialog" aria-modal="true"
+     aria-label="Portrait of Duncan Burns">
+  <button class="lbox-x" type="button" aria-label="Close">&times;</button>
+  <img src="assets/duncan-burns.jpg" width="400" height="400" alt="Duncan Burns">
+</div>
+<script>
+/* The portrait is a real link to the file, so with scripting off a click still
+   opens the image. Here that is intercepted and shown in place instead. The
+   source is 400px square and the panel is capped there, so it is never upscaled. */
+(function(){
+  var link = document.querySelector('.abio-facelink');
+  var box  = document.getElementById('lbox');
+  if (!link || !box) return;
+  var last = null;
+
+  function open(e){
+    e.preventDefault();
+    last = document.activeElement;
+    box.hidden = false;
+    box.setAttribute('aria-hidden', 'false');
+    requestAnimationFrame(function(){ box.classList.add('on'); });
+    box.querySelector('.lbox-x').focus();
+    document.body.style.overflow = 'hidden';
+  }
+  function close(){
+    box.classList.remove('on');
+    box.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    setTimeout(function(){ box.hidden = true; }, 200);
+    if (last) last.focus();
+  }
+  link.addEventListener('click', open);
+  box.addEventListener('click', function(e){
+    if (e.target === box || e.target.classList.contains('lbox-x')) close();
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && !box.hidden) close();
+  });
 })();
 </script>
 </body>
