@@ -673,13 +673,30 @@ footer::before{
   letter-spacing:-.015em;color:var(--ink);margin:10px 0 0}
 .vdesc{margin:8px 0 0;font-family:var(--font-text);font-size:13.5px;line-height:1.5;
   color:var(--muted);flex:1}
-.vsign{margin:34px 0 0;padding:30px 20px 24px;border-radius:16px;text-align:center;
+/* The intro was set left in a full-width panel and read as a column stranded
+   against the edge. Centred, on the same treatment as the Dashboards head. */
+.doc-in{position:relative;overflow:hidden;text-align:center}
+.doc-in::before{content:'';position:absolute;left:0;right:0;top:0;height:270px;
+  pointer-events:none;z-index:0;
+  background:radial-gradient(78% 120% at 6% 0%,rgba(104,10,29,.11),transparent 62%),
+             radial-gradient(72% 120% at 94% 4%,rgba(20,85,143,.12),transparent 60%)}
+.doc-in > *{position:relative;z-index:1}
+.doc h1{justify-content:center;font-size:clamp(34px,5vw,72px)}
+.doc .ramp{height:3px;margin:20px auto 26px;max-width:none}
+.doc .panel-lede{font-size:clamp(16px,1.35vw,21px);line-height:1.5;
+  max-width:60ch;margin-left:auto;margin-right:auto}
+.doc .panel-body,.doc .panel-note{margin-left:auto;margin-right:auto}
+.vgrid{text-align:left}
+/* the two kinds, colour-keyed to the chips on every tile so the distinction is
+   made before the grid starts rather than discovered inside it */
+.k-par,.k-exp{font-style:normal;font-weight:700}
+.k-par{color:#9A3412}
+.k-exp{color:#0F4577}
+.vsign{margin:30px auto 0;max-width:340px;padding:16px 22px;border-radius:12px;text-align:center;
   background:radial-gradient(120% 140% at 50% 30%,#0C1012,#04060700 70%),#040607;
   border:1px solid rgba(11,17,19,.14)}
-.vsign img{width:min(330px,72%);height:auto;display:block;margin:0 auto;
+.vsign img{width:min(190px,62%);height:auto;display:block;margin:0 auto;
   mix-blend-mode:screen}
-.vsign figcaption{margin-top:14px;font-family:var(--font-mono);font-size:10.5px;
-  font-weight:600;letter-spacing:.17em;text-transform:uppercase;color:rgba(255,255,255,.62)}
 .vsig{font-family:var(--font-display);font-weight:700;letter-spacing:-.01em;
   color:var(--cranberry)}
 @media (max-width:520px){ .vgrid{grid-template-columns:1fr} }
@@ -706,10 +723,9 @@ footer::before{
     
     <h1>Videos<i>22</i></h1>
     <span class="ramp" aria-hidden="true"></span>
-    <p class="panel-lede">Twenty-two short films on Massachusetts politics, made
-    and published by Duncan Burns
-    (<a href="https://www.youtube.com/@duncanburnsMA" target="_blank" rel="noopener">@duncanburnsMA</a>).
-    Some are parody. Some are straight explainers. Each one says which it is.</p>
+    <p class="panel-lede">Short films on Massachusetts politics.
+    Some are <em class="k-par">parody</em>. Some are straight
+    <em class="k-exp">explainers</em>. Each one says which it is.</p>
     <p class="panel-body">The parodies go after the Commonwealth&rsquo;s Democratic
     establishment &mdash; Governor Healey, Mayor Wu and the legislators around them &mdash;
     on corruption, hypocrisy, donor money expensed as a lifestyle, sanctuary policy
@@ -719,9 +735,7 @@ footer::before{
     the labour-force and migration numbers behind the exodus, the HHS money trail,
     the published reports behind the sanctuary argument, the H-1B filings. Where the
     blame is bipartisan they say so &mdash; the H-1B film names the House and Senate of
-    both parties before it gets anywhere near Beacon Hill. Nearly all of them close
-    the same way, on a card he built himself:
-    <span class="vsig">The Massachusetts Resistance</span>.</p>
+    both parties before it gets anywhere near Beacon Hill.</p>
     <p class="panel-note">Every film is tagged Parody or Explainer, so nothing on this
     page can be mistaken for the record. The explainers run on the same sourced
     figures as the dashboards; the parodies are arguments, made in the open.</p>
@@ -1014,7 +1028,7 @@ footer::before{
       </li>
     </ul>
     <figure class="vsign">
-      <img src="assets/resistance-mark.webp" width="760" height="561" alt="The Massachusetts Resistance" loading="lazy" decoding="async">      <figcaption>Nearly every film ends here.</figcaption>    </figure>
+      <img src="assets/resistance-mark.webp" width="760" height="561" alt="The Massachusetts Resistance" loading="lazy" decoding="async">    </figure>
   
   </div>
 </main>
