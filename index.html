@@ -817,7 +817,7 @@ import * as THREE from 'three';
   cv.className = 'lq'; cv.setAttribute('aria-hidden','true');
   h.appendChild(cv);
 
-  var renderer, tex, mesh, scene, cam, W=0, H=0, ready=false, painted=false;
+  var renderer, tex, mesh, scene, cam, W=0, H=0, ready=false, painted=false, builtDpr=0;
 
   function makeTexture(){
     var r = h.getBoundingClientRect();
@@ -880,14 +880,14 @@ import * as THREE from 'three';
   }
 
   var U = {
-    uTex:{value:null}, uProg:{value:0}, uTime:{value:0},
+    uTex:{value:null}, uTime:{value:0},
     uMouse:{value:new THREE.Vector2(-9,-9)}, uAspect:{value:1}, uHover:{value:0}
   };
 
   var FRAG = `
     precision highp float;
     uniform sampler2D uTex;
-    uniform float uProg, uTime, uAspect, uHover;
+    uniform float uTime, uAspect, uHover;
     uniform vec2 uMouse;
     varying vec2 vUv;
 
@@ -906,16 +906,11 @@ import * as THREE from 'three';
 
     void main(){
       vec2 uv = vUv;
-      float settle = smoothstep(0.0, 1.0, uProg);
-      /* Amplitude is scaled to the LETTER, not the box. At 0.075 of a 950px box
-         it displaced ~70px on 60px type and the words melted into each other. */
-      float amp = (1.0 - settle) * 0.018;
-
-      vec2 q = vec2(fbm(uv*5.0 + uTime*0.11),
-                    fbm(uv*5.0 + 7.3 - uTime*0.09));
-      vec2 warp = (q - 0.5) * amp;
-      /* and it pours up into place rather than only smearing sideways */
-      warp.y += (1.0 - settle) * 0.045;
+      /* No settle term. The type is drawn crisp and stays crisp; every
+         displacement below is gated on uHover, which is zero until the pointer
+         is actually over the words. An unreadable headline is not a state this
+         shader can reach any more. */
+      vec2 warp = vec2(0.0);
 
       /* cursor ripple keeps working after it has settled */
       vec2 ap = vec2(uv.x*uAspect, uv.y);
@@ -930,14 +925,11 @@ import * as THREE from 'three';
       /* chromatic split on near-black ink only makes dark mud: three offset
          copies of an almost-black glyph read as a heavy smear, which is what
          the arriving headline looked like. Kept small; the ripple carries it. */
-      float split = length(warp)*0.65 + fall*0.010;
+      float split = length(warp)*0.65 + fall*0.010;   /* zero unless hovering */
       vec4 cr = texture2D(uTex, uv + warp + vec2( split, 0.0));
       vec4 cg = texture2D(uTex, uv + warp);
       vec4 cb = texture2D(uTex, uv + warp - vec2( split, 0.0));
       float a = max(cr.a, max(cg.a, cb.a));
-      /* it arrives faint and gains weight as it settles, so the unresolved
-         state reads as something forming rather than something broken */
-      a *= 0.18 + 0.82 * settle;
       if (a < 0.004) discard;
       vec3 col = vec3(cr.r, cg.g, cb.b);
       /* the ripple crest catches a little light */
@@ -965,24 +957,14 @@ import * as THREE from 'three';
       mesh.frustumCulled = false;
       scene.add(mesh);
     }
-    renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
+    builtDpr = Math.min(devicePixelRatio||1,2);
+    renderer.setPixelRatio(builtDpr);
     renderer.setSize(W,H,false);
     ready = true;
   }
 
-  var prog = 0;
-  function measure(){
-    var r = h.getBoundingClientRect(), vh = innerHeight;
-    if (!r.height) return;
-    /* fully settled by the time the band has risen to 45% of the viewport, so
-       at any normal reading position the type is crisp. The previous attempt
-       topped out at 0.81 and never resolved, which is why it stayed a smear. */
-    /* crisp well before the band reaches the middle of the viewport. At 0.55
-       it was still ~0.89 settled at a normal reading position, and the residual
-       warp plus chromatic split made the line unreadable. */
-    prog = Math.max(0, Math.min(1, (vh - r.top) / (vh * 0.38)));
-  }
-  window.__LQ = { p:function(){ return prog; }, ready:function(){ return ready; } };
+  window.__LQ = { ready:function(){ return ready; },
+                  dpr:function(){ return builtDpr; } };
 
   var hover = 0, hoverT = 0;
   h.addEventListener('pointermove', function(e){
@@ -999,24 +981,22 @@ import * as THREE from 'three';
     var r = h.getBoundingClientRect();
     if (r.bottom < -160 || r.top > innerHeight + 160) return;
     if (!painted){ painted = true; h.classList.add('lq-on'); }
-    /* measured here rather than only on scroll: a scroll-only measurement can
-       be taken once against a layout that is not final and then never corrected,
-       which is exactly how the headline ended up frozen mid-liquid. */
-    measure();
     var dt = Math.min(clock.getDelta(), .05);
     U.uTime.value += dt;
-    U.uProg.value += (prog - U.uProg.value) * Math.min(1, dt*6.5);
     hover += (hoverT - hover) * Math.min(1, dt*5.0);
+    /* the buffer is sized to the device ratio at build time; if that changes -
+       moving the window to a differently scaled display, or a browser zoom -
+       the texture is redrawn rather than being stretched to fit */
+    if (Math.abs((Math.min(devicePixelRatio||1,2)) - builtDpr) > 0.01){ build(); }
     U.uHover.value = hover;
     renderer.render(scene, cam);
   })();
 
-  function boot(){ build(); measure(); }
+  function boot(){ build(); }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(boot);
   else addEventListener('load', boot);
-  addEventListener('scroll', measure, {passive:true});
   var rt; addEventListener('resize', function(){ clearTimeout(rt);
-    rt = setTimeout(function(){ ready=false; build(); measure(); }, 180); }, {passive:true});
+    rt = setTimeout(function(){ ready=false; build(); }, 180); }, {passive:true});
 })();
 </script>
 
