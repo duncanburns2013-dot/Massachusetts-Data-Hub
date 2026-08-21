@@ -138,15 +138,25 @@ def metro_table():
 
 # ── FRED: nominal per-capita personal income, pinned to the BEA vintage ──────
 def nominal_income(year):
-    out = {}
+    """Every request used to fail silently into `continue`, so a bad run
+    returned {} and the writer published it. Failures are counted now and a
+    result too small to be real raises instead of shipping."""
+    out, failed = {}, []
     for st in STATES.values():
         try:
             txt = get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={st}PCPI")
-        except Exception:
+        except Exception as e:
+            failed.append(f"{st}:{type(e).__name__}")
             continue
         for row in list(csv.reader(io.StringIO(txt)))[1:]:
             if row and row[0][:4] == year:
                 out[st] = num(row[1])
+    if failed:
+        print(f"  nominal_income: {len(failed)} state(s) failed: {', '.join(failed[:8])}")
+    if len(out) < 45:
+        raise RuntimeError(
+            f"nominal_income returned {len(out)} of {len(STATES)} states for {year} - "
+            "refusing to publish a partial series")
     return out
 
 
@@ -264,6 +274,21 @@ def main():
         "living_wage": living_wage(),
         "income": income_benchmark(),
     }
+
+    # A section that comes back empty must never replace a populated one. The
+    # Aug 20 run emptied nominal_income and the page published "$NaN" and a rank
+    # of "0th"; carrying the last good values forward keeps a partial outage
+    # from becoming a false figure.
+    if os.path.exists(OUT):
+        try:
+            prev = json.load(open(OUT, encoding="utf-8"))
+        except Exception:
+            prev = {}
+        for key in ("rpp", "real_income", "nominal_income", "metros", "living_wage"):
+            if not payload.get(key) and prev.get(key):
+                payload[key] = prev[key]
+                payload.setdefault("meta", {}).setdefault("carried_forward", []).append(key)
+                print(f"  WARNING: {key} came back empty - carried the previous values forward")
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
