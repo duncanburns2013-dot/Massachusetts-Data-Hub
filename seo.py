@@ -18,6 +18,7 @@ BASE = 'https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/'
 NOINDEX = {
     'template.html':                 'a development template, not content',
     'tax-burden-nh-comparison.html': 'a redirect stub kept so an old shared URL does not 404',
+    '404.html':                      'served for URLs that do not exist; it is not one itself',
 }
 
 DESC = {

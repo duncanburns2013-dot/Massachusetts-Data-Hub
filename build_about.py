@@ -20,7 +20,7 @@ BODY = '''
     Commonwealth charges, spends and reports &mdash; assembled from primary
     government sources and published so anyone can check the arithmetic.</p>
 
-    <section class="abio">
+    <section class="abio rv">
       <a class="abio-facelink" href="assets/duncan-burns.jpg"
          aria-label="Enlarge the portrait of Duncan Burns">
         <img class="abio-face" src="assets/duncan-burns.jpg" width="400" height="400"
@@ -41,7 +41,7 @@ BODY = '''
       </div>
     </section>
 
-    <blockquote class="acreed">
+    <blockquote class="acreed rv">
       <p>I believe in liberty, and there can&rsquo;t be liberty without an equal
       rule of law. I built this data hub of public information to use as a shield
       and a sword against the enemies within.</p>
@@ -53,43 +53,53 @@ BODY = '''
       <cite>Duncan Burns</cite>
     </blockquote>
 
-    <h2 class="asub">This started in print</h2>
-    <p class="panel-body">The questions on this site are not new ones. They ran
+    <h2 class="asub rv">This started in print</h2>
+    <p class="panel-body rv">The questions on this site are not new ones. They ran
     in <em>The Valley Patriot</em> first, and the dashboards exist because a
     column can make an argument but cannot show you the arithmetic.</p>
-    <ul class="acols">
+    <ul class="acols rv">
       <li>How Beacon Hill Is Bankrupting the Merrimack Valley</li>
       <li>H-1B Foreign Workers Are Destroying Merrimack Valley Economy</li>
       <li>Akamai Uses Tax Breaks to Hire H1B Foreign Workers</li>
       <li>The Battle of Unequitable Liberty in Massachusetts</li>
     </ul>
-    <p class="panel-note"><a href="https://valleypatriot.com/category/op-eds-editorials/duncan-burns/"
+    <p class="panel-note rv"><a href="https://valleypatriot.com/category/op-eds-editorials/duncan-burns/"
        target="_blank" rel="noopener">The full archive, 2016 to 2026 &nearr;</a></p>
 
-    <h2 class="asub">How the figures are handled</h2>
-    <p class="panel-body">Every figure is traceable. Nothing is modelled,
+    <h2 class="asub rv">How the figures are handled</h2>
+    <p class="panel-body rv">Every figure is traceable. Nothing is modelled,
     estimated or smoothed unless the dashboard says so in plain language and
     names the method. Where two official sources disagree, both are shown rather
     than averaged. The instrument on the front page carries all 351
     municipalities at their real geometry; the dashboards behind it hold the
     detail, each with its own source vintage.</p>
 
-    <h2 class="asub">And how they stay current</h2>
-    <p class="panel-body">There is no site-wide &ldquo;updated&rdquo; date,
+    <h2 class="asub rv">And how they stay current</h2>
+    <p class="panel-body rv">There is no site-wide &ldquo;updated&rdquo; date,
     because one would only tell you when a script last ran. Nine pipelines
     refresh on their own clocks, matched to when each source actually publishes.</p>
-    <dl class="afeeds">
-      <div><dt>MLS figures</dt><dd>daily, 07:00</dd></div>
-      <div><dt>New Hampshire figures</dt><dd>daily, 07:20</dd></div>
-      <div><dt>Census ACS</dt><dd>monthly, 20th</dd></div>
-      <div><dt>CBP encounters</dt><dd>monthly, 25th</dd></div>
-      <div><dt>IRS SOI migration</dt><dd>monthly, 1st</dd></div>
-      <div><dt>Consumer prices</dt><dd>monthly, 10th&ndash;16th</dd></div>
-      <div><dt>Energy</dt><dd>2nd and 26th</dd></div>
-      <div><dt>Employment</dt><dd>monthly, Fridays</dd></div>
-      <div><dt>This site</dt><dd>every 3 hours</dd></div>
-    </dl>
-    <p class="panel-note">Built and maintained in the open. The full source, the
+    <div class="feeds rv">
+      <div class="feed-group">
+        <div class="feed-axis"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span></div>
+        <ul>
+          <li><b>MLS figures</b><span class="ftrack" aria-hidden="true"><i style="left:29.2%"></i></span><em>daily, 07:00</em></li>
+          <li><b>New Hampshire figures</b><span class="ftrack" aria-hidden="true"><i style="left:30.6%"></i></span><em>daily, 07:20</em></li>
+          <li><b>This site redeploys</b><span class="ftrack" aria-hidden="true"><i style="left:0%"></i><i style="left:12.5%"></i><i style="left:25%"></i><i style="left:37.5%"></i><i style="left:50%"></i><i style="left:62.5%"></i><i style="left:75%"></i><i style="left:87.5%"></i></span><em>every 3 hours</em></li>
+        </ul>
+      </div>
+      <div class="feed-group">
+        <div class="feed-axis"><span>1st</span><span>8th</span><span>15th</span><span>22nd</span><span>31st</span></div>
+        <ul>
+          <li><b>IRS SOI migration</b><span class="ftrack" aria-hidden="true"><i style="left:0%"></i></span><em>1st</em></li>
+          <li><b>Energy</b><span class="ftrack" aria-hidden="true"><i style="left:3.3%"></i><i style="left:83.3%"></i></span><em>2nd and 26th</em></li>
+          <li><b>Consumer prices</b><span class="ftrack" aria-hidden="true"><b class="fspan" style="left:30%;width:20%"></b></span><em>10th&ndash;16th</em></li>
+          <li><b>Employment</b><span class="ftrack" aria-hidden="true"><b class="fspan" style="left:0%;width:20%"></b><b class="fspan" style="left:46.7%;width:20%"></b></span><em>the Friday in each window</em></li>
+          <li><b>Census ACS</b><span class="ftrack" aria-hidden="true"><i style="left:63.3%"></i></span><em>20th</em></li>
+          <li><b>CBP encounters</b><span class="ftrack" aria-hidden="true"><i style="left:80%"></i></span><em>25th</em></li>
+        </ul>
+      </div>
+    </div>
+    <p class="panel-note rv">Built and maintained in the open. The full source, the
     data files and every revision are in the
     <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub"
        target="_blank" rel="noopener">GitHub repository</a>.</p>
@@ -172,15 +182,47 @@ CSS = """
   color:rgba(11,17,19,.84);padding:11px 14px;border-radius:10px;
   background:rgba(255,255,255,.5);border:1px solid rgba(11,17,19,.10)}
 
-.afeeds{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));
-  margin:16px 0 0;text-align:left}
-.afeeds > div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
-  padding:9px 13px;border-radius:9px;background:rgba(255,255,255,.5);
-  border:1px solid rgba(11,17,19,.07)}
-.afeeds dt{font-family:var(--font-text);font-size:13.5px;color:rgba(11,17,19,.84)}
-.afeeds dd{margin:0;font-family:var(--font-mono);font-size:11.5px;font-weight:600;
-  letter-spacing:.04em;color:var(--bay-blue);white-space:nowrap}
 
+/* ---- the refresh schedule, drawn rather than listed ---------------------
+   Nine pipelines on nine different clocks is the actual argument for having no
+   single site-wide "updated" date, and a list of times does not show it. Each
+   track is one cycle - a day on the first group, a month on the second - with a
+   mark where that feed fires. The rhythm is the point. */
+.feeds{margin:18px 0 0;text-align:left;display:grid;gap:18px}
+.feed-group{padding:14px 16px 6px;border-radius:12px;
+  background:rgba(255,255,255,.5);border:1px solid rgba(11,17,19,.07)}
+.feed-axis{display:flex;justify-content:space-between;margin:0 0 8px;
+  padding-left:min(38%,190px);font-family:var(--font-mono);font-size:11px;
+  letter-spacing:.06em;color:rgba(11,17,19,.45)}
+.feed-group ul{list-style:none;margin:0;padding:0}
+.feed-group li{display:grid;grid-template-columns:min(38%,190px) 1fr auto;
+  align-items:center;gap:12px;padding:7px 0;border-top:1px solid rgba(11,17,19,.06)}
+.feed-group li:first-child{border-top:0}
+.feed-group li>b{font-family:var(--font-text);font-size:13.5px;font-weight:500;
+  color:rgba(11,17,19,.86)}
+.feed-group li>em{font-family:var(--font-mono);font-style:normal;font-size:11px;
+  font-weight:600;color:var(--bay-blue);white-space:nowrap}
+.ftrack{position:relative;display:block;height:14px;border-radius:7px;
+  background:linear-gradient(90deg,rgba(11,17,19,.05),rgba(11,17,19,.09))}
+.ftrack::after{content:'';position:absolute;left:0;right:0;top:50%;height:1px;
+  background:rgba(11,17,19,.10)}
+.ftrack i{position:absolute;top:50%;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;
+  border-radius:50%;background:var(--cranberry);
+  box-shadow:0 0 0 3px rgba(104,10,29,.14)}
+.ftrack .fspan{position:absolute;top:50%;height:7px;margin-top:-3.5px;border-radius:4px;
+  background:linear-gradient(90deg,rgba(104,10,29,.75),rgba(20,85,143,.6))}
+@media (max-width:620px){
+  .feed-axis{padding-left:0;font-size:11px}
+  .feed-group li{grid-template-columns:1fr auto;gap:6px 10px}
+  .feed-group li>b{grid-column:1}
+  .feed-group li>em{grid-column:2;justify-self:end}
+  .ftrack{grid-column:1 / -1}
+}
+/* ---- the same reveal the front page uses, so About moves like the rest --- */
+.rv{opacity:0;transform:translateY(14px);
+  transition:opacity .7s cubic-bezier(.19,1,.22,1),transform .7s cubic-bezier(.19,1,.22,1)}
+.rv.vis{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){ .rv{opacity:1;transform:none;transition:none} }
 @media (max-width:640px){
   .abio{grid-template-columns:1fr;justify-items:center;text-align:center}
   .abio-text h2{text-align:center}
@@ -195,10 +237,15 @@ s = s[:m.start(2)] + BODY + s[m.end(2):]
 
 # the CSS is appended, not replaced, so a second run onto an already-built
 # page would stack a duplicate block and let the stale rules keep winning
-assert '.abio{' not in s, 'about.html is already built; restore the pre-build version first: git show 1f8dc28:about.html > about.html'
-assert s.count('</style>') == 2, s.count('</style>')
-i = s.rindex('</style>')
-s = s[:i] + CSS + NL + s[i:]
+
+C0, C1 = '/* == about:css start == */', '/* == about:css end == */'
+FENCED = C0 + NL + CSS.strip(NL) + NL + C1 + NL
+if C0 in s:                       # rebuild: replace the fence, keep everything else
+    a = s.index(C0); b = s.index(C1) + len(C1) + 1
+    s = s[:a] + FENCED + s[b:]
+else:
+    i = s.rindex('</style>')
+    s = s[:i] + FENCED + s[i:]
 
 LIGHTBOX = """
 <div class="lbox" id="lbox" hidden aria-hidden="true" role="dialog" aria-modal="true"
@@ -241,9 +288,42 @@ LIGHTBOX = """
   });
 })();
 </script>
+<script>
+/* Sections arrive as you reach them, staggered, matching the front page. Anything
+   already on screen at load is shown immediately rather than fading in under the
+   reader. */
+(function(){
+  var els = [].slice.call(document.querySelectorAll('.rv'));
+  if (!els.length) return;
+  if (!('IntersectionObserver' in window) ||
+      matchMedia('(prefers-reduced-motion: reduce)').matches){
+    els.forEach(function(e){ e.classList.add('vis'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(rows){
+    rows.forEach(function(r, i){
+      if (!r.isIntersecting) return;
+      var el = r.target;
+      setTimeout(function(){ el.classList.add('vis'); }, i * 70);
+      io.unobserve(el);
+    });
+  }, {rootMargin: '0px 0px -8% 0px', threshold: 0.06});
+  els.forEach(function(e){
+    if (e.getBoundingClientRect().top < innerHeight) e.classList.add('vis');
+    else io.observe(e);
+  });
+  setTimeout(function(){ els.forEach(function(e){ e.classList.add('vis'); }); }, 6000);
+})();
+</script>
 """
-assert s.count('</body>') == 1
-s = s.replace('</body>', LIGHTBOX + '</body>')
+J0, J1 = '<!-- == about:js start == -->', '<!-- == about:js end == -->'
+BLOCK = J0 + NL + LIGHTBOX.strip(NL) + NL + J1 + NL
+if J0 in s:
+    a = s.index(J0); b = s.index(J1) + len(J1) + 1
+    s = s[:a] + BLOCK + s[b:]
+else:
+    assert s.count('</body>') == 1
+    s = s.replace('</body>', BLOCK + '</body>')
 
 
 # Dashboards is an anchor on the front page, not on this one
@@ -253,7 +333,7 @@ assert '"#dashboards"' not in s, 'a bare #dashboards link survives'
 
 io.open('about.html', 'w', encoding='utf-8', newline=NL).write(s)
 print('about.html rebuilt: %.1f KB' % (len(s) / 1024.0))
-print('outbound links: %d | column titles: %d | feed rows: %d'
-      % (len(re.findall(r'href="https?://(?!fonts|use\.typekit)', s)),
+print('outbound links: %d | column titles: %d | schedule rows: %d'
+      % (len(re.findall(r'href="https?://(?!fonts|use)', s)),
          len(re.findall(r'<li>[A-Z]', s)),
-         len(re.findall(r'<div><dt>', s))))
+         len(re.findall(r'class="ftrack"', s))))
