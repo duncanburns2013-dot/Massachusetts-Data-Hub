@@ -13,7 +13,7 @@ import io, re
 NL = chr(10)
 
 BODY = '''
-    <h1>About<i>351</i></h1>
+    <h1>About</h1>
     <span class="ramp" aria-hidden="true"></span>
 
     <p class="panel-lede">Massachusetts Data Hub is a public record of what the
