@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """Build the Videos page from the 21 published YouTube cuts.
 
 Two decisions worth recording.
@@ -27,7 +27,7 @@ VIDEOS = [
  ('wclglGpNkHM','explainer','Following the money through the HHS mega-file release, one document at a time.'),
  ('khDK5GcUxKg','parody',   "The Governor's gaslighting, collected and played back against the record."),
  ('ulSCv2O5gLw','parody',   "One week of the Governor's own statements, rounded up and handed straight back."),
- ('pDAlm2HTaGY','parody',   'The crimes that keep putting Massachusetts in the national headlines, and who let them out.'),
+ ('pDAlm2HTaGY','explainer','Published reports on the crimes, set against the Massachusetts policy that let them out.'),
  ('AMpB4OEv5nI','explainer','Why people are leaving: labour force, migration, affordability and the jobs behind them.'),
  ('qerOCoYHwZk','explainer','For any politician claiming to be working on the cost of living here. They built it.'),
  ('ofgRUfMg6HI','explainer','Every charge on the bill traced back to the law it comes from. Nothing falls without repeal.'),
@@ -109,6 +109,8 @@ CSS = """
   letter-spacing:-.015em;color:var(--ink);margin:10px 0 0}
 .vdesc{margin:8px 0 0;font-family:var(--font-text);font-size:13.5px;line-height:1.5;
   color:var(--muted);flex:1}
+.vsig{font-family:var(--font-display);font-weight:700;letter-spacing:-.01em;
+  color:var(--cranberry)}
 @media (max-width:520px){ .vgrid{grid-template-columns:1fr} }
 @media (prefers-reduced-motion: reduce){
   .vcard,.vplay{transition:none} .vcard:hover{transform:none}
@@ -140,7 +142,9 @@ JS = """<script>
 })();
 </script>"""
 
-s = io.open('videos.html', encoding='utf-8').read()
+# this file comes back from git and PowerShell as CRLF with a BOM, and the
+# splice regexes below anchor on a bare newline
+s = io.open('videos.html', encoding='utf-8-sig').read().replace('\r\n', '\n')
 
 m = re.search(r'\s*<p class="panel-note" id="videos-note">.*?</p>\n', s, re.S)
 assert m, 'placeholder note not found'
@@ -151,9 +155,8 @@ assert '<i>%d</i>' % len(VIDEOS) in s, 'count not updated'
 
 OLD_LEDE = ('<p class="panel-lede">Short documentary and commentary pieces built from the\n'
             '    same sourced figures as the dashboards.</p>')
-NEW_LEDE = ('<p class="panel-lede">Parody and explainers on Massachusetts politics. The\n'
-            '    explainers run on the same sourced figures as the dashboards; the parodies\n'
-            '    are labelled as parodies, so nothing here is mistaken for the record.</p>')
+NEW_LEDE = '<p class="panel-lede">Twenty-one short films on Massachusetts politics, made\n    and published by Duncan Burns\n    (<a href="https://www.youtube.com/@duncanburnsMA" target="_blank" rel="noopener">@duncanburnsMA</a>).\n    Some are parody. Some are straight explainers. Each one says which it is.</p>\n    <p class="panel-body">The parodies go after the Commonwealth&rsquo;s Democratic\n    establishment &mdash; Governor Healey, Mayor Wu and the legislators around them &mdash;\n    on corruption, hypocrisy, donor money expensed as a lifestyle, sanctuary policy\n    and the cost of living here. They are built from real news footage and real\n    figures cut against AI-generated montage, dark humour and staged confessionals.\n    The explainers carry no joke: the statute behind every line of a utility bill,\n    the labour-force and migration numbers behind the exodus, the HHS money trail,\n    the published reports behind the sanctuary argument, the H-1B filings. Where the\n    blame is bipartisan they say so &mdash; the H-1B film names the House and Senate of\n    both parties before it gets anywhere near Beacon Hill. Nearly all of them close\n    the same way, on a card he built himself:\n    <span class="vsig">The Massachusetts Resistance</span>.</p>\n    <p class="panel-note">Every film is tagged Parody or Explainer, so nothing on this\n    page can be mistaken for the record. The explainers run on the same sourced\n    figures as the dashboards; the parodies are arguments, made in the open.</p>'
+
 assert s.count(OLD_LEDE) == 1, 'lede not found'
 s = s.replace(OLD_LEDE, NEW_LEDE)
 
