@@ -38,6 +38,7 @@ VIDEOS = [
  ('PMFi4Z4i6A0','parody',   'How a freshman representative landed a tier-one committee seat, and what that took.'),
  ('ZZejr_0D5cA','explainer','Massachusetts Democrats and the money that follows them, quoted from the record.'),
  ('nztB5Dhc2xw','explainer','A federal betrayal with state guardrails left unused, in a state near the top of the table.'),
+ ('fxS8iVsaibY','parody',   'A parody of the friendly local-media interview, Jon Keller with Senator Paul Feeney.'),
 ]
 
 META = {v['id']: v for v in json.load(io.open('build_videos_meta.json', encoding='utf-8-sig'))}
@@ -75,6 +76,12 @@ for vid, kind, desc in VIDEOS:
                              prio='high' if eager else 'auto'))
 GRID = '    <ul class="vgrid">\n' + '\n'.join(cards) + '\n    </ul>'
 
+SIGNOFF = ('    <figure class="vsign">' + '\n' +
+           '      <img src="assets/resistance-mark.webp" width="760" height="561"' + 
+           ' alt="The Massachusetts Resistance" loading="lazy" decoding="async">' + 
+           '      <figcaption>Nearly every film ends here.</figcaption>' + 
+           '    </figure>')
+
 CSS = """
 /* ---- the video wall ------------------------------------------------------
    Posters are local files, so nothing is requested from Google until a visitor
@@ -109,6 +116,13 @@ CSS = """
   letter-spacing:-.015em;color:var(--ink);margin:10px 0 0}
 .vdesc{margin:8px 0 0;font-family:var(--font-text);font-size:13.5px;line-height:1.5;
   color:var(--muted);flex:1}
+.vsign{margin:34px 0 0;padding:30px 20px 24px;border-radius:16px;text-align:center;
+  background:radial-gradient(120% 140% at 50% 30%,#0C1012,#04060700 70%),#040607;
+  border:1px solid rgba(11,17,19,.14)}
+.vsign img{width:min(330px,72%);height:auto;display:block;margin:0 auto;
+  mix-blend-mode:screen}
+.vsign figcaption{margin-top:14px;font-family:var(--font-mono);font-size:10.5px;
+  font-weight:600;letter-spacing:.17em;text-transform:uppercase;color:rgba(255,255,255,.62)}
 .vsig{font-family:var(--font-display);font-weight:700;letter-spacing:-.01em;
   color:var(--cranberry)}
 @media (max-width:520px){ .vgrid{grid-template-columns:1fr} }
@@ -148,17 +162,21 @@ s = io.open('videos.html', encoding='utf-8-sig').read().replace('\r\n', '\n')
 
 m = re.search(r'\s*<p class="panel-note" id="videos-note">.*?</p>\n', s, re.S)
 assert m, 'placeholder note not found'
-s = s[:m.start()] + '\n' + GRID + '\n' + s[m.end():]
+s = s[:m.start()] + '\n' + GRID + '\n' + SIGNOFF + '\n' + s[m.end():]
 
 s = s.replace('<h1>Videos<i>6</i></h1>', '<h1>Videos<i>%d</i></h1>' % len(VIDEOS))
 assert '<i>%d</i>' % len(VIDEOS) in s, 'count not updated'
 
 OLD_LEDE = ('<p class="panel-lede">Short documentary and commentary pieces built from the\n'
             '    same sourced figures as the dashboards.</p>')
-NEW_LEDE = '<p class="panel-lede">Twenty-one short films on Massachusetts politics, made\n    and published by Duncan Burns\n    (<a href="https://www.youtube.com/@duncanburnsMA" target="_blank" rel="noopener">@duncanburnsMA</a>).\n    Some are parody. Some are straight explainers. Each one says which it is.</p>\n    <p class="panel-body">The parodies go after the Commonwealth&rsquo;s Democratic\n    establishment &mdash; Governor Healey, Mayor Wu and the legislators around them &mdash;\n    on corruption, hypocrisy, donor money expensed as a lifestyle, sanctuary policy\n    and the cost of living here. They are built from real news footage and real\n    figures cut against AI-generated montage, dark humour and staged confessionals.\n    The explainers carry no joke: the statute behind every line of a utility bill,\n    the labour-force and migration numbers behind the exodus, the HHS money trail,\n    the published reports behind the sanctuary argument, the H-1B filings. Where the\n    blame is bipartisan they say so &mdash; the H-1B film names the House and Senate of\n    both parties before it gets anywhere near Beacon Hill. Nearly all of them close\n    the same way, on a card he built himself:\n    <span class="vsig">The Massachusetts Resistance</span>.</p>\n    <p class="panel-note">Every film is tagged Parody or Explainer, so nothing on this\n    page can be mistaken for the record. The explainers run on the same sourced\n    figures as the dashboards; the parodies are arguments, made in the open.</p>'
+NEW_LEDE = '<p class="panel-lede">%(count)s short films on Massachusetts politics, made\n    and published by Duncan Burns\n    (<a href="https://www.youtube.com/@duncanburnsMA" target="_blank" rel="noopener">@duncanburnsMA</a>).\n    Some are parody. Some are straight explainers. Each one says which it is.</p>\n    <p class="panel-body">The parodies go after the Commonwealth&rsquo;s Democratic\n    establishment &mdash; Governor Healey, Mayor Wu and the legislators around them &mdash;\n    on corruption, hypocrisy, donor money expensed as a lifestyle, sanctuary policy\n    and the cost of living here. They are built from real news footage and real\n    figures cut against AI-generated montage, dark humour and staged confessionals.\n    The explainers carry no joke: the statute behind every line of a utility bill,\n    the labour-force and migration numbers behind the exodus, the HHS money trail,\n    the published reports behind the sanctuary argument, the H-1B filings. Where the\n    blame is bipartisan they say so &mdash; the H-1B film names the House and Senate of\n    both parties before it gets anywhere near Beacon Hill. Nearly all of them close\n    the same way, on a card he built himself:\n    <span class="vsig">The Massachusetts Resistance</span>.</p>\n    <p class="panel-note">Every film is tagged Parody or Explainer, so nothing on this\n    page can be mistaken for the record. The explainers run on the same sourced\n    figures as the dashboards; the parodies are arguments, made in the open.</p>'
 
+WORDS = {20:'Twenty', 21:'Twenty-one', 22:'Twenty-two', 23:'Twenty-three',
+         24:'Twenty-four', 25:'Twenty-five', 26:'Twenty-six'}
+assert len(VIDEOS) in WORDS, 'add %d to WORDS' % len(VIDEOS)
+LEDE_TEXT = NEW_LEDE % {'count': WORDS[len(VIDEOS)]}
 assert s.count(OLD_LEDE) == 1, 'lede not found'
-s = s.replace(OLD_LEDE, NEW_LEDE)
+s = s.replace(OLD_LEDE, LEDE_TEXT)
 
 # the page carries two <style> blocks - index's head styles and the doc styles
 # added when this page was split out. The wall belongs with the doc styles.
