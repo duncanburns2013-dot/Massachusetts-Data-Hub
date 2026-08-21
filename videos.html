@@ -639,6 +639,45 @@ footer::before{
 .doc .panel-note{margin:20px 0 0;font-family:var(--font-text);
   font-size:13px;line-height:1.62;color:rgba(11,17,19,.74);max-width:78ch}
 .doc .panel-note a{color:var(--bay-blue);font-weight:600}
+
+/* ---- the video wall ------------------------------------------------------
+   Posters are local files, so nothing is requested from Google until a visitor
+   presses play. Each tile is a real link to youtu.be and works with scripting
+   off; the script upgrades it in place to a youtube-nocookie iframe. */
+.vgrid{list-style:none;margin:26px 0 0;padding:0;display:grid;gap:22px;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));grid-auto-rows:1fr}
+.vcard{display:flex;flex-direction:column;height:100%;
+  background:#fff;border:1px solid rgba(11,17,19,.07);border-radius:14px;
+  overflow:hidden;box-shadow:0 1px 2px rgba(11,17,19,.05);
+  transition:transform .35s cubic-bezier(.19,1,.22,1),box-shadow .35s}
+.vcard:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(11,17,19,.13)}
+.vthumb{position:relative;display:block;aspect-ratio:16/9;background:#0B1113;
+  overflow:hidden;text-decoration:none}
+.vthumb img{width:100%;height:100%;object-fit:cover;display:block}
+.vthumb iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vplay{position:absolute;left:50%;top:50%;width:58px;height:40px;margin:-20px 0 0 -29px;
+  border-radius:10px;background:rgba(11,17,19,.62);
+  transition:background .25s,transform .25s cubic-bezier(.19,1,.22,1)}
+.vplay::after{content:"";position:absolute;left:23px;top:12px;border-style:solid;
+  border-width:8px 0 8px 13px;border-color:transparent transparent transparent #fff}
+.vthumb:hover .vplay,.vthumb:focus-visible .vplay{background:var(--cranberry);transform:scale(1.08)}
+.vdur{position:absolute;right:8px;bottom:8px;padding:2px 6px;border-radius:4px;
+  background:rgba(11,17,19,.78);color:#fff;
+  font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.02em}
+.vbody{display:flex;flex-direction:column;flex:1;padding:14px 16px 16px}
+.vkind{align-self:flex-start;font-family:var(--font-mono);font-size:9.5px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;padding:3px 7px;border-radius:5px;border:1px solid}
+.vk-parody{color:#7A2E10;border-color:rgba(194,65,12,.45);background:rgba(194,65,12,.09)}
+.vk-explainer{color:#0F4577;border-color:rgba(20,85,143,.42);background:rgba(20,85,143,.09)}
+.vname{font-family:var(--font-display);font-weight:700;font-size:17px;line-height:1.22;
+  letter-spacing:-.015em;color:var(--ink);margin:10px 0 0}
+.vdesc{margin:8px 0 0;font-family:var(--font-text);font-size:13.5px;line-height:1.5;
+  color:var(--muted);flex:1}
+@media (max-width:520px){ .vgrid{grid-template-columns:1fr} }
+@media (prefers-reduced-motion: reduce){
+  .vcard,.vplay{transition:none} .vcard:hover{transform:none}
+}
+
 </style>
 <body>
 <canvas id="flow" aria-hidden="true"></canvas>
@@ -656,14 +695,286 @@ footer::before{
 <main class="doc">
   <div class="doc-in">
     
-    <h1>Videos<i>6</i></h1>
+    <h1>Videos<i>21</i></h1>
     <span class="ramp" aria-hidden="true"></span>
-    <p class="panel-lede">Short documentary and commentary pieces built from the
-    same sourced figures as the dashboards.</p>
-    <p class="panel-note" id="videos-note">Not linked yet. The videos exist as
-    finished cuts; they need their published URLs before they can be listed
-    here, so this section is deliberately empty rather than filled with
-    placeholders.</p>
+    <p class="panel-lede">Parody and explainers on Massachusetts politics. The
+    explainers run on the same sourced figures as the dashboards; the parodies
+    are labelled as parodies, so nothing here is mistaken for the record.</p>
+    <ul class="vgrid">
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/j5q_MkabqZI" data-id="j5q_MkabqZI"
+           target="_blank" rel="noopener" aria-label="Play MassDems Secret Meeting (4:36)">
+          <img src="assets/video-thumbs/j5q_MkabqZI.jpg" alt="" width="1280" height="720" loading="eager" fetchpriority="high" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">4:36</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-parody">Parody</span>
+          <h2 class="vname">MassDems Secret Meeting</h2>
+          <p class="vdesc">How Massachusetts Democrats actually work, staged as the meeting they would never hold.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/Opo_qFI7G_0" data-id="Opo_qFI7G_0"
+           target="_blank" rel="noopener" aria-label="Play Beacon Hill Exellence Awards (12:54)">
+          <img src="assets/video-thumbs/Opo_qFI7G_0.jpg" alt="" width="1280" height="720" loading="eager" fetchpriority="high" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">12:54</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-parody">Parody</span>
+          <h2 class="vname">Beacon Hill Exellence Awards</h2>
+          <p class="vdesc">An awards night for the 2025 Massachusetts Democratic Party, staged before the State of the State.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/guB1b7l0wMs" data-id="guB1b7l0wMs"
+           target="_blank" rel="noopener" aria-label="Play June 2026 Energy Bill (2:07)">
+          <img src="assets/video-thumbs/guB1b7l0wMs.jpg" alt="" width="1280" height="720" loading="eager" fetchpriority="high" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">2:07</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-explainer">Explainer</span>
+          <h2 class="vname">June 2026 Energy Bill</h2>
+          <p class="vdesc">The gaslighting on utility bills, set against the law that put those charges on them.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/hlh5X6AnqEE" data-id="hlh5X6AnqEE"
+           target="_blank" rel="noopener" aria-label="Play Warren The Lifelong Fraud (1:55)">
+          <img src="assets/video-thumbs/hlh5X6AnqEE.jpg" alt="" width="1280" height="720" loading="eager" fetchpriority="high" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">1:55</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-parody">Parody</span>
+          <h2 class="vname">Warren The Lifelong Fraud</h2>
+          <p class="vdesc">A song about Elizabeth Warren and the lifelong habit of inventing the biography.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/BL8N9z6qPJg" data-id="BL8N9z6qPJg"
+           target="_blank" rel="noopener" aria-label="Play MassDems Let Them Eat Cake (3:29)">
+          <img src="assets/video-thumbs/BL8N9z6qPJg.jpg" alt="" width="1280" height="720" loading="lazy" fetchpriority="auto" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">3:29</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-parody">Parody</span>
+          <h2 class="vname">MassDems Let Them Eat Cake</h2>
+          <p class="vdesc">A musical about the places Massachusetts Democrats most like to expense their donors.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/p6GEJboVyQY" data-id="p6GEJboVyQY"
+           target="_blank" rel="noopener" aria-label="Play Clown Party: Invasion Massachusetts (2:21)">
+          <img src="assets/video-thumbs/p6GEJboVyQY.jpg" alt="" width="1280" height="720" loading="lazy" fetchpriority="auto" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">2:21</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-parody">Parody</span>
+          <h2 class="vname">Clown Party: Invasion Massachusetts</h2>
+          <p class="vdesc">A local X personality at the height of the migrant crisis, when Massachusetts led the news.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/J7Wv6-QoAL8" data-id="J7Wv6-QoAL8"
+           target="_blank" rel="noopener" aria-label="Play Mayor Wu: The Queen (2:41)">
+          <img src="assets/video-thumbs/J7Wv6-QoAL8.jpg" alt="" width="1280" height="720" loading="lazy" fetchpriority="auto" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">2:41</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-parody">Parody</span>
+          <h2 class="vname">Mayor Wu: The Queen</h2>
+          <p class="vdesc">They marched under No Kings, which reads oddly in a city that answers to a Queen.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/wclglGpNkHM" data-id="wclglGpNkHM"
+           target="_blank" rel="noopener" aria-label="Play BURN IT DOWN (3:39)">
+          <img src="assets/video-thumbs/wclglGpNkHM.jpg" alt="" width="1280" height="720" loading="lazy" fetchpriority="auto" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">3:39</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-explainer">Explainer</span>
+          <h2 class="vname">BURN IT DOWN</h2>
+          <p class="vdesc">Following the money through the HHS mega-file release, one document at a time.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/khDK5GcUxKg" data-id="khDK5GcUxKg"
+           target="_blank" rel="noopener" aria-label="Play Maura The Gaslighter Healey (3:53)">
+          <img src="assets/video-thumbs/khDK5GcUxKg.jpg" alt="" width="1280" height="720" loading="lazy" fetchpriority="auto" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">3:53</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-parody">Parody</span>
+          <h2 class="vname">Maura The Gaslighter Healey</h2>
+          <p class="vdesc">The Governor&#x27;s gaslighting, collected and played back against the record.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/ulSCv2O5gLw" data-id="ulSCv2O5gLw"
+           target="_blank" rel="noopener" aria-label="Play Maura Week Roundup (1:21)">
+          <img src="assets/video-thumbs/ulSCv2O5gLw.jpg" alt="" width="1280" height="720" loading="lazy" fetchpriority="auto" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">1:21</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-parody">Parody</span>
+          <h2 class="vname">Maura Week Roundup</h2>
+          <p class="vdesc">One week of the Governor&#x27;s own statements, rounded up and handed straight back.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/pDAlm2HTaGY" data-id="pDAlm2HTaGY"
+           target="_blank" rel="noopener" aria-label="Play You Let Them Out (3:52)">
+          <img src="assets/video-thumbs/pDAlm2HTaGY.jpg" alt="" width="1280" height="720" loading="lazy" fetchpriority="auto" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">3:52</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-parody">Parody</span>
+          <h2 class="vname">You Let Them Out</h2>
+          <p class="vdesc">The crimes that keep putting Massachusetts in the national headlines, and who let them out.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/AMpB4OEv5nI" data-id="AMpB4OEv5nI"
+           target="_blank" rel="noopener" aria-label="Play MA Quiet Exit (2:13)">
+          <img src="assets/video-thumbs/AMpB4OEv5nI.jpg" alt="" width="1280" height="720" loading="lazy" fetchpriority="auto" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">2:13</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-explainer">Explainer</span>
+          <h2 class="vname">MA Quiet Exit</h2>
+          <p class="vdesc">Why people are leaving: labour force, migration, affordability and the jobs behind them.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/qerOCoYHwZk" data-id="qerOCoYHwZk"
+           target="_blank" rel="noopener" aria-label="Play MA Dems Inflation Hypocrisy (1:00)">
+          <img src="assets/video-thumbs/qerOCoYHwZk.jpg" alt="" width="1280" height="720" loading="lazy" fetchpriority="auto" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">1:00</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-explainer">Explainer</span>
+          <h2 class="vname">MA Dems Inflation Hypocrisy</h2>
+          <p class="vdesc">For any politician claiming to be working on the cost of living here. They built it.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/ofgRUfMg6HI" data-id="ofgRUfMg6HI"
+           target="_blank" rel="noopener" aria-label="Play Every Charge (3:12)">
+          <img src="assets/video-thumbs/ofgRUfMg6HI.jpg" alt="" width="1280" height="720" loading="lazy" fetchpriority="auto" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">3:12</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-explainer">Explainer</span>
+          <h2 class="vname">Every Charge</h2>
+          <p class="vdesc">Every charge on the bill traced back to the law it comes from. Nothing falls without repeal.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/iwyRVb5McCI" data-id="iwyRVb5McCI"
+           target="_blank" rel="noopener" aria-label="Play Crown of The Baystate (4:24)">
+          <img src="assets/video-thumbs/iwyRVb5McCI.jpg" alt="" width="1280" height="720" loading="lazy" fetchpriority="auto" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">4:24</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-parody">Parody</span>
+          <h2 class="vname">Crown of The Baystate</h2>
+          <p class="vdesc">Government by the Crown, performed in a Commonwealth that was meant to have abolished it.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/E7LFWvB3Ou0" data-id="E7LFWvB3Ou0"
+           target="_blank" rel="noopener" aria-label="Play LoTR Massachusetts (4:59)">
+          <img src="assets/video-thumbs/E7LFWvB3Ou0.jpg" alt="" width="1280" height="720" loading="lazy" fetchpriority="auto" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">4:59</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-parody">Parody</span>
+          <h2 class="vname">LoTR Massachusetts</h2>
+          <p class="vdesc">Massachusetts politics recast in Tolkien, with MassDems and the local X cast as themselves.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/0duhQMCQUlA" data-id="0duhQMCQUlA"
+           target="_blank" rel="noopener" aria-label="Play Jamie Eldridge&#x27;s Message (1:01)">
+          <img src="assets/video-thumbs/0duhQMCQUlA.jpg" alt="" width="1280" height="720" loading="lazy" fetchpriority="auto" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">1:01</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-parody">Parody</span>
+          <h2 class="vname">Jamie Eldridge&#x27;s Message</h2>
+          <p class="vdesc">Senator Jamie Eldridge&#x27;s answer to Mass Fiscal, which needs very little commentary.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/teLoDaZpZiI" data-id="teLoDaZpZiI"
+           target="_blank" rel="noopener" aria-label="Play Crime Boss Jimmy (1:59)">
+          <img src="assets/video-thumbs/teLoDaZpZiI.jpg" alt="" width="1280" height="720" loading="lazy" fetchpriority="auto" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">1:59</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-parody">Parody</span>
+          <h2 class="vname">Crime Boss Jimmy</h2>
+          <p class="vdesc">A song about Congressman James McGovern and the standards he keeps for everybody else.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/PMFi4Z4i6A0" data-id="PMFi4Z4i6A0"
+           target="_blank" rel="noopener" aria-label="Play Lori Trahan: Representatives Lament (2:57)">
+          <img src="assets/video-thumbs/PMFi4Z4i6A0.jpg" alt="" width="1280" height="720" loading="lazy" fetchpriority="auto" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">2:57</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-parody">Parody</span>
+          <h2 class="vname">Lori Trahan: Representatives Lament</h2>
+          <p class="vdesc">How a freshman representative landed a tier-one committee seat, and what that took.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/ZZejr_0D5cA" data-id="ZZejr_0D5cA"
+           target="_blank" rel="noopener" aria-label="Play In Their Own Words (4:37)">
+          <img src="assets/video-thumbs/ZZejr_0D5cA.jpg" alt="" width="1280" height="720" loading="lazy" fetchpriority="auto" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">4:37</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-explainer">Explainer</span>
+          <h2 class="vname">In Their Own Words</h2>
+          <p class="vdesc">Massachusetts Democrats and the money that follows them, quoted from the record.</p>
+        </div>
+      </li>
+      <li class="vcard">
+        <a class="vthumb" href="https://youtu.be/nztB5Dhc2xw" data-id="nztB5Dhc2xw"
+           target="_blank" rel="noopener" aria-label="Play The Era of H-1B Must End (1:24)">
+          <img src="assets/video-thumbs/nztB5Dhc2xw.jpg" alt="" width="1280" height="720" loading="lazy" fetchpriority="auto" decoding="async">
+          <span class="vplay" aria-hidden="true"></span>
+          <span class="vdur">1:24</span>
+        </a>
+        <div class="vbody">
+          <span class="vkind vk-explainer">Explainer</span>
+          <h2 class="vname">The Era of H-1B Must End</h2>
+          <p class="vdesc">A federal betrayal with state guardrails left unused, in a state near the top of the table.</p>
+        </div>
+      </li>
+    </ul>
   
   </div>
 </main>
@@ -823,6 +1134,30 @@ import * as THREE from 'three';
 
   window.__FLOW = { info:function(){ return {frames:frames, on:cv.classList.contains('on'),
                      size:U.uRes.value.x+'x'+U.uRes.value.y}; } };
+})();
+</script>
+<script>
+/* Upgrade a poster to the real player in place. The anchor already points at
+   youtu.be, so with scripting off every tile still goes somewhere useful; this
+   only intercepts the click when it can do better. youtube-nocookie keeps the
+   request out of the ad cookie jar. */
+(function(){
+  var grid = document.querySelector('.vgrid');
+  if (!grid) return;
+  grid.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('.vthumb') : null;
+    if (!a || a.dataset.playing) return;
+    e.preventDefault();
+    var f = document.createElement('iframe');
+    f.src = 'https://www.youtube-nocookie.com/embed/' + a.dataset.id +
+            '?autoplay=1&rel=0&modestbranding=1';
+    f.title = a.getAttribute('aria-label') || 'Video';
+    f.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+    f.allowFullscreen = true;
+    a.dataset.playing = '1';
+    a.innerHTML = '';
+    a.appendChild(f);
+  });
 })();
 </script>
 </body>
