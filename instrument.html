@@ -221,6 +221,17 @@ body.arrived .head nav{transition-delay:.38s}
   background:none;border:0;padding:2px 0;text-decoration:underline}
 .find-clear:hover{color:var(--cran)}
 @media (max-width:800px){.find{display:none}}
+/* the pinned town keeps its own label, in the anchor idiom rather than the
+   dark hover chip, so the two never look like the same thing */
+.pinlab{position:fixed;z-index:19;pointer-events:none;opacity:0;
+  transition:opacity .16s;transform:translate(-50%,calc(-100% - 15px));
+  text-align:center;white-space:nowrap;padding:5px 10px;border-radius:2px;
+  background:rgba(255,255,255,.9);border:1.5px solid var(--bay);
+  box-shadow:0 6px 18px rgba(11,17,19,.16)}
+.pinlab b{display:block;font-family:var(--ui);font-size:12.5px;font-weight:700;
+  letter-spacing:-.012em;color:var(--ink)}
+.pinlab s{display:block;text-decoration:none;font-family:var(--mono);
+  font-size:11px;color:var(--bay)}
 </style>
 </head>
 <body>
@@ -261,6 +272,7 @@ body.arrived .head nav{transition-delay:.38s}
   <button class="find-clear" id="findclear" type="button" hidden
           aria-label="Clear the pinned town">Clear</button>
 </div>
+<div class="pinlab" id="pinlab"><b></b><s></s></div>
 <div class="readout" id="ro"><b></b><i></i><u></u></div>
 <div class="survey" id="survey"><em id="surveyN">0</em><span>towns surveyed</span></div>
 <div class="boot" id="boot"><div>
@@ -1026,6 +1038,7 @@ for(const k in METRICS){const b=document.createElement('button');
 /* ================= HOVER ================= */
 const ray=new THREE.Raycaster(),ptr=new THREE.Vector2(-9,-9);
 let hovered=null,pointerOn=false,pinned=null;
+const pinLab=document.getElementById('pinlab');
 renderer.domElement.addEventListener('pointermove',e=>{
   ptr.set((e.clientX/innerWidth)*2-1,-(e.clientY/innerHeight)*2+1);pointerOn=true;});
 renderer.domElement.addEventListener('pointerleave',()=>{pointerOn=false;});
@@ -1102,7 +1115,7 @@ function tick(){
       t.vel.y+=(-k*(t.pos.y-t.tgt.y)-c*t.vel.y)*h;
       t.vel.z+=(-k*(t.pos.z-t.tgt.z)-c*t.vel.z)*h;
       t.pos.addScaledVector(t.vel,h);
-      const hT=t.hTgt*(t.arm||0)+(hovered===t?.5:0);
+      const hT=t.hTgt*(t.arm||0)+(pinned===t?.95:hovered===t?.5:0);
       t.hVel+=(-k*(t.hNow-hT)-c*t.hVel)*h;t.hNow=Math.max(.012,t.hNow+t.hVel*h);
       t.sVel+=(-k*(t.sNow-t.sTgt)-c*t.sVel)*h;t.sNow=Math.max(.02,t.sNow+t.sVel*h);
     }
@@ -1135,13 +1148,10 @@ function tick(){
   AO_ON.value+=(wantAO-AO_ON.value)*Math.min(1,dt*3.2);
   EDGE.opacity+=(wantEdge-EDGE.opacity)*Math.min(1,dt*3.2);
 
-  // a pinned town stands in for a hovered one, so the search reuses every bit of
-  // the hover treatment - lift, lightened colour, readout - with no second path.
-  // The pointer still wins whenever it is actually over a town.
   if(pointerOn){ray.setFromCamera(ptr,camera);
     const hit=ray.intersectObjects(raycastable,false)[0];
-    hovered=hit?hit.object.userData.t:(pinned||null);}
-  else hovered=pinned||null;
+    hovered=hit?hit.object.userData.t:null;}
+  else hovered=null;
 
   for(const a of anchors){
     proj.copy(a.v).project(camera);
@@ -1196,6 +1206,27 @@ function tick(){
           : 'not reported')
       : (hovered.v[metric]!=null?M.fmt(hovered.v[metric])+'  '+M.unit:'not reported');
   }else ro.style.opacity=0;
+
+  // the pinned town carries its own label so it survives the pointer moving
+  // away. Same projection rules the anchors use: hidden behind the camera and
+  // hidden under the chrome rather than allowed to sit on top of it.
+  if(pinned){
+    proj.set(pinned.pos.x,pinned.hNow,pinned.pos.z).project(camera);
+    const px=(proj.x*.5+.5)*innerWidth, py=(-proj.y*.5+.5)*innerHeight;
+    const underUI = py > innerHeight-118 || (px < 540 && py > innerHeight-300);
+    if(proj.z<1 && !underUI){
+      pinLab.style.opacity=1;
+      pinLab.style.left=px+'px';
+      pinLab.style.top=py+'px';
+      const M=METRICS[metric];
+      pinLab.querySelector('b').textContent=pinned.n;
+      pinLab.querySelector('s').textContent=view==='afford'
+        ? (pinned.v.price!=null&&pinned.v.income!=null
+            ? (pinned.v.price/pinned.v.income).toFixed(1)+' yrs of income'
+            : 'not reported')
+        : (pinned.v[metric]!=null?M.fmt(pinned.v[metric])+'  '+M.unit:'not reported');
+    } else pinLab.style.opacity=0;
+  } else pinLab.style.opacity=0;
 
   controls.update();
   renderer.render(scene,camera);
