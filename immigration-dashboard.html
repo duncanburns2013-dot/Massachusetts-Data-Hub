@@ -816,6 +816,10 @@ tr:hover td{background:var(--surface)}
 .inv{background:none;min-height:0;font-family:inherit}
 #nav-moneytrail .tab{display:none}
 #nav-moneytrail .tab.active{display:block;animation:fadeIn .25s}
+.cthru-note{margin:18px 0 0;padding:13px 16px;border-radius:11px;font-size:13px;line-height:1.6;
+  background:rgba(194,65,12,.07);border:1px solid rgba(194,65,12,.26);color:var(--gray-800,#333)}
+.cthru-note strong{color:#9A3412}
+.cthru-note a{color:#9A3412;font-weight:600}
 </style>
 <!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
 <link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
@@ -1296,6 +1300,17 @@ tr:hover td{background:var(--surface)}
           <button id="expPrev" disabled>← PREV</button>
           <span id="expPageInfo">—</span>
           <button id="expNext">NEXT →</button>
+        </div>
+        <div class="cthru-note" role="note">
+          <strong>CTHRU is not current.</strong> The Office of the Comptroller states on its
+          <a href="https://www.macomptroller.org/cthru/" target="_blank" rel="noopener">CTHRU page</a>:
+          &ldquo;Due to a processing issue, the CTHRU Statewide Spending portal does not reflect
+          up-to-date information&hellip; All financial information is being collected and will be
+          restored to the portal when the issue is resolved.&rdquo; The payments below were pulled
+          before that, and cannot be refreshed against the portal until it is fixed. The Comptroller
+          is supplying the data by
+          <a href="https://macomptroller.nextrequest.com/" target="_blank" rel="noopener">public records request</a>
+          in the meantime. Checked 21 August 2026.
         </div>
         <p style="font-size:13px;color:var(--gray-700);margin-top:18px;font-style:italic;">
           Source: Massachusetts statewide payment records (CTHRU), Executive Office of Health &amp; Human Services, filtered by vendor name. Totals recomputed in your browser from
