@@ -195,32 +195,6 @@ body.arrived .head nav{transition-delay:.38s}
   .wordmark,.head nav,.ask,.controls{opacity:1;transform:none;transition:none}
 }
 @media (max-width:800px){.head nav{display:none}.legend{display:none}}
-/* ---- find a town --------------------------------------------------------
-   Top right, clear of the chrome: the bottom strip and the lower-left
-   headline are both spoken for, and the nav sits above this. */
-.find{position:fixed;top:74px;right:var(--pad);z-index:22;width:236px;
-  pointer-events:auto;display:flex;flex-direction:column;gap:6px}
-.find-lab{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--berk-ink);font-weight:500}
-#findq{font-family:var(--ui);font-size:12.5px;font-weight:500;color:var(--ink);
-  padding:8px 11px;border:1.5px solid var(--line);border-radius:2px;
-  background:rgba(255,255,255,.72);width:100%;transition:.15s}
-#findq:hover{border-color:var(--ink2)}
-#findq:focus{outline:none;border-color:var(--bay);background:#fff}
-.find-list{list-style:none;margin:0;padding:4px;max-height:238px;overflow-y:auto;
-  background:rgba(255,255,255,.97);border:1.5px solid var(--line);border-radius:2px;
-  box-shadow:0 10px 26px rgba(11,17,19,.14)}
-.find-list li{padding:7px 9px;font-family:var(--ui);font-size:12.5px;color:var(--ink2);
-  cursor:pointer;border-radius:2px;display:flex;justify-content:space-between;gap:10px}
-.find-list li:hover,.find-list li[aria-selected="true"]{background:var(--bay);color:#fff}
-.find-list li s{text-decoration:none;font-family:var(--mono);font-size:11px;opacity:.62}
-.find-list li[aria-selected="true"] s,.find-list li:hover s{opacity:.85}
-.find-none{padding:7px 9px;font-family:var(--ui);font-size:12.5px;color:var(--ink2);opacity:.7}
-.find-clear{align-self:flex-start;font-family:var(--mono);font-size:10px;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);cursor:pointer;
-  background:none;border:0;padding:2px 0;text-decoration:underline}
-.find-clear:hover{color:var(--cran)}
-@media (max-width:800px){.find{display:none}}
 </style>
 </head>
 <body>
@@ -253,14 +227,6 @@ body.arrived .head nav{transition-delay:.38s}
   </div>
 </div>
 
-<div class="find" id="find">
-  <label class="find-lab" for="findq">Find a town</label>
-  <input id="findq" type="search" autocomplete="off" spellcheck="false"
-         placeholder="Type a town&hellip;" aria-controls="findlist" aria-expanded="false">
-  <ul class="find-list" id="findlist" role="listbox" hidden></ul>
-  <button class="find-clear" id="findclear" type="button" hidden
-          aria-label="Clear the pinned town">Clear</button>
-</div>
 <div class="readout" id="ro"><b></b><i></i><u></u></div>
 <div class="survey" id="survey"><em id="surveyN">0</em><span>towns surveyed</span></div>
 <div class="boot" id="boot"><div>
@@ -1025,7 +991,7 @@ for(const k in METRICS){const b=document.createElement('button');
 
 /* ================= HOVER ================= */
 const ray=new THREE.Raycaster(),ptr=new THREE.Vector2(-9,-9);
-let hovered=null,pointerOn=false,pinned=null;
+let hovered=null,pointerOn=false;
 renderer.domElement.addEventListener('pointermove',e=>{
   ptr.set((e.clientX/innerWidth)*2-1,-(e.clientY/innerHeight)*2+1);pointerOn=true;});
 renderer.domElement.addEventListener('pointerleave',()=>{pointerOn=false;});
@@ -1135,13 +1101,10 @@ function tick(){
   AO_ON.value+=(wantAO-AO_ON.value)*Math.min(1,dt*3.2);
   EDGE.opacity+=(wantEdge-EDGE.opacity)*Math.min(1,dt*3.2);
 
-  // a pinned town stands in for a hovered one, so the search reuses every bit of
-  // the hover treatment - lift, lightened colour, readout - with no second path.
-  // The pointer still wins whenever it is actually over a town.
   if(pointerOn){ray.setFromCamera(ptr,camera);
     const hit=ray.intersectObjects(raycastable,false)[0];
-    hovered=hit?hit.object.userData.t:(pinned||null);}
-  else hovered=pinned||null;
+    hovered=hit?hit.object.userData.t:null;}
+  else hovered=null;
 
   for(const a of anchors){
     proj.copy(a.v).project(camera);
@@ -1207,81 +1170,6 @@ addEventListener('resize',()=>{
   const V=VIEWS[view];
   if(V&&V.ext&&flyT>=1){const c=framed(V);camera.position.z=c.p[2];controls.update();}
 });
-
-/* ---- find a town --------------------------------------------------------
-   351 towns on a plot means the only way to answer "what about mine" was to
-   sweep the pointer until the right shape lit up. This pins instead. It does
-   not move the camera: the view is the argument, and hunting for a town should
-   not rearrange it. */
-(function(){
-  const box=document.getElementById('find'), q=document.getElementById('findq'),
-        list=document.getElementById('findlist'), clr=document.getElementById('findclear');
-  if(!box||!q||!list) return;
-  let cursor=-1, shown=[];
-
-  const norm=t=>t.toLowerCase().replace(/[^a-z]/g,'');
-
-  function matches(term){
-    const n=norm(term);
-    if(!n) return [];
-    // a town whose name starts with what was typed comes before one that merely
-    // contains it, so "wa" offers Waltham before Edgartown
-    const starts=[],has=[];
-    for(const t of pieces){
-      const tn=norm(t.n);
-      if(tn.startsWith(n)) starts.push(t);
-      else if(tn.includes(n)) has.push(t);
-    }
-    return starts.concat(has).slice(0,8);
-  }
-
-  function render(){
-    list.innerHTML='';
-    if(!shown.length){ list.hidden=true; q.setAttribute('aria-expanded','false'); return; }
-    shown.forEach((t,i)=>{
-      const li=document.createElement('li');
-      li.setAttribute('role','option');
-      li.setAttribute('aria-selected',String(i===cursor));
-      li.innerHTML='<span></span><s></s>';
-      li.querySelector('span').textContent=t.n;
-      li.querySelector('s').textContent=t.c?t.c:'';
-      li.addEventListener('mousedown',e=>{e.preventDefault();pick(t);});
-      list.appendChild(li);
-    });
-    list.hidden=false; q.setAttribute('aria-expanded','true');
-  }
-
-  function pick(t){
-    pinned=t;
-    q.value=t.n;
-    shown=[]; cursor=-1; render();
-    clr.hidden=false;
-    q.blur();
-  }
-
-  function clear(){
-    pinned=null; q.value=''; shown=[]; cursor=-1; render(); clr.hidden=true;
-  }
-
-  q.addEventListener('input',()=>{ shown=matches(q.value); cursor=shown.length?0:-1; render(); });
-  q.addEventListener('focus',()=>{ if(q.value){ shown=matches(q.value); cursor=shown.length?0:-1; render(); } });
-  q.addEventListener('blur',()=>{ setTimeout(()=>{ shown=[]; render(); },120); });
-  q.addEventListener('keydown',e=>{
-    if(e.key==='ArrowDown'||e.key==='ArrowUp'){
-      if(!shown.length) return;
-      e.preventDefault();
-      cursor=(cursor+(e.key==='ArrowDown'?1:shown.length-1))%shown.length;
-      render();
-      const el=list.children[cursor]; if(el) el.scrollIntoView({block:'nearest'});
-    } else if(e.key==='Enter'){
-      if(cursor>=0&&shown[cursor]) pick(shown[cursor]);
-    } else if(e.key==='Escape'){
-      if(shown.length){ shown=[]; render(); } else clear();
-    }
-  });
-  clr.addEventListener('click',clear);
-})();
-
 </script>
 </body>
 </html>
