@@ -190,6 +190,12 @@ s = s[:i] + CSS + '\n' + s[i:]
 assert s.count('</body>') == 1
 s = s.replace('</body>', JS + '\n</body>')
 
+
+# Dashboards is an anchor on the front page, not on this one
+s = s.replace('<a href="#dashboards">Dashboards</a>',
+              '<a href="index.html#dashboards">Dashboards</a>')
+assert '"#dashboards"' not in s, 'a bare #dashboards link survives'
+
 io.open('videos.html', 'w', encoding='utf-8', newline='\n').write(s)
 
 lens = [len(d) for _, _, d in VIDEOS]

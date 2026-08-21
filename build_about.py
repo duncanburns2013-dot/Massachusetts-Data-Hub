@@ -140,6 +140,9 @@ CSS = """
   transition:transform .35s cubic-bezier(.19,1,.22,1),box-shadow .35s}
 .abio-facelink:hover{transform:scale(1.03)}
 .abio-facelink:focus-visible{outline:2px solid var(--bay-blue);outline-offset:3px}
+/* `hidden` is display:none from the UA sheet and a class beats it, so
+   without this the overlay stays laid out and eats every click */
+.lbox[hidden]{display:none}
 .lbox{position:fixed;inset:0;z-index:90;display:flex;align-items:center;
   justify-content:center;padding:24px;opacity:0;transition:opacity .2s;
   background:rgba(6,9,11,.74);backdrop-filter:blur(6px);
@@ -240,6 +243,12 @@ LIGHTBOX = """
 """
 assert s.count('</body>') == 1
 s = s.replace('</body>', LIGHTBOX + '</body>')
+
+
+# Dashboards is an anchor on the front page, not on this one
+s = s.replace('<a href="#dashboards">Dashboards</a>',
+              '<a href="index.html#dashboards">Dashboards</a>')
+assert '"#dashboards"' not in s, 'a bare #dashboards link survives'
 
 io.open('about.html', 'w', encoding='utf-8', newline=NL).write(s)
 print('about.html rebuilt: %.1f KB' % (len(s) / 1024.0))
