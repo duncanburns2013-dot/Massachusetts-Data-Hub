@@ -822,7 +822,10 @@ import * as THREE from 'three';
     var r = h.getBoundingClientRect();
     W = Math.ceil(r.width); H = Math.ceil(r.height);
     if (!W || !H) return null;
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    // 2x supersample: the texture is downsampled by the linear filter, which
+    // lands glyph edges on real pixels. At 1x any sub-pixel offset between the
+    // texel grid and the screen grid thickens the strokes.
+    var dpr = Math.min((window.devicePixelRatio || 1) * 2, 4);
     var off = document.createElement('canvas');
     off.width = Math.ceil(W*dpr); off.height = Math.ceil(H*dpr);
     var o = off.getContext('2d');
