@@ -54,14 +54,6 @@ body::after{
 }
 .hero,.tab-nav,.main-content,footer{position:relative;z-index:1}
 .hero{padding:56px 24px 44px;text-align:center;border-bottom:1px solid rgba(11,17,19,0.05)}
-.hero-alert{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(205,13,13,0.12);border:1px solid rgba(205,13,13,0.25);color:#ff8a80;
-  border-radius:100px;padding:6px 18px;font-size:0.7rem;font-weight:700;
-  text-transform:uppercase;letter-spacing:0.1em;margin-bottom:26px;animation:fadeIn 0.5s ease;
-}
-.hero-alert .pulse{width:8px;height:8px;border-radius:50%;background:#ff5252;animation:alertPulse 1.5s ease-in-out infinite}
-@keyframes alertPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,82,82,0.5)}50%{box-shadow:0 0 0 6px rgba(255,82,82,0)}}
 .hero h1{
   font-family:'DM Serif Display',Georgia,serif;font-size:clamp(2.4rem,6vw,3.8rem);font-weight:400;
   letter-spacing:-0.02em;margin-bottom:14px;line-height:1.12;
@@ -702,12 +694,18 @@ footer::before{
   .vcard,.vplay{transition:none} .vcard:hover{transform:none}
 }
 
+.skip-link{position:absolute;left:8px;top:-48px;z-index:200;padding:10px 16px;
+  border-radius:8px;background:#680A1D;color:#fff;text-decoration:none;
+  font-family:var(--font-mono,ui-monospace,monospace);font-size:12px;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;transition:top .18s}
+.skip-link:focus{top:8px}
 </style>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <canvas id="flow" aria-hidden="true"></canvas>
 <header class="site-head">
   <a class="wm" href="./">Massachusetts Data Hub</a>
-  <nav class="site-nav">
+  <nav class="site-nav" aria-label="Main">
     <a href="index.html#top">The Instrument</a>
     <a href="index.html#dashboards">Dashboards</a>
     <a href="videos.html" aria-current="page">Videos</a>
@@ -716,7 +714,7 @@ footer::before{
     <a href="MASTER_DATA.md">Method</a>
   </nav>
 </header>
-<main class="doc">
+<main id="main" class="doc">
   <div class="doc-in">
     
     <h1>Videos<i>22</i></h1>

@@ -7,7 +7,7 @@
   <meta property="og:site_name" content="Massachusetts Data Hub">
   <meta property="og:title" content="Massachusetts Data Hub">
   <meta property="og:description" content="Official data dashboards covering taxes, housing, education, employment, energy, and more across Massachusetts — all sourced from government data.">
-  <meta property="og:url" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/about.html">
+  <meta property="og:url" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/index.html">
   <meta property="og:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -16,9 +16,7 @@
   <meta name="twitter:description" content="Official data dashboards covering taxes, housing, education, employment, energy, and more across Massachusetts — all sourced from government data.">
   <meta name="twitter:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<link rel="canonical" href="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/about.html">
 <title>About — Massachusetts Data Hub</title>
-<meta name="description" content="Who builds Massachusetts Data Hub, where every figure comes from, and the schedule each of the nine data feeds refreshes on.">
 <!-- Social Share Card -->
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
@@ -54,14 +52,6 @@ body::after{
 }
 .hero,.tab-nav,.main-content,footer{position:relative;z-index:1}
 .hero{padding:56px 24px 44px;text-align:center;border-bottom:1px solid rgba(11,17,19,0.05)}
-.hero-alert{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(205,13,13,0.12);border:1px solid rgba(205,13,13,0.25);color:#ff8a80;
-  border-radius:100px;padding:6px 18px;font-size:0.7rem;font-weight:700;
-  text-transform:uppercase;letter-spacing:0.1em;margin-bottom:26px;animation:fadeIn 0.5s ease;
-}
-.hero-alert .pulse{width:8px;height:8px;border-radius:50%;background:#ff5252;animation:alertPulse 1.5s ease-in-out infinite}
-@keyframes alertPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,82,82,0.5)}50%{box-shadow:0 0 0 6px rgba(255,82,82,0)}}
 .hero h1{
   font-family:'DM Serif Display',Georgia,serif;font-size:clamp(2.4rem,6vw,3.8rem);font-weight:400;
   letter-spacing:-0.02em;margin-bottom:14px;line-height:1.12;
@@ -661,8 +651,7 @@ footer::before{
 /* His words, and they should not look like the rest of the page, which is
    written about him rather than by him. */
 .acreed{margin:26px 0 0;padding:24px clamp(20px,2.6vw,34px);text-align:left;
-  border-radius:16px;border:1px solid rgba(104,10,29,.20);
-  border-left:4px solid var(--cranberry);
+  border-radius:16px;border:1px solid rgba(104,10,29,.22);
   background:linear-gradient(180deg,rgba(104,10,29,.055),rgba(104,10,29,.02))}
 .acreed p{font-family:var(--font-display);font-weight:400;
   font-size:clamp(16px,1.55vw,22px);line-height:1.5;letter-spacing:-.012em;
@@ -717,8 +706,7 @@ footer::before{
   grid-template-columns:repeat(auto-fit,minmax(330px,1fr));text-align:left}
 .acols li{font-family:var(--font-text);font-size:14px;line-height:1.45;
   color:rgba(11,17,19,.84);padding:11px 14px;border-radius:10px;
-  background:rgba(255,255,255,.5);border:1px solid rgba(11,17,19,.07);
-  border-left:3px solid var(--cranberry)}
+  background:rgba(255,255,255,.5);border:1px solid rgba(11,17,19,.10)}
 
 .afeeds{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));
   margin:16px 0 0;text-align:left}
@@ -734,12 +722,18 @@ footer::before{
   .abio-text h2{text-align:center}
 }
 
+.skip-link{position:absolute;left:8px;top:-48px;z-index:200;padding:10px 16px;
+  border-radius:8px;background:#680A1D;color:#fff;text-decoration:none;
+  font-family:var(--font-mono,ui-monospace,monospace);font-size:12px;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;transition:top .18s}
+.skip-link:focus{top:8px}
 </style>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <canvas id="flow" aria-hidden="true"></canvas>
 <header class="site-head">
   <a class="wm" href="./">Massachusetts Data Hub</a>
-  <nav class="site-nav">
+  <nav class="site-nav" aria-label="Main">
     <a href="index.html#top">The Instrument</a>
     <a href="index.html#dashboards">Dashboards</a>
     <a href="videos.html">Videos</a>
@@ -748,7 +742,7 @@ footer::before{
     <a href="MASTER_DATA.md">Method</a>
   </nav>
 </header>
-<main class="doc">
+<main id="main" class="doc">
   <div class="doc-in">
     <h1>About</h1>
     <span class="ramp" aria-hidden="true"></span>
@@ -842,7 +836,7 @@ footer::before{
     <a class="share-btn rd" href="#" onclick="shareOn('rd');return false"><svg viewBox="0 0 24 24"><path d="M12 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 01-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 01.042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 014.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 01.14-.197.35.35 0 01.238-.042l2.906.617a1.214 1.214 0 011.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 00-.231.094.33.33 0 000 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 000-.462.342.342 0 00-.461 0c-.545.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 00-.206-.095z"/></svg>Post</a>
     <a class="share-btn em" href="#" onclick="shareOn('em');return false"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg>Email</a>
   </div>
-  <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub" target="_blank" rel="noopener">GitHub Repository</a><br>
+  <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub" target="_blank">GitHub Repository</a><br>
   <!-- No compiled-on month. Nothing refreshes this line, so it can only drift:
        it read "April 2026" in August. Each dashboard carries its own source
        vintage, which is the date that actually means something. -->

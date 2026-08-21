@@ -54,14 +54,6 @@ body::after{
 }
 .hero,.tab-nav,.main-content,footer{position:relative;z-index:1}
 .hero{padding:56px 24px 44px;text-align:center;border-bottom:1px solid rgba(11,17,19,0.05)}
-.hero-alert{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(205,13,13,0.12);border:1px solid rgba(205,13,13,0.25);color:#ff8a80;
-  border-radius:100px;padding:6px 18px;font-size:0.7rem;font-weight:700;
-  text-transform:uppercase;letter-spacing:0.1em;margin-bottom:26px;animation:fadeIn 0.5s ease;
-}
-.hero-alert .pulse{width:8px;height:8px;border-radius:50%;background:#ff5252;animation:alertPulse 1.5s ease-in-out infinite}
-@keyframes alertPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,82,82,0.5)}50%{box-shadow:0 0 0 6px rgba(255,82,82,0)}}
 .hero h1{
   font-family:'DM Serif Display',Georgia,serif;font-size:clamp(2.4rem,6vw,3.8rem);font-weight:400;
   letter-spacing:-0.02em;margin-bottom:14px;line-height:1.12;
@@ -480,7 +472,7 @@ footer{color:rgba(11,17,19,.80)}
   border:1px solid rgba(11,17,19,.07);border-radius:18px;
   padding:26px clamp(20px,2.4vw,34px) 24px;
 }
-.sources h4{
+.sources h3{
   font-family:var(--font-display);font-weight:700;
   font-size:clamp(15px,1.35vw,20px);letter-spacing:-.02em;color:var(--ink);
   margin:0;display:flex;align-items:baseline;gap:11px;
@@ -584,7 +576,7 @@ footer{
 .sec-head p{margin-left:auto;margin-right:auto;max-width:62ch}
 
 /* ---- sources: centred, and a chip field that answers the cursor --------- */
-.sources h4{justify-content:center}
+.sources h3{justify-content:center}
 .srcchips{justify-content:center}
 .sources-note{text-align:center}
 .srcchip{
@@ -649,6 +641,11 @@ svg.sprite{position:absolute;width:0;height:0;overflow:hidden}
 .card-icon.purple    .ci{color:#3F35A6}
 .card-icon.gray      .ci{color:rgba(11,17,19,.72)}
 
+.skip-link{position:absolute;left:8px;top:-48px;z-index:200;padding:10px 16px;
+  border-radius:8px;background:#680A1D;color:#fff;text-decoration:none;
+  font-family:var(--font-mono,ui-monospace,monospace);font-size:12px;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;transition:top .18s}
+.skip-link:focus{top:8px}
 </style>
 <!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
 <link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
@@ -656,6 +653,7 @@ svg.sprite{position:absolute;width:0;height:0;overflow:hidden}
 
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <!-- Card icons: Lucide v1.33.0, ISC licence, https://lucide.dev -->
 <svg class="sprite" aria-hidden="true" focusable="false"
      fill="none" stroke="currentColor" stroke-width="1.75"
@@ -687,7 +685,7 @@ svg.sprite{position:absolute;width:0;height:0;overflow:hidden}
      masthead and nav because this page supplies them. -->
 <header class="site-head">
   <a class="wm" href="./">Massachusetts Data Hub</a>
-  <nav class="site-nav">
+  <nav class="site-nav" aria-label="Main">
     <a href="#top">The Instrument</a>
     <a href="#dashboards">Dashboards</a>
     <a href="videos.html">Videos</a>
@@ -715,7 +713,7 @@ svg.sprite{position:absolute;width:0;height:0;overflow:hidden}
     </div>
   </div>
 </section>
-<div class="main-content">
+<main id="main" class="main-content">
   <section id="dashboards">
     <div class="sec-head rv">
       <h2>Dashboards</h2>
@@ -745,8 +743,8 @@ svg.sprite{position:absolute;width:0;height:0;overflow:hidden}
     </div>
     </div>
   </section>
-  <section class="sources rv"><div class="sources-in"><h4>Official data sources<i class="src-n">27</i></h4><span class="sources-ramp" aria-hidden="true"></span><div class="srcchips"><span class="srcchip">BLS (LAUS, CES, OES, CPI)</span><span class="srcchip">BEA (SAINC, SAPCE, RPP)</span><span class="srcchip">Census Bureau (ACS, QuickFacts)</span><span class="srcchip">CBP</span><span class="srcchip">ICE</span><span class="srcchip">CBO</span><span class="srcchip">EIA</span><span class="srcchip">MA DOR</span><span class="srcchip">MA DLS</span><span class="srcchip">DOI</span><span class="srcchip">DESE</span><span class="srcchip">CHIA</span><span class="srcchip">CAR</span><span class="srcchip">KFF</span><span class="srcchip">Warren Group</span><span class="srcchip">MLS PIN</span><span class="srcchip">Paragon MLS</span><span class="srcchip">Tax Foundation</span><span class="srcchip">ITEP</span><span class="srcchip">MIT Living Wage Calculator</span><span class="srcchip">PERAC</span><span class="srcchip">PRIT Fund</span><span class="srcchip">Public Plans Database</span><span class="srcchip">OCPF</span><span class="srcchip">OpenSecrets</span><span class="srcchip">RGGI Inc</span><span class="srcchip">ISO-NE</span></div><p class="sources-note">See <a href="MASTER_DATA.md">MASTER_DATA.md</a> for full citations.</p></div></section>
-</div>
+  <section class="sources rv"><div class="sources-in"><h3>Official data sources<i class="src-n">27</i></h3><span class="sources-ramp" aria-hidden="true"></span><div class="srcchips"><span class="srcchip">BLS (LAUS, CES, OES, CPI)</span><span class="srcchip">BEA (SAINC, SAPCE, RPP)</span><span class="srcchip">Census Bureau (ACS, QuickFacts)</span><span class="srcchip">CBP</span><span class="srcchip">ICE</span><span class="srcchip">CBO</span><span class="srcchip">EIA</span><span class="srcchip">MA DOR</span><span class="srcchip">MA DLS</span><span class="srcchip">DOI</span><span class="srcchip">DESE</span><span class="srcchip">CHIA</span><span class="srcchip">CAR</span><span class="srcchip">KFF</span><span class="srcchip">Warren Group</span><span class="srcchip">MLS PIN</span><span class="srcchip">Paragon MLS</span><span class="srcchip">Tax Foundation</span><span class="srcchip">ITEP</span><span class="srcchip">MIT Living Wage Calculator</span><span class="srcchip">PERAC</span><span class="srcchip">PRIT Fund</span><span class="srcchip">Public Plans Database</span><span class="srcchip">OCPF</span><span class="srcchip">OpenSecrets</span><span class="srcchip">RGGI Inc</span><span class="srcchip">ISO-NE</span></div><p class="sources-note">See <a href="MASTER_DATA.md">MASTER_DATA.md</a> for full citations.</p></div></section>
+</main>
 <footer>
   <div class="share-bar">
     <span class="share-label">Share this data:</span>

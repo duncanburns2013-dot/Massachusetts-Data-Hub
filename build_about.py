@@ -115,8 +115,7 @@ CSS = """
 /* His words, and they should not look like the rest of the page, which is
    written about him rather than by him. */
 .acreed{margin:26px 0 0;padding:24px clamp(20px,2.6vw,34px);text-align:left;
-  border-radius:16px;border:1px solid rgba(104,10,29,.20);
-  border-left:4px solid var(--cranberry);
+  border-radius:16px;border:1px solid rgba(104,10,29,.22);
   background:linear-gradient(180deg,rgba(104,10,29,.055),rgba(104,10,29,.02))}
 .acreed p{font-family:var(--font-display);font-weight:400;
   font-size:clamp(16px,1.55vw,22px);line-height:1.5;letter-spacing:-.012em;
@@ -171,8 +170,7 @@ CSS = """
   grid-template-columns:repeat(auto-fit,minmax(330px,1fr));text-align:left}
 .acols li{font-family:var(--font-text);font-size:14px;line-height:1.45;
   color:rgba(11,17,19,.84);padding:11px 14px;border-radius:10px;
-  background:rgba(255,255,255,.5);border:1px solid rgba(11,17,19,.07);
-  border-left:3px solid var(--cranberry)}
+  background:rgba(255,255,255,.5);border:1px solid rgba(11,17,19,.10)}
 
 .afeeds{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));
   margin:16px 0 0;text-align:left}
@@ -195,6 +193,9 @@ m = re.search(r'(<div class="doc-in">)(.*?)(\n  </div>\n</main>)', s, re.S)
 assert m, 'doc-in block not found'
 s = s[:m.start(2)] + BODY + s[m.end(2):]
 
+# the CSS is appended, not replaced, so a second run onto an already-built
+# page would stack a duplicate block and let the stale rules keep winning
+assert '.abio{' not in s, 'about.html is already built; restore the pre-build version first: git show 1f8dc28:about.html > about.html'
 assert s.count('</style>') == 2, s.count('</style>')
 i = s.rindex('</style>')
 s = s[:i] + CSS + NL + s[i:]
