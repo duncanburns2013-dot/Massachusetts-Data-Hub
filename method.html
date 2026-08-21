@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <!-- Open Graph / Social Cards -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Massachusetts Data Hub">
+  <meta property="og:title" content="Massachusetts Data Hub">
+  <meta property="og:description" content="Official data dashboards covering taxes, housing, education, employment, energy, and more across Massachusetts — all sourced from government data.">
+  <meta property="og:url" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/method.html">
+  <meta property="og:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Massachusetts Data Hub">
+  <meta name="twitter:description" content="Official data dashboards covering taxes, housing, education, employment, energy, and more across Massachusetts — all sourced from government data.">
+  <meta name="twitter:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="canonical" href="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/method.html">
+
+<title>Method — Massachusetts Data Hub</title>
+<meta name="description" content="Every figure on Massachusetts Data Hub, with its source, its source URL and the date it was verified.">
+<!-- Social Share Card -->
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bay-blue:#14558F;--bay-hover:#104472;--bay-dark:#0A2B48;
+  --berkshire:#388557;--duckling:#F6C51B;--cranberry:#680A1D;
+  --granite:#535353;--success:#24A850;--warning:#F6B622;--danger:#CD0D0D;
+  --card:#ffffff;--border:#e8e5df;--text:#1a1a1a;
+  --muted:#7a756e;--navy:#0f2942;--gold:#c9a84c;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#E9EBEA;color:#0B1113;line-height:1.65;-webkit-font-smoothing:antialiased}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 15%,rgba(20,85,143,0.18),transparent 55%),
+    radial-gradient(ellipse 60% 50% at 80% 80%,rgba(104,10,29,0.14),transparent 50%),
+    radial-gradient(ellipse 50% 40% at 60% 30%,rgba(56,133,87,0.08),transparent 45%),
+    radial-gradient(ellipse 40% 30% at 40% 70%,rgba(246,197,27,0.05),transparent 40%);
+  background-size:200% 200%;
+  animation:none;
+}
+@keyframes bgDrift{
+  0%{background-position:0% 0%}
+  33%{background-position:100% 50%}
+  66%{background-position:30% 100%}
+  100%{background-position:0% 0%}
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+}
+.hero,.tab-nav,.main-content,footer{position:relative;z-index:1}
+.hero{padding:56px 24px 44px;text-align:center;border-bottom:1px solid rgba(11,17,19,0.05)}
+.hero h1{
+  font-family:'DM Serif Display',Georgia,serif;font-size:clamp(2.4rem,6vw,3.8rem);font-weight:400;
+  letter-spacing:-0.02em;margin-bottom:14px;line-height:1.12;
+  background:none;-webkit-background-clip:initial;color:var(--cranberry);
+  
+  animation:fadeIn 0.5s 0.1s ease both;
+}
+@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.hero .sub{opacity:0.5;font-size:0.88rem;font-weight:400;max-width:640px;margin:0 auto 36px;line-height:1.65;letter-spacing:0.01em;animation:fadeIn 0.5s 0.2s ease both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.tab-nav{display:flex;justify-content:center;background:rgba(233,235,234,0.94);border-bottom:1px solid rgba(11,17,19,0.05);overflow-x:auto;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);scrollbar-width:none}
+.tab-nav::-webkit-scrollbar{display:none}
+.tab-nav a{padding:15px 22px;font-size:0.78rem;font-weight:600;color:rgba(11,17,19,0.6);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.25s;text-transform:uppercase;letter-spacing:0.06em}
+.tab-nav a:hover{color:rgba(11,17,19,0.78);background:rgba(11,17,19,0.03)}
+.tab-nav a.active{color:#0B1113;border-bottom-color:var(--duckling)}
+.main-content{max-width:1560px;margin:0 auto;padding:32px 24px 48px}
+/* ---- Explainers: editorial entry points, not reference tools ----------------
+   Deliberately a different shape from .card. The dashboards answer questions you
+   already know to ask; an explainer tells you which question matters. Making it
+   look like a tenth dashboard tile would bury exactly the thing meant to be read
+   first. Grows to a 2-up on wide screens when there is a second one. */
+.feature{
+  display:grid;grid-template-columns:1.15fr .85fr;gap:0;
+  background:linear-gradient(135deg,#FFFFFF 0%,#F1F4F3 100%);
+  border:1px solid rgba(201,168,76,.28);border-radius:16px;overflow:hidden;
+  text-decoration:none;color:#0B1113;position:relative;
+  box-shadow:0 4px 20px rgba(0,0,0,.28);
+  transition:border-color .35s,transform .35s,box-shadow .35s;
+}
+.feature:hover{border-color:rgba(201,168,76,.6);transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.34)}
+.feature:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.feature-body{padding:30px 30px 26px}
+.feature-kicker{
+  font-size:0.6875rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:12px;
+}
+.feature h3{
+  font-family:'DM Serif Display',Georgia,serif;font-weight:400;
+  font-size:clamp(1.3rem,2.4vw,1.75rem);line-height:1.2;color:#0B1113;margin-bottom:12px;
+}
+.feature p{font-size:.86rem;line-height:1.62;color:rgba(11,17,19,0.66);margin-bottom:18px}
+.feature .go{font-size:.78rem;font-weight:700;color:var(--gold);letter-spacing:.03em}
+/* the pull-quote panel carries the finding itself, so the card argues rather than advertises */
+.feature-pull{
+  border-left:1px solid rgba(255,255,255,.08);
+  padding:30px 28px;display:flex;flex-direction:column;justify-content:center;
+  background:rgba(0,0,0,.16);
+}
+.pull-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:9px 0}
+.pull-row+.pull-row{border-top:1px solid rgba(11,17,19,0.06)}
+.pull-lbl{font-size:0.6875rem;text-transform:uppercase;letter-spacing:.09em;color:rgba(11,17,19,0.6)}
+.pull-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.3rem;color:#0B1113}
+.pull-val.over{color:#A81733}
+.pull-note{margin-top:14px;font-size:.7rem;color:rgba(11,17,19,0.57);line-height:1.5}
+@media (max-width:820px){
+  .feature{grid-template-columns:1fr}
+  .feature-pull{border-left:none;border-top:1px solid rgba(11,17,19,0.07);padding:22px 30px 26px}
+}
+
+.sec-head{margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(11,17,19,0.07)}
+.sec-head h2{font-family:'DM Serif Display',Georgia,serif;font-size:1.35rem;font-weight:400;color:rgba(11,17,19,0.88);margin-bottom:4px}
+.sec-head p{font-size:0.85rem;color:rgba(11,17,19,0.6)}
+.grid-wrap{
+  background:linear-gradient(170deg,rgba(20,85,143,0.16),rgba(56,133,87,0.10),rgba(246,197,27,0.09),rgba(104,10,29,0.12),rgba(20,85,143,0.10),rgba(56,133,87,0.14),rgba(246,197,27,0.08),rgba(104,10,29,0.11));
+  background-size:300% 300%;animation:gridGlow 12s ease-in-out infinite;
+  border:1px solid rgba(11,17,19,0.05);border-radius:18px;padding:24px;margin-bottom:32px;position:relative;overflow:hidden;
+}
+@keyframes gridGlow{0%{background-position:0% 0%}25%{background-position:100% 50%}50%{background-position:50% 100%}75%{background-position:0% 50%}100%{background-position:0% 0%}}
+.grid-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 40% at 10% 10%,rgba(20,85,143,0.08),transparent),radial-gradient(ellipse 40% 50% at 90% 85%,rgba(104,10,29,0.07),transparent);pointer-events:none}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;position:relative;z-index:1}
+.card{background:#FFFFFF;border:1px solid rgba(11,17,19,0.05);border-radius:14px;padding:26px 22px 20px;text-decoration:none;color:#0B1113;display:flex;flex-direction:column;box-shadow:0 2px 8px rgba(0,0,0,0.2);transition:all 0.4s cubic-bezier(.25,.46,.45,.94);position:relative;overflow:hidden;backdrop-filter:blur(4px)}
+.card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(11,17,19,0.05),transparent 70%);opacity:0;transition:opacity 0.4s}
+.card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0;opacity:0;transition:opacity 0.4s}
+.card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,0.35);border-color:rgba(11,17,19,0.42)}
+.card:hover::before{opacity:1}
+.card:hover::after{opacity:1}
+.card.c-blue::after{background:linear-gradient(90deg,var(--bay-blue),#14558F)}
+.card.c-green::after{background:linear-gradient(90deg,var(--berkshire),#2A6B44)}
+.card.c-cranberry::after{background:linear-gradient(90deg,var(--cranberry),#B07C20)}
+.card.c-purple::after{background:linear-gradient(90deg,#6c5ce7,#a29bfe)}
+.card.c-gray::after{background:linear-gradient(90deg,var(--granite),#999)}
+.card.c-red::after{background:linear-gradient(90deg,var(--danger),#e88)}
+.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-icon{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px;font-size:20px}
+.card-icon.blue{background:rgba(20,85,143,0.3)}
+.card-icon.green{background:rgba(56,133,87,0.25)}
+.card-icon.cranberry{background:rgba(104,10,29,0.3)}
+.card-icon.red{background:rgba(205,13,13,0.2)}
+.card-icon.purple{background:rgba(108,92,231,0.25)}
+.card-icon.gray{background:rgba(11,17,19,0.07)}
+/* "Live" is a promise that a workflow refreshes the page on a schedule, so only
+   the eight auto-fed dashboards may wear it; the seven hand-maintained ones get
+   .badge-snap. All fifteen said Live, including pages untouched since June. */
+.badge{font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:3px 10px;border-radius:100px;color:#2A6B44;background:rgba(56,133,87,0.15);border:1px solid rgba(56,133,87,0.25)}
+.badge-snap{color:#5A6467;background:rgba(90,100,103,0.10);border-color:rgba(90,100,103,0.22)}
+.card-name{font-family:'DM Serif Display',Georgia,serif;font-size:1.05rem;font-weight:400;color:#0B1113;line-height:1.3;margin-bottom:10px}
+.card-desc{font-size:0.82rem;font-weight:400;color:rgba(11,17,19,0.63);line-height:1.6;flex-grow:1;margin-bottom:16px}
+.card-foot{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid rgba(11,17,19,0.05)}
+.tags{display:flex;gap:5px;flex-wrap:wrap}
+.tag{font-size:0.6875rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:rgba(11,17,19,0.05);color:rgba(11,17,19,0.6);border:1px solid rgba(11,17,19,0.05)}
+.arrow{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(11,17,19,0.05);color:var(--duckling);font-size:13px;font-weight:700;flex-shrink:0;transition:all 0.3s}
+.card:hover .arrow{background:var(--duckling);color:var(--navy);transform:translateX(3px)}
+
+
+
+
+
+.share-bar{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.share-label{font-size:0.6875rem;font-weight:600;color:rgba(11,17,19,0.54);text-transform:uppercase;letter-spacing:0.08em}
+.share-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-size:0.72rem;font-weight:600;text-decoration:none;color:#0B1113;transition:all 0.3s;border:1px solid rgba(11,17,19,0.07);cursor:pointer;background:rgba(11,17,19,0.04);backdrop-filter:blur(4px)}
+.share-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.3);border-color:rgba(11,17,19,0.44);background:rgba(11,17,19,0.07)}
+.share-btn svg{width:14px;height:14px;fill:currentColor;flex-shrink:0}
+.share-btn.x:hover{border-color:rgba(11,17,19,0.22);color:#0B1113}
+.share-btn.fb:hover{border-color:rgba(24,119,242,0.5);color:#14558F}
+.share-btn.li:hover{border-color:rgba(10,102,194,0.5);color:#14558F}
+.share-btn.rd:hover{border-color:rgba(255,69,0,0.5);color:#ff8a65}
+.share-btn.em:hover{border-color:rgba(246,197,27,0.4);color:var(--duckling)}
+footer{text-align:center;padding:36px 24px;color:rgba(11,17,19,0.57);font-size:0.75rem;border-top:1px solid rgba(11,17,19,0.05)}
+footer a{color:rgba(11,17,19,0.72);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(246,197,27,0.3)}
+footer a:hover{color:var(--duckling)}
+.rv{opacity:0;transform:translateY(14px);transition:opacity 0.5s ease,transform 0.5s ease}
+.rv.vis{opacity:1;transform:translateY(0)}
+.grid .card:nth-child(1){transition-delay:0s}
+.grid .card:nth-child(2){transition-delay:0.05s}
+.grid .card:nth-child(3){transition-delay:0.10s}
+.grid .card:nth-child(4){transition-delay:0.15s}
+.grid .card:nth-child(5){transition-delay:0.20s}
+.grid .card:nth-child(6){transition-delay:0.25s}
+.grid .card:nth-child(7){transition-delay:0.30s}
+.grid .card:nth-child(8){transition-delay:0.35s}
+.grid .card:nth-child(9){transition-delay:0.40s}
+.grid .card:nth-child(10){transition-delay:0.45s}
+.grid .card:nth-child(11){transition-delay:0.50s}
+.grid .card:nth-child(12){transition-delay:0.55s}
+.grid .card:nth-child(13){transition-delay:0.6s}
+.grid .card:nth-child(14){transition-delay:0.65s}
+.grid .card:nth-child(15){transition-delay:0.7s}
+@media(max-width:960px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.hero{padding:48px 16px 36px}.main-content{padding:20px 16px 40px}.grid-wrap{padding:16px}.share-bar{gap:8px}.share-btn{padding:7px 12px;font-size:0.6875rem}}
+@media(max-width:540px){.grid{grid-template-columns:1fr}.grid-wrap{padding:12px}}
+
+/* ---- front page: instrument as hero -------------------------------------- */
+.site-head{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;
+  align-items:center;justify-content:space-between;gap:24px;
+  padding:18px clamp(18px,3vw,40px);pointer-events:none}
+.site-head .wm{pointer-events:auto;font-family:var(--font-display);font-weight:700;
+  font-size:clamp(22px,2.2vw,34px);letter-spacing:-.03em;color:var(--cranberry);
+  text-decoration:none;line-height:1}
+.site-nav{pointer-events:auto;display:flex;gap:clamp(12px,1.8vw,26px);
+  font-family:var(--font-text);font-size:13px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase}
+.site-nav a{color:var(--muted);text-decoration:none;padding-bottom:3px;
+  border-bottom:1.5px solid transparent;transition:color .18s,border-color .18s}
+.site-nav a:hover{color:var(--cranberry);border-bottom-color:var(--cranberry)}
+.stage{position:relative;height:100vh;width:100%;background:var(--bg)}
+.stage .instr{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.stage-more{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;opacity:.75;transition:opacity .2s}
+.stage-more:hover{opacity:1;color:var(--cranberry)}
+@media (max-width:800px){.stage{height:78vh}.site-nav{display:none}}
+
+/* ---- the turn: instrument -> directory -----------------------------------
+   The stage ended and the card grid began with nothing between them, so the
+   page just stopped. This band is the hinge: it states what the site is once,
+   at size, and hands the reader down. Deliberately empty of ornament - the
+   footage test earlier proved that anything behind content here either
+   disappears or fights it. */
+.turn{position:relative;padding:clamp(80px,11vw,150px) clamp(24px,5vw,90px);
+  background:linear-gradient(180deg,var(--bg) 0%,#DFE3E2 55%,var(--bg) 100%);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  text-align:center}
+.turn-l{font-family:var(--font-mono);font-size:11px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--berk-ink);margin:0 0 22px}
+.turn-h{font-family:var(--font-display);font-weight:700;
+  font-size:clamp(26px,3.6vw,54px);line-height:1.08;letter-spacing:-.03em;
+  color:var(--ink);margin:0 auto;max-width:20ch}
+.turn-h em{font-style:normal;color:var(--cranberry)}
+.turn-go{display:inline-block;margin-top:34px;font-family:var(--font-mono);
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+  text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:6px;
+  transition:color .2s,border-color .2s}
+.turn-go:hover{color:var(--cranberry);border-color:var(--cranberry)}
+
+/* the band asserted that every figure is computed from an official source and
+   then showed no figures. It carries them now - centred type on a gradient was
+   the plainest arrangement available, and it was asserting rather than proving */
+.turn{position:relative;padding:clamp(70px,9vw,130px) clamp(24px,5vw,90px);
+  background:linear-gradient(180deg,var(--bg) 0%,#DFE3E2 60%,var(--bg) 100%);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.turn-in{max-width:1560px;margin:0 auto;display:grid;gap:clamp(28px,4vw,72px);
+  grid-template-columns:1.25fr .75fr;align-items:end}
+.turn-h{font-family:var(--font-display);font-weight:700;margin:0;
+  font-size:clamp(28px,4.2vw,64px);line-height:1.04;letter-spacing:-.034em;color:var(--ink)}
+.turn-h em{font-style:normal;color:var(--cranberry)}
+.turn-side{border-left:2px solid var(--cranberry);padding-left:clamp(16px,1.6vw,26px)}
+.turn-l{font-family:var(--font-mono);font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--berk-ink);margin:0 0 18px}
+.turn-figs{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:14px 22px}
+.turn-figs div{margin:0}
+.turn-figs dt{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted)}
+.turn-figs dd{margin:2px 0 0;font-family:var(--font-mono);font-weight:600;
+  font-size:clamp(17px,1.5vw,23px);letter-spacing:-.03em;color:var(--bay-blue)}
+.turn-go{display:inline-block;margin-top:26px;font-family:var(--font-mono);
+  font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
+  text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:5px;
+  transition:color .2s,border-color .2s}
+.turn-go:hover{color:var(--cranberry);border-color:var(--cranberry)}
+@media (max-width:900px){.turn-in{grid-template-columns:1fr}.turn-side{border-left:0;
+  border-top:2px solid var(--cranberry);padding:20px 0 0}}
+
+/* ---- the directory ---------------------------------------------------------
+   The cards were flat white rectangles with a 3px bar, on a grid fixed at three
+   columns inside a 1200px cap - so on a wide display they were small, identical
+   and static. The complaint was that nothing happens on the page or the cards,
+   and it was correct.
+   The rule now runs the FULL height of the card and is the thing that moves:
+   it widens and the card lifts toward the reader. One gesture, not six. */
+.grid{display:grid;gap:clamp(14px,1.4vw,22px);
+  grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}
+.card{position:relative;display:flex;flex-direction:column;gap:10px;
+  background:var(--card);border:1px solid var(--border);border-radius:3px;
+  padding:22px 24px 18px 26px;text-decoration:none;overflow:hidden;isolation:isolate;
+  transition:transform .34s cubic-bezier(.2,.8,.2,1),box-shadow .34s cubic-bezier(.2,.8,.2,1),
+             border-color .34s}
+.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:7px;
+  background:var(--bay-blue);transform:scaleX(.43);transform-origin:left center;transition:transform .34s cubic-bezier(.2,.8,.2,1),opacity .34s}
+.card.c-cranberry::before{background:var(--cranberry)}
+.card.c-green::before{background:var(--berkshire)}
+.card.c-blue::before{background:var(--bay-blue)}
+.card::after{content:'';position:absolute;inset:0;z-index:-1;opacity:0;
+  background:linear-gradient(115deg,rgba(20,85,143,.05),transparent 62%);
+  transition:opacity .34s}
+.card:hover{transform:translateY(-4px);border-color:transparent;
+  box-shadow:0 2px 4px rgba(11,17,19,.05),0 14px 34px -10px rgba(11,17,19,.22)}
+.card:hover::before{transform:scaleX(1)}
+.card:hover::after{opacity:1}
+.card:focus-visible{outline:2px solid var(--cranberry);outline-offset:3px}
+.card-name{font-family:var(--font-display);font-weight:700;font-size:18px;
+  letter-spacing:-.022em;line-height:1.18;color:var(--ink)}
+.card-desc{font-family:var(--font-text);font-size:13.5px;line-height:1.5;color:var(--muted);flex:1}
+.card-also{font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;
+  color:var(--berk-ink);border-top:1px dashed var(--border);padding-top:9px;margin-top:2px}
+.card-also b{font-weight:600;color:var(--ink)}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin-top:4px}
+.tag{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);background:rgba(11,17,19,.04);border:1px solid var(--border);
+  border-radius:2px;padding:3px 6px}
+.arrow{font-size:15px;color:var(--muted);transition:transform .34s cubic-bezier(.2,.8,.2,1),color .34s}
+.card:hover .arrow{transform:translateX(5px);color:var(--cranberry)}
+.badge{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--berk-ink);background:rgba(42,107,68,.09);border:1px solid rgba(42,107,68,.2);
+  border-radius:20px;padding:3px 8px}
+.badge.b-ext{color:var(--muted);background:rgba(11,17,19,.04);border-color:var(--border)}
+.card--ext{background:linear-gradient(180deg,#FFFFFF,#F6F8F7)}
+@media (prefers-reduced-motion:reduce){
+  .card,.card::before,.card::after,.arrow{transition:none}
+  .card:hover{transform:none}
+}
+
+/* A card with a second destination cannot be one big <a> - nesting links is
+   invalid. The primary link stretches to fill the card; the companion sits
+   above it and is genuinely clickable, because "also inside" was claiming
+   containment that did not exist. */
+.card-go{text-decoration:none;position:static}
+.card-go::after{content:'';position:absolute;inset:0;z-index:1}
+.card-also{position:relative;z-index:2;display:block;text-decoration:none;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;
+  color:var(--berk-ink);border-top:1px dashed var(--border);
+  padding-top:9px;margin-top:2px;transition:color .2s}
+.card-also b{font-weight:600;color:var(--ink)}
+.card-also:hover{color:var(--cranberry)}
+.card-also:hover b{color:var(--cranberry)}
+
+/* one subject, one card, several doors - three separate Boston cards read as
+   three subjects when it is one */
+.card-also{position:relative;z-index:2;display:flex;flex-wrap:wrap;gap:4px 14px;
+  align-items:baseline;border-top:1px dashed var(--border);padding-top:9px;margin-top:2px;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.04em}
+.card-also>span{color:var(--muted);text-transform:uppercase;letter-spacing:.14em;font-size:11px}
+.card-also a{color:var(--berk-ink);text-decoration:none;transition:color .2s}
+.card-also a:hover{color:var(--cranberry)}
+
+/* ============================================================================
+   TWO EFFECTS. No layout, copy or markup changes.
+   ========================================================================== */
+
+/* ---- 1. liquid type ------------------------------------------------------ */
+.turn-h{position:relative}
+.turn-h canvas.lq{position:absolute;left:0;top:0;width:100%;height:100%;
+  pointer-events:none;display:block}
+/* the real heading only goes transparent once a frame has actually painted */
+.turn-h.lq-on{color:transparent}
+.turn-h.lq-on em{color:transparent}
+
+/* ---- 2. magnetic cards --------------------------------------------------- */
+.grid{perspective:1400px;perspective-origin:50% 40%}
+.card{
+  transform-style:preserve-3d;
+  will-change:transform;
+  transition:transform .5s cubic-bezier(.19,1,.22,1),
+             box-shadow .5s cubic-bezier(.19,1,.22,1),
+             border-color .4s;
+}
+.card.mg{
+  transform:
+    rotateX(calc(var(--ry,0) * -7deg))
+    rotateY(calc(var(--rx,0) *  7deg))
+    translate3d(0,-6px,34px);
+  transition:transform .16s cubic-bezier(.22,.61,.36,1),
+             box-shadow .3s ease, border-color .3s;
+  box-shadow:
+    0 34px 70px -18px rgba(11,17,19,.42),
+    0 6px 18px -6px rgba(11,17,19,.22);
+  border-color:rgba(11,17,19,.28);
+  z-index:3;
+}
+/* specular sheen that tracks the pointer across the card face */
+.card .sheen{
+  position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:4;
+  opacity:0;transition:opacity .3s ease;
+  background:
+    radial-gradient(340px circle at var(--mx,50%) var(--my,50%),
+      rgba(255,255,255,.62), rgba(255,255,255,.10) 34%, transparent 62%);
+  mix-blend-mode:soft-light;
+}
+.card.mg .sheen{opacity:1}
+/* a second, coloured pass so the card glows in its own subject colour */
+.card .sheen::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),
+    var(--glow,rgba(20,85,143,.30)), transparent 60%);
+  mix-blend-mode:multiply;opacity:.5;
+}
+.card.c-blue{--glow:rgba(20,85,143,.30)}
+.card.c-green{--glow:rgba(56,133,87,.28)}
+.card.c-cranberry{--glow:rgba(104,10,29,.30)}
+.card.c-purple{--glow:rgba(108,92,231,.28)}
+.card.c-red{--glow:rgba(205,13,13,.26)}
+.card.c-gray{--glow:rgba(11,17,19,.20)}
+/* the arrow leans out of the card as it tilts */
+.card.mg .arrow{transform:translate3d(0,0,26px) scale(1.12);
+  background:var(--duckling);color:var(--navy)}
+
+@media (prefers-reduced-motion: reduce){
+  .turn-h.lq-on{color:var(--ink)}
+  .turn-h.lq-on em{color:var(--cranberry)}
+  .turn-h canvas.lq{display:none}
+  .card,.card.mg{transform:none!important;transition:none}
+  .card .sheen{display:none}
+}
+@media (hover:none){
+  .card .sheen{display:none}
+}
+
+
+/* ---- 3. background: domain-warped flow field, one shader pass ------------ */
+#flow{
+  position:fixed;inset:0;z-index:0;pointer-events:none;display:block;
+  width:100%;height:100%;opacity:0;transition:opacity 1.4s ease;
+}
+#flow.on{opacity:1}
+@media (prefers-reduced-motion: reduce){ #flow{display:none} }
+
+/* the section grounds were fully opaque, so nothing behind them could be seen.
+   Same colours, carried at alpha, so the field reads through them. */
+.turn{
+  background:linear-gradient(180deg,
+    rgba(233,235,234,.70) 0%, rgba(223,227,226,.34) 55%, rgba(233,235,234,.58) 100%);
+}
+/* the field tints the ground just enough to push the smallest muted labels
+   under 4.5:1. Measured against the darkest tint the shader can output, not
+   guessed: figure label 4.13, band label 4.34, section sub 4.25, footer 3.89. */
+.turn-l{color:#3E4A4D}
+.turn-figs dt{color:#3E4A4D}
+.sec-head p{color:rgba(11,17,19,.82)}
+footer{color:rgba(11,17,19,.80)}
+
+.grid-wrap{
+  background:linear-gradient(170deg,
+    rgba(20,85,143,.09),rgba(56,133,87,.05),rgba(246,197,27,.04),
+    rgba(104,10,29,.07),rgba(20,85,143,.05),rgba(56,133,87,.08),
+    rgba(246,197,27,.04),rgba(104,10,29,.06));
+  background-size:300% 300%;
+}
+
+
+/* ---- 4. the turn band as a space: three depths ------------------------- */
+.turn{overflow:hidden}
+.turn-in{position:relative}
+.turn-h,.turn-side{will-change:transform}
+.turn-h{transform:translate3d(calc(var(--tx,0)*-14px),calc(var(--ty,0)*-9px + var(--sy,0px)),0)}
+.turn-side{transform:translate3d(calc(var(--tx,0)*9px),calc(var(--ty,0)*6px + var(--sy2,0px)),0)}
+.turn-h,.turn-side{transition:transform .5s cubic-bezier(.19,1,.22,1)}
+.turn.live .turn-h,.turn.live .turn-side{transition:transform .14s linear}
+
+/* the card rail animated its width, which lays out on every frame of every
+   hover across 21 cards. Same 3px-to-7px result, done on the compositor. */
+.card::before{width:7px;transform:scaleX(.43);transform-origin:left center;
+  transition:transform .34s cubic-bezier(.2,.8,.2,1),opacity .34s}
+.card:hover::before{width:7px;transform:scaleX(1)}
+
+/* ---- 5. cards: real pixel displacement on hover ------------------------- */
+.card.warp{filter:url(#cardwarp)}
+
+/* ---- 7. sources and footer as their own section ------------------------- */
+.sources{
+  position:relative;z-index:1;
+  margin:56px auto 0;max-width:1560px;padding:0 24px;
+}
+.sources-in{
+  background:rgba(255,255,255,.52);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(11,17,19,.07);border-radius:18px;
+  padding:26px clamp(20px,2.4vw,34px) 24px;
+}
+.sources h4{
+  font-family:var(--font-display);font-weight:700;
+  font-size:clamp(15px,1.35vw,20px);letter-spacing:-.02em;color:var(--ink);
+  margin:0;display:flex;align-items:baseline;gap:11px;
+}
+.sources .src-n{
+  font-family:var(--font-mono);font-style:normal;font-weight:600;
+  font-size:.62em;color:var(--bay-blue);letter-spacing:-.02em;
+}
+.sources-ramp{
+  display:block;height:2px;margin:14px 0 18px;border-radius:2px;
+  background:linear-gradient(90deg,#12467F,#3D82BC,#8FB9D6,#CFC7B4,#F2A65A,#DC5127,#8E0B22);
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform 1.1s cubic-bezier(.19,1,.22,1);
+}
+.sources.vis .sources-ramp{transform:scaleX(1)}
+.srcchips{display:flex;flex-wrap:wrap;gap:6px}
+.srcchip{
+  font-family:var(--font-mono);font-size:11px;font-weight:600;
+  letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;
+  padding:5px 10px;border-radius:6px;
+  color:rgba(11,17,19,.78);background:rgba(255,255,255,.72);
+  border:1px solid rgba(11,17,19,.12);
+  transition:transform .3s cubic-bezier(.19,1,.22,1),border-color .3s,color .3s;
+}
+.srcchip:hover{transform:translateY(-2px);border-color:rgba(20,85,143,.45);color:var(--bay-blue)}
+.sources-note{
+  margin:16px 0 0;font-family:var(--font-text);
+  font-size:12.5px;color:rgba(11,17,19,.72);
+}
+.sources-note a{color:var(--bay-blue);font-weight:600}
+
+/* measured on the footer's translucent ground: 3.79:1 against 4.5 */
+.share-label{color:rgba(11,17,19,.80)}
+
+footer{
+  position:relative;z-index:1;margin-top:44px;
+  background:rgba(233,235,234,.58);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-top:1px solid rgba(11,17,19,.08);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .turn-h,.turn-side{transform:none!important}
+  .card.warp{filter:none}
+  .sources-ramp{transform:scaleX(1)}
+}
+
+
+/* ---- Videos and About: the same section shell as the sources block ------- */
+.panel-sec{position:relative;z-index:1;margin:56px auto 0;max-width:1560px;padding:0 24px}
+.panel-in{
+  background:rgba(255,255,255,.52);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(11,17,19,.07);border-radius:18px;
+  padding:26px clamp(20px,2.4vw,34px) 24px;
+}
+.panel-sec h4{
+  font-family:var(--font-display);font-weight:700;
+  font-size:clamp(15px,1.35vw,20px);letter-spacing:-.02em;color:var(--ink);
+  margin:0;display:flex;align-items:baseline;gap:11px;
+}
+.panel-sec .panel-n{
+  font-family:var(--font-mono);font-style:normal;font-weight:600;
+  font-size:.62em;color:var(--bay-blue);letter-spacing:-.02em;
+}
+.panel-ramp{
+  display:block;height:2px;margin:14px 0 18px;border-radius:2px;
+  background:linear-gradient(90deg,#12467F,#3D82BC,#8FB9D6,#CFC7B4,#F2A65A,#DC5127,#8E0B22);
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform 1.1s cubic-bezier(.19,1,.22,1);
+}
+.panel-sec.vis .panel-ramp{transform:scaleX(1)}
+.panel-lede{
+  margin:0;font-family:var(--font-text);
+  font-size:clamp(14px,1.05vw,16.5px);line-height:1.6;
+  color:rgba(11,17,19,.88);max-width:74ch;
+}
+.panel-body{
+  margin:14px 0 0;font-family:var(--font-text);
+  font-size:13.5px;line-height:1.68;color:rgba(11,17,19,.80);max-width:78ch;
+}
+.panel-note{
+  margin:16px 0 0;font-family:var(--font-text);
+  font-size:12.5px;line-height:1.6;color:rgba(11,17,19,.72);max-width:78ch;
+}
+.panel-note a{color:var(--bay-blue);font-weight:600}
+@media (prefers-reduced-motion: reduce){ .panel-ramp{transform:scaleX(1)} }
+
+
+/* ---- sources: centred, and a chip field that answers the cursor --------- */
+.sources h4{justify-content:center}
+.srcchips{justify-content:center}
+.sources-note{text-align:center}
+.srcchip{
+  will-change:transform;
+  transform:translate3d(0,calc(var(--lift,0) * -7px),0) scale(calc(1 + var(--lift,0) * .06));
+  border-color:rgba(11,17,19,calc(.12 + var(--lift,0) * .34));
+  box-shadow:0 calc(var(--lift,0) * 6px) calc(var(--lift,0) * 14px) rgba(11,17,19,calc(var(--lift,0) * .16));
+  transition:transform .5s cubic-bezier(.19,1,.22,1),border-color .5s,box-shadow .5s,color .5s;
+}
+.srcchips.live .srcchip{transition:transform .12s linear,border-color .2s,box-shadow .2s,color .2s}
+.srcchip:hover{transform:translate3d(0,-8px,0) scale(1.07)}
+
+/* ---- footer: colour, and the ramp sweeping its edge --------------------- */
+footer{
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(120% 160% at 12% 0%, rgba(20,85,143,.10), transparent 58%),
+    radial-gradient(120% 160% at 88% 10%, rgba(104,10,29,.09), transparent 55%),
+    rgba(233,235,234,.62);
+  border-top:0;
+}
+footer::before{
+  content:'';position:absolute;left:0;right:0;top:0;height:3px;
+  background:linear-gradient(90deg,#12467F,#3D82BC,#8FB9D6,#CFC7B4,#F2A65A,#DC5127,#8E0B22,
+                                    #DC5127,#F2A65A,#CFC7B4,#8FB9D6,#3D82BC,#12467F);
+  background-size:200% 100%;
+  animation:footRamp 22s linear infinite;
+}
+@keyframes footRamp{from{background-position:0% 0}to{background-position:200% 0}}
+.share-btn{transition:transform .4s cubic-bezier(.19,1,.22,1),background .3s,border-color .3s,color .3s}
+.share-btn:hover{transform:translateY(-3px)}
+.share-btn.x:hover{border-color:rgba(11,17,19,.5);background:rgba(11,17,19,.07)}
+.share-btn.fb:hover{border-color:rgba(20,85,143,.55);background:rgba(20,85,143,.10);color:var(--bay-blue)}
+.share-btn.li:hover{border-color:rgba(20,85,143,.55);background:rgba(20,85,143,.10);color:var(--bay-blue)}
+.share-btn.rd:hover{border-color:rgba(194,65,12,.55);background:rgba(194,65,12,.10);color:#9A3412}
+.share-btn.em:hover{border-color:rgba(184,134,11,.6);background:rgba(184,134,11,.12);color:#7A5A08}
+
+@media (prefers-reduced-motion: reduce){
+  footer::before{animation:none}
+  .srcchip{transform:none!important;transition:none}
+}
+
+</style>
+<!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+
+<style>
+.doc{position:relative;z-index:1;max-width:1560px;margin:0 auto;
+  padding:clamp(90px,11vw,150px) 24px clamp(40px,5vw,70px)}
+.doc-in{background:rgba(255,255,255,.52);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(11,17,19,.07);border-radius:18px;
+  padding:clamp(26px,3vw,44px) clamp(20px,2.6vw,40px)}
+.doc h1{font-family:var(--font-display);font-weight:700;
+  font-size:clamp(30px,4vw,58px);letter-spacing:-.035em;line-height:1.02;
+  color:var(--ink);margin:0;display:flex;align-items:baseline;gap:14px}
+.doc h1 i{font-family:var(--font-mono);font-style:normal;font-weight:600;
+  font-size:.34em;color:var(--bay-blue);letter-spacing:-.02em}
+.doc .ramp{display:block;height:2px;margin:18px 0 24px;border-radius:2px;
+  background:linear-gradient(90deg,#12467F,#3D82BC,#8FB9D6,#CFC7B4,#F2A65A,#DC5127,#8E0B22)}
+.doc .panel-lede{margin:0;font-family:var(--font-text);
+  font-size:clamp(15px,1.2vw,19px);line-height:1.58;color:rgba(11,17,19,.88);max-width:74ch}
+.doc .panel-body{margin:16px 0 0;font-family:var(--font-text);
+  font-size:14.5px;line-height:1.7;color:rgba(11,17,19,.82);max-width:78ch}
+.doc .panel-note{margin:20px 0 0;font-family:var(--font-text);
+  font-size:13px;line-height:1.62;color:rgba(11,17,19,.74);max-width:78ch}
+.doc .panel-note a{color:var(--bay-blue);font-weight:600}
+
+/* ---- About ---------------------------------------------------------------
+   Same head treatment as Videos: centred, heavier, with a warm-to-cool wash
+   across the top of the panel. The bio is the one block set left, because a
+   portrait beside centred ragged text reads as an accident. */
+.doc-in{position:relative;overflow:hidden;text-align:center}
+.doc-in::before{content:'';position:absolute;left:0;right:0;top:0;height:270px;
+  pointer-events:none;z-index:0;
+  background:radial-gradient(78% 120% at 6% 0%,rgba(104,10,29,.11),transparent 62%),
+             radial-gradient(72% 120% at 94% 4%,rgba(20,85,143,.12),transparent 60%)}
+.doc-in > *{position:relative;z-index:1}
+.doc h1{justify-content:center;font-size:clamp(34px,5vw,72px)}
+.doc .ramp{height:3px;margin:20px auto 26px;max-width:none}
+.doc .panel-lede{font-size:clamp(17px,1.5vw,24px);line-height:1.45;max-width:none}
+.doc .panel-body{max-width:none;font-size:15px;line-height:1.72}
+.doc .panel-note{max-width:none;font-size:13px;line-height:1.65}
+
+/* His words, and they should not look like the rest of the page, which is
+   written about him rather than by him. */
+.acreed{margin:26px 0 0;padding:24px clamp(20px,2.6vw,34px);text-align:left;
+  border-radius:16px;border:1px solid rgba(104,10,29,.22);
+  background:linear-gradient(180deg,rgba(104,10,29,.055),rgba(104,10,29,.02))}
+.acreed p{font-family:var(--font-display);font-weight:400;
+  font-size:clamp(16px,1.55vw,22px);line-height:1.5;letter-spacing:-.012em;
+  color:rgba(11,17,19,.90);margin:0 0 14px;max-width:74ch}
+.acreed p:last-of-type{margin-bottom:16px}
+.acreed cite{display:block;font-family:var(--font-mono);font-style:normal;
+  font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;
+  color:var(--cranberry)}
+.acreed cite::before{content:"— "}
+.asub{font-family:var(--font-display);font-weight:700;letter-spacing:-.02em;
+  font-size:clamp(17px,1.6vw,23px);color:var(--ink);margin:40px 0 10px;
+  padding-top:22px;border-top:1px solid rgba(11,17,19,.10)}
+
+.abio{display:grid;grid-template-columns:180px 1fr;gap:clamp(20px,2.6vw,34px);
+  align-items:start;text-align:left;margin:30px 0 4px;padding:24px clamp(18px,2.2vw,28px);
+  border-radius:16px;background:rgba(255,255,255,.55);
+  border:1px solid rgba(11,17,19,.07)}
+.abio-face{width:180px;height:180px;border-radius:14px;object-fit:cover;display:block;
+  box-shadow:0 6px 22px rgba(11,17,19,.16)}
+.abio-facelink{display:block;width:180px;border-radius:14px;cursor:zoom-in;
+  transition:transform .35s cubic-bezier(.19,1,.22,1),box-shadow .35s}
+.abio-facelink:hover{transform:scale(1.03)}
+.abio-facelink:focus-visible{outline:2px solid var(--bay-blue);outline-offset:3px}
+/* `hidden` is display:none from the UA sheet and a class beats it, so
+   without this the overlay stays laid out and eats every click */
+.lbox[hidden]{display:none}
+.lbox{position:fixed;inset:0;z-index:90;display:flex;align-items:center;
+  justify-content:center;padding:24px;opacity:0;transition:opacity .2s;
+  background:rgba(6,9,11,.74);backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);cursor:zoom-out}
+.lbox.on{opacity:1}
+/* capped at the source's own 400px: enlarging past that would only show
+   the compression, and the studio frame exists at no larger size */
+.lbox img{width:min(400px,82vw);height:auto;border-radius:16px;display:block;
+  box-shadow:0 24px 70px rgba(0,0,0,.55);transform:scale(.96);
+  transition:transform .25s cubic-bezier(.19,1,.22,1)}
+.lbox.on img{transform:scale(1)}
+.lbox-x{position:absolute;top:18px;right:20px;width:40px;height:40px;
+  border-radius:10px;border:1px solid rgba(255,255,255,.28);cursor:pointer;
+  background:rgba(255,255,255,.10);color:#fff;font-size:24px;line-height:1;
+  transition:background .2s}
+.lbox-x:hover{background:rgba(255,255,255,.2)}
+@media (prefers-reduced-motion: reduce){
+  .abio-facelink,.lbox,.lbox img{transition:none}
+  .abio-facelink:hover{transform:none} .lbox img{transform:none}}
+.abio-text h2{font-family:var(--font-display);font-weight:700;letter-spacing:-.025em;
+  font-size:clamp(21px,2vw,30px);color:var(--cranberry);margin:0 0 10px}
+.abio-text p{font-family:var(--font-text);font-size:14.5px;line-height:1.68;
+  color:rgba(11,17,19,.84);margin:0 0 10px}
+
+.acols{list-style:none;margin:14px auto 0;padding:0;display:grid;gap:8px;
+  grid-template-columns:repeat(auto-fit,minmax(330px,1fr));text-align:left}
+.acols li{font-family:var(--font-text);font-size:14px;line-height:1.45;
+  color:rgba(11,17,19,.84);padding:11px 14px;border-radius:10px;
+  background:rgba(255,255,255,.5);border:1px solid rgba(11,17,19,.10)}
+
+.afeeds{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));
+  margin:16px 0 0;text-align:left}
+.afeeds > div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  padding:9px 13px;border-radius:9px;background:rgba(255,255,255,.5);
+  border:1px solid rgba(11,17,19,.07)}
+.afeeds dt{font-family:var(--font-text);font-size:13.5px;color:rgba(11,17,19,.84)}
+.afeeds dd{margin:0;font-family:var(--font-mono);font-size:11.5px;font-weight:600;
+  letter-spacing:.04em;color:var(--bay-blue);white-space:nowrap}
+
+@media (max-width:640px){
+  .abio{grid-template-columns:1fr;justify-items:center;text-align:center}
+  .abio-text h2{text-align:center}
+}
+
+.skip-link{position:absolute;left:8px;top:-48px;z-index:200;padding:10px 16px;
+  border-radius:8px;background:#680A1D;color:#fff;text-decoration:none;
+  font-family:var(--font-mono,ui-monospace,monospace);font-size:12px;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;transition:top .18s}
+.skip-link:focus{top:8px}
+/* == about:css start == */
+/* ---- About ---------------------------------------------------------------
+   Same head treatment as Videos: centred, heavier, with a warm-to-cool wash
+   across the top of the panel. The bio is the one block set left, because a
+   portrait beside centred ragged text reads as an accident. */
+.doc-in{position:relative;overflow:hidden;text-align:center}
+.doc-in::before{content:'';position:absolute;left:0;right:0;top:0;height:270px;
+  pointer-events:none;z-index:0;
+  background:radial-gradient(78% 120% at 6% 0%,rgba(104,10,29,.11),transparent 62%),
+             radial-gradient(72% 120% at 94% 4%,rgba(20,85,143,.12),transparent 60%)}
+.doc-in > *{position:relative;z-index:1}
+.doc h1{justify-content:center;font-size:clamp(34px,5vw,72px)}
+.doc .ramp{height:3px;margin:20px auto 26px;max-width:none}
+.doc .panel-lede{font-size:clamp(17px,1.5vw,24px);line-height:1.45;max-width:none}
+.doc .panel-body{max-width:none;font-size:15px;line-height:1.72}
+.doc .panel-note{max-width:none;font-size:13px;line-height:1.65}
+
+/* His words, and they should not look like the rest of the page, which is
+   written about him rather than by him. */
+.acreed{margin:26px 0 0;padding:24px clamp(20px,2.6vw,34px);text-align:left;
+  border-radius:16px;border:1px solid rgba(104,10,29,.22);
+  background:linear-gradient(180deg,rgba(104,10,29,.055),rgba(104,10,29,.02))}
+.acreed p{font-family:var(--font-display);font-weight:400;
+  font-size:clamp(16px,1.55vw,22px);line-height:1.5;letter-spacing:-.012em;
+  color:rgba(11,17,19,.90);margin:0 0 14px;max-width:74ch}
+.acreed p:last-of-type{margin-bottom:16px}
+.acreed cite{display:block;font-family:var(--font-mono);font-style:normal;
+  font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;
+  color:var(--cranberry)}
+.acreed cite::before{content:"— "}
+.asub{font-family:var(--font-display);font-weight:700;letter-spacing:-.02em;
+  font-size:clamp(17px,1.6vw,23px);color:var(--ink);margin:40px 0 10px;
+  padding-top:22px;border-top:1px solid rgba(11,17,19,.10)}
+
+.abio{display:grid;grid-template-columns:180px 1fr;gap:clamp(20px,2.6vw,34px);
+  align-items:start;text-align:left;margin:30px 0 4px;padding:24px clamp(18px,2.2vw,28px);
+  border-radius:16px;background:rgba(255,255,255,.55);
+  border:1px solid rgba(11,17,19,.07)}
+.abio-face{width:180px;height:180px;border-radius:14px;object-fit:cover;display:block;
+  box-shadow:0 6px 22px rgba(11,17,19,.16)}
+.abio-facelink{display:block;width:180px;border-radius:14px;cursor:zoom-in;
+  transition:transform .35s cubic-bezier(.19,1,.22,1),box-shadow .35s}
+.abio-facelink:hover{transform:scale(1.03)}
+.abio-facelink:focus-visible{outline:2px solid var(--bay-blue);outline-offset:3px}
+/* `hidden` is display:none from the UA sheet and a class beats it, so
+   without this the overlay stays laid out and eats every click */
+.lbox[hidden]{display:none}
+.lbox{position:fixed;inset:0;z-index:90;display:flex;align-items:center;
+  justify-content:center;padding:24px;opacity:0;transition:opacity .2s;
+  background:rgba(6,9,11,.74);backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);cursor:zoom-out}
+.lbox.on{opacity:1}
+/* capped at the source's own 400px: enlarging past that would only show
+   the compression, and the studio frame exists at no larger size */
+.lbox img{width:min(400px,82vw);height:auto;border-radius:16px;display:block;
+  box-shadow:0 24px 70px rgba(0,0,0,.55);transform:scale(.96);
+  transition:transform .25s cubic-bezier(.19,1,.22,1)}
+.lbox.on img{transform:scale(1)}
+.lbox-x{position:absolute;top:18px;right:20px;width:40px;height:40px;
+  border-radius:10px;border:1px solid rgba(255,255,255,.28);cursor:pointer;
+  background:rgba(255,255,255,.10);color:#fff;font-size:24px;line-height:1;
+  transition:background .2s}
+.lbox-x:hover{background:rgba(255,255,255,.2)}
+@media (prefers-reduced-motion: reduce){
+  .abio-facelink,.lbox,.lbox img{transition:none}
+  .abio-facelink:hover{transform:none} .lbox img{transform:none}}
+.abio-text h2{font-family:var(--font-display);font-weight:700;letter-spacing:-.025em;
+  font-size:clamp(21px,2vw,30px);color:var(--cranberry);margin:0 0 10px}
+.abio-text p{font-family:var(--font-text);font-size:14.5px;line-height:1.68;
+  color:rgba(11,17,19,.84);margin:0 0 10px}
+
+.acols{list-style:none;margin:14px auto 0;padding:0;display:grid;gap:8px;
+  grid-template-columns:repeat(auto-fit,minmax(330px,1fr));text-align:left}
+.acols li{font-family:var(--font-text);font-size:14px;line-height:1.45;
+  color:rgba(11,17,19,.84);padding:11px 14px;border-radius:10px;
+  background:rgba(255,255,255,.5);border:1px solid rgba(11,17,19,.10)}
+
+
+/* ---- the refresh schedule, drawn rather than listed ---------------------
+   Nine pipelines on nine different clocks is the actual argument for having no
+   single site-wide "updated" date, and a list of times does not show it. Each
+   track is one cycle - a day on the first group, a month on the second - with a
+   mark where that feed fires. The rhythm is the point. */
+.feeds{margin:18px 0 0;text-align:left;display:grid;gap:18px}
+.feed-group{padding:14px 16px 6px;border-radius:12px;
+  background:rgba(255,255,255,.5);border:1px solid rgba(11,17,19,.07)}
+.feed-axis{display:flex;justify-content:space-between;margin:0 0 8px;
+  padding-left:min(38%,190px);font-family:var(--font-mono);font-size:11px;
+  letter-spacing:.06em;color:rgba(11,17,19,.45)}
+.feed-group ul{list-style:none;margin:0;padding:0}
+.feed-group li{display:grid;grid-template-columns:min(38%,190px) 1fr auto;
+  align-items:center;gap:12px;padding:7px 0;border-top:1px solid rgba(11,17,19,.06)}
+.feed-group li:first-child{border-top:0}
+.feed-group li>b{font-family:var(--font-text);font-size:13.5px;font-weight:500;
+  color:rgba(11,17,19,.86)}
+.feed-group li>em{font-family:var(--font-mono);font-style:normal;font-size:11px;
+  font-weight:600;color:var(--bay-blue);white-space:nowrap}
+.ftrack{position:relative;display:block;height:14px;border-radius:7px;
+  background:linear-gradient(90deg,rgba(11,17,19,.05),rgba(11,17,19,.09))}
+.ftrack::after{content:'';position:absolute;left:0;right:0;top:50%;height:1px;
+  background:rgba(11,17,19,.10)}
+.ftrack i{position:absolute;top:50%;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;
+  border-radius:50%;background:var(--cranberry);
+  box-shadow:0 0 0 3px rgba(104,10,29,.14)}
+.ftrack .fspan{position:absolute;top:50%;height:7px;margin-top:-3.5px;border-radius:4px;
+  background:linear-gradient(90deg,rgba(104,10,29,.75),rgba(20,85,143,.6))}
+@media (max-width:620px){
+  .feed-axis{padding-left:0;font-size:11px}
+  .feed-group li{grid-template-columns:1fr auto;gap:6px 10px}
+  .feed-group li>b{grid-column:1}
+  .feed-group li>em{grid-column:2;justify-self:end}
+  .ftrack{grid-column:1 / -1}
+}
+/* ---- the same reveal the front page uses, so About moves like the rest --- */
+.rv{opacity:0;transform:translateY(14px);
+  transition:opacity .7s cubic-bezier(.19,1,.22,1),transform .7s cubic-bezier(.19,1,.22,1)}
+.rv.vis{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){ .rv{opacity:1;transform:none;transition:none} }
+@media (max-width:640px){
+  .abio{grid-template-columns:1fr;justify-items:center;text-align:center}
+  .abio-text h2{text-align:center}
+}
+/* == about:css end == */
+</style>
+<style>/* == method:css start == */
+.mk-lede{font-size:clamp(17px,1.5vw,24px);line-height:1.45;text-align:center;margin:0}
+.mk-key{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:20px 0 6px}
+.mk-key span{font-family:var(--font-text);font-size:13px;color:rgba(11,17,19,.78)}
+.mk{display:inline-block;font-family:var(--font-mono);font-size:11px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:5px;
+  border:1px solid;white-space:nowrap}
+.mk-v{color:#2C6B45;border-color:rgba(56,133,87,.42);background:rgba(56,133,87,.10)}
+.mk-l{color:#0F4577;border-color:rgba(20,85,143,.40);background:rgba(20,85,143,.09)}
+.mk-jump{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:22px 0 0;padding:0;list-style:none}
+.mk-jump a{display:inline-block;text-decoration:none;font-family:var(--font-mono);font-size:11px;
+  font-weight:600;letter-spacing:.06em;padding:6px 11px;border-radius:7px;color:var(--bay-blue);
+  background:rgba(20,85,143,.07);border:1px solid rgba(20,85,143,.20);transition:background .2s,border-color .2s}
+.mk-jump a:hover{background:rgba(20,85,143,.15);border-color:rgba(20,85,143,.45)}
+.mk-body{text-align:left;margin:34px 0 0}
+.mk-h2{font-family:var(--font-display);font-weight:700;letter-spacing:-.025em;
+  font-size:clamp(20px,2vw,29px);color:var(--ink);margin:46px 0 4px;padding-top:24px;
+  border-top:1px solid rgba(11,17,19,.12);scroll-margin-top:80px}
+.mk-h2:first-of-type{margin-top:8px}
+.mk-h3{font-family:var(--font-display);font-weight:700;letter-spacing:-.015em;
+  font-size:clamp(15px,1.35vw,19px);color:var(--cranberry);margin:28px 0 6px}
+.mk-h4{font-family:var(--font-text);font-weight:700;font-size:14px;margin:18px 0 4px;color:var(--ink)}
+.mk-body p{font-family:var(--font-text);font-size:14.5px;line-height:1.68;
+  color:rgba(11,17,19,.84);margin:8px 0}
+.mk-list{margin:8px 0 8px 2px;padding:0;list-style:none}
+.mk-list li{position:relative;padding-left:16px;font-family:var(--font-text);font-size:14px;
+  line-height:1.6;color:rgba(11,17,19,.84);margin:4px 0}
+.mk-list li::before{content:'';position:absolute;left:2px;top:.62em;width:5px;height:5px;
+  border-radius:50%;background:rgba(20,85,143,.55)}
+.mk-note{margin:14px 0;padding:13px 16px;border-radius:11px;
+  background:rgba(194,65,12,.06);border:1px solid rgba(194,65,12,.22)}
+.mk-note p{margin:4px 0;font-size:13.5px;color:rgba(11,17,19,.86)}
+.mk-tw{overflow-x:auto;margin:12px 0 16px;border-radius:11px;
+  border:1px solid rgba(11,17,19,.09);background:rgba(255,255,255,.55)}
+.mk-t{border-collapse:collapse;width:100%;min-width:520px}
+.mk-t th{position:sticky;top:0;text-align:left;font-family:var(--font-mono);font-size:11px;
+  font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(11,17,19,.62);
+  padding:10px 13px;background:rgba(241,243,242,.97);border-bottom:1px solid rgba(11,17,19,.12)}
+.mk-t td{font-family:var(--font-text);font-size:13.5px;color:rgba(11,17,19,.86);
+  padding:9px 13px;border-bottom:1px solid rgba(11,17,19,.06);vertical-align:top}
+.mk-t tbody tr:last-child td{border-bottom:0}
+.mk-t tbody tr:hover{background:rgba(20,85,143,.045)}
+.mk-t td:nth-child(2){font-family:var(--font-mono);font-size:13px;white-space:nowrap}
+.mk-body code{font-family:var(--font-mono);font-size:12.5px;padding:1px 5px;border-radius:4px;
+  background:rgba(11,17,19,.06);color:rgba(11,17,19,.78)}
+@media (max-width:620px){ .mk-t{min-width:440px} }
+/* == method:css end == */</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<canvas id="flow" aria-hidden="true"></canvas>
+<header class="site-head">
+  <a class="wm" href="./">Massachusetts Data Hub</a>
+  <nav class="site-nav" aria-label="Main">
+    <a href="index.html#top">The Instrument</a>
+    <a href="index.html#dashboards">Dashboards</a>
+    <a href="videos.html">Videos</a>
+    <a href="about.html">About</a>
+    
+    <a href="method.html">Method</a>
+  </nav>
+</header>
+<main id="main" class="doc">
+  <div class="doc-in">
+    <h1>Method</h1>
+    <span class="ramp" aria-hidden="true"></span>
+    <p class="mk-lede">Every figure on this site, with the source it came from and
+    the date it was checked.</p>
+    <div class="mk-key">
+      <span><span class="mk mk-v">verified</span> checked by hand against the source</span>
+      <span><span class="mk mk-l">live</span> refreshed by a feed; the JSON is authoritative</span>
+    </div>
+    <ul class="mk-jump"><li><a href="#immigration">Immigration</a></li><li><a href="#housing-real-estate">Housing & Real Estate</a></li><li><a href="#employment-labor">Employment & Labor</a></li><li><a href="#education">Education</a></li><li><a href="#healthcare-insurance">Healthcare & Insurance</a></li><li><a href="#cost-of-living">Cost of Living</a></li><li><a href="#gold-treasury">Gold & Treasury</a></li><li><a href="#tax-burden-federal-massachusetts">Tax Burden — Federal & Massachusetts</a></li><li><a href="#state-budget-the-scope-reconciliation">State Budget — the scope reconciliation</a></li><li><a href="#tax-burden-new-hampshire">Tax Burden — New Hampshire</a></li><li><a href="#dashboard-registry">Dashboard Registry</a></li></ul>
+    <div class="mk-body">
+<blockquote class="mk-note"><p><strong>Last Reviewed:</strong> August 10, 2026</p><p><strong>Maintainer:</strong> Duncan Burns</p><p><strong>Purpose:</strong> Reference for hand-verified data points used across dashboards</p></blockquote>
+<h2 id="immigration" class="mk-h2 rv">Immigration</h2>
+<h3 class="mk-h3">National — Border Encounters (CBP)</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Fiscal Year</th><th>SWB Encounters</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>FY2017</td><td>415,517</td><td>CBP</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>FY2018</td><td>521,090</td><td>CBP</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>FY2019</td><td>977,509</td><td>CBP</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>FY2020</td><td>458,088</td><td>CBP</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>FY2021</td><td>1,734,686</td><td>CBP</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>FY2022</td><td>2,378,944</td><td>CBP</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>FY2023</td><td>2,475,669</td><td>CBP</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>FY2024</td><td>2,136,800</td><td>CBP</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>FY2025 (full year)</td><td>237,538</td><td>CBP (USBP only)</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Jul 2026</td></tr><tr><td>FY2026 (thru May 2026)</td><td>61,726</td><td>CBP (USBP only)</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Jul 2026</td></tr></tbody></table></div>
+<ul class="mk-list"><li><strong>FY2025 pace:</strong> Lowest since 1970</li><li><strong>FY2021-24 total:</strong> ~10.8M nationwide encounters</li><li><strong>Source URL:</strong> https://www.cbp.gov/newsroom/stats/southwest-land-border-encounters</li></ul>
+<blockquote class="mk-note"><p><strong>⚠️ Methodology break at FY2025 — do not compare across it.</strong></p><p>FY2017–FY2024 are <strong>total</strong> SWB encounters (Border Patrol + Office of Field Operations</p><p>ports of entry), from OHSS/KHSM. CBP stopped publishing the OFO port-of-entry component</p><p>for FY2025+, so FY2025 and FY2026 above are <strong>Border Patrol only</strong> and are therefore not</p><p>like-for-like with the years above them. The immigration dashboard's total series</p><p>deliberately ends at FY2024 for this reason.</p><p>Live figures: <code>data/cbp-encounters-latest.json</code> (<span class="mk mk-l" title="refreshed by a feed">live</span> refreshed monthly on the 25th).</p></blockquote>
+<h3 class="mk-h3">National — Net International Migration (Census)</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Year</th><th>NIM (persons)</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>2019</td><td>1,031,000</td><td>Census Vintage 2025</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>2020</td><td>818,000</td><td>Census Vintage 2025</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>2021</td><td>1,041,000</td><td>Census Vintage 2025</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>2022</td><td>2,020,000</td><td>Census Vintage 2025</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>2023</td><td>2,358,000</td><td>Census Vintage 2025</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>2024</td><td>2,384,000</td><td>Census Vintage 2025</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>2025 proj</td><td>321,000</td><td>Census Vintage 2025</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr></tbody></table></div>
+<ul class="mk-list"><li><strong>Census methodology revision (Dec 2024):</strong> 69–102% undercount in prior estimates</li><li><strong>2022-24 revised total:</strong> +6.8M (revised upward)</li><li><strong>Source URL:</strong> https://www.census.gov/programs-surveys/popest.html</li></ul>
+<h3 class="mk-h3">National — Deportation Math</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Metric</th><th>Figure</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>Entered (FY2021-24)</td><td>~8M</td><td>CBP + Census</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Interior removals (Biden admin)</td><td>~600K (~150K/yr)</td><td>ICE ERO</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Net remaining</td><td>~7.4M</td><td>Calculated</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr></tbody></table></div>
+<h3 class="mk-h3">National — Fiscal Impact</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Metric</th><th>Figure</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>Cato/NASEM cumulative surplus (1994-2023)</td><td>$14.5T</td><td>Cato White Paper 2025</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>College grad share of surplus</td><td>$11.7T (81%)</td><td>Cato/NASEM</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Non-college grad share</td><td>$2.8T (19%)</td><td>Cato/NASEM</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Noncitizen share of surplus</td><td>$6.3T</td><td>Cato/NASEM</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>CBO state/local net cost (2023)</td><td>$9.2B</td><td>CBO June 2025</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Undocumented tax contributions (national)</td><td>$96.7B</td><td>ITEP 2024</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Incarceration rate vs natives</td><td>44% less likely</td><td>Cato/NASEM</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr></tbody></table></div>
+<ul class="mk-list"><li><strong>Key finding:</strong> Legal immigrants net positive at all levels; undocumented net negative at state/local</li><li><strong>Cato caveat:</strong> Paper does NOT separate legal from illegal; counts US-born children as "US-born"</li></ul>
+<h3 class="mk-h3">Massachusetts — Immigration Costs</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Category</th><th>Annual Cost</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>Total annual immigration cost</td><td>~$2.35B</td><td>Multiple state sources</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Illegal-only cost estimate</td><td>$800M–$1.5B</td><td>CIS/FAIR/state data</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Undocumented tax contributions (MA)</td><td>~$1.4B total ($446M state/local)</td><td>ITEP</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr></tbody></table></div>
+<h3 class="mk-h3">Massachusetts — Shelter Crisis</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Metric</th><th>Figure</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>FY2024 shelter spending (actual)</td><td>~$978M</td><td>EOHLC / State Auditor</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>FY2025 shelter spending</td><td>~$978M</td><td>EOHLC</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>FY2026 shelter budget</td><td>$276M</td><td>Gov. Healey budget</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Cost per family per week</td><td>$3,496</td><td>State Auditor</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>$100K fee per shelter family</td><td>Proposed</td><td>Legislature</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr></tbody></table></div>
+<h3 class="mk-h3">Massachusetts — H-1B Workers</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Year</th><th>H-1B Workers (MA)</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>Peak</td><td>21,834</td><td>USCIS</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Current</td><td>~7,550</td><td>USCIS</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr></tbody></table></div>
+<h3 class="mk-h3">Massachusetts — Concentration Cities</h3>
+<p><span class="mk mk-l" title="refreshed by a feed">live</span> Live values: <code>data/census-latest.json</code> (ACS 5-year, vintage 2024, refreshed monthly on the 20th). The figures below are that file's current contents; the Feb 2026 column showed an older ACS vintage.</p>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>City</th><th>Foreign-Born %</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>Chelsea</td><td>46%</td><td>ACS 2024 (5-yr)</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Jul 2026</td></tr><tr><td>Everett</td><td>46%</td><td>ACS 2024 (5-yr)</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Jul 2026</td></tr><tr><td>Lawrence</td><td>45%</td><td>ACS 2024 (5-yr)</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Jul 2026</td></tr><tr><td>Revere</td><td>44%</td><td>ACS 2024 (5-yr)</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Jul 2026</td></tr><tr><td>Malden</td><td>41%</td><td>ACS 2024 (5-yr)</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Jul 2026</td></tr><tr><td>Lynn</td><td>37%</td><td>ACS 2024 (5-yr)</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Jul 2026</td></tr><tr><td>Brockton</td><td>34%</td><td>ACS 2024 (5-yr)</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Jul 2026</td></tr><tr><td>Framingham / Quincy</td><td>33%</td><td>ACS 2024 (5-yr)</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Jul 2026</td></tr><tr><td>Lowell</td><td>30%</td><td>ACS 2024 (5-yr)</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Jul 2026</td></tr><tr><td>Boston</td><td>28%</td><td>ACS 2024 (5-yr)</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Jul 2026</td></tr><tr><td>Waltham</td><td>26%</td><td>ACS 2024 (5-yr)</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Jul 2026</td></tr><tr><td>Worcester</td><td>25%</td><td>ACS 2024 (5-yr)</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Jul 2026</td></tr><tr><td>Methuen / Somerville</td><td>24%</td><td>ACS 2024 (5-yr)</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Jul 2026</td></tr><tr><td>Springfield</td><td>10%</td><td>ACS 2024 (5-yr)</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Jul 2026</td></tr></tbody></table></div>
+<ul class="mk-list"><li><strong>60-mile radius of Beacon Hill</strong> — inner-ring cities bearing disproportionate burden</li><li><strong>Lawrence multilingual population:</strong> 78.1%</li><li><strong>Chelsea multilingual population:</strong> 70.6%</li><li><strong>Everett:</strong> 63.4% · <strong>Revere:</strong> 56.3% · <strong>Lynn:</strong> 53.5% · <strong>Malden:</strong> 50.9%</li><li><strong>MA median household income:</strong> $103,960 (ACS 2024 5-yr)</li></ul>
+<h3 class="mk-h3">Massachusetts — Population &amp; Migration</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Metric</th><th>Figure</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>IRS returns lost (cumulative 2011–2023)</td><td>184,719</td><td>IRS SOI</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Aug 2026</td></tr><tr><td>AGI lost (cumulative 2011–2023)</td><td>$24.7B</td><td>IRS SOI</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Aug 2026</td></tr><tr><td>Net outflow, latest year (2022-23)</td><td>16,921 returns</td><td>IRS SOI</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Aug 2026</td></tr><tr><td>Net AGI loss, latest year (2022-23)</td><td>$4.18B</td><td>IRS SOI</td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Aug 2026</td></tr><tr><td>2024 US growth from immigration</td><td>84%</td><td>Census</td><td><span class="mk mk-v" title="hand verified">verified</span> Jan 2026</td></tr><tr><td>MA NIM "nosedive" (2025 proj)</td><td>Historic decline</td><td>Census Vintage 2025</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr></tbody></table></div>
+<h2 id="housing-real-estate" class="mk-h2 rv">Housing &amp; Real Estate</h2>
+<h3 class="mk-h3">Massachusetts — Median Prices (Warren Group)</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Region</th><th>Median Price</th><th>YoY Change</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>Massachusetts</td><td>$638,000</td><td>+3.7%</td><td>Warren Group</td><td><span class="mk mk-v" title="hand verified">verified</span> Jan 2026</td></tr><tr><td>Greater Boston</td><td>$800,000</td><td>+4.2%</td><td>Warren Group</td><td><span class="mk mk-v" title="hand verified">verified</span> Jan 2026</td></tr><tr><td>Essex County</td><td>$699,000</td><td>+5.1%</td><td>Warren Group</td><td><span class="mk mk-v" title="hand verified">verified</span> Jan 2026</td></tr></tbody></table></div>
+<ul class="mk-list"><li><strong>Source URL:</strong> https://www.thewarrengroup.com/</li></ul>
+<h3 class="mk-h3">Massachusetts — Average Prices (MLS PIN, 5-Year)</h3>
+<p><span class="mk mk-l" title="refreshed by a feed">live</span> <strong>Source of truth: <code>data/mls-history.json</code></strong> (closed sales per calendar year), regenerated by <code>update-mls-figures.py</code>. The dashboards read that cache directly — do not hand-edit a price here or there. Values below are the cache as of its 2026-07-17 generation.</p>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Year</th><th>MA Statewide</th><th>Essex County</th><th>Boston</th><th>Newburyport</th></tr></thead><tbody><tr><td>2021</td><td>$662,660</td><td>$713,369</td><td>$1,086,945</td><td>$941,914</td></tr><tr><td>2022</td><td>$720,966</td><td>$766,970</td><td>$1,066,003</td><td>$1,077,707</td></tr><tr><td>2023</td><td>$755,209</td><td>$813,741</td><td>$1,082,495</td><td>$1,113,346</td></tr><tr><td>2024</td><td>$809,407</td><td>$870,718</td><td>$1,132,849</td><td>$1,234,212</td></tr><tr><td>2025</td><td>$853,462</td><td>$896,083</td><td>$1,299,708</td><td>$1,325,883</td></tr><tr><td>2026</td><td>$866,440</td><td>$902,134</td><td>$1,303,605</td><td>$1,221,963</td></tr></tbody></table></div>
+<ul class="mk-list"><li><strong>5-Year Growth (2021→2025):</strong> MA +28.8%, Newburyport +40.8%, Essex +25.6%, Boston +19.6%</li><li><strong>Note:</strong> These are AVERAGES (skewed by luxury); Warren Group MEDIANS used for affordability analysis</li></ul>
+<h4 class="mk-h4">Live trailing-12-month window (changes daily — do not transcribe)</h4>
+<p>The dashboards' last column is <strong>not calendar 2026</strong> — it is a rolling trailing-12-month window rewritten every day. As of <strong>August 21, 2026</strong>: MA $866,440 · Essex $902,134 · Boston $1,303,605. Quote it with its as-of date or not at all.</p>
+<h3 class="mk-h3">Massachusetts — Market Indicators</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Metric</th><th>Calendar 2025</th><th>Trailing 12mo (as of 2026-08-21)</th><th>Source</th></tr></thead><tbody><tr><td>Avg DOM</td><td>35.6 days</td><td>38 days</td><td>MLS PIN <span class="mk mk-l" title="refreshed by a feed">live</span></td></tr><tr><td>SP/LP Ratio</td><td>101.18%</td><td>100.94%</td><td>MLS PIN <span class="mk mk-l" title="refreshed by a feed">live</span></td></tr><tr><td>Units Sold</td><td>38,870</td><td>40,782</td><td>MLS PIN <span class="mk mk-l" title="refreshed by a feed">live</span></td></tr><tr><td>Median Price</td><td>$670,000</td><td>$680,000</td><td>MLS PIN <span class="mk mk-l" title="refreshed by a feed">live</span></td></tr></tbody></table></div>
+<blockquote class="mk-note"><p>Earlier revisions listed the trailing-12-month figures under a "2025" heading —</p><p>most recently "Units Sold 39,323 <span class="mk mk-v" title="hand verified">verified</span> Feb 2026", which is the live window, not the</p><p>calendar year, and not a February figure. They are separated above.</p></blockquote>
+<h3 class="mk-h3">Haverhill Specific</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Metric</th><th>Value</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>Median household income</td><td>$88,326</td><td>Census QuickFacts ACS 2020-2024</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>MA median household income</td><td>$103,960</td><td>ACS 2024 (5-yr), <code>data/census-latest.json</code></td><td><span class="mk mk-l" title="refreshed by a feed">live</span> Jul 2026</td></tr><tr><td>Condo median (Haverhill)</td><td>$390,000</td><td>MLS</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>SF median (Haverhill)</td><td>$605,500</td><td>MLS</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Income needed for condo</td><td>~$86K</td><td>Calc: 6.5%, 20% down, 28% DTI</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Income needed for SF</td><td>~$124K</td><td>Calc: 6.5%, 20% down, 28% DTI</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr></tbody></table></div>
+<h3 class="mk-h3">New Hampshire — Market Data (PrimeMLS)</h3>
+<p><span class="mk mk-l" title="refreshed by a feed">live</span> Source of truth: <code>data/nh-figures.json</code>, refreshed daily by <code>update-nh-figures.py</code>. Values below are that file as of <strong>2026-08-01</strong>. (Feed is PrimeMLS, not Paragon.)</p>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Region</th><th>Median Price</th><th>Avg Sale</th><th>Avg DOM</th><th>SP/LP</th></tr></thead><tbody><tr><td>NH Statewide</td><td>$441,616</td><td>$528,884</td><td>29 days</td><td>100.41%</td></tr></tbody></table></div>
+<ul class="mk-list"><li><strong>Active inventory:</strong> 2,922 listings · median list $649,000 · avg list $864,326</li><li>Also tracked per-market: Portsmouth, Salem, Derry, Windham</li></ul>
+<h3 class="mk-h3">Boston — Commercial Real Estate (CMBS)</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Metric</th><th>Value</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>Office vacancy (C&amp;W)</td><td>19.0%</td><td>Cushman &amp; Wakefield Q2 2026</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>Office vacancy (Colliers)</td><td>23.7%</td><td>Colliers Q2 2026</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>Office vacancy (CBRE)</td><td>18.7%</td><td>CBRE Q2 2026</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>National office vacancy</td><td>20.1%</td><td>Cushman &amp; Wakefield Q2 2026</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>CMBS office delinquency</td><td>11.57%</td><td>Trepp, June 2026</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>CMBS all-property delinquency</td><td>7.35%</td><td>Trepp, June 2026</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>Pre-COVID vacancy</td><td>~7.5%</td><td>Multiple sources</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr></tbody></table></div>
+<blockquote class="mk-note"><p>**Vacancy definitions differ by brokerage — these are not competing estimates of one</p><p>number.** C&amp;W 19.0%, CBRE 18.7% and Colliers 23.7% all describe Greater Boston Q2 2026</p><p>on different footprints (submarket set, building class, sublease treatment). Quote the</p><p>brokerage with the figure, and don't mix them in a single time series.</p></blockquote>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Major sale discounts (2025)</th><th>31–62% losses</th><th>Boston Globe / CommercialEdge</th><th><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</th></tr></thead><tbody><tr><td>Boston property tax dependence</td><td>~73% of $4.8B budget</td><td>Boston.gov</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>National avg office value decline</td><td>~37%</td><td>Green Street</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr></tbody></table></div>
+<h2 id="employment-labor" class="mk-h2 rv">Employment &amp; Labor</h2>
+<h3 class="mk-h3">Massachusetts — Current Labor Market</h3>
+<p><span class="mk mk-l" title="refreshed by a feed">live</span> Source of truth: <code>data/employment-latest.json</code>, refreshed monthly from the BLS API. Values below are that file as of <strong>2026-07-31</strong> (reference month June 2026).</p>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Metric</th><th>Value</th><th>Period</th><th>Source</th></tr></thead><tbody><tr><td>MA unemployment rate</td><td>4.4%</td><td>June 2026</td><td>BLS LAUS <span class="mk mk-l" title="refreshed by a feed">live</span></td></tr><tr><td>MA unemployment level</td><td>170,985</td><td>June 2026</td><td>BLS LAUS <span class="mk mk-l" title="refreshed by a feed">live</span></td></tr><tr><td>MA labor force</td><td>3,873,506</td><td>June 2026</td><td>BLS LAUS <span class="mk mk-l" title="refreshed by a feed">live</span></td></tr><tr><td>MA total nonfarm</td><td>3,719,500</td><td>June 2026</td><td>BLS CES <span class="mk mk-l" title="refreshed by a feed">live</span></td></tr><tr><td>US unemployment rate</td><td>4.2%</td><td>June 2026</td><td>BLS <span class="mk mk-l" title="refreshed by a feed">live</span></td></tr><tr><td>US job openings</td><td>7.594M</td><td>May 2026</td><td>BLS JOLTS <span class="mk mk-l" title="refreshed by a feed">live</span></td></tr></tbody></table></div>
+<blockquote class="mk-note"><p><strong>⚠️ BLS discontinued monthly state-level JOLTS in 2026.</strong> National JOLTS is still monthly;</p><p>state figures are annual now, first annual release July 2026. Any "MA job openings rate"</p><p>quoted monthly is a pre-2026 series and cannot be extended.</p></blockquote>
+<h3 class="mk-h3">Massachusetts — JOLTS (historical, pre-discontinuation)</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Metric</th><th>Value</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>Job openings rate (peak)</td><td>~5.5%</td><td>BLS JOLTS</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Job openings rate (2025)</td><td>~4.2%</td><td>BLS JOLTS</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>MA premium over national rate</td><td>Nearly gone</td><td>BLS JOLTS</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr></tbody></table></div>
+<h3 class="mk-h3">National — Labor Market (2025)</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Metric</th><th>Value</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>NFP downward revision (Apr 2024–Mar 2025)</td><td>-911,000 jobs</td><td>BLS benchmark</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Healthcare jobs added (2025)</td><td>+713,000</td><td>BLS CES</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Business/professional services lost</td><td>-97,000</td><td>BLS CES</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Manufacturing lost</td><td>-68,000</td><td>BLS CES</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Federal government jobs lost since peak</td><td>-277,000 (-9.2%)</td><td>BLS CES</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Perceived job-finding probability</td><td>43.1% (record low)</td><td>NY Fed SCE Dec 2025</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Private sector hiring plans</td><td>Lowest since 2009</td><td>Challenger/BLS</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr></tbody></table></div>
+<ul class="mk-list"><li><strong>Key finding:</strong> "Hiring recession" — low-hire/low-fire environment, worst since 2009 by multiple measures</li><li><strong>Healthcare masks weakness:</strong> 713K healthcare jobs &gt; total net gains, meaning all other sectors flat/negative</li></ul>
+<h3 class="mk-h3">National — Employment Situation Release Dates</h3>
+<p>Machine-readable copy lives in <a href="data/bls-release-schedule.json" target="_blank" rel="noopener"><code>data/bls-release-schedule.json</code></a>; the employment updater reads it to stamp "Released &amp;lt;date&amp;gt;" on the national block.</p>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Reference Month</th><th>Released</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>November 2025</td><td>Dec 16, 2025</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>December 2025</td><td>Jan 09, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>January 2026</td><td>Feb 11, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>February 2026</td><td>Mar 06, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>March 2026</td><td>Apr 03, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>April 2026</td><td>May 08, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>May 2026</td><td>Jun 05, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>June 2026</td><td>Jul 02, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>July 2026</td><td>Aug 07, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>August 2026</td><td>Sep 04, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>September 2026</td><td>Oct 02, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>October 2026</td><td>Nov 06, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>November 2026</td><td>Dec 04, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr></tbody></table></div>
+<ul class="mk-list"><li><strong>Not a first-Friday rule.</strong> April 2026 went out on the *second* Friday (May 8) and June 2026 on a *Thursday* (Jul 2, moved for July 4). These dates cannot be computed — they must be read from the published schedule.</li><li><strong>Source URL:</strong> https://www.bls.gov/schedule/news_release/empsit.htm</li></ul>
+<h3 class="mk-h3">Massachusetts — State Employment &amp; Unemployment Release Dates</h3>
+<p>The MA vintage. Lands ~3 weeks after the national release, which is why the MA blocks on the employment dashboard legitimately sit a month behind the national block. Same JSON file, <code>state_employment</code> key.</p>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Reference Month</th><th>Released</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>November 2025</td><td>Jan 07, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>December 2025</td><td>Jan 27, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>January 2026</td><td>Apr 08, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>February 2026</td><td>Apr 22, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>March 2026</td><td>May 06, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>April 2026</td><td>May 22, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>May 2026</td><td>Jun 23, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>June 2026</td><td>Jul 21, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>July 2026</td><td>Aug 21, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>August 2026</td><td>Sep 18, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>September 2026</td><td>Oct 20, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>October 2026</td><td>Nov 20, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>November 2026</td><td>Dec 18, 2026</td><td>BLS schedule</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr></tbody></table></div>
+<ul class="mk-list"><li><strong>Even less regular than the national schedule.</strong> The January 2026 reference month did not appear until <strong>April 8, 2026</strong>.</li><li><strong>Source URL:</strong> https://www.bls.gov/schedule/news_release/laus.htm</li><li><strong>Maintenance:</strong> BLS publishes ~13 months ahead. When the newest reference month is missing, the updater logs a <code>::warning::</code> in the Actions run and renders an em dash instead of inventing a date — that warning is the cue to top up the table above and the JSON.</li><li><strong>Note:</strong> bls.gov HTML 403s non-browser clients, so this cannot be scraped from CI (the same block that stalled the CBP feed). <code>api.bls.gov</code> serves the figures but carries no release dates.</li></ul>
+<h2 id="education" class="mk-h2 rv">Education</h2>
+<h3 class="mk-h3">Statewide Enrollment Shifts (2019–2025)</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Sector</th><th>Change</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>K-12 overall</td><td>-3.5%</td><td>DESE</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Local public schools</td><td>-6.4%</td><td>DESE</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Private schools</td><td>-1%</td><td>DESE</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Vocational/technical</td><td>+18%</td><td>DESE</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Charter schools</td><td>+11%</td><td>DESE</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Homeschooling</td><td>+56%</td><td>DESE</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr></tbody></table></div>
+<h3 class="mk-h3">Gateway Cities vs. Wealthy Towns (DESE FY2024 / MCAS 2025)</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Metric</th><th>Gateway Cities (7)</th><th>Wealthy Towns (7)</th><th>Gap</th></tr></thead><tbody><tr><td>Per pupil spending</td><td>$22,887</td><td>$26,166</td><td>+$3,278 (+14%)</td></tr><tr><td>Overall proficiency</td><td>20.9%</td><td>67.6%</td><td>+46.6 pts (3.2x)</td></tr><tr><td>Failure rate</td><td>35.4%</td><td>7.1%</td><td>5x higher failure</td></tr><tr><td>Teacher salary</td><td>$83,140</td><td>$101,150</td><td>+$18,010 (+22%)</td></tr></tbody></table></div>
+<ul class="mk-list"><li><strong>Key finding:</strong> Wealthy towns spend only 14% more but achieve 3.2x higher proficiency</li><li><strong>Sources:</strong> DESE PerPupilExpenditures.xlsx (FY2024), NextGenMCAS.xlsx (Spring 2025), TeacherSalaries.xlsx (2020-21)</li></ul>
+<h2 id="healthcare-insurance" class="mk-h2 rv">Healthcare &amp; Insurance</h2>
+<h3 class="mk-h3">2026 MA Rate Increases (Division of Insurance)</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Carrier</th><th>Approved Increase</th><th>Verified</th></tr></thead><tbody><tr><td>Harvard Pilgrim</td><td>12.2%</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Blue Cross Blue Shield</td><td>11.9%</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Tufts Health</td><td>11.1%</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Health New England</td><td>9.4%</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>UnitedHealthcare</td><td>9.3%</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>MGB Health Plan</td><td>7.2%</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Fallon Health</td><td>7.1%</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr></tbody></table></div>
+<ul class="mk-list"><li><strong>Average increase:</strong> 9.9% (3x inflation rate of ~3%)</li><li><strong>State benchmark:</strong> 3.6%</li><li><strong>Consumers affected:</strong> 711,563</li><li><strong>Saved via negotiations:</strong> $54M</li></ul>
+<h3 class="mk-h3">Premium Comparisons</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Year</th><th>MA Family Premium</th><th>US Average</th><th>MA Premium Gap</th></tr></thead><tbody><tr><td>2024</td><td>$28,151</td><td>$24,540</td><td>+14.7%</td></tr><tr><td>2025</td><td>—</td><td>$26,993</td><td>—</td></tr></tbody></table></div>
+<ul class="mk-list"><li><strong>MA premium cost growth (2021-23):</strong> +12.1%</li><li><strong>MA wage growth (2021-23):</strong> +9.7%</li><li><strong>Sources:</strong> KFF Employer Health Benefits Survey, CHIA Annual Reports</li></ul>
+<h2 id="cost-of-living" class="mk-h2 rv">Cost of Living</h2>
+<h3 class="mk-h3">SNAP vs. Poverty</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Metric</th><th>Value</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>MA SNAP participation rate</td><td>15.6%</td><td>USDA-FNS FY2024</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>MA poverty rate</td><td>10.4%</td><td>Census ACS 2023</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>MA SNAP beneficiaries</td><td>1.11M</td><td>USDA-FNS</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Gap (SNAP - poverty)</td><td>5.2 pp</td><td>Calculated</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr></tbody></table></div>
+<h3 class="mk-h3">SNAP Fraud Detection</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Metric</th><th>Value</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>Expected fraud (national model)</td><td>~$50M</td><td>USDA-FNS Trafficking Studies</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Detected fraud (MA)</td><td>$0.69M</td><td>MA BSI Q1 FY2025</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Detection rate</td><td>~1.4%</td><td>Calculated</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Leading fraud type</td><td>Identity fraud (31%)</td><td>LexisNexis True Cost of Fraud</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr></tbody></table></div>
+<h2 id="gold-treasury" class="mk-h2 rv">Gold &amp; Treasury</h2>
+<h3 class="mk-h3">US Treasury Gold Holdings</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Metric</th><th>Value</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>Total holdings</td><td>261.5M fine troy oz</td><td>Treasury.gov</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Holdings change (2012-2025)</td><td>Flat / zero change</td><td>Treasury.gov</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Fort Knox</td><td>147.3M oz</td><td>Treasury.gov</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>West Point</td><td>54.1M oz</td><td>Treasury.gov</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>Denver</td><td>43.9M oz</td><td>Treasury.gov</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr></tbody></table></div>
+<h3 class="mk-h3">Global Central Bank Buying</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Year</th><th>Annual Purchases (tonnes)</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>2010-2021 avg</td><td>~473t</td><td>World Gold Council</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>2022</td><td>1,082t (record)</td><td>World Gold Council</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>2023</td><td>1,037t</td><td>World Gold Council</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>2024</td><td>1,045t</td><td>World Gold Council</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr><tr><td>H1 2025</td><td>415t (~830t pace)</td><td>World Gold Council</td><td><span class="mk mk-v" title="hand verified">verified</span> Feb 2026</td></tr></tbody></table></div>
+<ul class="mk-list"><li><strong>Unreported purchases (2022):</strong> 741 tonnes (likely China, Russia)</li><li><strong>Gold price (2026):</strong> Hit $4,889/oz</li></ul>
+<h2 id="tax-burden-federal-massachusetts" class="mk-h2 rv">Tax Burden — Federal &amp; Massachusetts</h2>
+<p>Machine-readable source of truth: <a href="data/burden-constants.json" target="_blank" rel="noopener"><code>data/burden-constants.json</code></a>. Both burden dashboards are generated from it by <code>update-burden-constants.py</code>. Change the JSON, not the HTML.</p>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Figure</th><th>Value</th><th>Source</th><th>URL</th><th>Verified</th></tr></thead><tbody><tr><td>Federal standard deduction TY2026</td><td>$16,100 single / $32,200 MFJ</td><td>IRS Rev. Proc. 2025-32</td><td>irs.gov/pub/irs-drop/rp-25-32.pdf</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>Social Security wage base 2026</td><td>$184,500</td><td>SSA contribution &amp; benefit base</td><td>ssa.gov/oact/cola/cbb.html</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>MA income tax rate</td><td>5.0% flat</td><td>M.G.L. c. 62 §4</td><td>malegislature.gov</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>MA 4% surtax threshold TY2026</td><td>$1,107,750</td><td>M.G.L. c. 62 §§4(d), 5A; DOR</td><td>mass.gov/info-details/massachusetts-4-surtax-on-taxable-income</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>MA interest, dividends &amp; long-term gains</td><td>5%</td><td>M.G.L. c. 62 §4(a),(c)</td><td>mass.gov/info-details/massachusetts-income-tax-rates</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>MA short-term capital gains</td><td>8.5% (cut from 12%, St. 2023 c. 50)</td><td>M.G.L. c. 62 §4(c)</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>MA motor fuel excise</td><td><strong>26.5¢/gal</strong> (24¢ + 2.5¢ UST)</td><td>M.G.L. c. 64A §1; c. 21J §3</td><td>mass.gov/info-details/motor-fuel-excise-tax</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>MA avg single-family tax bill FY2026</td><td>$8,113</td><td>DLS *City &amp; Town*, Feb 2026</td><td>mass.gov/info-details/fy2026-statewide-average-single-family-tax-bill</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>MA avg single-family assessed value FY2026</td><td>$742,986 → 1.092% effective</td><td>DLS *City &amp; Town*, Feb 2026</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>MA corporate &amp; business excise FY2025</td><td>$4.662B</td><td>DOR FY2025 close, Aug 2025</td><td>mass.gov/news/fiscal-year-2025-revenue-collections-totaled-43708-billion</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>MA households</td><td>2,829,804</td><td>Census ACS 2024 1-yr, B11001</td><td>censusreporter.org/profiles/04000US25-massachusetts/</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>MA aggregate household income</td><td>$408.376B</td><td>Census ACS 2024 1-yr, B19025</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td><strong>MA mean household income</strong></td><td><strong>$144,312</strong> (B19025 ÷ B11001)</td><td>Derived — the allocation divisor</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>MA population</td><td>7,044,056</td><td>Census ACS 2024 5-yr, B01003</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>MA share of national household income</td><td>2.6918% (derived)</td><td>ACS B19025 ÷ national B19025</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>MA share of national population</td><td>2.1032% (derived)</td><td>ACS B01003</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>US households</td><td>132,737,144</td><td>Census ACS 2024 1-yr, B11001</td><td>censusreporter.org/tables/B11001/</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>US aggregate household income</td><td>$15.171T</td><td>Census ACS 2024 1-yr, B19025</td><td>censusreporter.org/tables/B19025/</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>Federal deficit FY2025</td><td>$1.8T (5.8–5.9% of GDP)</td><td>CBO Monthly Budget Review, Oct 2025</td><td>cbo.gov/publication/61307</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td><strong>Federal corporate income tax receipts FY2025</strong></td><td><strong>$452,089,303,420</strong> (net)</td><td>U.S. Treasury, Final Monthly Treasury Statement Sept 2025, Table 4</td><td>api.fiscaldata.treasury.gov — mts_table_4</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>Federal corporate receipts FY2024</td><td>$529,866,802,638 — FY25 is −14.7%</td><td>same</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>MA unfunded pension + OPEB (stock)</td><td>$55.8B total · $42.1B pension-only · $19,719/household</td><td>Commonwealth ACFR FY2024; PERAC</td><td>See pension-dashboard.html</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>MA annual pension appropriation FY2026</td><td>$4.9B — ~8% of the state budget, <strong>already in Layer 1</strong></td><td>Commonwealth budget FY2026</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td><strong>MA residential electricity, all-in</strong></td><td><strong>28.82¢/kWh</strong> (May 2026; 29.90¢ May 2025, −3.6%)</td><td>EIA Electric Power Monthly Table 5.6.A via API v2</td><td>api.eia.gov/v2/electricity/retail-sales/data/</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td><strong>NH residential electricity, all-in</strong></td><td><strong>27.33¢/kWh</strong> (May 2026; 24.02¢ May 2025, <strong>+13.8%</strong>)</td><td>same</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>US / New England residential electricity</td><td>18.44¢ / 28.14¢ (May 2026)</td><td>same</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td><strong>MA electric policy charges</strong></td><td><strong>3.789¢/kWh</strong> — EE 2.292 + NMRS 0.625 + SMART 0.583 + EV 0.238 + RE 0.050 + ESMP 0.001</td><td>Eversource MA filed tariff, Rate R1, eff. 1 Jul 2026</td><td>eversource.com/…/electric-delivery-rates/egma</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td><strong>MA gas policy charges</strong></td><td><strong>59.08¢/therm</strong> — EE 41.70 + GSEP 17.38</td><td>Eversource MA Summary of Gas Rates</td><td>eversource.com/docs/default-source/rates-tariffs/summary-rates-gas.pdf</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>MA gas commodity cost</td><td>38.42¢/therm (eff. 1 May 2026) — <strong>less than the policy riders above</strong></td><td>Eversource MA Cost of Gas</td><td>eversource.com/…/ma-cost-of-gas</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>MA electric distribution / transmission</td><td>9.443¢ / 4.673¢ per kWh — excluded as infrastructure</td><td>same tariff</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>MA pension-only unfunded (stock)</td><td>$42.1B · $14,877/household</td><td>Commonwealth ACFR FY2024; PERAC</td><td>See pension-dashboard.html</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>MA state/local accrual in the burden model</td><td><strong>$0 — excluded by design</strong>, see note below</td><td>Scope decision</td><td>—</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr></tbody></table></div>
+<h3 class="mk-h3">The two MA median-income figures — do not merge them</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Vintage</th><th>Value</th><th>Concept</th><th>Use</th></tr></thead><tbody><tr><td>Census <strong>CPS ASEC</strong> via FRED <code>MEHOINUSMAA646N</code></td><td><strong>$113,900</strong></td><td>Median household income 2024</td><td>Context / presets</td></tr><tr><td>Census <strong>ACS 1-year</strong> B19013</td><td><strong>$104,828</strong></td><td>Median household income 2024</td><td>Context / presets</td></tr><tr><td>Census <strong>ACS 1-year</strong> B19025 ÷ B11001</td><td><strong>$144,312</strong></td><td>*Mean* household income</td><td><strong>Allocation divisor</strong></td></tr></tbody></table></div>
+<p>CPS and ACS disagree by ~$9K on the same concept. Carry both and cite which one any given chart uses — this is exactly the kind of thing a hostile reader finds first.</p>
+<p><strong>~~Known defect to fix~~ — FIXED 2026-08-11.</strong> <code>tax-budget-dashboard.html</code> labelled $113,900 as "Census 2024 ACS"; it is the <strong>CPS</strong> figure and is now labelled "Census CPS ASEC (2024)" in both places, with the $104,828 ACS comparator named inline. The same file carried an unlabelled "$7,732/year" property tax figure; the hero stat, the prose and the stat card now read <strong>$8,113 (FY2026)</strong>. The FY2025 county table keeps its own FY2025 source line — it was already labelled correctly and its county figures are FY2025.</p>
+<p>The <code>chartIncomeReal</code> cross-state bar series still uses 113,900 for MA. Left alone deliberately: the other seven states' vintage is undocumented, and swapping MA to ACS without knowing theirs would trade a labelling error for a comparability error. <strong>Open item:</strong> establish the vintage of the other states, then make all eight consistent.</p>
+<p><strong>Never use a median as an allocation divisor.</strong> Per-household shares must sum back to the statewide pool, which only works with the mean. The reconciliation panel on the burden dashboard checks this.</p>
+<h2 id="state-budget-the-scope-reconciliation" class="mk-h2 rv">State Budget — the scope reconciliation</h2>
+<blockquote class="mk-note"><p><strong>Read this before quoting any Massachusetts budget total.</strong> Three different numbers</p><p>circulate for the same fiscal year. They are all correct; they are different scopes.</p><p>Quoting one without naming its scope is how the same year ends up with three answers.</p></blockquote>
+<p>The official GAA workbooks split every account into four types. The <strong>headline figure the press release and the media quote is the first three, and excludes Intragovernmental Service Spending.</strong></p>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Account type</th><th>FY24</th><th>FY25</th><th>FY26 GAA</th><th>FY26 *proj.*</th><th><strong>FY27 GAA</strong></th></tr></thead><tbody><tr><td>Budgetary Direct Appropriations</td><td>53.384</td><td>54.749</td><td>57.905</td><td>61.661</td><td><strong>60.292</strong></td></tr><tr><td>Section 2E Consolidated Transfer</td><td>1.940</td><td>2.245</td><td>2.290</td><td>2.452</td><td><strong>2.288</strong></td></tr><tr><td>Budgetary Retained Revenues</td><td>0.739</td><td>0.724</td><td>0.779</td><td>0.764</td><td><strong>0.836</strong></td></tr><tr><td>Intragovernmental Service Spending</td><td>0.737</td><td>0.787</td><td>0.853</td><td>0.838</td><td><strong>0.901</strong></td></tr><tr><td><strong>All four types</strong></td><td>56.800</td><td>58.505</td><td>61.826</td><td>65.715</td><td><strong>64.317</strong></td></tr><tr><td><strong>HEADLINE SCOPE</strong> (first three)</td><td>56.063</td><td>57.718</td><td>60.974</td><td>64.877</td><td><strong>63.416</strong></td></tr></tbody></table></div>
+<p>$B. Source: official mass.gov GAA export <code>gaabudgets.xlsx</code>. <span class="mk mk-v" title="hand verified">verified</span> Verified Aug 2026.</p>
+<p><strong>Proof the definition is right, not inferred:</strong> 60.292 + 2.288 + 0.836 = <strong>$63.416B</strong>, matching <code>summary-fy-27-enacted-budget-summary.csv</code>'s Total row of <strong>$63,416,035,478</strong> to the dollar, and the press release's "$63.42 billion".</p>
+<h3 class="mk-h3">FY2027 enacted — key figures</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Figure</th><th>Value</th><th>Source</th><th>Verified</th></tr></thead><tbody><tr><td>FY2027 GAA, headline scope</td><td><strong>$63.416B</strong> (+4.01% over FY26)</td><td>H.5555, signed 9 Jul 2026</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td><strong>Governor's vetoes</strong></td><td><strong>$0 — none.</strong> Signed the conference report untouched</td><td>Globe / CommonWealth Beacon, 9 Jul 2026</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>Votes</td><td>Senate 39–1, House 142–6</td><td>State House News</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>Chapter 70</td><td><strong>$7,658,399,506</strong> (+$793.5M, +11.6%) — *final year of the SOA ramp*</td><td><code>sect3.xlsx</code></td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>— municipal / regional split</td><td>$6,695,466,289 / $962,933,217</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>Unrestricted General Government Aid</td><td><strong>$1,363,109,516</strong> (+$40M, +3.0%)</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>SpEd Circuit Breaker</td><td>$654.6M (+35.0%); $806.6M incl. Fair Share supp.</td><td><code>gaabudgets.xlsx</code></td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>Fair Share surtax deployed</td><td>~$2.7B (~64% education / ~36% transportation)</td><td>MTF</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>Emergency Assistance family shelter</td><td>$259.9M (−6.0%; was $325.3M in FY24)</td><td><code>gaabudgets.xlsx</code></td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>State Retiree Benefits Trust (OPEB) deposit</td><td><strong>$400M</strong>, down from $550M in FY24 (−27%)</td><td>line 1595-6152</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>Line items in <code>tax-budget-dashboard.html</code></td><td>860, <strong>all 860 verified against the official GAA</strong></td><td><code>gaa1.xlsx</code> diff</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr></tbody></table></div>
+<h3 class="mk-h3">Enacted ≠ spent — the supplemental gap</h3>
+<p>Like-for-like (identical 913-account universe, headline scope, inter-fund transfer lines excluded from both sides):</p>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>FY</th><th>Enacted</th><th>Actual / projected</th><th>Overrun</th></tr></thead><tbody><tr><td>FY24</td><td>55.870</td><td>55.958</td><td>+0.2%</td></tr><tr><td>FY25</td><td>57.567</td><td>63.303</td><td><strong>+10.0%</strong></td></tr><tr><td>FY26</td><td>60.956</td><td>64.859 (proj.)</td><td><strong>+6.4%</strong></td></tr><tr><td>FY27</td><td>63.400</td><td>— not begun</td><td>—</td></tr></tbody></table></div>
+<p>Plotted as <code>h5Outturn</code> on <code>tax-budget-dashboard.html</code>.</p>
+<blockquote class="mk-note"><p><strong>Do not compute this by summing <code>gaaspend.xlsx</code> raw.</strong> That file contains inter-fund</p><p>transfer accounts — <code>1595-0029</code> (GF → Education &amp; Transportation Fund) alone is <strong>$5.3B</strong></p><p>in FY25 — which were never appropriated and appear on only one side. Summing raw</p><p>overstates the FY25 "overrun" as +25.7% instead of the true +10.0%. Exclude accounts whose</p><p>description begins *Transfer* or *XFR*, and restrict to accounts present in both workbooks.</p></blockquote>
+<h3 class="mk-h3">Local-aid CSV ingestion gotcha</h3>
+<p><code>summary-fy-27-local-aid-aid-to-municipalities.csv</code> carries a <strong><code>Total Municipal Aid</code> footer row inside the data body</strong>, plus a blank row before it. A naive <code>read_csv().sum()</code> double-counts it and reports Chapter 70 at <strong>$13.39B instead of $6.70B</strong> — a 100% overstatement. Filter out any row whose municipality name contains "Total" before aggregating. The per-town figures themselves are correct.</p>
+<p>Note also that the municipal CSV <strong>omits regional school districts</strong> (Triton, Pentucket, Whittier and the rest). Regional Ch70 flows to the *district*, not the member towns, which is why Newbury, Rowley, West Newbury and Salisbury show only $13K–$19K of Chapter 70 and are effectively UGGA-only. Use <code>sect3.xlsx</code> when districts matter.</p>
+<h2 id="tax-burden-new-hampshire" class="mk-h2 rv">Tax Burden — New Hampshire</h2>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Figure</th><th>Value</th><th>Source</th><th>URL</th><th>Verified</th></tr></thead><tbody><tr><td>NH individual income tax</td><td><strong>0%</strong> — I&amp;D repealed 1 Jan 2025</td><td>NH DRA; HB 2 (2023) ch. 79 §§86-88</td><td>revenue.nh.gov/news-and-media/repeal-nh-interest-and-dividends-tax-now-effect</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH I&amp;D rate history</td><td>5% → 4% (2023) → 3% (2024) → 0% (2025)</td><td>NH DRA</td><td>revenue.nh.gov/taxes-glance/interest-dividends-tax</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH capital gains tax</td><td><strong>None — never levied</strong> (not a 2025 change)</td><td>NH DRA</td><td>revenue.nh.gov/taxes-glance</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH general sales tax</td><td>None</td><td>NH DRA</td><td>revenue.nh.gov</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH Meals &amp; Rooms tax</td><td>8.5%</td><td>RSA 78-A</td><td>revenue.nh.gov/taxes-glance/meals-rentals-tax</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH Business Profits Tax</td><td>7.5%</td><td>RSA 77-A</td><td>revenue.nh.gov/taxes-glance/business-taxes</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH Business Enterprise Tax</td><td>0.55% on compensation + interest + dividends paid</td><td>RSA 77-E</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH Real Estate Transfer Tax</td><td>$0.75 per $100, <strong>each side</strong></td><td>RSA 78-B</td><td>revenue.nh.gov</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH households</td><td>570,689</td><td>Census ACS 2024 1-yr, B11001</td><td>censusreporter.org/profiles/04000US33-new-hampshire/</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH aggregate household income</td><td>$73.393B</td><td>Census ACS 2024 1-yr, B19025</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td><strong>NH mean household income</strong></td><td><strong>$128,604</strong> (B19025 ÷ B11001)</td><td>Derived — allocation divisor</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH median household income 2024</td><td>$99,782</td><td>Census ACS 2024 1-yr, B19013</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH population</td><td>1,394,868</td><td>Census ACS 2024 5-yr, B01003</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH share of national household income</td><td><strong>0.4838%</strong> (derived)</td><td>ACS B19025 ÷ national B19025</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH share of national population</td><td>0.4165% (derived)</td><td>ACS B01003</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td><strong>NH average municipal property rate 2025</strong></td><td><strong>$15.83 per $1,000 → 1.583%</strong> (was $20.96 in 2019)</td><td>NH Fiscal Policy Institute</td><td>nhfpi.org/resource/property-taxes-in-new-hampshire-how-they-work-and-how-they-compare/</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH per-capita property tax FY2022</td><td>$3,388 — <strong>2nd highest state</strong>, behind NJ $3,617</td><td>NHFPI</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH property tax reliance</td><td>60% (NHFPI) vs 63–64% (InDepthNH) — <strong>carry both</strong></td><td>NHFPI / InDepthNH</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td><strong>NHRS unfunded liability</strong></td><td><strong>$5.58B</strong>, 68.6% funded (30 Jun 2024) · $9,778/household</td><td>NHRS ACFR + GASB 67/74, FY2025 release</td><td>nhrs.org/docs/default-source/gasb/</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH municipal rate range</td><td>$2.62 – $36.54 per $1,000</td><td>InDepthNH, Apr 2026</td><td>indepthnh.org</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH property tax share of state+local revenue</td><td>63–64%</td><td>InDepthNH / NHFPI, Apr 2026</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td><strong>NH business taxes FY2025 (BPT+BET)</strong></td><td><strong>$1,102.6M</strong> — Gen $670.5M + Ed $432.1M</td><td>NH DAS Monthly Revenue Focus, June FY2025 accrual</td><td>das.nh.gov/accounting/FY%2025/FY2025_Monthly_Revenue_June_Preliminary_Accrual.pdf</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH business taxes FY2024</td><td>$1,217.9M (FY25 is −9.5%, and −12.4% vs the $1,259.0M plan)</td><td>same</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH BPT / BET split</td><td>75% / 25% — <strong>assumed</strong></td><td>DAS publishes them combined; split needs NH DRA</td><td>revenue.nh.gov/taxes-glance/business-taxes</td><td>⚠️ Split unverified</td></tr><tr><td>NH Interest &amp; Dividends revenue FY2025</td><td>$90.8M, down 50.7% from FY2024's $184.3M</td><td>NH DAS, June FY2025 accrual</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH General + Education Fund revenue FY2025</td><td>$3,122.7M, 1.3% below plan</td><td>NH DAS, June FY2025 accrual</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH road toll (gas)</td><td><strong>23.75¢</strong> = 22.2¢ toll + ~1.55¢ oil discharge surcharge</td><td>RSA 260:32 (base $0.18, +4.2¢ per 2014 SB 367); RSA 146-A</td><td>gc.nh.gov/rsa/html/XXI/260/260-32.htm</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH BET share of business taxes</td><td>25.7% (5-yr TY2019–23 avg); TY2023 BET = $253M</td><td>NHFPI</td><td>nhfpi.org/resource/business-enterprise-tax-rate-decreases-have-lowered-revenue-with-limited-economic-benefit/</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH BET rate history</td><td>0.75% → 0.72% (2016) → 0.675% (2018) → 0.6% (2019) → 0.55% (2022–)</td><td>NHFPI</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td><strong>NH electric policy charges</strong></td><td><strong>0.618¢/kWh</strong> — System Benefits Charge, the only mandated rider</td><td>Eversource NH filed tariff, Rate R</td><td>eversource.com/…/electric-delivery-rates/nh</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td><strong>NH gas policy charges</strong></td><td><strong>16.30¢/therm</strong> — Liberty EnergyNorth LDAC (a *ceiling*, bundles mechanisms MA excludes)</td><td>NHPUC DG 24-098; see also DE 25-071</td><td>new-hampshire.libertyutilities.com</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH electric distribution / transmission</td><td>6.727¢ / 4.445¢ per kWh — excluded as infrastructure</td><td>Eversource NH Rate R</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH stranded cost recovery</td><td><strong>−0.148¢/kWh — a credit, not a charge</strong></td><td>Eversource NH Rate R</td><td>same</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr><tr><td>NH state/local accrual in the burden model</td><td><strong>$0 — excluded by design</strong>, same rule as MA</td><td>Scope decision</td><td>—</td><td><span class="mk mk-v" title="hand verified">verified</span> Aug 2026</td></tr></tbody></table></div>
+<h3 class="mk-h3">Why pension debt is excluded from the burden calculators</h3>
+<p>The burden dashboards count what a household <strong>pays</strong>. An unfunded pension liability isn't billed to anyone — it's a claim on future tax capacity, and the portion collected today arrives through the appropriation funded by the income and property taxes Layer 1 already counts. Counting it again in Layer 5 double-counts.</p>
+<p>It also cannot be sourced symmetrically across the border, in two opposite directions:</p>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th></th><th>Massachusetts</th><th>New Hampshire</th></tr></thead><tbody><tr><td>OPEB (retiree health)</td><td><strong>included</strong> in the $55.8B — $13.7B, only 15.6% funded</td><td><strong>not sourced</strong></td></tr><tr><td>Municipal systems</td><td><strong>mostly excluded</strong> — the $42.1B is MTRS + SERS + Boston Teachers; PERAC tracks ~104</td><td><strong>included</strong> — NHRS is one statewide system</td></tr></tbody></table></div>
+<p>Use <strong>$42.1B MA vs $5.58B NH</strong> for any pension-to-pension read, and carry the caveat. The stocks are disclosed beside Layer 5 on both dashboards; the full story lives in <code>pension-dashboard.html</code>.</p>
+<p><strong>Removing it improved the analysis.</strong> Layer 5 is now entirely federal and therefore genuinely identical on both sides of the border, and the compression finding now holds at $75k — the old asymmetric placeholders (MA $2,000 vs NH $1,600) had been manufacturing a $400 NH advantage out of pure guesswork.</p>
+<h3 class="mk-h3">The Layer 4 inclusion rule</h3>
+<blockquote class="mk-note"><p>A charge is a <strong>policy cost</strong> if it exists because of a legislative or regulatory</p><p>mandate, rather than because of the physical cost of generating and delivering energy.</p></blockquote>
+<p>Excluded on both sides as infrastructure or mechanism: distribution, transmission, revenue decoupling, regulatory reconciliation, stranded cost, customer charge.</p>
+<p>Electricity is genuinely like-for-like — both figures are <strong>Eversource</strong>, the same company on both sides of the border. Gas is not: Eversource doesn't serve NH gas, so that side is Liberty EnergyNorth.</p>
+<p><strong>Both figures are conservative in the same direction.</strong> MA's is a <strong>floor</strong> — its own tariff footnote places the Long Term Renewable Contract Adjustment (83C/83D offshore wind), Solar Program Cost Adjustment and Grid Modernization *inside* the Distribution charge, unbroken out, and RPS/CES sits inside supply. NH's gas figure is a <strong>ceiling</strong> — the LDAC bundles mechanisms MA excludes. So the true gap is wider than stated.</p>
+<p><strong>Headline finding: Massachusetts gas policy charges (59.08¢/therm) cost more than the gas itself (38.42¢/therm).</strong> The prior 18¢ placeholder understated it by over 3×.</p>
+<p>Worth watching separately: <strong>NH electricity rose 13.8% year over year while MA fell 3.6%.</strong> Whatever advantage NH holds on the meter is closing fast.</p>
+<h3 class="mk-h3">NH median property tax bill — sources disagree, carry all three</h3>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Value</th><th>Effective rate</th><th>Source</th></tr></thead><tbody><tr><td>$6,530</td><td>1.82%</td><td>Ownwell</td></tr><tr><td>$6,707</td><td>1.46%</td><td>SmartAsset</td></tr><tr><td>$5,680</td><td>—</td><td>World Population Review (median across counties)</td></tr></tbody></table></div>
+<p>The dashboard uses 1.71%, derived from the ~$17.10 per $1,000 statewide average total rate, which is the cleanest of the four. **Note this is a rate on *assessed* value** — NH DRA publishes equalization ratios precisely because assessed and market values diverge, so applying it to a market price overstates the bill.</p>
+<h3 class="mk-h3">The constants-consistency rule</h3>
+<p><code>households × meanHouseholdIncome ÷ incomeShare</code> <strong>must return the same national aggregate for every state.</strong> Before this was enforced, MA implied a $14.91T national total and NH implied $17.50T — a 17.3% disagreement that made the "federal borrowing is identical across the border" claim false by $2,674 on a line captioned *"Identical basis"*. <code>update-burden-constants.py</code> now fails the build if this breaks.</p>
+<h2 id="dashboard-registry" class="mk-h2 rv">Dashboard Registry</h2>
+<p>All dashboards live at <code>https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/&lt;file&gt;</code>. Migration off the old repos is complete — the paths below are the real ones in this repo.</p>
+<div class="mk-tw"><table class="mk-t"><thead><tr><th>Dashboard</th><th>File</th><th>Auto-refreshed by</th><th>Cadence</th></tr></thead><tbody><tr><td>Immigration (National + MA)</td><td><code>immigration-dashboard.html</code></td><td><code>update-cbp-encounters.py</code></td><td>monthly (25th)</td></tr><tr><td>MA Housing Market</td><td><code>ma-housing-dashboard.html</code></td><td><code>update-mls-figures.py</code></td><td>daily</td></tr><tr><td>NH Housing Market</td><td><code>nh-housing-dashboard.html</code></td><td><code>update-nh-figures.py</code></td><td>daily</td></tr><tr><td>Haverhill Market Report</td><td><code>haverhill-market-report.html</code></td><td><code>update-mls-figures.py</code></td><td>daily</td></tr><tr><td>Master Affordability</td><td><code>affordability-dashboard.html</code></td><td><code>update-affordability-dashboard.py</code> + CPI</td><td>monthly</td></tr><tr><td>MA Education (Statewide)</td><td><code>education-statewide.html</code></td><td>— (manual)</td><td>—</td></tr><tr><td>Boston Education</td><td><code>education-boston.html</code></td><td>— (manual)</td><td>—</td></tr><tr><td>Merrimack Valley Education</td><td><code>education-merrimack-valley.html</code></td><td>— (manual)</td><td>—</td></tr><tr><td>Healthcare Insurance</td><td><code>healthcare-dashboard.html</code></td><td>— (manual)</td><td>—</td></tr><tr><td>Employment</td><td><code>employment-dashboard.html</code></td><td><code>scripts/fetch-bls-data.js</code></td><td>monthly</td></tr><tr><td>Commercial RE</td><td><code>commercial-re-dashboard.html</code></td><td>— (manual)</td><td>—</td></tr><tr><td>Energy</td><td><code>energy-dashboard.html</code></td><td><code>update-energy-dashboard.py</code></td><td>monthly (15th)</td></tr><tr><td>Tax &amp; Budget</td><td><code>tax-budget-dashboard.html</code></td><td><code>update-irs-soi-migration.py</code></td><td>monthly (1st)</td></tr><tr><td>Pension</td><td><code>pension-dashboard.html</code></td><td>— (manual)</td><td>—</td></tr><tr><td>Pay to Play</td><td><code>pay-to-play-dashboard.html</code></td><td>— (manual)</td><td>—</td></tr></tbody></table></div>
+<h3 class="mk-h3">Old repos (superseded — these still serve older copies)</h3>
+<ul class="mk-list"><li>https://duncanburns2013-dot.github.io/Immigration/</li><li>https://duncanburns2013-dot.github.io/Housing-Market-Data/housing-market-dashboard.html</li><li>https://duncanburns2013-dot.github.io/Housing-Market-Data/nh-housing-market-dashboard.html</li><li>https://duncanburns2013-dot.github.io/Housing-Market-Data/haverhill-market-report.html</li><li>https://duncanburns2013-dot.github.io/Master-Massachusetts-Affordability-Employment-/dashboard.html</li><li>https://duncanburns2013-dot.github.io/Merrimac-Valley-Education-/</li><li>https://duncanburns2013-dot.github.io/Merrimac-Valley-Education-/boston-dashboard.html</li></ul>
+    </div>
+  </div>
+</main>
+<footer>
+  <div class="share-bar">
+    <span class="share-label">Share this data:</span>
+    <a class="share-btn x" href="#" onclick="shareOn('x');return false"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>Post</a>
+    <a class="share-btn fb" href="#" onclick="shareOn('fb');return false"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>Share</a>
+    <a class="share-btn li" href="#" onclick="shareOn('li');return false"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>Share</a>
+    <a class="share-btn rd" href="#" onclick="shareOn('rd');return false"><svg viewBox="0 0 24 24"><path d="M12 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 01-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 01.042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 014.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 01.14-.197.35.35 0 01.238-.042l2.906.617a1.214 1.214 0 011.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 00-.231.094.33.33 0 000 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 000-.462.342.342 0 00-.461 0c-.545.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 00-.206-.095z"/></svg>Post</a>
+    <a class="share-btn em" href="#" onclick="shareOn('em');return false"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg>Email</a>
+  </div>
+  <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub" target="_blank">GitHub Repository</a><br>
+  <!-- No compiled-on month. Nothing refreshes this line, so it can only drift:
+       it read "April 2026" in August. Each dashboard carries its own source
+       vintage, which is the date that actually means something. -->
+  <span>Massachusetts Data Hub &middot; Compiled by Duncan Burns</span><br>
+  <span>All data from official government sources</span>
+</footer>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"}}
+</script>
+<script type="module">
+/* ===========================================================================
+   EFFECT 3 - DOMAIN-WARPED FLOW FIELD
+   One full-screen fragment shader. fbm warped by fbm warped again, evolving in
+   time, tinted on the instrument's ramp. The cursor bends the field.
+   ========================================================================= */
+import * as THREE from 'three';
+
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var cv = document.getElementById('flow');
+  if (!cv) return;
+
+  var renderer;
+  try{ renderer = new THREE.WebGLRenderer({canvas:cv, alpha:true, antialias:false}); }
+  catch(e){ return; }
+  renderer.setClearAlpha(0);
+
+  var U = {
+    uTime:{value:0}, uRes:{value:new THREE.Vector2(1,1)},
+    uMouse:{value:new THREE.Vector2(-9,-9)}, uForce:{value:0}, uStir:{value:0}
+  };
+
+  var mat = new THREE.ShaderMaterial({
+    uniforms:U, transparent:true, depthTest:false, depthWrite:false,
+    vertexShader:`void main(){ gl_Position = vec4(position.xy*2.0, 0.0, 1.0); }`,
+    fragmentShader:`
+      precision highp float;
+      uniform float uTime, uForce, uStir;
+      uniform vec2 uRes, uMouse;
+
+      float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
+      float vnoise(vec2 p){
+        vec2 i=floor(p), f=fract(p);
+        vec2 u=f*f*(3.0-2.0*f);
+        return mix(mix(hash(i),hash(i+vec2(1,0)),u.x),
+                   mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x),u.y);
+      }
+      float fbm(vec2 p){
+        float v=0.0, a=0.5;
+        for(int k=0;k<6;k++){ v+=a*vnoise(p); p=p*2.03+vec2(11.3,7.7); a*=0.5; }
+        return v;
+      }
+      /* the instrument's diverging ramp */
+      vec3 ramp(float t){
+        vec3 c0=vec3(0.071,0.275,0.498), c1=vec3(0.239,0.510,0.737),
+             c2=vec3(0.561,0.725,0.839), c3=vec3(0.812,0.780,0.706),
+             c4=vec3(0.949,0.651,0.353), c5=vec3(0.863,0.318,0.153),
+             c6=vec3(0.557,0.043,0.133);
+        float u=clamp(t,0.0,1.0)*6.0;
+        if(u<1.0)return mix(c0,c1,u);
+        if(u<2.0)return mix(c1,c2,u-1.0);
+        if(u<3.0)return mix(c2,c3,u-2.0);
+        if(u<4.0)return mix(c3,c4,u-3.0);
+        if(u<5.0)return mix(c4,c5,u-4.0);
+        return mix(c5,c6,u-5.0);
+      }
+
+      void main(){
+        vec2 uv = gl_FragCoord.xy / uRes;
+        vec2 p = uv * vec2(uRes.x/uRes.y, 1.0) * 2.4;
+        float t = uTime * (0.045 + uStir*0.16);
+
+        /* the cursor drags the field toward it */
+        vec2 mp = uMouse * vec2(uRes.x/uRes.y, 1.0) * 2.4;
+        vec2 toM = p - mp;
+        float md = length(toM);
+        p -= normalize(toM + 1e-5) * (uForce / (md*md + 0.35));
+
+        /* domain warping: fbm of an fbm of an fbm */
+        vec2 q = vec2(fbm(p + vec2(0.0, t)),
+                      fbm(p + vec2(5.2, 1.3) - t));
+        vec2 r = vec2(fbm(p + 3.4*q + vec2(1.7, 9.2) + t*0.7),
+                      fbm(p + 3.4*q + vec2(8.3, 2.8) - t*0.6));
+        float f = fbm(p + (3.2 + uStir*2.4)*r);
+
+        /* bands, so it reads as flow rather than as fog */
+        float band = fract(f*2.6 + t*1.4);
+        band = smoothstep(0.39, 0.52, band) * smoothstep(0.89, 0.58, band);
+
+        float shade = clamp(f*1.36 - 0.13, 0.0, 1.0);
+        vec3 col = ramp(shade);
+
+        float a = (band*0.52 + 0.075) * smoothstep(0.0, 0.35, f);
+        a *= 0.41;                                  /* it is a ground, not a subject */
+        gl_FragColor = vec4(col, a);
+      }`
+  });
+
+  var scene = new THREE.Scene();
+  var quad = new THREE.Mesh(new THREE.PlaneGeometry(2,2), mat);
+  quad.frustumCulled = false;
+  scene.add(quad);
+  var cam = new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+
+  function resize(){
+    var w = innerWidth, h = innerHeight;
+    renderer.setPixelRatio(Math.min(devicePixelRatio||1, 1.5));
+    renderer.setSize(w,h,false);
+    U.uRes.value.set(w * renderer.getPixelRatio(), h * renderer.getPixelRatio());
+  }
+  resize();
+  addEventListener('resize', resize, {passive:true});
+
+  /* scroll velocity stirs the field and it settles when you stop */
+  var lastY = scrollY, vel = 0;
+  addEventListener('scroll', function(){
+    vel = Math.min(1.0, Math.abs(scrollY - lastY) / 90);
+    lastY = scrollY;
+  }, {passive:true});
+
+  var want = 0;
+  addEventListener('pointermove', function(e){
+    U.uMouse.value.set(e.clientX/innerWidth, 1 - e.clientY/innerHeight);
+    want = 0.55;
+  }, {passive:true});
+  addEventListener('pointerleave', function(){ want = 0; }, {passive:true});
+
+  var hidden = false;
+  document.addEventListener('visibilitychange', function(){ hidden = document.hidden; });
+
+  var clock = new THREE.Clock(), first = true, frames = 0;
+  (function loop(){
+    requestAnimationFrame(loop);
+    if (hidden) return;
+    var dt = Math.min(clock.getDelta(), 0.05);
+    U.uTime.value += dt;
+    U.uForce.value += (want - U.uForce.value) * Math.min(1, dt*3);
+    U.uStir.value += (vel - U.uStir.value) * Math.min(1, dt*2.2);
+    vel *= 0.90;
+    renderer.render(scene, cam);
+    frames++;
+    if (first){ first = false; cv.classList.add('on'); }
+  })();
+
+  window.__FLOW = { info:function(){ return {frames:frames, on:cv.classList.contains('on'),
+                     size:U.uRes.value.x+'x'+U.uRes.value.y}; } };
+})();
+</script>
+</body>
+</html>
