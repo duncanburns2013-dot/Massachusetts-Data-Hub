@@ -48,6 +48,18 @@ BODY = '''
       </div>
     </section>
 
+    <blockquote class="acreed">
+      <p>I believe in liberty, and there can&rsquo;t be liberty without an equal
+      rule of law. I built this data hub of public information to use as a shield
+      and a sword against the enemies within.</p>
+      <p>Information like this should always be free, and the public should always
+      have access to it as a means to keep checks and balances upon their own
+      government. Unfortunately for Massachusetts residents, our government has
+      made Massachusetts the most opaque, and arguably the most corrupt
+      (pay-to-play), in the nation.</p>
+      <cite>Duncan Burns</cite>
+    </blockquote>
+
     <h2 class="asub">This started in print</h2>
     <p class="panel-body">The questions on this site are not new ones. They ran
     in <em>The Valley Patriot</em> first, and the dashboards exist because a
@@ -107,6 +119,20 @@ CSS = """
 .doc .panel-body{max-width:none;font-size:15px;line-height:1.72}
 .doc .panel-note{max-width:none;font-size:13px;line-height:1.65}
 
+/* His words, and they should not look like the rest of the page, which is
+   written about him rather than by him. */
+.acreed{margin:26px 0 0;padding:24px clamp(20px,2.6vw,34px);text-align:left;
+  border-radius:16px;border:1px solid rgba(104,10,29,.20);
+  border-left:4px solid var(--cranberry);
+  background:linear-gradient(180deg,rgba(104,10,29,.055),rgba(104,10,29,.02))}
+.acreed p{font-family:var(--font-display);font-weight:400;
+  font-size:clamp(16px,1.55vw,22px);line-height:1.5;letter-spacing:-.012em;
+  color:rgba(11,17,19,.90);margin:0 0 14px;max-width:74ch}
+.acreed p:last-of-type{margin-bottom:16px}
+.acreed cite{display:block;font-family:var(--font-mono);font-style:normal;
+  font-size:10.5px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;
+  color:var(--cranberry)}
+.acreed cite::before{content:"— "}
 .asub{font-family:var(--font-display);font-weight:700;letter-spacing:-.02em;
   font-size:clamp(17px,1.6vw,23px);color:var(--ink);margin:40px 0 10px;
   padding-top:22px;border-top:1px solid rgba(11,17,19,.10)}
