@@ -102,7 +102,7 @@ CSS = """
   background:rgba(11,17,19,.78);color:#fff;
   font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.02em}
 .vbody{display:flex;flex-direction:column;flex:1;padding:14px 16px 16px}
-.vkind{align-self:flex-start;font-family:var(--font-mono);font-size:9.5px;font-weight:700;
+.vkind{align-self:flex-start;font-family:var(--font-mono);font-size:11px;font-weight:700;
   letter-spacing:.14em;text-transform:uppercase;padding:3px 7px;border-radius:5px;border:1px solid}
 .vk-parody{color:#7A2E10;border-color:rgba(194,65,12,.45);background:rgba(194,65,12,.09)}
 .vk-explainer{color:#0F4577;border-color:rgba(20,85,143,.42);background:rgba(20,85,143,.09)}

@@ -85,7 +85,7 @@ body::after{
 .feature:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 .feature-body{padding:30px 30px 26px}
 .feature-kicker{
-  font-size:.63rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  font-size:0.6875rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
   color:var(--gold);margin-bottom:12px;
 }
 .feature h3{
@@ -102,7 +102,7 @@ body::after{
 }
 .pull-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:9px 0}
 .pull-row+.pull-row{border-top:1px solid rgba(11,17,19,0.06)}
-.pull-lbl{font-size:.66rem;text-transform:uppercase;letter-spacing:.09em;color:rgba(11,17,19,0.6)}
+.pull-lbl{font-size:0.6875rem;text-transform:uppercase;letter-spacing:.09em;color:rgba(11,17,19,0.6)}
 .pull-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.3rem;color:#0B1113}
 .pull-val.over{color:#A81733}
 .pull-note{margin-top:14px;font-size:.7rem;color:rgba(11,17,19,0.57);line-height:1.5}
@@ -145,13 +145,13 @@ body::after{
 /* "Live" is a promise that a workflow refreshes the page on a schedule, so only
    the eight auto-fed dashboards may wear it; the seven hand-maintained ones get
    .badge-snap. All fifteen said Live, including pages untouched since June. */
-.badge{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:3px 10px;border-radius:100px;color:#2A6B44;background:rgba(56,133,87,0.15);border:1px solid rgba(56,133,87,0.25)}
+.badge{font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:3px 10px;border-radius:100px;color:#2A6B44;background:rgba(56,133,87,0.15);border:1px solid rgba(56,133,87,0.25)}
 .badge-snap{color:#5A6467;background:rgba(90,100,103,0.10);border-color:rgba(90,100,103,0.22)}
 .card-name{font-family:'DM Serif Display',Georgia,serif;font-size:1.05rem;font-weight:400;color:#0B1113;line-height:1.3;margin-bottom:10px}
 .card-desc{font-size:0.82rem;font-weight:400;color:rgba(11,17,19,0.63);line-height:1.6;flex-grow:1;margin-bottom:16px}
 .card-foot{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid rgba(11,17,19,0.05)}
 .tags{display:flex;gap:5px;flex-wrap:wrap}
-.tag{font-size:0.62rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:rgba(11,17,19,0.05);color:rgba(11,17,19,0.6);border:1px solid rgba(11,17,19,0.05)}
+.tag{font-size:0.6875rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:rgba(11,17,19,0.05);color:rgba(11,17,19,0.6);border:1px solid rgba(11,17,19,0.05)}
 .arrow{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(11,17,19,0.05);color:var(--duckling);font-size:13px;font-weight:700;flex-shrink:0;transition:all 0.3s}
 .card:hover .arrow{background:var(--duckling);color:var(--navy);transform:translateX(3px)}
 
@@ -160,7 +160,7 @@ body::after{
 
 
 .share-bar{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px}
-.share-label{font-size:0.68rem;font-weight:600;color:rgba(11,17,19,0.54);text-transform:uppercase;letter-spacing:0.08em}
+.share-label{font-size:0.6875rem;font-weight:600;color:rgba(11,17,19,0.54);text-transform:uppercase;letter-spacing:0.08em}
 .share-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-size:0.72rem;font-weight:600;text-decoration:none;color:#0B1113;transition:all 0.3s;border:1px solid rgba(11,17,19,0.07);cursor:pointer;background:rgba(11,17,19,0.04);backdrop-filter:blur(4px)}
 .share-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.3);border-color:rgba(11,17,19,0.44);background:rgba(11,17,19,0.07)}
 .share-btn svg{width:14px;height:14px;fill:currentColor;flex-shrink:0}
@@ -190,7 +190,7 @@ footer a:hover{color:var(--duckling)}
 .grid .card:nth-child(14){transition-delay:0.65s}
 .grid .card:nth-child(15){transition-delay:0.7s}
 @media(max-width:960px){.grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:768px){.hero{padding:48px 16px 36px}.main-content{padding:20px 16px 40px}.grid-wrap{padding:16px}.share-bar{gap:8px}.share-btn{padding:7px 12px;font-size:0.68rem}}
+@media(max-width:768px){.hero{padding:48px 16px 36px}.main-content{padding:20px 16px 40px}.grid-wrap{padding:16px}.share-bar{gap:8px}.share-btn{padding:7px 12px;font-size:0.6875rem}}
 @media(max-width:540px){.grid{grid-template-columns:1fr}.grid-wrap{padding:12px}}
 
 /* ---- front page: instrument as hero -------------------------------------- */
@@ -209,7 +209,7 @@ footer a:hover{color:var(--duckling)}
 .stage{position:relative;height:100vh;width:100%;background:var(--bg)}
 .stage .instr{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
 .stage-more{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);
-  font-family:var(--font-mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
   color:var(--muted);text-decoration:none;opacity:.75;transition:opacity .2s}
 .stage-more:hover{opacity:1;color:var(--cranberry)}
 @media (max-width:800px){.stage{height:78vh}.site-nav{display:none}}
@@ -224,7 +224,7 @@ footer a:hover{color:var(--duckling)}
   background:linear-gradient(180deg,var(--bg) 0%,#DFE3E2 55%,var(--bg) 100%);
   border-top:1px solid var(--border);border-bottom:1px solid var(--border);
   text-align:center}
-.turn-l{font-family:var(--font-mono);font-size:10px;letter-spacing:.24em;
+.turn-l{font-family:var(--font-mono);font-size:11px;letter-spacing:.24em;
   text-transform:uppercase;color:var(--berk-ink);margin:0 0 22px}
 .turn-h{font-family:var(--font-display);font-weight:700;
   font-size:clamp(26px,3.6vw,54px);line-height:1.08;letter-spacing:-.03em;
@@ -248,16 +248,16 @@ footer a:hover{color:var(--duckling)}
   font-size:clamp(28px,4.2vw,64px);line-height:1.04;letter-spacing:-.034em;color:var(--ink)}
 .turn-h em{font-style:normal;color:var(--cranberry)}
 .turn-side{border-left:2px solid var(--cranberry);padding-left:clamp(16px,1.6vw,26px)}
-.turn-l{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;
+.turn-l{font-family:var(--font-mono);font-size:11px;letter-spacing:.2em;
   text-transform:uppercase;color:var(--berk-ink);margin:0 0 18px}
 .turn-figs{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:14px 22px}
 .turn-figs div{margin:0}
-.turn-figs dt{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.16em;
+.turn-figs dt{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;
   text-transform:uppercase;color:var(--muted)}
 .turn-figs dd{margin:2px 0 0;font-family:var(--font-mono);font-weight:600;
   font-size:clamp(17px,1.5vw,23px);letter-spacing:-.03em;color:var(--bay-blue)}
 .turn-go{display:inline-block;margin-top:26px;font-family:var(--font-mono);
-  font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
+  font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
   text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:5px;
   transition:color .2s,border-color .2s}
 .turn-go:hover{color:var(--cranberry);border-color:var(--cranberry)}
@@ -294,17 +294,17 @@ footer a:hover{color:var(--duckling)}
 .card-name{font-family:var(--font-display);font-weight:700;font-size:18px;
   letter-spacing:-.022em;line-height:1.18;color:var(--ink)}
 .card-desc{font-family:var(--font-text);font-size:13.5px;line-height:1.5;color:var(--muted);flex:1}
-.card-also{font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;
+.card-also{font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;
   color:var(--berk-ink);border-top:1px dashed var(--border);padding-top:9px;margin-top:2px}
 .card-also b{font-weight:600;color:var(--ink)}
 .card-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;
   margin-top:4px}
-.tag{font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+.tag{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
   color:var(--muted);background:rgba(11,17,19,.04);border:1px solid var(--border);
   border-radius:2px;padding:3px 6px}
 .arrow{font-size:15px;color:var(--muted);transition:transform .34s cubic-bezier(.2,.8,.2,1),color .34s}
 .card:hover .arrow{transform:translateX(5px);color:var(--cranberry)}
-.badge{font-family:var(--font-mono);font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;
+.badge{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
   color:var(--berk-ink);background:rgba(42,107,68,.09);border:1px solid rgba(42,107,68,.2);
   border-radius:20px;padding:3px 8px}
 .badge.b-ext{color:var(--muted);background:rgba(11,17,19,.04);border-color:var(--border)}
@@ -321,7 +321,7 @@ footer a:hover{color:var(--duckling)}
 .card-go{text-decoration:none;position:static}
 .card-go::after{content:'';position:absolute;inset:0;z-index:1}
 .card-also{position:relative;z-index:2;display:block;text-decoration:none;
-  font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;
   color:var(--berk-ink);border-top:1px dashed var(--border);
   padding-top:9px;margin-top:2px;transition:color .2s}
 .card-also b{font-weight:600;color:var(--ink)}
@@ -332,8 +332,8 @@ footer a:hover{color:var(--duckling)}
    three subjects when it is one */
 .card-also{position:relative;z-index:2;display:flex;flex-wrap:wrap;gap:4px 14px;
   align-items:baseline;border-top:1px dashed var(--border);padding-top:9px;margin-top:2px;
-  font-family:var(--font-mono);font-size:10px;letter-spacing:.04em}
-.card-also>span{color:var(--muted);text-transform:uppercase;letter-spacing:.14em;font-size:9px}
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.04em}
+.card-also>span{color:var(--muted);text-transform:uppercase;letter-spacing:.14em;font-size:11px}
 .card-also a{color:var(--berk-ink);text-decoration:none;transition:color .2s}
 .card-also a:hover{color:var(--cranberry)}
 
@@ -488,7 +488,7 @@ footer{color:rgba(11,17,19,.80)}
 .sources.vis .sources-ramp{transform:scaleX(1)}
 .srcchips{display:flex;flex-wrap:wrap;gap:6px}
 .srcchip{
-  font-family:var(--font-mono);font-size:10px;font-weight:600;
+  font-family:var(--font-mono);font-size:11px;font-weight:600;
   letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;
   padding:5px 10px;border-radius:6px;
   color:rgba(11,17,19,.78);background:rgba(255,255,255,.72);
@@ -658,7 +658,7 @@ footer::before{
   color:rgba(11,17,19,.90);margin:0 0 14px;max-width:74ch}
 .acreed p:last-of-type{margin-bottom:16px}
 .acreed cite{display:block;font-family:var(--font-mono);font-style:normal;
-  font-size:10.5px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;
+  font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;
   color:var(--cranberry)}
 .acreed cite::before{content:"— "}
 .asub{font-family:var(--font-display);font-weight:700;letter-spacing:-.02em;

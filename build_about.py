@@ -122,7 +122,7 @@ CSS = """
   color:rgba(11,17,19,.90);margin:0 0 14px;max-width:74ch}
 .acreed p:last-of-type{margin-bottom:16px}
 .acreed cite{display:block;font-family:var(--font-mono);font-style:normal;
-  font-size:10.5px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;
+  font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;
   color:var(--cranberry)}
 .acreed cite::before{content:"— "}
 .asub{font-family:var(--font-display);font-weight:700;letter-spacing:-.02em;

@@ -34,7 +34,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:1000px;margin:0 auto;position:relative}
 .hero-stat{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:14px 8px;text-align:center}
 .hero-stat .val{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.1rem,2.5vw,1.6rem)}
-.hero-stat .lbl{font-size:0.6rem;opacity:0.55;margin-top:3px;text-transform:uppercase;letter-spacing:0.08em;font-weight:500}
+.hero-stat .lbl{font-size:0.6875rem;opacity:0.55;margin-top:3px;text-transform:uppercase;letter-spacing:0.08em;font-weight:500}
 .hero-stat .val.bad{color:#e8a87c}.hero-stat .val.warn{color:#ffd080}.hero-stat .val.good{color:#7fd8a6}
 
 /* TAB NAV */
@@ -60,10 +60,10 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:22px}
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.03);transition:box-shadow 0.3s,transform 0.3s}
 .stat-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.07);transform:translateY(-2px)}
-.stat-card .label{font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px}
+.stat-card .label{font-size:0.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px}
 .stat-card .value{font-family:'DM Serif Display',Georgia,serif;font-size:1.8rem;line-height:1.1}
 .stat-card .value.red{color:var(--red)}.stat-card .value.green{color:var(--green)}.stat-card .value.blue{color:var(--blue)}.stat-card .value.amber{color:var(--amber)}
-.stat-card .sub{font-size:0.68rem;color:var(--muted);margin-top:4px}
+.stat-card .sub{font-size:0.6875rem;color:var(--muted);margin-top:4px}
 
 /* ALERTS */
 .alert{background:var(--red-bg);border:1px solid rgba(192,57,43,0.15);border-radius:12px;padding:18px 20px;margin-bottom:18px;border-left:4px solid var(--red)}
@@ -92,22 +92,22 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 /* DATA CARDS */
 .metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:18px}
 .metric-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
-.metric-card .mc-label{font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:8px}
+.metric-card .mc-label{font-size:0.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:8px}
 .metric-card .mc-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.6rem;line-height:1.1;margin-bottom:8px}
 .metric-card .mc-val.red{color:var(--red)}.metric-card .mc-val.blue{color:var(--blue)}.metric-card .mc-val.amber{color:var(--amber)}.metric-card .mc-val.green{color:var(--green)}
 .mc-meta{display:flex;flex-wrap:wrap;gap:16px;margin-top:4px}
-.mc-ml{font-size:0.65rem;color:var(--muted)}.mc-mv{font-size:0.78rem;font-weight:600;color:var(--text)}
+.mc-ml{font-size:0.6875rem;color:var(--muted)}.mc-mv{font-size:0.78rem;font-weight:600;color:var(--text)}
 
 /* DATA TABLE */
 .data-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:18px;overflow-x:auto;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
 .data-card h3{font-size:0.85rem;font-weight:700;margin-bottom:14px;color:var(--navy)}
 .data-table{width:100%;border-collapse:collapse;font-size:0.78rem}
-.data-table th{text-align:left;padding:9px 12px;border-bottom:2px solid var(--navy);font-weight:700;color:var(--navy);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em}
+.data-table th{text-align:left;padding:9px 12px;border-bottom:2px solid var(--navy);font-weight:700;color:var(--navy);font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.08em}
 .data-table td{padding:9px 12px;border-bottom:1px solid var(--border)}
 .data-table tr:hover{background:rgba(15,41,66,0.02)}
 .td-red{color:var(--red);font-weight:700}.td-green{color:var(--green);font-weight:700}.td-amber{color:var(--amber);font-weight:700}
 .td-blue{color:var(--blue);font-weight:700}
-.source{font-size:0.65rem;color:var(--muted);margin-top:8px;font-style:italic}
+.source{font-size:0.6875rem;color:var(--muted);margin-top:8px;font-style:italic}
 
 /* FOOTER */
 footer{text-align:center;padding:32px 24px;color:var(--muted);font-size:0.72rem;border-top:1px solid var(--border);background:#fff;margin-top:30px}
@@ -116,7 +116,7 @@ footer a:hover{color:var(--gold)}
 
 /* RESPONSIVE */
 @media(max-width:768px){.hero-stats{grid-template-columns:repeat(2,1fr)}.chart-grid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.container{padding:16px}}
-@media(max-width:480px){.hero-stats{grid-template-columns:1fr 1fr}.stat-row{grid-template-columns:1fr}.tab-btn{padding:10px 10px;font-size:0.65rem}}
+@media(max-width:480px){.hero-stats{grid-template-columns:1fr 1fr}.stat-row{grid-template-columns:1fr}.tab-btn{padding:10px 10px;font-size:0.6875rem}}
 </style>
 <!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
 <link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
