@@ -219,7 +219,17 @@ footer a:hover{color:var(--duckling)}
   font-family:var(--font-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
   color:var(--muted);text-decoration:none;opacity:.75;transition:opacity .2s}
 .stage-more:hover{opacity:1;color:var(--cranberry)}
-@media (max-width:800px){.stage{height:78vh}.site-nav{display:none}}
+@media (max-width:800px){
+  .stage{height:78vh}
+  /* The nav used to be display:none here, which left every phone with no way
+     to reach Dashboards, Videos, About or Method at all - there is no hamburger
+     anywhere on this site to fall back to. Five short items wrap onto a second
+     line instead, and the head gets a wash so they stay legible over the map. */
+  .site-head{flex-direction:column;align-items:flex-start;gap:9px;padding:13px 18px;
+    background:linear-gradient(180deg,rgba(233,235,234,.96) 38%,rgba(233,235,234,0))}
+  .site-nav{flex-wrap:wrap;gap:7px 15px;font-size:11px;letter-spacing:.10em}
+  .site-nav a{padding-bottom:2px}
+}
 
 /* ---- the turn: instrument -> directory -----------------------------------
    The stage ended and the card grid began with nothing between them, so the

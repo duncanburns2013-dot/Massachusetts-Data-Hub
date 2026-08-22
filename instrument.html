@@ -202,7 +202,35 @@ body.arrived .head nav{transition-delay:.38s}
   .survey{display:none}
   .wordmark,.head nav,.ask,.controls{opacity:1;transform:none;transition:none}
 }
-@media (max-width:800px){.head nav{display:none}.legend{display:none}}
+@media (max-width:800px){
+  /* The desktop design is a full-bleed hero: the canvas fills the viewport and
+     the copy floats on top of it. At phone width there is no room for both, and
+     the result was the map running straight through the text with the question
+     landing on the buttons. The canvas stays exactly as it is - full viewport,
+     fixed - so every projection, pointer and label calculation is untouched.
+     What changes is that the copy stops floating: it starts below the map and
+     scrolls up over it on its own ground. */
+  html,body{height:auto}
+  body{overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain}
+  /* pan-y hands vertical drags back to the page. Without it the canvas ate every
+     gesture, so trying to scroll rotated the map instead - the "difficult to
+     control" part. Horizontal drags still turn it. */
+  canvas{touch-action:pan-y}
+  .shell{position:static;inset:auto;display:block;height:auto}
+  .head{position:fixed;top:0;left:0;right:0;z-index:6;
+    flex-direction:column;align-items:flex-start;gap:8px;
+    background:linear-gradient(180deg,rgba(198,205,204,.97) 40%,rgba(198,205,204,0))}
+  .head nav{flex-wrap:wrap;gap:6px 14px;font-size:11px}
+  /* the map gets the top of the screen to itself; the reading starts under it */
+  .foot{position:relative;z-index:6;margin-top:63vh;
+    background:var(--bg);box-shadow:0 -10px 14px 0 var(--bg);
+    padding-bottom:26px}
+  .ask{padding-top:6px}
+  .ask h1{font-size:23px;line-height:1.12}
+  .controls{gap:16px;align-items:flex-start}
+  /* too wide to sit beside the controls at this width */
+  .legend{display:none}
+}
 </style>
 <script type="application/ld+json">
 {
@@ -430,6 +458,9 @@ const VIEWS={
     // control strip. 3.9 sits in the empty band between the state's southern
     // edge (Nantucket is the southernmost land, at z~3.24) and the chrome.
     q3:{p:[0,.012,3.9],flat:true},
+    // the state is 14.7 units across; 16 keeps a margin for the coastline
+    // and the Cape, which are the first things a narrow frame clips
+    fit:16,
     cam:{p:[0.6,15.6,10.6],t:[0,0,0],fov:34}},
   rank  :{lab:'Who charges the most?',q:'Who charges the most?',
     s:m=>`All 351 towns torn out of the map and stood in one line, highest on the left. ${m.lab}.`,
@@ -816,6 +847,27 @@ function layout(){
    camera back only as far as the aspect requires and never pulls it closer than
    the distance the view was authored at. */
 function framed(V){
+  /* A tilted view cannot be fitted by pushing z alone. Doing that to the map
+     drops its elevation from 56 degrees to 16 and the extrusions go edge-on, so
+     a view may instead declare `fit`: the width it has to hold, fitted by moving
+     the camera out along its own axis. The angle it was authored at survives and
+     only the distance changes. Used when the frame is narrower than the view was
+     drawn for, which in practice means a phone. */
+  if(V.fit){
+    const halfF = (V.cam.fov ?? 34) * Math.PI / 360;
+    const need = V.fit / (2 * Math.tan(halfF) * Math.max(0.2, camera.aspect));
+    const d = Math.hypot(V.cam.p[0] - V.cam.t[0],
+                         V.cam.p[1] - V.cam.t[1],
+                         V.cam.p[2] - V.cam.t[2]);
+    if(need > d){
+      const k = need / d;
+      return {p:[V.cam.t[0] + (V.cam.p[0]-V.cam.t[0])*k,
+                 V.cam.t[1] + (V.cam.p[1]-V.cam.t[1])*k,
+                 V.cam.t[2] + (V.cam.p[2]-V.cam.t[2])*k],
+              t:V.cam.t, fov:V.cam.fov};
+    }
+    return V.cam;
+  }
   if(!V.ext) return V.cam;
   const half = (V.cam.fov ?? 34) * Math.PI / 360;
   const need = V.ext / (2 * Math.tan(half) * Math.max(0.2, camera.aspect));
@@ -884,7 +936,14 @@ if(SDF){
   qText.material.depthWrite=false;
   scene.add(qText);
   window.__Q=qText;
-  document.documentElement.classList.add('q-in-scene');
+  // The scene headline is sized in world units, so it does not answer to the
+  // viewport: on a phone it overran both edges and landed on the controls. Below
+  // 800px the question goes back to being the DOM heading, which wraps.
+  if(matchMedia('(min-width:801px)').matches){
+    document.documentElement.classList.add('q-in-scene');
+  }else{
+    qText.visible=false;
+  }
 }
 const LBL_PX=13;                       // on-screen height of a primary label
 function mkT(txt,font,size,color,y,track){
@@ -999,8 +1058,19 @@ function apply(instant){
      Pushed out of range for those views rather than switched off, so the map's
      own falloff is untouched. */
   const flat=view!=='place';
-  scene.fog.near=flat?400:40;
-  scene.fog.far =flat?800:84;
+  /* The map's fog is authored for a camera at ~19 units. When `fit` pulls the
+     camera out to clear a narrow frame it can sit at three times that, which put
+     the whole state inside a 40-84 fog and drained it to the background colour -
+     on a phone the map arrived as a pale ghost. The falloff travels with the
+     camera so the depth cueing reads the same from any distance. */
+  // measured against where the camera is going, not where it still is - apply()
+  // runs before flyTo() has moved it, so reading camera.position here gave the
+  // previous view's distance and the fog never travelled at all
+  const fc = framed(V);
+  const camD = Math.hypot(fc.p[0] - fc.t[0], fc.p[1] - fc.t[1], fc.p[2] - fc.t[2]);
+  const k = Math.max(1, camD / 19);
+  scene.fog.near=flat?400:40*k;
+  scene.fog.far =flat?800:84*k;
   if(qText&&V.q3){
     qText.text=V.q;
     qText.position.set(...V.q3.p);
@@ -1213,7 +1283,10 @@ addEventListener('resize',()=>{
   renderer.setSize(innerWidth,innerHeight);
   /* the required distance depends on aspect, so a reshape has to re-fit */
   const V=VIEWS[view];
-  if(V&&V.ext&&flyT>=1){const c=framed(V);camera.position.z=c.p[2];controls.update();}
+  // a view fitted along its own axis has to be re-fitted the same way, or
+  // rotating a phone leaves the map framed for the old aspect
+  if(V&&V.fit&&flyT>=1){const c=framed(V);camera.position.set(...c.p);controls.update();}
+  else if(V&&V.ext&&flyT>=1){const c=framed(V);camera.position.z=c.p[2];controls.update();}
 });
 </script>
 </body>
