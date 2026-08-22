@@ -720,26 +720,32 @@ basis"*. `update-burden-constants.py` now fails the build if this breaks.
 
 ## 🔗 Dashboard Registry
 
-All dashboards live at `https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/<file>`.
-Migration off the old repos is complete — the paths below are the real ones in this repo.
+All dashboards live at `https://massachusettsdatahub.com/<file>`.
+Cadences below are the cron lines in `.github/workflows`, and the refresh column
+names the script that actually writes each page.
 
 | Dashboard | File | Auto-refreshed by | Cadence |
 |-----------|------|-------------------|---------|
-| Immigration (National + MA) | `immigration-dashboard.html` | `update-cbp-encounters.py` | monthly (25th) |
-| MA Housing Market | `ma-housing-dashboard.html` | `update-mls-figures.py` | daily |
-| NH Housing Market | `nh-housing-dashboard.html` | `update-nh-figures.py` | daily |
-| Haverhill Market Report | `haverhill-market-report.html` | `update-mls-figures.py` | daily |
-| Master Affordability | `affordability-dashboard.html` | `update-affordability-dashboard.py` + CPI | monthly |
-| MA Education (Statewide) | `education-statewide.html` | — (manual) | — |
-| Boston Education | `education-boston.html` | — (manual) | — |
-| Merrimack Valley Education | `education-merrimack-valley.html` | — (manual) | — |
-| Healthcare Insurance | `healthcare-dashboard.html` | — (manual) | — |
-| Employment | `employment-dashboard.html` | `scripts/fetch-bls-data.js` | monthly |
-| Commercial RE | `commercial-re-dashboard.html` | — (manual) | — |
-| Energy | `energy-dashboard.html` | `update-energy-dashboard.py` | monthly (15th) |
-| Tax & Budget | `tax-budget-dashboard.html` | `update-irs-soi-migration.py` | monthly (1st) |
-| Pension | `pension-dashboard.html` | — (manual) | — |
-| Pay to Play | `pay-to-play-dashboard.html` | — (manual) | — |
+| Immigration (National + MA) | `immigration-dashboard.html` | `update-cbp-encounters.py`, `update-census-data.py` | 25th, 20th |
+| MA Housing Market | `ma-housing-dashboard.html` | `update-mls-figures.py` | daily, 07:00 UTC |
+| NH Housing Market | `nh-housing-dashboard.html` | `update-nh-figures.py` &rarr; `data/nh-figures.json` | daily, 07:20 UTC |
+| Haverhill Market Report | `haverhill-market-report.html` | `update-mls-figures.py` | daily, 07:00 UTC |
+| Master Affordability | `affordability-dashboard.html` | `update-cost-of-living.py`, `update-census-data.py` | 20th |
+| Employment | `employment-dashboard.html` | `scripts/fetch-bls-data.js` | the Friday in the 1st&ndash;7th and 15th&ndash;21st windows |
+| Energy | `energy-dashboard.html` | `update-energy-dashboard.py`, `update-fuel-prices.py` | 2nd and 26th |
+| Tax & Budget | `tax-budget-dashboard.html` | `update-irs-soi-migration.py`, `update-tax-budget-dashboard.py` | 1st, 26th |
+| The Five Layers (MA & NH) | `tax-burden-dashboard.html` | `update-burden-constants.py` | run by hand |
+| All Things Boston | `all-things-boston.html` | &mdash; | manual |
+| MA Education (Statewide) | `education-statewide.html` | &mdash; | manual |
+| Merrimack Valley Education | `education-merrimack-valley.html` | &mdash; | manual |
+| Healthcare Insurance | `healthcare-dashboard.html` | &mdash; | manual |
+| Commercial RE | `commercial-re-dashboard.html` | &mdash; | manual |
+| Pension | `pension-dashboard.html` | &mdash; | manual |
+| Pay to Play | `pay-to-play-dashboard.html` | &mdash; | manual |
+
+Consumer-price figures refresh on the 10th&ndash;16th (`update-cpi.yml`) and feed the
+affordability and energy pages rather than a page of their own. The site itself
+redeploys every three hours, and after every one of these runs.
 
 ### Old repos (superseded — these still serve older copies)
 
