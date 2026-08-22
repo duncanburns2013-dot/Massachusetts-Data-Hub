@@ -337,7 +337,7 @@ assert _box == 1, 'the lightbox appears %d times; duplicate id=lbox' % _box
 
 # Dashboards is an anchor on the front page, not on this one
 s = s.replace('<a href="#dashboards">Dashboards</a>',
-              '<a href="index.html#dashboards">Dashboards</a>')
+              '<a href="./#dashboards">Dashboards</a>')
 assert '"#dashboards"' not in s, 'a bare #dashboards link survives'
 
 io.open('about.html', 'w', encoding='utf-8', newline=NL).write(s)
