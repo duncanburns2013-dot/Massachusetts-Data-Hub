@@ -10,7 +10,7 @@ between them unless every page names which one is real.
 Re-runnable. Existing canonical and og:url tags are replaced rather than
 duplicated, and pages that already carry a description are left alone.
 """
-import io, re, glob, os
+import io, re, glob, os, json, html, subprocess
 
 BASE = 'https://massachusettsdatahub.com/'
 
@@ -29,16 +29,20 @@ NOINDEX = {
 }
 
 DESC = {
+ # No count that can move. Dashboards get added, films get added, feeds get
+ # added, and a description that names a total is wrong from the next commit
+ # onwards without anything appearing to break. 351 is the one number safe to
+ # write down, because it is fixed by statute.
  'index.html':
-   'Massachusetts tax, spending, housing, energy, education and immigration data. '
-   'Nineteen dashboards built from primary government sources, with all 351 '
-   'municipalities in one interactive instrument.',
+   'Massachusetts tax, spending, housing, energy, education and immigration data, '
+   'built from primary government sources, with all 351 municipalities in one '
+   'interactive instrument.',
  'about.html':
    'Who builds Massachusetts Data Hub, where every figure comes from, and the '
-   'schedule each of the nine data feeds refreshes on.',
+   'schedule each data feed refreshes on.',
  'videos.html':
-   'Parody and explainers on Massachusetts politics. Twenty-two short films, each '
-   'labelled as one or the other so nothing here is mistaken for the record.',
+   'Parody and explainers on Massachusetts politics, each labelled as one or the '
+   'other so nothing here is mistaken for the record.',
  'instrument.html':
    'All 351 Massachusetts municipalities as a single interactive object: tax rates, '
    'real burden per resident, median home price and affordability, at real geometry.',
@@ -53,12 +57,102 @@ DESC = {
  'ma-housing-dashboard.html':
    'Massachusetts MLS data for the state, Boston, Essex County and Greater '
    'Newburyport: median prices, days on market, sale-to-list ratios and '
-   'affordability, over thirteen years.',
+   'affordability, every year since 2014.',
 }
+
+# ---------------------------------------------------------------- structured data
+# Pages that are a body of figures get Dataset. The two names that a plain title
+# split would mangle are overridden; the rest come from the page's own <title>.
+NOT_A_DATASET = {'index.html', 'about.html', 'videos.html', 'method.html'}
+DATASET_NAME = {
+    'instrument.html':          'Massachusetts municipal tax and affordability, all 351 municipalities',
+    'tax-burden-dashboard.html': 'The five layers of Massachusetts and New Hampshire tax burden',
+}
+# where the figures are about, which is not always Massachusetts
+COVERAGE = {
+    'nh-housing-dashboard.html':  ['New Hampshire'],
+    'tax-burden-dashboard.html':  ['Massachusetts', 'New Hampshire'],
+    'all-things-boston.html':     ['Boston, Massachusetts'],
+    'haverhill-market-report.html': ['Haverhill, Massachusetts'],
+    'education-merrimack-valley.html': ['Merrimack Valley, Massachusetts'],
+}
+
+def last_commit(path):
+    """git's own record of when this page last changed - not a date I chose"""
+    try:
+        out = subprocess.run(['git', 'log', '-1', '--format=%cs', '--', path],
+                             capture_output=True, text=True, timeout=15)
+        d = out.stdout.strip()
+        return d if re.match(r'^\d{4}-\d{2}-\d{2}$', d) else None
+    except Exception:
+        return None
+
+def page_title(s):
+    m = re.search(r'<title>([^<]*)</title>', s)
+    if not m:
+        return None
+    t = html.unescape(m.group(1)).strip()
+    return re.split(r'\s+[\u2014|]\s+', t)[0].strip()
+
+def page_desc(s):
+    m = re.search(r'name="description" content="([^"]*)"', s)
+    return html.unescape(m.group(1)).strip() if m else None
+
+PERSON = {
+    '@type': 'Person',
+    '@id': BASE + 'about.html#duncan-burns',
+    'name': 'Duncan Burns',
+    'url': BASE + 'about.html',
+    'sameAs': [
+        'https://valleypatriot.com/category/op-eds-editorials/duncan-burns/',
+        'https://github.com/duncanburns2013-dot',
+    ],
+}
+ORG = {
+    '@type': 'Organization',
+    '@id': BASE + '#publisher',
+    'name': 'Massachusetts Data Hub',
+    'url': BASE,
+    'logo': BASE + 'favicon-512.png',
+    'founder': {'@id': PERSON['@id']},
+}
+# the logo file was removed as an orphan, so do not claim one
+ORG.pop('logo')
+
+def schema_for(p, s, url):
+    title, desc = page_title(s), page_desc(s)
+    if not title or not desc:
+        return None
+    if p == 'index.html':
+        node = {'@type': 'WebSite', '@id': BASE + '#website', 'name': 'Massachusetts Data Hub',
+                'url': BASE, 'description': desc, 'inLanguage': 'en-US',
+                'publisher': ORG, 'creator': PERSON}
+    elif p == 'about.html':
+        node = {'@type': 'AboutPage', '@id': url, 'url': url, 'name': title,
+                'description': desc, 'inLanguage': 'en-US',
+                'isPartOf': {'@id': BASE + '#website'}, 'mainEntity': PERSON}
+    elif p in NOT_A_DATASET:
+        return None
+    else:
+        node = {'@type': 'Dataset', '@id': url + '#dataset',
+                'name': DATASET_NAME.get(p, title), 'description': desc, 'url': url,
+                'inLanguage': 'en-US', 'isAccessibleForFree': True,
+                'creator': {'@id': PERSON['@id']}, 'publisher': ORG,
+                'includedInDataCatalog': {'@type': 'DataCatalog', '@id': BASE + '#website',
+                                          'name': 'Massachusetts Data Hub', 'url': BASE},
+                'spatialCoverage': [{'@type': 'Place', 'name': n}
+                                    for n in COVERAGE.get(p, ['Massachusetts'])]}
+        when = last_commit(p)
+        if when:
+            node['dateModified'] = when
+    node['@context'] = 'https://schema.org'
+    ordered = {'@context': node.pop('@context')}
+    ordered.update(node)
+    return ordered
 
 pages = sorted(p for p in glob.glob('*.html') if not p.startswith('_'))
 added_desc = added_canon = fixed_og = added_noindex = moved = 0
-added_icons = added_card = 0
+added_icons = added_card = added_ld = 0
 
 # the tab mark is the state's own outline; the .ico is there for older
 # browsers and the crawlers that still ask for it by that name
@@ -96,13 +190,18 @@ for p in pages:
         return '<meta property="og:url" content="%s">' % url
     s = re.sub(r'<meta property="og:url" content="([^"]*)"\s*/?>', og, s)
 
-    # --- description
-    if p in DESC and not re.search(r'name="description"', s):
-        d = '<meta name="description" content="%s">\n' % DESC[p]
-        m = re.search(r'(<title>.*?</title>\n)', s, re.S)
-        if m:
-            s = s[:m.end()] + d + s[m.end():]
-            added_desc += 1
+    # --- description. DESC is the curated wording and it wins rather than
+    # deferring to whatever the page already carries: leaving the page's own copy
+    # alone is how "Nineteen dashboards" outlived a recount that put the real
+    # figure at sixteen, three of those front-page cards being other projects.
+    if p in DESC:
+        want = '<meta name="description" content="%s">' % DESC[p]
+        if want not in s:
+            s2 = re.sub(r'[ \t]*<meta[^>]+name="description"[^>]*>\n?', '', s)
+            m = re.search(r'(<title>.*?</title>\n)', s2, re.S)
+            if m:
+                s = s2[:m.end()] + want + '\n' + s2[m.end():]
+                added_desc += 1
 
     # --- the icon set, stamped once and replaced rather than stacked
     s = re.sub(r'[ \t]*<link[^>]+rel="(?:icon|shortcut icon|apple-touch-icon)"[^>]*>\n?', '', s)
@@ -127,6 +226,18 @@ for p in pages:
         if m:
             s = s[:m.end()] + card + s[m.end():]
             added_card += 1
+
+    # --- structured data, replaced rather than stacked
+    s = re.sub(r'\n?<script type="application/ld\+json">.*?</script>', '', s, flags=re.S)
+    if p not in NOINDEX:
+        node = schema_for(p, s, url)
+        if node:
+            tag = ('<script type="application/ld+json">\n%s\n</script>\n'
+                   % json.dumps(node, indent=2, ensure_ascii=False))
+            m = re.search(r'(</head>)', s)
+            if m:
+                s = s[:m.start()] + tag + s[m.start():]
+                added_ld += 1
 
     # --- keep the template and the redirect stub out of the index
     if p in NOINDEX and 'name="robots"' not in s:
@@ -154,6 +265,7 @@ io.open('sitemap.xml', 'w', encoding='utf-8', newline='\n').write('\n'.join(sm) 
 io.open('robots.txt', 'w', encoding='utf-8', newline='\n').write(
     'User-agent: *\nAllow: /\n\nSitemap: %ssitemap.xml\n' % BASE)
 
+print('structured data    : %d pages' % added_ld)
 print('icon sets stamped  : %d' % added_icons)
 print('social cards added : %d' % added_card)
 print('pages moved to BASE: %d' % moved)
