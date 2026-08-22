@@ -7,16 +7,16 @@
   <meta property="og:site_name" content="Massachusetts Data Hub">
   <meta property="og:title" content="Massachusetts Data Hub">
   <meta property="og:description" content="Official data dashboards covering taxes, housing, education, employment, energy, and more across Massachusetts — all sourced from government data.">
-  <meta property="og:url" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/method.html">
-  <meta property="og:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
+  <meta property="og:url" content="https://massachusettsdatahub.com/method.html">
+  <meta property="og:image" content="https://massachusettsdatahub.com/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Massachusetts Data Hub">
   <meta name="twitter:description" content="Official data dashboards covering taxes, housing, education, employment, energy, and more across Massachusetts — all sourced from government data.">
-  <meta name="twitter:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
+  <meta name="twitter:image" content="https://massachusettsdatahub.com/og-image.png">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<link rel="canonical" href="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/method.html">
+<link rel="canonical" href="https://massachusettsdatahub.com/method.html">
 
 <title>Method — Massachusetts Data Hub</title>
 <meta name="description" content="Every figure on Massachusetts Data Hub, with its source, its source URL and the date it was verified.">
@@ -974,7 +974,7 @@ footer::before{
 <h3 class="mk-h3">The constants-consistency rule</h3>
 <p><code>households × meanHouseholdIncome ÷ incomeShare</code> <strong>must return the same national aggregate for every state.</strong> Before this was enforced, MA implied a $14.91T national total and NH implied $17.50T — a 17.3% disagreement that made the "federal borrowing is identical across the border" claim false by $2,674 on a line captioned *"Identical basis"*. <code>update-burden-constants.py</code> now fails the build if this breaks.</p>
 <h2 id="dashboard-registry" class="mk-h2 rv">Dashboard Registry</h2>
-<p>All dashboards live at <code>https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/&lt;file&gt;</code>. Migration off the old repos is complete — the paths below are the real ones in this repo.</p>
+<p>All dashboards live at <code>https://massachusettsdatahub.com/&lt;file&gt;</code>. Migration off the old repos is complete — the paths below are the real ones in this repo.</p>
 <div class="mk-tw"><table class="mk-t"><thead><tr><th>Dashboard</th><th>File</th><th>Auto-refreshed by</th><th>Cadence</th></tr></thead><tbody><tr><td>Immigration (National + MA)</td><td><code>immigration-dashboard.html</code></td><td><code>update-cbp-encounters.py</code></td><td>monthly (25th)</td></tr><tr><td>MA Housing Market</td><td><code>ma-housing-dashboard.html</code></td><td><code>update-mls-figures.py</code></td><td>daily</td></tr><tr><td>NH Housing Market</td><td><code>nh-housing-dashboard.html</code></td><td><code>update-nh-figures.py</code></td><td>daily</td></tr><tr><td>Haverhill Market Report</td><td><code>haverhill-market-report.html</code></td><td><code>update-mls-figures.py</code></td><td>daily</td></tr><tr><td>Master Affordability</td><td><code>affordability-dashboard.html</code></td><td><code>update-affordability-dashboard.py</code> + CPI</td><td>monthly</td></tr><tr><td>MA Education (Statewide)</td><td><code>education-statewide.html</code></td><td>— (manual)</td><td>—</td></tr><tr><td>Boston Education</td><td><code>education-boston.html</code></td><td>— (manual)</td><td>—</td></tr><tr><td>Merrimack Valley Education</td><td><code>education-merrimack-valley.html</code></td><td>— (manual)</td><td>—</td></tr><tr><td>Healthcare Insurance</td><td><code>healthcare-dashboard.html</code></td><td>— (manual)</td><td>—</td></tr><tr><td>Employment</td><td><code>employment-dashboard.html</code></td><td><code>scripts/fetch-bls-data.js</code></td><td>monthly</td></tr><tr><td>Commercial RE</td><td><code>commercial-re-dashboard.html</code></td><td>— (manual)</td><td>—</td></tr><tr><td>Energy</td><td><code>energy-dashboard.html</code></td><td><code>update-energy-dashboard.py</code></td><td>monthly (15th)</td></tr><tr><td>Tax &amp; Budget</td><td><code>tax-budget-dashboard.html</code></td><td><code>update-irs-soi-migration.py</code></td><td>monthly (1st)</td></tr><tr><td>Pension</td><td><code>pension-dashboard.html</code></td><td>— (manual)</td><td>—</td></tr><tr><td>Pay to Play</td><td><code>pay-to-play-dashboard.html</code></td><td>— (manual)</td><td>—</td></tr></tbody></table></div>
 <h3 class="mk-h3">Old repos (superseded — these still serve older copies)</h3>
 <ul class="mk-list"><li>https://duncanburns2013-dot.github.io/Immigration/</li><li>https://duncanburns2013-dot.github.io/Housing-Market-Data/housing-market-dashboard.html</li><li>https://duncanburns2013-dot.github.io/Housing-Market-Data/nh-housing-market-dashboard.html</li><li>https://duncanburns2013-dot.github.io/Housing-Market-Data/haverhill-market-report.html</li><li>https://duncanburns2013-dot.github.io/Master-Massachusetts-Affordability-Employment-/dashboard.html</li><li>https://duncanburns2013-dot.github.io/Merrimac-Valley-Education-/</li><li>https://duncanburns2013-dot.github.io/Merrimac-Valley-Education-/boston-dashboard.html</li></ul>

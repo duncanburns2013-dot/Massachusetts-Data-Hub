@@ -12,7 +12,14 @@ duplicated, and pages that already carry a description are left alone.
 """
 import io, re, glob, os
 
-BASE = 'https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/'
+BASE = 'https://massachusettsdatahub.com/'
+
+# every address this site has answered on. Anything still naming one of
+# these gets moved to BASE - og:image and twitter:image included, which
+# canonical-only rewriting used to miss. Scoped to this repo's own path so
+# the sibling projects on the same host, and all-things-boston's og:image
+# which lives in another repository, are left where they are.
+FORMER = ['https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/']
 
 # pages that should never be indexed, and never appear in the sitemap
 NOINDEX = {
@@ -50,11 +57,17 @@ DESC = {
 }
 
 pages = sorted(p for p in glob.glob('*.html') if not p.startswith('_'))
-added_desc = added_canon = fixed_og = added_noindex = 0
+added_desc = added_canon = fixed_og = added_noindex = moved = 0
 
 for p in pages:
     s = orig = io.open(p, encoding='utf-8').read()
     url = BASE + ('' if p == 'index.html' else p)
+
+    # --- move any address the site used to answer on
+    for old in FORMER:
+        if old != BASE and old in s:
+            s = s.replace(old, BASE)
+            moved += 1
 
     # --- canonical: replace any existing one rather than stacking a second
     s = re.sub(r'[ \t]*<link[^>]+rel="canonical"[^>]*>\n?', '', s)
@@ -106,6 +119,7 @@ io.open('sitemap.xml', 'w', encoding='utf-8', newline='\n').write('\n'.join(sm) 
 io.open('robots.txt', 'w', encoding='utf-8', newline='\n').write(
     'User-agent: *\nAllow: /\n\nSitemap: %ssitemap.xml\n' % BASE)
 
+print('pages moved to BASE: %d' % moved)
 print('canonicals stamped : %d' % added_canon)
 print('descriptions added : %d' % added_desc)
 print('og:url normalised  : %d changed' % fixed_og)
