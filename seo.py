@@ -47,9 +47,6 @@ DESC = {
    'Massachusetts MLS data for the state, Boston, Essex County and Greater '
    'Newburyport: median prices, days on market, sale-to-list ratios and '
    'affordability, over thirteen years.',
- 'ma-351-3d-map.html':
-   'A spinnable Massachusetts where every municipality rises by what it charges per '
-   '$1,000 of assessed value, with a guided tour.',
 }
 
 pages = sorted(p for p in glob.glob('*.html') if not p.startswith('_'))
