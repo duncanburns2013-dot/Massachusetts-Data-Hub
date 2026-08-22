@@ -222,7 +222,11 @@ body.arrived .head nav{transition-delay:.38s}
     background:linear-gradient(180deg,rgba(198,205,204,.97) 40%,rgba(198,205,204,0))}
   .head nav{flex-wrap:wrap;gap:6px 14px;font-size:11px}
   /* the map gets the top of the screen to itself; the reading starts under it */
-  .foot{position:relative;z-index:6;margin-top:63vh;
+  /* the map gets most of the screen at rest and the reading starts below the
+     fold, so scrolling is what trades one for the other. At 63vh the panel
+     sat in the middle and could only ever move up over the map - there was
+     no way to see more of it than the band it had been given. */
+  .foot{position:relative;z-index:6;margin-top:82vh;
     background:var(--bg);box-shadow:0 -10px 14px 0 var(--bg);
     padding-bottom:26px}
   .ask{padding-top:6px}
@@ -230,6 +234,20 @@ body.arrived .head nav{transition-delay:.38s}
   .controls{gap:16px;align-items:flex-start}
   /* too wide to sit beside the controls at this width */
   .legend{display:none}
+  /* The projected town names are a fixed pixel width and there are six of them
+     across the scatter. At 390px they overlapped each other and ran off both
+     edges - Nantucket, Cambridge, Edgartown and Provincetown were all cut. The
+     marks and both axes still carry the reading; the names do not survive this
+     width and are better gone than shown broken. */
+  .lbl.name{display:none}
+  /* The chips are sized by their own text and wrapped, which on a phone gave a
+     ragged two-then-one, two-then-two-then-one stagger with every edge in a
+     different place. One column, full width: every target the same size, every
+     edge aligned, and nothing depends on how long a label happens to be. */
+  .controls>.group{width:100%}
+  .chips{display:grid;grid-template-columns:1fr;gap:7px}
+  button.chip{width:100%;text-align:left;white-space:normal;padding:11px 14px;
+    font-size:13.5px;line-height:1.25}
 }
 </style>
 <script type="application/ld+json">
@@ -853,9 +871,19 @@ function framed(V){
      the camera out along its own axis. The angle it was authored at survives and
      only the distance changes. Used when the frame is narrower than the view was
      drawn for, which in practice means a phone. */
-  if(V.fit){
+  /* Portrait only. Pushing z is fine when the camera already looks along z, and
+     the two flattened views were authored that way, so on any landscape frame
+     the original behaviour below is kept untouched. In portrait it breaks: the
+     scatter's camera is almost straight overhead at [0,78,1.31], so adding z
+     swings it to a shallow angle and the plot arrives tilted with its axis
+     labels off both edges - which is exactly what a phone got. Moving the camera
+     out along its own line keeps whatever angle the view was authored at. */
+  const W = V.fit || V.ext;
+  if(W && camera.aspect < 1){
     const halfF = (V.cam.fov ?? 34) * Math.PI / 360;
-    const need = V.fit / (2 * Math.tan(halfF) * Math.max(0.2, camera.aspect));
+    // the axis labels are a fixed pixel size, so on a narrow screen they eat a
+    // larger share of the frame than the declared extent allows for
+    const need = (W * 1.26) / (2 * Math.tan(halfF) * Math.max(0.2, camera.aspect));
     const d = Math.hypot(V.cam.p[0] - V.cam.t[0],
                          V.cam.p[1] - V.cam.t[1],
                          V.cam.p[2] - V.cam.t[2]);
@@ -968,6 +996,12 @@ function clearL3(){
 // a town's name and its measurement, stacked — the name in the UI face, the
 // figure in the mono, exactly as they are everywhere else on the page
 function nameLabel(primary,secondary,v){
+  /* Six of these across a 390px scatter is not a reading, it is a pile: at that
+     width they overlapped each other and ran off the right edge, so Nantucket,
+     Cambridge, Edgartown and Provincetown all arrived broken. They are scene
+     text, so no stylesheet can reach them - they simply are not built in
+     portrait. The marks and both axes still carry the argument. */
+  if(innerWidth < innerHeight) return;
   if(SDF){
     const g=new THREE.Group();
     g.add(mkT(primary,F_UI,1,'#0B1113',.52));
@@ -1068,6 +1102,12 @@ function apply(instant){
   // previous view's distance and the fog never travelled at all
   const fc = framed(V);
   const camD = Math.hypot(fc.p[0] - fc.t[0], fc.p[1] - fc.t[1], fc.p[2] - fc.t[2]);
+  /* OrbitControls caps the distance at 120, which is generous for every view as
+     authored but not for a portrait frame: the scatter needs 166 to clear its own
+     axis labels at 390px, so the controls quietly clamped it and the plot stayed
+     too large for the screen. The ceiling has to clear whatever the fit asked
+     for, or the fit is computed and then thrown away. */
+  controls.maxDistance = Math.max(120, camD * 1.08);
   const k = Math.max(1, camD / 19);
   scene.fog.near=flat?400:40*k;
   scene.fog.far =flat?800:84*k;
@@ -1285,7 +1325,7 @@ addEventListener('resize',()=>{
   const V=VIEWS[view];
   // a view fitted along its own axis has to be re-fitted the same way, or
   // rotating a phone leaves the map framed for the old aspect
-  if(V&&V.fit&&flyT>=1){const c=framed(V);camera.position.set(...c.p);controls.update();}
+  if(V&&(V.fit||camera.aspect<1)&&flyT>=1){const c=framed(V);camera.position.set(...c.p);controls.update();}
   else if(V&&V.ext&&flyT>=1){const c=framed(V);camera.position.z=c.p[2];controls.update();}
 });
 </script>
