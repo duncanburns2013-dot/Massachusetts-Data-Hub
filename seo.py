@@ -58,6 +58,17 @@ DESC = {
 
 pages = sorted(p for p in glob.glob('*.html') if not p.startswith('_'))
 added_desc = added_canon = fixed_og = added_noindex = moved = 0
+added_icons = added_card = 0
+
+# the tab mark is the state's own outline; the .ico is there for older
+# browsers and the crawlers that still ask for it by that name
+ICONS = (
+    '<link rel="icon" href="%sfavicon.svg" type="image/svg+xml">',
+    '<link rel="icon" href="%sfavicon-32.png" sizes="32x32" type="image/png">',
+    '<link rel="icon" href="%sfavicon-16.png" sizes="16x16" type="image/png">',
+    '<link rel="icon" href="%sfavicon.ico" sizes="48x48">',
+    '<link rel="apple-touch-icon" href="%sapple-touch-icon.png">',
+)
 
 for p in pages:
     s = orig = io.open(p, encoding='utf-8').read()
@@ -93,6 +104,30 @@ for p in pages:
             s = s[:m.end()] + d + s[m.end():]
             added_desc += 1
 
+    # --- the icon set, stamped once and replaced rather than stacked
+    s = re.sub(r'[ \t]*<link[^>]+rel="(?:icon|shortcut icon|apple-touch-icon)"[^>]*>\n?', '', s)
+    m = re.search(r'(<link rel="canonical"[^>]*>\n)', s)
+    if not m:
+        m = re.search(r'(<meta[^>]+name="viewport"[^>]*>\n)', s)
+    if not m:
+        # a noindexed stub gets no canonical, and one of them carries no viewport
+        # either, so fall back to the one tag every page is guaranteed to have
+        m = re.search(r'(<title>.*?</title>\n)', s, re.S)
+    if m:
+        block = ''.join((t % BASE) + '\n' for t in ICONS)
+        s = s[:m.end()] + block + s[m.end():]
+        added_icons += 1
+
+    # --- a social card only where the page has none of its own
+    if p not in NOINDEX and 'og:image' not in s:
+        card = ('<meta property="og:image" content="%sog-image.png">\n'
+                '<meta name="twitter:image" content="%sog-image.png">\n'
+                '<meta name="twitter:card" content="summary_large_image">\n') % (BASE, BASE)
+        m = re.search(r'(<link rel="canonical"[^>]*>\n)', s)
+        if m:
+            s = s[:m.end()] + card + s[m.end():]
+            added_card += 1
+
     # --- keep the template and the redirect stub out of the index
     if p in NOINDEX and 'name="robots"' not in s:
         m = re.search(r'(<title>.*?</title>\n)', s, re.S)
@@ -119,6 +154,8 @@ io.open('sitemap.xml', 'w', encoding='utf-8', newline='\n').write('\n'.join(sm) 
 io.open('robots.txt', 'w', encoding='utf-8', newline='\n').write(
     'User-agent: *\nAllow: /\n\nSitemap: %ssitemap.xml\n' % BASE)
 
+print('icon sets stamped  : %d' % added_icons)
+print('social cards added : %d' % added_card)
 print('pages moved to BASE: %d' % moved)
 print('canonicals stamped : %d' % added_canon)
 print('descriptions added : %d' % added_desc)
