@@ -17,8 +17,9 @@
   <meta name="twitter:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
   <meta name="description" content="What is actually expensive in Massachusetts, where in the state it is expensive, and what a household needs to earn — from BEA Regional Price Parities and the MIT Living Wage Calculator.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/affordability-dashboard.html">
 <title>What It Costs to Live in Massachusetts</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha384-bs/nf9FbdNouRbMiFcrcZfLXYPKiPaGVGplVbv7dLGECccEXDW+S3zjqSKR5ZEaD" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
 
@@ -32,7 +33,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .hero .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;max-width:860px;margin:0 auto;position:relative}
 .hero .stat-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:12px 8px;min-width:auto}
 .hero .stat-box .num{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.1rem,2.5vw,1.5rem);font-weight:400;color:#e8a87c}
-.hero .stat-box .lbl{font-size:.58rem;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.5);margin-top:.2rem;font-weight:500}
+.hero .stat-box .lbl{font-size:0.6875rem;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.5);margin-top:.2rem;font-weight:500}
 nav{display:flex;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.04);justify-content:center}
 nav button{padding:13px 16px;font-size:.72rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);white-space:nowrap;border-bottom:2px solid transparent;transition:all .25s;text-transform:uppercase;letter-spacing:.05em;font-family:'DM Sans',system-ui,sans-serif}
 nav button:hover{color:var(--text);background:rgba(0,0,0,.02)}
@@ -44,13 +45,13 @@ nav button.active{color:var(--navy);border-bottom-color:var(--gold)}
 .kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 12px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.03);transition:box-shadow .3s,transform .3s}
 .kpi:hover{box-shadow:0 4px 16px rgba(0,0,0,.07);transform:translateY(-2px)}
 .kpi .val{font-family:'DM Serif Display',Georgia,serif;font-size:1.6rem;font-weight:400;line-height:1.1}
-.kpi .lbl{font-size:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:4px}
+.kpi .lbl{font-size:0.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:4px}
 .kpi.red .val{color:var(--red)}.kpi.blue .val{color:var(--blue)}.kpi.green .val{color:var(--green)}.kpi.orange .val,.kpi.yellow .val{color:var(--amber)}.kpi.purple .val{color:var(--purple)}
 .grid{display:grid;gap:14px;margin-bottom:22px}.grid-2{grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}.grid-3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.03)}
 .card.full{grid-column:1/-1}
 .card h3{font-size:.82rem;font-weight:700;color:var(--navy);margin-bottom:10px}
-.card .note{font-size:.66rem;color:var(--muted);margin:-6px 0 10px}
+.card .note{font-size:0.6875rem;color:var(--muted);margin:-6px 0 10px}
 .chart-wrap{position:relative;height:280px}.chart-wrap.tall{height:360px}.chart-wrap.short{height:240px}.chart-wrap.xtall{height:440px}
 .callout{background:var(--blue-bg);border:1px solid rgba(26,68,128,.12);border-radius:12px;padding:16px 18px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start;border-left:4px solid var(--blue)}
 .callout.red,.callout.warn{background:var(--red-bg);border-left-color:var(--red);border-color:rgba(192,57,43,.12)}
@@ -60,23 +61,27 @@ nav button.active{color:var(--navy);border-bottom-color:var(--gold)}
 .callout a{color:var(--navy);font-weight:600}
 .insight{margin-top:12px;padding:12px 14px;background:var(--surface2);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;font-size:.76rem;line-height:1.6;color:var(--text)}
 .insight strong{color:var(--navy)}
-.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.62rem;font-weight:700;letter-spacing:.03em;white-space:nowrap}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:0.6875rem;font-weight:700;letter-spacing:.03em;white-space:nowrap}
 .badge.red{background:var(--red-bg);color:var(--red)}
 .badge.green{background:var(--green-bg);color:var(--green)}
 .badge.yellow,.badge.amber{background:var(--amber-bg);color:var(--amber)}
 .badge.blue{background:var(--blue-bg);color:var(--blue)}
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:.78rem}
-th{background:rgba(15,41,66,.04);padding:10px 14px;text-align:left;font-weight:700;color:var(--navy);border-bottom:2px solid var(--navy);font-size:.65rem;text-transform:uppercase;letter-spacing:.08em}
+th{background:rgba(15,41,66,.04);padding:10px 14px;text-align:left;font-weight:700;color:var(--navy);border-bottom:2px solid var(--navy);font-size:0.6875rem;text-transform:uppercase;letter-spacing:.08em}
 td{padding:10px 14px;border-bottom:1px solid var(--border)}
 td.num{text-align:right;font-variant-numeric:tabular-nums}
 tr:hover{background:rgba(15,41,66,.02)}
 .footer{text-align:center;padding:32px 24px;color:var(--muted);font-size:.72rem;border-top:1px solid var(--border);margin-top:30px;background:#fff}
 .footer a{color:var(--navy);text-decoration:none;font-weight:600;border-bottom:1px solid var(--gold)}.footer a:hover{color:var(--gold)}
 @media(max-width:768px){.hero .stat-row{grid-template-columns:repeat(2,1fr)}.grid-2,.grid-3{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}.container{padding:16px}}
-@media(max-width:480px){.hero .stat-row{grid-template-columns:repeat(2,1fr)}.kpi-grid{grid-template-columns:1fr}nav button{padding:10px 10px;font-size:.65rem}}
+@media(max-width:480px){.hero .stat-row{grid-template-columns:repeat(2,1fr)}.kpi-grid{grid-template-columns:1fr}nav button{padding:10px 10px;font-size:0.6875rem}}
 
 </style>
+<!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+
 </head>
 <body>
 
@@ -210,9 +215,9 @@ BEA real per-capita personal income (chained 2017 dollars) &middot; BEA per-capi
 const D = JSON.parse(document.getElementById('col-data').textContent);
 
 /* ── palette ─────────────────────────────────────────────────────────────── */
-const COL = {all:'#1a4480', goods:'#1a7a4c', housing:'#c0392b', utilities:'#b8860b', other:'#7e22ce'};
+const COL = {all:'#14558F', goods:'#2A6B44', housing:'#A81733', utilities:'#B07C20', other:'#46527A'};
 const CAT = [['all','All items'],['goods','Goods'],['housing','Housing'],['utilities','Utilities'],['other','Other services']];
-const GC='#e8e5df', TXT='#7a756e', NEUTRAL='#8792a6';
+const GC='#CDD3D1', TXT='#5A6467', NEUTRAL='#8A9391';
 Chart.defaults.color=TXT; Chart.defaults.borderColor=GC;
 Chart.defaults.font.family="'DM Sans',sans-serif"; Chart.defaults.font.size=11;
 Chart.defaults.plugins.legend.labels.boxWidth=12; Chart.defaults.plugins.legend.labels.padding=14;
@@ -277,15 +282,15 @@ function initReal(){
   const isMA = p=>p.s==='MA';
   new Chart(document.getElementById('rScatter'),{type:'scatter',data:{datasets:[
     {label:'States', data:pts.filter(p=>!isMA(p)), backgroundColor:'rgba(135,146,166,.55)', pointRadius:5},
-    {label:'Massachusetts', data:pts.filter(isMA), backgroundColor:'#c0392b', pointRadius:9}
+    {label:'Massachusetts', data:pts.filter(isMA), backgroundColor:'#A81733', pointRadius:9}
   ]},options:{plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>c.raw.s+': price '+c.raw.x.toFixed(1)+', income '+money(c.raw.y)}}},
     scales:{x:{title:{display:true,text:'price level (US = 100)'},grid:{color:GC}},
             y:{title:{display:true,text:'per-capita personal income'},ticks:{callback:money0},grid:{color:GC}}}}});
 
   const top = Object.keys(D.nominal_income).sort((a,b)=>D.nominal_income[b]-D.nominal_income[a]).slice(0,10);
   new Chart(document.getElementById('rIncome'),{type:'bar',data:{labels:top,datasets:[
-    {label:'Nominal', data:top.map(s=>D.nominal_income[s]), backgroundColor:'#1a4480'},
-    {label:'Price-adjusted (chained 2017 $)', data:top.map(s=>D.real_income[s]), backgroundColor:'#8792a6'}
+    {label:'Nominal', data:top.map(s=>D.nominal_income[s]), backgroundColor:'#14558F'},
+    {label:'Price-adjusted (chained 2017 $)', data:top.map(s=>D.real_income[s]), backgroundColor:'#8A9391'}
   ]},options:vOpts({y:{ticks:{callback:money0},beginAtZero:true}})});
 
   new Chart(document.getElementById('rCats'),{type:'bar',data:{
@@ -380,12 +385,12 @@ function initGeo(){
 
   const byH=names.slice().sort((a,b)=>M[b].housing-M[a].housing);
   new Chart(document.getElementById('gHousing'),{type:'bar',data:{labels:byH,datasets:[
-    {label:'Housing price level',data:byH.map(n=>M[n].housing),backgroundColor:byH.map(n=>M[n].housing>=100?'#c0392b':'#1a7a4c')},
+    {label:'Housing price level',data:byH.map(n=>M[n].housing),backgroundColor:byH.map(n=>M[n].housing>=100?'#A81733':'#2A6B44')},
     refLine(100,'National average',byH.length)]},options:hOpts({x:{min:60,max:160}})});
 
   const byU=names.slice().sort((a,b)=>M[b].utilities-M[a].utilities);
   new Chart(document.getElementById('gUtil'),{type:'bar',data:{labels:byU,datasets:[
-    {label:'Utilities price level',data:byU.map(n=>M[n].utilities),backgroundColor:'#b8860b'},
+    {label:'Utilities price level',data:byU.map(n=>M[n].utilities),backgroundColor:'#B07C20'},
     refLine(100,'National average',byU.length)]},options:hOpts({x:{min:60,max:170}})});
 
   document.getElementById('insGeo').innerHTML =
@@ -413,13 +418,13 @@ function initNeed(){
     kpi('blue', money(L.budget['housing'][iBoth]), 'Housing<br>Family of 4, 2 Earners');
 
   const ds=[{label:'Income needed before tax',data:need,backgroundColor:cols.map((c,ix)=>
-    MEDIAN&&need[ix]>MEDIAN?'#c0392b':'#1a7a4c')}];
+    MEDIAN&&need[ix]>MEDIAN?'#A81733':'#2A6B44')}];
   if(MEDIAN) ds.push(refLine(MEDIAN,'MA '+MEDIAN_KIND,cols.length));
   new Chart(document.getElementById('nWage'),{type:'bar',data:{labels:cols,datasets:ds},
     options:hOpts({x:{beginAtZero:true,ticks:{callback:money0}}})});
 
-  const KEYS=[['housing','Housing','#c0392b'],['child care','Child care','#7e22ce'],['food','Food','#1a7a4c'],
-    ['transportation','Transport','#1a4480'],['medical','Medical','#b8860b'],['other','Other','#8792a6'],
+  const KEYS=[['housing','Housing','#A81733'],['child care','Child care','#46527A'],['food','Food','#2A6B44'],
+    ['transportation','Transport','#14558F'],['medical','Medical','#B07C20'],['other','Other','#8A9391'],
     ['civic','Civic','#0e7490'],['internet & mobile','Internet & mobile','#be185d'],['annual taxes','Taxes','#4b5563']];
   const show=[iSingle,i('1 adult, 2 children'),iOne,iBoth];
   new Chart(document.getElementById('nBudget'),{type:'bar',data:{
@@ -430,7 +435,7 @@ function initNeed(){
   const occ=L.occupations.slice().sort((a,b)=>b[1]-a[1]);
   const single=need[iSingle];
   new Chart(document.getElementById('nOcc'),{type:'bar',data:{labels:occ.map(o=>o[0]),datasets:[
-    {label:'Typical annual salary',data:occ.map(o=>o[1]),backgroundColor:occ.map(o=>o[1]>=single?'#1a7a4c':'#c0392b')},
+    {label:'Typical annual salary',data:occ.map(o=>o[1]),backgroundColor:occ.map(o=>o[1]>=single?'#2A6B44':'#A81733')},
     refLine(single,'Single adult needs '+money(single),occ.length)]},
     options:hOpts({x:{beginAtZero:true,ticks:{callback:money0}}})});
 

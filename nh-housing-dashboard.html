@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/nh-housing-dashboard.html">
 <title>New Hampshire Housing Market Dashboard</title>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Massachusetts Data Hub">
@@ -23,10 +24,10 @@
 <!-- Squarespace: paste into a CODE block. For Squarespace, set DATA_URL to the jsDelivr URL (see below). -->
 <meta charset="utf-8">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap">
-<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.49.1/dist/apexcharts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.49.1/dist/apexcharts.min.js" integrity="sha384-LoktLSu+KN7O05Gi2Epno0XhcstpeXAu40T7IP2JC5OZ2qKi/oE9znxViQS3yYn5" crossorigin="anonymous"></script>
 <style>
-#nhr{--bg:#f8f7f4;--navy:#0f2942;--gold:#c9a84c;--peach:#e8a87c;--ink:#1a1a1a;--muted:#7a756e;--border:#e8e5df;--card:#fff;
-  --red:#c23b22;--green:#2d8a56;--blue:#2d6bc4;--amber:#c08c20;--purple:#6b5ce7;
+#nhr{--bg:#E9EBEA;--navy:#14558F;--gold:#B07C20;--peach:#B07C20;--ink:#0B1113;--muted:#5A6467;--border:#CDD3D1;--card:#fff;
+  --red:#c23b22;--green:#2d8a56;--blue:#2d6bc4;--amber:#c08c20;--purple:#46527A;
   font-family:'DM Sans',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;max-width:1200px;margin:0 auto}
 #nhr *{margin:0;padding:0;box-sizing:border-box}
 #nhr .serif{font-family:'DM Serif Display',Georgia,serif;font-weight:400}
@@ -34,15 +35,15 @@
 #nhr .hero{background:var(--navy);color:#fff;text-align:center;padding:52px 24px 40px;position:relative;overflow:hidden;border-radius:14px 14px 0 0}
 #nhr .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,0.14) 0%,transparent 60%),radial-gradient(ellipse at 80% 85%,rgba(139,26,26,0.12) 0%,transparent 50%);pointer-events:none}
 #nhr .hero-inner{position:relative;z-index:2;max-width:1000px;margin:0 auto}
-#nhr .hero-badge{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.5);font-weight:600;margin-bottom:14px}
+#nhr .hero-badge{font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.5);font-weight:600;margin-bottom:14px}
 #nhr .hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.7rem,4.5vw,2.7rem);line-height:1.15;margin-bottom:12px}
 #nhr .hero h1 em{font-style:normal;color:var(--gold)}
 #nhr .hero-sub{font-size:0.9rem;opacity:0.6;max-width:640px;margin:0 auto 28px}
 #nhr .hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:900px;margin:0 auto}
 #nhr .hero-stat{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:16px 10px}
-#nhr .hs-label{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;opacity:0.55;margin-bottom:6px}
+#nhr .hs-label{font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.1em;opacity:0.55;margin-bottom:6px}
 #nhr .hs-val{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.2rem,3vw,1.7rem);color:var(--peach);line-height:1}
-#nhr .hs-note{font-size:0.62rem;opacity:0.42;margin-top:5px}
+#nhr .hs-note{font-size:0.6875rem;opacity:0.42;margin-top:5px}
 /* NAV */
 #nhr .nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,0.04)}
 #nhr .nav-inner{display:flex;gap:2px;overflow-x:auto;padding:0 12px}
@@ -60,7 +61,7 @@
 #nhr .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:20px}
 #nhr .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,0.03);transition:all 0.2s}
 #nhr .card:hover{box-shadow:0 8px 22px rgba(0,0,0,0.06);transform:translateY(-2px)}
-#nhr .card-label{font-size:0.62rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);font-weight:600;margin-bottom:4px}
+#nhr .card-label{font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);font-weight:600;margin-bottom:4px}
 #nhr .card-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.7rem;line-height:1.1}
 #nhr .card-sub{font-size:0.75rem;color:var(--muted);margin-top:4px}
 /* CHARTS */
@@ -74,10 +75,10 @@
 #nhr .town:hover{border-color:var(--gold);transform:translateY(-2px)}
 #nhr .town-name{font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:5px}
 #nhr .town-price{font-family:'DM Serif Display',Georgia,serif;font-size:1.25rem;color:var(--ink)}
-#nhr .town-meta{font-size:0.68rem;color:var(--muted);margin-top:5px}
+#nhr .town-meta{font-size:0.6875rem;color:var(--muted);margin-top:5px}
 #nhr table{width:100%;border-collapse:collapse;font-size:0.8rem}
 #nhr th,#nhr td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--border)}
-#nhr th{font-size:0.64rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--navy);font-weight:700;border-bottom:2px solid var(--navy)}
+#nhr th{font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--navy);font-weight:700;border-bottom:2px solid var(--navy)}
 #nhr td:first-child{font-weight:600;color:var(--navy)}
 #nhr .afford-box{background:linear-gradient(135deg,#fefce8,#fef9c3);border:1px solid #fde047;border-radius:14px;padding:22px;margin-bottom:20px}
 /* FOOTER */
@@ -88,6 +89,10 @@
 @media(max-width:768px){#nhr .hero-stats{grid-template-columns:repeat(2,1fr)}#nhr .section{padding:28px 14px}}
 @media(max-width:480px){#nhr .hero-stats{grid-template-columns:1fr 1fr}}
 </style>
+<!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+
 
 <div id="nhr">
   <header class="hero"><div class="hero-inner">
@@ -111,8 +116,8 @@
 // For Squarespace / production, point this at the published JSON:
 // const DATA_URL = "data/nh-figures.json";
 const DATA_URL = window.NH_DATA_URL || "data/nh-figures.json";
-const NAVY='#0f2942', GOLD='#c9a84c';
-const COLORS={ 'NH Statewide':'#2d6bc4','Portsmouth':'#c23b22','Salem':'#2d8a56','Derry':'#c08c20','Windham':'#6b5ce7' };
+const NAVY='#14558F', GOLD='#B07C20';
+const COLORS={ 'NH Statewide':'#14558F','Portsmouth':'#A81733','Salem':'#2A6B44','Derry':'#B07C20','Windham':'#46527A' };
 const MARKETS=[
   {key:'NH Statewide',id:'statewide',label:'NH Statewide'},
   {key:'Portsmouth',id:'portsmouth',label:'Portsmouth'},
@@ -136,7 +141,7 @@ function barChart(el,cats,data,colors,fmt){
   new ApexCharts(el,{...baseOpts,
     chart:{...baseOpts.chart,type:'bar',height:320},
     series:[{name:'',data:data}],
-    colors:['#0f2942'],
+    colors:['#14558F'],
     plotOptions:{bar:{borderRadius:5,distributed:Array.isArray(colors),columnWidth:'62%'}},
     ...(Array.isArray(colors)?{colors:colors}:{}),
     legend:{show:false},
@@ -219,7 +224,7 @@ function affordSection(data){
   const rows=MARKETS.map(m=>({m,md:data.markets[m.key]})).filter(x=>x.md).map(({m,md})=>{
     const need=inc(md.median_sale);const gap=NHMI-need;
     return `<tr><td>${m.label}</td><td>${money(md.median_sale)}</td><td>${money(md.median_sale*0.2)}</td><td>${moneyFull(need)}</td>
-      <td style="color:${gap>=0?'#2d8a56':'#c23b22'};font-weight:600">${gap>=0?'✓ within reach':'−'+money(Math.abs(gap))+' short'}</td></tr>`;
+      <td style="color:${gap>=0?'#2A6B44':'#A81733'};font-weight:600">${gap>=0?'✓ within reach':'−'+money(Math.abs(gap))+' short'}</td></tr>`;
   }).join('');
   sec.innerHTML=`
     <div class="section-title">Affordability</div>

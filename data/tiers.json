@@ -1,0 +1,418 @@
+{
+  "generated_from": "immigrant_orgs_FILTERED.csv",
+  "total_as_published": 228606881.69,
+  "payment_count": 8883,
+  "tiers": {
+    "A_immigrant_program": {
+      "label": "Immigrant/refugee program spending (defensible)",
+      "amount": 38177053.7,
+      "payments": 2377,
+      "vendors": 11
+    },
+    "B_shelter_reserve": {
+      "label": "Family shelter & housing reserves (defensible)",
+      "amount": 8582543.23,
+      "payments": 112,
+      "vendors": 4
+    },
+    "C_health_center": {
+      "label": "MassHealth claims / community health centers (not immigrant-specific)",
+      "amount": 179338210.86,
+      "payments": 4973,
+      "vendors": 7
+    },
+    "D_false_positive": {
+      "label": "Name-match false positives (unrelated vendors)",
+      "amount": 2509073.9,
+      "payments": 1421,
+      "vendors": 12
+    }
+  },
+  "defensible_core": 46759596.93,
+  "by_fy": {
+    "2020": {
+      "published": 550890.35,
+      "core": 550890.35
+    },
+    "2021": {
+      "published": 2626808.42,
+      "core": 554782.36
+    },
+    "2022": {
+      "published": 12813330.38,
+      "core": 12813330.38
+    },
+    "2023": {
+      "published": 90422380.76,
+      "core": 7498502.16
+    },
+    "2024": {
+      "published": 14746091.51,
+      "core": 7661103.54
+    },
+    "2025": {
+      "published": 100421451.46,
+      "core": 15089432.48
+    },
+    "2026": {
+      "published": 7025928.81,
+      "core": 2591555.66
+    }
+  },
+  "vendors": [
+    {
+      "name": "EAST BOSTON NEIGHBORHOOD HEALTH CENTER",
+      "amount": 59184430.14,
+      "payments": 723,
+      "tier": "C_health_center",
+      "city": "EAST BOSTON",
+      "fys": [
+        "2021",
+        "2023",
+        "2024",
+        "2025"
+      ]
+    },
+    {
+      "name": "BROCKTON NEIGHBORHOOD HLTH CTR",
+      "amount": 58566403.24,
+      "payments": 2660,
+      "tier": "C_health_center",
+      "city": "BROCKTON",
+      "fys": [
+        "2021",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+      ]
+    },
+    {
+      "name": "NEIGHBORHEALTH CORPORATION",
+      "amount": 45435559.45,
+      "payments": 618,
+      "tier": "C_health_center",
+      "city": "EAST BOSTON",
+      "fys": [
+        "2025",
+        "2026"
+      ]
+    },
+    {
+      "name": "REFUGEE & IMMIGRANT ASSIST. CENTER",
+      "amount": 17098052.16,
+      "payments": 1370,
+      "tier": "A_immigrant_program",
+      "city": "BOSTON",
+      "fys": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+      ]
+    },
+    {
+      "name": "IMMIGRANT FAMILY SERVS INST (IFSI-USA)",
+      "amount": 14480198.17,
+      "payments": 46,
+      "tier": "B_shelter_reserve",
+      "city": "MATTAPAN",
+      "fys": [
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+      ]
+    },
+    {
+      "name": "HARVARD STREET NEIGHBORHOOD",
+      "amount": 11942275.08,
+      "payments": 914,
+      "tier": "C_health_center",
+      "city": "DORCHESTER",
+      "fys": [
+        "2021",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+      ]
+    },
+    {
+      "name": "MASSACHUSETTS IMMIGRANT &",
+      "amount": 7662233.16,
+      "payments": 293,
+      "tier": "A_immigrant_program",
+      "city": "BOSTON",
+      "fys": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+      ]
+    },
+    {
+      "name": "ORGANIZATION REFUGEE & IMMIGRANT SUCCESS",
+      "amount": 4296551.77,
+      "payments": 264,
+      "tier": "A_immigrant_program",
+      "city": "MANCHESTER",
+      "fys": [
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+      ]
+    },
+    {
+      "name": "BOSTON CHINATOWN NEIGHBORHOOD CENTER",
+      "amount": 2649826.1,
+      "payments": 65,
+      "tier": "C_health_center",
+      "city": "BOSTON",
+      "fys": [
+        "2025",
+        "2026"
+      ]
+    },
+    {
+      "name": "PROJECT CITIZENSHIP INC",
+      "amount": 1857950.0,
+      "payments": 123,
+      "tier": "A_immigrant_program",
+      "city": "BOSTON",
+      "fys": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+      ]
+    },
+    {
+      "name": "EAST BOSTON NEIGHBORHOOD",
+      "amount": 1724668.0,
+      "payments": 1,
+      "tier": "C_health_center",
+      "city": "EAST BOSTON",
+      "fys": [
+        "2023"
+      ]
+    },
+    {
+      "name": "NEIGHBORHOOD HOME HLTH CARE INC",
+      "amount": 1552132.41,
+      "payments": 341,
+      "tier": "D_false_positive",
+      "city": "NEWTON",
+      "fys": [
+        "2021",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+      ]
+    },
+    {
+      "name": "IMMIGRANTS ASSISTANCE CTR INC",
+      "amount": 702599.57,
+      "payments": 172,
+      "tier": "A_immigrant_program",
+      "city": "NEW BEDFORD",
+      "fys": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+      ]
+    },
+    {
+      "name": "NEIGHBORHOOD DENTAL GROUP PC",
+      "amount": 351496.4,
+      "payments": 322,
+      "tier": "D_false_positive",
+      "city": "WORCESTER",
+      "fys": [
+        "2021",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+      ]
+    },
+    {
+      "name": "MERRIMACK VALLEY IMMIGRANT & EDU. CENTER",
+      "amount": 344550.0,
+      "payments": 164,
+      "tier": "A_immigrant_program",
+      "city": "LAWRENCE",
+      "fys": [
+        "2020",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+      ]
+    },
+    {
+      "name": "NEIGHBORHOOD PEDIATRICS PC",
+      "amount": 253290.06,
+      "payments": 196,
+      "tier": "D_false_positive",
+      "city": "FITCHBURG",
+      "fys": [
+        "2021",
+        "2023",
+        "2024",
+        "2025"
+      ]
+    },
+    {
+      "name": "WORCESTER REFUGEE AND IMMIGRANT SUPPORT",
+      "amount": 120810.95,
+      "payments": 41,
+      "tier": "C_health_center",
+      "city": "WORCESTER",
+      "fys": [
+        "2025",
+        "2026"
+      ]
+    },
+    {
+      "name": "HARVARD NEIGHBORHOOD PHARMACY INC",
+      "amount": 108464.18,
+      "payments": 280,
+      "tier": "D_false_positive",
+      "city": "DORCHESTER",
+      "fys": [
+        "2021",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+      ]
+    },
+    {
+      "name": "NEIGHBORHOOD HOUSE",
+      "amount": 92893.43,
+      "payments": 8,
+      "tier": "D_false_positive",
+      "city": "DORCHESTER",
+      "fys": [
+        "2021",
+        "2023",
+        "2025"
+      ]
+    },
+    {
+      "name": "PAUL F MIRAGLIA D.D.S., P.C.",
+      "amount": 90252.59,
+      "payments": 220,
+      "tier": "D_false_positive",
+      "city": "PLYMOUTH",
+      "fys": [
+        "2021",
+        "2023",
+        "2024",
+        "2025",
+        "2026"
+      ]
+    },
+    {
+      "name": "WALDO IMMIGRATION AND REFUGEE SERVICES",
+      "amount": 31500.0,
+      "payments": 6,
+      "tier": "A_immigrant_program",
+      "city": "ROXBURY",
+      "fys": [
+        "2025"
+      ]
+    },
+    {
+      "name": "MINI MIRACLES FAMILY DAYCARE",
+      "amount": 28853.97,
+      "payments": 15,
+      "tier": "D_false_positive",
+      "city": "WEST BOYLSTON",
+      "fys": [
+        "2025",
+        "2026"
+      ]
+    },
+    {
+      "name": "AMIRAH, INC",
+      "amount": 21700.0,
+      "payments": 1,
+      "tier": "D_false_positive",
+      "city": "WOBURN",
+      "fys": [
+        "2023"
+      ]
+    },
+    {
+      "name": "KRISTINA MIRANDA",
+      "amount": 3720.0,
+      "payments": 10,
+      "tier": "D_false_positive",
+      "city": "HYATTSVILLE",
+      "fys": [
+        "2025"
+      ]
+    },
+    {
+      "name": "NEIGHBORHOOD CARE MEDICAL SERVICES PLLC",
+      "amount": 3163.69,
+      "payments": 17,
+      "tier": "D_false_positive",
+      "city": "DEDHAM",
+      "fys": [
+        "2025",
+        "2026"
+      ]
+    },
+    {
+      "name": "NEIGHBORHOOD COUNSELING AND COMMUNITY",
+      "amount": 3007.17,
+      "payments": 10,
+      "tier": "D_false_positive",
+      "city": "SOMERVILLE",
+      "fys": [
+        "2023"
+      ]
+    },
+    {
+      "name": "BRAZILIAN WOMENS GROUP",
+      "amount": 200.0,
+      "payments": 2,
+      "tier": "A_immigrant_program",
+      "city": "CAMBRIDGE",
+      "fys": [
+        "2026"
+      ]
+    },
+    {
+      "name": "MIRANDA Y CHEN",
+      "amount": 100.0,
+      "payments": 1,
+      "tier": "D_false_positive",
+      "city": "UNASSIGNED",
+      "fys": [
+        "2025"
+      ]
+    }
+  ]
+}

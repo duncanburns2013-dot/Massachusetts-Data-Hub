@@ -17,9 +17,10 @@
   <meta name="twitter:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
   <meta name="description" content="Campaign finance, political contributions, and pay-to-play spending data in Massachusetts.">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="canonical" href="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/pay-to-play-dashboard.html">
 <title>Massachusetts Pay-to-Play: Lobbying & Political Spending</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha384-bs/nf9FbdNouRbMiFcrcZfLXYPKiPaGVGplVbv7dLGECccEXDW+S3zjqSKR5ZEaD" crossorigin="anonymous"></script>
 <style>
 :root{--bg:#f8f7f4;--card:#ffffff;--border:#e8e5df;--text:#1a1a1a;--muted:#7a756e;--red:#c0392b;--red-bg:rgba(192,57,43,0.06);--green:#1a7a4c;--green-bg:rgba(26,122,76,0.06);--blue:#1a4480;--blue-bg:rgba(26,68,128,0.06);--amber:#b8860b;--amber-bg:rgba(184,134,11,0.06);--accent:#8b1a1a;--gold:#c9a84c;--navy:#0f2942}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -32,7 +33,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .hero-stat{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:18px 10px;text-align:center;backdrop-filter:blur(4px);transition:background 0.3s}
 .hero-stat:hover{background:rgba(255,255,255,0.1)}
 .hero-stat .val{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.1rem,2.5vw,1.5rem);font-weight:400}
-.hero-stat .lbl{font-size:0.62rem;opacity:0.55;margin-top:4px;text-transform:uppercase;letter-spacing:0.08em;font-weight:500}
+.hero-stat .lbl{font-size:0.6875rem;opacity:0.55;margin-top:4px;text-transform:uppercase;letter-spacing:0.08em;font-weight:500}
 .hero-stat .val.bad{color:#e8a87c}
 .tab-nav{display:flex;justify-content:center;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
 .tab-btn{padding:15px 22px;font-size:0.78rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.25s;text-transform:uppercase;letter-spacing:0.06em}
@@ -46,7 +47,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:26px}
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px 18px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.03);transition:box-shadow 0.3s,transform 0.3s}
 .stat-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.07);transform:translateY(-2px)}
-.stat-card .label{font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:8px}
+.stat-card .label{font-size:0.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:8px}
 .stat-card .value{font-family:'DM Serif Display',Georgia,serif;font-size:2rem;font-weight:400;line-height:1.1}
 .stat-card .value.red{color:var(--red)}
 .stat-card .value.green{color:var(--green)}
@@ -66,7 +67,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .data-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:26px;overflow-x:auto;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
 .data-card h3{font-size:0.88rem;font-weight:700;margin-bottom:14px;color:var(--navy)}
 .data-table{width:100%;border-collapse:collapse;font-size:0.82rem}
-.data-table th{text-align:left;padding:10px 14px;border-bottom:2px solid var(--navy);font-weight:700;color:var(--navy);font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em}
+.data-table th{text-align:left;padding:10px 14px;border-bottom:2px solid var(--navy);font-weight:700;color:var(--navy);font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.08em}
 .data-table td{padding:10px 14px;border-bottom:1px solid var(--border)}
 .data-table tr:hover{background:rgba(15,41,66,0.02)}
 .data-table .highlight{color:var(--red);font-weight:700}
@@ -74,13 +75,17 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .info-box{background:var(--blue-bg);border:1px solid rgba(26,68,128,0.12);border-radius:14px;padding:24px;margin-bottom:26px;border-left:4px solid var(--blue)}
 .info-box h4{color:var(--blue);font-size:0.88rem;margin-bottom:10px;font-weight:700}
 .info-box p{font-size:0.82rem;color:var(--text);line-height:1.65}
-.source{font-size:0.68rem;color:var(--muted);margin-top:8px;font-style:italic}
+.source{font-size:0.6875rem;color:var(--muted);margin-top:8px;font-style:italic}
 footer{text-align:center;padding:36px 24px;color:var(--muted);font-size:0.75rem;border-top:1px solid var(--border);background:#fff;margin-top:36px}
 footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1px solid var(--gold)}
 footer a:hover{color:var(--gold)}
 @media(max-width:768px){.hero-stats{grid-template-columns:repeat(3,1fr)}.chart-grid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.hero{padding:36px 16px 30px}.container{padding:18px}}
 @media(max-width:480px){.hero-stats{grid-template-columns:repeat(2,1fr)}.stat-row{grid-template-columns:1fr}}
 </style>
+<!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+
 </head>
 <body>
 
@@ -458,30 +463,30 @@ function switchTab(tabId){document.querySelectorAll('.tab-content').forEach(t=>t
 function initCharts(tab){
   switch(tab){
     case 'overview':
-      safeChart('chartSectors',{type:'bar',data:{labels:['Health','Finance/Insur/RE','Misc Business','Energy/NatRes','Labor','Ideology/Single-Issue','Communic/Electronics','Transportation','Other','Agribusiness','Construction','Defense'],datasets:[{label:'Total (Millions $)',data:[112.7,74.4,63.8,39.3,36.7,34.8,30.8,25.0,21.6,8.8,8.2,1.4],backgroundColor:ctx=>ctx.dataIndex===0?'#c0392b':ctx.dataIndex<4?'#b8860b':'#1a4480',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Millions ($)'}}},plugins:{legend:{display:false}}}});
-      safeChart('chartIndustries',{type:'bar',data:{labels:['Hospitals/Nursing','Insurance','Pharma/Health Prod','Public Unions','Health Services','Health Profs','Electric Utilities','Telecom','Real Estate','Casinos/Gambling'],datasets:[{label:'Total (Millions $)',data:[43.4,42.8,37.3,20.1,16.2,15.8,14.6,12.4,12.0,11.8],backgroundColor:ctx=>ctx.dataIndex<3?'#c0392b':ctx.dataIndex<6?'#b8860b':'#1a4480',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Millions ($)'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartSectors',{type:'bar',data:{labels:['Health','Finance/Insur/RE','Misc Business','Energy/NatRes','Labor','Ideology/Single-Issue','Communic/Electronics','Transportation','Other','Agribusiness','Construction','Defense'],datasets:[{label:'Total (Millions $)',data:[112.7,74.4,63.8,39.3,36.7,34.8,30.8,25.0,21.6,8.8,8.2,1.4],backgroundColor:ctx=>ctx.dataIndex===0?'#A81733':ctx.dataIndex<4?'#B07C20':'#14558F',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Millions ($)'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartIndustries',{type:'bar',data:{labels:['Hospitals/Nursing','Insurance','Pharma/Health Prod','Public Unions','Health Services','Health Profs','Electric Utilities','Telecom','Real Estate','Casinos/Gambling'],datasets:[{label:'Total (Millions $)',data:[43.4,42.8,37.3,20.1,16.2,15.8,14.6,12.4,12.0,11.8],backgroundColor:ctx=>ctx.dataIndex<3?'#A81733':ctx.dataIndex<6?'#B07C20':'#14558F',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Millions ($)'}}},plugins:{legend:{display:false}}}});
       break;
 
     case 'sectors':
-      safeChart('chartSpenders2024',{type:'bar',data:{labels:['MA Assn Health Plans','MA Health & Hosp Assn','MassBio','MA Nurses Assn','Blue Cross Blue Shield'],datasets:[{label:'2024 Spending ($)',data:[1305040,1116626,866139,519192,460403],backgroundColor:['#c0392b','#c0392b','#b8860b','#b8860b','#1a4480'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,title:{display:true,text:'Spending ($)'}}},plugins:{legend:{display:false}}}});
-      safeChart('chartHealthDominance',{type:'doughnut',data:{labels:['Health ($112.7M)','Finance/Insurance/RE ($74.4M)','Misc Business ($63.8M)','Energy ($39.3M)','Labor ($36.7M)','All Other ($130.6M)'],datasets:[{data:[112.7,74.4,63.8,39.3,36.7,130.6],backgroundColor:['#c0392b','#1a4480','#5a8fba','#b8860b','#7c3aed','#6b7280']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});
+      safeChart('chartSpenders2024',{type:'bar',data:{labels:['MA Assn Health Plans','MA Health & Hosp Assn','MassBio','MA Nurses Assn','Blue Cross Blue Shield'],datasets:[{label:'2024 Spending ($)',data:[1305040,1116626,866139,519192,460403],backgroundColor:['#A81733','#A81733','#B07C20','#B07C20','#14558F'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,title:{display:true,text:'Spending ($)'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartHealthDominance',{type:'doughnut',data:{labels:['Health ($112.7M)','Finance/Insurance/RE ($74.4M)','Misc Business ($63.8M)','Energy ($39.3M)','Labor ($36.7M)','All Other ($130.6M)'],datasets:[{data:[112.7,74.4,63.8,39.3,36.7,130.6],backgroundColor:['#A81733','#14558F','#5C97CC','#B07C20','#46527A','#5A6467']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});
       break;
 
     case 'firms':
-      safeChart('chartFirmIncome',{type:'bar',data:{labels:['ML Strategies','Smith Costello','Bay State Strategies','O\'Neill & Partners','Murphy Donoghue','Tremont Strategies','Preti Strategies','Serlin Haley','Kearney Donovan','O\'Neill & Assoc'],datasets:[{label:'Total Income ($M)',data:[25.4,20.4,17.3,13.6,13.0,12.7,11.4,11.0,10.7,10.4],backgroundColor:ctx=>ctx.dataIndex<3?'#c0392b':ctx.dataIndex===3?'#6b7280':'#1a4480',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Millions ($)'}}},plugins:{legend:{display:false}}}});
-      safeChart('chartDonationDist',{type:'bar',data:{labels:['$200','$100','$500','$150','$250','$125','$1,000','Other'],datasets:[{label:'# of Donations',data:[3539,572,48,34,33,29,12,31],backgroundColor:ctx=>ctx.dataIndex===0?'#c0392b':'#1a4480',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,title:{display:true,text:'Number of Donations'}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const pct=(ctx.parsed.y/4298*100).toFixed(1);return `${ctx.parsed.y} donations (${pct}%)`}}}}}});
-      safeChart('chartFirmDonations',{type:'bar',data:{labels:['ML Strategies','Smith Costello & Crawford','Bay State Strategies'],datasets:[{label:'Total ($)',data:[335496,273517,213450],backgroundColor:['#c0392b','#1a4480','#b8860b'],borderRadius:8},{label:'# Donations',data:[1809,1379,1110],backgroundColor:['rgba(192,57,43,0.3)','rgba(26,68,128,0.3)','rgba(184,134,11,0.3)'],borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true}},plugins:{legend:{position:'top',labels:{font:{size:11}}}}}});
-      safeChart('chartTopDonors',{type:'bar',data:{labels:['Shapiro\n(Bay State)','Costello\n(Smith C&C)','Smith\n(Smith C&C)','Crawford\n(Smith C&C)','Basile\n(Smith C&C)','Shea\n(Bay State)','Youmans\n(Smith C&C)','Tocco\n(ML Strat)','Bernstein\n(Bay State)','Silveira\n(ML Strat)'],datasets:[{label:'Total Donated ($)',data:[72100,59550,53240,44350,24250,17450,17100,14725,10600,10575],backgroundColor:ctx=>['#b8860b','#1a4480','#1a4480','#1a4480','#1a4480','#b8860b','#1a4480','#c0392b','#b8860b','#c0392b'][ctx.dataIndex],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Total Donated ($)'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartFirmIncome',{type:'bar',data:{labels:['ML Strategies','Smith Costello','Bay State Strategies','O\'Neill & Partners','Murphy Donoghue','Tremont Strategies','Preti Strategies','Serlin Haley','Kearney Donovan','O\'Neill & Assoc'],datasets:[{label:'Total Income ($M)',data:[25.4,20.4,17.3,13.6,13.0,12.7,11.4,11.0,10.7,10.4],backgroundColor:ctx=>ctx.dataIndex<3?'#A81733':ctx.dataIndex===3?'#5A6467':'#14558F',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Millions ($)'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartDonationDist',{type:'bar',data:{labels:['$200','$100','$500','$150','$250','$125','$1,000','Other'],datasets:[{label:'# of Donations',data:[3539,572,48,34,33,29,12,31],backgroundColor:ctx=>ctx.dataIndex===0?'#A81733':'#14558F',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,title:{display:true,text:'Number of Donations'}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const pct=(ctx.parsed.y/4298*100).toFixed(1);return `${ctx.parsed.y} donations (${pct}%)`}}}}}});
+      safeChart('chartFirmDonations',{type:'bar',data:{labels:['ML Strategies','Smith Costello & Crawford','Bay State Strategies'],datasets:[{label:'Total ($)',data:[335496,273517,213450],backgroundColor:['#A81733','#14558F','#B07C20'],borderRadius:8},{label:'# Donations',data:[1809,1379,1110],backgroundColor:['rgba(168,23,51,0.3)','rgba(20,85,143,0.3)','rgba(176,124,32,0.3)'],borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true}},plugins:{legend:{position:'top',labels:{font:{size:11}}}}}});
+      safeChart('chartTopDonors',{type:'bar',data:{labels:['Shapiro\n(Bay State)','Costello\n(Smith C&C)','Smith\n(Smith C&C)','Crawford\n(Smith C&C)','Basile\n(Smith C&C)','Shea\n(Bay State)','Youmans\n(Smith C&C)','Tocco\n(ML Strat)','Bernstein\n(Bay State)','Silveira\n(ML Strat)'],datasets:[{label:'Total Donated ($)',data:[72100,59550,53240,44350,24250,17450,17100,14725,10600,10575],backgroundColor:ctx=>['#B07C20','#14558F','#14558F','#14558F','#14558F','#B07C20','#14558F','#A81733','#B07C20','#A81733'][ctx.dataIndex],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Total Donated ($)'}}},plugins:{legend:{display:false}}}});
       break;
 
     case 'recipients':
-      safeChart('chartRecipients',{type:'bar',data:{labels:['DeLeo','Healey','Lawn','Michlewitz','Cusack','Baker','Polito','Finegold','Moran','Murphy','Tarr','Romney','Dem Senate PAC','Spilka','Mariano'],datasets:[{label:'Total ($)',data:[21200,19736,17250,16800,16400,15500,14000,12450,12000,12000,11400,11400,10925,10825,10800],backgroundColor:ctx=>ctx.parsed.y>15000?'#c0392b':ctx.parsed.y>10000?'#b8860b':'#1a4480',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Total from 3 Firms ($)'}}},plugins:{legend:{display:false}}}});
-      safeChart('chartRecipientFirms',{type:'bar',data:{labels:['DeLeo','Healey','Michlewitz','Baker','Spilka','Mariano','Tarr'],datasets:[{label:'ML Strategies',data:[7200,6500,5800,5200,4500,3600,3800],backgroundColor:'#c0392b',borderRadius:2},{label:'Smith Costello',data:[7800,6800,5600,5800,0,4200,4000],backgroundColor:'#1a4480',borderRadius:2},{label:'Bay State',data:[6200,6436,5400,4500,6325,3000,3600],backgroundColor:'#b8860b',borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,title:{display:true,text:'Total ($)'}}},plugins:{legend:{position:'top',labels:{font:{size:11}}}}}});
+      safeChart('chartRecipients',{type:'bar',data:{labels:['DeLeo','Healey','Lawn','Michlewitz','Cusack','Baker','Polito','Finegold','Moran','Murphy','Tarr','Romney','Dem Senate PAC','Spilka','Mariano'],datasets:[{label:'Total ($)',data:[21200,19736,17250,16800,16400,15500,14000,12450,12000,12000,11400,11400,10925,10825,10800],backgroundColor:ctx=>ctx.parsed.y>15000?'#A81733':ctx.parsed.y>10000?'#B07C20':'#14558F',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Total from 3 Firms ($)'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartRecipientFirms',{type:'bar',data:{labels:['DeLeo','Healey','Michlewitz','Baker','Spilka','Mariano','Tarr'],datasets:[{label:'ML Strategies',data:[7200,6500,5800,5200,4500,3600,3800],backgroundColor:'#A81733',borderRadius:2},{label:'Smith Costello',data:[7800,6800,5600,5800,0,4200,4000],backgroundColor:'#14558F',borderRadius:2},{label:'Bay State',data:[6200,6436,5400,4500,6325,3000,3600],backgroundColor:'#B07C20',borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,title:{display:true,text:'Total ($)'}}},plugins:{legend:{position:'top',labels:{font:{size:11}}}}}});
       break;
 
     case 'loophole':
-      safeChart('chartPhilbin',{type:'bar',data:{labels:['$50','$100','$150','$200','$250','$500','$1,000'],datasets:[{label:'# of Philbin Donations',data:[0,0,0,28,0,0,0],backgroundColor:ctx=>ctx.parsed.y>0?'#c0392b':'#e8e5df',borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,max:35,title:{display:true,text:'Number of Donations'}}},plugins:{legend:{display:false}}}});
-      safeChart('chartHospitals',{type:'bar',data:{labels:['Mass General\nBrigham','Boston\nMedical Ctr','Brigham &\nWomens','Point32\nHealth','Boston\nChildrens','Beth Israel','Tufts\nMedical','Mass\nGeneral','Cambridge\nHealth','Dana-\nFarber'],datasets:[{label:'Employee Donations ($)',data:[19522,12975,11877,8611,8045,8011,7965,7936,6917,5800],backgroundColor:'#c0392b',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Total Employee Donations ($)'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartPhilbin',{type:'bar',data:{labels:['$50','$100','$150','$200','$250','$500','$1,000'],datasets:[{label:'# of Philbin Donations',data:[0,0,0,28,0,0,0],backgroundColor:ctx=>ctx.parsed.y>0?'#A81733':'#CDD3D1',borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,max:35,title:{display:true,text:'Number of Donations'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartHospitals',{type:'bar',data:{labels:['Mass General\nBrigham','Boston\nMedical Ctr','Brigham &\nWomens','Point32\nHealth','Boston\nChildrens','Beth Israel','Tufts\nMedical','Mass\nGeneral','Cambridge\nHealth','Dana-\nFarber'],datasets:[{label:'Employee Donations ($)',data:[19522,12975,11877,8611,8045,8011,7965,7936,6917,5800],backgroundColor:'#A81733',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Total Employee Donations ($)'}}},plugins:{legend:{display:false}}}});
       break;
   }
 }

@@ -7,7 +7,7 @@
   <meta property="og:site_name" content="Massachusetts Data Hub">
   <meta property="og:title" content="Massachusetts Data Hub">
   <meta property="og:description" content="Official data dashboards covering taxes, housing, education, employment, energy, and more across Massachusetts — all sourced from government data.">
-  <meta property="og:url" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/index.html">
+  <meta property="og:url" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/">
   <meta property="og:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -16,7 +16,9 @@
   <meta name="twitter:description" content="Official data dashboards covering taxes, housing, education, employment, energy, and more across Massachusetts — all sourced from government data.">
   <meta name="twitter:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="canonical" href="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/">
 <title>Massachusetts Data Hub</title>
+<meta name="description" content="Massachusetts tax, spending, housing, energy, education and immigration data. Nineteen dashboards built from primary government sources, with all 351 municipalities in one interactive instrument.">
 <!-- Social Share Card -->
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
@@ -29,7 +31,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:'DM Sans',system-ui,sans-serif;background:#0b1e30;color:#fff;line-height:1.65;-webkit-font-smoothing:antialiased}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#E9EBEA;color:#0B1113;line-height:1.65;-webkit-font-smoothing:antialiased}
 body::before{
   content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
@@ -38,7 +40,7 @@ body::before{
     radial-gradient(ellipse 50% 40% at 60% 30%,rgba(56,133,87,0.08),transparent 45%),
     radial-gradient(ellipse 40% 30% at 40% 70%,rgba(246,197,27,0.05),transparent 40%);
   background-size:200% 200%;
-  animation:bgDrift 20s ease-in-out infinite;
+  animation:none;
 }
 @keyframes bgDrift{
   0%{background-position:0% 0%}
@@ -51,31 +53,23 @@ body::after{
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
 }
 .hero,.tab-nav,.main-content,footer{position:relative;z-index:1}
-.hero{padding:56px 24px 44px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.06)}
-.hero-alert{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(205,13,13,0.12);border:1px solid rgba(205,13,13,0.25);color:#ff8a80;
-  border-radius:100px;padding:6px 18px;font-size:0.7rem;font-weight:700;
-  text-transform:uppercase;letter-spacing:0.1em;margin-bottom:26px;animation:fadeIn 0.5s ease;
-}
-.hero-alert .pulse{width:8px;height:8px;border-radius:50%;background:#ff5252;animation:alertPulse 1.5s ease-in-out infinite}
-@keyframes alertPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,82,82,0.5)}50%{box-shadow:0 0 0 6px rgba(255,82,82,0)}}
+.hero{padding:56px 24px 44px;text-align:center;border-bottom:1px solid rgba(11,17,19,0.05)}
 .hero h1{
   font-family:'DM Serif Display',Georgia,serif;font-size:clamp(2.4rem,6vw,3.8rem);font-weight:400;
   letter-spacing:-0.02em;margin-bottom:14px;line-height:1.12;
-  background:linear-gradient(90deg,#5a9fd4,var(--duckling),#e8a87c,#6fcf97,#5a9fd4,var(--duckling),#e8a87c);
-  background-size:300% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  animation:fadeIn 0.5s 0.1s ease both,gradientShift 8s ease-in-out infinite;
+  background:none;-webkit-background-clip:initial;color:var(--cranberry);
+  
+  animation:fadeIn 0.5s 0.1s ease both;
 }
 @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 .hero .sub{opacity:0.5;font-size:0.88rem;font-weight:400;max-width:640px;margin:0 auto 36px;line-height:1.65;letter-spacing:0.01em;animation:fadeIn 0.5s 0.2s ease both}
 @keyframes fadeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
-.tab-nav{display:flex;justify-content:center;background:rgba(11,30,48,0.95);border-bottom:1px solid rgba(255,255,255,0.06);overflow-x:auto;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);scrollbar-width:none}
+.tab-nav{display:flex;justify-content:center;background:rgba(233,235,234,0.94);border-bottom:1px solid rgba(11,17,19,0.05);overflow-x:auto;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);scrollbar-width:none}
 .tab-nav::-webkit-scrollbar{display:none}
-.tab-nav a{padding:15px 22px;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.4);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.25s;text-transform:uppercase;letter-spacing:0.06em}
-.tab-nav a:hover{color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.03)}
-.tab-nav a.active{color:#fff;border-bottom-color:var(--duckling)}
-.main-content{max-width:1200px;margin:0 auto;padding:32px 24px 48px}
+.tab-nav a{padding:15px 22px;font-size:0.78rem;font-weight:600;color:rgba(11,17,19,0.6);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.25s;text-transform:uppercase;letter-spacing:0.06em}
+.tab-nav a:hover{color:rgba(11,17,19,0.78);background:rgba(11,17,19,0.03)}
+.tab-nav a.active{color:#0B1113;border-bottom-color:var(--duckling)}
+.main-content{max-width:1560px;margin:0 auto;padding:32px 24px 48px}
 /* ---- Explainers: editorial entry points, not reference tools ----------------
    Deliberately a different shape from .card. The dashboards answer questions you
    already know to ask; an explainer tells you which question matters. Making it
@@ -83,9 +77,9 @@ body::after{
    first. Grows to a 2-up on wide screens when there is a second one. */
 .feature{
   display:grid;grid-template-columns:1.15fr .85fr;gap:0;
-  background:linear-gradient(135deg,rgba(15,41,66,.95) 0%,rgba(20,54,86,.95) 100%);
+  background:linear-gradient(135deg,#FFFFFF 0%,#F1F4F3 100%);
   border:1px solid rgba(201,168,76,.28);border-radius:16px;overflow:hidden;
-  text-decoration:none;color:#fff;position:relative;
+  text-decoration:none;color:#0B1113;position:relative;
   box-shadow:0 4px 20px rgba(0,0,0,.28);
   transition:border-color .35s,transform .35s,box-shadow .35s;
 }
@@ -93,14 +87,14 @@ body::after{
 .feature:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 .feature-body{padding:30px 30px 26px}
 .feature-kicker{
-  font-size:.63rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  font-size:0.6875rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
   color:var(--gold);margin-bottom:12px;
 }
 .feature h3{
   font-family:'DM Serif Display',Georgia,serif;font-weight:400;
-  font-size:clamp(1.3rem,2.4vw,1.75rem);line-height:1.2;color:#fff;margin-bottom:12px;
+  font-size:clamp(1.3rem,2.4vw,1.75rem);line-height:1.2;color:#0B1113;margin-bottom:12px;
 }
-.feature p{font-size:.86rem;line-height:1.62;color:rgba(255,255,255,.5);margin-bottom:18px}
+.feature p{font-size:.86rem;line-height:1.62;color:rgba(11,17,19,0.66);margin-bottom:18px}
 .feature .go{font-size:.78rem;font-weight:700;color:var(--gold);letter-spacing:.03em}
 /* the pull-quote panel carries the finding itself, so the card argues rather than advertises */
 .feature-pull{
@@ -109,36 +103,36 @@ body::after{
   background:rgba(0,0,0,.16);
 }
 .pull-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:9px 0}
-.pull-row+.pull-row{border-top:1px solid rgba(255,255,255,.07)}
-.pull-lbl{font-size:.66rem;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.4)}
-.pull-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.3rem;color:#fff}
-.pull-val.over{color:#e8846c}
-.pull-note{margin-top:14px;font-size:.7rem;color:rgba(255,255,255,.35);line-height:1.5}
+.pull-row+.pull-row{border-top:1px solid rgba(11,17,19,0.06)}
+.pull-lbl{font-size:0.6875rem;text-transform:uppercase;letter-spacing:.09em;color:rgba(11,17,19,0.6)}
+.pull-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.3rem;color:#0B1113}
+.pull-val.over{color:#A81733}
+.pull-note{margin-top:14px;font-size:.7rem;color:rgba(11,17,19,0.57);line-height:1.5}
 @media (max-width:820px){
   .feature{grid-template-columns:1fr}
-  .feature-pull{border-left:none;border-top:1px solid rgba(255,255,255,.08);padding:22px 30px 26px}
+  .feature-pull{border-left:none;border-top:1px solid rgba(11,17,19,0.07);padding:22px 30px 26px}
 }
 
-.sec-head{margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.08)}
-.sec-head h2{font-family:'DM Serif Display',Georgia,serif;font-size:1.35rem;font-weight:400;color:rgba(255,255,255,0.85);margin-bottom:4px}
-.sec-head p{font-size:0.85rem;color:rgba(255,255,255,0.4)}
+.sec-head{margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(11,17,19,0.07)}
+.sec-head h2{font-family:'DM Serif Display',Georgia,serif;font-size:1.35rem;font-weight:400;color:rgba(11,17,19,0.88);margin-bottom:4px}
+.sec-head p{font-size:0.85rem;color:rgba(11,17,19,0.6)}
 .grid-wrap{
   background:linear-gradient(170deg,rgba(20,85,143,0.16),rgba(56,133,87,0.10),rgba(246,197,27,0.09),rgba(104,10,29,0.12),rgba(20,85,143,0.10),rgba(56,133,87,0.14),rgba(246,197,27,0.08),rgba(104,10,29,0.11));
   background-size:300% 300%;animation:gridGlow 12s ease-in-out infinite;
-  border:1px solid rgba(255,255,255,0.06);border-radius:18px;padding:24px;margin-bottom:32px;position:relative;overflow:hidden;
+  border:1px solid rgba(11,17,19,0.05);border-radius:18px;padding:24px;margin-bottom:32px;position:relative;overflow:hidden;
 }
 @keyframes gridGlow{0%{background-position:0% 0%}25%{background-position:100% 50%}50%{background-position:50% 100%}75%{background-position:0% 50%}100%{background-position:0% 0%}}
 .grid-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 40% at 10% 10%,rgba(20,85,143,0.08),transparent),radial-gradient(ellipse 40% 50% at 90% 85%,rgba(104,10,29,0.07),transparent);pointer-events:none}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;position:relative;z-index:1}
-.card{background:rgba(15,41,66,0.85);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:26px 22px 20px;text-decoration:none;color:#fff;display:flex;flex-direction:column;box-shadow:0 2px 8px rgba(0,0,0,0.2);transition:all 0.4s cubic-bezier(.25,.46,.45,.94);position:relative;overflow:hidden;backdrop-filter:blur(4px)}
-.card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,0.05),transparent 70%);opacity:0;transition:opacity 0.4s}
+.card{background:#FFFFFF;border:1px solid rgba(11,17,19,0.05);border-radius:14px;padding:26px 22px 20px;text-decoration:none;color:#0B1113;display:flex;flex-direction:column;box-shadow:0 2px 8px rgba(0,0,0,0.2);transition:all 0.4s cubic-bezier(.25,.46,.45,.94);position:relative;overflow:hidden;backdrop-filter:blur(4px)}
+.card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(11,17,19,0.05),transparent 70%);opacity:0;transition:opacity 0.4s}
 .card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0;opacity:0;transition:opacity 0.4s}
-.card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,0.35);border-color:rgba(255,255,255,0.12)}
+.card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,0.35);border-color:rgba(11,17,19,0.42)}
 .card:hover::before{opacity:1}
 .card:hover::after{opacity:1}
-.card.c-blue::after{background:linear-gradient(90deg,var(--bay-blue),#5a9fd4)}
-.card.c-green::after{background:linear-gradient(90deg,var(--berkshire),#6fcf97)}
-.card.c-cranberry::after{background:linear-gradient(90deg,var(--cranberry),#e8a87c)}
+.card.c-blue::after{background:linear-gradient(90deg,var(--bay-blue),#14558F)}
+.card.c-green::after{background:linear-gradient(90deg,var(--berkshire),#2A6B44)}
+.card.c-cranberry::after{background:linear-gradient(90deg,var(--cranberry),#B07C20)}
 .card.c-purple::after{background:linear-gradient(90deg,#6c5ce7,#a29bfe)}
 .card.c-gray::after{background:linear-gradient(90deg,var(--granite),#999)}
 .card.c-red::after{background:linear-gradient(90deg,var(--danger),#e88)}
@@ -149,36 +143,36 @@ body::after{
 .card-icon.cranberry{background:rgba(104,10,29,0.3)}
 .card-icon.red{background:rgba(205,13,13,0.2)}
 .card-icon.purple{background:rgba(108,92,231,0.25)}
-.card-icon.gray{background:rgba(255,255,255,0.08)}
+.card-icon.gray{background:rgba(11,17,19,0.07)}
 /* "Live" is a promise that a workflow refreshes the page on a schedule, so only
    the eight auto-fed dashboards may wear it; the seven hand-maintained ones get
    .badge-snap. All fifteen said Live, including pages untouched since June. */
-.badge{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:3px 10px;border-radius:100px;color:#6fcf97;background:rgba(56,133,87,0.15);border:1px solid rgba(56,133,87,0.25)}
-.badge-snap{color:#9aa8bd;background:rgba(154,168,189,0.12);border-color:rgba(154,168,189,0.25)}
-.card-name{font-family:'DM Serif Display',Georgia,serif;font-size:1.05rem;font-weight:400;color:#fff;line-height:1.3;margin-bottom:10px}
-.card-desc{font-size:0.82rem;font-weight:400;color:rgba(255,255,255,0.45);line-height:1.6;flex-grow:1;margin-bottom:16px}
-.card-foot{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid rgba(255,255,255,0.06)}
+.badge{font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:3px 10px;border-radius:100px;color:#2A6B44;background:rgba(56,133,87,0.15);border:1px solid rgba(56,133,87,0.25)}
+.badge-snap{color:#5A6467;background:rgba(90,100,103,0.10);border-color:rgba(90,100,103,0.22)}
+.card-name{font-family:'DM Serif Display',Georgia,serif;font-size:1.05rem;font-weight:400;color:#0B1113;line-height:1.3;margin-bottom:10px}
+.card-desc{font-size:0.82rem;font-weight:400;color:rgba(11,17,19,0.63);line-height:1.6;flex-grow:1;margin-bottom:16px}
+.card-foot{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid rgba(11,17,19,0.05)}
 .tags{display:flex;gap:5px;flex-wrap:wrap}
-.tag{font-size:0.62rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.05)}
-.arrow{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,0.06);color:var(--duckling);font-size:13px;font-weight:700;flex-shrink:0;transition:all 0.3s}
+.tag{font-size:0.6875rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:rgba(11,17,19,0.05);color:rgba(11,17,19,0.6);border:1px solid rgba(11,17,19,0.05)}
+.arrow{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(11,17,19,0.05);color:var(--duckling);font-size:13px;font-weight:700;flex-shrink:0;transition:all 0.3s}
 .card:hover .arrow{background:var(--duckling);color:var(--navy);transform:translateX(3px)}
-.info-box{background:rgba(56,133,87,0.06);border:1px solid rgba(56,133,87,0.15);border-left:4px solid var(--berkshire);border-radius:14px;padding:22px 24px;margin-bottom:26px}
-.info-box h4{color:#6fcf97;font-size:0.85rem;font-weight:700;margin-bottom:8px}
-.info-box p{font-size:0.82rem;color:rgba(255,255,255,0.6);line-height:1.6}
-.info-box a{color:#5a9fd4;font-weight:600;text-decoration:none;border-bottom:1px solid var(--duckling)}
-.info-box a:hover{color:var(--duckling)}
+
+
+
+
+
 .share-bar{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px}
-.share-label{font-size:0.68rem;font-weight:600;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.08em}
-.share-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-size:0.72rem;font-weight:600;text-decoration:none;color:#fff;transition:all 0.3s;border:1px solid rgba(255,255,255,0.08);cursor:pointer;background:rgba(255,255,255,0.04);backdrop-filter:blur(4px)}
-.share-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.3);border-color:rgba(255,255,255,0.15);background:rgba(255,255,255,0.08)}
+.share-label{font-size:0.6875rem;font-weight:600;color:rgba(11,17,19,0.54);text-transform:uppercase;letter-spacing:0.08em}
+.share-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-size:0.72rem;font-weight:600;text-decoration:none;color:#0B1113;transition:all 0.3s;border:1px solid rgba(11,17,19,0.07);cursor:pointer;background:rgba(11,17,19,0.04);backdrop-filter:blur(4px)}
+.share-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.3);border-color:rgba(11,17,19,0.44);background:rgba(11,17,19,0.07)}
 .share-btn svg{width:14px;height:14px;fill:currentColor;flex-shrink:0}
-.share-btn.x:hover{border-color:rgba(255,255,255,0.25);color:#fff}
-.share-btn.fb:hover{border-color:rgba(24,119,242,0.5);color:#6cb4ff}
-.share-btn.li:hover{border-color:rgba(10,102,194,0.5);color:#5a9fd4}
+.share-btn.x:hover{border-color:rgba(11,17,19,0.22);color:#0B1113}
+.share-btn.fb:hover{border-color:rgba(24,119,242,0.5);color:#14558F}
+.share-btn.li:hover{border-color:rgba(10,102,194,0.5);color:#14558F}
 .share-btn.rd:hover{border-color:rgba(255,69,0,0.5);color:#ff8a65}
 .share-btn.em:hover{border-color:rgba(246,197,27,0.4);color:var(--duckling)}
-footer{text-align:center;padding:36px 24px;color:rgba(255,255,255,0.35);font-size:0.75rem;border-top:1px solid rgba(255,255,255,0.06)}
-footer a{color:rgba(255,255,255,0.6);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(246,197,27,0.3)}
+footer{text-align:center;padding:36px 24px;color:rgba(11,17,19,0.57);font-size:0.75rem;border-top:1px solid rgba(11,17,19,0.05)}
+footer a{color:rgba(11,17,19,0.72);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(246,197,27,0.3)}
 footer a:hover{color:var(--duckling)}
 .rv{opacity:0;transform:translateY(14px);transition:opacity 0.5s ease,transform 0.5s ease}
 .rv.vis{opacity:1;transform:translateY(0)}
@@ -198,44 +192,528 @@ footer a:hover{color:var(--duckling)}
 .grid .card:nth-child(14){transition-delay:0.65s}
 .grid .card:nth-child(15){transition-delay:0.7s}
 @media(max-width:960px){.grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:768px){.hero{padding:48px 16px 36px}.main-content{padding:20px 16px 40px}.grid-wrap{padding:16px}.share-bar{gap:8px}.share-btn{padding:7px 12px;font-size:0.68rem}}
+@media(max-width:768px){.hero{padding:48px 16px 36px}.main-content{padding:20px 16px 40px}.grid-wrap{padding:16px}.share-bar{gap:8px}.share-btn{padding:7px 12px;font-size:0.6875rem}}
 @media(max-width:540px){.grid{grid-template-columns:1fr}.grid-wrap{padding:12px}}
+
+/* ---- front page: instrument as hero -------------------------------------- */
+.site-head{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;
+  align-items:center;justify-content:space-between;gap:24px;
+  padding:18px clamp(18px,3vw,40px);pointer-events:none}
+.site-head .wm{pointer-events:auto;font-family:var(--font-display);font-weight:700;
+  font-size:clamp(22px,2.2vw,34px);letter-spacing:-.03em;color:var(--cranberry);
+  text-decoration:none;line-height:1}
+.site-nav{pointer-events:auto;display:flex;gap:clamp(12px,1.8vw,26px);
+  font-family:var(--font-text);font-size:13px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase}
+.site-nav a{color:var(--muted);text-decoration:none;padding-bottom:3px;
+  border-bottom:1.5px solid transparent;transition:color .18s,border-color .18s}
+.site-nav a:hover{color:var(--cranberry);border-bottom-color:var(--cranberry)}
+.stage{position:relative;height:100vh;width:100%;background:var(--bg)}
+.stage .instr{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.stage-more{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;opacity:.75;transition:opacity .2s}
+.stage-more:hover{opacity:1;color:var(--cranberry)}
+@media (max-width:800px){.stage{height:78vh}.site-nav{display:none}}
+
+/* ---- the turn: instrument -> directory -----------------------------------
+   The stage ended and the card grid began with nothing between them, so the
+   page just stopped. This band is the hinge: it states what the site is once,
+   at size, and hands the reader down. Deliberately empty of ornament - the
+   footage test earlier proved that anything behind content here either
+   disappears or fights it. */
+.turn{position:relative;padding:clamp(80px,11vw,150px) clamp(24px,5vw,90px);
+  background:linear-gradient(180deg,var(--bg) 0%,#DFE3E2 55%,var(--bg) 100%);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  text-align:center}
+.turn-l{font-family:var(--font-mono);font-size:11px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--berk-ink);margin:0 0 22px}
+.turn-h{font-family:var(--font-display);font-weight:700;
+  font-size:clamp(26px,3.6vw,54px);line-height:1.08;letter-spacing:-.03em;
+  color:var(--ink);margin:0 auto;max-width:20ch}
+.turn-h em{font-style:normal;color:var(--cranberry)}
+.turn-go{display:inline-block;margin-top:34px;font-family:var(--font-mono);
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+  text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:6px;
+  transition:color .2s,border-color .2s}
+.turn-go:hover{color:var(--cranberry);border-color:var(--cranberry)}
+
+/* the band asserted that every figure is computed from an official source and
+   then showed no figures. It carries them now - centred type on a gradient was
+   the plainest arrangement available, and it was asserting rather than proving */
+.turn{position:relative;padding:clamp(70px,9vw,130px) clamp(24px,5vw,90px);
+  background:linear-gradient(180deg,var(--bg) 0%,#DFE3E2 60%,var(--bg) 100%);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.turn-in{max-width:1560px;margin:0 auto;display:grid;gap:clamp(28px,4vw,72px);
+  grid-template-columns:1.25fr .75fr;align-items:end}
+.turn-h{font-family:var(--font-display);font-weight:700;margin:0;
+  font-size:clamp(28px,4.2vw,64px);line-height:1.04;letter-spacing:-.034em;color:var(--ink)}
+.turn-h em{font-style:normal;color:var(--cranberry)}
+.turn-side{border-left:2px solid var(--cranberry);padding-left:clamp(16px,1.6vw,26px)}
+.turn-l{font-family:var(--font-mono);font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--berk-ink);margin:0 0 18px}
+.turn-figs{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:14px 22px}
+.turn-figs div{margin:0}
+.turn-figs dt{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted)}
+.turn-figs dd{margin:2px 0 0;font-family:var(--font-mono);font-weight:600;
+  font-size:clamp(17px,1.5vw,23px);letter-spacing:-.03em;color:var(--bay-blue)}
+.turn-go{display:inline-block;margin-top:26px;font-family:var(--font-mono);
+  font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
+  text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:5px;
+  transition:color .2s,border-color .2s}
+.turn-go:hover{color:var(--cranberry);border-color:var(--cranberry)}
+@media (max-width:900px){.turn-in{grid-template-columns:1fr}.turn-side{border-left:0;
+  border-top:2px solid var(--cranberry);padding:20px 0 0}}
+
+/* ---- the directory ---------------------------------------------------------
+   The cards were flat white rectangles with a 3px bar, on a grid fixed at three
+   columns inside a 1200px cap - so on a wide display they were small, identical
+   and static. The complaint was that nothing happens on the page or the cards,
+   and it was correct.
+   The rule now runs the FULL height of the card and is the thing that moves:
+   it widens and the card lifts toward the reader. One gesture, not six. */
+.grid{display:grid;gap:clamp(14px,1.4vw,22px);
+  grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}
+.card{position:relative;display:flex;flex-direction:column;gap:10px;
+  background:var(--card);border:1px solid var(--border);border-radius:3px;
+  padding:22px 24px 18px 26px;text-decoration:none;overflow:hidden;isolation:isolate;
+  transition:transform .34s cubic-bezier(.2,.8,.2,1),box-shadow .34s cubic-bezier(.2,.8,.2,1),
+             border-color .34s}
+.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:7px;
+  background:var(--bay-blue);transform:scaleX(.43);transform-origin:left center;transition:transform .34s cubic-bezier(.2,.8,.2,1),opacity .34s}
+.card.c-cranberry::before{background:var(--cranberry)}
+.card.c-green::before{background:var(--berkshire)}
+.card.c-blue::before{background:var(--bay-blue)}
+.card::after{content:'';position:absolute;inset:0;z-index:-1;opacity:0;
+  background:linear-gradient(115deg,rgba(20,85,143,.05),transparent 62%);
+  transition:opacity .34s}
+.card:hover{transform:translateY(-4px);border-color:transparent;
+  box-shadow:0 2px 4px rgba(11,17,19,.05),0 14px 34px -10px rgba(11,17,19,.22)}
+.card:hover::before{transform:scaleX(1)}
+.card:hover::after{opacity:1}
+.card:focus-visible{outline:2px solid var(--cranberry);outline-offset:3px}
+.card-name{font-family:var(--font-display);font-weight:700;font-size:18px;
+  letter-spacing:-.022em;line-height:1.18;color:var(--ink)}
+.card-desc{font-family:var(--font-text);font-size:13.5px;line-height:1.5;color:var(--muted);flex:1}
+.card-also{font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;
+  color:var(--berk-ink);border-top:1px dashed var(--border);padding-top:9px;margin-top:2px}
+.card-also b{font-weight:600;color:var(--ink)}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin-top:4px}
+.tag{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);background:rgba(11,17,19,.04);border:1px solid var(--border);
+  border-radius:2px;padding:3px 6px}
+.arrow{font-size:15px;color:var(--muted);transition:transform .34s cubic-bezier(.2,.8,.2,1),color .34s}
+.card:hover .arrow{transform:translateX(5px);color:var(--cranberry)}
+.badge{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--berk-ink);background:rgba(42,107,68,.09);border:1px solid rgba(42,107,68,.2);
+  border-radius:20px;padding:3px 8px}
+.badge.b-ext{color:var(--muted);background:rgba(11,17,19,.04);border-color:var(--border)}
+.card--ext{background:linear-gradient(180deg,#FFFFFF,#F6F8F7)}
+@media (prefers-reduced-motion:reduce){
+  .card,.card::before,.card::after,.arrow{transition:none}
+  .card:hover{transform:none}
+}
+
+/* A card with a second destination cannot be one big <a> - nesting links is
+   invalid. The primary link stretches to fill the card; the companion sits
+   above it and is genuinely clickable, because "also inside" was claiming
+   containment that did not exist. */
+.card-go{text-decoration:none;position:static}
+.card-go::after{content:'';position:absolute;inset:0;z-index:1}
+.card-also{position:relative;z-index:2;display:block;text-decoration:none;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;
+  color:var(--berk-ink);border-top:1px dashed var(--border);
+  padding-top:9px;margin-top:2px;transition:color .2s}
+.card-also b{font-weight:600;color:var(--ink)}
+.card-also:hover{color:var(--cranberry)}
+.card-also:hover b{color:var(--cranberry)}
+
+/* one subject, one card, several doors - three separate Boston cards read as
+   three subjects when it is one */
+.card-also{position:relative;z-index:2;display:flex;flex-wrap:wrap;gap:4px 14px;
+  align-items:baseline;border-top:1px dashed var(--border);padding-top:9px;margin-top:2px;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.04em}
+.card-also>span{color:var(--muted);text-transform:uppercase;letter-spacing:.14em;font-size:11px}
+.card-also a{color:var(--berk-ink);text-decoration:none;transition:color .2s}
+.card-also a:hover{color:var(--cranberry)}
+
+/* ============================================================================
+   TWO EFFECTS. No layout, copy or markup changes.
+   ========================================================================== */
+
+/* ---- 1. liquid type ------------------------------------------------------ */
+.turn-h{position:relative}
+.turn-h canvas.lq{position:absolute;left:0;top:0;width:100%;height:100%;
+  pointer-events:none;display:block}
+/* the real heading only goes transparent once a frame has actually painted */
+.turn-h.lq-on{color:transparent}
+.turn-h.lq-on em{color:transparent}
+
+/* ---- 2. magnetic cards --------------------------------------------------- */
+.grid{perspective:1400px;perspective-origin:50% 40%}
+.card{
+  transform-style:preserve-3d;
+  will-change:transform;
+  transition:transform .5s cubic-bezier(.19,1,.22,1),
+             box-shadow .5s cubic-bezier(.19,1,.22,1),
+             border-color .4s;
+}
+.card.mg{
+  transform:
+    rotateX(calc(var(--ry,0) * -7deg))
+    rotateY(calc(var(--rx,0) *  7deg))
+    translate3d(0,-6px,34px);
+  transition:transform .16s cubic-bezier(.22,.61,.36,1),
+             box-shadow .3s ease, border-color .3s;
+  box-shadow:
+    0 34px 70px -18px rgba(11,17,19,.42),
+    0 6px 18px -6px rgba(11,17,19,.22);
+  border-color:rgba(11,17,19,.28);
+  z-index:3;
+}
+/* specular sheen that tracks the pointer across the card face */
+.card .sheen{
+  position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:4;
+  opacity:0;transition:opacity .3s ease;
+  background:
+    radial-gradient(340px circle at var(--mx,50%) var(--my,50%),
+      rgba(255,255,255,.62), rgba(255,255,255,.10) 34%, transparent 62%);
+  mix-blend-mode:soft-light;
+}
+.card.mg .sheen{opacity:1}
+/* a second, coloured pass so the card glows in its own subject colour */
+.card .sheen::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),
+    var(--glow,rgba(20,85,143,.30)), transparent 60%);
+  mix-blend-mode:multiply;opacity:.5;
+}
+.card.c-blue{--glow:rgba(20,85,143,.30)}
+.card.c-green{--glow:rgba(56,133,87,.28)}
+.card.c-cranberry{--glow:rgba(104,10,29,.30)}
+.card.c-purple{--glow:rgba(108,92,231,.28)}
+.card.c-red{--glow:rgba(205,13,13,.26)}
+.card.c-gray{--glow:rgba(11,17,19,.20)}
+/* the arrow leans out of the card as it tilts */
+.card.mg .arrow{transform:translate3d(0,0,26px) scale(1.12);
+  background:var(--duckling);color:var(--navy)}
+
+@media (prefers-reduced-motion: reduce){
+  .turn-h.lq-on{color:var(--ink)}
+  .turn-h.lq-on em{color:var(--cranberry)}
+  .turn-h canvas.lq{display:none}
+  .card,.card.mg{transform:none!important;transition:none}
+  .card .sheen{display:none}
+}
+@media (hover:none){
+  .card .sheen{display:none}
+}
+
+
+/* ---- 3. background: domain-warped flow field, one shader pass ------------ */
+#flow{
+  position:fixed;inset:0;z-index:0;pointer-events:none;display:block;
+  width:100%;height:100%;opacity:0;transition:opacity 1.4s ease;
+}
+#flow.on{opacity:1}
+@media (prefers-reduced-motion: reduce){ #flow{display:none} }
+
+/* the section grounds were fully opaque, so nothing behind them could be seen.
+   Same colours, carried at alpha, so the field reads through them. */
+.turn{
+  background:linear-gradient(180deg,
+    rgba(233,235,234,.70) 0%, rgba(223,227,226,.34) 55%, rgba(233,235,234,.58) 100%);
+}
+/* the field tints the ground just enough to push the smallest muted labels
+   under 4.5:1. Measured against the darkest tint the shader can output, not
+   guessed: figure label 4.13, band label 4.34, section sub 4.25, footer 3.89. */
+.turn-l{color:#3E4A4D}
+.turn-figs dt{color:#3E4A4D}
+.sec-head p{color:rgba(11,17,19,.82)}
+footer{color:rgba(11,17,19,.80)}
+
+.grid-wrap{
+  background:linear-gradient(170deg,
+    rgba(20,85,143,.09),rgba(56,133,87,.05),rgba(246,197,27,.04),
+    rgba(104,10,29,.07),rgba(20,85,143,.05),rgba(56,133,87,.08),
+    rgba(246,197,27,.04),rgba(104,10,29,.06));
+  background-size:300% 300%;
+}
+
+
+/* ---- 4. the turn band as a space: three depths ------------------------- */
+.turn{overflow:hidden}
+.turn-in{position:relative}
+.turn-h,.turn-side{will-change:transform}
+.turn-h{transform:translate3d(calc(var(--tx,0)*-14px),calc(var(--ty,0)*-9px + var(--sy,0px)),0)}
+.turn-side{transform:translate3d(calc(var(--tx,0)*9px),calc(var(--ty,0)*6px + var(--sy2,0px)),0)}
+.turn-h,.turn-side{transition:transform .5s cubic-bezier(.19,1,.22,1)}
+.turn.live .turn-h,.turn.live .turn-side{transition:transform .14s linear}
+
+/* the card rail animated its width, which lays out on every frame of every
+   hover across 21 cards. Same 3px-to-7px result, done on the compositor. */
+.card::before{width:7px;transform:scaleX(.43);transform-origin:left center;
+  transition:transform .34s cubic-bezier(.2,.8,.2,1),opacity .34s}
+.card:hover::before{width:7px;transform:scaleX(1)}
+
+/* ---- 5. cards: real pixel displacement on hover ------------------------- */
+.card.warp{filter:url(#cardwarp)}
+
+/* ---- 7. sources and footer as their own section ------------------------- */
+.sources{
+  position:relative;z-index:1;
+  margin:56px auto 0;max-width:1560px;padding:0 24px;
+}
+.sources-in{
+  background:rgba(255,255,255,.52);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(11,17,19,.07);border-radius:18px;
+  padding:26px clamp(20px,2.4vw,34px) 24px;
+}
+.sources h3{
+  font-family:var(--font-display);font-weight:700;
+  font-size:clamp(15px,1.35vw,20px);letter-spacing:-.02em;color:var(--ink);
+  margin:0;display:flex;align-items:baseline;gap:11px;
+}
+.sources .src-n{
+  font-family:var(--font-mono);font-style:normal;font-weight:600;
+  font-size:.62em;color:var(--bay-blue);letter-spacing:-.02em;
+}
+.sources-ramp{
+  display:block;height:2px;margin:14px 0 18px;border-radius:2px;
+  background:linear-gradient(90deg,#12467F,#3D82BC,#8FB9D6,#CFC7B4,#F2A65A,#DC5127,#8E0B22);
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform 1.1s cubic-bezier(.19,1,.22,1);
+}
+.sources.vis .sources-ramp{transform:scaleX(1)}
+.srcchips{display:flex;flex-wrap:wrap;gap:6px}
+.srcchip{
+  font-family:var(--font-mono);font-size:11px;font-weight:600;
+  letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;
+  padding:5px 10px;border-radius:6px;
+  color:rgba(11,17,19,.78);background:rgba(255,255,255,.72);
+  border:1px solid rgba(11,17,19,.12);
+  transition:transform .3s cubic-bezier(.19,1,.22,1),border-color .3s,color .3s;
+}
+.srcchip:hover{transform:translateY(-2px);border-color:rgba(20,85,143,.45);color:var(--bay-blue)}
+.sources-note{
+  margin:16px 0 0;font-family:var(--font-text);
+  font-size:12.5px;color:rgba(11,17,19,.72);
+}
+.sources-note a{color:var(--bay-blue);font-weight:600}
+
+/* measured on the footer's translucent ground: 3.79:1 against 4.5 */
+.share-label{color:rgba(11,17,19,.80)}
+
+footer{
+  position:relative;z-index:1;margin-top:44px;
+  background:rgba(233,235,234,.58);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-top:1px solid rgba(11,17,19,.08);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .turn-h,.turn-side{transform:none!important}
+  .card.warp{filter:none}
+  .sources-ramp{transform:scaleX(1)}
+}
+
+
+/* ---- Videos and About: the same section shell as the sources block ------- */
+.panel-sec{position:relative;z-index:1;margin:56px auto 0;max-width:1560px;padding:0 24px}
+.panel-in{
+  background:rgba(255,255,255,.52);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(11,17,19,.07);border-radius:18px;
+  padding:26px clamp(20px,2.4vw,34px) 24px;
+}
+.panel-sec h4{
+  font-family:var(--font-display);font-weight:700;
+  font-size:clamp(15px,1.35vw,20px);letter-spacing:-.02em;color:var(--ink);
+  margin:0;display:flex;align-items:baseline;gap:11px;
+}
+.panel-sec .panel-n{
+  font-family:var(--font-mono);font-style:normal;font-weight:600;
+  font-size:.62em;color:var(--bay-blue);letter-spacing:-.02em;
+}
+.panel-ramp{
+  display:block;height:2px;margin:14px 0 18px;border-radius:2px;
+  background:linear-gradient(90deg,#12467F,#3D82BC,#8FB9D6,#CFC7B4,#F2A65A,#DC5127,#8E0B22);
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform 1.1s cubic-bezier(.19,1,.22,1);
+}
+.panel-sec.vis .panel-ramp{transform:scaleX(1)}
+.panel-lede{
+  margin:0;font-family:var(--font-text);
+  font-size:clamp(14px,1.05vw,16.5px);line-height:1.6;
+  color:rgba(11,17,19,.88);max-width:74ch;
+}
+.panel-body{
+  margin:14px 0 0;font-family:var(--font-text);
+  font-size:13.5px;line-height:1.68;color:rgba(11,17,19,.80);max-width:78ch;
+}
+.panel-note{
+  margin:16px 0 0;font-family:var(--font-text);
+  font-size:12.5px;line-height:1.6;color:rgba(11,17,19,.72);max-width:78ch;
+}
+.panel-note a{color:var(--bay-blue);font-weight:600}
+@media (prefers-reduced-motion: reduce){ .panel-ramp{transform:scaleX(1)} }
+
+
+/* ---- every card the same height ----------------------------------------
+   Card heights ran 285 to 366px, an 81px spread, because the descriptions run
+   anywhere from 3 to 7 lines and each grid row only grows to its own tallest
+   card. 1fr rows make every row equal to the tallest, and .card-desc already
+   has flex-grow, so the slack lands between the description and the footer
+   rather than truncating anyone's copy. */
+.grid{grid-auto-rows:1fr}
+.card{height:100%}
+
+/* ---- the Dashboards heading sits centred over its grid ------------------ */
+.sec-head{text-align:center}
+.sec-head p{margin-left:auto;margin-right:auto;max-width:62ch}
+
+/* ---- sources: centred, and a chip field that answers the cursor --------- */
+.sources h3{justify-content:center}
+.srcchips{justify-content:center}
+.sources-note{text-align:center}
+.srcchip{
+  will-change:transform;
+  transform:translate3d(0,calc(var(--lift,0) * -7px),0) scale(calc(1 + var(--lift,0) * .06));
+  border-color:rgba(11,17,19,calc(.12 + var(--lift,0) * .34));
+  box-shadow:0 calc(var(--lift,0) * 6px) calc(var(--lift,0) * 14px) rgba(11,17,19,calc(var(--lift,0) * .16));
+  transition:transform .5s cubic-bezier(.19,1,.22,1),border-color .5s,box-shadow .5s,color .5s;
+}
+.srcchips.live .srcchip{transition:transform .12s linear,border-color .2s,box-shadow .2s,color .2s}
+.srcchip:hover{transform:translate3d(0,-8px,0) scale(1.07)}
+
+/* ---- footer: colour, and the ramp sweeping its edge --------------------- */
+footer{
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(120% 160% at 12% 0%, rgba(20,85,143,.10), transparent 58%),
+    radial-gradient(120% 160% at 88% 10%, rgba(104,10,29,.09), transparent 55%),
+    rgba(233,235,234,.62);
+  border-top:0;
+}
+footer::before{
+  content:'';position:absolute;left:0;right:0;top:0;height:3px;
+  background:linear-gradient(90deg,#12467F,#3D82BC,#8FB9D6,#CFC7B4,#F2A65A,#DC5127,#8E0B22,
+                                    #DC5127,#F2A65A,#CFC7B4,#8FB9D6,#3D82BC,#12467F);
+  background-size:200% 100%;
+  animation:footRamp 22s linear infinite;
+}
+@keyframes footRamp{from{background-position:0% 0}to{background-position:200% 0}}
+.share-btn{transition:transform .4s cubic-bezier(.19,1,.22,1),background .3s,border-color .3s,color .3s}
+.share-btn:hover{transform:translateY(-3px)}
+.share-btn.x:hover{border-color:rgba(11,17,19,.5);background:rgba(11,17,19,.07)}
+.share-btn.fb:hover{border-color:rgba(20,85,143,.55);background:rgba(20,85,143,.10);color:var(--bay-blue)}
+.share-btn.li:hover{border-color:rgba(20,85,143,.55);background:rgba(20,85,143,.10);color:var(--bay-blue)}
+.share-btn.rd:hover{border-color:rgba(194,65,12,.55);background:rgba(194,65,12,.10);color:#9A3412}
+.share-btn.em:hover{border-color:rgba(184,134,11,.6);background:rgba(184,134,11,.12);color:#7A5A08}
+
+@media (prefers-reduced-motion: reduce){
+  footer::before{animation:none}
+  .srcchip{transform:none!important;transition:none}
+}
+
+
+/* ---- card designators: a drawn set, not emoji ---------------------------
+   The emoji were cartoon colour on a restrained page and drew differently on
+   every OS. These are Lucide strokes inheriting currentColor, so each tone
+   class colours its own icon and the tile keeps the tint it already had. */
+svg.sprite{position:absolute;width:0;height:0;overflow:hidden}
+.card-icon{font-size:0}
+/* The stroke properties have to live on the referencing element: a <use> does
+   not inherit presentation attributes from the sprite's own <svg>, so without
+   these the symbol paths fall back to fill:black and render as solid blobs. */
+.card-icon .ci{
+  width:21px;height:21px;display:block;overflow:visible;
+  fill:none;stroke:currentColor;stroke-width:1.75;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.card-icon.blue      .ci{color:#0F4577}
+.card-icon.green     .ci{color:#2C6B45}
+.card-icon.cranberry .ci{color:#5A0818}
+.card-icon.red       .ci{color:#8E0B14}
+.card-icon.purple    .ci{color:#3F35A6}
+.card-icon.gray      .ci{color:rgba(11,17,19,.72)}
+
+.skip-link{position:absolute;left:8px;top:-48px;z-index:200;padding:10px 16px;
+  border-radius:8px;background:#680A1D;color:#fff;text-decoration:none;
+  font-family:var(--font-mono,ui-monospace,monospace);font-size:12px;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;transition:top .18s}
+.skip-link:focus{top:8px}
 </style>
+<!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+
 </head>
 <body>
-<div class="hero">
-  <div class="hero-alert"><span class="pulse"></span> Economic Crisis Dashboard</div>
-  <h1>Massachusetts Data Hub</h1>
-  <p class="sub">Interactive dashboards tracking the Commonwealth's affordability crisis, housing market, tax burden, pension liabilities, energy costs, and political influence &mdash; built exclusively from official government sources.</p>
-</div>
-<nav class="tab-nav">
-  <a href="#explainers" class="active">Start Here</a>
-  <a href="#dashboards">Dashboards</a>
-  <a href="MASTER_DATA.md">Data Reference</a>
-  <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub" target="_blank">GitHub &nearr;</a>
-</nav>
-<div class="main-content">
-  <section id="explainers" style="margin-bottom:44px">
-    <div class="sec-head rv">
-      <h2>Start Here</h2>
-      <p>Plain-English walkthroughs. Read one of these first, then use the dashboards for the detail.</p>
-    </div>
-    <a href="budget-explainer.html" class="feature rv">
-      <div class="feature-body">
-        <div class="feature-kicker">FY2027 Budget &middot; Explainer</div>
-        <h3>The budget was signed at $63.4 billion. That&rsquo;s the opening figure.</h3>
-        <p>Massachusetts enacts a budget in July and then raises it all year. Two years ago the state enacted $57.6&nbsp;billion and spent $63.3&nbsp;billion. How that gap opens, who closes it, why one fiscal year has three different totals, and the Chapter&nbsp;70 cliff waiting in FY2028.</p>
-        <span class="go">Read the explainer &rarr;</span>
-      </div>
-      <div class="feature-pull">
-        <div class="pull-row"><span class="pull-lbl">FY2025 enacted</span><span class="pull-val">$57.6B</span></div>
-        <div class="pull-row"><span class="pull-lbl">FY2025 actually spent</span><span class="pull-val over">$63.3B</span></div>
-        <div class="pull-row"><span class="pull-lbl">FY2027 will spend</span><span class="pull-val" style="font-size:.95rem;color:rgba(255,255,255,.55)">not yet knowable</span></div>
-        <p class="pull-note">Enacted vs. actual, same 913 accounts, transfers excluded. FY2024 landed on target &mdash; the overrun is a pattern, not a law.</p>
-      </div>
-    </a>
-  </section>
+<a class="skip-link" href="#main">Skip to content</a>
+<!-- Card icons: Lucide v1.33.0, ISC licence, https://lucide.dev -->
+<svg class="sprite" aria-hidden="true" focusable="false"
+     fill="none" stroke="currentColor" stroke-width="1.75"
+     stroke-linecap="round" stroke-linejoin="round">
+<symbol id="i-plane-takeoff" viewBox="0 0 24 24"><path d="M2 22h20" /> <path d="M6.36 17.4 4 17l-2-4 1.1-.55a2 2 0 0 1 1.8 0l.17.1a2 2 0 0 0 1.8 0L8 12 5 6l.9-.45a2 2 0 0 1 2.09.2l4.02 3a2 2 0 0 0 2.1.2l4.19-2.06a2.41 2.41 0 0 1 1.73-.17L21 7a1.4 1.4 0 0 1 .87 1.99l-.38.76c-.23.46-.6.84-1.07 1.08L7.58 17.2a2 2 0 0 1-1.22.18Z" /></symbol>
+<symbol id="i-building-2" viewBox="0 0 24 24"><path d="M10 12h4" /> <path d="M10 8h4" /> <path d="M14 21v-3a2 2 0 0 0-4 0v3" /> <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2" /> <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16" /></symbol>
+<symbol id="i-vote" viewBox="0 0 24 24"><path d="m9 12 2 2 4-4" /> <path d="M5 7c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v12H5V7Z" /> <path d="M22 19H2" /></symbol>
+<symbol id="i-file-search" viewBox="0 0 24 24"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <circle cx="11.5" cy="14.5" r="2.5" /> <path d="M13.3 16.3 15 18" /></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /> <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /> <path d="M2 12h20" /></symbol>
+<symbol id="i-house" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /> <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></symbol>
+<symbol id="i-mountain-snow" viewBox="0 0 24 24"><path d="m8 3 4 8 5-5 5 15H2L8 3z" /> <path d="M4.14 15.08c2.62-1.57 5.24-1.43 7.86.42 2.74 1.94 5.49 2 8.23.19" /></symbol>
+<symbol id="i-clipboard-list" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /> <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /> <path d="M12 11h4" /> <path d="M12 16h4" /> <path d="M8 11h.01" /> <path d="M8 16h.01" /></symbol>
+<symbol id="i-shopping-basket" viewBox="0 0 24 24"><path d="m15 11-1 9" /> <path d="m19 11-4-7" /> <path d="M2 11h20" /> <path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4" /> <path d="M4.5 15.5h15" /> <path d="m5 11 4-7" /> <path d="m9 11 1 9" /></symbol>
+<symbol id="i-graduation-cap" viewBox="0 0 24 24"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" /> <path d="M22 10v6" /> <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" /></symbol>
+<symbol id="i-ruler" viewBox="0 0 24 24"><path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z" /> <path d="m14.5 12.5 2-2" /> <path d="m11.5 9.5 2-2" /> <path d="m8.5 6.5 2-2" /> <path d="m17.5 15.5 2-2" /></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /></symbol>
+<symbol id="i-briefcase" viewBox="0 0 24 24"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" /> <rect width="20" height="14" x="2" y="6" rx="2" /></symbol>
+<symbol id="i-building" viewBox="0 0 24 24"><path d="M12 10h.01" /> <path d="M12 14h.01" /> <path d="M12 6h.01" /> <path d="M16 10h.01" /> <path d="M16 14h.01" /> <path d="M16 6h.01" /> <path d="M8 10h.01" /> <path d="M8 14h.01" /> <path d="M8 6h.01" /> <path d="M9 22v-3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" /> <rect x="4" y="2" width="16" height="20" rx="2" /></symbol>
+<symbol id="i-receipt" viewBox="0 0 24 24"><path d="M12 17V7" /> <path d="M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8" /> <path d="M4 3a1 1 0 0 1 1-1 1.3 1.3 0 0 1 .7.2l.933.6a1.3 1.3 0 0 0 1.4 0l.934-.6a1.3 1.3 0 0 1 1.4 0l.933.6a1.3 1.3 0 0 0 1.4 0l.933-.6a1.3 1.3 0 0 1 1.4 0l.934.6a1.3 1.3 0 0 0 1.4 0l.933-.6A1.3 1.3 0 0 1 19 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1 1.3 1.3 0 0 1-.7-.2l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.934.6a1.3 1.3 0 0 1-1.4 0l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-1.4 0l-.934-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-.7.2 1 1 0 0 1-1-1z" /></symbol>
+<symbol id="i-landmark" viewBox="0 0 24 24"><path d="M10 18v-7" /> <path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z" /> <path d="M14 18v-7" /> <path d="M18 18v-7" /> <path d="M3 22h18" /> <path d="M6 18v-7" /></symbol>
+<symbol id="i-piggy-bank" viewBox="0 0 24 24"><path d="M11 17h3v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-3a3.16 3.16 0 0 0 2-2h1a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1h-1a5 5 0 0 0-2-4V3a4 4 0 0 0-3.2 1.6l-.3.4H11a6 6 0 0 0-6 6v1a5 5 0 0 0 2 4v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1z" /> <path d="M16 10h.01" /> <path d="M2 8v1a2 2 0 0 0 2 2h1" /></symbol>
+<symbol id="i-zap" viewBox="0 0 24 24"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z" /></symbol>
+<symbol id="i-handshake" viewBox="0 0 24 24"><path d="m11 17 2 2a1 1 0 1 0 3-3" /> <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" /> <path d="m21 3 1 11h-2" /> <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" /> <path d="M3 4h8" /></symbol>
+</svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="cardwarp" x="-12%" y="-12%" width="124%" height="124%"><feTurbulence id="cardturb" type="fractalNoise" baseFrequency="0.014 0.022" numOctaves="3" seed="7" result="n"/><feDisplacementMap id="carddisp" in="SourceGraphic" in2="n" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
+<canvas id="flow" aria-hidden="true"></canvas>
+<!-- The instrument is the hero: full viewport, its own document, so the 351-town
+     payload and its WebGL stay isolated from this page. embed=1 suppresses its
+     masthead and nav because this page supplies them. -->
+<header class="site-head">
+  <a class="wm" href="./">Massachusetts Data Hub</a>
+  <nav class="site-nav" aria-label="Main">
+    <a href="#top">The Instrument</a>
+    <a href="#dashboards">Dashboards</a>
+    <a href="videos.html">Videos</a>
+    <a href="about.html">About</a>
+    
+    <a href="method.html">Method</a>
+  </nav>
+</header>
+<section class="stage" id="top">
+  <iframe class="instr" src="instrument.html?embed=1" title="Massachusetts, all 351 municipalities" loading="eager"></iframe>
+</section>
 
+<section class="turn">
+  <div class="turn-in">
+    <h1 class="turn-h">The instrument shows you <em>where</em>.<br>The dashboards show you <em>why</em>.</h1>
+    <div class="turn-side">
+      <p class="turn-l">Computed at runtime from official sources</p>
+      <dl class="turn-figs">
+        <div><dt>Municipalities</dt><dd>351</dd></div>
+        <div><dt>Dashboards</dt><dd id="turn-dash">22</dd></div>
+        <div><dt>Live data feeds</dt><dd>14</dd></div>
+        <div><dt>Last refreshed</dt><dd id="turn-upd">18 Aug 2026</dd></div>
+      </dl>
+      <a class="turn-go" href="#dashboards">Open the dashboards</a>
+    </div>
+  </div>
+</section>
+<main id="main" class="main-content">
   <section id="dashboards">
     <div class="sec-head rv">
       <h2>Dashboards</h2>
@@ -243,31 +721,30 @@ footer a:hover{color:var(--duckling)}
     </div>
     <div class="grid-wrap">
     <div class="grid">
-      <a href="immigration-dashboard.html" class="card c-cranberry rv"><div class="card-top"><div class="card-icon cranberry">&#x1F6C2;</div><span class="badge">Live</span></div><div class="card-name">Immigration &mdash; National + Massachusetts</div><div class="card-desc">Border encounters, net international migration, deportation math, Census revisions, fiscal impact (Cato/NASEM), MA shelter crisis, H-1B data, and city-level concentration analysis.</div><div class="card-foot"><div class="tags"><span class="tag">CBP</span><span class="tag">Census</span><span class="tag">ICE</span><span class="tag">CBO</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="ma-housing-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F3E0;</div><span class="badge">Live</span></div><div class="card-name">Massachusetts Housing Market</div><div class="card-desc">Statewide, Boston, Essex County, and Greater Newburyport. Median prices, DOM, SP/LP ratios, 5-year MLS trends, and affordability calculations.</div><div class="card-foot"><div class="tags"><span class="tag">Warren Group</span><span class="tag">MLS PIN</span><span class="tag">Census ACS</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="nh-housing-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F3D4;&#xFE0F;</div><span class="badge">Live</span></div><div class="card-name">New Hampshire Housing Market</div><div class="card-desc">Statewide market data with regional breakdowns. Median prices, average sales, DOM, sell-through rates, and SP/LP ratios.</div><div class="card-foot"><div class="tags"><span class="tag">Paragon MLS</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="haverhill-market-report.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F4CB;</div><span class="badge">Live</span></div><div class="card-name">Haverhill Market Report</div><div class="card-desc">Deep dive into Haverhill's SF and condo markets. Affordability analysis comparing median income ($88K) to income needed for homeownership.</div><div class="card-foot"><div class="tags"><span class="tag">MLS</span><span class="tag">Census QuickFacts</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="affordability-dashboard.html" class="card c-red rv"><div class="card-top"><div class="card-icon red">&#x1F4B0;</div><span class="badge">Live</span></div><div class="card-name">What It Costs to Live in Massachusetts</div><div class="card-desc">What is actually expensive here and what is not. BEA price parities by state and metro, price-adjusted income rankings, and the MIT living wage by household type.</div><div class="card-foot"><div class="tags"><span class="tag">BEA</span><span class="tag">MIT Living Wage</span><span class="tag">Census ACS</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="education-statewide.html" class="card c-green rv"><div class="card-top"><div class="card-icon green">&#x1F393;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">MA Education &mdash; Statewide</div><div class="card-desc">Enrollment shifts (traditional &minus;6.4%, vocational +18%, homeschool +56%), per-pupil spending, MCAS proficiency, Gateway Cities vs. wealthy towns.</div><div class="card-foot"><div class="tags"><span class="tag">DESE</span><span class="tag">MCAS</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="education-boston.html" class="card c-green rv"><div class="card-top"><div class="card-icon green">&#x1F3EB;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">Boston Education Dashboard</div><div class="card-desc">Boston Public Schools deep dive &mdash; chronic absenteeism by race/grade, achievement gaps, spending per pupil, and demographic breakdowns.</div><div class="card-foot"><div class="tags"><span class="tag">DESE</span><span class="tag">BPS</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="education-merrimack-valley.html" class="card c-green rv"><div class="card-top"><div class="card-icon green">&#x1F4D0;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">Merrimack Valley Education</div><div class="card-desc">Haverhill, Methuen, and Lawrence comparison. MCAS scores, spending gaps, ELL populations, and district-level performance analysis.</div><div class="card-foot"><div class="tags"><span class="tag">DESE</span><span class="tag">MassINC</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="healthcare-dashboard.html" class="card c-purple rv"><div class="card-top"><div class="card-icon purple">&#x1F6E1;&#xFE0F;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">All Things Insurance</div><div class="card-desc">Health, homeowners, auto, MassHealth, and licensing. 2026 DOI rate decisions (7.1&ndash;12.2%), $3.6B home market, FAIR Plan 8.7% share, auto carrier market share, and insurance cost vs. income growth.</div><div class="card-foot"><div class="tags"><span class="tag">DOI</span><span class="tag">CHIA</span><span class="tag">KFF</span><span class="tag">CAR</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="employment-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F4BC;</div><span class="badge">Live</span></div><div class="card-name">Employment &amp; Labor Market</div><div class="card-desc">JOLTS data, NFP revisions (&minus;911K), hiring recession analysis, openings rate at 3.9% (Feb 2026: 6.9M), and the healthcare employment mask.</div><div class="card-foot"><div class="tags"><span class="tag">BLS JOLTS</span><span class="tag">BLS CES</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="commercial-re-dashboard.html" class="card c-gray rv"><div class="card-top"><div class="card-icon gray">&#x1F3E2;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">Boston Commercial Real Estate</div><div class="card-desc">Office vacancy trajectory (7.5% &rarr; 23.9%), CMBS delinquencies, major sale discounts (31&ndash;62%), and property tax revenue impact.</div><div class="card-foot"><div class="tags"><span class="tag">Trepp</span><span class="tag">C&amp;W</span><span class="tag">Colliers</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="ma-351.html" class="card c-cranberry rv"><div class="card-top"><div class="card-icon cranberry">&#x1F5FA;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">351 &mdash; Every Town in 3D</div><div class="card-desc">A spinnable Massachusetts where every municipality rises by what it charges. Tax rate, real burden per resident, median home price and the business rate premium, town by town, with a guided tour.</div><div class="card-foot"><div class="tags"><span class="tag">DLS</span><span class="tag">MLS PIN</span><span class="tag">MassGIS</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="tax-burden-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue">&#x1F9FE;</div><span class="badge">Live</span></div><div class="card-name">The Five Layers &mdash; MA &amp; NH Total Burden</div><div class="card-desc">What a household actually pays across all five layers &mdash; billed, withheld on your behalf, embedded in prices, collected through the meter, deferred to later. Massachusetts and New Hampshire each get a full breakdown, then a Compare tab puts them side by side. Every contested assumption is a control, not a buried constant.</div><div class="card-foot"><div class="tags"><span class="tag">IRS</span><span class="tag">DOR</span><span class="tag">DLS</span><span class="tag">CBO</span><span class="tag">DPU</span><span class="tag">Census</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="tax-budget-dashboard.html" class="card c-cranberry rv"><div class="card-top"><div class="card-icon cranberry">&#x1F3DB;&#xFE0F;</div><span class="badge">Live</span></div><div class="card-name">Tax Burden, Budget &amp; Cost of Living</div><div class="card-desc">Income tax + 4% surtax, property tax burden, the enacted $63.4B FY2027 budget line by line, state rankings, and BEA/BLS cost-of-living analysis showing MA's purchasing power erosion.</div><div class="card-foot"><div class="tags"><span class="tag">BEA</span><span class="tag">BLS</span><span class="tag">Census</span><span class="tag">DOR</span><span class="tag">EIA</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="pension-dashboard.html" class="card c-red rv"><div class="card-top"><div class="card-icon red">&#x1F4B0;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">Pensions &amp; Unfunded Liabilities</div><div class="card-desc">$55.8B unfunded (pension + OPEB). PRIT Fund ($105B), 23-year time series, demographic collapse (1.3 workers/retiree), 99 municipal systems, $4.9B FY26 taxpayer cost.</div><div class="card-foot"><div class="tags"><span class="tag">ACFR</span><span class="tag">PERAC</span><span class="tag">PPD</span><span class="tag">PRIT</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="energy-dashboard.html" class="card c-green rv"><div class="card-top"><div class="card-icon green">&#x26A1;</div><span class="badge">Live</span></div><div class="card-name">Energy Policy &amp; Carbon Tax</div><div class="card-desc">RGGI carbon tax ($1.36B total, $200M in 2025), highest electricity costs in contiguous US, rate comparison vs. neighbors, and spending allocation analysis.</div><div class="card-foot"><div class="tags"><span class="tag">EIA</span><span class="tag">RGGI Inc</span><span class="tag">ISO-NE</span></div><div class="arrow">&rarr;</div></div></a>
-      <a href="pay-to-play-dashboard.html" class="card c-purple rv"><div class="card-top"><div class="card-icon purple">&#x1F91D;</div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">Pay-to-Play &amp; Lobbying</div><div class="card-desc">4,298 OCPF donations ($822K) from top lobbying firms, 82.3% at exact $200 cap, OpenSecrets sector rankings, healthcare case study, nonprofit loopholes.</div><div class="card-foot"><div class="tags"><span class="tag">OCPF</span><span class="tag">OpenSecrets</span><span class="tag">SOC</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="energy-dashboard.html" class="card c-green rv"><div class="card-top"><div class="card-icon green"><svg class="ci" aria-hidden="true" focusable="false"><use href="#i-zap"/></svg></div><span class="badge">Live</span></div><div class="card-name">Energy Policy &amp; Carbon Tax</div><div class="card-desc">The RGGI carbon tax, the highest electricity costs in the contiguous US, and where the money goes.</div><div class="card-foot"><div class="tags"><span class="tag">EIA</span><span class="tag">RGGI Inc</span><span class="tag">ISO-NE</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="tax-budget-dashboard.html" class="card c-cranberry rv"><div class="card-top"><div class="card-icon cranberry"><svg class="ci" aria-hidden="true" focusable="false"><use href="#i-landmark"/></svg></div><span class="badge">Live</span></div><div class="card-name">Tax Burden, Budget &amp; Cost of Living</div><div class="card-desc">Income tax and surtax, property burden, the enacted $63.4B FY2027 budget line by line, and state rankings.</div><div class="card-foot"><div class="tags"><span class="tag">BEA</span><span class="tag">BLS</span><span class="tag">Census</span><span class="tag">DOR</span><span class="tag">EIA</span></div><div class="arrow">&rarr;</div></div></a>
+      <div class="card c-cranberry rv"><div class="card-top"><div class="card-icon cranberry"><svg class="ci" aria-hidden="true" focusable="false"><use href="#i-globe"/></svg></div><span class="badge">Live</span></div><a class="card-go" href="immigration-dashboard.html"><div class="card-name">Immigration &mdash; National + Massachusetts</div></a><div class="card-desc">Border encounters, migration, deportation math, fiscal impact, the MA shelter crisis and the FY27 money trail.</div><div class="card-foot"><div class="tags"><span class="tag">CBP</span><span class="tag">Census</span><span class="tag">ICE</span><span class="tag">CBO</span><span class="tag">OCPF</span></div><div class="arrow">&rarr;</div></div></div>
+      <a href="https://duncanburns2013-dot.github.io/The-Peoples-Audit/" class="card c-green rv card--ext" target="_blank" rel="noopener"><div class="card-top"><div class="card-icon green"><svg class="ci" aria-hidden="true" focusable="false"><use href="#i-vote"/></svg></div><span class="badge b-ext">Separate site</span></div><div class="card-name">The Peoples Audit</div><div class="card-desc">Lobbying registrations, firm-by-firm spending and legislative roll-call records from the Secretary.</div><div class="card-foot"><div class="tags"><span class="tag">MA SoS</span><span class="tag">Roll calls</span></div><div class="arrow">&nearr;</div></div></a>
+      <a href="https://duncanburns2013-dot.github.io/HHS-MA-DOGE/" class="card c-cranberry rv card--ext" target="_blank" rel="noopener"><div class="card-top"><div class="card-icon cranberry"><svg class="ci" aria-hidden="true" focusable="false"><use href="#i-file-search"/></svg></div><span class="badge b-ext">Separate site</span></div><div class="card-name">HHS &mdash; MA DOGE</div><div class="card-desc">Healthcare fraud, contracting and lobbying investigation. Its own site, with its own look.</div><div class="card-foot"><div class="tags"><span class="tag">HHS</span><span class="tag">OIG</span></div><div class="arrow">&nearr;</div></div></a>
+      <a href="education-statewide.html" class="card c-green rv"><div class="card-top"><div class="card-icon green"><svg class="ci" aria-hidden="true" focusable="false"><use href="#i-graduation-cap"/></svg></div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">MA Education &mdash; Statewide</div><div class="card-desc">Enrollment shifts, per-pupil spending, MCAS proficiency, and Gateway Cities against the wealthy towns.</div><div class="card-foot"><div class="tags"><span class="tag">DESE</span><span class="tag">MCAS</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="tax-burden-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue"><svg class="ci" aria-hidden="true" focusable="false"><use href="#i-receipt"/></svg></div><span class="badge">Live</span></div><div class="card-name">The Five Layers &mdash; MA &amp; NH Total Burden</div><div class="card-desc">All five layers a household pays &mdash; billed, withheld, embedded, metered, deferred. MA and NH, side by side.</div><div class="card-foot"><div class="tags"><span class="tag">IRS</span><span class="tag">DOR</span><span class="tag">DLS</span><span class="tag">CBO</span><span class="tag">DPU</span><span class="tag">Census</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="https://duncanburns2013-dot.github.io/H1B/" class="card c-cranberry rv card--ext" target="_blank" rel="noopener"><div class="card-top"><div class="card-icon cranberry"><svg class="ci" aria-hidden="true" focusable="false"><use href="#i-plane-takeoff"/></svg></div><span class="badge b-ext">Separate site</span></div><div class="card-name">H-1B &mdash; The Great Offshoring</div><div class="card-desc">844,054 USCIS filings and DOL wage data, with a Massachusetts deep dive on employers and pay.</div><div class="card-foot"><div class="tags"><span class="tag">USCIS</span><span class="tag">DOL LCA</span><span class="tag">BLS</span></div><div class="arrow">&nearr;</div></div></a>
+      <div class="card c-blue rv"><div class="card-top"><div class="card-icon blue"><svg class="ci" aria-hidden="true" focusable="false"><use href="#i-building-2"/></svg></div><span class="badge">Live</span></div><a class="card-go" href="all-things-boston.html"><div class="card-name">All Things Boston</div></a><div class="card-desc">City budget, payroll, FBI crime, BPS, ICE enforcement, commercial real estate, housing, 311 and pensions.</div><div class="card-foot"><div class="tags"><span class="tag">Boston ACFR</span><span class="tag">BPD</span><span class="tag">BPS</span></div><div class="arrow">&rarr;</div></div></div>
+      <a href="ma-housing-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue"><svg class="ci" aria-hidden="true" focusable="false"><use href="#i-house"/></svg></div><span class="badge">Live</span></div><div class="card-name">Massachusetts Housing Market</div><div class="card-desc">Statewide, Boston, Essex County and Greater Newburyport. Median prices, DOM, SP/LP and affordability.</div><div class="card-foot"><div class="tags"><span class="tag">Warren Group</span><span class="tag">MLS PIN</span><span class="tag">Census ACS</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="nh-housing-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue"><svg class="ci" aria-hidden="true" focusable="false"><use href="#i-mountain-snow"/></svg></div><span class="badge">Live</span></div><div class="card-name">New Hampshire Housing Market</div><div class="card-desc">Statewide market data with regional breakdowns. Median prices, average sales, DOM and SP/LP ratios.</div><div class="card-foot"><div class="tags"><span class="tag">Paragon MLS</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="haverhill-market-report.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue"><svg class="ci" aria-hidden="true" focusable="false"><use href="#i-clipboard-list"/></svg></div><span class="badge">Live</span></div><div class="card-name">Haverhill Market Report</div><div class="card-desc">Haverhill's single-family and condo markets, and what income homeownership here actually requires.</div><div class="card-foot"><div class="tags"><span class="tag">MLS</span><span class="tag">Census QuickFacts</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="affordability-dashboard.html" class="card c-red rv"><div class="card-top"><div class="card-icon red"><svg class="ci" aria-hidden="true" focusable="false"><use href="#i-shopping-basket"/></svg></div><span class="badge">Live</span></div><div class="card-name">What It Costs to Live in Massachusetts</div><div class="card-desc">What is actually expensive here and what is not. BEA price parities and the MIT living wage by household.</div><div class="card-foot"><div class="tags"><span class="tag">BEA</span><span class="tag">MIT Living Wage</span><span class="tag">Census ACS</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="education-merrimack-valley.html" class="card c-green rv"><div class="card-top"><div class="card-icon green"><svg class="ci" aria-hidden="true" focusable="false"><use href="#i-ruler"/></svg></div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">Merrimack Valley Education</div><div class="card-desc">Haverhill, Methuen and Lawrence compared: MCAS scores, spending gaps and ELL populations.</div><div class="card-foot"><div class="tags"><span class="tag">DESE</span><span class="tag">MassINC</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="healthcare-dashboard.html" class="card c-purple rv"><div class="card-top"><div class="card-icon purple"><svg class="ci" aria-hidden="true" focusable="false"><use href="#i-shield"/></svg></div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">All Things Insurance</div><div class="card-desc">Health, homeowners, auto, MassHealth and licensing. 2026 DOI rate decisions and the $3.6B home market.</div><div class="card-foot"><div class="tags"><span class="tag">DOI</span><span class="tag">CHIA</span><span class="tag">KFF</span><span class="tag">CAR</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="employment-dashboard.html" class="card c-blue rv"><div class="card-top"><div class="card-icon blue"><svg class="ci" aria-hidden="true" focusable="false"><use href="#i-briefcase"/></svg></div><span class="badge">Live</span></div><div class="card-name">Employment &amp; Labor Market</div><div class="card-desc">JOLTS data, the &minus;911K payroll revision, the hiring recession, and the healthcare employment mask.</div><div class="card-foot"><div class="tags"><span class="tag">BLS JOLTS</span><span class="tag">BLS CES</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="commercial-re-dashboard.html" class="card c-gray rv"><div class="card-top"><div class="card-icon gray"><svg class="ci" aria-hidden="true" focusable="false"><use href="#i-building"/></svg></div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">Boston Commercial Real Estate</div><div class="card-desc">Office vacancy from 7.5% to 23.9%, CMBS delinquencies, sale discounts and the property tax hit.</div><div class="card-foot"><div class="tags"><span class="tag">Trepp</span><span class="tag">C&amp;W</span><span class="tag">Colliers</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="pension-dashboard.html" class="card c-red rv"><div class="card-top"><div class="card-icon red"><svg class="ci" aria-hidden="true" focusable="false"><use href="#i-piggy-bank"/></svg></div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">Pensions &amp; Unfunded Liabilities</div><div class="card-desc">$55.8B unfunded across pension and OPEB, the $105B PRIT Fund, 99 municipal systems, 23 years of data.</div><div class="card-foot"><div class="tags"><span class="tag">ACFR</span><span class="tag">PERAC</span><span class="tag">PPD</span><span class="tag">PRIT</span></div><div class="arrow">&rarr;</div></div></a>
+      <a href="pay-to-play-dashboard.html" class="card c-purple rv"><div class="card-top"><div class="card-icon purple"><svg class="ci" aria-hidden="true" focusable="false"><use href="#i-handshake"/></svg></div><span class="badge badge-snap">Snapshot</span></div><div class="card-name">Pay-to-Play &amp; Lobbying</div><div class="card-desc">4,298 OCPF donations from top lobbying firms, 82.3% at the exact $200 cap, and the nonprofit loopholes.</div><div class="card-foot"><div class="tags"><span class="tag">OCPF</span><span class="tag">OpenSecrets</span><span class="tag">SOC</span></div><div class="arrow">&rarr;</div></div></a>
     </div>
     </div>
   </section>
-  <div class="info-box rv">
-    <h4>&#x1F4CB; Official Data Sources</h4>
-    <p>BLS (LAUS, CES, OES, CPI) &middot; BEA (SAINC, SAPCE, RPP) &middot; Census Bureau (ACS, QuickFacts) &middot; CBP &middot; ICE &middot; CBO &middot; EIA &middot; MA DOR &middot; MA DLS &middot; DOI &middot; DESE &middot; CHIA &middot; CAR &middot; KFF &middot; Warren Group &middot; MLS PIN &middot; Paragon MLS &middot; Tax Foundation &middot; ITEP &middot; MIT Living Wage Calculator &middot; PERAC &middot; PRIT Fund &middot; Public Plans Database &middot; OCPF &middot; OpenSecrets &middot; RGGI Inc &middot; ISO-NE. See <a href="MASTER_DATA.md">MASTER_DATA.md</a> for full citations.</p>
-  </div>
-</div>
+  <section class="sources rv"><div class="sources-in"><h3>Official data sources<i class="src-n">27</i></h3><span class="sources-ramp" aria-hidden="true"></span><div class="srcchips"><span class="srcchip">BLS (LAUS, CES, OES, CPI)</span><span class="srcchip">BEA (SAINC, SAPCE, RPP)</span><span class="srcchip">Census Bureau (ACS, QuickFacts)</span><span class="srcchip">CBP</span><span class="srcchip">ICE</span><span class="srcchip">CBO</span><span class="srcchip">EIA</span><span class="srcchip">MA DOR</span><span class="srcchip">MA DLS</span><span class="srcchip">DOI</span><span class="srcchip">DESE</span><span class="srcchip">CHIA</span><span class="srcchip">CAR</span><span class="srcchip">KFF</span><span class="srcchip">Warren Group</span><span class="srcchip">MLS PIN</span><span class="srcchip">Paragon MLS</span><span class="srcchip">Tax Foundation</span><span class="srcchip">ITEP</span><span class="srcchip">MIT Living Wage Calculator</span><span class="srcchip">PERAC</span><span class="srcchip">PRIT Fund</span><span class="srcchip">Public Plans Database</span><span class="srcchip">OCPF</span><span class="srcchip">OpenSecrets</span><span class="srcchip">RGGI Inc</span><span class="srcchip">ISO-NE</span></div><p class="sources-note">Every figure, its source and the date it was checked: <a href="method.html">the method</a>.</p></div></section>
+</main>
 <footer>
   <div class="share-bar">
     <span class="share-label">Share this data:</span>
@@ -277,7 +754,7 @@ footer a:hover{color:var(--duckling)}
     <a class="share-btn rd" href="#" onclick="shareOn('rd');return false"><svg viewBox="0 0 24 24"><path d="M12 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 01-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 01.042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 014.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 01.14-.197.35.35 0 01.238-.042l2.906.617a1.214 1.214 0 011.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 00-.231.094.33.33 0 000 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 000-.462.342.342 0 00-.461 0c-.545.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 00-.206-.095z"/></svg>Post</a>
     <a class="share-btn em" href="#" onclick="shareOn('em');return false"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg>Email</a>
   </div>
-  <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub" target="_blank">GitHub Repository</a><br>
+  <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub" target="_blank" rel="noopener">GitHub Repository</a><br>
   <!-- No compiled-on month. Nothing refreshes this line, so it can only drift:
        it read "April 2026" in August. Each dashboard carries its own source
        vintage, which is the date that actually means something. -->
@@ -287,6 +764,15 @@ footer a:hover{color:var(--duckling)}
 <script>
 const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis')})},{threshold:0.04,rootMargin:'0px 0px -15px 0px'});
 document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+// The turn band is labelled "computed at runtime". The dashboard count is the
+// one figure on it this page actually owns, so count the cards instead of
+// printing a number that goes stale the next time one is added or folded in.
+// Separate-site cards (b-ext) are not dashboards on this hub.
+(function(){
+  var sec=document.getElementById('dashboards'); if(!sec) return;
+  var n=sec.querySelectorAll('.card').length - sec.querySelectorAll('.badge.b-ext').length;
+  var el=document.getElementById('turn-dash'); if(el && n>0) el.textContent=n;
+})();
 var SHARE_URL='https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/';
 // Share copy stays generic on purpose. It used to quote live figures - "#41",
 // "$313K", "#1 in nation" - plus a hard dashboard count, none of which any feed
@@ -307,6 +793,558 @@ function shareOn(p){
   };
   if(p==='em'){window.location.href=urls[p]}else{window.open(urls[p],'_blank','width=600,height=500')}
 }
+</script>
+
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"}}
+</script>
+<script type="module">
+/* ===========================================================================
+   EFFECT 1 - LIQUID TYPE
+   The headline becomes a texture, then a fragment shader liquefies it with
+   domain-warped fbm and splits the channels by the amount of distortion. Scroll
+   settles it to crisp type; the cursor keeps driving ripples through it.
+   ========================================================================= */
+import * as THREE from 'three';
+
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var h = document.querySelector('.turn-h');
+  if (!h) return;
+
+  var cv = document.createElement('canvas');
+  cv.className = 'lq'; cv.setAttribute('aria-hidden','true');
+  h.appendChild(cv);
+
+  var renderer, tex, mesh, scene, cam, W=0, H=0, ready=false, painted=false, builtDpr=0;
+
+  function makeTexture(){
+    var r = h.getBoundingClientRect();
+    W = Math.ceil(r.width); H = Math.ceil(r.height);
+    if (!W || !H) return null;
+    // 2x supersample: the texture is downsampled by the linear filter, which
+    // lands glyph edges on real pixels. At 1x any sub-pixel offset between the
+    // texel grid and the screen grid thickens the strokes.
+    var dpr = Math.min((window.devicePixelRatio || 1) * 2, 4);
+    var off = document.createElement('canvas');
+    off.width = Math.ceil(W*dpr); off.height = Math.ceil(H*dpr);
+    var o = off.getContext('2d');
+    o.setTransform(dpr,0,0,dpr,0,0);
+    o.textBaseline = 'top';
+
+    var cs = getComputedStyle(h);
+    var fontPx = parseFloat(cs.fontSize);
+    var lh = parseFloat(cs.lineHeight) || fontPx*1.05;
+    var fam = cs.fontFamily, wt = cs.fontWeight;
+    /* Canvas resets letterSpacing every time `font` is assigned, so it has to be
+       re-applied after each one. Setting it first silently discarded it: the
+       line measured 792px against the DOM's 734px, which tripped the fit-to-box
+       shrink and scaled the type down on top of the wrong tracking. */
+    var TRACK = ('letterSpacing' in o) ? cs.letterSpacing : null;
+    function setFont(px){
+      o.font = wt + ' ' + px + 'px ' + fam;
+      if (TRACK !== null) o.letterSpacing = TRACK;
+    }
+
+    var ink = cs.color;
+    var emEl = h.querySelector('em');
+    var accent = emEl ? getComputedStyle(emEl).color : '#680A1D';
+    var LINES = [
+      [['The instrument shows you ', ink], ['where', accent], ['.', ink]],
+      [['The dashboards show you ', ink], ['why', accent], ['.', ink]]
+    ];
+    function widest(px){
+      setFont(px);
+      var m=0;
+      for (var i=0;i<LINES.length;i++){ var w=0;
+        for (var j=0;j<LINES[i].length;j++) w += o.measureText(LINES[i][j][0]).width;
+        if (w>m) m=w; }
+      return m;
+    }
+    var wMax = widest(fontPx);
+    if (wMax > W-2){ fontPx = Math.max(12, fontPx*(W-2)/wMax); lh = fontPx*1.06; }
+    setFont(fontPx);
+
+    var y = Math.max(0,(H - lh*LINES.length)/2);
+    for (var i=0;i<LINES.length;i++){
+      var x = 0;
+      for (var j=0;j<LINES[i].length;j++){
+        o.fillStyle = LINES[i][j][1];
+        o.fillText(LINES[i][j][0], x, y);
+        x += o.measureText(LINES[i][j][0]).width;
+      }
+      y += lh;
+    }
+    var t = new THREE.CanvasTexture(off);
+    t.minFilter = THREE.LinearFilter; t.magFilter = THREE.LinearFilter;
+    t.generateMipmaps = false;
+    return t;
+  }
+
+  var U = {
+    uTex:{value:null}, uTime:{value:0},
+    uMouse:{value:new THREE.Vector2(-9,-9)}, uAspect:{value:1}, uHover:{value:0}
+  };
+
+  var FRAG = `
+    precision highp float;
+    uniform sampler2D uTex;
+    uniform float uTime, uAspect, uHover;
+    uniform vec2 uMouse;
+    varying vec2 vUv;
+
+    float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
+    float vnoise(vec2 p){
+      vec2 i=floor(p), f=fract(p);
+      vec2 u=f*f*(3.0-2.0*f);
+      return mix(mix(hash(i),hash(i+vec2(1,0)),u.x),
+                 mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x),u.y);
+    }
+    float fbm(vec2 p){
+      float v=0.0, a=0.5;
+      for(int k=0;k<5;k++){ v+=a*vnoise(p); p*=2.02; a*=0.5; }
+      return v;
+    }
+
+    void main(){
+      vec2 uv = vUv;
+      /* No settle term. The type is drawn crisp and stays crisp; every
+         displacement below is gated on uHover, which is zero until the pointer
+         is actually over the words. An unreadable headline is not a state this
+         shader can reach any more. */
+      vec2 warp = vec2(0.0);
+
+      /* cursor ripple keeps working after it has settled */
+      vec2 ap = vec2(uv.x*uAspect, uv.y);
+      vec2 am = vec2(uMouse.x*uAspect, uMouse.y);
+      float d = distance(ap, am);
+      float fall = exp(-d*11.0) * uHover;
+      vec2 dir = normalize(ap - am + vec2(1e-5));
+      float rip = sin(d*46.0 - uTime*5.2) * fall * 0.028;
+      warp += dir * rip;
+
+      /* chromatic split scales with how distorted this pixel is */
+      /* chromatic split on near-black ink only makes dark mud: three offset
+         copies of an almost-black glyph read as a heavy smear, which is what
+         the arriving headline looked like. Kept small; the ripple carries it. */
+      float split = length(warp)*0.65 + fall*0.010;   /* zero unless hovering */
+      vec4 cr = texture2D(uTex, uv + warp + vec2( split, 0.0));
+      vec4 cg = texture2D(uTex, uv + warp);
+      vec4 cb = texture2D(uTex, uv + warp - vec2( split, 0.0));
+      float a = max(cr.a, max(cg.a, cb.a));
+      if (a < 0.004) discard;
+      vec3 col = vec3(cr.r, cg.g, cb.b);
+      /* the ripple crest catches a little light */
+      col += vec3(0.55,0.60,0.66) * fall * 0.30;
+      gl_FragColor = vec4(col, a);
+    }`;
+
+  function build(){
+    tex = makeTexture();
+    if (!tex) return;
+    U.uTex.value = tex;
+    U.uAspect.value = W/Math.max(1,H);
+    if (!renderer){
+      renderer = new THREE.WebGLRenderer({canvas:cv, alpha:true, antialias:true});
+      renderer.setClearAlpha(0);
+      scene = new THREE.Scene();
+      cam = new THREE.OrthographicCamera(-0.5,0.5,0.5,-0.5,0,1);
+      mesh = new THREE.Mesh(new THREE.PlaneGeometry(1,1),
+        new THREE.ShaderMaterial({
+          uniforms:U, transparent:true, depthTest:false, depthWrite:false,
+          vertexShader:`varying vec2 vUv; void main(){ vUv=uv;
+            gl_Position=vec4(position.xy*2.0,0.0,1.0); }`,
+          fragmentShader:FRAG
+        }));
+      mesh.frustumCulled = false;
+      scene.add(mesh);
+    }
+    builtDpr = Math.min(devicePixelRatio||1,2);
+    renderer.setPixelRatio(builtDpr);
+    renderer.setSize(W,H,false);
+    ready = true;
+  }
+
+  window.__LQ = { ready:function(){ return ready; },
+                  dpr:function(){ return builtDpr; } };
+
+  var hover = 0, hoverT = 0;
+  h.addEventListener('pointermove', function(e){
+    var r = h.getBoundingClientRect();
+    U.uMouse.value.set((e.clientX-r.left)/r.width, 1-(e.clientY-r.top)/r.height);
+    hoverT = 1;
+  }, {passive:true});
+  h.addEventListener('pointerleave', function(){ hoverT = 0; }, {passive:true});
+
+  var clock = new THREE.Clock();
+  (function loop(){
+    requestAnimationFrame(loop);
+    if (!ready) return;
+    var r = h.getBoundingClientRect();
+    if (r.bottom < -160 || r.top > innerHeight + 160) return;
+    if (!painted){ painted = true; h.classList.add('lq-on'); }
+    var dt = Math.min(clock.getDelta(), .05);
+    U.uTime.value += dt;
+    hover += (hoverT - hover) * Math.min(1, dt*5.0);
+    /* the buffer is sized to the device ratio at build time; if that changes -
+       moving the window to a differently scaled display, or a browser zoom -
+       the texture is redrawn rather than being stretched to fit */
+    if (Math.abs((Math.min(devicePixelRatio||1,2)) - builtDpr) > 0.01){ build(); }
+    U.uHover.value = hover;
+    renderer.render(scene, cam);
+  })();
+
+  function boot(){ build(); }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(boot);
+  else addEventListener('load', boot);
+  var rt; addEventListener('resize', function(){ clearTimeout(rt);
+    rt = setTimeout(function(){ ready=false; build(); }, 180); }, {passive:true});
+})();
+</script>
+
+<script>
+/* ===========================================================================
+   EFFECT 2 - MAGNETIC CARDS
+   Real 3D tilt toward the pointer on a perspective grid, with a specular sheen
+   that tracks across the face and a glow in the card's own subject colour.
+   One listener on the grid, rAF-throttled.
+   ========================================================================= */
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!matchMedia('(hover: hover)').matches) return;
+  var grid = document.querySelector('#dashboards .grid');
+  if (!grid) return;
+
+  var cards = grid.querySelectorAll('.card');
+  cards.forEach(function(c){
+    var sh = document.createElement('span');
+    sh.className = 'sheen'; sh.setAttribute('aria-hidden','true');
+    c.appendChild(sh);
+  });
+
+  var raf = 0, pending = null, current = null;
+  function apply(){
+    raf = 0;
+    if (!pending) return;
+    var c = pending.card, r = pending.rect, x = pending.x, y = pending.y;
+    var nx = (x - r.left) / r.width, ny = (y - r.top) / r.height;
+    c.style.setProperty('--rx', (nx*2-1).toFixed(3));
+    c.style.setProperty('--ry', (ny*2-1).toFixed(3));
+    c.style.setProperty('--mx', (nx*100).toFixed(1)+'%');
+    c.style.setProperty('--my', (ny*100).toFixed(1)+'%');
+  }
+
+  grid.addEventListener('pointermove', function(e){
+    var c = e.target.closest ? e.target.closest('.card') : null;
+    if (!c){ return; }
+    if (current && current !== c) clear(current);
+    if (current !== c){ current = c; c.classList.add('mg'); }
+    pending = { card:c, rect:c.getBoundingClientRect(), x:e.clientX, y:e.clientY };
+    if (!raf) raf = requestAnimationFrame(apply);
+  }, {passive:true});
+
+  function clear(c){
+    c.classList.remove('mg');
+    c.style.removeProperty('--rx'); c.style.removeProperty('--ry');
+  }
+  grid.addEventListener('pointerleave', function(){
+    if (current){ clear(current); current = null; }
+  }, {passive:true});
+  cards.forEach(function(c){
+    c.addEventListener('pointerleave', function(){
+      if (current === c){ clear(c); current = null; }
+    }, {passive:true});
+  });
+  window.__MG = { cards: cards.length,
+                  force:function(i,nx,ny){ var c=cards[i]; c.classList.add('mg');
+                    c.style.setProperty('--rx',(nx*2-1).toFixed(3));
+                    c.style.setProperty('--ry',(ny*2-1).toFixed(3));
+                    c.style.setProperty('--mx',(nx*100)+'%');
+                    c.style.setProperty('--my',(ny*100)+'%'); } };
+})();
+</script>
+
+<script type="module">
+/* ===========================================================================
+   EFFECT 3 - DOMAIN-WARPED FLOW FIELD
+   One full-screen fragment shader. fbm warped by fbm warped again, evolving in
+   time, tinted on the instrument's ramp. The cursor bends the field.
+   ========================================================================= */
+import * as THREE from 'three';
+
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var cv = document.getElementById('flow');
+  if (!cv) return;
+
+  var renderer;
+  try{ renderer = new THREE.WebGLRenderer({canvas:cv, alpha:true, antialias:false}); }
+  catch(e){ return; }
+  renderer.setClearAlpha(0);
+
+  var U = {
+    uTime:{value:0}, uRes:{value:new THREE.Vector2(1,1)},
+    uMouse:{value:new THREE.Vector2(-9,-9)}, uForce:{value:0}, uStir:{value:0}
+  };
+
+  var mat = new THREE.ShaderMaterial({
+    uniforms:U, transparent:true, depthTest:false, depthWrite:false,
+    vertexShader:`void main(){ gl_Position = vec4(position.xy*2.0, 0.0, 1.0); }`,
+    fragmentShader:`
+      precision highp float;
+      uniform float uTime, uForce, uStir;
+      uniform vec2 uRes, uMouse;
+
+      float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
+      float vnoise(vec2 p){
+        vec2 i=floor(p), f=fract(p);
+        vec2 u=f*f*(3.0-2.0*f);
+        return mix(mix(hash(i),hash(i+vec2(1,0)),u.x),
+                   mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x),u.y);
+      }
+      float fbm(vec2 p){
+        float v=0.0, a=0.5;
+        for(int k=0;k<6;k++){ v+=a*vnoise(p); p=p*2.03+vec2(11.3,7.7); a*=0.5; }
+        return v;
+      }
+      /* the instrument's diverging ramp */
+      vec3 ramp(float t){
+        vec3 c0=vec3(0.071,0.275,0.498), c1=vec3(0.239,0.510,0.737),
+             c2=vec3(0.561,0.725,0.839), c3=vec3(0.812,0.780,0.706),
+             c4=vec3(0.949,0.651,0.353), c5=vec3(0.863,0.318,0.153),
+             c6=vec3(0.557,0.043,0.133);
+        float u=clamp(t,0.0,1.0)*6.0;
+        if(u<1.0)return mix(c0,c1,u);
+        if(u<2.0)return mix(c1,c2,u-1.0);
+        if(u<3.0)return mix(c2,c3,u-2.0);
+        if(u<4.0)return mix(c3,c4,u-3.0);
+        if(u<5.0)return mix(c4,c5,u-4.0);
+        return mix(c5,c6,u-5.0);
+      }
+
+      void main(){
+        vec2 uv = gl_FragCoord.xy / uRes;
+        vec2 p = uv * vec2(uRes.x/uRes.y, 1.0) * 2.4;
+        float t = uTime * (0.045 + uStir*0.16);
+
+        /* the cursor drags the field toward it */
+        vec2 mp = uMouse * vec2(uRes.x/uRes.y, 1.0) * 2.4;
+        vec2 toM = p - mp;
+        float md = length(toM);
+        p -= normalize(toM + 1e-5) * (uForce / (md*md + 0.35));
+
+        /* domain warping: fbm of an fbm of an fbm */
+        vec2 q = vec2(fbm(p + vec2(0.0, t)),
+                      fbm(p + vec2(5.2, 1.3) - t));
+        vec2 r = vec2(fbm(p + 3.4*q + vec2(1.7, 9.2) + t*0.7),
+                      fbm(p + 3.4*q + vec2(8.3, 2.8) - t*0.6));
+        float f = fbm(p + (3.2 + uStir*2.4)*r);
+
+        /* bands, so it reads as flow rather than as fog */
+        float band = fract(f*2.6 + t*1.4);
+        band = smoothstep(0.39, 0.52, band) * smoothstep(0.89, 0.58, band);
+
+        float shade = clamp(f*1.36 - 0.13, 0.0, 1.0);
+        vec3 col = ramp(shade);
+
+        /* the band term carries the contrast, the flat term is only a floor.
+           Growing the first and shrinking the second widens the crest-to-trough
+           span from 0.084 to 0.160 while the quiet areas stay quiet. */
+        float a = (band*0.52 + 0.075) * smoothstep(0.0, 0.35, f);
+        a *= 0.41;                                  /* it is a ground, not a subject */
+        gl_FragColor = vec4(col, a);
+      }`
+  });
+
+  var scene = new THREE.Scene();
+  var quad = new THREE.Mesh(new THREE.PlaneGeometry(2,2), mat);
+  quad.frustumCulled = false;
+  scene.add(quad);
+  var cam = new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+
+  function resize(){
+    var w = innerWidth, h = innerHeight;
+    renderer.setPixelRatio(Math.min(devicePixelRatio||1, 1.5));
+    renderer.setSize(w,h,false);
+    U.uRes.value.set(w * renderer.getPixelRatio(), h * renderer.getPixelRatio());
+  }
+  resize();
+  addEventListener('resize', resize, {passive:true});
+
+  /* scroll velocity stirs the field and it settles when you stop */
+  var lastY = scrollY, vel = 0;
+  addEventListener('scroll', function(){
+    vel = Math.min(1.0, Math.abs(scrollY - lastY) / 90);
+    lastY = scrollY;
+  }, {passive:true});
+
+  var want = 0;
+  addEventListener('pointermove', function(e){
+    U.uMouse.value.set(e.clientX/innerWidth, 1 - e.clientY/innerHeight);
+    want = 0.55;
+  }, {passive:true});
+  addEventListener('pointerleave', function(){ want = 0; }, {passive:true});
+
+  var hidden = false;
+  document.addEventListener('visibilitychange', function(){ hidden = document.hidden; });
+
+  var clock = new THREE.Clock(), first = true, frames = 0;
+  (function loop(){
+    requestAnimationFrame(loop);
+    if (hidden) return;
+    var dt = Math.min(clock.getDelta(), 0.05);
+    U.uTime.value += dt;
+    U.uForce.value += (want - U.uForce.value) * Math.min(1, dt*3);
+    U.uStir.value += (vel - U.uStir.value) * Math.min(1, dt*2.2);
+    vel *= 0.90;
+    renderer.render(scene, cam);
+    frames++;
+    if (first){ first = false; cv.classList.add('on'); }
+  })();
+
+  window.__FLOW = { info:function(){ return {frames:frames, on:cv.classList.contains('on'),
+                     size:U.uRes.value.x+'x'+U.uRes.value.y}; } };
+})();
+</script>
+
+<script>
+/* ---- 4. turn band: pointer parallax + scroll counter-drift -------------- */
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var band = document.querySelector('.turn');
+  if (!band) return;
+  var raf = 0, tx = 0, ty = 0;
+  function write(){
+    raf = 0;
+    band.style.setProperty('--tx', tx.toFixed(3));
+    band.style.setProperty('--ty', ty.toFixed(3));
+  }
+  band.addEventListener('pointermove', function(e){
+    var r = band.getBoundingClientRect();
+    tx = (e.clientX - r.left)/r.width * 2 - 1;
+    ty = (e.clientY - r.top)/r.height * 2 - 1;
+    band.classList.add('live');
+    if (!raf) raf = requestAnimationFrame(write);
+  }, {passive:true});
+  band.addEventListener('pointerleave', function(){
+    band.classList.remove('live'); tx = 0; ty = 0;
+    if (!raf) raf = requestAnimationFrame(write);
+  }, {passive:true});
+
+  /* the two blocks drift against the scroll at different rates */
+  var sraf = 0;
+  function drift(){
+    sraf = 0;
+    var r = band.getBoundingClientRect();
+    var p = (innerHeight - r.top) / (innerHeight + r.height);   // 0..1 through
+    var d = (p - 0.5) * 2;
+    band.style.setProperty('--sy',  (d * -18).toFixed(1) + 'px');
+    band.style.setProperty('--sy2', (d *  12).toFixed(1) + 'px');
+  }
+  addEventListener('scroll', function(){ if(!sraf) sraf = requestAnimationFrame(drift); }, {passive:true});
+  drift();
+})();
+
+/* ---- 5. cards: animate a real displacement filter on the hovered card --- */
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!matchMedia('(hover: hover)').matches) return;
+  var disp = document.getElementById('carddisp');
+  var turb = document.getElementById('cardturb');
+  if (!disp || !turb) return;
+  var grid = document.querySelector('#dashboards .grid');
+  if (!grid) return;
+
+  var active = null, scale = 0, want = 0, t = 0, raf = 0;
+  function tick(){
+    raf = requestAnimationFrame(tick);
+    t += 0.016;
+    scale += (want - scale) * 0.12;
+    if (scale < 0.05 && want === 0){
+      scale = 0;
+      if (active){ active.classList.remove('warp'); active = null; }
+      cancelAnimationFrame(raf); raf = 0;
+      disp.setAttribute('scale','0');
+      return;
+    }
+    /* drift the noise so the ripple lives instead of sitting still */
+    var f1 = (0.012 + Math.sin(t*0.7)*0.004).toFixed(4);
+    var f2 = (0.020 + Math.cos(t*0.5)*0.005).toFixed(4);
+    turb.setAttribute('baseFrequency', f1 + ' ' + f2);
+    disp.setAttribute('scale', scale.toFixed(2));
+  }
+  grid.addEventListener('pointerover', function(e){
+    var c = e.target.closest ? e.target.closest('.card') : null;
+    if (!c || c === active) return;
+    if (active) active.classList.remove('warp');
+    active = c; c.classList.add('warp');
+    want = 4.2;
+    if (!raf) raf = requestAnimationFrame(tick);
+  }, {passive:true});
+  grid.addEventListener('pointerleave', function(){
+    want = 0;
+    if (!raf) raf = requestAnimationFrame(tick);
+  }, {passive:true});
+})();
+
+/* ---- 7. reveal the sources ramp when the block arrives ----------------- */
+(function(){
+  var secs = document.querySelectorAll('.sources, .panel-sec');
+  if (!secs.length) return;
+  if (!('IntersectionObserver' in window)){
+    secs.forEach(function(x){ x.classList.add('vis'); }); return; }
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('vis'); io.unobserve(e.target); } });
+  }, {threshold:0.15});
+  secs.forEach(function(x){ io.observe(x); });
+  setTimeout(function(){ secs.forEach(function(x){ x.classList.add('vis'); }); }, 6000);
+})();
+</script>
+
+<script>
+/* ---- the sources chips as a field ----
+   Each chip carries a --lift from 0 to 1 by how close the pointer is. Rects are
+   cached on enter and on resize, so a move is 27 distance checks and no layout
+   reads at all. */
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!matchMedia('(hover: hover)').matches) return;
+  var wrap = document.querySelector('.srcchips');
+  if (!wrap) return;
+  var chips = [].slice.call(wrap.querySelectorAll('.srcchip'));
+  var rects = [], raf = 0, px = 0, py = 0;
+
+  function cache(){
+    rects = chips.map(function(c){
+      var r = c.getBoundingClientRect();
+      return {x:r.left + r.width/2, y:r.top + r.height/2};
+    });
+  }
+  var R = 190;                       /* the reach of the field, in pixels */
+  function paint(){
+    raf = 0;
+    for (var i=0;i<chips.length;i++){
+      var d = Math.hypot(px - rects[i].x, py - rects[i].y);
+      var lift = d > R ? 0 : Math.pow(1 - d/R, 2);
+      chips[i].style.setProperty('--lift', lift.toFixed(3));
+      chips[i].style.color = lift > 0.12
+        ? 'rgba(20,85,143,' + (0.72 + lift*0.28).toFixed(2) + ')'
+        : '';
+    }
+  }
+  wrap.addEventListener('pointerenter', function(){ cache(); wrap.classList.add('live'); }, {passive:true});
+  wrap.addEventListener('pointermove', function(e){
+    if (!rects.length) cache();
+    px = e.clientX; py = e.clientY;
+    if (!raf) raf = requestAnimationFrame(paint);
+  }, {passive:true});
+  wrap.addEventListener('pointerleave', function(){
+    wrap.classList.remove('live');
+    chips.forEach(function(c){ c.style.setProperty('--lift', 0); c.style.color = ''; });
+  }, {passive:true});
+  addEventListener('resize', function(){ rects = []; }, {passive:true});
+  addEventListener('scroll', function(){ rects = []; }, {passive:true});
+})();
 </script>
 </body>
 </html>

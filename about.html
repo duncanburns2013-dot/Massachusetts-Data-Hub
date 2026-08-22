@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <!-- Open Graph / Social Cards -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Massachusetts Data Hub">
+  <meta property="og:title" content="Massachusetts Data Hub">
+  <meta property="og:description" content="Official data dashboards covering taxes, housing, education, employment, energy, and more across Massachusetts — all sourced from government data.">
+  <meta property="og:url" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/about.html">
+  <meta property="og:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Massachusetts Data Hub">
+  <meta name="twitter:description" content="Official data dashboards covering taxes, housing, education, employment, energy, and more across Massachusetts — all sourced from government data.">
+  <meta name="twitter:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="canonical" href="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/about.html">
+<title>About — Massachusetts Data Hub</title>
+<meta name="description" content="Who builds Massachusetts Data Hub, where every figure comes from, and the schedule each of the nine data feeds refreshes on.">
+<!-- Social Share Card -->
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bay-blue:#14558F;--bay-hover:#104472;--bay-dark:#0A2B48;
+  --berkshire:#388557;--duckling:#F6C51B;--cranberry:#680A1D;
+  --granite:#535353;--success:#24A850;--warning:#F6B622;--danger:#CD0D0D;
+  --card:#ffffff;--border:#e8e5df;--text:#1a1a1a;
+  --muted:#7a756e;--navy:#0f2942;--gold:#c9a84c;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#E9EBEA;color:#0B1113;line-height:1.65;-webkit-font-smoothing:antialiased}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 15%,rgba(20,85,143,0.18),transparent 55%),
+    radial-gradient(ellipse 60% 50% at 80% 80%,rgba(104,10,29,0.14),transparent 50%),
+    radial-gradient(ellipse 50% 40% at 60% 30%,rgba(56,133,87,0.08),transparent 45%),
+    radial-gradient(ellipse 40% 30% at 40% 70%,rgba(246,197,27,0.05),transparent 40%);
+  background-size:200% 200%;
+  animation:none;
+}
+@keyframes bgDrift{
+  0%{background-position:0% 0%}
+  33%{background-position:100% 50%}
+  66%{background-position:30% 100%}
+  100%{background-position:0% 0%}
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+}
+.hero,.tab-nav,.main-content,footer{position:relative;z-index:1}
+.hero{padding:56px 24px 44px;text-align:center;border-bottom:1px solid rgba(11,17,19,0.05)}
+.hero h1{
+  font-family:'DM Serif Display',Georgia,serif;font-size:clamp(2.4rem,6vw,3.8rem);font-weight:400;
+  letter-spacing:-0.02em;margin-bottom:14px;line-height:1.12;
+  background:none;-webkit-background-clip:initial;color:var(--cranberry);
+  
+  animation:fadeIn 0.5s 0.1s ease both;
+}
+@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.hero .sub{opacity:0.5;font-size:0.88rem;font-weight:400;max-width:640px;margin:0 auto 36px;line-height:1.65;letter-spacing:0.01em;animation:fadeIn 0.5s 0.2s ease both}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.tab-nav{display:flex;justify-content:center;background:rgba(233,235,234,0.94);border-bottom:1px solid rgba(11,17,19,0.05);overflow-x:auto;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);scrollbar-width:none}
+.tab-nav::-webkit-scrollbar{display:none}
+.tab-nav a{padding:15px 22px;font-size:0.78rem;font-weight:600;color:rgba(11,17,19,0.6);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.25s;text-transform:uppercase;letter-spacing:0.06em}
+.tab-nav a:hover{color:rgba(11,17,19,0.78);background:rgba(11,17,19,0.03)}
+.tab-nav a.active{color:#0B1113;border-bottom-color:var(--duckling)}
+.main-content{max-width:1560px;margin:0 auto;padding:32px 24px 48px}
+/* ---- Explainers: editorial entry points, not reference tools ----------------
+   Deliberately a different shape from .card. The dashboards answer questions you
+   already know to ask; an explainer tells you which question matters. Making it
+   look like a tenth dashboard tile would bury exactly the thing meant to be read
+   first. Grows to a 2-up on wide screens when there is a second one. */
+.feature{
+  display:grid;grid-template-columns:1.15fr .85fr;gap:0;
+  background:linear-gradient(135deg,#FFFFFF 0%,#F1F4F3 100%);
+  border:1px solid rgba(201,168,76,.28);border-radius:16px;overflow:hidden;
+  text-decoration:none;color:#0B1113;position:relative;
+  box-shadow:0 4px 20px rgba(0,0,0,.28);
+  transition:border-color .35s,transform .35s,box-shadow .35s;
+}
+.feature:hover{border-color:rgba(201,168,76,.6);transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.34)}
+.feature:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.feature-body{padding:30px 30px 26px}
+.feature-kicker{
+  font-size:0.6875rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:12px;
+}
+.feature h3{
+  font-family:'DM Serif Display',Georgia,serif;font-weight:400;
+  font-size:clamp(1.3rem,2.4vw,1.75rem);line-height:1.2;color:#0B1113;margin-bottom:12px;
+}
+.feature p{font-size:.86rem;line-height:1.62;color:rgba(11,17,19,0.66);margin-bottom:18px}
+.feature .go{font-size:.78rem;font-weight:700;color:var(--gold);letter-spacing:.03em}
+/* the pull-quote panel carries the finding itself, so the card argues rather than advertises */
+.feature-pull{
+  border-left:1px solid rgba(255,255,255,.08);
+  padding:30px 28px;display:flex;flex-direction:column;justify-content:center;
+  background:rgba(0,0,0,.16);
+}
+.pull-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:9px 0}
+.pull-row+.pull-row{border-top:1px solid rgba(11,17,19,0.06)}
+.pull-lbl{font-size:0.6875rem;text-transform:uppercase;letter-spacing:.09em;color:rgba(11,17,19,0.6)}
+.pull-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.3rem;color:#0B1113}
+.pull-val.over{color:#A81733}
+.pull-note{margin-top:14px;font-size:.7rem;color:rgba(11,17,19,0.57);line-height:1.5}
+@media (max-width:820px){
+  .feature{grid-template-columns:1fr}
+  .feature-pull{border-left:none;border-top:1px solid rgba(11,17,19,0.07);padding:22px 30px 26px}
+}
+
+.sec-head{margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(11,17,19,0.07)}
+.sec-head h2{font-family:'DM Serif Display',Georgia,serif;font-size:1.35rem;font-weight:400;color:rgba(11,17,19,0.88);margin-bottom:4px}
+.sec-head p{font-size:0.85rem;color:rgba(11,17,19,0.6)}
+.grid-wrap{
+  background:linear-gradient(170deg,rgba(20,85,143,0.16),rgba(56,133,87,0.10),rgba(246,197,27,0.09),rgba(104,10,29,0.12),rgba(20,85,143,0.10),rgba(56,133,87,0.14),rgba(246,197,27,0.08),rgba(104,10,29,0.11));
+  background-size:300% 300%;animation:gridGlow 12s ease-in-out infinite;
+  border:1px solid rgba(11,17,19,0.05);border-radius:18px;padding:24px;margin-bottom:32px;position:relative;overflow:hidden;
+}
+@keyframes gridGlow{0%{background-position:0% 0%}25%{background-position:100% 50%}50%{background-position:50% 100%}75%{background-position:0% 50%}100%{background-position:0% 0%}}
+.grid-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 40% at 10% 10%,rgba(20,85,143,0.08),transparent),radial-gradient(ellipse 40% 50% at 90% 85%,rgba(104,10,29,0.07),transparent);pointer-events:none}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;position:relative;z-index:1}
+.card{background:#FFFFFF;border:1px solid rgba(11,17,19,0.05);border-radius:14px;padding:26px 22px 20px;text-decoration:none;color:#0B1113;display:flex;flex-direction:column;box-shadow:0 2px 8px rgba(0,0,0,0.2);transition:all 0.4s cubic-bezier(.25,.46,.45,.94);position:relative;overflow:hidden;backdrop-filter:blur(4px)}
+.card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(11,17,19,0.05),transparent 70%);opacity:0;transition:opacity 0.4s}
+.card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0;opacity:0;transition:opacity 0.4s}
+.card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,0.35);border-color:rgba(11,17,19,0.42)}
+.card:hover::before{opacity:1}
+.card:hover::after{opacity:1}
+.card.c-blue::after{background:linear-gradient(90deg,var(--bay-blue),#14558F)}
+.card.c-green::after{background:linear-gradient(90deg,var(--berkshire),#2A6B44)}
+.card.c-cranberry::after{background:linear-gradient(90deg,var(--cranberry),#B07C20)}
+.card.c-purple::after{background:linear-gradient(90deg,#6c5ce7,#a29bfe)}
+.card.c-gray::after{background:linear-gradient(90deg,var(--granite),#999)}
+.card.c-red::after{background:linear-gradient(90deg,var(--danger),#e88)}
+.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-icon{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px;font-size:20px}
+.card-icon.blue{background:rgba(20,85,143,0.3)}
+.card-icon.green{background:rgba(56,133,87,0.25)}
+.card-icon.cranberry{background:rgba(104,10,29,0.3)}
+.card-icon.red{background:rgba(205,13,13,0.2)}
+.card-icon.purple{background:rgba(108,92,231,0.25)}
+.card-icon.gray{background:rgba(11,17,19,0.07)}
+/* "Live" is a promise that a workflow refreshes the page on a schedule, so only
+   the eight auto-fed dashboards may wear it; the seven hand-maintained ones get
+   .badge-snap. All fifteen said Live, including pages untouched since June. */
+.badge{font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:3px 10px;border-radius:100px;color:#2A6B44;background:rgba(56,133,87,0.15);border:1px solid rgba(56,133,87,0.25)}
+.badge-snap{color:#5A6467;background:rgba(90,100,103,0.10);border-color:rgba(90,100,103,0.22)}
+.card-name{font-family:'DM Serif Display',Georgia,serif;font-size:1.05rem;font-weight:400;color:#0B1113;line-height:1.3;margin-bottom:10px}
+.card-desc{font-size:0.82rem;font-weight:400;color:rgba(11,17,19,0.63);line-height:1.6;flex-grow:1;margin-bottom:16px}
+.card-foot{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid rgba(11,17,19,0.05)}
+.tags{display:flex;gap:5px;flex-wrap:wrap}
+.tag{font-size:0.6875rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:rgba(11,17,19,0.05);color:rgba(11,17,19,0.6);border:1px solid rgba(11,17,19,0.05)}
+.arrow{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(11,17,19,0.05);color:var(--duckling);font-size:13px;font-weight:700;flex-shrink:0;transition:all 0.3s}
+.card:hover .arrow{background:var(--duckling);color:var(--navy);transform:translateX(3px)}
+
+
+
+
+
+.share-bar{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.share-label{font-size:0.6875rem;font-weight:600;color:rgba(11,17,19,0.54);text-transform:uppercase;letter-spacing:0.08em}
+.share-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-size:0.72rem;font-weight:600;text-decoration:none;color:#0B1113;transition:all 0.3s;border:1px solid rgba(11,17,19,0.07);cursor:pointer;background:rgba(11,17,19,0.04);backdrop-filter:blur(4px)}
+.share-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.3);border-color:rgba(11,17,19,0.44);background:rgba(11,17,19,0.07)}
+.share-btn svg{width:14px;height:14px;fill:currentColor;flex-shrink:0}
+.share-btn.x:hover{border-color:rgba(11,17,19,0.22);color:#0B1113}
+.share-btn.fb:hover{border-color:rgba(24,119,242,0.5);color:#14558F}
+.share-btn.li:hover{border-color:rgba(10,102,194,0.5);color:#14558F}
+.share-btn.rd:hover{border-color:rgba(255,69,0,0.5);color:#ff8a65}
+.share-btn.em:hover{border-color:rgba(246,197,27,0.4);color:var(--duckling)}
+footer{text-align:center;padding:36px 24px;color:rgba(11,17,19,0.57);font-size:0.75rem;border-top:1px solid rgba(11,17,19,0.05)}
+footer a{color:rgba(11,17,19,0.72);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(246,197,27,0.3)}
+footer a:hover{color:var(--duckling)}
+.rv{opacity:0;transform:translateY(14px);transition:opacity 0.5s ease,transform 0.5s ease}
+.rv.vis{opacity:1;transform:translateY(0)}
+.grid .card:nth-child(1){transition-delay:0s}
+.grid .card:nth-child(2){transition-delay:0.05s}
+.grid .card:nth-child(3){transition-delay:0.10s}
+.grid .card:nth-child(4){transition-delay:0.15s}
+.grid .card:nth-child(5){transition-delay:0.20s}
+.grid .card:nth-child(6){transition-delay:0.25s}
+.grid .card:nth-child(7){transition-delay:0.30s}
+.grid .card:nth-child(8){transition-delay:0.35s}
+.grid .card:nth-child(9){transition-delay:0.40s}
+.grid .card:nth-child(10){transition-delay:0.45s}
+.grid .card:nth-child(11){transition-delay:0.50s}
+.grid .card:nth-child(12){transition-delay:0.55s}
+.grid .card:nth-child(13){transition-delay:0.6s}
+.grid .card:nth-child(14){transition-delay:0.65s}
+.grid .card:nth-child(15){transition-delay:0.7s}
+@media(max-width:960px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){.hero{padding:48px 16px 36px}.main-content{padding:20px 16px 40px}.grid-wrap{padding:16px}.share-bar{gap:8px}.share-btn{padding:7px 12px;font-size:0.6875rem}}
+@media(max-width:540px){.grid{grid-template-columns:1fr}.grid-wrap{padding:12px}}
+
+/* ---- front page: instrument as hero -------------------------------------- */
+.site-head{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;
+  align-items:center;justify-content:space-between;gap:24px;
+  padding:18px clamp(18px,3vw,40px);pointer-events:none}
+.site-head .wm{pointer-events:auto;font-family:var(--font-display);font-weight:700;
+  font-size:clamp(22px,2.2vw,34px);letter-spacing:-.03em;color:var(--cranberry);
+  text-decoration:none;line-height:1}
+.site-nav{pointer-events:auto;display:flex;gap:clamp(12px,1.8vw,26px);
+  font-family:var(--font-text);font-size:13px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase}
+.site-nav a{color:var(--muted);text-decoration:none;padding-bottom:3px;
+  border-bottom:1.5px solid transparent;transition:color .18s,border-color .18s}
+.site-nav a:hover{color:var(--cranberry);border-bottom-color:var(--cranberry)}
+.stage{position:relative;height:100vh;width:100%;background:var(--bg)}
+.stage .instr{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.stage-more{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;opacity:.75;transition:opacity .2s}
+.stage-more:hover{opacity:1;color:var(--cranberry)}
+@media (max-width:800px){.stage{height:78vh}.site-nav{display:none}}
+
+/* ---- the turn: instrument -> directory -----------------------------------
+   The stage ended and the card grid began with nothing between them, so the
+   page just stopped. This band is the hinge: it states what the site is once,
+   at size, and hands the reader down. Deliberately empty of ornament - the
+   footage test earlier proved that anything behind content here either
+   disappears or fights it. */
+.turn{position:relative;padding:clamp(80px,11vw,150px) clamp(24px,5vw,90px);
+  background:linear-gradient(180deg,var(--bg) 0%,#DFE3E2 55%,var(--bg) 100%);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  text-align:center}
+.turn-l{font-family:var(--font-mono);font-size:11px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--berk-ink);margin:0 0 22px}
+.turn-h{font-family:var(--font-display);font-weight:700;
+  font-size:clamp(26px,3.6vw,54px);line-height:1.08;letter-spacing:-.03em;
+  color:var(--ink);margin:0 auto;max-width:20ch}
+.turn-h em{font-style:normal;color:var(--cranberry)}
+.turn-go{display:inline-block;margin-top:34px;font-family:var(--font-mono);
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);
+  text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:6px;
+  transition:color .2s,border-color .2s}
+.turn-go:hover{color:var(--cranberry);border-color:var(--cranberry)}
+
+/* the band asserted that every figure is computed from an official source and
+   then showed no figures. It carries them now - centred type on a gradient was
+   the plainest arrangement available, and it was asserting rather than proving */
+.turn{position:relative;padding:clamp(70px,9vw,130px) clamp(24px,5vw,90px);
+  background:linear-gradient(180deg,var(--bg) 0%,#DFE3E2 60%,var(--bg) 100%);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.turn-in{max-width:1560px;margin:0 auto;display:grid;gap:clamp(28px,4vw,72px);
+  grid-template-columns:1.25fr .75fr;align-items:end}
+.turn-h{font-family:var(--font-display);font-weight:700;margin:0;
+  font-size:clamp(28px,4.2vw,64px);line-height:1.04;letter-spacing:-.034em;color:var(--ink)}
+.turn-h em{font-style:normal;color:var(--cranberry)}
+.turn-side{border-left:2px solid var(--cranberry);padding-left:clamp(16px,1.6vw,26px)}
+.turn-l{font-family:var(--font-mono);font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--berk-ink);margin:0 0 18px}
+.turn-figs{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:14px 22px}
+.turn-figs div{margin:0}
+.turn-figs dt{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted)}
+.turn-figs dd{margin:2px 0 0;font-family:var(--font-mono);font-weight:600;
+  font-size:clamp(17px,1.5vw,23px);letter-spacing:-.03em;color:var(--bay-blue)}
+.turn-go{display:inline-block;margin-top:26px;font-family:var(--font-mono);
+  font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);
+  text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:5px;
+  transition:color .2s,border-color .2s}
+.turn-go:hover{color:var(--cranberry);border-color:var(--cranberry)}
+@media (max-width:900px){.turn-in{grid-template-columns:1fr}.turn-side{border-left:0;
+  border-top:2px solid var(--cranberry);padding:20px 0 0}}
+
+/* ---- the directory ---------------------------------------------------------
+   The cards were flat white rectangles with a 3px bar, on a grid fixed at three
+   columns inside a 1200px cap - so on a wide display they were small, identical
+   and static. The complaint was that nothing happens on the page or the cards,
+   and it was correct.
+   The rule now runs the FULL height of the card and is the thing that moves:
+   it widens and the card lifts toward the reader. One gesture, not six. */
+.grid{display:grid;gap:clamp(14px,1.4vw,22px);
+  grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}
+.card{position:relative;display:flex;flex-direction:column;gap:10px;
+  background:var(--card);border:1px solid var(--border);border-radius:3px;
+  padding:22px 24px 18px 26px;text-decoration:none;overflow:hidden;isolation:isolate;
+  transition:transform .34s cubic-bezier(.2,.8,.2,1),box-shadow .34s cubic-bezier(.2,.8,.2,1),
+             border-color .34s}
+.card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:7px;
+  background:var(--bay-blue);transform:scaleX(.43);transform-origin:left center;transition:transform .34s cubic-bezier(.2,.8,.2,1),opacity .34s}
+.card.c-cranberry::before{background:var(--cranberry)}
+.card.c-green::before{background:var(--berkshire)}
+.card.c-blue::before{background:var(--bay-blue)}
+.card::after{content:'';position:absolute;inset:0;z-index:-1;opacity:0;
+  background:linear-gradient(115deg,rgba(20,85,143,.05),transparent 62%);
+  transition:opacity .34s}
+.card:hover{transform:translateY(-4px);border-color:transparent;
+  box-shadow:0 2px 4px rgba(11,17,19,.05),0 14px 34px -10px rgba(11,17,19,.22)}
+.card:hover::before{transform:scaleX(1)}
+.card:hover::after{opacity:1}
+.card:focus-visible{outline:2px solid var(--cranberry);outline-offset:3px}
+.card-name{font-family:var(--font-display);font-weight:700;font-size:18px;
+  letter-spacing:-.022em;line-height:1.18;color:var(--ink)}
+.card-desc{font-family:var(--font-text);font-size:13.5px;line-height:1.5;color:var(--muted);flex:1}
+.card-also{font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;
+  color:var(--berk-ink);border-top:1px dashed var(--border);padding-top:9px;margin-top:2px}
+.card-also b{font-weight:600;color:var(--ink)}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin-top:4px}
+.tag{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);background:rgba(11,17,19,.04);border:1px solid var(--border);
+  border-radius:2px;padding:3px 6px}
+.arrow{font-size:15px;color:var(--muted);transition:transform .34s cubic-bezier(.2,.8,.2,1),color .34s}
+.card:hover .arrow{transform:translateX(5px);color:var(--cranberry)}
+.badge{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--berk-ink);background:rgba(42,107,68,.09);border:1px solid rgba(42,107,68,.2);
+  border-radius:20px;padding:3px 8px}
+.badge.b-ext{color:var(--muted);background:rgba(11,17,19,.04);border-color:var(--border)}
+.card--ext{background:linear-gradient(180deg,#FFFFFF,#F6F8F7)}
+@media (prefers-reduced-motion:reduce){
+  .card,.card::before,.card::after,.arrow{transition:none}
+  .card:hover{transform:none}
+}
+
+/* A card with a second destination cannot be one big <a> - nesting links is
+   invalid. The primary link stretches to fill the card; the companion sits
+   above it and is genuinely clickable, because "also inside" was claiming
+   containment that did not exist. */
+.card-go{text-decoration:none;position:static}
+.card-go::after{content:'';position:absolute;inset:0;z-index:1}
+.card-also{position:relative;z-index:2;display:block;text-decoration:none;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;
+  color:var(--berk-ink);border-top:1px dashed var(--border);
+  padding-top:9px;margin-top:2px;transition:color .2s}
+.card-also b{font-weight:600;color:var(--ink)}
+.card-also:hover{color:var(--cranberry)}
+.card-also:hover b{color:var(--cranberry)}
+
+/* one subject, one card, several doors - three separate Boston cards read as
+   three subjects when it is one */
+.card-also{position:relative;z-index:2;display:flex;flex-wrap:wrap;gap:4px 14px;
+  align-items:baseline;border-top:1px dashed var(--border);padding-top:9px;margin-top:2px;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.04em}
+.card-also>span{color:var(--muted);text-transform:uppercase;letter-spacing:.14em;font-size:11px}
+.card-also a{color:var(--berk-ink);text-decoration:none;transition:color .2s}
+.card-also a:hover{color:var(--cranberry)}
+
+/* ============================================================================
+   TWO EFFECTS. No layout, copy or markup changes.
+   ========================================================================== */
+
+/* ---- 1. liquid type ------------------------------------------------------ */
+.turn-h{position:relative}
+.turn-h canvas.lq{position:absolute;left:0;top:0;width:100%;height:100%;
+  pointer-events:none;display:block}
+/* the real heading only goes transparent once a frame has actually painted */
+.turn-h.lq-on{color:transparent}
+.turn-h.lq-on em{color:transparent}
+
+/* ---- 2. magnetic cards --------------------------------------------------- */
+.grid{perspective:1400px;perspective-origin:50% 40%}
+.card{
+  transform-style:preserve-3d;
+  will-change:transform;
+  transition:transform .5s cubic-bezier(.19,1,.22,1),
+             box-shadow .5s cubic-bezier(.19,1,.22,1),
+             border-color .4s;
+}
+.card.mg{
+  transform:
+    rotateX(calc(var(--ry,0) * -7deg))
+    rotateY(calc(var(--rx,0) *  7deg))
+    translate3d(0,-6px,34px);
+  transition:transform .16s cubic-bezier(.22,.61,.36,1),
+             box-shadow .3s ease, border-color .3s;
+  box-shadow:
+    0 34px 70px -18px rgba(11,17,19,.42),
+    0 6px 18px -6px rgba(11,17,19,.22);
+  border-color:rgba(11,17,19,.28);
+  z-index:3;
+}
+/* specular sheen that tracks the pointer across the card face */
+.card .sheen{
+  position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:4;
+  opacity:0;transition:opacity .3s ease;
+  background:
+    radial-gradient(340px circle at var(--mx,50%) var(--my,50%),
+      rgba(255,255,255,.62), rgba(255,255,255,.10) 34%, transparent 62%);
+  mix-blend-mode:soft-light;
+}
+.card.mg .sheen{opacity:1}
+/* a second, coloured pass so the card glows in its own subject colour */
+.card .sheen::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),
+    var(--glow,rgba(20,85,143,.30)), transparent 60%);
+  mix-blend-mode:multiply;opacity:.5;
+}
+.card.c-blue{--glow:rgba(20,85,143,.30)}
+.card.c-green{--glow:rgba(56,133,87,.28)}
+.card.c-cranberry{--glow:rgba(104,10,29,.30)}
+.card.c-purple{--glow:rgba(108,92,231,.28)}
+.card.c-red{--glow:rgba(205,13,13,.26)}
+.card.c-gray{--glow:rgba(11,17,19,.20)}
+/* the arrow leans out of the card as it tilts */
+.card.mg .arrow{transform:translate3d(0,0,26px) scale(1.12);
+  background:var(--duckling);color:var(--navy)}
+
+@media (prefers-reduced-motion: reduce){
+  .turn-h.lq-on{color:var(--ink)}
+  .turn-h.lq-on em{color:var(--cranberry)}
+  .turn-h canvas.lq{display:none}
+  .card,.card.mg{transform:none!important;transition:none}
+  .card .sheen{display:none}
+}
+@media (hover:none){
+  .card .sheen{display:none}
+}
+
+
+/* ---- 3. background: domain-warped flow field, one shader pass ------------ */
+#flow{
+  position:fixed;inset:0;z-index:0;pointer-events:none;display:block;
+  width:100%;height:100%;opacity:0;transition:opacity 1.4s ease;
+}
+#flow.on{opacity:1}
+@media (prefers-reduced-motion: reduce){ #flow{display:none} }
+
+/* the section grounds were fully opaque, so nothing behind them could be seen.
+   Same colours, carried at alpha, so the field reads through them. */
+.turn{
+  background:linear-gradient(180deg,
+    rgba(233,235,234,.70) 0%, rgba(223,227,226,.34) 55%, rgba(233,235,234,.58) 100%);
+}
+/* the field tints the ground just enough to push the smallest muted labels
+   under 4.5:1. Measured against the darkest tint the shader can output, not
+   guessed: figure label 4.13, band label 4.34, section sub 4.25, footer 3.89. */
+.turn-l{color:#3E4A4D}
+.turn-figs dt{color:#3E4A4D}
+.sec-head p{color:rgba(11,17,19,.82)}
+footer{color:rgba(11,17,19,.80)}
+
+.grid-wrap{
+  background:linear-gradient(170deg,
+    rgba(20,85,143,.09),rgba(56,133,87,.05),rgba(246,197,27,.04),
+    rgba(104,10,29,.07),rgba(20,85,143,.05),rgba(56,133,87,.08),
+    rgba(246,197,27,.04),rgba(104,10,29,.06));
+  background-size:300% 300%;
+}
+
+
+/* ---- 4. the turn band as a space: three depths ------------------------- */
+.turn{overflow:hidden}
+.turn-in{position:relative}
+.turn-h,.turn-side{will-change:transform}
+.turn-h{transform:translate3d(calc(var(--tx,0)*-14px),calc(var(--ty,0)*-9px + var(--sy,0px)),0)}
+.turn-side{transform:translate3d(calc(var(--tx,0)*9px),calc(var(--ty,0)*6px + var(--sy2,0px)),0)}
+.turn-h,.turn-side{transition:transform .5s cubic-bezier(.19,1,.22,1)}
+.turn.live .turn-h,.turn.live .turn-side{transition:transform .14s linear}
+
+/* the card rail animated its width, which lays out on every frame of every
+   hover across 21 cards. Same 3px-to-7px result, done on the compositor. */
+.card::before{width:7px;transform:scaleX(.43);transform-origin:left center;
+  transition:transform .34s cubic-bezier(.2,.8,.2,1),opacity .34s}
+.card:hover::before{width:7px;transform:scaleX(1)}
+
+/* ---- 5. cards: real pixel displacement on hover ------------------------- */
+.card.warp{filter:url(#cardwarp)}
+
+/* ---- 7. sources and footer as their own section ------------------------- */
+.sources{
+  position:relative;z-index:1;
+  margin:56px auto 0;max-width:1560px;padding:0 24px;
+}
+.sources-in{
+  background:rgba(255,255,255,.52);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(11,17,19,.07);border-radius:18px;
+  padding:26px clamp(20px,2.4vw,34px) 24px;
+}
+.sources h4{
+  font-family:var(--font-display);font-weight:700;
+  font-size:clamp(15px,1.35vw,20px);letter-spacing:-.02em;color:var(--ink);
+  margin:0;display:flex;align-items:baseline;gap:11px;
+}
+.sources .src-n{
+  font-family:var(--font-mono);font-style:normal;font-weight:600;
+  font-size:.62em;color:var(--bay-blue);letter-spacing:-.02em;
+}
+.sources-ramp{
+  display:block;height:2px;margin:14px 0 18px;border-radius:2px;
+  background:linear-gradient(90deg,#12467F,#3D82BC,#8FB9D6,#CFC7B4,#F2A65A,#DC5127,#8E0B22);
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform 1.1s cubic-bezier(.19,1,.22,1);
+}
+.sources.vis .sources-ramp{transform:scaleX(1)}
+.srcchips{display:flex;flex-wrap:wrap;gap:6px}
+.srcchip{
+  font-family:var(--font-mono);font-size:11px;font-weight:600;
+  letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;
+  padding:5px 10px;border-radius:6px;
+  color:rgba(11,17,19,.78);background:rgba(255,255,255,.72);
+  border:1px solid rgba(11,17,19,.12);
+  transition:transform .3s cubic-bezier(.19,1,.22,1),border-color .3s,color .3s;
+}
+.srcchip:hover{transform:translateY(-2px);border-color:rgba(20,85,143,.45);color:var(--bay-blue)}
+.sources-note{
+  margin:16px 0 0;font-family:var(--font-text);
+  font-size:12.5px;color:rgba(11,17,19,.72);
+}
+.sources-note a{color:var(--bay-blue);font-weight:600}
+
+/* measured on the footer's translucent ground: 3.79:1 against 4.5 */
+.share-label{color:rgba(11,17,19,.80)}
+
+footer{
+  position:relative;z-index:1;margin-top:44px;
+  background:rgba(233,235,234,.58);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-top:1px solid rgba(11,17,19,.08);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .turn-h,.turn-side{transform:none!important}
+  .card.warp{filter:none}
+  .sources-ramp{transform:scaleX(1)}
+}
+
+
+/* ---- Videos and About: the same section shell as the sources block ------- */
+.panel-sec{position:relative;z-index:1;margin:56px auto 0;max-width:1560px;padding:0 24px}
+.panel-in{
+  background:rgba(255,255,255,.52);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(11,17,19,.07);border-radius:18px;
+  padding:26px clamp(20px,2.4vw,34px) 24px;
+}
+.panel-sec h4{
+  font-family:var(--font-display);font-weight:700;
+  font-size:clamp(15px,1.35vw,20px);letter-spacing:-.02em;color:var(--ink);
+  margin:0;display:flex;align-items:baseline;gap:11px;
+}
+.panel-sec .panel-n{
+  font-family:var(--font-mono);font-style:normal;font-weight:600;
+  font-size:.62em;color:var(--bay-blue);letter-spacing:-.02em;
+}
+.panel-ramp{
+  display:block;height:2px;margin:14px 0 18px;border-radius:2px;
+  background:linear-gradient(90deg,#12467F,#3D82BC,#8FB9D6,#CFC7B4,#F2A65A,#DC5127,#8E0B22);
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform 1.1s cubic-bezier(.19,1,.22,1);
+}
+.panel-sec.vis .panel-ramp{transform:scaleX(1)}
+.panel-lede{
+  margin:0;font-family:var(--font-text);
+  font-size:clamp(14px,1.05vw,16.5px);line-height:1.6;
+  color:rgba(11,17,19,.88);max-width:74ch;
+}
+.panel-body{
+  margin:14px 0 0;font-family:var(--font-text);
+  font-size:13.5px;line-height:1.68;color:rgba(11,17,19,.80);max-width:78ch;
+}
+.panel-note{
+  margin:16px 0 0;font-family:var(--font-text);
+  font-size:12.5px;line-height:1.6;color:rgba(11,17,19,.72);max-width:78ch;
+}
+.panel-note a{color:var(--bay-blue);font-weight:600}
+@media (prefers-reduced-motion: reduce){ .panel-ramp{transform:scaleX(1)} }
+
+
+/* ---- sources: centred, and a chip field that answers the cursor --------- */
+.sources h4{justify-content:center}
+.srcchips{justify-content:center}
+.sources-note{text-align:center}
+.srcchip{
+  will-change:transform;
+  transform:translate3d(0,calc(var(--lift,0) * -7px),0) scale(calc(1 + var(--lift,0) * .06));
+  border-color:rgba(11,17,19,calc(.12 + var(--lift,0) * .34));
+  box-shadow:0 calc(var(--lift,0) * 6px) calc(var(--lift,0) * 14px) rgba(11,17,19,calc(var(--lift,0) * .16));
+  transition:transform .5s cubic-bezier(.19,1,.22,1),border-color .5s,box-shadow .5s,color .5s;
+}
+.srcchips.live .srcchip{transition:transform .12s linear,border-color .2s,box-shadow .2s,color .2s}
+.srcchip:hover{transform:translate3d(0,-8px,0) scale(1.07)}
+
+/* ---- footer: colour, and the ramp sweeping its edge --------------------- */
+footer{
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(120% 160% at 12% 0%, rgba(20,85,143,.10), transparent 58%),
+    radial-gradient(120% 160% at 88% 10%, rgba(104,10,29,.09), transparent 55%),
+    rgba(233,235,234,.62);
+  border-top:0;
+}
+footer::before{
+  content:'';position:absolute;left:0;right:0;top:0;height:3px;
+  background:linear-gradient(90deg,#12467F,#3D82BC,#8FB9D6,#CFC7B4,#F2A65A,#DC5127,#8E0B22,
+                                    #DC5127,#F2A65A,#CFC7B4,#8FB9D6,#3D82BC,#12467F);
+  background-size:200% 100%;
+  animation:footRamp 22s linear infinite;
+}
+@keyframes footRamp{from{background-position:0% 0}to{background-position:200% 0}}
+.share-btn{transition:transform .4s cubic-bezier(.19,1,.22,1),background .3s,border-color .3s,color .3s}
+.share-btn:hover{transform:translateY(-3px)}
+.share-btn.x:hover{border-color:rgba(11,17,19,.5);background:rgba(11,17,19,.07)}
+.share-btn.fb:hover{border-color:rgba(20,85,143,.55);background:rgba(20,85,143,.10);color:var(--bay-blue)}
+.share-btn.li:hover{border-color:rgba(20,85,143,.55);background:rgba(20,85,143,.10);color:var(--bay-blue)}
+.share-btn.rd:hover{border-color:rgba(194,65,12,.55);background:rgba(194,65,12,.10);color:#9A3412}
+.share-btn.em:hover{border-color:rgba(184,134,11,.6);background:rgba(184,134,11,.12);color:#7A5A08}
+
+@media (prefers-reduced-motion: reduce){
+  footer::before{animation:none}
+  .srcchip{transform:none!important;transition:none}
+}
+
+</style>
+<!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+
+</head>
+<style>
+.doc{position:relative;z-index:1;max-width:1560px;margin:0 auto;
+  padding:clamp(90px,11vw,150px) 24px clamp(40px,5vw,70px)}
+.doc-in{background:rgba(255,255,255,.52);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid rgba(11,17,19,.07);border-radius:18px;
+  padding:clamp(26px,3vw,44px) clamp(20px,2.6vw,40px)}
+.doc h1{font-family:var(--font-display);font-weight:700;
+  font-size:clamp(30px,4vw,58px);letter-spacing:-.035em;line-height:1.02;
+  color:var(--ink);margin:0;display:flex;align-items:baseline;gap:14px}
+.doc h1 i{font-family:var(--font-mono);font-style:normal;font-weight:600;
+  font-size:.34em;color:var(--bay-blue);letter-spacing:-.02em}
+.doc .ramp{display:block;height:2px;margin:18px 0 24px;border-radius:2px;
+  background:linear-gradient(90deg,#12467F,#3D82BC,#8FB9D6,#CFC7B4,#F2A65A,#DC5127,#8E0B22)}
+.doc .panel-lede{margin:0;font-family:var(--font-text);
+  font-size:clamp(15px,1.2vw,19px);line-height:1.58;color:rgba(11,17,19,.88);max-width:74ch}
+.doc .panel-body{margin:16px 0 0;font-family:var(--font-text);
+  font-size:14.5px;line-height:1.7;color:rgba(11,17,19,.82);max-width:78ch}
+.doc .panel-note{margin:20px 0 0;font-family:var(--font-text);
+  font-size:13px;line-height:1.62;color:rgba(11,17,19,.74);max-width:78ch}
+.doc .panel-note a{color:var(--bay-blue);font-weight:600}
+
+.skip-link{position:absolute;left:8px;top:-48px;z-index:200;padding:10px 16px;
+  border-radius:8px;background:#680A1D;color:#fff;text-decoration:none;
+  font-family:var(--font-mono,ui-monospace,monospace);font-size:12px;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;transition:top .18s}
+.skip-link:focus{top:8px}
+/* == about:css start == */
+/* ---- About ---------------------------------------------------------------
+   Same head treatment as Videos: centred, heavier, with a warm-to-cool wash
+   across the top of the panel. The bio is the one block set left, because a
+   portrait beside centred ragged text reads as an accident. */
+.doc-in{position:relative;overflow:hidden;text-align:center}
+.doc-in::before{content:'';position:absolute;left:0;right:0;top:0;height:270px;
+  pointer-events:none;z-index:0;
+  background:radial-gradient(78% 120% at 6% 0%,rgba(104,10,29,.11),transparent 62%),
+             radial-gradient(72% 120% at 94% 4%,rgba(20,85,143,.12),transparent 60%)}
+.doc-in > *{position:relative;z-index:1}
+.doc h1{justify-content:center;font-size:clamp(34px,5vw,72px)}
+.doc .ramp{height:3px;margin:20px auto 26px;max-width:none}
+.doc .panel-lede{font-size:clamp(17px,1.5vw,24px);line-height:1.45;max-width:none}
+.doc .panel-body{max-width:none;font-size:15px;line-height:1.72}
+.doc .panel-note{max-width:none;font-size:13px;line-height:1.65}
+
+/* His words, and they should not look like the rest of the page, which is
+   written about him rather than by him. */
+.acreed{margin:26px 0 0;padding:24px clamp(20px,2.6vw,34px);text-align:left;
+  border-radius:16px;border:1px solid rgba(104,10,29,.22);
+  background:linear-gradient(180deg,rgba(104,10,29,.055),rgba(104,10,29,.02))}
+.acreed p{font-family:var(--font-display);font-weight:400;
+  font-size:clamp(16px,1.55vw,22px);line-height:1.5;letter-spacing:-.012em;
+  color:rgba(11,17,19,.90);margin:0 0 14px;max-width:74ch}
+.acreed p:last-of-type{margin-bottom:16px}
+.acreed cite{display:block;font-family:var(--font-mono);font-style:normal;
+  font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;
+  color:var(--cranberry)}
+.acreed cite::before{content:"— "}
+.asub{font-family:var(--font-display);font-weight:700;letter-spacing:-.02em;
+  font-size:clamp(17px,1.6vw,23px);color:var(--ink);margin:40px 0 10px;
+  padding-top:22px;border-top:1px solid rgba(11,17,19,.10)}
+
+.abio{display:grid;grid-template-columns:180px 1fr;gap:clamp(20px,2.6vw,34px);
+  align-items:start;text-align:left;margin:30px 0 4px;padding:24px clamp(18px,2.2vw,28px);
+  border-radius:16px;background:rgba(255,255,255,.55);
+  border:1px solid rgba(11,17,19,.07)}
+.abio-face{width:180px;height:180px;border-radius:14px;object-fit:cover;display:block;
+  box-shadow:0 6px 22px rgba(11,17,19,.16)}
+.abio-facelink{display:block;width:180px;border-radius:14px;cursor:zoom-in;
+  transition:transform .35s cubic-bezier(.19,1,.22,1),box-shadow .35s}
+.abio-facelink:hover{transform:scale(1.03)}
+.abio-facelink:focus-visible{outline:2px solid var(--bay-blue);outline-offset:3px}
+/* `hidden` is display:none from the UA sheet and a class beats it, so
+   without this the overlay stays laid out and eats every click */
+.lbox[hidden]{display:none}
+.lbox{position:fixed;inset:0;z-index:90;display:flex;align-items:center;
+  justify-content:center;padding:24px;opacity:0;transition:opacity .2s;
+  background:rgba(6,9,11,.74);backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);cursor:zoom-out}
+.lbox.on{opacity:1}
+/* capped at the source's own 400px: enlarging past that would only show
+   the compression, and the studio frame exists at no larger size */
+.lbox img{width:min(400px,82vw);height:auto;border-radius:16px;display:block;
+  box-shadow:0 24px 70px rgba(0,0,0,.55);transform:scale(.96);
+  transition:transform .25s cubic-bezier(.19,1,.22,1)}
+.lbox.on img{transform:scale(1)}
+.lbox-x{position:absolute;top:18px;right:20px;width:40px;height:40px;
+  border-radius:10px;border:1px solid rgba(255,255,255,.28);cursor:pointer;
+  background:rgba(255,255,255,.10);color:#fff;font-size:24px;line-height:1;
+  transition:background .2s}
+.lbox-x:hover{background:rgba(255,255,255,.2)}
+@media (prefers-reduced-motion: reduce){
+  .abio-facelink,.lbox,.lbox img{transition:none}
+  .abio-facelink:hover{transform:none} .lbox img{transform:none}}
+.abio-text h2{font-family:var(--font-display);font-weight:700;letter-spacing:-.025em;
+  font-size:clamp(21px,2vw,30px);color:var(--cranberry);margin:0 0 10px}
+.abio-text p{font-family:var(--font-text);font-size:14.5px;line-height:1.68;
+  color:rgba(11,17,19,.84);margin:0 0 10px}
+
+.acols{list-style:none;margin:14px auto 0;padding:0;display:grid;gap:8px;
+  grid-template-columns:repeat(auto-fit,minmax(330px,1fr));text-align:left}
+.acols li{font-family:var(--font-text);font-size:14px;line-height:1.45;
+  color:rgba(11,17,19,.84);padding:11px 14px;border-radius:10px;
+  background:rgba(255,255,255,.5);border:1px solid rgba(11,17,19,.10)}
+
+
+/* ---- the refresh schedule, drawn rather than listed ---------------------
+   Nine pipelines on nine different clocks is the actual argument for having no
+   single site-wide "updated" date, and a list of times does not show it. Each
+   track is one cycle - a day on the first group, a month on the second - with a
+   mark where that feed fires. The rhythm is the point. */
+.feeds{margin:18px 0 0;text-align:left;display:grid;gap:18px}
+.feed-group{padding:14px 16px 6px;border-radius:12px;
+  background:rgba(255,255,255,.5);border:1px solid rgba(11,17,19,.07)}
+.feed-axis{display:flex;justify-content:space-between;margin:0 0 8px;
+  padding-left:min(38%,190px);font-family:var(--font-mono);font-size:11px;
+  letter-spacing:.06em;color:rgba(11,17,19,.45)}
+.feed-group ul{list-style:none;margin:0;padding:0}
+.feed-group li{display:grid;grid-template-columns:min(38%,190px) 1fr auto;
+  align-items:center;gap:12px;padding:7px 0;border-top:1px solid rgba(11,17,19,.06)}
+.feed-group li:first-child{border-top:0}
+.feed-group li>b{font-family:var(--font-text);font-size:13.5px;font-weight:500;
+  color:rgba(11,17,19,.86)}
+.feed-group li>em{font-family:var(--font-mono);font-style:normal;font-size:11px;
+  font-weight:600;color:var(--bay-blue);white-space:nowrap}
+.ftrack{position:relative;display:block;height:14px;border-radius:7px;
+  background:linear-gradient(90deg,rgba(11,17,19,.05),rgba(11,17,19,.09))}
+.ftrack::after{content:'';position:absolute;left:0;right:0;top:50%;height:1px;
+  background:rgba(11,17,19,.10)}
+.ftrack i{position:absolute;top:50%;width:7px;height:7px;margin:-3.5px 0 0 -3.5px;
+  border-radius:50%;background:var(--cranberry);
+  box-shadow:0 0 0 3px rgba(104,10,29,.14)}
+.ftrack .fspan{position:absolute;top:50%;height:7px;margin-top:-3.5px;border-radius:4px;
+  background:linear-gradient(90deg,rgba(104,10,29,.75),rgba(20,85,143,.6))}
+@media (max-width:620px){
+  .feed-axis{padding-left:0;font-size:11px}
+  .feed-group li{grid-template-columns:1fr auto;gap:6px 10px}
+  .feed-group li>b{grid-column:1}
+  .feed-group li>em{grid-column:2;justify-self:end}
+  .ftrack{grid-column:1 / -1}
+}
+/* ---- the same reveal the front page uses, so About moves like the rest --- */
+.rv{opacity:0;transform:translateY(14px);
+  transition:opacity .7s cubic-bezier(.19,1,.22,1),transform .7s cubic-bezier(.19,1,.22,1)}
+.rv.vis{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){ .rv{opacity:1;transform:none;transition:none} }
+@media (max-width:640px){
+  .abio{grid-template-columns:1fr;justify-items:center;text-align:center}
+  .abio-text h2{text-align:center}
+}
+/* == about:css end == */
+</style>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<canvas id="flow" aria-hidden="true"></canvas>
+<header class="site-head">
+  <a class="wm" href="./">Massachusetts Data Hub</a>
+  <nav class="site-nav" aria-label="Main">
+    <a href="index.html#top">The Instrument</a>
+    <a href="index.html#dashboards">Dashboards</a>
+    <a href="videos.html">Videos</a>
+    <a href="about.html" aria-current="page">About</a>
+    
+    <a href="method.html">Method</a>
+  </nav>
+</header>
+<main id="main" class="doc">
+  <div class="doc-in">
+    <h1>About</h1>
+    <span class="ramp" aria-hidden="true"></span>
+
+    <p class="panel-lede">Massachusetts Data Hub is a public record of what the
+    Commonwealth charges, spends and reports &mdash; assembled from primary
+    government sources and published so anyone can check the arithmetic.</p>
+
+    <section class="abio rv">
+      <a class="abio-facelink" href="assets/duncan-burns.jpg"
+         aria-label="Enlarge the portrait of Duncan Burns">
+        <img class="abio-face" src="assets/duncan-burns.jpg" width="400" height="400"
+             alt="Duncan Burns" loading="eager" fetchpriority="high" decoding="async">
+      </a>
+      <div class="abio-text">
+        <h2>Duncan Burns</h2>
+        <p>A U.S. Air Force veteran and UMass graduate. Operations Manager at
+        Bentley&rsquo;s Real Estate in Greater Newburyport, where ten years of
+        marketing, compliance and training sit behind a brokerage that has held
+        first place in its market for seven consecutive years, took Essex County
+        in 2022, and appears in <em>The Wall Street Journal</em>&rsquo;s
+        REALTRENDS &ldquo;The Thousand&rdquo;. A licensed Massachusetts real
+        estate agent and Notary Public.</p>
+        <p>He has written op-eds for <em>The Valley Patriot</em> since 2016 and
+        took its Editor&rsquo;s Choice Award that year. A North Shore native, he
+        lives in the Merrimack Valley.</p>
+      </div>
+    </section>
+
+    <blockquote class="acreed rv">
+      <p>I believe in liberty, and there can&rsquo;t be liberty without an equal
+      rule of law. I built this data hub of public information to use as a shield
+      and a sword against the enemies within.</p>
+      <p>Information like this should always be free, and the public should always
+      have access to it as a means to keep checks and balances upon their own
+      government. Unfortunately for Massachusetts residents, our government has
+      made Massachusetts the most opaque, and arguably the most corrupt
+      (pay-to-play), in the nation.</p>
+      <cite>Duncan Burns</cite>
+    </blockquote>
+
+    <h2 class="asub rv">This started in print</h2>
+    <p class="panel-body rv">The questions on this site are not new ones. They ran
+    in <em>The Valley Patriot</em> first, and the dashboards exist because a
+    column can make an argument but cannot show you the arithmetic.</p>
+    <ul class="acols rv">
+      <li>How Beacon Hill Is Bankrupting the Merrimack Valley</li>
+      <li>H-1B Foreign Workers Are Destroying Merrimack Valley Economy</li>
+      <li>Akamai Uses Tax Breaks to Hire H1B Foreign Workers</li>
+      <li>The Battle of Unequitable Liberty in Massachusetts</li>
+    </ul>
+    <p class="panel-note rv"><a href="https://valleypatriot.com/category/op-eds-editorials/duncan-burns/"
+       target="_blank" rel="noopener">The full archive, 2016 to 2026 &nearr;</a></p>
+
+    <h2 class="asub rv">How the figures are handled</h2>
+    <p class="panel-body rv">Every figure is traceable. Nothing is modelled,
+    estimated or smoothed unless the dashboard says so in plain language and
+    names the method. Where two official sources disagree, both are shown rather
+    than averaged. The instrument on the front page carries all 351
+    municipalities at their real geometry; the dashboards behind it hold the
+    detail, each with its own source vintage.</p>
+
+    <h2 class="asub rv">And how they stay current</h2>
+    <p class="panel-body rv">There is no site-wide &ldquo;updated&rdquo; date,
+    because one would only tell you when a script last ran. Nine pipelines
+    refresh on their own clocks, matched to when each source actually publishes.</p>
+    <div class="feeds rv">
+      <div class="feed-group">
+        <div class="feed-axis"><span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span></div>
+        <ul>
+          <li><b>MLS figures</b><span class="ftrack" aria-hidden="true"><i style="left:29.2%"></i></span><em>daily, 07:00</em></li>
+          <li><b>New Hampshire figures</b><span class="ftrack" aria-hidden="true"><i style="left:30.6%"></i></span><em>daily, 07:20</em></li>
+          <li><b>This site redeploys</b><span class="ftrack" aria-hidden="true"><i style="left:0%"></i><i style="left:12.5%"></i><i style="left:25%"></i><i style="left:37.5%"></i><i style="left:50%"></i><i style="left:62.5%"></i><i style="left:75%"></i><i style="left:87.5%"></i></span><em>every 3 hours</em></li>
+        </ul>
+      </div>
+      <div class="feed-group">
+        <div class="feed-axis"><span>1st</span><span>8th</span><span>15th</span><span>22nd</span><span>31st</span></div>
+        <ul>
+          <li><b>IRS SOI migration</b><span class="ftrack" aria-hidden="true"><i style="left:0%"></i></span><em>1st</em></li>
+          <li><b>Energy</b><span class="ftrack" aria-hidden="true"><i style="left:3.3%"></i><i style="left:83.3%"></i></span><em>2nd and 26th</em></li>
+          <li><b>Consumer prices</b><span class="ftrack" aria-hidden="true"><b class="fspan" style="left:30%;width:20%"></b></span><em>10th&ndash;16th</em></li>
+          <li><b>Employment</b><span class="ftrack" aria-hidden="true"><b class="fspan" style="left:0%;width:20%"></b><b class="fspan" style="left:46.7%;width:20%"></b></span><em>the Friday in each window</em></li>
+          <li><b>Census ACS</b><span class="ftrack" aria-hidden="true"><i style="left:63.3%"></i></span><em>20th</em></li>
+          <li><b>CBP encounters</b><span class="ftrack" aria-hidden="true"><i style="left:80%"></i></span><em>25th</em></li>
+        </ul>
+      </div>
+    </div>
+    <p class="panel-note rv">Built and maintained in the open. The full source, the
+    data files and every revision are in the
+    <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub"
+       target="_blank" rel="noopener">GitHub repository</a>.</p>
+
+  </div>
+</main>
+<footer>
+  <div class="share-bar">
+    <span class="share-label">Share this data:</span>
+    <a class="share-btn x" href="#" onclick="shareOn('x');return false"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>Post</a>
+    <a class="share-btn fb" href="#" onclick="shareOn('fb');return false"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>Share</a>
+    <a class="share-btn li" href="#" onclick="shareOn('li');return false"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>Share</a>
+    <a class="share-btn rd" href="#" onclick="shareOn('rd');return false"><svg viewBox="0 0 24 24"><path d="M12 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 01-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 01.042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 014.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 01.14-.197.35.35 0 01.238-.042l2.906.617a1.214 1.214 0 011.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 00-.231.094.33.33 0 000 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 000-.462.342.342 0 00-.461 0c-.545.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 00-.206-.095z"/></svg>Post</a>
+    <a class="share-btn em" href="#" onclick="shareOn('em');return false"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg>Email</a>
+  </div>
+  <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub" target="_blank" rel="noopener">GitHub Repository</a><br>
+  <!-- No compiled-on month. Nothing refreshes this line, so it can only drift:
+       it read "April 2026" in August. Each dashboard carries its own source
+       vintage, which is the date that actually means something. -->
+  <span>Massachusetts Data Hub &middot; Compiled by Duncan Burns</span><br>
+  <span>All data from official government sources</span>
+</footer>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"}}
+</script>
+<script type="module">
+/* ===========================================================================
+   EFFECT 3 - DOMAIN-WARPED FLOW FIELD
+   One full-screen fragment shader. fbm warped by fbm warped again, evolving in
+   time, tinted on the instrument's ramp. The cursor bends the field.
+   ========================================================================= */
+import * as THREE from 'three';
+
+(function(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var cv = document.getElementById('flow');
+  if (!cv) return;
+
+  var renderer;
+  try{ renderer = new THREE.WebGLRenderer({canvas:cv, alpha:true, antialias:false}); }
+  catch(e){ return; }
+  renderer.setClearAlpha(0);
+
+  var U = {
+    uTime:{value:0}, uRes:{value:new THREE.Vector2(1,1)},
+    uMouse:{value:new THREE.Vector2(-9,-9)}, uForce:{value:0}, uStir:{value:0}
+  };
+
+  var mat = new THREE.ShaderMaterial({
+    uniforms:U, transparent:true, depthTest:false, depthWrite:false,
+    vertexShader:`void main(){ gl_Position = vec4(position.xy*2.0, 0.0, 1.0); }`,
+    fragmentShader:`
+      precision highp float;
+      uniform float uTime, uForce, uStir;
+      uniform vec2 uRes, uMouse;
+
+      float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
+      float vnoise(vec2 p){
+        vec2 i=floor(p), f=fract(p);
+        vec2 u=f*f*(3.0-2.0*f);
+        return mix(mix(hash(i),hash(i+vec2(1,0)),u.x),
+                   mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x),u.y);
+      }
+      float fbm(vec2 p){
+        float v=0.0, a=0.5;
+        for(int k=0;k<6;k++){ v+=a*vnoise(p); p=p*2.03+vec2(11.3,7.7); a*=0.5; }
+        return v;
+      }
+      /* the instrument's diverging ramp */
+      vec3 ramp(float t){
+        vec3 c0=vec3(0.071,0.275,0.498), c1=vec3(0.239,0.510,0.737),
+             c2=vec3(0.561,0.725,0.839), c3=vec3(0.812,0.780,0.706),
+             c4=vec3(0.949,0.651,0.353), c5=vec3(0.863,0.318,0.153),
+             c6=vec3(0.557,0.043,0.133);
+        float u=clamp(t,0.0,1.0)*6.0;
+        if(u<1.0)return mix(c0,c1,u);
+        if(u<2.0)return mix(c1,c2,u-1.0);
+        if(u<3.0)return mix(c2,c3,u-2.0);
+        if(u<4.0)return mix(c3,c4,u-3.0);
+        if(u<5.0)return mix(c4,c5,u-4.0);
+        return mix(c5,c6,u-5.0);
+      }
+
+      void main(){
+        vec2 uv = gl_FragCoord.xy / uRes;
+        vec2 p = uv * vec2(uRes.x/uRes.y, 1.0) * 2.4;
+        float t = uTime * (0.045 + uStir*0.16);
+
+        /* the cursor drags the field toward it */
+        vec2 mp = uMouse * vec2(uRes.x/uRes.y, 1.0) * 2.4;
+        vec2 toM = p - mp;
+        float md = length(toM);
+        p -= normalize(toM + 1e-5) * (uForce / (md*md + 0.35));
+
+        /* domain warping: fbm of an fbm of an fbm */
+        vec2 q = vec2(fbm(p + vec2(0.0, t)),
+                      fbm(p + vec2(5.2, 1.3) - t));
+        vec2 r = vec2(fbm(p + 3.4*q + vec2(1.7, 9.2) + t*0.7),
+                      fbm(p + 3.4*q + vec2(8.3, 2.8) - t*0.6));
+        float f = fbm(p + (3.2 + uStir*2.4)*r);
+
+        /* bands, so it reads as flow rather than as fog */
+        float band = fract(f*2.6 + t*1.4);
+        band = smoothstep(0.39, 0.52, band) * smoothstep(0.89, 0.58, band);
+
+        float shade = clamp(f*1.36 - 0.13, 0.0, 1.0);
+        vec3 col = ramp(shade);
+
+        float a = (band*0.52 + 0.075) * smoothstep(0.0, 0.35, f);
+        a *= 0.41;                                  /* it is a ground, not a subject */
+        gl_FragColor = vec4(col, a);
+      }`
+  });
+
+  var scene = new THREE.Scene();
+  var quad = new THREE.Mesh(new THREE.PlaneGeometry(2,2), mat);
+  quad.frustumCulled = false;
+  scene.add(quad);
+  var cam = new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+
+  function resize(){
+    var w = innerWidth, h = innerHeight;
+    renderer.setPixelRatio(Math.min(devicePixelRatio||1, 1.5));
+    renderer.setSize(w,h,false);
+    U.uRes.value.set(w * renderer.getPixelRatio(), h * renderer.getPixelRatio());
+  }
+  resize();
+  addEventListener('resize', resize, {passive:true});
+
+  /* scroll velocity stirs the field and it settles when you stop */
+  var lastY = scrollY, vel = 0;
+  addEventListener('scroll', function(){
+    vel = Math.min(1.0, Math.abs(scrollY - lastY) / 90);
+    lastY = scrollY;
+  }, {passive:true});
+
+  var want = 0;
+  addEventListener('pointermove', function(e){
+    U.uMouse.value.set(e.clientX/innerWidth, 1 - e.clientY/innerHeight);
+    want = 0.55;
+  }, {passive:true});
+  addEventListener('pointerleave', function(){ want = 0; }, {passive:true});
+
+  var hidden = false;
+  document.addEventListener('visibilitychange', function(){ hidden = document.hidden; });
+
+  var clock = new THREE.Clock(), first = true, frames = 0;
+  (function loop(){
+    requestAnimationFrame(loop);
+    if (hidden) return;
+    var dt = Math.min(clock.getDelta(), 0.05);
+    U.uTime.value += dt;
+    U.uForce.value += (want - U.uForce.value) * Math.min(1, dt*3);
+    U.uStir.value += (vel - U.uStir.value) * Math.min(1, dt*2.2);
+    vel *= 0.90;
+    renderer.render(scene, cam);
+    frames++;
+    if (first){ first = false; cv.classList.add('on'); }
+  })();
+
+  window.__FLOW = { info:function(){ return {frames:frames, on:cv.classList.contains('on'),
+                     size:U.uRes.value.x+'x'+U.uRes.value.y}; } };
+})();
+</script>
+
+<!-- == about:js start == -->
+<div class="lbox" id="lbox" hidden aria-hidden="true" role="dialog" aria-modal="true"
+     aria-label="Portrait of Duncan Burns">
+  <button class="lbox-x" type="button" aria-label="Close">&times;</button>
+  <img src="assets/duncan-burns.jpg" width="400" height="400" alt="Duncan Burns">
+</div>
+<script>
+/* The portrait is a real link to the file, so with scripting off a click still
+   opens the image. Here that is intercepted and shown in place instead. The
+   source is 400px square and the panel is capped there, so it is never upscaled. */
+(function(){
+  var link = document.querySelector('.abio-facelink');
+  var box  = document.getElementById('lbox');
+  if (!link || !box) return;
+  var last = null;
+
+  function open(e){
+    e.preventDefault();
+    last = document.activeElement;
+    box.hidden = false;
+    box.setAttribute('aria-hidden', 'false');
+    requestAnimationFrame(function(){ box.classList.add('on'); });
+    box.querySelector('.lbox-x').focus();
+    document.body.style.overflow = 'hidden';
+  }
+  function close(){
+    box.classList.remove('on');
+    box.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    setTimeout(function(){ box.hidden = true; }, 200);
+    if (last) last.focus();
+  }
+  link.addEventListener('click', open);
+  box.addEventListener('click', function(e){
+    if (e.target === box || e.target.classList.contains('lbox-x')) close();
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && !box.hidden) close();
+  });
+})();
+</script>
+<script>
+/* Sections arrive as you reach them, staggered, matching the front page. Anything
+   already on screen at load is shown immediately rather than fading in under the
+   reader. */
+(function(){
+  var els = [].slice.call(document.querySelectorAll('.rv'));
+  if (!els.length) return;
+  if (!('IntersectionObserver' in window) ||
+      matchMedia('(prefers-reduced-motion: reduce)').matches){
+    els.forEach(function(e){ e.classList.add('vis'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(rows){
+    rows.forEach(function(r, i){
+      if (!r.isIntersecting) return;
+      var el = r.target;
+      setTimeout(function(){ el.classList.add('vis'); }, i * 70);
+      io.unobserve(el);
+    });
+  }, {rootMargin: '0px 0px -8% 0px', threshold: 0.06});
+  els.forEach(function(e){
+    if (e.getBoundingClientRect().top < innerHeight) e.classList.add('vis');
+    else io.observe(e);
+  });
+  setTimeout(function(){ els.forEach(function(e){ e.classList.add('vis'); }); }, 6000);
+})();
+</script>
+<!-- == about:js end == -->
+</body>
+</html>

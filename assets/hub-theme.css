@@ -1,0 +1,150 @@
+/* ============================================================================
+   Massachusetts Data Hub — shared theme
+   ----------------------------------------------------------------------------
+   Loaded AFTER each dashboard's own <style>. It does not restyle anything: it
+   redefines the custom properties those dashboards already use, so the change
+   cascades everywhere the tokens are referenced with no specificity fights and
+   no risk to their layout, charts or content.
+
+   Measured before writing: tax-burden routes 180 colour uses through var() vs 7
+   raw hex, healthcare 91 vs 3, energy 156 vs 24. Two files are the exception —
+   ma-housing (66 vs 54) and index (19 vs 32) — and need hand-work on top.
+
+   Palette is the three OFFICIAL Massachusetts colours (Bay Blue, Berkshire
+   Green, Cranberry) plus the neutral slate ground used by the instrument.
+   Type is Adobe Fonts kit irk1bar: Halyard Display / Text + IBM Plex Mono.
+   ========================================================================== */
+
+:root{
+  /* --- official state palette ------------------------------------------- */
+  --bay:#14558F;          /* Cape Cod Bay      */
+  --berk:#388557;         /* the Berkshires    */
+  --cran:#680A1D;         /* the cranberry     */
+  --berk-ink:#2A6B44;     /* same green at 5.3:1 — the official one fails as text */
+
+  /* --- ground and surfaces ---------------------------------------------- */
+  --bg:#E9EBEA;
+  --card:#FFFFFF;
+  --border:#CDD3D1;
+  --rule:#CDD3D1;
+  --paper:#E9EBEA;
+  --text:#0B1113;
+  --ink:#0B1113;
+  --slate:#3E4A4D;
+  --muted:#5A6467;
+
+  /* --- the tokens the dashboards already reference, remapped ------------- */
+  --navy:#14558F;
+  --blue:#14558F;
+  --ma:#14558F;
+  --accent:#680A1D;
+  --oxblood:#680A1D;
+  --red:#A81733;
+  --nh:#A81733;
+  --green:#2A6B44;
+  --ledger:#2A6B44;
+  --amber:#B07C20;
+  --gold:#B07C20;
+  --purple:#46527A;
+  --dust:#C99C99;
+
+  /* tints — kept at the same low alpha the dashboards expect */
+  --red-bg:rgba(168,23,51,.06);
+  --green-bg:rgba(42,107,68,.06);
+  --blue-bg:rgba(20,85,143,.06);
+  --amber-bg:rgba(176,124,32,.06);
+  --purple-bg:rgba(70,82,122,.06);
+
+  /* --- type -------------------------------------------------------------- */
+  --font-display:'halyard-display',system-ui,sans-serif;
+  --font-text:'halyard-text',system-ui,sans-serif;
+  --font-mono:'ibm-plex-mono',ui-monospace,SFMono-Regular,monospace;
+}
+
+/* The dashboards set font-family in class-scoped rules ('.hero h1{...}'), which
+   outrank bare element selectors, so the first pass changed the body text and
+   left every serif heading untouched. A theme layer is the one legitimate case
+   for !important: it is a deliberate override of the sheet above it, and it is
+   scoped to font-family alone so nothing else in their CSS is disturbed.
+   Order matters below — mono is declared last so figures win over body text. */
+:where(html) body,p,li,td,th,label,button,input,select,textarea,
+nav,summary,blockquote,figcaption{
+  font-family:var(--font-text)!important;
+}
+h1,h2,h3,h4,h5,h6,.section-title,.summary-title,.vs-col h3,.verdict h3{
+  font-family:var(--font-display)!important;
+  letter-spacing:-.02em;
+}
+/* Every measured figure is monospaced. These are the ACTUAL class names carrying
+   the serif, read out of the dashboards' own CSS rather than guessed at - a first
+   pass at [class*="kpi"] / [class*="num"] matched nothing, because the real names
+   are .val, .value, .tn, .mv, .num. Declared last so figures beat body text. */
+code,pre,.mono,
+.hero-stat .val,.stat-card .value,.vs-total .tn,.cmp-num,.tl-date,
+.expose-card .num,.equiv-hero .big-price,.metric-card .mv,
+.hs-val,.card-val,.summary-val,.afford-stat-val{
+  font-family:var(--font-mono)!important;
+  font-variant-numeric:tabular-nums;
+  letter-spacing:-.03em;
+}
+
+/* The heroes moved from near-black navy (#0f2942) to Bay Blue (#14558F), which is
+   far lighter. White text at 0.35-0.5 alpha read fine against the old ground and
+   fails against the new one - .hero-date was landing near 2:1. Floor the faint
+   text that sits on a hero; it is a contrast regression the recolour introduced,
+   not a design choice. */
+.hero-date,.hero-sub,.hero-badge,.hero-note,
+[class*="hero"] [class*="-sub"],[class*="hero"] [class*="-date"],
+[class*="hero"] [class*="-note"],[class*="hero"] [class*="-label"]{
+  color:rgba(255,255,255,.82)!important;
+}
+
+/* Some dashboards carry their own "TEMPLATE LAYOUT OVERRIDES" block with
+   font-family ... !important on class selectors, which outranks a bare
+   h1{...!important}. Prefixing with `html` lifts specificity above theirs
+   without resorting to anything uglier. Also covers ApexCharts, which a few
+   pages use instead of Chart.js and which styles its own labels. */
+html .hero-headline h1,html .section-title,html .summary-title,
+html .vs-col h3,html .verdict h3{
+  font-family:var(--font-display)!important;
+}
+html body,html .nav-btn,
+html .apexcharts-legend-text,html .apexcharts-tooltip-title,
+html .apexcharts-xaxis-label,html .apexcharts-yaxis-label{
+  font-family:var(--font-text)!important;
+}
+html .hs-val,html .card-val,html .summary-val,html .afford-stat-val,
+html .apexcharts-datalabel,html .apexcharts-datalabel-value{
+  font-family:var(--font-mono)!important;
+  font-variant-numeric:tabular-nums;
+}
+
+/* ---- semantic colour inside a dark hero -------------------------------
+   The up/down colours and --muted are INK-dark by design: they are built for
+   the light body. The heroes are Bay Blue, so on them cranberry reads as
+   near-black on dark and Berkshire Green disappears entirely - the deltas under
+   the hero figures were effectively invisible.
+   Light variants, checked against #14558F: #8FD9AE = 4.5:1, #FFB3BE = 4.5:1. */
+[class*="hero"] .hs-n .up,[class*="hero"] .hs-n .pos,[class*="hero"] .hs-n .good,
+[class*="hero"] [class*="-note"] .up,[class*="hero"] [class*="-sub"] .up{
+  color:#8FD9AE!important;
+}
+[class*="hero"] .hs-n .dn,[class*="hero"] .hs-n .down,[class*="hero"] .hs-n .neg,
+[class*="hero"] .hs-n .bad,[class*="hero"] [class*="-note"] .dn,
+[class*="hero"] [class*="-sub"] .dn{
+  color:#FFB3BE!important;
+}
+/* Scoped to the delta line only. A broader [class*="hero"] .up/.dn also caught
+   the KPI values themselves and turned them green and pink - the values carry
+   the same sign classes and must keep their own colour. */
+/* muted body-grey is unreadable on the hero for the same reason */
+[class*="hero"] .hs-n,[class*="hero"] .hs-l,[class*="hero"] .hs-supply,
+[class*="hero"] [class*="-note"],[class*="hero"] [class*="-cap"]{
+  color:rgba(255,255,255,.74)!important;
+}
+
+/* haverhill carries its own TEMPLATE LAYOUT OVERRIDES block, like ma-housing */
+html .hero h1,html .sec-t,html .tog{font-family:var(--font-display)!important}
+html .hs-v,html .cv,html .comp-iv{
+  font-family:var(--font-mono)!important;font-variant-numeric:tabular-nums;
+}

@@ -16,9 +16,11 @@
   <meta name="twitter:description" content="Residential electricity rates, energy costs, and utility data for Massachusetts — EIA and official government sources.">
   <meta name="twitter:image" content="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/og-image.png">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="canonical" href="https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/energy-dashboard.html">
 <title>Massachusetts Energy Policy & Costs</title>
+<meta name="description" content="Why Massachusetts electricity costs what it does: the RGGI carbon tax, the mandates behind the charges, how the state compares with its neighbours, and where the money goes.">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha384-bs/nf9FbdNouRbMiFcrcZfLXYPKiPaGVGplVbv7dLGECccEXDW+S3zjqSKR5ZEaD" crossorigin="anonymous"></script>
 <style>
 :root{--bg:#f8f7f4;--card:#ffffff;--border:#e8e5df;--text:#1a1a1a;--muted:#7a756e;--red:#c0392b;--red-bg:rgba(192,57,43,0.06);--green:#1a7a4c;--green-bg:rgba(26,122,76,0.06);--blue:#1a4480;--blue-bg:rgba(26,68,128,0.06);--amber:#b8860b;--amber-bg:rgba(184,134,11,0.06);--purple:#7e22ce;--purple-bg:rgba(126,34,206,0.06);--accent:#8b1a1a;--gold:#c9a84c;--navy:#0f2942}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -31,7 +33,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .hero-stat{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:14px 8px;text-align:center;backdrop-filter:blur(4px);transition:background 0.3s}
 .hero-stat:hover{background:rgba(255,255,255,0.1)}
 .hero-stat .val{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.1rem,2.5vw,1.6rem);font-weight:400}
-.hero-stat .lbl{font-size:0.6rem;opacity:0.55;margin-top:3px;text-transform:uppercase;letter-spacing:0.08em;font-weight:500}
+.hero-stat .lbl{font-size:0.6875rem;opacity:0.55;margin-top:3px;text-transform:uppercase;letter-spacing:0.08em;font-weight:500}
 .hero-stat .val.bad{color:#e8a87c}.hero-stat .val.good{color:#7fd8a6}
 .tab-nav{display:flex;justify-content:center;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
 .tab-btn{padding:13px 16px;font-size:0.72rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.25s;text-transform:uppercase;letter-spacing:0.05em}
@@ -45,10 +47,10 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:22px}
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.03);transition:box-shadow 0.3s,transform 0.3s}
 .stat-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.07);transform:translateY(-2px)}
-.stat-card .label{font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px}
+.stat-card .label{font-size:0.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px}
 .stat-card .value{font-family:'DM Serif Display',Georgia,serif;font-size:1.8rem;font-weight:400;line-height:1.1}
 .stat-card .value.red{color:var(--red)}.stat-card .value.green{color:var(--green)}.stat-card .value.blue{color:var(--blue)}.stat-card .value.amber{color:var(--amber)}.stat-card .value.purple{color:var(--purple)}
-.stat-card .sub{font-size:0.68rem;color:var(--muted);margin-top:4px}
+.stat-card .sub{font-size:0.6875rem;color:var(--muted);margin-top:4px}
 .alert{background:var(--red-bg);border:1px solid rgba(192,57,43,0.15);border-radius:12px;padding:20px;margin-bottom:22px;border-left:4px solid var(--red)}
 .alert.blue{background:var(--blue-bg);border-color:rgba(26,68,128,0.15);border-left-color:var(--blue)}
 .alert.amber{background:var(--amber-bg);border-color:rgba(184,134,11,0.2);border-left-color:var(--amber)}
@@ -65,7 +67,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .data-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:22px;overflow-x:auto;box-shadow:0 1px 3px rgba(0,0,0,0.03)}
 .data-card h3{font-size:0.85rem;font-weight:700;margin-bottom:12px;color:var(--navy)}
 .data-table{width:100%;border-collapse:collapse;font-size:0.78rem}
-.data-table th{text-align:left;padding:9px 12px;border-bottom:2px solid var(--navy);font-weight:700;color:var(--navy);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em}
+.data-table th{text-align:left;padding:9px 12px;border-bottom:2px solid var(--navy);font-weight:700;color:var(--navy);font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.08em}
 .data-table td{padding:9px 12px;border-bottom:1px solid var(--border)}
 .data-table tr:hover{background:rgba(15,41,66,0.02)}
 .data-table .highlight{color:var(--red);font-weight:700}.data-table .good{color:var(--green);font-weight:600}.data-table .amber{color:var(--amber);font-weight:600}
@@ -74,7 +76,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .info-box p{font-size:0.78rem;color:var(--text);line-height:1.65}
 .info-box.amber{background:var(--amber-bg);border-left-color:var(--amber)}.info-box.amber h4{color:var(--amber)}
 .info-box.red{background:var(--red-bg);border-left-color:var(--red)}.info-box.red h4{color:var(--red)}
-.source{font-size:0.65rem;color:var(--muted);margin-top:6px;font-style:italic}
+.source{font-size:0.6875rem;color:var(--muted);margin-top:6px;font-style:italic}
 .vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
 .vs-col h3{font-family:'DM Serif Display',Georgia,serif;font-size:1rem;margin-bottom:10px;padding-bottom:6px;border-bottom:3px solid}
 .vs-col.cut h3{color:var(--green);border-color:var(--green)}.vs-col.kept h3{color:var(--red);border-color:var(--red)}
@@ -84,13 +86,13 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .vs-total{text-align:center;margin-top:8px;padding:14px;border-radius:10px}
 .vs-total.ct{background:var(--green-bg);border:2px solid var(--green)}.vs-total.kt{background:var(--red-bg);border:2px solid var(--red)}
 .vs-total .tn{font-family:'DM Serif Display',Georgia,serif;font-size:2rem}
-.vs-total .tl{font-size:0.65rem;font-weight:600;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:2px}
+.vs-total .tl{font-size:0.6875rem;font-weight:600;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:2px}
 .cmp-grid{display:grid;gap:10px;margin:16px 0}
 .cmp-row{background:var(--card);border-radius:10px;padding:14px;border:1px solid var(--border);display:grid;grid-template-columns:1fr auto 1fr auto;align-items:center;gap:12px;box-shadow:0 1px 2px rgba(0,0,0,0.03)}
 .cmp-side{text-align:center}
 .cmp-num{font-family:'DM Serif Display',Georgia,serif;font-size:1.8rem;line-height:1}.cmp-num.red{color:var(--red)}.cmp-num.blue{color:var(--blue)}
 .cmp-vs{font-family:'DM Serif Display',Georgia,serif;font-size:0.9rem;color:var(--muted)}
-.cmp-tag{font-size:0.68rem;color:var(--red);font-weight:700;text-align:right;background:var(--red-bg);padding:3px 10px;border-radius:20px;letter-spacing:0.03em}
+.cmp-tag{font-size:0.6875rem;color:var(--red);font-weight:700;text-align:right;background:var(--red-bg);padding:3px 10px;border-radius:20px;letter-spacing:0.03em}
 .tl-wrap{position:relative;padding-left:28px;margin:16px 0}
 .tl-wrap::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:3px;background:linear-gradient(var(--red),var(--blue),var(--red));border-radius:2px}
 .tl-i{position:relative;margin-bottom:20px}
@@ -105,7 +107,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .b-item.hot{border-color:var(--red);color:var(--text);background:var(--red-bg)}
 .quote-block{background:var(--blue-bg);border-left:4px solid var(--blue);border-radius:0 10px 10px 0;padding:14px 16px;margin:14px 0;font-size:0.85rem;font-style:italic;color:var(--text);line-height:1.55}
 .quote-block.red{background:var(--red-bg);border-left-color:var(--red)}.quote-block.purple{background:var(--purple-bg);border-left-color:var(--purple)}
-.quote-block cite{display:block;font-size:0.65rem;font-style:normal;font-weight:700;color:var(--muted);margin-top:6px;letter-spacing:0.06em;text-transform:uppercase}
+.quote-block cite{display:block;font-size:0.6875rem;font-style:normal;font-weight:700;color:var(--muted);margin-top:6px;letter-spacing:0.06em;text-transform:uppercase}
 .verdict{border-radius:10px;padding:18px 20px;text-align:center;margin:16px 0}
 .verdict.red{background:linear-gradient(135deg,#7f1d1d,#991b1b);color:#fff}
 .verdict.blue{background:linear-gradient(135deg,var(--navy),#1a4480);color:#fff}
@@ -123,8 +125,8 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .hyp-chain{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;text-align:center;margin:6px 0}
 .hyp-step{border-radius:8px;padding:10px 6px}
 .hyp-step.r{background:var(--red-bg);border:1px solid rgba(192,57,43,0.15)}.hyp-step.b{background:var(--blue-bg);border:1px solid rgba(26,68,128,0.15)}.hyp-step.p{background:var(--purple-bg);border:1px solid rgba(126,34,206,0.15)}
-.hyp-step .st{font-size:0.68rem;font-weight:700}.hyp-step.r .st{color:var(--red)}.hyp-step.b .st{color:var(--blue)}.hyp-step.p .st{color:var(--purple)}
-.hyp-step .sd{font-size:0.58rem;color:var(--muted);margin-top:2px}
+.hyp-step .st{font-size:0.6875rem;font-weight:700}.hyp-step.r .st{color:var(--red)}.hyp-step.b .st{color:var(--blue)}.hyp-step.p .st{color:var(--purple)}
+.hyp-step .sd{font-size:0.6875rem;color:var(--muted);margin-top:2px}
 .hyp-arrow{display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--muted)}
 .nc{background:var(--red-bg);border:1px solid rgba(192,57,43,0.15);border-radius:10px;padding:16px;margin:14px 0;border-left:4px solid var(--red)}
 .nc-title{font-size:0.82rem;color:var(--red);margin-bottom:10px;font-weight:700}
@@ -168,7 +170,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .metric-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
 .metric-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 12px;text-align:center}
 .metric-card .mv{font-family:'DM Serif Display',Georgia,serif;font-size:1.6rem;line-height:1.1}
-.metric-card .ml{font-size:0.65rem;color:var(--muted);margin-top:4px;line-height:1.35;text-transform:uppercase;letter-spacing:0.05em;font-weight:600}
+.metric-card .ml{font-size:0.6875rem;color:var(--muted);margin-top:4px;line-height:1.35;text-transform:uppercase;letter-spacing:0.05em;font-weight:600}
 .outrage-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
 .outrage-bar-wrap{margin-bottom:10px}
 .outrage-bar-label{display:flex;justify-content:space-between;margin-bottom:5px;font-size:0.75rem}
@@ -178,9 +180,9 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 .legal-chain{display:flex;align-items:stretch;gap:0;margin:16px 0;overflow-x:auto}
 .lc-step{background:var(--navy);color:#fff;padding:14px 16px;flex:1;min-width:120px;position:relative;text-align:center}
 .lc-step:not(:last-child)::after{content:'▶';position:absolute;right:-10px;top:50%;transform:translateY(-50%);color:var(--gold);font-size:0.9rem;z-index:2;background:var(--bg);padding:2px 0}
-.lc-step .lc-cite{font-family:monospace;font-size:0.6rem;color:var(--gold);font-weight:700;letter-spacing:0.04em;margin-bottom:4px}
-.lc-step .lc-name{font-size:0.68rem;font-weight:600;opacity:0.9;line-height:1.3}
-.lc-step .lc-year{font-size:0.6rem;opacity:0.5;margin-top:3px}
+.lc-step .lc-cite{font-family:monospace;font-size:0.6875rem;color:var(--gold);font-weight:700;letter-spacing:0.04em;margin-bottom:4px}
+.lc-step .lc-name{font-size:0.6875rem;font-weight:600;opacity:0.9;line-height:1.3}
+.lc-step .lc-year{font-size:0.6875rem;opacity:0.5;margin-top:3px}
 .lc-step:first-child{border-radius:8px 0 0 8px}.lc-step:last-child{border-radius:0 8px 8px 0;background:var(--red)}
 .vote-row-pass{background:rgba(192,57,43,0.06)}.vote-row-pass td:last-child{color:var(--red);font-weight:700}
 footer{text-align:center;padding:32px 24px;color:var(--muted);font-size:0.72rem;border-top:1px solid var(--border);background:#fff;margin-top:30px}
@@ -188,8 +190,12 @@ footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1p
 footer a:hover{color:var(--gold)}
 @media(max-width:900px){.equiv-hero{grid-template-columns:1fr}.equiv-gauge{height:220px}.outrage-grid{grid-template-columns:1fr}.legal-chain{flex-direction:column}.lc-step:not(:last-child)::after{content:'▼';right:auto;left:50%;bottom:-12px;top:auto;transform:translateX(-50%)}.lc-step{border-radius:8px!important}}
 @media(max-width:768px){.hero-stats{grid-template-columns:repeat(3,1fr)}.chart-grid{grid-template-columns:1fr}.stat-row{grid-template-columns:repeat(2,1fr)}.hero{padding:32px 16px 26px}.container{padding:16px}.vs-grid{grid-template-columns:1fr}.cmp-row{grid-template-columns:1fr auto 1fr;gap:8px}.cmp-tag{grid-column:1/-1;text-align:center}.expose-grid{grid-template-columns:1fr}.donut-grid{grid-template-columns:1fr}.buried{grid-template-columns:1fr 1fr}.hyp-chain{grid-template-columns:1fr}.hyp-arrow{transform:rotate(90deg)}.metric-trio{grid-template-columns:1fr 1fr}}
-@media(max-width:480px){.hero-stats{grid-template-columns:repeat(2,1fr)}.stat-row{grid-template-columns:1fr}.tab-btn{padding:10px 10px;font-size:0.65rem}.equiv-hero .big-price{font-size:3.5rem}.metric-trio{grid-template-columns:1fr}}
+@media(max-width:480px){.hero-stats{grid-template-columns:repeat(2,1fr)}.stat-row{grid-template-columns:1fr}.tab-btn{padding:10px 10px;font-size:0.6875rem}.equiv-hero .big-price{font-size:3.5rem}.metric-trio{grid-template-columns:1fr}}
 </style>
+<!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+
 </head>
 <body>
 <div class="hero">
@@ -675,10 +681,10 @@ footer a:hover{color:var(--gold)}
 <div style="font-size:0.95rem;opacity:0.85;margin-bottom:20px;line-height:1.65;max-width:380px">MA utility mandates cost the average household <strong style="color:#fca5a5"><span id="equivTotalPremium">&#x2014;</span>/yr</strong> more than the US average. To generate that same extra burden through gasoline alone (<span id="equivGallonsYr">&#x2014;</span> gal/yr), prices would need to reach:</div>
 <div class="big-price"><span id="equivBigPrice">&#x2014;</span></div>
 <div class="sub-price">per gallon</div>
-<div style="margin-top:16px;font-size:0.8rem;opacity:0.7;line-height:1.6"><span id="equivPctAbove">&#x2014;</span> above today's MA price of <span id="equivGasToday">&#x2014;</span><br><span id="equivVsRecord">&#x2014;</span> the <strong style="color:#fbbf24">all-time MA record</strong> of <span id="equivRecord">&#x2014;</span> (<span id="equivRecordWhen">&#x2014;</span>)</div>
+<div style="margin-top:16px;font-size:0.8rem;opacity:0.7;line-height:1.6"><span id="equivPctAbove">&#x2014;</span> above today's MA price of <span id="equivGasToday">&#x2014;</span><br><span id="equivVsRecord">&#x2014;</span> the <strong style="color:#D9B441">all-time MA record</strong> of <span id="equivRecord">&#x2014;</span> (<span id="equivRecordWhen">&#x2014;</span>)</div>
 </div>
 <div>
-<div style="font-size:0.65rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;font-family:monospace">PRICE GAUGE &#x2014; $/GALLON &#x00B7; SCALE: $0&#x2013;<span id="equivScaleHi2">&#x2014;</span></div>
+<div style="font-size:0.6875rem;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;font-family:monospace">PRICE GAUGE &#x2014; $/GALLON &#x00B7; SCALE: $0&#x2013;<span id="equivScaleHi2">&#x2014;</span></div>
 <div class="equiv-gauge" id="gaugeContainer"></div>
 </div>
 </div>
@@ -691,8 +697,8 @@ footer a:hover{color:var(--gold)}
 <div class="data-card" style="margin-bottom:0">
 <h3>The <span id="equivBreakdownTotal">&#x2014;</span>/Gal Breakdown</h3>
 <p style="font-size:0.72rem;color:var(--muted);margin-bottom:16px">Where each cent of the equivalence comes from</p>
-<div class="breakdown-item elec"><div style="display:flex;justify-content:space-between"><div style="font-size:0.78rem;font-weight:600">&#x26A1; Electricity mandate premium</div><div style="font-family:monospace;color:var(--red);font-weight:700;font-size:1rem"><span id="equivElecPerGal">&#x2014;</span></div></div><div style="font-size:0.68rem;color:var(--muted);margin-top:4px"><span id="equivElecSrc">&#x2014;</span></div><div class="equiv-prog"><div class="equiv-prog-fill" id="equivElecBar" style="background:var(--red)"></div></div></div>
-<div class="breakdown-item gas"><div style="display:flex;justify-content:space-between"><div style="font-size:0.78rem;font-weight:600">&#x1F525; Natural gas pipeline/mandate premium</div><div style="font-family:monospace;color:var(--amber);font-weight:700;font-size:1rem"><span id="equivNgPerGal">&#x2014;</span></div></div><div style="font-size:0.68rem;color:var(--muted);margin-top:4px"><span id="equivNgSrc">&#x2014;</span></div><div class="equiv-prog"><div class="equiv-prog-fill" id="equivNgBar" style="background:var(--amber)"></div></div></div>
+<div class="breakdown-item elec"><div style="display:flex;justify-content:space-between"><div style="font-size:0.78rem;font-weight:600">&#x26A1; Electricity mandate premium</div><div style="font-family:monospace;color:var(--red);font-weight:700;font-size:1rem"><span id="equivElecPerGal">&#x2014;</span></div></div><div style="font-size:0.6875rem;color:var(--muted);margin-top:4px"><span id="equivElecSrc">&#x2014;</span></div><div class="equiv-prog"><div class="equiv-prog-fill" id="equivElecBar" style="background:var(--red)"></div></div></div>
+<div class="breakdown-item gas"><div style="display:flex;justify-content:space-between"><div style="font-size:0.78rem;font-weight:600">&#x1F525; Natural gas pipeline/mandate premium</div><div style="font-family:monospace;color:var(--amber);font-weight:700;font-size:1rem"><span id="equivNgPerGal">&#x2014;</span></div></div><div style="font-size:0.6875rem;color:var(--muted);margin-top:4px"><span id="equivNgSrc">&#x2014;</span></div><div class="equiv-prog"><div class="equiv-prog-fill" id="equivNgBar" style="background:var(--amber)"></div></div></div>
 <div style="border-top:2px solid var(--navy);padding-top:12px;margin-top:8px;display:flex;justify-content:space-between;align-items:center"><div style="font-size:0.78rem;color:var(--muted)">Total rise needed from today's <span id="equivRiseFrom">&#x2014;</span></div><div style="font-family:monospace;color:var(--red);font-weight:700;font-size:1.2rem"><span id="equivRise">&#x2014;</span></div></div>
 </div>
 <div class="data-card" style="margin-bottom:0">
@@ -857,7 +863,7 @@ function switchTab(id,btn){
   btn.classList.add('active');
   initCharts(id);
 }
-const C={red:'#c0392b',red2:'rgba(192,57,43,0.15)',green:'#1a7a4c',green2:'rgba(26,122,76,0.12)',blue:'#1a4480',blue2:'rgba(26,68,128,0.12)',amber:'#b8860b',amber2:'rgba(184,134,11,0.12)',navy:'#0f2942',gold:'#c9a84c',muted:'#7a756e',bg:'#f8f7f4'};
+const C={red:'#A81733',red2:'rgba(168,23,51,0.15)',green:'#2A6B44',green2:'rgba(42,107,68,0.12)',blue:'#14558F',blue2:'rgba(20,85,143,0.12)',amber:'#B07C20',amber2:'rgba(176,124,32,0.12)',navy:'#14558F',gold:'#B07C20',muted:'#5A6467',bg:'#E9EBEA'};
 const YEARS = ['2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'];
 // Fuel series are annual averages of EIA's own weekly retail workbooks, written
 // by update-fuel-prices.py. They were hand-typed until 2026-08 and every one of
@@ -1146,11 +1152,11 @@ function tinyOpts(){ return {plugins:{legend:{display:false}},scales:{x:{ticks:{
 function initCharts(tab){
   if(tab==='overview'){
     safeChart('chartRatesOverview',{type:'bar',data:{labels:['MA','CT','NY','RI','US Avg','TX','FL'],datasets:[{data:[28.82,27.37,29.93,29.46,18.44,16.44,15.17],backgroundColor:(ctx)=>{const v=ctx.parsed.y;return v>20?C.red:v<18?C.green:C.amber;},borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+'¢/kWh'}}}}});
-    safeChart('chartRateHistory',{type:'line',data:{labels:YEARS,datasets:[{label:'MA Premium %',data:ELEC_MA.map((m,i)=>+((m/ELEC_US[i]-1)*100).toFixed(1)),borderColor:C.red,backgroundColor:'rgba(192,57,43,0.08)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'+'+c.parsed.y+'% above US avg'}}}}});
+    safeChart('chartRateHistory',{type:'line',data:{labels:YEARS,datasets:[{label:'MA Premium %',data:ELEC_MA.map((m,i)=>+((m/ELEC_US[i]-1)*100).toFixed(1)),borderColor:C.red,backgroundColor:'rgba(168,23,51,0.08)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'+'+c.parsed.y+'% above US avg'}}}}});
   }
   if(tab==='rates'){
-    safeChart('chartBillBreak',{type:'doughnut',data:{labels:['Supply (~40%)','Distribution (~30%)','Renewable/RPS (~10%)','Energy Efficiency (~7%)','Transition (~8%)','RGGI/Other (~5%)'],datasets:[{data:[40,30,10,7,8,5],backgroundColor:[C.blue,C.navy,C.red,C.amber,'#7e22ce','#374151'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:10}}}}});
-    safeChart('chartGapTime',{type:'line',data:{labels:YEARS,datasets:[{label:'MA (¢/kWh)',data:ELEC_MA,borderColor:C.red,backgroundColor:'rgba(192,57,43,0.08)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:3},{label:'US Avg (¢/kWh)',data:ELEC_US,borderColor:C.green,borderWidth:2,tension:0.4,pointRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:true,labels:{font:{size:9}}}}}});
+    safeChart('chartBillBreak',{type:'doughnut',data:{labels:['Supply (~40%)','Distribution (~30%)','Renewable/RPS (~10%)','Energy Efficiency (~7%)','Transition (~8%)','RGGI/Other (~5%)'],datasets:[{data:[40,30,10,7,8,5],backgroundColor:[C.blue,C.navy,C.red,C.amber,'#46527A','#3E4A4D'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:10}}}}});
+    safeChart('chartGapTime',{type:'line',data:{labels:YEARS,datasets:[{label:'MA (¢/kWh)',data:ELEC_MA,borderColor:C.red,backgroundColor:'rgba(168,23,51,0.08)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:3},{label:'US Avg (¢/kWh)',data:ELEC_US,borderColor:C.green,borderWidth:2,tension:0.4,pointRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:true,labels:{font:{size:9}}}}}});
   }
   if(tab==='legislation'){
     // Bar 1 reads OVERPAY rather than a literal: this chart plotted a frozen $922
@@ -1158,9 +1164,9 @@ function initCharts(tab){
     safeChart('c1a',{type:'bar',data:{labels:['Annual Overpayment','Their Claim','Realistic Relief'],datasets:[{data:[OVERPAY,310,RELIEF_HH],backgroundColor:[C.red,C.blue,C.green],borderRadius:5}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/yr'}}}}});
     safeChart('c1b',{type:'bar',data:{labels:['Mass Save Cut','ACP Rebates','Net Metering','New Wind Cost','New Solar Cost','Procurement Fund'],datasets:[{label:'Savings',data:[80,40,30,0,0,0],backgroundColor:C.green,borderRadius:4},{label:'Added Cost',data:[0,0,0,-120,-80,-60],backgroundColor:C.red,borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:true,labels:{font:{size:9}}}}}});
     const billBase={labels:['Supply','Distribution','Renewable','Energy Eff.','Transition','RGGI'],vals:[74,55.5,18.5,12.95,14.8,9.25]};
-    safeChart('c4a',{type:'doughnut',data:{labels:billBase.labels,datasets:[{data:billBase.vals,backgroundColor:[C.blue,C.navy,C.red,C.amber,'#7e22ce','#374151'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:8}}}}});
+    safeChart('c4a',{type:'doughnut',data:{labels:billBase.labels,datasets:[{data:billBase.vals,backgroundColor:[C.blue,C.navy,C.red,C.amber,'#46527A','#3E4A4D'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:8}}}}});
     const billAfter={labels:['Supply','Distribution','Renewable (↓)','Energy Eff. (↓)','Transition','RGGI'],vals:[65,55.5,16,11,14.8,9.25]};
-    safeChart('c4b',{type:'doughnut',data:{labels:billAfter.labels,datasets:[{data:billAfter.vals,backgroundColor:[C.blue,C.navy,C.red,C.amber,'#7e22ce','#374151'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:8}}}}});
+    safeChart('c4b',{type:'doughnut',data:{labels:billAfter.labels,datasets:[{data:billAfter.vals,backgroundColor:[C.blue,C.navy,C.red,C.amber,'#46527A','#3E4A4D'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:8}}}}});
     safeChart('c4c',{type:'bar',data:{labels:['MA','CT','NY','RI','US Avg','TX','FL'],datasets:[{data:[187,170,180,177,105,93,95],backgroundColor:(ctx)=>{const v=ctx.parsed.y;return v>150?C.red:v<110?C.green:C.amber;},borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/mo @ 600 kWh'}}}}});
   }
   if(tab==='cutkept'){
@@ -1179,10 +1185,10 @@ function initCharts(tab){
   }
   if(tab==='transparency'){ /* no charts to init */ }
   if(tab==='gasvsutil'){
-    safeChart('chartGasMA',{type:'line',data:{labels:YEARS,datasets:[{label:'MA Gas',data:GAS_MA,borderColor:C.red,backgroundColor:'rgba(192,57,43,0.06)',fill:true,tension:0.4,borderWidth:2,pointRadius:3},{label:'US Gas',data:GAS_US,borderColor:C.blue,borderWidth:2,tension:0.4,pointRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:true,labels:{font:{size:9}}}}}});
-    safeChart('chartElecComp',{type:'line',data:{labels:YEARS,datasets:[{label:'MA Electricity',data:ELEC_MA,borderColor:C.red,backgroundColor:'rgba(192,57,43,0.08)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:3},{label:'US Electricity',data:ELEC_US,borderColor:C.green,borderWidth:2,tension:0.4,pointRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:true,labels:{font:{size:9}}}}}});
-    safeChart('chartPremium',{type:'line',data:{labels:YEARS,datasets:[{label:'Electricity %',data:ELEC_MA.map((m,i)=>+((m/ELEC_US[i]-1)*100).toFixed(1)),borderColor:C.red,backgroundColor:'rgba(192,57,43,0.08)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:3},{label:'Gasoline %',data:GAS_MA.map((m,i)=>+((m/GAS_US[i]-1)*100).toFixed(1)),borderColor:C.amber,borderWidth:2,tension:0.4,pointRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:true,labels:{font:{size:9}}}}}});
-    safeChart('chartDiesel',{type:'line',data:{labels:YEARS,datasets:[{label:'NE Diesel',data:DIESEL_NE,borderColor:C.red,backgroundColor:'rgba(192,57,43,0.06)',fill:true,tension:0.4,borderWidth:2,pointRadius:3},{label:'US Diesel',data:DIESEL_US,borderColor:C.blue,borderWidth:2,tension:0.4,pointRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:true,labels:{font:{size:9}}}}}});
+    safeChart('chartGasMA',{type:'line',data:{labels:YEARS,datasets:[{label:'MA Gas',data:GAS_MA,borderColor:C.red,backgroundColor:'rgba(168,23,51,0.06)',fill:true,tension:0.4,borderWidth:2,pointRadius:3},{label:'US Gas',data:GAS_US,borderColor:C.blue,borderWidth:2,tension:0.4,pointRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:true,labels:{font:{size:9}}}}}});
+    safeChart('chartElecComp',{type:'line',data:{labels:YEARS,datasets:[{label:'MA Electricity',data:ELEC_MA,borderColor:C.red,backgroundColor:'rgba(168,23,51,0.08)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:3},{label:'US Electricity',data:ELEC_US,borderColor:C.green,borderWidth:2,tension:0.4,pointRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:true,labels:{font:{size:9}}}}}});
+    safeChart('chartPremium',{type:'line',data:{labels:YEARS,datasets:[{label:'Electricity %',data:ELEC_MA.map((m,i)=>+((m/ELEC_US[i]-1)*100).toFixed(1)),borderColor:C.red,backgroundColor:'rgba(168,23,51,0.08)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:3},{label:'Gasoline %',data:GAS_MA.map((m,i)=>+((m/GAS_US[i]-1)*100).toFixed(1)),borderColor:C.amber,borderWidth:2,tension:0.4,pointRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:true,labels:{font:{size:9}}}}}});
+    safeChart('chartDiesel',{type:'line',data:{labels:YEARS,datasets:[{label:'NE Diesel',data:DIESEL_NE,borderColor:C.red,backgroundColor:'rgba(168,23,51,0.06)',fill:true,tension:0.4,borderWidth:2,pointRadius:3},{label:'US Diesel',data:DIESEL_US,borderColor:C.blue,borderWidth:2,tension:0.4,pointRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:true,labels:{font:{size:9}}}}}});
     const tbody=document.getElementById('priceTableBody');
     if(tbody){tbody.innerHTML=YEARS.map((y,i)=>{const gd=((GAS_MA[i]/GAS_US[i]-1)*100).toFixed(1);const dd=((DIESEL_NE[i]/DIESEL_US[i]-1)*100).toFixed(1);const ed=((ELEC_MA[i]/ELEC_US[i]-1)*100).toFixed(1);const ec=parseFloat(ed)>40?'highlight':'';return`<tr><td>${y}</td><td>$${GAS_US[i].toFixed(2)}</td><td>$${GAS_MA[i].toFixed(2)}</td><td class="${parseFloat(gd)>5?'highlight':parseFloat(gd)<-5?'good':''}">${gd>0?'+':''}${gd}%</td><td>$${DIESEL_US[i].toFixed(2)}</td><td>$${DIESEL_NE[i].toFixed(2)}</td><td>${dd>0?'+':''}${dd}%</td><td class="${ec}">${ELEC_MA[i].toFixed(1)}¢</td><td>${ELEC_US[i].toFixed(1)}¢</td><td class="${ec}">${ed>0?'+':''}${ed}%</td></tr>`;}).join('');}
     // MA_NG / US_NG and the consumption conventions are now module-scope — the
@@ -1202,7 +1208,7 @@ function initCharts(tab){
     buildGauge();buildEquivBars();
   }
   if(tab==='boston'){
-    safeChart('chartBCCE',{type:'doughnut',data:{labels:['BCCE Covers (Supply ~40%)','Untouched by BCCE (60%)'],datasets:[{data:[40,60],backgroundColor:[C.green,'rgba(192,57,43,0.25)'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},boxWidth:12}}}}});
+    safeChart('chartBCCE',{type:'doughnut',data:{labels:['BCCE Covers (Supply ~40%)','Untouched by BCCE (60%)'],datasets:[{data:[40,60],backgroundColor:[C.green,'rgba(168,23,51,0.25)'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},boxWidth:12}}}}});
     // Same defect as c1a: the mandate-premium bar was frozen at $922 while every
     // "$765/yr mandate premium" caption on this tab had moved on.
     safeChart('chartBCCEvMandate',{type:'bar',data:{labels:['BCCE Supply Savings','Mandate Premium Untouched'],datasets:[{data:[BCCE_SAVINGS,OVERPAY],backgroundColor:[C.green,C.red],borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/yr'}}}}});
@@ -1217,12 +1223,12 @@ function buildGauge(){
   gc.innerHTML='';
   // Record label follows GAS_RECORD, which is Massachusetts' own weekly high --
   // it read "All-Time US Record" while carrying the MA figure.
-  const prices=[{label:'MA Gas Today',val:MA_GAS_TODAY,color:'#7fd8a6'},{label:'All-Time MA Record ('+GAS_RECORD_WHEN+')',val:GAS_RECORD,color:'#fbbf24'},{label:'Required to Match MA Mandate Premium',val:REQUIRED_PRICE,color:'#fca5a5'}];
+  const prices=[{label:'MA Gas Today',val:MA_GAS_TODAY,color:'#7fd8a6'},{label:'All-Time MA Record ('+GAS_RECORD_WHEN+')',val:GAS_RECORD,color:'#D9B441'},{label:'Required to Match MA Mandate Premium',val:REQUIRED_PRICE,color:'#fca5a5'}];
   const maxV=MAX_SCALE;
   prices.forEach(p=>{
     const pct=(p.val/maxV)*100;
     const row=document.createElement('div');row.className='equiv-bar-row';
-    row.innerHTML=`<div class="equiv-bar-label">${p.label}</div><div class="equiv-bar-track"><div class="equiv-bar-fill" style="width:${pct}%;background:${p.color};color:#0f2942"><div class="equiv-price-tag" style="color:${p.color}">$${p.val.toFixed(2)}</div></div></div>`;
+    row.innerHTML=`<div class="equiv-bar-label">${p.label}</div><div class="equiv-bar-track"><div class="equiv-bar-fill" style="width:${pct}%;background:${p.color};color:#14558F"><div class="equiv-price-tag" style="color:${p.color}">$${p.val.toFixed(2)}</div></div></div>`;
     gc.appendChild(row);
   });
   // Flip any value that does not fit outside its bar to the inside, decided by
@@ -1239,7 +1245,7 @@ function buildGauge(){
       tag.classList.add('is-inside');
     }
   });
-  const refLine=document.createElement('div');refLine.style.cssText='margin-top:8px;padding:8px 0;border-top:2px dashed rgba(255,255,255,0.3);font-size:0.68rem;color:rgba(255,255,255,0.5);text-align:center';refLine.textContent='Scale: $0 – $'+MAX_SCALE.toFixed(2)+'/gallon';gc.appendChild(refLine);
+  const refLine=document.createElement('div');refLine.style.cssText='margin-top:8px;padding:8px 0;border-top:2px dashed rgba(255,255,255,0.3);font-size:0.6875rem;color:rgba(255,255,255,0.5);text-align:center';refLine.textContent='Scale: $0 – $'+MAX_SCALE.toFixed(2)+'/gallon';gc.appendChild(refLine);
 }
 
 function buildEquivBars(){
