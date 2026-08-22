@@ -11,7 +11,14 @@ instead of from scratch.
 Nothing below is generic web advice. Every rule in it was paid for by something
 breaking on this repository.
 
+**Building your own?** Part I is how this site works and what to avoid.
+[Part II](#part-ii--building-one-of-these-from-zero) is the order to build one
+in, for any subject — a city budget, a school district, a regulator. If that is
+what you came for, start there and refer back.
+
 ---
+
+# Part I — How this site works
 
 ## 1. The argument comes first, then the design
 
@@ -424,3 +431,210 @@ you add the seventeenth, and nobody remembers the sentence exists.
 - How MLS data is acquired. That is private and stays private.
 - API keys. All feed credentials live in repository secrets and are referenced
   only by name in workflow YAML.
+
+---
+
+# Part II — Building one of these from zero
+
+Everything above describes a site about Massachusetts. Nothing about the method
+is. The same shape works for a city budget, a school district, a county
+sheriff's office, a utility regulator, a national agency — any subject where the
+official numbers exist, are scattered, and nobody has put them in one place.
+
+What follows is the order to build it in. The order matters more than any
+individual step, because the expensive mistakes are all *sequencing* mistakes:
+designing before you know what you can source, automating before you know what
+is worth automating, and adding pages faster than you can document them.
+
+**The single most common failure is building the pages first.** Pages are the
+cheap part. Do the spine first.
+
+---
+
+## Phase 0 — Decide the claim, and the edges
+
+Write one sentence stating what the site proves. Ours is *every figure is
+checkable*. Yours might be *this is what the district actually spends per
+student*, or *these are every permit issued and how long each took*.
+
+Then write down what you are **not** covering. A scope you can fully source
+beats a broad one you can only partly source — on a site whose credibility is
+the product, one undocumented chart discredits the documented ones around it.
+
+Two tests before you continue:
+
+- Can you name the primary source for every number you intend to show? Not the
+  news article about it — the agency that published it.
+- If someone disputes a figure, can you show them where it came from in one
+  click? If the answer needs a conversation, the design is wrong.
+
+## Phase 1 — Build the citation register before any page
+
+Create the register first, as a plain markdown table:
+
+```
+| Figure | Source | Updated |
+|--------|--------|---------|
+```
+
+Fill a row for every figure you intend to publish. **The rule that makes this
+work: if you cannot fill the row, you do not get to publish the chart.**
+
+This inverts the usual order and it is the whole trick. Most data sites are
+built chart-first and have sourcing bolted on afterwards, which is why their
+sourcing is thin — by then the charts exist and nobody wants to delete one.
+
+The register is the spine. Every page is a view of it, and the public sourcing
+page is a rendering of it rather than a separate document that drifts.
+
+## Phase 2 — Build exactly one page, completely
+
+Resist building five. Build one, all the way, including the parts that are
+tedious.
+
+- Every chart gets a **heading** and a visible **`Source:` line** directly
+  beneath it. Your generator will read those later, so this is structure, not
+  decoration.
+- Define your colours and three type roles as **CSS custom properties from the
+  very first page** — even though it feels premature with one page. Retheming
+  later works by redefining what tokens *mean* (§7); that mechanism only exists
+  if the pages referenced tokens in the first place. Retrofitting tokens across
+  a dozen finished pages is a week you will not want to spend.
+- Make it work from `file://`. If it needs a server to render, you have taken on
+  a dependency you did not need.
+
+## Phase 3 — Write the generator, fenced from day one
+
+Now automate what you just did by hand. Four small scripts, roughly:
+
+| Script | Job |
+|---|---|
+| `build_<register>.py` | Render the register into a real page |
+| `<links>.py` | Stamp a "sourced here" strip onto every content page |
+| `seo.py` | Own page identity: meta, canonical, JSON-LD, sitemap, robots |
+| a runner | Run them in the right order, every time |
+
+Three rules, all of them from §3:
+
+1. **Fenced and idempotent from the first version.** Never write a one-shot
+   migration you will need twice. Sentinel comments, replace in place.
+2. **Fail the build rather than publish something wrong.** Anchors that do not
+   resolve, links to sections that do not exist, tokens that went missing —
+   `sys.exit`. It costs a minute now instead of credibility later.
+3. **Fix the run order and write it down.** Whichever script owns page identity
+   runs last, because anything that borrows another page's shell inherits its
+   canonical URL.
+
+## Phase 4 — Publish before it is finished
+
+Get it on a real domain early, with an ugly page, rather than late with a
+polished one. Deploy problems are structural and you want them surfaced while
+the site is small.
+
+Static hosting is enough — GitHub Pages, Netlify, Cloudflare Pages. If you use
+Pages with a workflow build, the traps in §5 apply verbatim and all three will
+cost you an afternoon each if you meet them cold:
+
+- `CNAME` must be inside the uploaded artifact or the custom domain clears;
+- serialise deploys with a concurrency group, and do **not** cancel in progress;
+- anything embedded in an iframe caches independently of its parent, so put a
+  content hash in the embed URL.
+
+## Phase 5 — Automate only what is genuinely automatable
+
+Not every source deserves a feed. Automate a source when it has a real API or a
+stable machine-readable file **and** it changes often enough to matter. An
+annual PDF does not need a scraper; it needs a calendar reminder.
+
+For everything you do automate:
+
+- **Write to whatever the page actually reads.** If the numbers are baked into
+  the markup, the updater must rewrite the markup. A feed that only writes JSON,
+  for a page that only reads markup, produces a confidently stale dashboard —
+  and it will look fine to you, because the JSON is current.
+- **Put a floor under every multi-part fetch.** Refuse to publish a partial
+  series. Never swallow failures into `continue`.
+- **Assert invariants across sources**, not just outputs — if two pages derive
+  from a shared quantity, assert the shared quantity (§4).
+- **Match names with their qualifiers.** Duplicate place names across
+  jurisdictions are the classic silent wrong-row bug.
+- **Keep credentials in repository secrets**, referenced only by name.
+- **Check the schedules actually ran.** A cron that has been failing quietly for
+  six weeks is worse than no cron, because the page looks maintained.
+
+## Phase 6 — Build the verification harness early
+
+This is the step everyone defers and everyone regrets deferring, because
+verification is what lets you move fast later without breaking things quietly.
+
+You need two small tools (§6): a headless screenshotter and a JS evaluator,
+driven over the DevTools Protocol. No browser-automation library is required —
+a modern Node has everything.
+
+Then, in this order:
+
+1. Capture the same page twice and **establish your noise floor.** Without it a
+   diff means nothing.
+2. Capture at a real phone viewport using device-metrics emulation, not a window
+   size flag.
+3. Add `--use-angle=swiftshader` before concluding that any WebGL content is
+   broken.
+
+The discipline this buys is the important part: **never claim how something
+looks without a capture you have actually read.** That single rule catches more
+mistakes than any test suite you would realistically write for a site like this.
+
+## Phase 7 — The honesty pass, before you tell anyone about it
+
+Re-read every label as an adversary would (§9):
+
+- Does any column claim a *human verified* something when what you know is a
+  data vintage? Say **Updated**, not Verified.
+- Does any "live" or "auto-updating" badge sit on a row its feed does not
+  actually cover? Either narrow the badge or drop it.
+- Is any date actually a document title? Future years in source strings usually
+  are.
+- Does any evergreen sentence contain a count that will be wrong next month?
+- Is anything published that nothing on the site uses? Hold it back.
+- Are you serving internal notes as raw markdown by accident? (§5, and the
+  exclusion step in this repo's deploy workflow.)
+
+## A minimum viable tree
+
+```
+index.html                 the argument, and the way in
+<subject>-dashboard.html   one file per topic, standalone
+method.html                generated from the register
+about.html                 who made this, and how to challenge it
+REGISTER.md                figure -> source -> updated, the spine
+assets/theme.css           tokens only, loaded after each page's own styles
+build_method.py            register -> page
+method_links.py            stamp "sourced here" onto every page
+seo.py                     page identity, sitemap, robots, JSON-LD
+data/*.json                only for pages that read at runtime
+.github/workflows/         one per feed, plus the deploy
+CNAME                      if you use a custom domain
+```
+
+## What to skip
+
+- **A framework.** Static HTML with tokens is faster to build, trivially
+  hostable, and readable in a diff five years from now.
+- **A CMS.** The register is your CMS.
+- **Animating reference content.** Fine for a landing page. On a page whose job
+  is to be looked up, content that starts invisible is a liability — see the
+  fourteen headings in §7 that were invisible in production and survived several
+  reviews precisely because nobody had seen them.
+- **Chasing completeness before credibility.** Ten fully-sourced figures beat a
+  hundred unsourced ones.
+
+## The honest sequencing summary
+
+```
+claim -> register -> one complete page -> generator -> publish
+      -> feeds -> verification harness -> honesty pass -> more pages
+```
+
+Most people do it in roughly the reverse order, which is why most data sites are
+a pile of charts with a sources page nobody maintains. The register first is
+what makes everything after it cheap.

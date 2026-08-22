@@ -4,7 +4,7 @@ Interactive dashboards and data analysis covering housing, immigration, educatio
 
 **Live Site:** https://massachusettsdatahub.com
 
-**How this is built:** [PLAYBOOK.md](PLAYBOOK.md) - the build chain, the publishing traps, and the rules the data pages are held to.
+**How this is built:** [PLAYBOOK.md](PLAYBOOK.md) - the build chain, the publishing traps, and the rules the data pages are held to. Part II is a from-zero guide to building a site like this for any subject.
 
 ---
 
