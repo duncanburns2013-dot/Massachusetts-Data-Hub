@@ -219,6 +219,9 @@ footer a:hover{color:var(--duckling)}
   font-family:var(--font-mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
   color:var(--muted);text-decoration:none;opacity:.75;transition:opacity .2s}
 .stage-more:hover{opacity:1;color:var(--cranberry)}
+/* the embed carries its own controls at desktop widths, so the way through is
+   only needed where they are not shown - see the instrument`s own phone rules */
+.stage-more{display:none}
 @media (max-width:800px){
   .stage{height:78vh}
   /* The nav used to be display:none here, which left every phone with no way
@@ -229,6 +232,7 @@ footer a:hover{color:var(--duckling)}
     background:linear-gradient(180deg,rgba(233,235,234,.96) 38%,rgba(233,235,234,0))}
   .site-nav{flex-wrap:wrap;gap:7px 15px;font-size:11px;letter-spacing:.10em}
   .site-nav a{padding-bottom:2px}
+  .stage-more{display:block;pointer-events:auto}
 }
 
 /* ---- the turn: instrument -> directory -----------------------------------
@@ -741,6 +745,7 @@ svg.sprite{position:absolute;width:0;height:0;overflow:hidden}
 </header>
 <section class="stage" id="top">
   <iframe class="instr" src="instrument.html?embed=1" title="Massachusetts, all 351 municipalities" loading="eager"></iframe>
+  <a class="stage-more" href="instrument.html">Open the instrument &rarr;</a>
 </section>
 
 <section class="turn">

@@ -244,6 +244,12 @@ body.arrived .head nav{transition-delay:.38s}
      ragged two-then-one, two-then-two-then-one stagger with every edge in a
      different place. One column, full width: every target the same size, every
      edge aligned, and nothing depends on how long a label happens to be. */
+  /* Inside the embed the iframe is a fixed 78vh of the front page, and vh units
+     in here are relative to that box - so making the panel taller only scales it
+     up again and it gets clipped by the iframe either way. On a phone the hero is
+     the map and nothing else; the reading and the controls live on the
+     instrument`s own page, which is free to be as tall as it likes. */
+  html.embed .foot{display:none}
   .controls>.group{width:100%}
   .chips{display:grid;grid-template-columns:1fr;gap:7px}
   button.chip{width:100%;text-align:left;white-space:normal;padding:11px 14px;
