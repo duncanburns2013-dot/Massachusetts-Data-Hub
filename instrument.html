@@ -229,7 +229,17 @@ body.arrived .head nav{transition-delay:.38s}
   .foot{position:relative;z-index:6;margin-top:64vh;
     background:var(--bg);box-shadow:0 -10px 14px 0 var(--bg);
     padding-bottom:26px}
-  .ask{padding-top:6px}
+  /* On a phone the buttons matter more than the paragraph: left in source order
+     they began at y=735 on an 844 screen, which is under the fold once the
+     browser chrome takes its share, so the instrument looked like it had no
+     controls at all. display:contents dissolves the .ask wrapper so its children
+     can be ordered against the controls individually - question, figures,
+     buttons, then the explanation. */
+  .ask{display:contents}
+  #q{order:1;padding:6px var(--pad) 0}
+  .ans{order:2;padding:0 var(--pad)}
+  .controls{order:3}
+  #qs{order:4;padding:0 var(--pad)}
   .ask h1{font-size:23px;line-height:1.12}
   .controls{gap:16px;align-items:flex-start}
   /* too wide to sit beside the controls at this width */
