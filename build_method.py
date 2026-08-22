@@ -12,9 +12,13 @@ What the file actually holds is the citation register: 365 rows of
 figure -> source -> date verified, section by section. That is the most
 defensible thing on the site, so it gets rendered properly.
 
-Two sections are held back. "How to Use This File" is addressed to me, not to a
+Three sections are held back. "How to Use This File" is addressed to me, not to a
 reader. The "Update Log" carries an "Updated By" column naming its authors,
-which is a disclosure decision for Duncan rather than a default.
+which is a disclosure decision for Duncan rather than a default. "Gold &
+Treasury" is federal reserve-holdings research that no dashboard on this site
+draws on - the Method page is meant to account for the figures that are
+published, and sourcing something nothing shows invites the question of where
+it is. The research stays in MASTER_DATA.md; it just stops being published.
 
 The one distinction the page must not lose is the file's own: a row marked with
 the recycling mark is API-fed and authoritative in data/*.json, while a ticked
@@ -25,7 +29,7 @@ import io, re, html as H
 
 NL = chr(10)
 SRC, OUT = 'MASTER_DATA.md', 'method.html'
-SKIP_SECTIONS = ('How to Use This File', 'Update Log')
+SKIP_SECTIONS = ('How to Use This File', 'Update Log', 'Gold & Treasury')
 
 TICK, LIVE = '✅', '\U0001f504'          # the two status marks used in the file
 EMOJI = re.compile('[\U0001F000-\U0001FAFF☀-➿️⬀-⯿]+')

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Build the Videos page from the 21 published YouTube cuts.
+"""Build the Videos page from the published YouTube cuts.
 
 Two decisions worth recording.
 
@@ -7,6 +7,13 @@ Posters are served from this repo, not from i.ytimg.com. Twenty-one hot-linked
 thumbnails would mean twenty-one requests to Google before anyone pressed play;
 1.7 MB of local JPEG costs nothing against the 1 GB Pages ceiling and the page
 stays a closed system until a visitor actually asks for a video.
+
+Re-runnable. The grid, the stylesheet and the script are each replaced between
+fences rather than spliced in over a placeholder. The first version of this
+file consumed what it searched for - a placeholder note, a counter reading 6,
+an old lede - so it could only run once, and the VIDEOS list below drifted two
+films out of date before anyone noticed. Adding a film is now one line here
+plus a poster in assets/video-thumbs, and a re-run.
 
 The embed is a facade. Each tile is a real link to youtu.be, so it works with no
 JavaScript at all; with JavaScript the click swaps in a youtube-nocookie iframe
@@ -24,6 +31,7 @@ VIDEOS = [
  ('BL8N9z6qPJg','parody',   'A musical about the places Massachusetts Democrats most like to expense their donors.'),
  ('p6GEJboVyQY','parody',   'A local X personality at the height of the migrant crisis, when Massachusetts led the news.'),
  ('J7Wv6-QoAL8','parody',   'They marched under No Kings, which reads oddly in a city that answers to a Queen.'),
+ ('PRYUaWNppZA','parody',   'The distance between how Ayanna Pressley describes herself and what the record shows.'),
  ('wclglGpNkHM','explainer','Following the money through the HHS mega-file release, one document at a time.'),
  ('khDK5GcUxKg','parody',   "The Governor's gaslighting, collected and played back against the record."),
  ('ulSCv2O5gLw','parody',   "One week of the Governor's own statements, rounded up and handed straight back."),
@@ -39,6 +47,7 @@ VIDEOS = [
  ('ZZejr_0D5cA','explainer','Massachusetts Democrats and the money that follows them, quoted from the record.'),
  ('nztB5Dhc2xw','explainer','A federal betrayal with state guardrails left unused, in a state near the top of the table.'),
  ('fxS8iVsaibY','parody',   'A parody of the friendly local-media interview, Jon Keller with Senator Paul Feeney.'),
+ ('3jPA_8SPhf0','explainer',"Who the Commonwealth puts first, and what its own immigration posture costs the people already here."),
 ]
 
 META = {v['id']: v for v in json.load(io.open('build_videos_meta.json', encoding='utf-8-sig'))}
@@ -164,31 +173,34 @@ JS = """<script>
 </script>"""
 
 # this file comes back from git and PowerShell as CRLF with a BOM, and the
-# splice regexes below anchor on a bare newline
+# splices below anchor on a bare newline
 s = io.open('videos.html', encoding='utf-8-sig').read().replace('\r\n', '\n')
 
-m = re.search(r'\s*<p class="panel-note" id="videos-note">.*?</p>\n', s, re.S)
-assert m, 'placeholder note not found'
-s = s[:m.start()] + '\n' + GRID + '\n' + '\n' + s[m.end():]
 
-s = s.replace('<h1>Videos<i>6</i></h1>', '<h1>Videos<i>%d</i></h1>' % len(VIDEOS))
-assert '<i>%d</i>' % len(VIDEOS) in s, 'count not updated'
+def fenced(text, body, open_tag, close_tag, where):
+    """Replace between the fences, or plant them the first time."""
+    block = open_tag + '\n' + body + '\n' + close_tag + '\n'
+    if open_tag in text:
+        a = text.index(open_tag)
+        b = text.index(close_tag) + len(close_tag) + 1
+        return text[:a] + block + text[b:]
+    i = where(text)
+    return text[:i] + block + text[i:]
 
-OLD_LEDE = ('<p class="panel-lede">Short documentary and commentary pieces built from the\n'
-            '    same sourced figures as the dashboards.</p>')
-NEW_LEDE = '<p class="panel-lede">Short films on Massachusetts politics.\n    Some are <em class="k-par">parody</em>. Some are straight\n    <em class="k-exp">explainers</em>. Each one says which it is.</p>\n    <p class="panel-body">The parodies go after the Commonwealth&rsquo;s Democratic\n    establishment &mdash; Governor Healey, Mayor Wu and the legislators around them &mdash;\n    on corruption, hypocrisy, donor money expensed as a lifestyle, sanctuary policy\n    and the cost of living here. They are built from real news footage and real\n    figures cut against AI-generated montage, dark humour and staged confessionals.\n    The explainers carry no joke: the statute behind every line of a utility bill,\n    the labour-force and migration numbers behind the exodus, the HHS money trail,\n    the published reports behind the sanctuary argument, the H-1B filings. Where the\n    blame is bipartisan they say so &mdash; the H-1B film names the House and Senate of\n    both parties before it gets anywhere near Beacon Hill.</p>\n    <p class="panel-note">Every film is tagged Parody or Explainer, so nothing on this\n    page can be mistaken for the record. The explainers run on the same sourced\n    figures as the dashboards; the parodies are arguments, made in the open.</p>'
 
-LEDE_TEXT = NEW_LEDE
-assert s.count(OLD_LEDE) == 1, 'lede not found'
-s = s.replace(OLD_LEDE, LEDE_TEXT)
+# the heading and the lede are permanent page content now; the builder owns the
+# grid, the stylesheet and the script and nothing else
+s = fenced(s, GRID, '<!-- == videos:grid start == -->', '<!-- == videos:grid end == -->',
+           lambda t: t.index('    <ul class="vgrid">'))
 
 # the page carries two <style> blocks - index's head styles and the doc styles
 # added when this page was split out. The wall belongs with the doc styles.
 assert s.count('</style>') == 2, s.count('</style>')
-i = s.rindex('</style>')
-s = s[:i] + CSS + '\n' + s[i:]
+s = fenced(s, CSS.strip('\n'), '/* == videos:css start == */', '/* == videos:css end == */',
+           lambda t: t.rindex('</style>'))
 assert s.count('</body>') == 1
-s = s.replace('</body>', JS + '\n</body>')
+s = fenced(s, JS, '<!-- == videos:js start == -->', '<!-- == videos:js end == -->',
+           lambda t: t.index('</body>'))
 
 
 # Dashboards is an anchor on the front page, not on this one

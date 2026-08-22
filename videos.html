@@ -639,6 +639,7 @@ footer::before{
   font-size:13px;line-height:1.62;color:rgba(11,17,19,.74);max-width:78ch}
 .doc .panel-note a{color:var(--bay-blue);font-weight:600}
 
+/* == videos:css start == */
 /* ---- the video wall ------------------------------------------------------
    Posters are local files, so nothing is requested from Google until a visitor
    presses play. Each tile is a real link to youtu.be and works with scripting
@@ -698,12 +699,13 @@ footer::before{
 @media (prefers-reduced-motion: reduce){
   .vcard,.vplay{transition:none} .vcard:hover{transform:none}
 }
-
+/* == videos:css end == */
 .skip-link{position:absolute;left:8px;top:-48px;z-index:200;padding:10px 16px;
   border-radius:8px;background:#680A1D;color:#fff;text-decoration:none;
   font-family:var(--font-mono,ui-monospace,monospace);font-size:12px;font-weight:600;
   letter-spacing:.08em;text-transform:uppercase;transition:top .18s}
 .skip-link:focus{top:8px}
+
 </style>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -740,6 +742,7 @@ footer::before{
     <p class="panel-note">Every film is tagged Parody or Explainer, so nothing on this
     page can be mistaken for the record. The explainers run on the same sourced
     figures as the dashboards; the parodies are arguments, made in the open.</p>
+<!-- == videos:grid start == -->
     <ul class="vgrid">
       <li class="vcard">
         <a class="vthumb" href="https://youtu.be/j5q_MkabqZI" data-id="j5q_MkabqZI"
@@ -835,7 +838,7 @@ footer::before{
       <li class="vcard">
         <a class="vthumb" href="https://youtu.be/PRYUaWNppZA" data-id="PRYUaWNppZA"
            target="_blank" rel="noopener" aria-label="Play Ayanna Nothing To See Here (2:40)">
-          <img src="assets/video-thumbs/PRYUaWNppZA.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
+          <img src="assets/video-thumbs/PRYUaWNppZA.jpg" alt="" width="1280" height="720" loading="lazy" fetchpriority="auto" decoding="async">
           <span class="vplay" aria-hidden="true"></span>
           <span class="vdur">2:40</span>
         </a>
@@ -1043,7 +1046,7 @@ footer::before{
       <li class="vcard">
         <a class="vthumb" href="https://youtu.be/3jPA_8SPhf0" data-id="3jPA_8SPhf0"
            target="_blank" rel="noopener" aria-label="Play INVASION: Massachusetts (2:54)">
-          <img src="assets/video-thumbs/3jPA_8SPhf0.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async">
+          <img src="assets/video-thumbs/3jPA_8SPhf0.jpg" alt="" width="1280" height="720" loading="lazy" fetchpriority="auto" decoding="async">
           <span class="vplay" aria-hidden="true"></span>
           <span class="vdur">2:54</span>
         </a>
@@ -1054,6 +1057,7 @@ footer::before{
         </div>
       </li>
     </ul>
+<!-- == videos:grid end == -->
 
   
   </div>
@@ -1216,6 +1220,7 @@ import * as THREE from 'three';
                      size:U.uRes.value.x+'x'+U.uRes.value.y}; } };
 })();
 </script>
+<!-- == videos:js start == -->
 <script>
 /* Upgrade a poster to the real player in place. The anchor already points at
    youtu.be, so with scripting off every tile still goes somewhere useful; this
@@ -1240,5 +1245,6 @@ import * as THREE from 'three';
   });
 })();
 </script>
+<!-- == videos:js end == -->
 </body>
 </html>
