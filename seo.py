@@ -249,6 +249,25 @@ for p in pages:
     if s != orig:
         io.open(p, 'w', encoding='utf-8', newline='\n').write(s)
 
+# ------------------------------------------------------- cache-busting the embed
+# The instrument is an iframe, and Pages serves it with max-age=600. A browser
+# will keep showing its cached copy for those ten minutes after the outer page
+# has already updated, which looks exactly like a deploy that did not take -
+# the front page gains a link that the embed inside it has never heard of.
+# The src carries a short hash of the file, so any edit to the instrument is a
+# different URL and the stale copy can never be reused.
+import hashlib
+if os.path.exists('instrument.html') and os.path.exists('index.html'):
+    _h = hashlib.sha1(io.open('instrument.html', 'rb').read()).hexdigest()[:10]
+    _idx = io.open('index.html', encoding='utf-8').read()
+    _new = re.sub(r'src="instrument\.html\?embed=1(?:&amp;v=[0-9a-f]+)?"',
+                  'src="instrument.html?embed=1&amp;v=%s"' % _h, _idx)
+    if _new != _idx:
+        io.open('index.html', 'w', encoding='utf-8', newline=chr(10)).write(_new)
+        print('embed cache key   : %s (changed)' % _h)
+    else:
+        print('embed cache key   : %s' % _h)
+
 # ---------------------------------------------------------------- sitemap
 listed = [p for p in pages if p not in NOINDEX]
 def loc(p): return BASE + ('' if p == 'index.html' else p)
