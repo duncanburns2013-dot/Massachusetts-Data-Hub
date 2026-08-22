@@ -2,7 +2,9 @@
 
 Interactive dashboards and data analysis covering housing, immigration, education, healthcare, and affordability across the Commonwealth.
 
-**Live Site:** https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/
+**Live Site:** https://massachusettsdatahub.com
+
+**How this is built:** [PLAYBOOK.md](PLAYBOOK.md) - the build chain, the publishing traps, and the rules the data pages are held to.
 
 ---
 
