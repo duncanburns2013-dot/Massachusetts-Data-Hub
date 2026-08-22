@@ -103,6 +103,7 @@ PERSON = {
     '@id': BASE + 'about.html#duncan-burns',
     'name': 'Duncan Burns',
     'url': BASE + 'about.html',
+    'image': BASE + 'assets/duncan-burns.jpg',
     'sameAs': [
         'https://valleypatriot.com/category/op-eds-editorials/duncan-burns/',
         'https://github.com/duncanburns2013-dot',
