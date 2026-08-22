@@ -10,11 +10,10 @@ shared footer or nav to hang it on - they were built at different times and link
 back to the hub with different wording, or not at all. One place to maintain,
 re-runnable, fenced.
 
-A dashboard is only linked to a section that actually documents it. Four of them
-have no section in MASTER_DATA.md at all, and they are listed at the bottom of
-this file rather than pointed at a page that does not cover them: linking
-"how this is sourced" to something that does not source it is worse than not
-linking at all.
+A dashboard is only linked to a section that actually documents it. All sixteen
+are documented now; anything added later that is not belongs in UNDOCUMENTED
+until it is, because linking "how this is sourced" to a page that does not
+source it is worse than not linking at all.
 """
 import io, os, re, sys, glob
 
@@ -35,11 +34,16 @@ SECTION = {
     'healthcare-dashboard.html':       ('healthcare-insurance',                 'Healthcare &amp; Insurance'),
     'tax-budget-dashboard.html':       ('state-budget-the-scope-reconciliation', 'State Budget'),
     'tax-burden-dashboard.html':       ('tax-burden-federal-massachusetts',     'Tax Burden'),
+    'energy-dashboard.html':           ('energy',                               'Energy'),
+    'pension-dashboard.html':          ('pensions',                             'Pensions'),
+    'pay-to-play-dashboard.html':      ('lobbying-political-spending',          'Lobbying &amp; Political Spending'),
+    'all-things-boston.html':          ('boston',                               'Boston'),
 }
 
-# no section documents these yet, so they get no link
-UNDOCUMENTED = ('energy-dashboard.html', 'pension-dashboard.html',
-                'pay-to-play-dashboard.html', 'all-things-boston.html')
+# every dashboard is documented now; anything added here that has no section in
+# MASTER_DATA.md belongs in this tuple until it does, because linking "how this
+# is sourced" to a page that does not source it is worse than not linking
+UNDOCUMENTED = ()
 
 F0, F1 = '<!-- == method-link start == -->', '<!-- == method-link end == -->'
 
@@ -92,8 +96,11 @@ def main():
             skipped += 1
 
     print('method links stamped : %d dashboards' % stamped)
-    print('left unlinked        : %d (%s)' % (skipped, ', '.join(UNDOCUMENTED)))
-    print('  those four have no section in MASTER_DATA.md; write one and add it above')
+    if skipped:
+        print('left unlinked        : %d (%s)' % (skipped, ', '.join(UNDOCUMENTED)))
+        print('  no section in MASTER_DATA.md yet; write one and map it above')
+    else:
+        print('left unlinked        : none, every dashboard is documented')
 
     # every anchor pointed at must exist on the built page
     m = io.open(BASE, encoding='utf-8').read()

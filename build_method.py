@@ -52,6 +52,7 @@ def slug(t):
     return re.sub(r'[^a-z0-9]+', '-', strip_emoji(t).lower()).strip('-')[:48]
 
 
+# NOTE: headings must not carry .rv - see the comment in the module docstring.
 def convert(md):
     """A converter for exactly the subset this file uses: h2-h4, tables,
     bullets, blockquotes, rules and paragraphs."""
@@ -88,7 +89,7 @@ def convert(md):
             if not skipping:
                 t = strip_emoji(title)
                 sections.append((slug(title), t))
-                out.append('<h2 id="%s" class="mk-h2 rv">%s</h2>' % (slug(title), inline(t)))
+                out.append('<h2 id="%s" class="mk-h2">%s</h2>' % (slug(title), inline(t)))
             i += 1; continue
 
         if skipping:
@@ -207,7 +208,7 @@ def build():
     <h1>Method</h1>
     <span class="ramp" aria-hidden="true"></span>
     <p class="mk-lede">Every figure on this site, with the source it came from and
-    the date it was checked.</p>
+    when it was last checked or refreshed.</p>
     <div class="mk-key">
       <span><span class="mk mk-v">verified</span> checked by hand against the source</span>
       <span><span class="mk mk-l">live</span> refreshed by a feed; the JSON is authoritative</span>

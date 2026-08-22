@@ -718,6 +718,98 @@ basis"*. `update-burden-constants.py` now fails the build if this breaks.
 
 ---
 
+## ⚡ Energy
+
+Figures on `energy-dashboard.html`. Refreshed by `update-energy-dashboard.py` and `update-fuel-prices.py` on the 2nd and 26th, so the rate series carries the feed mark; the legislative analysis beside it does not and is dated to the document it reads.
+
+| Figure | Source | Updated |
+|--------|--------|---------|
+| Residential Electricity Rates — MA vs. Selected States (¢/kWh) | EIA Electric Power Monthly Table 5.6.A, May 2026 | 🔄 May 2026 |
+| MA Rate Premium Over National Average — Historical | EIA, annual residential average rates | 🔄 |
+| MA Electricity Bill Breakdown (Typical Residential) | Eversource/National Grid rate schedules; DPU filings | — |
+| MA vs. National Rate Gap Over Time | EIA Electric Power Monthly | 🔄 |
+| Annual Impact Per Household | EIA May 2026, bill text analysis | May 2026 |
+| Where the "Savings" Actually Come From | Bill sections analyzed against verified Eversource rate breakdown | — |
+| State Comparison — Monthly Bill at 600 kWh | EIA May 2026 rates × 600 kWh/month | 🔄 May 2026 |
+| The $14.3B Claim — Credibility Breakdown | S.3143 fact sheet (June 24, 2026); @DuncanBurnsMA analysis | June 2026 |
+| Savings Claims by Category — $M Over 10 Years | S.3143 Senate fact sheet | — |
+| Annual Per-Household Reality Check | EIA | 🔄 |
+| What S.3143 Doesn't Touch — The Structural Cost Drivers | EIA; RGGI Inc.; DPU rate orders; ISO-NE. These policy-driven costs persist regardless of S.3143 passage | — |
+| RGGI Carbon Tax — MA Auction Proceeds by Year ($M) | RGGI Inc | — |
+| How RGGI Proceeds Are Spent (All RGGI States) | RGGI Proceeds Report 2023 | 2023 |
+| What BCCE Actually Covers vs. Your Full Bill | Eversource rate schedules; BCCE program data; DPU filings | — |
+| BCCE "Savings" vs. Mandate Premium — Annual $ | BCCE program ($200/yr avg); EIA rate data ($747/yr overpayment vs US avg at 600 kWh/mo) | — |
+| Boston's Emissions by Sector (2023 Inventory) | Boston GHG Inventory 2023; 2030 Climate Action Plan, p.33 | 2023 |
+| What $200/yr in BCCE Savings Looks Like Against the Full Mandate Stack | EIA rates; DPU filings; RGGI Inc.; Eversource/NGrid rate schedules; BCCE program data | — |
+
+---
+
+## 🏛️ Pensions
+
+Figures on `pension-dashboard.html`. Maintained by hand against the actuarial reports and the Commonwealth’s own accounts; there is no feed behind it.
+
+| Figure | Source | Updated |
+|--------|--------|---------|
+| Unfunded Liabilities by Category | Commonwealth ACFR FY2024; MBTA Audited Financials FY2024 | FY2024 |
+| Funded Ratio by System | PERAC 2024 Actuarial Valuations; ACFR FY2024 | FY2024 |
+| Employer Pension Cost as % of Payroll (SERS), 2001–2024 | Public Plans Database (publicplansdata.org), PPD ID 50 | — |
+| Net State Deficit Trend (FY2015–2024) | Commonwealth ACFR FY2015–FY2024 | FY2015–FY2024 |
+| SERS Funded Ratio vs. National Average, 2001–2024 | Public Plans Database (PPD ID 50) | — |
+| SERS Net Assets Growth ($B), 2001–2024 | Public Plans Database | — |
+| Actual Returns vs. Assumed Rate (SERS) | Public Plans Database; PRIT ACFR | — |
+| Assumption Sensitivity: What If Returns Miss? | ACFR FY2024 sensitivity disclosures (illustrative) | FY2024 |
+| PRIT Asset Allocation (FY2024) | Public Plans Database; PRIT ACFR FY2024 | FY2024 |
+| Allocation Shift: 2001 → 2024 | PPD — note PE tripled from 5.6% to 17.0% | — |
+| Annual Returns vs. 7% Target, 2001–2024 | Public Plans Database (PPD ID 50) | — |
+| FY2024 Returns by Asset Class (Net) | PRIT ACFR FY2024/2025 | 2025 |
+| Active Workers per Retiree (SERS vs. National), 2001–2024 | Public Plans Database — national averages weighted by plan size | — |
+| Annual Net Cash Flow (SERS, $M) — Benefits Paid Minus Contributions | Public Plans Database — negative = paying out more than taking in | — |
+| Municipal Systems by Funded Ratio Category | PERAC January 1, 2025 Funded Ratio List | January 2025 |
+| Assumed Rate of Return Distribution | PERAC Jan 2025 — median ARR is 7.0% | 2025 |
+| Statewide OPEB Summary | PERAC OPEB Summary (May 2024); ACFR FY2024 | FY2024 |
+| State Retiree Benefits Trust Fund — Annual Deposit ($M) | enacted General Appropriations Acts FY2024–FY2027, line 1595-6152, via the official mass.gov GAA export ( | FY2024–FY2027 |
+| Net Deficit Trajectory (FY2015–2024) | Commonwealth ACFR FY2015–FY2024 | FY2015–FY2024 |
+| Pension Funded Ratios — MA vs. Selected States | Public Plans Database; individual state ACFRs | — |
+| MA SERS vs. National Avg, 2001–2024 | Public Plans Database | — |
+
+---
+
+## 💵 Lobbying & Political Spending
+
+Figures on `pay-to-play-dashboard.html`. Two authorities: OpenSecrets for sector and firm totals, and the state’s own OCPF database for individual donations. Maintained by hand.
+
+| Figure | Source | Updated |
+|--------|--------|---------|
+| Lobbying Spending by Sector — $457M Total (2015–2025) | OpenSecrets, Massachusetts State Lobbying Ranked Sectors (2015–2025) | 2015–2025 |
+| Top 10 Industries by Lobbying Spend (2015–2025) | OpenSecrets, Massachusetts State Lobbying by Industry (2015–2025) | 2015–2025 |
+| 2024 Top Lobbying Spenders — Single Year | Secretary of the Commonwealth, MA Lobbying Reports (2024) | 2024 |
+| Healthcare vs. All Other Sectors (2015–2025) | OpenSecrets, Ranked Sectors Massachusetts (2015–2025) | 2015–2025 |
+| Firm Lobbying Income (2015–2025) — Top 10 | OpenSecrets, Top 20 Lobbying Firms, Massachusetts (2015–2025) | 2015–2025 |
+| The $200 Pattern — Donation Amount Distribution (OCPF) | OCPF Campaign Finance Database — ML Strategies, Smith Costello, Bay State Strategies donations | — |
+| Donations by Firm — OCPF Analysis | OCPF — 4,298 total donations analyzed | — |
+| Top 10 Individual Lobbyist Donors | OCPF Campaign Finance Database | — |
+| Top 15 Recipients of Lobbyist Firm Donations (OCPF) | OCPF — combined donations from ML Strategies, Smith Costello, Bay State Strategies employees | — |
+| Donations by Source Firm — Top Recipients | OCPF Campaign Finance Database | — |
+| Healthcare Case Study: MGB VP Christopher Philbin | OCPF — Philbin donation records (2024) | 2024 |
+| Healthcare Industry — Political Giving from Employees (2024) | OCPF Campaign Finance Database, employer field analysis (2024) | 2024 |
+
+---
+
+## 🏙️ Boston
+
+Figures on `all-things-boston.html`. The page states its sources in prose rather than under each chart, so the authorities are listed here and the page itself carries the detail. Maintained by hand.
+
+| Figure | Source | Updated |
+|--------|--------|---------|
+| Department expenditure, budgeted vs actual | City of Boston ACFR, Schedule of Expenditures Compared to Budget (budgetary basis) | FY2020–FY2025 |
+| Employee payroll | City of Boston Employee Earnings Reports, data.boston.gov | CY2019–CY2025 |
+| Crime | FBI and Boston Police Department figures | — |
+| Schools | Massachusetts DESE School & District Profiles | — |
+| Immigration enforcement | ICE ERO Boston, with UC Berkeley, the Globe and GBH reporting | — |
+| 311 service requests | data.boston.gov | — |
+| Assessed property values | City of Boston Assessing Department | — |
+
+---
 ## 🔗 Dashboard Registry
 
 All dashboards live at `https://massachusettsdatahub.com/<file>`.
