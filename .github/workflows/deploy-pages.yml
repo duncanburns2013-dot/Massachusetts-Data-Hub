@@ -59,6 +59,15 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      # The artifact is the whole repository, so anything committed here is also
+      # served. These are internal build notes, not pages: dropping them from the
+      # checkout keeps them in git and off the website. This deletes from the
+      # runner's working copy only - nothing is committed.
+      - name: Drop repo-only docs from the artifact
+        run: |
+          rm -f PLAYBOOK.md
+          echo "excluded from the published site: PLAYBOOK.md"
+
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
