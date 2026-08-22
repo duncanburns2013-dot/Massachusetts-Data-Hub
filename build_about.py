@@ -326,6 +326,15 @@ else:
     s = s.replace('</body>', BLOCK + '</body>')
 
 
+# an early version of this script appended its CSS instead of replacing it, and
+# the copy it left behind sat above the fence carrying rules the fence no longer
+# has. Both shipped for weeks, and build_method.py uses this page as its shell,
+# so the stale block was being copied onto Method too. One block, or stop.
+_css = s.count('---- About ---')
+assert _css == 1, 'the About CSS appears %d times; a stale copy is loose' % _css
+_box = s.count('<div class="lbox"')
+assert _box == 1, 'the lightbox appears %d times; duplicate id=lbox' % _box
+
 # Dashboards is an anchor on the front page, not on this one
 s = s.replace('<a href="#dashboards">Dashboards</a>',
               '<a href="index.html#dashboards">Dashboards</a>')

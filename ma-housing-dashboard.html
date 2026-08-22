@@ -318,7 +318,13 @@ body{font-family:'DM Sans',system-ui,sans-serif !important;background:#E9EBEA !i
 .hs-label{font-size:0.6875rem !important;opacity:0.55 !important;text-transform:uppercase !important;letter-spacing:0.08em !important;color:#fff !important}
 .hs-val{font-family:'DM Serif Display',Georgia,serif !important;font-size:clamp(1.2rem,3vw,1.7rem) !important;font-weight:400 !important;color:#B07C20 !important}
 .hs-val.gold{color:#B07C20 !important}
-.hs-note{font-size:0.6875rem !important;opacity:0.4 !important}
+/* was opacity .4 over rgba(255,255,255,.3): white landed at 12% on the
+   #14558F hero, 1.33:1. The signal colours are darker than the background
+   they sit on here, so the hero gets light variants of its own. */
+.hs-note{font-size:0.6875rem !important;opacity:1 !important;
+  color:rgba(255,255,255,.78) !important}                 /* 5.40:1 */
+.hero .hs-note .chg-up{color:#FFC2CC !important}          /* 5.08:1 */
+.hero .hs-note .chg-dn{color:#8FE3B4 !important}          /* 5.07:1 */
 nav{background:#fff !important;border-bottom:1px solid #CDD3D1 !important;position:sticky !important;top:0 !important;z-index:100 !important;box-shadow:0 1px 3px rgba(0,0,0,0.04) !important}
 .nav-inner{justify-content:flex-start !important;max-width:1200px !important;margin:0 auto !important;flex-wrap:nowrap !important;overflow-x:auto !important}
 @media (min-width: 1240px) { .nav-inner { justify-content: center !important; } }
@@ -470,10 +476,10 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !imp
         <div class="summary-item">
             <div class="summary-label">Recent Trends (trailing 12 months)</div>
             <div class="summary-val" style="font-size:1.1rem; line-height:1.4;">
-                Supply and market times, year over year
+                Supply today, market times year over year
             </div>
             <p style="font-size:0.82rem; color:#555; margin-top:8px;">
-                Essex County months of supply moved <span id="rt-essex-supply">—</span> and days on market <span id="rt-essex-dom">—</span>; Newburyport moved <span id="rt-nbpt-supply">—</span> and <span id="rt-nbpt-dom">—</span>. Statewide, supply moved <span id="rt-ma-supply">—</span>. Many homeowners remain locked into ultra-low mortgage rates, limiting new listings and preventing a meaningful supply rebound.
+                Essex County months of supply stands at <span id="rt-essex-supply">—</span>, with days on market <span id="rt-essex-dom">—</span>; Newburyport is at <span id="rt-nbpt-supply">—</span> with <span id="rt-nbpt-dom">—</span>. Statewide supply is <span id="rt-ma-supply">—</span>. Months of supply is published for the current trailing window only, so it is shown as a level rather than a year-over-year change. Many homeowners remain locked into ultra-low mortgage rates, limiting new listings and preventing a meaningful supply rebound.
             </p>
         </div>
 
@@ -1584,11 +1590,19 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !imp
             if (a == null || b == null) return '—';
             return a.toFixed(dp) + ' → ' + b.toFixed(dp);
         };
-        setTxt('rt-essex-supply', movedBy('essex', 'supply', 2));
+        // Months of supply is only published for the current trailing window -
+        // every earlier year in the series is null - so there is no prior value
+        // to move from. movedBy would print an em dash here forever, which is
+        // what it did. Stating the level is the reading the data supports.
+        const levelOf = (g, m, dp, unit) => {
+            const v = tail(g, m);
+            return v == null ? '—' : v.toFixed(dp) + (unit || '');
+        };
+        setTxt('rt-essex-supply', levelOf('essex', 'supply', 2, ' months'));
         setTxt('rt-essex-dom', movedBy('essex', 'dom', 1) + ' days');
-        setTxt('rt-nbpt-supply', movedBy('nbpt', 'supply', 2));
+        setTxt('rt-nbpt-supply', levelOf('nbpt', 'supply', 2, ' months'));
         setTxt('rt-nbpt-dom', movedBy('nbpt', 'dom', 1) + ' days');
-        setTxt('rt-ma-supply', movedBy('ma', 'supply', 2));
+        setTxt('rt-ma-supply', levelOf('ma', 'supply', 2, ' months'));
 
         // ── Overview cards ────────────────────────────────────────────────────
         setTxt('ov-ma-val', fmtMoneyFull(tail('ma', 'price')));
