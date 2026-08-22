@@ -226,7 +226,7 @@ body.arrived .head nav{transition-delay:.38s}
      fold, so scrolling is what trades one for the other. At 63vh the panel
      sat in the middle and could only ever move up over the map - there was
      no way to see more of it than the band it had been given. */
-  .foot{position:relative;z-index:6;margin-top:82vh;
+  .foot{position:relative;z-index:6;margin-top:64vh;
     background:var(--bg);box-shadow:0 -10px 14px 0 var(--bg);
     padding-bottom:26px}
   .ask{padding-top:6px}
@@ -887,9 +887,13 @@ function framed(V){
   const W = V.fit || V.ext;
   if(W && camera.aspect < 1){
     const halfF = (V.cam.fov ?? 34) * Math.PI / 360;
-    // the axis labels are a fixed pixel size, so on a narrow screen they eat a
-    // larger share of the frame than the declared extent allows for
-    const need = (W * 1.26) / (2 * Math.tan(halfF) * Math.max(0.2, camera.aspect));
+    /* The flattened views carry axis labels at a fixed pixel size, which eat a
+       larger share of a narrow frame than their declared extent accounts for, so
+       those get a margin. The map has no such labels - `fit` already includes the
+       room the coastline needs - and giving it the same margin only shrank it to
+       a chip floating in an empty screen. */
+    const margin = V.fit ? 1.0 : 1.26;
+    const need = (W * margin) / (2 * Math.tan(halfF) * Math.max(0.2, camera.aspect));
     const d = Math.hypot(V.cam.p[0] - V.cam.t[0],
                          V.cam.p[1] - V.cam.t[1],
                          V.cam.p[2] - V.cam.t[2]);
