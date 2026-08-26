@@ -13,6 +13,7 @@ duplicated, and pages that already carry a description are left alone.
 import io, re, glob, os, json, html, subprocess
 
 BASE = 'https://massachusettsdatahub.com/'
+CARDS_DIR = 'cards'      # per-page social cards, rendered by build_cards.py
 
 # every address this site has answered on. Anything still naming one of
 # these gets moved to BASE - og:image and twitter:image included, which
@@ -218,15 +219,29 @@ for p in pages:
         s = s[:m.end()] + block + s[m.end():]
         added_icons += 1
 
-    # --- a social card only where the page has none of its own
-    if p not in NOINDEX and 'og:image' not in s:
-        card = ('<meta property="og:image" content="%sog-image.png">\n'
-                '<meta name="twitter:image" content="%sog-image.png">\n'
-                '<meta name="twitter:card" content="summary_large_image">\n') % (BASE, BASE)
-        m = re.search(r'(<link rel="canonical"[^>]*>\n)', s)
-        if m:
-            s = s[:m.end()] + card + s[m.end():]
-            added_card += 1
+    # --- every page points at its own card
+    # Sharing any of these used to produce the same picture, because one shared
+    # og-image.png was added where a page had none and then never touched again.
+    # build_cards.py renders a card per page from that page's own og:title and
+    # og:description, so this both plants the tags on a page that has none and
+    # corrects a page still naming the shared image - or, in one case, an image
+    # that lives in a different repository altogether.
+    own = os.path.join(CARDS_DIR, p[:-5] + '.jpg')
+    if p not in NOINDEX and os.path.exists(own):
+        img = '%s%s/%s.jpg' % (BASE, CARDS_DIR, p[:-5])
+        if 'og:image' in s:
+            s = re.sub(r'<meta property="og:image" content="[^"]*">',
+                       '<meta property="og:image" content="%s">' % img, s)
+            s = re.sub(r'<meta name="twitter:image" content="[^"]*">',
+                       '<meta name="twitter:image" content="%s">' % img, s)
+        else:
+            card = ('<meta property="og:image" content="%s">\n'
+                    '<meta name="twitter:image" content="%s">\n'
+                    '<meta name="twitter:card" content="summary_large_image">\n') % (img, img)
+            m = re.search(r'(<link rel="canonical"[^>]*>\n)', s)
+            if m:
+                s = s[:m.end()] + card + s[m.end():]
+        added_card += 1
 
     # --- structured data, replaced rather than stacked
     s = re.sub(r'\n?<script type="application/ld\+json">.*?</script>', '', s, flags=re.S)

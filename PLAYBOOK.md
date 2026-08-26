@@ -59,6 +59,7 @@ and a deploy that cannot fail for reasons unrelated to the content.
 | `build_method.py` | `method.html` | Renders `MASTER_DATA.md` |
 | `method_links.py` | all 16 dashboards | Stamps the "sourced here" strip |
 | `build_videos.py` | `videos.html` | 24 entries |
+| `build_cards.py` | `cards/*.jpg` | One social card per page |
 | `seo.py` | every page | Meta, canonical, JSON-LD, `sitemap.xml`, `robots.txt` |
 
 **Order is load-bearing. `seo.py` runs last, always.**
@@ -408,6 +409,9 @@ you add the seventeenth, and nobody remembers the sentence exists.
 | Partial API series published | Plausible, wrong numbers | Raise below a floor; never `continue` |
 | Prefix-matching source names | Wrong row, no error | Match with the qualifier |
 | Claiming a look without a screenshot | Confident wrong statements | Capture, read, then speak |
+| One shared `og:image` for every page | Every link previews identically | A card per page, from its own title/description |
+| Card artwork holding a URL or a count | Stale the day either changes | Put neither in the artwork |
+| Card art whose source lives in a temp dir | Cannot be rebuilt at all | Commit the source plate |
 
 ---
 
