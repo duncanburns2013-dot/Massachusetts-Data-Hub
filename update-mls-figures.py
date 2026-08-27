@@ -538,20 +538,53 @@ def fhfa_crosscheck(history: dict) -> list[str]:
 
     Levels aren't comparable (average sale price vs repeat-sales index) but turning
     points are, which is all this needs.
+
+    WHICH INDEX, AND WHY IT CHANGED (2026-08-27)
+    This compared against FHFA MASTHPI and began failing the nightly on a series that
+    is provably correct: calendar-2021 re-queried straight from Bridge came back at
+    662,657.04 against the cached 662,660.43, a 0.001% difference on 53,924 sales, so
+    _year_bounds and CloseDate are right. MASTHPI is FHFA's ALL-TRANSACTIONS index --
+    it blends in appraisal valuations from refinances and lags purchase prices, so a
+    forward shift fits it better by construction, for correct data. The gap sat just
+    inside the old margin for weeks (fwd 0.806 against a 0.814 limit) until a routine
+    FRED update pushed it 0.003 over. It was going to trip eventually no matter what
+    the MLS data did.
+
+    So the comparator is now BOXRSA -- Case-Shiller Boston, purchase-only, monthly --
+    which is already in the same file. Against it the as-labelled series scores +0.811
+    and the forward shift +0.629: the honest series wins, which is the premise this
+    check needs to rest on. FHFA is still printed, because a break visible in both
+    indices is worth seeing, but it no longer gates.
     """
     fred = REPO / "data" / "housing-history-latest.json"
     if not fred.exists():
-        return ["FHFA cross-check skipped: data/housing-history-latest.json absent"]
+        return ["Index cross-check skipped: data/housing-history-latest.json absent"]
     try:
-        obs = json.loads(fred.read_text(encoding="utf-8"))["nominal"]["masthpi"]
+        nominal = json.loads(fred.read_text(encoding="utf-8"))["nominal"]
+        obs = nominal["boxrsa"]
     except (json.JSONDecodeError, KeyError) as e:
-        return [f"FHFA cross-check skipped: {fred.name} unreadable ({e})"]
+        return [f"Index cross-check skipped: {fred.name} unreadable ({e})"]
 
-    by_year: dict[int, list[float]] = {}
-    for o in obs:
-        by_year.setdefault(int(o["d"][:4]), []).append(o["v"])
-    idx = {y: statistics.mean(v) for y, v in by_year.items()}
-    idx_yoy = {y: (idx[y] / idx[y - 1] - 1) * 100 for y in sorted(idx) if y - 1 in idx}
+    def _annual_yoy(series: list) -> dict[int, float]:
+        """Year-over-year from an observation list, COMPLETE years only.
+
+        A trailing partial year is dropped rather than averaged: the current year
+        holds only the months published so far, and comparing a 5-month mean to a
+        12-month one is not a year-over-year change. It also enters the candidates
+        asymmetrically -- only the forward shift reaches the newest year -- so a
+        partial year silently scores one shift on evidence the others never see.
+        """
+        by: dict[int, list[float]] = {}
+        for o in series:
+            by.setdefault(int(o["d"][:4]), []).append(o["v"])
+        if not by:
+            return {}
+        per_year = max(len(v) for v in by.values())
+        full = {y: v for y, v in by.items() if len(v) >= per_year}
+        ix = {y: statistics.mean(v) for y, v in full.items()}
+        return {y: (ix[y] / ix[y - 1] - 1) * 100 for y in sorted(ix) if y - 1 in ix}
+
+    idx_yoy = _annual_yoy(obs)
 
     prices = history_series(history, "ma", "sf", "avg_price")
     if not prices or any(p is None for p in prices):
@@ -589,22 +622,46 @@ def fhfa_crosscheck(history: dict) -> list[str]:
     def _s(v):
         return "n/a" if v is None else f"{v:+.3f}"
 
-    print(f"[mls-update] FHFA cross-check (MA SF price YoY vs FHFA MA HPI YoY): "
+    print(f"[mls-update] index cross-check (MA SF price YoY vs Case-Shiller Boston YoY): "
           f"as-labelled r={_s(cands[0])}, back-1yr r={_s(cands[-1])}, fwd-1yr r={_s(cands[+1])}")
 
+    # FHFA's All-Transactions index is still printed, because a break that shows in
+    # both indices is worth seeing -- but it does not gate. See the docstring.
+    fhfa_yoy = _annual_yoy(nominal.get("masthpi", []))
+    if fhfa_yoy:
+        def _rf(series):
+            ks = [k for k in series if k in fhfa_yoy]
+            if len(ks) < 3:
+                return None
+            a = [series[k] for k in ks]
+            b = [fhfa_yoy[k] for k in ks]
+            if len(set(a)) < 2 or len(set(b)) < 2:
+                return None
+            return statistics.correlation(a, b)
+        print(f"[mls-update]   (FHFA All-Transactions, informational: "
+              f"as-labelled r={_s(_rf(ours))}, "
+              f"fwd-1yr r={_s(_rf({y + 1: v for y, v in ours.items()}))})")
+
     fails = []
+    # Margin 0.05, not 0.15. The wide band was needed while the comparator was FHFA
+    # All-Transactions, which lags purchase prices and left the honest series only
+    # ~0.15 clear of its own forward shift -- so the band had to be wide enough to
+    # swallow that, and a back-shift hiding 0.10 inside it went straight through
+    # (verified: the old guard failed to catch a back-shifted history). Against
+    # Case-Shiller the true series wins by 0.182, so 0.05 keeps 3.6x headroom and
+    # now catches BOTH directions. Re-measure this margin if the index changes.
     for shift in (-1, +1):
         r = cands[shift]
-        if r is not None and r > aligned + 0.15:
+        if r is not None and r > aligned + 0.05:
             direction = "back" if shift == -1 else "forward"
             fails.append(
-                f"fetched MA SF history tracks FHFA BETTER shifted {direction} a year "
+                f"fetched MA SF history tracks the index BETTER shifted {direction} a year "
                 f"(r={r:+.3f}) than as-labelled (r={aligned:+.3f}) — the calendar-year "
                 "window or date field is probably wrong. Check _year_bounds/CloseDate."
             )
     if aligned < 0.30:
         fails.append(
-            f"fetched MA SF history barely tracks FHFA's MA index (r={aligned:+.3f}). "
+            f"fetched MA SF history barely tracks Case-Shiller Boston (r={aligned:+.3f}). "
             "Expected ~+0.8. The query window is suspect — do not publish this."
         )
     return fails
