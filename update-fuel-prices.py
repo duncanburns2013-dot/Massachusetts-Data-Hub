@@ -93,7 +93,9 @@ def fetch(url, series, frequency, tries=5):
                 continue
             sys.exit(f"ERROR: EIA {series} -> HTTP {e.code}: "
                      f"{e.read().decode('utf-8', 'replace')[:200]}")
-        except urllib.error.URLError as e:
+        except (urllib.error.URLError, TimeoutError) as e:
+            # TimeoutError is NOT a URLError: a read timeout escaped this handler
+            # entirely and aborted the run. Same defect as update-energy-dashboard.py.
             if attempt < tries - 1:
                 time.sleep(5 * (attempt + 1))
                 continue

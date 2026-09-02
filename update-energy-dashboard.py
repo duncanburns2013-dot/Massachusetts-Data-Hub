@@ -42,8 +42,9 @@ import os
 import re
 import ssl
 import sys
+import time
 from urllib.request import urlopen, Request
-from urllib.error import URLError
+from urllib.error import HTTPError, URLError
 
 API_KEY = os.environ.get("EIA_API_KEY", "").strip()
 if not API_KEY:
@@ -68,27 +69,49 @@ KWH_PER_YEAR = KWH_PER_MONTH * 12
 # --------------------------------------------------------------------------
 # EIA API
 # --------------------------------------------------------------------------
-def _fetch(params):
-    """GET the EIA API and return the `response.data` list."""
+def _fetch(params, tries=4):
+    """GET the EIA API and return the `response.data` list.
+
+    Retries transient network failures. This used to have no retry at all except
+    the TLS one below, and a read timeout is not a URLError — it is a bare
+    TimeoutError — so nothing caught it: one slow EIA response killed the whole
+    nightly on 2026-09-02, and because this step runs first it took the
+    fuel-price and tax-budget steps down with it. Timeout raised from 30s to 60s
+    for the same reason; EIA is occasionally just slow.
+    """
     url = EIA_BASE + "?api_key=" + API_KEY + "".join(
         f"&{k}={v}" for k, v in params)
     req = Request(url, headers={"User-Agent": "ma-data-hub-energy"})
-    try:
-        with urlopen(req, timeout=30) as r:
-            payload = json.loads(r.read())
-    except URLError as e:
-        # Some runners ship a broken trust store (urlopen wraps the
-        # SSLCertVerificationError in a URLError). EIA data is public and the
-        # API key already travels in the URL, so an unverified retry leaks
-        # nothing extra — but warn so it is never silently relied upon.
-        if not isinstance(e.reason, ssl.SSLError):
+    for attempt in range(tries):
+        last = attempt == tries - 1
+        try:
+            with urlopen(req, timeout=60) as r:
+                return json.loads(r.read())["response"]["data"]
+        except HTTPError as e:
+            if e.code in (429, 500, 502, 503, 504) and not last:
+                time.sleep(5 * (attempt + 1))
+                continue
             raise
-        print("WARN: TLS verification failed; retrying without verification.",
-              file=sys.stderr)
-        with urlopen(req, timeout=30,
-                     context=ssl._create_unverified_context()) as r:
-            payload = json.loads(r.read())
-    return payload["response"]["data"]
+        except URLError as e:
+            # Some runners ship a broken trust store (urlopen wraps the
+            # SSLCertVerificationError in a URLError). EIA data is public and the
+            # API key already travels in the URL, so an unverified retry leaks
+            # nothing extra — but warn so it is never silently relied upon.
+            if isinstance(e.reason, ssl.SSLError):
+                print("WARN: TLS verification failed; retrying without verification.",
+                      file=sys.stderr)
+                with urlopen(req, timeout=60,
+                             context=ssl._create_unverified_context()) as r:
+                    return json.loads(r.read())["response"]["data"]
+            if last:
+                raise
+            time.sleep(5 * (attempt + 1))
+        except TimeoutError:
+            if last:
+                raise
+            print(f"WARN: EIA read timed out; retry {attempt + 2}/{tries}.",
+                  file=sys.stderr)
+            time.sleep(5 * (attempt + 1))
 
 
 def latest_monthly(state):
