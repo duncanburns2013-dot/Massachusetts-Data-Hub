@@ -1,0 +1,32 @@
+# The watchdog. Everything else in .github/workflows fetches data; this one job
+# only asks whether what is already published has gone stale.
+#
+# It exists because a BROKEN feed is loud and a STOPPED feed is silent. update-cbp
+# reports a neutral skip when cbp.gov blocks it, by design, so nothing goes red --
+# and the immigration page aged 18 days with every workflow green. This is the
+# only job here that is meant to be noisy: a failure means readers are looking at
+# figures older than the page implies, which is worth an email.
+name: Data Freshness
+
+on:
+  schedule:
+    - cron: "0 13 * * *"   # 09:00 ET, after the overnight data jobs have run
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # Ages come from `git log` on each data file, so the default depth-1
+          # checkout would report every file as having no history and pass blind.
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Check every published source against its expected cadence
+        run: python scripts/check-freshness.py
