@@ -19,7 +19,7 @@ anchors silently stopped matching and the page sat on stale numbers for months
 while still committing daily. This one has exactly one HTML anchor, and a
 failure to match is fatal rather than silent.
 """
-import csv, html as _html, io, json, os, re, sys, urllib.request, zipfile
+import csv, html as _html, io, json, os, re, sys, time, urllib.error, urllib.request, zipfile
 
 html_unescape = _html.unescape
 from datetime import datetime, timezone
@@ -56,10 +56,31 @@ MA_METROS = {
 }
 
 
-def get(url, binary=False):
+def get(url, binary=False, tries=4):
+    """Fetch a URL, retrying transient failures.
+
+    This had no retry at all. On 2026-08-22 every one of the 50 state income
+    requests came back TimeoutError and the run aborted -- correctly, because the
+    partial-series guard refused to publish 0 of 50, but the whole pass was lost
+    to what was almost certainly a brief BEA wobble. Note TimeoutError is NOT a
+    URLError and has to be named explicitly; catching only URLError is the same
+    hole that took the energy nightly down on 2026-09-02.
+    """
     req = urllib.request.Request(url, headers=UA)
-    raw = urllib.request.urlopen(req, timeout=120).read()
-    return raw if binary else raw.decode("utf-8", "replace")
+    for attempt in range(tries):
+        last = attempt == tries - 1
+        try:
+            raw = urllib.request.urlopen(req, timeout=120).read()
+            return raw if binary else raw.decode("utf-8", "replace")
+        except urllib.error.HTTPError as e:
+            if e.code in (429, 500, 502, 503, 504) and not last:
+                time.sleep(5 * (attempt + 1))
+                continue
+            raise
+        except (urllib.error.URLError, TimeoutError):
+            if last:
+                raise
+            time.sleep(5 * (attempt + 1))
 
 
 def bea_zip(name):
