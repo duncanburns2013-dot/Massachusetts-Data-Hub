@@ -49,6 +49,27 @@ STAMPS = [
      "MLS tail is refetched nightly"),
     ("energy-dashboard.html", r"FUEL_NOW = \{asOf:'([^']+)'", "%Y-%m-%d", 45,
      "EIA weekly retail prices, monthly job"),
+
+    # --- Hand-maintained pages ------------------------------------------------
+    # These have no updater. They cannot go stale "quietly" any more, but they can
+    # still go stale -- so they are aged by an explicit stamp rather than by their
+    # git date, which is worthless here: the last commit touching all four was a
+    # cosmetic social-card pass that changed no data at all.
+    #
+    # 400 days, because every source behind them publishes annually. That is long
+    # enough not to nag during a release window and short enough that missing a
+    # full cycle is impossible to ignore.
+    ("tax-burden-dashboard.html", r'generated:"([^"]+)"', "%Y-%m-%d", 400,
+     "annual sources; regenerate with update-burden-constants.py"),
+    ("tax-burden-nh-comparison.html",
+     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 400,
+     "annual sources; hand-maintained, no updater exists"),
+    ("education-statewide.html",
+     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 400,
+     "DESE publishes annually; ingest is by hand, no API"),
+    ("education-merrimack-valley.html",
+     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 400,
+     "DESE publishes annually; ingest is by hand, no API"),
 ]
 
 # Deliberately NOT checked, so the list is a decision rather than an oversight:
@@ -116,10 +137,20 @@ def main() -> int:
     for rel, detail, max_age, why in stale:
         print(f"  {rel}: {detail} (limit {max_age}d — {why})", file=sys.stderr)
     print("\nA stale source means the site is publishing figures older than it "
-          "implies. Re-run that feed's workflow. For CBP, check that the "
-          "self-hosted runner is online -- cbp.gov 403s GitHub's IP ranges, so "
-          "that feed can only come from duncanburns2013-dot/ma-data-hub-runner:\n"
-          "  gh api repos/duncanburns2013-dot/ma-data-hub-runner/actions/runners"
+          "implies.\n"
+          "  a data/*.json file   re-run that feed's workflow.\n"
+          "  a page stamp         that page has NO updater. Refresh it from its "
+          "publisher by\n"
+          "                       hand, then bump its data-checked stamp -- that "
+          "is what clears\n"
+          "                       the alert.\n"
+          "  CBP                  check the self-hosted runner is online. Akamai "
+          "refuses Python's\n"
+          "                       HTTP client outright, so that feed can only "
+          "come from\n"
+          "                       duncanburns2013-dot/ma-data-hub-runner, which "
+          "fetches via curl:\n"
+          "    gh api repos/duncanburns2013-dot/ma-data-hub-runner/actions/runners"
           " --jq '.runners[].status'", file=sys.stderr)
     return 1
 

@@ -466,8 +466,10 @@ The MA vintage. Lands ~3 weeks after the national release, which is why the MA b
 ## 🧾 Tax Burden — Federal & Massachusetts
 
 Machine-readable source of truth: [`data/burden-constants.json`](data/burden-constants.json).
-Both burden dashboards are generated from it by `update-burden-constants.py`. Change the
-JSON, not the HTML.
+`tax-burden-dashboard.html` is generated from it by `update-burden-constants.py` --
+that script's TARGETS list holds that page and no other. Change the JSON, not the HTML.
+`tax-burden-nh-comparison.html` is NOT generated: it is maintained by hand and carries
+its own `data-checked` stamp, which the freshness watchdog ages.
 
 | Figure | Value | Source | URL | Verified |
 |---|---|---|---|---|
