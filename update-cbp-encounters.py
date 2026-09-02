@@ -46,7 +46,10 @@ import glob
 import json
 import os
 import re
+import shutil
+import subprocess
 import sys
+import tempfile
 import time
 import urllib.error
 from datetime import datetime, timezone
@@ -84,9 +87,11 @@ MONTH_FULL = {1: "Oct", 2: "Nov", 3: "Dec", 4: "Jan", 5: "Feb", 6: "Mar",
 # (75 = BSD sysexits EX_TEMPFAIL, same convention as update-nh-figures.py.)
 EXIT_BLOCKED = 75
 
-# cbp.gov fronts these pages with a bot filter that 403s a custom agent string.
-# "MA-Data-Hub/1.0" was honest and got this feed blocked from 2026-07-16 onward;
-# a real browser UA is what actually gets served. Same lesson as primemls.py.
+# cbp.gov fronts these pages with Akamai Bot Manager. A custom agent string
+# ("MA-Data-Hub/1.0", honest, and blocked from 2026-07-16 onward) is refused, and
+# so is sending no User-Agent at all -- but a browser UA is necessary, not
+# sufficient. What the filter really keys on is the HTTP client itself; see the
+# note on CURL below. The same first lesson as primemls.py, one layer deeper.
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
 
@@ -95,34 +100,95 @@ class Blocked(RuntimeError):
     """The source refused us (403/429) and the retries ran out."""
 
 
-def fetch(url, max_retries=4):
+HEADERS = {
+    "User-Agent": UA,
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+}
+
+# Akamai fingerprints the HTTP CLIENT, not the IP address, and it refuses
+# Python's. Measured 2026-09-02 with identical URL, headers and source address,
+# run side by side on one machine and on a GitHub-hosted runner:
+#
+#   this project's self-hosted runner   python urllib -> 403   curl -> 200
+#   GitHub-hosted ubuntu runner         python urllib -> 200   curl -> 403
+#
+# Header combinations change nothing: UA alone, UA+Accept, UA+Accept-Language and
+# all three together were each 403 on the self-hosted runner and each 200 on the
+# hosted one. Sending no User-Agent at all is 403 everywhere.
+#
+# This also corrects the story this file used to tell. The block was never about
+# GitHub's IP ranges -- the earlier test that "proved" that must have gone out
+# without a User-Agent, the one case that fails from anywhere. And the reason
+# urllib appeared to work from the author's machine is that Norton's Web/Mail
+# Shield was intercepting TLS and re-originating the request: the certificate
+# Python saw for www.cbp.gov was issued by "Norton Web/Mail Shield Root", not by
+# Akamai. The Actions runner is not intercepted, so it gets the raw refusal.
+#
+# So: fetch through curl, which ships with Windows 10/11 and every runner image,
+# and keep urllib as the fallback for hosts that lack it.
+CURL = shutil.which("curl")
+
+
+def _curl_get(url, timeout):
+    """(status, body) via the system curl. Raises URLError if curl itself fails."""
+    fd, path = tempfile.mkstemp(suffix=".download")
+    os.close(fd)
+    try:
+        args = [CURL, "-sS", "--compressed", "-o", path, "-w", "%{http_code}",
+                "--max-time", str(int(timeout)), "-A", UA]
+        for k, v in HEADERS.items():
+            if k != "User-Agent":
+                args += ["-H", f"{k}: {v}"]
+        p = subprocess.run(args + [url], capture_output=True, text=True)
+        if p.returncode != 0:
+            raise urllib.error.URLError(
+                f"curl exit {p.returncode}: {p.stderr.strip()[:200]}")
+        with open(path, "rb") as f:
+            return int(p.stdout.strip() or 0), f.read()
+    finally:
+        try:
+            os.remove(path)
+        except OSError:
+            pass
+
+
+def _get_once(url, timeout):
+    """(status, body). An HTTP error status is returned, not raised."""
+    if CURL:
+        return _curl_get(url, timeout)
+    try:
+        with urlopen(Request(url, headers=HEADERS), timeout=timeout) as r:
+            return r.status, r.read()
+    except urllib.error.HTTPError as e:
+        return e.code, e.read()
+
+
+def fetch_bytes(url, max_retries=4, timeout=90):
     last = None
     for attempt in range(max_retries):
-        req = Request(url, headers={
-            "User-Agent": UA,
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "Accept-Language": "en-US,en;q=0.9",
-        })
         try:
-            with urlopen(req, timeout=45) as r:
-                return r.read().decode("utf-8", "replace")
-        except urllib.error.HTTPError as e:
-            last = f"HTTP {e.code}"
-            if e.code in (403, 429, 500, 502, 503, 504) and attempt < max_retries - 1:
-                ra = e.headers.get("Retry-After")
-                wait = float(ra) if (ra and ra.isdigit()) else 8.0 * (attempt + 1)
-                time.sleep(min(wait, 60))
-                continue
-            if e.code in (403, 429):
-                raise Blocked(f"{url}: {last}")
-            raise
+            code, body = _get_once(url, timeout)
         except (urllib.error.URLError, TimeoutError) as e:
             last = str(e)
             if attempt < max_retries - 1:
                 time.sleep(2 ** attempt)
                 continue
             raise
+        if code == 200:
+            return body
+        last = f"HTTP {code}"
+        if code in (403, 429, 500, 502, 503, 504) and attempt < max_retries - 1:
+            time.sleep(min(8.0 * (attempt + 1), 60))
+            continue
+        if code in (403, 429):
+            raise Blocked(f"{url}: {last}")
+        raise urllib.error.HTTPError(url, code, last, None, None)
     raise Blocked(f"{url}: unreachable ({last})")
+
+
+def fetch(url, max_retries=4):
+    return fetch_bytes(url, max_retries).decode("utf-8", "replace")
 
 
 def parse_month_header(cell):
@@ -218,8 +284,8 @@ NATIONWIDE_GLOB = "nationwide-encounters-*-aor.csv"
 # the URL constructed, because the fiscal-year span in the filename rolls over and
 # a constructed URL would silently 404 every October.
 #
-# This only works from a residential IP: cbp.gov answers GitHub's ranges with 403
-# for the static files too, verified 2026-09-02. Hence the self-hosted runner.
+# Fetched through curl -- see the note on CURL below. Akamai refuses Python's own
+# HTTP client outright from this machine, whatever headers it sends.
 DOC_PAGE = "https://www.cbp.gov/document/stats/nationwide-encounters"
 SW_REGION = "Southwest Land Border"
 
@@ -270,8 +336,8 @@ def download_latest_csvs():
             got.append(name)
             continue
         print(f"    downloading {name}")
-        with open(dest, "w", encoding="utf-8", newline="") as f:
-            f.write(fetch("https://www.cbp.gov" + link))
+        with open(dest, "wb") as f:
+            f.write(fetch_bytes("https://www.cbp.gov" + link))
         got.append(name)
     print(f"  newest CBP batch: {newest_dir} ({len(got)} file(s))")
     return got
@@ -342,7 +408,7 @@ def main():
     print("=== CBP Border Patrol SW-border update ===\n")
 
     if "--download" in sys.argv:
-        print("  fetching the newest CBP export (needs a residential IP)...")
+        print("  fetching the newest CBP export...")
         try:
             download_latest_csvs()
         except Blocked as e:
