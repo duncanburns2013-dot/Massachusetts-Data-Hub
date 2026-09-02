@@ -212,6 +212,17 @@ CSV_DIR = os.path.join(BASE_DIR, "data", "_raw_cbp")
 SBO_GLOB = "sbo-encounters-*.csv"          # southwest border only, by component
 NATIONWIDE_GLOB = "nationwide-encounters-*-aor.csv"
 
+# CBP links the exports from this page as ordinary static files, e.g.
+#   /sites/default/files/2026-08/nationwide-encounters-fy23-fy26-jul-aor.csv
+# (the folder is the month AFTER the data month). The page is scraped rather than
+# the URL constructed, because the fiscal-year span in the filename rolls over and
+# a constructed URL would silently 404 every October.
+#
+# This only works from a residential IP: cbp.gov answers GitHub's ranges with 403
+# for the static files too, verified 2026-09-02. Hence the self-hosted runner.
+DOC_PAGE = "https://www.cbp.gov/document/stats/nationwide-encounters"
+SW_REGION = "Southwest Land Border"
+
 # The dashboard's two series are defined by component. Both count every encounter
 # type the component records -- for USBP that is apprehensions plus the Title 42
 # expulsions of Mar 2020-May 2023, which is what makes the published FY2023 total
@@ -233,6 +244,39 @@ MIN_CBP_FY = 2024
 MIN_CBP_TOTAL_FY = 2025
 
 
+def download_latest_csvs():
+    """Fetch the newest published encounters CSVs into CSV_DIR. Returns [names].
+
+    Note it downloads the *-aor.csv, not the sbo-*.csv this script was first
+    written around: CBP publishes the AOR file as a direct download and the SBO
+    one only through the Tableau viz. They agree exactly -- filtering AOR to
+    Land Border Region == "Southwest Land Border" reproduces every SBO component
+    total for FY2023-FY2026, checked before switching.
+    """
+    os.makedirs(CSV_DIR, exist_ok=True)
+    html = fetch(DOC_PAGE)
+    links = set(re.findall(
+        r"/sites/default/files/[\d-]+/[a-z0-9-]*encounters[^\"']*\.csv", html))
+    if not links:
+        raise RuntimeError(f"no CSV links found on {DOC_PAGE} -- page layout changed")
+    # The publication folder sorts chronologically, so the newest batch is last.
+    newest_dir = max(l.split("/")[4] for l in links)
+    got = []
+    for link in sorted(l for l in links if l.split("/")[4] == newest_dir):
+        name = link.rsplit("/", 1)[-1]
+        dest = os.path.join(CSV_DIR, name)
+        if os.path.exists(dest):
+            print(f"    have {name}")
+            got.append(name)
+            continue
+        print(f"    downloading {name}")
+        with open(dest, "w", encoding="utf-8", newline="") as f:
+            f.write(fetch("https://www.cbp.gov" + link))
+        got.append(name)
+    print(f"  newest CBP batch: {newest_dir} ({len(got)} file(s))")
+    return got
+
+
 def _newest(pattern):
     hits = glob.glob(os.path.join(CSV_DIR, pattern))
     return max(hits, key=os.path.getmtime) if hits else None
@@ -240,13 +284,25 @@ def _newest(pattern):
 
 def read_csv_export():
     """{fy: {'usbp','ofo','months'}} from the newest SBO export, or None."""
-    path = _newest(SBO_GLOB)
+    # Prefer the AOR export. It is the file CBP publishes as a plain download, so
+    # it is the only one the scheduled job can fetch on its own; the sbo-*.csv
+    # comes out of the Tableau viz and had to be saved by hand. Filtering AOR to
+    # Land Border Region == "Southwest Land Border" reproduces the SBO figures
+    # EXACTLY -- every component, every fiscal year FY2023-FY2026, checked before
+    # this became the primary path. The hand-saved file still wins if it is the
+    # only one present, so older caches keep working.
+    path, sw_only = _newest(NATIONWIDE_GLOB), True
+    if not path:
+        path, sw_only = _newest(SBO_GLOB), False
     if not path:
         return None, None
-    print(f"  CSV export: {os.path.basename(path)}")
+    print(f"  CSV export: {os.path.basename(path)}"
+          + ("  (AOR, filtered to the southwest land border)" if sw_only else ""))
     per = {}
     with open(path, encoding="utf-8-sig", newline="") as f:
         for row in csv.DictReader(f):
+            if sw_only and row.get("Land Border Region") != SW_REGION:
+                continue
             try:
                 n = int(row["Encounter Count"])
             except (KeyError, TypeError, ValueError):
@@ -285,6 +341,13 @@ def read_csv_export():
 def main():
     print("=== CBP Border Patrol SW-border update ===\n")
 
+    if "--download" in sys.argv:
+        print("  fetching the newest CBP export (needs a residential IP)...")
+        try:
+            download_latest_csvs()
+        except Blocked as e:
+            print(f"  !! blocked while downloading: {e}", file=sys.stderr)
+            return EXIT_BLOCKED
     csv_per, csv_nat = read_csv_export()
     if csv_per:
         print("  using the CSV export (carries OFO; the HTML tables do not).\n")
@@ -488,7 +551,38 @@ def main():
     }
     json_path = os.path.join(BASE_DIR, "data", "cbp-encounters-latest.json")
     os.makedirs(os.path.dirname(json_path), exist_ok=True)
-    with open(json_path, "w") as f:
+
+    # Keep the old fetched_at when nothing else moved, so a no-op run leaves the
+    # file byte-identical.
+    #
+    # This matters more than it looks. Since 2026-09-02 this script is polled
+    # DAILY by the self-hosted runner (CBP publishes monthly, on no fixed date,
+    # so polling beats guessing). A fresh timestamp on every poll would rewrite
+    # the file every day, which would (a) put a meaningless commit on the public
+    # repo daily and (b) blind the freshness watchdog -- check-freshness.py ages
+    # this feed by its last COMMIT date, so a daily timestamp-only commit would
+    # report it as one day old forever, even if CBP never published again. The
+    # watchdog exists precisely to catch that, so it must not be fed a heartbeat.
+    #
+    # "When did we last look" is not the question; "how current is the data" is.
+    def _body(d):
+        # Compare what will actually be SERIALISED, not the live dict: FY_PAGES
+        # is keyed by int and JSON keys are strings, so a plain dict comparison
+        # never matches and the timestamp churns anyway.
+        return {k: v for k, v in json.loads(json.dumps(d)).items()
+                if k != "fetched_at"}
+
+    try:
+        with open(json_path, encoding="utf-8") as f:
+            prev = json.load(f)
+        if _body(prev) == _body(out):
+            out["fetched_at"] = prev["fetched_at"]
+            print(f"Data unchanged since {prev['fetched_at'][:10]} -- "
+                  f"timestamp left alone.")
+    except (OSError, ValueError, KeyError):
+        pass  # No readable previous file: write a fresh one.
+
+    with open(json_path, "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2)
     print(f"Data -> {json_path}")
     return 0

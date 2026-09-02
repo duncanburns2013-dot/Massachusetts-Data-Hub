@@ -35,7 +35,10 @@ DATA = [
     ("data/price-distribution-latest.json", 5, "daily pull; worst real gap 1d"),
     ("data/employment-latest.json",      21,  "tracks BLS releases; worst real gap 7d"),
     ("data/cost-of-living-latest.json",  45,  "monthly BEA/MIT; worst real gap 13d"),
-    ("data/cbp-encounters-latest.json",  60,  "monthly, and MANUAL: cbp.gov 403s CI"),
+    # Polled daily by the self-hosted runner, but only committed when CBP
+    # actually publishes -- the updater keeps the old fetched_at on a no-op run
+    # precisely so this check keeps measuring the data and not the heartbeat.
+    ("data/cbp-encounters-latest.json",  60,  "monthly source; runner polls daily"),
     ("data/census-latest.json",          75,  "monthly job, annual source; worst gap 26d"),
     ("data/irs-soi-migration-latest.json", 75, "monthly job, annual source; worst gap 31d"),
 ]
@@ -113,8 +116,11 @@ def main() -> int:
     for rel, detail, max_age, why in stale:
         print(f"  {rel}: {detail} (limit {max_age}d — {why})", file=sys.stderr)
     print("\nA stale source means the site is publishing figures older than it "
-          "implies. Re-run that feed's workflow, or for CBP drop a fresh export "
-          "into data/_raw_cbp/ and run update-cbp-encounters.py.", file=sys.stderr)
+          "implies. Re-run that feed's workflow. For CBP, check that the "
+          "self-hosted runner is online -- cbp.gov 403s GitHub's IP ranges, so "
+          "that feed can only come from duncanburns2013-dot/ma-data-hub-runner:\n"
+          "  gh api repos/duncanburns2013-dot/ma-data-hub-runner/actions/runners"
+          " --jq '.runners[].status'", file=sys.stderr)
     return 1
 
 

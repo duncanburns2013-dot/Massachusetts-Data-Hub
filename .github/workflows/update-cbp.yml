@@ -7,10 +7,20 @@
 
 name: Update CBP Encounters
 
+# SCHEDULE RETIRED 2026-09-02. cbp.gov answers GitHub's IP ranges with 403 --
+# for the HTML pages and for the static CSV exports alike, verified with a probe
+# workflow -- while the same requests succeed from a residential IP. So a
+# scheduled run here could only ever exit 75, which produced a monthly "success"
+# that never refreshed anything: silent staleness, the exact failure mode the
+# freshness watchdog was added to catch.
+#
+# This feed now runs on a self-hosted runner in the private repo
+# duncanburns2013-dot/ma-data-hub-runner, which fetches from a residential IP and
+# pushes here. See that repo's README.
+#
+# Kept dispatchable so the CSV-drop path still works by hand, and so this starts
+# passing again on its own if CBP ever unblocks the range.
 on:
-  schedule:
-    # 12:00 UTC on the 25th of each month (CBP usually publishes by then)
-    - cron: "0 12 25 * *"
   push:
     paths:
       - "update-cbp-encounters.py"

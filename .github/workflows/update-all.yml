@@ -69,8 +69,23 @@ jobs:
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
         run: python update-census-data.py
 
-      - name: "CBP Encounters"
-        run: python update-cbp-encounters.py
+      # cbp.gov 403s GitHub's IP ranges, so this step's normal outcome on a
+      # hosted runner is exit 75 ("blocked, nothing written"). Left bare, that
+      # failed the step and aborted the job BEFORE the commit step -- throwing
+      # away the BLS/EIA/BEA/Census refreshes that had already succeeded.
+      # The real CBP refresh now runs on the self-hosted runner
+      # (duncanburns2013-dot/ma-data-hub-runner); this is only a courtesy retry.
+      - name: "CBP Encounters (optional -- blocked from hosted runners)"
+        run: |
+          set +e
+          python update-cbp-encounters.py
+          code=$?
+          set -e
+          if [ "$code" -eq 75 ]; then
+            echo "::notice::cbp.gov blocked the hosted runner, as expected. The self-hosted runner owns this feed."
+            exit 0
+          fi
+          exit "$code"
 
       - name: "IRS SOI Migration"
         run: python update-irs-soi-migration.py
