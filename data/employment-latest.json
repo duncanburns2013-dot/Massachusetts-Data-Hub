@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-09-03T13:09:43.339Z",
+  "fetched_at": "2026-09-04T13:09:09.669Z",
   "ma_unemployment_rate": {
     "latest": {
       "value": 4.4,
@@ -40,20 +40,21 @@
     "latest": {
       "value": 4.1,
       "year": "2026",
-      "period": "M07",
-      "periodName": "July",
-      "date": "July 2026"
+      "period": "M08",
+      "periodName": "August",
+      "date": "August 2026"
     }
   },
   "us_unemployment_level": {
     "latest": {
-      "value": 6916,
+      "value": 7031,
       "year": "2026",
-      "period": "M07",
-      "periodName": "July",
-      "date": "July 2026"
+      "period": "M08",
+      "periodName": "August",
+      "date": "August 2026"
     },
     "byPeriod": {
+      "2026-M08": 7031,
       "2026-M07": 6916,
       "2026-M06": 7094,
       "2026-M05": 7307,
