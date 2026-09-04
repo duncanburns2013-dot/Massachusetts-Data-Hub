@@ -14,6 +14,7 @@ import io, re, glob, os, json, html, subprocess
 
 BASE = 'https://massachusettsdatahub.com/'
 CARDS_DIR = 'cards'      # per-page social cards, rendered by build_cards.py
+SITE_NAME = 'Massachusetts Data Hub'
 
 # every address this site has answered on. Anything still naming one of
 # these gets moved to BASE - og:image and twitter:image included, which
@@ -155,6 +156,17 @@ def schema_for(p, s, url):
 pages = sorted(p for p in glob.glob('*.html') if not p.startswith('_'))
 added_desc = added_canon = fixed_og = added_noindex = moved = 0
 added_icons = added_card = added_ld = 0
+fixed_social = 0
+
+# The front page's own og:description, which is the text every page built on the
+# shared shell went out carrying. It is the sentinel for "this page never had
+# social copy of its own" - not DESC['index.html'], which is the curated meta
+# description and a different string again.
+INHERITED_SOCIAL_DESC = None
+if os.path.exists('index.html'):
+    _m = re.search(r'<meta property="og:description" content="([^"]*)"',
+                   io.open('index.html', encoding='utf-8').read())
+    INHERITED_SOCIAL_DESC = _m.group(1) if _m else None
 
 # the tab mark is the state's own outline; the .ico is there for older
 # browsers and the crawlers that still ask for it by that name
@@ -204,6 +216,38 @@ for p in pages:
             if m:
                 s = s2[:m.end()] + want + '\n' + s2[m.end():]
                 added_desc += 1
+
+    # --- the social title and description a page inherited from its shell
+    # seo.py curated <meta name="description"> and stopped there, but no
+    # platform reads that tag: Facebook, LinkedIn and X read og:*. about,
+    # method and videos are built on a shared shell, so all three went out
+    # carrying the front page's og:title and og:description - a link to the
+    # Videos page previewed as "Massachusetts Data Hub / Official data
+    # dashboards covering taxes, housing...", which is the front page's pitch
+    # and tells a reader nothing about what they are about to click.
+    #
+    # Only inherited copy is replaced. Four dashboards carry a deliberately
+    # punchier social line than their meta description - all-things-boston
+    # opens on "Veterans $3.3M. DEI/Equity $28.5M." - and blanket-syncing the
+    # two tags would throw that away to fix an unrelated bug.
+    if p != 'index.html':
+        inherited_desc = INHERITED_SOCIAL_DESC
+        mine = re.search(r'<meta name="description" content="([^"]*)"', s)
+        od = re.search(r'<meta property="og:description" content="([^"]*)"', s)
+        if mine and od and inherited_desc and od.group(1) == inherited_desc:
+            for prop, attr in (('og:description', 'property'), ('twitter:description', 'name')):
+                s = re.sub(r'<meta %s="%s" content="[^"]*">' % (attr, prop),
+                           '<meta %s="%s" content="%s">' % (attr, prop, mine.group(1)), s)
+            fixed_social += 1
+
+        ot = re.search(r'<meta property="og:title" content="([^"]*)"', s)
+        ti = re.search(r'<title>(.*?)</title>', s, re.S)
+        if ot and ti and ot.group(1).strip() == SITE_NAME:
+            want_t = html.escape(re.sub(r'\s+', ' ', ti.group(1)).strip(), quote=True)
+            if want_t and want_t != SITE_NAME:
+                for prop, attr in (('og:title', 'property'), ('twitter:title', 'name')):
+                    s = re.sub(r'<meta %s="%s" content="[^"]*">' % (attr, prop),
+                               '<meta %s="%s" content="%s">' % (attr, prop, want_t), s)
 
     # --- the icon set, stamped once and replaced rather than stacked
     s = re.sub(r'[ \t]*<link[^>]+rel="(?:icon|shortcut icon|apple-touch-icon)"[^>]*>\n?', '', s)
@@ -306,6 +350,7 @@ print('social cards added : %d' % added_card)
 print('pages moved to BASE: %d' % moved)
 print('canonicals stamped : %d' % added_canon)
 print('descriptions added : %d' % added_desc)
+print('social copy fixed  : %d (og/twitter title+description inherited from a shell)' % fixed_social)
 print('og:url normalised  : %d changed' % fixed_og)
 print('noindex added      : %d (%s)' % (added_noindex, ', '.join(NOINDEX)))
 print('sitemap.xml        : %d urls' % len(listed))

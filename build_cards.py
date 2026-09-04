@@ -230,10 +230,20 @@ def main():
             # on the front page the headline is the wordmark, so the eyebrow
             # carries the scope instead of repeating it
             eyebrow = 'All 351 municipalities' if title.strip() == SITE else SITE
+            # A page title carries the site name so the browser tab and the
+            # search result both stand alone. The card already prints it as the
+            # eyebrow, so the headline drops it rather than saying it twice -
+            # "Videos", not "Videos - Massachusetts Data Hub" under a line
+            # reading MASSACHUSETTS DATA HUB.
+            head = title.strip()
+            for sep in (u' — ', ' | ', ' - '):
+                if head.endswith(sep + SITE):
+                    head = head[:-len(sep + SITE)].strip()
+                    break
             page = (TEMPLATE
                     .replace('__MAP__', map_uri)
                     .replace('__EYEBROW__', html.escape(eyebrow, quote=False))
-                    .replace('__TITLE__', html.escape(title, quote=False))
+                    .replace('__TITLE__', html.escape(head, quote=False))
                     .replace('__DESC__', emphasise(desc))
                     .replace('__DOMAIN__', DOMAIN))
             src = os.path.join(work, slug + '.html')
