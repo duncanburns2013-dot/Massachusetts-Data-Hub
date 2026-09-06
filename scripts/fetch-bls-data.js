@@ -401,6 +401,60 @@ function inject(html, tag, literal) {
   return html.replace(re, `$1${literal}$2`);
 }
 
+
+// ── MA vs nation comparison box (Overview tab) ───────────────────────────────
+// Twenty-six months of both geographies on ONE shared axis, so the page can read
+// a 12-month change at the same index for each and never has to align anything
+// itself.
+//
+// The national series publish about two weeks before the state ones, so the
+// newest month routinely carries a US value and a null for MA. That is deliberate
+// and must stay: the page anchors on MA's newest complete month and reads the US
+// column at that same index, which is the only way the two columns describe the
+// same period. Trimming the axis to MA's end would throw away the US value that
+// is needed the moment MA catches up.
+//
+// Exported so the alignment is testable without an API key — see
+// scripts/test-comparison-box.mjs.
+const CMP_TAGS = ['cmp-lab', 'cmp-ma-ur', 'cmp-us-ur', 'cmp-ma-nf', 'cmp-us-nf',
+                  'cmp-ma-lf', 'cmp-us-lf'];
+
+function buildComparisonBox(html, s) {
+  const cols = [s.maUR, s.usUR, s.maNF, s.usNF, s.maLF, s.usLF];
+  if (!cols.every(a => a && a.length)) return html;
+
+  // inject() only WARNS when a marker is missing. For this box that would leave
+  // every figure frozen at whatever month it was last built with while the rest
+  // of the page moved on — silent staleness, which is the failure mode this repo
+  // keeps paying for. Seven markers is enough surface to get one wrong, so they
+  // are checked up front and a miss is fatal rather than a log line nobody reads.
+  for (const t of CMP_TAGS) {
+    if (!new RegExp(`/\\*@${t}\\*/[\\s\\S]*?/\\*@\\*/`).test(html)) {
+      throw new Error(
+        `comparison-box marker @${t} is missing from employment-dashboard.html. ` +
+        `The box would keep publishing a stale month. Restore the marker.`);
+    }
+  }
+
+  const keys = [...new Set(cols.flat().map(mkey))].sort((a, b) => a - b).slice(-26);
+  const axis = keys.map(k => ({ year: Math.floor(k / 100), mon: k % 100 }));
+  const col = (pts, divisor = 1, dp = 1) => {
+    const m = new Map(pts.map(p => [mkey(p), p.value]));
+    return keys.map(k => (m.has(k) ? (m.get(k) / divisor).toFixed(dp) : 'null')).join(',');
+  };
+
+  html = inject(html, 'cmp-lab',   axisLabels(axis));
+  html = inject(html, 'cmp-ma-ur', col(s.maUR));
+  html = inject(html, 'cmp-us-ur', col(s.usUR));
+  html = inject(html, 'cmp-ma-nf', col(s.maNF));
+  html = inject(html, 'cmp-us-nf', col(s.usNF));
+  // MA labour force is published in PERSONS; every other level on this axis is
+  // thousands. Divided here so the page never has to know which is which.
+  html = inject(html, 'cmp-ma-lf', col(s.maLF, 1000, 3));
+  html = inject(html, 'cmp-us-lf', col(s.usLF));
+  return html;
+}
+
 // Build every auto-chart literal from the fetched series, then inject into the HTML.
 function updateCharts(html, find, findLong) {
   const maUR  = monthsOf(find(EMPLOYMENT_SERIES.MA_UNEMPLOYMENT_RATE));
@@ -484,6 +538,12 @@ function updateCharts(html, find, findLong) {
     html = inject(html, 'ur2-ma',  col(maMap));
     html = inject(html, 'ur2-nat', col(natMap));
   }
+
+  html = buildComparisonBox(html, {
+    maUR, usUR: natUR, maNF, maLF,
+    usNF: monthsOf(find(EMPLOYMENT_SERIES.US_NONFARM)),
+    usLF: monthsOf(find(EMPLOYMENT_SERIES.US_LABOR_FORCE)),
+  });
 
   return html;
 }
@@ -1216,4 +1276,4 @@ if (process.env.BLS_SKIP_MAIN !== '1') {
   });
 }
 
-export { monthsOf, inject, injectHTMLBlock, updateMASectorSpectrum, MA_SECTOR_SERIES, MA_SECTOR_META, loadReleaseSchedule, releaseDateFor, buildSectorRows, buildRevisionRows, momAdjacent, US_SECTOR_META };
+export { monthsOf, inject, injectHTMLBlock, buildComparisonBox, CMP_TAGS, updateMASectorSpectrum, MA_SECTOR_SERIES, MA_SECTOR_META, loadReleaseSchedule, releaseDateFor, buildSectorRows, buildRevisionRows, momAdjacent, US_SECTOR_META };

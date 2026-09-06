@@ -217,6 +217,43 @@ footer a:hover{color:var(--gold)}
     <p>MA unemployment was <strong id="ovUrMa">4.5%</strong> in <span id="ovUrMo">May 2026</span>; the national rate for the same month was <span id="ovUrNat">4.3%</span>. The rate <span id="ovUrDir">eased</span> as the number of unemployed <span id="ovUlDir">fell</span> by <strong id="ovUlChg">4,771</strong> — but the labor force <span id="ovLfDir">also contracted</span> by <strong id="ovLfChg">8,965</strong> in <span id="ovLfMo">May 2026</span>. Peak to <span id="ovLfMo2">May 2026</span>: <span id="ovLfPeak">73,000 people have exited the MA labor force since March 2025</span>. Source: BLS LAUS, <span id="ovUrRel">June 23, 2026</span>.</p>
   </div>
 
+
+  <!-- Massachusetts against the nation. Every figure is read from the cmp* arrays
+       at the SAME month, and that month is printed in the heading so the reader
+       can see which one. This is the whole reason the box is computed rather than
+       written: the national releases run about two weeks ahead of the state ones,
+       so on most days MA's newest month is one behind the US, and a box quoting
+       each series' own latest would compare different months and misstate the gap
+       in a way nobody would notice.
+       Levels are not comparable between a state and the nation, so the two growth
+       rows are 12-month PERCENT changes. Job openings is deliberately not given a
+       gap: see the note under the table. -->
+  <div class="chart-card" style="margin-bottom:24px">
+    <h3>Massachusetts vs. the Nation &mdash; <span id="cmpMonth">&mdash;</span></h3>
+    <table class="data-table">
+      <thead><tr><th>Measure</th><th>Massachusetts</th><th>United States</th><th>Gap</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Unemployment rate</strong></td>
+            <td id="cmpUrMa">&mdash;</td><td id="cmpUrUs">&mdash;</td><td id="cmpUrGap">&mdash;</td></tr>
+        <tr><td><strong>Payroll jobs</strong> &mdash; 12-month change</td>
+            <td id="cmpNfMa">&mdash;</td><td id="cmpNfUs">&mdash;</td><td id="cmpNfGap">&mdash;</td></tr>
+        <tr><td><strong>Labor force</strong> &mdash; 12-month change</td>
+            <td id="cmpLfMa">&mdash;</td><td id="cmpLfUs">&mdash;</td><td id="cmpLfGap">&mdash;</td></tr>
+        <tr><td><strong>Job openings rate</strong></td>
+            <td id="cmpJoMa">&mdash;</td><td id="cmpJoUs">&mdash;</td>
+            <td>different periods</td></tr>
+      </tbody>
+    </table>
+    <p class="source">Unemployment: BLS LAUS (MA) and CPS (US). Payrolls and labor
+      force: BLS CES and CPS, seasonally adjusted. Growth rows are 12-month percent
+      changes, because a state and the nation cannot be compared on levels.
+      <strong>Job openings is not a like-for-like row:</strong> BLS ended monthly
+      state JOLTS after December 2025, so the Massachusetts figure is the last
+      monthly reading published and the national one is current. They are shown
+      together because the comparison is still worth having, but they are
+      <em>different periods</em> and no gap is computed between them.</p>
+  </div>
+
   <div class="chart-grid">
     <div class="chart-card"><h3>Unemployment Rate Trajectory — MA vs. National (2019–2026)</h3><div class="chart-area"><canvas id="c-unemp"></canvas></div></div>
     <div class="chart-card"><h3>Annual Net Job Growth (MA)</h3><div class="chart-area"><canvas id="c-jobs"></canvas></div></div>
@@ -620,8 +657,14 @@ footer a:hover{color:var(--gold)}
     </div>
     <div class="stat-card">
       <div class="label">Last MA Openings (Dec 2025)</div>
-      <div class="value amber">1.07M</div>
-      <div class="sub">Final monthly state figure · Next: Jul 2026 annual</div>
+      <!-- Was 1.07M, which is roughly eight times the published figure. BLS
+           JTS000000250000000JOL puts Massachusetts openings at 129,000 (SA) in
+           December 2025, a 3.4% openings rate. 1.07M would have given
+           Massachusetts about 15% of every job opening in the country while it
+           holds 2.3% of the jobs -- the kind of number that survives only
+           because nothing on the page divided it by anything. -->
+      <div class="value amber">129,000</div>
+      <div class="sub">3.4% openings rate · final monthly state figure · next: annual</div>
     </div>
     <div class="stat-card">
       <div class="label">Openings per Unemployed</div>
@@ -969,6 +1012,22 @@ var ur2Lab=[/*@ur2-lab*/'Jul 25','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','A
 var ur2MA=[/*@ur2-ma*/4.5,4.5,4.6,4.7,4.7,4.7,4.8,4.7,4.7,4.5,4.4,4.4,null/*@*/];
 var ur2Nat=[/*@ur2-nat*/4.3,4.3,4.4,4.5,4.4,4.3,4.4,4.3,4.3,4.3,4.2,4.1,4.1/*@*/];
 
+// ── MA vs nation comparison box ──────────────────────────────────────────────
+// One shared month axis for both geographies. The national series publish about
+// two weeks before the state ones, so the tail months carry a US value and a null
+// for MA; the box anchors on MA's newest complete month and reads the US column
+// at that same index. Quoting each series' own latest would put July MA beside
+// August US and misstate every gap on the page.
+// MA labour force is published in PERSONS and is divided to thousands here so
+// both columns share a unit. fetch-bls-data.js does the same on refresh.
+var cmpLab=[/*@cmp-lab*/'Jul 24','Aug','Sep','Oct','Nov','Dec','Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar','Apr','May','Jun','Jul','Aug 26'/*@*/];
+var cmpMaUr=[/*@cmp-ma-ur*/4.1,4.1,4.1,4.1,4.1,4.1,4.2,4.3,4.3,4.4,4.4,4.4,4.5,4.5,4.6,null,4.7,4.7,4.7,4.8,4.7,4.7,4.5,4.4,4.4,null/*@*/];
+var cmpUsUr=[/*@cmp-us-ur*/4.2,4.2,4.1,4.1,4.2,4.1,4.0,4.2,4.2,4.2,4.3,4.1,4.3,4.3,4.4,null,4.5,4.4,4.3,4.4,4.3,4.3,4.3,4.2,4.1,4.1/*@*/];
+var cmpMaNf=[/*@cmp-ma-nf*/3725.9,3726.9,3726.9,3726.2,3722.9,3723.0,3723.0,3717.5,3714.9,3714.8,3714.6,3701.5,3706.7,3697.7,3694.7,3701.0,3701.4,3705.7,3707.7,3700.6,3707.8,3715.2,3711.1,3717.1,3712.5,null/*@*/];
+var cmpUsNf=[/*@cmp-us-nf*/157748.0,157757.0,157912.0,157945.0,158079.0,158316.0,158268.0,158310.0,158377.0,158485.0,158498.0,158478.0,158542.0,158472.0,158548.0,158408.0,158449.0,158432.0,158592.0,158436.0,158650.0,158798.0,158861.0,158892.0,158913.0,159075.0/*@*/];
+var cmpMaLf=[/*@cmp-ma-lf*/3930.779,3933.101,3935.220,3937.670,3939.859,3944.592,3949.077,3951.911,3952.593,3951.418,3949.636,3948.218,3946.177,3943.000,3939.694,null,3935.591,3935.586,3926.744,3915.281,3900.230,3888.509,3879.513,3873.490,3870.833,null/*@*/];
+var cmpUsLf=[/*@cmp-us-lf*/168395.0,168492.0,168662.0,168395.0,168248.0,168506.0,170696.0,170441.0,170641.0,171054.0,170492.0,170380.0,170412.0,170750.0,171261.0,null,171541.0,171495.0,170465.0,170483.0,170087.0,169995.0,170078.0,169358.0,169094.0,169777.0/*@*/];
+
 // National job openings rate (JOLTS JOR), monthly.
 var joltsLab=[/*@jolts-lab*/'Jan 24','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb','Mar','Apr','May','Jun','Jul 26'/*@*/];
 var joltsNat=[/*@jolts-nat*/5.1,5.1,5.0,4.6,4.7,4.5,4.5,4.6,4.2,4.5,4.6,4.4,4.5,4.4,4.2,4.3,4.4,4.3,4.3,4.2,4.3,4.3,4.1,4.0,4.4,4.2,4.2,4.6,4.5,4.3,4.4/*@*/];
@@ -1146,6 +1205,52 @@ function renderDerived(){
     txt('ovUrMo',moS(urK));
     txt('ovUrNat',ur2Nat[uiMA]==null?'not yet published':Number(ur2Nat[uiMA]).toFixed(1)+'%');
   }
+
+  // ── MA vs nation box ──
+  // Anchored on the newest month where MA has BOTH a rate and a level, then the
+  // US column is read at that same index. A year earlier is index-12 on the same
+  // axis, so a gap in the axis cannot silently turn a 12-month change into an
+  // 11-month one -- the year-ago slot is checked for null rather than assumed.
+  (function(){
+    function pct(a,b){ return (a==null||b==null||!b) ? null : (a/b-1)*100; }
+    function fp(v,dp){ return v==null ? '\u2014' : (v>=0?'+':'\u2212')+Math.abs(v).toFixed(dp==null?2:dp)+'%'; }
+    // The gap is taken between the ROUNDED figures, not the raw ones. At full
+    // precision MA +0.155% against US +0.234% is a 0.08-point gap, which prints
+    // beside a displayed "+0.16%" and "+0.23%" that subtract to 0.07 -- a page
+    // whose own three numbers do not add up invites the reader to trust none of
+    // them. Rounding first costs a hundredth of a point and keeps it checkable.
+    function gap(a,b,dp){
+      if(a==null||b==null) return '\u2014';
+      var d=+(a.toFixed(dp==null?2:dp))-(+(b.toFixed(dp==null?2:dp)));
+      return (d>0?'+':d<0?'\u2212':'')+Math.abs(d).toFixed(dp==null?2:dp)+' pts';
+    }
+    var n=cmpLab.length, ci=-1, k;
+    for(k=n-1;k>=0;k--){ if(cmpMaUr[k]!=null&&cmpMaNf[k]!=null&&cmpMaLf[k]!=null){ci=k;break;} }
+    if(ci<0) return;
+    var y=ci-12, kk=seriesKeys(cmpLab);
+    txt('cmpMonth', moS(kk[ci]));
+
+    txt('cmpUrMa', cmpMaUr[ci]==null?'\u2014':cmpMaUr[ci].toFixed(1)+'%');
+    txt('cmpUrUs', cmpUsUr[ci]==null?'\u2014':cmpUsUr[ci].toFixed(1)+'%');
+    txt('cmpUrGap', gap(cmpMaUr[ci], cmpUsUr[ci], 1));
+
+    var nfMa=y>=0?pct(cmpMaNf[ci],cmpMaNf[y]):null,
+        nfUs=y>=0?pct(cmpUsNf[ci],cmpUsNf[y]):null,
+        lfMa=y>=0?pct(cmpMaLf[ci],cmpMaLf[y]):null,
+        lfUs=y>=0?pct(cmpUsLf[ci],cmpUsLf[y]):null;
+    txt('cmpNfMa',fp(nfMa)); txt('cmpNfUs',fp(nfUs));
+    txt('cmpNfGap', gap(nfMa, nfUs));
+    txt('cmpLfMa',fp(lfMa)); txt('cmpLfUs',fp(lfUs));
+    txt('cmpLfGap', gap(lfMa, lfUs));
+
+    // Openings: national from the live JOLTS array, MA frozen at its final
+    // monthly reading because BLS publishes no newer one.
+    var jn=null, jk=null, jKeys=seriesKeys(joltsLab);
+    for(k=joltsNat.length-1;k>=0;k--){ if(joltsNat[k]!=null){jn=joltsNat[k];jk=jKeys[k];break;} }
+    txt('cmpJoUs', jn==null?'\u2014':Number(jn).toFixed(1)+'% ('+moS(jk)+')');
+    txt('cmpJoMa', '3.4% (Dec 2025)');
+  })();
+
   var lfLastK=lfK[lfK.length-1], lfLastChg=lfChgAt(lfLastK);
   txt('ovLfMo',moS(lfLastK)); txt('ovLfMo2',moS(lfLastK));
   // Direction words are derived, not asserted. "also contracted" reads as a lie
