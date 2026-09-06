@@ -421,7 +421,17 @@ const CMP_TAGS = ['cmp-lab', 'cmp-ma-ur', 'cmp-us-ur', 'cmp-ma-nf', 'cmp-us-nf',
 
 function buildComparisonBox(html, s) {
   const cols = [s.maUR, s.usUR, s.maNF, s.usNF, s.maLF, s.usLF];
-  if (!cols.every(a => a && a.length)) return html;
+  if (!cols.every(a => a && a.length)) {
+    // Left as a no-op on purpose: a transient gap in one BLS series should not
+    // fail the whole employment refresh, and last month's box is better than a
+    // half-written one. But it must not pass in silence either -- if a series is
+    // renamed the box would sit frozen forever looking perfectly healthy.
+    const missing = ['maUR', 'usUR', 'maNF', 'usNF', 'maLF', 'usLF']
+      .filter(k => !s[k] || !s[k].length);
+    console.warn(`   ⚠️  comparison box NOT updated — no data for: ${missing.join(', ')}. ` +
+                 `It is still showing the month it was last built with.`);
+    return html;
+  }
 
   // inject() only WARNS when a marker is missing. For this box that would leave
   // every figure frozen at whatever month it was last built with while the rest
