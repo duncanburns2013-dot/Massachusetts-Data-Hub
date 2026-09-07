@@ -100,6 +100,9 @@ STAMPS = [
     ("commercial-re-dashboard.html",
      r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 400,
      "quarterly brokerage reports; hand-maintained, no updater"),
+    ("pension-dashboard.html",
+     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 400,
+     "PERAC/ACFR/PPD publish annually; hand-maintained, no updater"),
 ]
 
 # Deliberately NOT checked, so the list is a decision rather than an oversight:
