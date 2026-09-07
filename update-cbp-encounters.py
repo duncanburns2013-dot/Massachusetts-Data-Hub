@@ -574,13 +574,16 @@ def main():
     # run. Unconditional on purpose: if it only fired when a number moved, a feed
     # that quietly stopped returning new months would keep an old stamp looking
     # current -- which is exactly how this page came to claim February in August.
+    # Every occurrence, not just the first. The header carried this anchor while
+    # the footer carried a hard-coded month, so the page updated its headline to
+    # July and went on telling the reader underneath that the data was compiled
+    # in February - the same failure this stamp exists to prevent, one element
+    # further down the page. Both now come from the data.
     stamp = fmt_month(*last)
-    sm = re.search(r'(data-field="page-updated">)[^<]*(<)', html)
-    if sm:
-        new_stamp = sm.group(1) + stamp + sm.group(2)
-        if sm.group(0) != new_stamp:
-            html = html[:sm.start()] + new_stamp + html[sm.end():]
-            print(f"  Page update stamp -> {stamp} (latest month in the data).")
+    pat = re.compile(r'(data-field="page-updated">)[^<]*(<)')
+    if pat.search(html):
+        html, changed = pat.subn(lambda m: m.group(1) + stamp + m.group(2), html)
+        print(f"  Page update stamp -> {stamp} ({changed} place(s), latest month in the data).")
     else:
         print("  !! page-updated anchor not found -- NOT updated")
 

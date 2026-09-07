@@ -70,6 +70,24 @@ STAMPS = [
     ("education-merrimack-valley.html",
      r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 400,
      "DESE publishes annually; ingest is by hand, no API"),
+
+    # Four more that had neither a feed nor a stamp, so nothing aged them at all
+    # and they could not show up here even as a warning. Each opening date is the
+    # vintage the page already declared -- in its own footer, or in the latest
+    # quarter it charts -- rather than a date chosen here, which would have been
+    # a guess dressed up as a check.
+    ("healthcare-dashboard.html",
+     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 400,
+     "CMS/KFF/CHIA publish annually; hand-maintained, no updater"),
+    ("pay-to-play-dashboard.html",
+     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 400,
+     "OCPF and OpenSecrets; hand-maintained, no updater"),
+    ("all-things-boston.html",
+     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 400,
+     "City of Boston ACFR and data.boston.gov; hand-maintained"),
+    ("commercial-re-dashboard.html",
+     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 400,
+     "quarterly brokerage reports; hand-maintained, no updater"),
 ]
 
 # Deliberately NOT checked, so the list is a decision rather than an oversight:
