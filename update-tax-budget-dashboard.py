@@ -297,6 +297,51 @@ def main():
         html, _ = tracker_row(html, "Shelter / Housing", ne_sh, us_sh, ne_lbl,
                               "Live Cost Tracker: Shelter")
 
+    # ── Stamp the page with the vintage of its own data ──
+    # Unconditional, like the CBP page's stamp and for the same reason: if it
+    # only fired when a number moved, a feed that quietly stopped returning new
+    # months would leave an old date looking current -- which is this script's
+    # documented failure mode, going green while updating nothing.
+    #
+    # The page carries two vintages, EIA electricity and BLS CPI, and they can
+    # sit a month apart. The OLDER of the two is stamped, so the page never
+    # claims to be fresher than its stalest figure.
+    #
+    # Written into anchors, never by searching for the month as text. Elsewhere
+    # the page says a Census release "has not been published as of July 2026" --
+    # prose about something that has NOT happened. A global month replace would
+    # march that sentence forward every run and make it a false statement, which
+    # is the trap this file's docstring flags at the top.
+    # Boston/NE CPI is published every other month, so ne_lbl is absent about half
+    # the time. Taking the BLS vintage from whichever of the two series answered
+    # keeps the stamp working in those months; reading ne_lbl alone left the page
+    # unstamped on every off-month, which is the silence this is meant to end.
+    vintages, sources = [], []
+    if period:                                   # EIA, 'YYYY-MM'
+        vintages.append(period)
+        sources.append(f"EIA {period}")
+    for name, lbl in (("BLS Boston/NE", ne_lbl), ("BLS US", us_lbl)):
+        if lbl:                                  # BLS, 'Mon YYYY'
+            mon, yr = lbl.split()
+            vintages.append("%s-%02d" % (yr, MONTHS.index(mon)))
+            sources.append(f"{name} {lbl}")
+            break
+    if vintages:
+        oldest = min(vintages)                   # ISO sorts chronologically
+        y, mo = oldest.split("-")
+        pretty = f"{MONTHS[int(mo)]} {y}"
+        html, ok1 = sub_once(
+            html, r'(<meta name="data-checked" content=")[^"]*(">)',
+            lambda m: f"{m.group(1)}{oldest}-01{m.group(2)}", "data-checked stamp")
+        html, ok2 = sub_once(
+            html, r'(<span data-field="page-updated">)[^<]*(</span>)',
+            lambda m: f"{m.group(1)}{pretty}{m.group(2)}", "page-updated stamp")
+        if ok1 or ok2:
+            print(f"\nStamped page vintage -> {pretty} "
+                  f"(oldest of: {', '.join(sources)}).")
+    else:
+        fail("no EIA or BLS vintage available -- page date NOT stamped")
+
     # ── Write ──
     if html != orig:
         with open(HTML_FILE, "w", encoding="utf-8") as f:

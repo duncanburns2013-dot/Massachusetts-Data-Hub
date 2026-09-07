@@ -49,6 +49,18 @@ STAMPS = [
      "MLS tail is refetched nightly"),
     ("energy-dashboard.html", r"FUEL_NOW = \{asOf:'([^']+)'", "%Y-%m-%d", 45,
      "EIA weekly retail prices, monthly job"),
+    # Written by update-tax-budget-dashboard.py from the OLDER of its EIA and
+    # BLS vintages, so this ages the stalest figure on the page, not the freshest.
+    #
+    # 90 days, not the 45 energy uses, because this stamp means something
+    # different. It is the FIRST of the month the data covers, while BLS
+    # publishes a month roughly six weeks after it ends: on 7 Sep the newest CPI
+    # month available is July, already 68 days old by this measure and entirely
+    # current. Month M stays newest until M+1 is released around the 12th of
+    # M+2, about 74 days, so 90 leaves headroom without hiding a real stall.
+    ("tax-budget-dashboard.html",
+     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 90,
+     "EIA electricity + BLS CPI; stamp is the covered month, BLS lags ~6 weeks"),
 
     # --- Hand-maintained pages ------------------------------------------------
     # These have no updater. They cannot go stale "quietly" any more, but they can
