@@ -1,0 +1,19 @@
+{
+ "fetched_at": "2026-09-08T10:51:40Z",
+ "source": "U.S. Census Bureau, Population Estimates Program (NST-EST components of change)",
+ "source_url": "https://www2.census.gov/programs-surveys/popest/datasets/2020-2025/state/totals/NST-EST2025-ALLDATA.csv",
+ "vintage": 2025,
+ "measure": "net domestic migration (interstate only; excludes international, births, deaths)",
+ "span": "2020-2025",
+ "net_domestic_outmigration": 182145,
+ "by_year": {
+  "2020": -36863,
+  "2021": -9433,
+  "2022": -47954,
+  "2023": -35360,
+  "2024": -19195,
+  "2025": -33340
+ },
+ "latest_year": 2025,
+ "latest_year_net": -33340
+}

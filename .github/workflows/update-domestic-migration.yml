@@ -1,0 +1,94 @@
+# .github/workflows/update-domestic-migration.yml
+#
+# Refreshes MA net domestic out-migration from the Census components-of-change
+# file and stamps immigration-dashboard.html.
+#
+# Census publishes one vintage a year, in December, and restates every earlier
+# year when it does -- so this runs monthly to catch the release rather than
+# guessing its exact day, and re-sums the whole series each time.
+#
+# It exists because the figure it replaced was hard-coded: it went a full vintage
+# out of date (137K against a published 182K) and nobody noticed until a Boston
+# Herald piece quoted the current number back at us.
+
+name: Update Domestic Migration
+
+on:
+  schedule:
+    # 15:00 UTC on the 3rd of each month
+    - cron: "0 15 3 * *"
+  push:
+    paths:
+      - "update-domestic-migration.py"
+  workflow_dispatch:
+
+jobs:
+  update-migration:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: push-to-main
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Fetch Census domestic migration
+        run: python update-domestic-migration.py
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet -- '*.html' 'data/*.json' \
+            && echo "changed=false" >> $GITHUB_OUTPUT \
+            || echo "changed=true"  >> $GITHUB_OUTPUT
+
+      - name: Commit updates
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add immigration-dashboard.html data/domestic-migration-latest.json
+          git commit -m "Auto-update: MA domestic migration $(date +'%B %Y')"
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt"
+              exit 0
+            fi
+            echo "Push attempt $attempt rejected - pulling latest and rebasing"
+            if ! git pull --rebase origin main; then
+              # Same reasoning as the other data workflows: both sides regenerated
+              # the same file from the same source, so a conflict here means another
+              # run already published this window. Nothing is lost by skipping.
+              git rebase --abort || true
+              echo "::notice::Another run already published this vintage - skipping, nothing lost."
+              exit 0
+            fi
+          done
+          echo "::error::Push failed after 5 attempts"
+          exit 1
+
+      - name: No new data
+        if: steps.changes.outputs.changed == 'false'
+        run: echo "Census vintage unchanged - no commit needed."
+
+      - name: Job summary
+        if: always()
+        run: |
+          echo "### MA Domestic Migration" >> $GITHUB_STEP_SUMMARY
+          if [ -f data/domestic-migration-latest.json ]; then
+            python - <<'PY' >> $GITHUB_STEP_SUMMARY
+          import json
+          d = json.load(open("data/domestic-migration-latest.json"))
+          print(f"- Census vintage: {d['vintage']}")
+          print(f"- Span: {d['span']}")
+          print(f"- Net domestic out-migration: {d['net_domestic_outmigration']:,}")
+          PY
+          fi

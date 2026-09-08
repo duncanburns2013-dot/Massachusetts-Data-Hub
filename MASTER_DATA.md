@@ -162,6 +162,7 @@ The figures below are that file's current contents; the Feb 2026 column showed a
 | IRS returns lost (cumulative 2011–2023) | 184,719 | IRS SOI | 🔄 Aug 2026 |
 | AGI lost (cumulative 2011–2023) | $24.7B | IRS SOI | 🔄 Aug 2026 |
 | Net outflow, latest year (2022-23) | 16,921 returns | IRS SOI | 🔄 Aug 2026 |
+| Net domestic out-migration, 2020-2025 | 182,145 people | US Census Bureau, Population Estimates (NST-EST2025 components of change) | 🔄 Sep 2026 |
 | Net AGI loss, latest year (2022-23) | $4.18B | IRS SOI | 🔄 Aug 2026 |
 | 2024 US growth from immigration | 84% | Census | ✅ Jan 2026 |
 | MA NIM "nosedive" (2025 proj) | Historic decline | Census Vintage 2025 | ✅ Feb 2026 |

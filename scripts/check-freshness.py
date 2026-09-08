@@ -41,6 +41,12 @@ DATA = [
     ("data/cbp-encounters-latest.json",  60,  "monthly source; runner polls daily"),
     ("data/census-latest.json",          75,  "monthly job, annual source; worst gap 26d"),
     ("data/irs-soi-migration-latest.json", 75, "monthly job, annual source; worst gap 31d"),
+    # Census releases one vintage a year, in December, and restates every earlier
+    # year when it does. 400 days so a missed release is impossible to ignore -
+    # the number this replaced went a full vintage out of date unnoticed until a
+    # newspaper printed the current one.
+    ("data/domestic-migration-latest.json", 400,
+     "Census population estimates; one vintage a year, each restating the last"),
 ]
 
 # Figures whose freshness lives in the page, not in a data file.

@@ -880,7 +880,12 @@ tr:hover td{background:var(--surface)}
 <div class="stat-box"><div class="num" style="color:#f87171">10.8M</div><div class="lbl">Biden Encounters</div></div>
 <div class="stat-box"><div class="num" style="color:#60a5fa">7.4M</div><div class="lbl">Net Stayed (est)</div></div>
 <div class="stat-box"><div class="num" style="color:#34d399">-84%</div><div class="lbl">SW Border Patrol, FY25 v FY24</div></div>
-<div class="stat-box"><div class="num" style="color:#D9B441">137K</div><div class="lbl">MA Residents Left</div></div>
+<!-- Written by update-domestic-migration.py from the Census components-of-change
+     file. It was "137K / MA Residents Left" - no period, no source, no Method
+     row - and it sat unmoved through the 2025 vintage, which added a year and
+     restated every earlier one. The label now says which migration this is:
+     interstate only, not population change. -->
+<div class="stat-box"><div class="num" style="color:#D9B441"><span data-field="net-outmigration">182K</span></div><div class="lbl">Net Domestic Out-Migration, <span data-field="net-outmigration-span">2020–25</span></div></div>
 <!-- #46527A is a chart-palette colour meant for light grounds; on this dark hero
      it measured 1.19:1 against the box, so the figure was invisible while its
      four neighbours sat at ~3:1. Violet keeps it distinct from the red, blue,
