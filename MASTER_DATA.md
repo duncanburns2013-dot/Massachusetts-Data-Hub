@@ -775,6 +775,55 @@ Figures on `pension-dashboard.html`. Maintained by hand against the actuarial re
 | Pension Funded Ratios — MA vs. Selected States | Public Plans Database; individual state ACFRs | — |
 | MA SERS vs. National Avg, 2001–2024 | Public Plans Database | — |
 
+### Headline figures
+
+The rows above document the charts. These are the summary cards, which the page
+displays without a source line of their own.
+
+Attribution here is to the **publisher**, not to a file. The specific documents
+these were read from are not retained, and the page’s own `Source:` lines belong
+to its charts rather than to these cards — borrowing one by proximity credited
+Massachusetts SERS headcounts to a national average, so it was not used. Naming
+the body that publishes each series is what can be stood behind: the FY2024 ACFR,
+the PERAC valuation and the PRIT report are all reachable from the links below,
+and a precise citation that might be wrong is worse here than an honest general one.
+
+- Commonwealth ACFR — <https://www.macomptroller.org/annual-comprehensive-financial-reports/>
+- PERAC — <https://www.mass.gov/orgs/public-employee-retirement-administration-commission>
+- PRIM / PRIT Fund — <https://www.mapension.com/>
+- State Retiree Benefits Trust Fund — <https://www.mass.gov/orgs/state-retiree-benefits-trust-fund>
+
+| Figure | Value | Publisher | Vintage |
+|--------|-------|-----------|---------|
+| SERS (State Employees) — 72.5% funded · $37B assets | $14.1B | PERAC — Public Employee Retirement Administration Commission (mass.gov); Office of the Comptroller, Commonwealth ACFR (macomptroller.org) | FY2024 |
+| MTRS (Teachers) — 60.4% funded · $39B assets | $25.5B | PERAC — Public Employee Retirement Administration Commission (mass.gov); Office of the Comptroller, Commonwealth ACFR (macomptroller.org) | FY2024 |
+| FY2024 — Pension appropriation | $4.10B | Enacted General Appropriations Acts, mass.gov GAA export | FY2024 |
+| FY2025 — +9.6% | $4.50B | Enacted General Appropriations Acts, mass.gov GAA export | FY2025 |
+| FY2026 — +9.6% | $4.93B | Enacted General Appropriations Acts, mass.gov GAA export | FY2026 |
+| Normal Cost (SERS) — Annual benefit accrual | $463M | PERAC — Public Employee Retirement Administration Commission (mass.gov) | FY2024 |
+| ARC % of Payroll — Up from 7.4% in 2001 | 18.3% | PERAC — Public Employee Retirement Administration Commission (mass.gov) | FY2024 |
+| Total PRIT Assets — FY2024 (June 30, 2024) | $105.3B | PRIM / PRIT Fund (mapension.com) | FY2024 |
+| Net Income — 5 of 7 asset classes beat benchmarks | $9.1B | PRIM / PRIT Fund (mapension.com) | FY2024 |
+| 5-Year Return — vs. 7.0% assumed | 9.17% | PRIM / PRIT Fund (mapension.com) | FY2024 |
+| 10-Year Return — Beating 7% target | 8.33% | PRIM / PRIT Fund (mapension.com) | FY2024 |
+| Since Inception — 40-year annualized (1985–2024) | 9.36% | PRIM / PRIT Fund (mapension.com) | 1985–2024 |
+| FY2025 Budget — 52.6 bps of AUM | $559M | PRIM / PRIT Fund (mapension.com) | FY2025 |
+| FY2026 Budget — 52.2 bps of projected $116B | $604M | PRIM / PRIT Fund (mapension.com) | FY2026 |
+| External Managers — Private firms managing public money | 175+ | PRIM / PRIT Fund (mapension.com) | FY2024 |
+| Active Workers (SERS) — Contributing members | 90,988 | PERAC — Public Employee Retirement Administration Commission (mass.gov) | FY2024 |
+| Retirees & Beneficiaries — Collecting benefits | 69,750 | PERAC — Public Employee Retirement Administration Commission (mass.gov) | FY2024 |
+| Total Membership — Including inactive vested | 197,928 | PERAC — Public Employee Retirement Administration Commission (mass.gov) | FY2024 |
+| FY2024 Cash Flow — More paid out than taken in | -$764M | PERAC — Public Employee Retirement Administration Commission (mass.gov) | FY2024 |
+| Municipal Unfunded — 99 systems (FY2023) | $15.2B | PERAC — Public Employee Retirement Administration Commission (mass.gov) | FY2023 |
+| All 105 Systems — State + municipal | $43.4B | PERAC — Public Employee Retirement Administration Commission (mass.gov) | January 2025 |
+| Median Funded Ratio — Up from 73.6% | 75.3% | PERAC — Public Employee Retirement Administration Commission (mass.gov) | January 2025 |
+| Legal Deadline — G.L. c. 32, §22F | FY2040 | G.L. c. 32, §22F | statute |
+| State OPEB Liability — Total promised | $16.2B | State Retiree Benefits Trust Fund (mass.gov); PERAC — Public Employee Retirement Administration Commission (mass.gov) | FY2024 |
+| Statewide Total — All entities combined | $56.1B | State Retiree Benefits Trust Fund (mass.gov); PERAC — Public Employee Retirement Administration Commission (mass.gov) | FY2024 |
+| Bonded Debt — GO + special obligation | $48.0B | Office of the Comptroller, Commonwealth ACFR (macomptroller.org) | FY2024 |
+| Net Deficit — Liabilities − assets | -$60.2B | Office of the Comptroller, Commonwealth ACFR (macomptroller.org) | FY2024 |
+| Unfunded liability per household | $40,599 | Office of the Comptroller, Commonwealth ACFR (macomptroller.org) | FY2024 |
+
 ---
 
 ## 💵 Lobbying & Political Spending
