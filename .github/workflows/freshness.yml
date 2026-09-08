@@ -30,3 +30,15 @@ jobs:
           python-version: "3.12"
       - name: Check every published source against its expected cadence
         run: python scripts/check-freshness.py
+
+      # The watchdog above only ages sources registered with it, which is exactly
+      # how "137K - MA Residents Left" sat a Census vintage out of date while every
+      # job stayed green: it was in no register, so nothing could age it. This asks
+      # the prior question - is this figure owned by an updater, or documented in
+      # Method, at all - and fails only on a NEW one, so the existing backlog does
+      # not force the check to be switched off.
+      #
+      # always(), so a stale feed above cannot mask an unaccountable figure here.
+      - name: Check headline statistics are documented or script-written
+        if: always()
+        run: python scripts/check-stats-documented.py
