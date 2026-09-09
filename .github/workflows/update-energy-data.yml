@@ -9,13 +9,31 @@ name: Update Energy Data
 # 2026-07-23, and the dashboard would have sat on April until 2026-08-15. Every
 # release was reaching the site roughly three weeks late, by construction.
 #
-# Running on the 26th picks each release up within days. The 2nd is a catch-up
-# for months when EIA slips past the 26th; the updater rewrites the same values
-# when nothing has changed, and the commit step is a no-op on an unchanged tree,
-# so the extra run costs nothing.
+# The 26th was chosen on that reasoning and never once landed a release. Every
+# run is on the record and the 2nd of the month did all the work:
+#
+#   run 2026-07-15 -> Apr      run 2026-08-26 -> May   (26th, still May)
+#   run 2026-07-16 -> Apr      run 2026-09-02 -> Jun   (2nd, caught it)
+#   run 2026-08-01 -> May
+#
+# May appeared between Jul 16 and Aug 1; June between Aug 26 and Sep 2. So the
+# release lands at the very end of the month or the first days of the next, not
+# the 23rd-26th assumed above, and the 26th fires about a week early every time.
+# Moved to the 28th, two days later and inside the observed window.
+#
+# 28th and not 29th/30th/31st: cron silently skips any month that lacks the day,
+# so a 29th would drop February in every non-leap year -- 2026, 2027, 2029. The
+# 28th exists in all twelve. The evidence does not distinguish 28 from 29 anyway
+# (June landed somewhere in Aug 27-31; the window is not narrower than that), so
+# the day that never disappears wins.
+#
+# The 2nd stays and remains the workhorse: it is the run that has actually
+# caught every release so far. The updater rewrites the same values when nothing
+# has changed and the commit step is a no-op on an unchanged tree, so a run that
+# finds nothing new costs nothing.
 on:
   schedule:
-    - cron: "0 10 26 * *"
+    - cron: "0 10 28 * *"
     - cron: "0 10 2 * *"
   workflow_dispatch:
 
