@@ -41,6 +41,17 @@ jobs:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
         run: python update-energy-dashboard.py
 
+      # The chain was broken in three places at once and each break hid the
+      # next: EIA published June, energy-dashboard.html advanced, but
+      # burden-constants.json was written by nothing, the commit step staged
+      # no JSON, and this propagator -- which pushes the constants into
+      # tax-burden-dashboard.html and tax-burden-nh-comparison.html -- ran on
+      # no schedule at all. Fixing only the first would have left the burden
+      # dashboards on the old figure regardless. Needs no API key: it reads
+      # the JSON the step above just wrote. (2026-09-09)
+      - name: Propagate burden constants into the burden dashboards
+        run: python update-burden-constants.py
+
       # Gasoline, diesel and residential natural gas. These were hand-typed until
       # 2026-08 and every series had drifted -- worst, the Equivalence tab was
       # billing gasoline at the 2025 annual average ($2.97) while Massachusetts
@@ -58,13 +69,18 @@ jobs:
 
       - name: Commit if changed
         run: |
-          if git diff --quiet -- '*.html'; then
-            echo "No HTML changes - nothing to commit."
+          # Globs are QUOTED so git expands them, not the shell: unquoted *.html
+          # only matches the repo root, and data/*.json would not have been
+          # staged at all. burden-constants.json sat a full EIA release behind
+          # the dashboard because nothing wrote it AND this step would have
+          # dropped the write if anything had. (Found 2026-09-09.)
+          if git diff --quiet -- '*.html' 'data/*.json'; then
+            echo "No data changes - nothing to commit."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add *.html
+          git add '*.html' 'data/*.json'
           git commit -m "data: auto-update EIA + BLS data"
           for attempt in 1 2 3 4 5; do
             if git push; then

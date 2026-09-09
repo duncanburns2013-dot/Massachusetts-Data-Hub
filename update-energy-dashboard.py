@@ -50,8 +50,14 @@ API_KEY = os.environ.get("EIA_API_KEY", "").strip()
 if not API_KEY:
     sys.exit("ERROR: set the EIA_API_KEY environment variable.")
 
-HTML_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                         "energy-dashboard.html")
+HERE = os.path.dirname(os.path.abspath(__file__))
+HTML_FILE = os.path.join(HERE, "energy-dashboard.html")
+CONSTANTS_FILE = os.path.join(HERE, "data", "burden-constants.json")
+# states.<ST>.utility.retailElectricCentsPerKwh — BOTH states, always together.
+# The burden model is a MA-vs-NH comparison, so refreshing one and not the other
+# would silently compare two different EIA months. Verified against the live
+# file, not assumed: the path is states -> ST -> utility, not layers -> utility.
+CONSTANTS_STATES = ("MA", "NH")
 EIA_BASE = "https://api.eia.gov/v2/electricity/retail-sales/data/"
 
 MON_ABBR = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -510,3 +516,86 @@ else:
     with open(HTML_FILE, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"\nDone — energy-dashboard.html updated to {mon_abbr} EIA data.")
+
+
+# --------------------------------------------------------------------------
+# Burden constants
+# --------------------------------------------------------------------------
+# The same EIA series the dashboard uses also backs the burden calculators, but
+# it lived in data/burden-constants.json as a hand-verified value that nothing
+# ever wrote. The dashboard advanced release by release while the constant sat
+# at 28.82c (2026-05) with a 2026-08-08 stamp — a full month behind, and only
+# noticeable if you compared the two by eye. Written here so the two figures
+# cannot diverge again. (2026-09-09)
+def update_burden_constants():
+    if not os.path.exists(CONSTANTS_FILE):
+        print(f"  skipped — {os.path.basename(CONSTANTS_FILE)} not found")
+        return
+    with open(CONSTANTS_FILE, "r", encoding="utf-8") as f:
+        raw = f.read()
+    doc = json.loads(raw)
+
+    # Fetch every state first. If any leg fails the whole write is abandoned,
+    # so the file can never end up half on one EIA month and half on another.
+    fresh = {}
+    for st in CONSTANTS_STATES:
+        if st in rate and st == "MA":
+            price, per = rate[st], period
+        else:
+            price, per = latest_monthly(st)
+        if per != period:
+            print(f"  ABORTED — {st} is {per}, MA is {period}; refusing to "
+                  f"write a mixed-period comparison.")
+            return
+        fresh[st] = price
+
+    changes, warnings = [], []
+    for st, price in fresh.items():
+        node = doc.get("states", {}).get(st, {}).get("utility", {}) \
+                  .get("retailElectricCentsPerKwh")
+        if node is None:
+            print(f"  skipped — states.{st}.utility.retailElectricCentsPerKwh "
+                  f"not present")
+            return
+        before = node.get("value")
+
+        # Machine-owned fields. Every number this script knows lives here, in
+        # its own key, so nothing has to be parsed back out of English.
+        node["value"] = round(price, 2)
+        node["period"] = period
+        node["usAverageCentsPerKwh"] = round(us, 2)
+        node["premiumPctVsUs"] = premium_pct(price, us)
+        node["verified"] = time.strftime("%Y-%m-%d")
+
+        # Author-owned prose. Only the leading period stamp is rewritten, and
+        # only because leaving it contradicting node["period"] is worse. The
+        # body is NOT touched: NH's note carries hand-written analysis ("only
+        # 1.49c cheaper than Massachusetts, and closing fast") that regexes
+        # cannot safely maintain. Derived claims are flagged for a human
+        # instead of silently edited — a substitution that matches the wrong
+        # span here is invisible until it ships.
+        note = node.get("note", "")
+        node["note"] = re.sub(r"period \d{4}-\d{2}", f"period {period}",
+                              note, count=1)
+        if before != node["value"]:
+            changes.append(f"{st} {before} -> {cents(price)}c")
+            if re.search(r"\d+\.\d+c(/kWh)? (cheaper|more|higher|lower)"
+                         r"|up \d+\.\d+%|FELL \d+\.\d+%", note):
+                warnings.append(st)
+
+    out = json.dumps(doc, indent=2, ensure_ascii=False) + "\n"
+    if out == raw:
+        print("  no change — burden constants already current.")
+        return
+    with open(CONSTANTS_FILE, "w", encoding="utf-8") as f:
+        f.write(out)
+    print(f"  burden-constants.json ({period}): "
+          f"{', '.join(changes) if changes else 'stamps refreshed'}")
+    for st in warnings:
+        print(f"  ::warning::{st} note contains a hand-written comparison "
+              f"whose figures just moved — re-read states.{st}.utility."
+              f"retailElectricCentsPerKwh.note before publishing.")
+
+
+print("\nUpdating burden constants...")
+update_burden_constants()
