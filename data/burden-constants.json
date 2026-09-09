@@ -592,7 +592,7 @@
       "utility": {
         "retailElectricCentsPerKwh": {
           "value": 27.01,
-          "note": "VERIFIED BASELINE, period 2026-06. Residential average retail price -- up 13.8% from 24.02c in May 2025, while Massachusetts FELL 3.6% over the same period. New Hampshire is now only 1.49c/kWh cheaper than Massachusetts on the all-in price, and closing fast. That materially weakens the 'Layer 4 is a genuine NH advantage' claim and should be reflected in the copy once the policy components are sourced.",
+          "note": "VERIFIED BASELINE, period 2026-06. Residential average retail price. New Hampshire is 2.60c/kWh cheaper than Massachusetts on the all-in price (27.01c against 29.61c), and the gap WIDENED sharply this release: in 2026-05 it was 1.49c, because NH fell from 27.33c while Massachusetts rose from 28.82c. The previous note here read that NH was 'closing fast' on Massachusetts and that this 'materially weakens the Layer 4 is a genuine NH advantage claim' -- both were true of the May figures and are now the opposite of what the June figures show. Direction of travel is one month of data either way, so treat it as a snapshot, not a trend.",
           "source": "EIA Electric Power Monthly Table 5.6.A, via the EIA API v2 (retail-sales, sectorid=RES)",
           "url": "https://api.eia.gov/v2/electricity/retail-sales/data/?frequency=monthly&data[0]=price&facets[sectorid][]=RES&facets[stateid][]=NH",
           "verified": "2026-09-09",
