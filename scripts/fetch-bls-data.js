@@ -402,6 +402,89 @@ function inject(html, tag, literal) {
 }
 
 
+
+// ── MA metro-area job change (MA Regions tab) ────────────────────────────────
+// CES metro-area series, seasonally adjusted. Area codes are BLS's own, taken
+// from download.bls.gov/pub/time.series/sm/sm.area rather than guessed, and each
+// series was confirmed to return data before being wired.
+//
+// These two charts were inline literals frozen at April 2026: the headings said
+// April, the bars were April, and the paragraph beneath named April's winners --
+// three months after the data had moved on. Nothing was broken, nothing went
+// red; they simply were not connected to anything.
+//
+// Both bars and headings are written here so a month can never appear beside
+// figures from a different one.
+const MA_METRO_SERIES = {
+  'Barnstable':                  'SMS25127000000000001',
+  'Worcester':                   'SMS25493400000000001',
+  'Springfield':                 'SMS25441400000000001',
+  'Boston Metro Div':            'SMS25144540000000001',
+  'Pittsfield':                  'SMS25383400000000001',
+  'Cambridge-Newton-Framingham': 'SMS25157640000000001',
+  'Amherst-Northampton':         'SMS25112000000000001',
+};
+const METRO_TAGS = ['metro-mom-lab', 'metro-mom-data', 'metro-yoy-lab', 'metro-yoy-data'];
+
+function buildMetroCharts(html, find) {
+  const pts = {};
+  for (const [name, id] of Object.entries(MA_METRO_SERIES)) {
+    const m = monthsOf(find(id));
+    if (!m.length) {
+      // No-op rather than a crash, but never in silence: a renamed area code
+      // would otherwise leave both charts frozen and looking perfectly fine,
+      // which is exactly how they got three months stale in the first place.
+      console.warn(`   ⚠️  metro charts NOT updated — no data for ${name} (${id}). ` +
+                   `They still show the month they were last built with.`);
+      return html;
+    }
+    pts[name] = new Map(m.map(p => [mkey(p), p.value]));
+  }
+  for (const t of METRO_TAGS) {
+    if (!new RegExp(`/\\*@${t}\\*/[\\s\\S]*?/\\*@\\*/`).test(html)) {
+      throw new Error(`metro marker @${t} is missing from employment-dashboard.html.`);
+    }
+  }
+
+  // The newest month EVERY metro has -- one lagging area must not drag a whole
+  // row of bars onto a different month from the heading above them.
+  const k = Math.min(...Object.values(pts).map(m => Math.max(...m.keys())));
+  const yr = Math.floor(k / 100), mo = k % 100;            // mon is 0-based
+  const prev = mo > 0 ? k - 1 : (yr - 1) * 100 + 11;
+  const back = k - 100;
+
+  const pct = (name, a, b) => {
+    const m = pts[name];
+    if (!m.has(a) || !m.has(b) || !m.get(b)) return null;
+    return Math.round((m.get(a) / m.get(b) - 1) * 1000) / 10;
+  };
+  const rank = (b) => Object.keys(MA_METRO_SERIES)
+    .map(n => [n, pct(n, k, b)])
+    .filter(([, v]) => v !== null)
+    .sort((x, y) => y[1] - x[1]);
+
+  const mom = rank(prev), yoy = rank(back);
+  if (!mom.length || !yoy.length) {
+    console.warn('   ⚠️  metro charts NOT updated — no comparable month.');
+    return html;
+  }
+
+  html = inject(html, 'metro-mom-lab',  mom.map(([n]) => `'${n}'`).join(','));
+  html = inject(html, 'metro-mom-data', mom.map(([, v]) => v).join(','));
+  html = inject(html, 'metro-yoy-lab',  yoy.map(([n]) => `'${n}'`).join(','));
+  html = inject(html, 'metro-yoy-data', yoy.map(([, v]) => v).join(','));
+
+  const ms = (key) => `${MON[key % 100]} ${Math.floor(key / 100)}`;
+  const setField = (f, v) =>
+    (html = html.replace(new RegExp(`(data-field="${f}">)[^<]*(<)`, 'g'), `$1${v}$2`));
+  setField('metro-mom-head', `${ms(prev)} \u2192 ${ms(k)}`);
+  setField('metro-yoy-head', `${ms(back)} \u2192 ${ms(k)}`);
+
+  console.log(`   ✅ metro charts updated (${ms(k)}): ` +
+              yoy.map(([n, v]) => `${n} ${v > 0 ? '+' : ''}${v}%`).join(', '));
+  return html;
+}
+
 // ── MA vs nation comparison box (Overview tab) ───────────────────────────────
 // Twenty-six months of both geographies on ONE shared axis, so the page can read
 // a 12-month change at the same index for each and never has to align anything
@@ -548,6 +631,8 @@ function updateCharts(html, find, findLong) {
     html = inject(html, 'ur2-ma',  col(maMap));
     html = inject(html, 'ur2-nat', col(natMap));
   }
+
+  html = buildMetroCharts(html, find);
 
   html = buildComparisonBox(html, {
     maUR, usUR: natUR, maNF, maLF,
@@ -1260,6 +1345,16 @@ async function main() {
     console.warn(`   ⚠️  US sectors skipped: ${err.message}`);
   }
 
+  // ── 2f. MA metro areas (non-critical — feeds the MA Regions charts) ────────
+  console.log('\n🔄 Fetching MA metro-area employment (CES metro, SA)...');
+  try {
+    const metro = await fetchBLSData(Object.values(MA_METRO_SERIES), currentYear - 2, currentYear);
+    empSeries.push(...metro);
+    console.log(`   ✅ MA metros fetched (${metro.length}/${Object.keys(MA_METRO_SERIES).length})`);
+  } catch (err) {
+    console.warn(`   ⚠️  MA metros skipped: ${err.message}`);
+  }
+
   // ── 3. Save snapshot + rotate previous ───────────────────────────────────
   await fs.mkdir(path.dirname(DATA_OUTPUT_PATH), { recursive: true });
   // Rotate: current → previous before overwriting
@@ -1286,4 +1381,4 @@ if (process.env.BLS_SKIP_MAIN !== '1') {
   });
 }
 
-export { monthsOf, inject, injectHTMLBlock, buildComparisonBox, CMP_TAGS, updateMASectorSpectrum, MA_SECTOR_SERIES, MA_SECTOR_META, loadReleaseSchedule, releaseDateFor, buildSectorRows, buildRevisionRows, momAdjacent, US_SECTOR_META };
+export { monthsOf, inject, injectHTMLBlock, buildComparisonBox, CMP_TAGS, buildMetroCharts, METRO_TAGS, MA_METRO_SERIES, updateMASectorSpectrum, MA_SECTOR_SERIES, MA_SECTOR_META, loadReleaseSchedule, releaseDateFor, buildSectorRows, buildRevisionRows, momAdjacent, US_SECTOR_META };

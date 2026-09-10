@@ -740,8 +740,8 @@ footer a:hover{color:var(--gold)}
   </div>
 
   <div class="chart-grid">
-    <div class="chart-card"><h3>Top MA Metro Areas — % Job Change, Mar → Apr 2026</h3><div class="chart-area"><canvas id="c-metro-mom"></canvas></div></div>
-    <div class="chart-card"><h3>MA Metro Areas — % Job Change, Year-over-Year (Apr 2025 → Apr 2026)</h3><div class="chart-area"><canvas id="c-metro-yoy"></canvas></div></div>
+    <div class="chart-card"><h3>Top MA Metro Areas — % Job Change, <span data-field="metro-mom-head">Jun 2026 → Jul 2026</span></h3><div class="chart-area"><canvas id="c-metro-mom"></canvas></div></div>
+    <div class="chart-card"><h3>MA Metro Areas — % Job Change, Year-over-Year (<span data-field="metro-yoy-head">Jul 2025 → Jul 2026</span>)</h3><div class="chart-area"><canvas id="c-metro-yoy"></canvas></div></div>
   </div>
 
   <div class="data-card">
@@ -766,7 +766,7 @@ footer a:hover{color:var(--gold)}
          jobs YoY") and by the chart's own three positive bars. The count and the
          names now read off the c-metro-yoy array, so they cannot disagree with the
          bars they describe. -->
-    <p><strong>Geography of the recovery:</strong> The April expansion was concentrated in Cape (Barnstable), the Pioneer Valley (Amherst-Northampton), and the Boston metro. Of the seven published metro areas, <span id="metroPosN">three</span> — <span id="metroPosNames">Barnstable, Worcester and Springfield</span> — gained jobs year-over-year, reflecting a broader pivot of activity outside the Boston core. Compared to April 2025, unemployment rates rose in nine of twelve labor market areas — a reminder that the level remains higher than a year ago even as monthly trends improve.</p>
+    <p><strong>Geography of the recovery:</strong> Strongest year-over-year in <span id="metroTopNames">—</span>. Of the seven published metro areas, <span id="metroPosN">three</span> — <span id="metroPosNames">Barnstable, Worcester and Springfield</span> — gained jobs year-over-year, reflecting a broader pivot of activity outside the Boston core. Compared to April 2025, unemployment rates rose in nine of twelve labor market areas — a reminder that the level remains higher than a year ago even as monthly trends improve.</p>
   </div>
 </div>
 
@@ -1046,8 +1046,14 @@ var u6U6=[6.4,6.7,7.1,7.2,7.2,7.3,7.2];
 var u6U3=[3.8,3.7,4.0,4.0,4.2,4.4,4.3];
 
 // MA metro YoY job change — EOLWD Local LMI, April 2026 release. Not fetched.
-var metroYoyLab=['Barnstable','Worcester','Springfield','Boston Metro Div','Pittsfield','Cambridge-Newton-Framingham','Amherst-Northampton'];
-var metroYoyData=[4.1,0.4,0.3,-0.1,-0.3,-0.4,-0.6];
+// Both metro charts are BLS CES metro-area series (SMS, seasonally adjusted),
+// sorted strongest-first by the updater. They were inline literals frozen at
+// April 2026 -- the headings said April, the bars were April, and the prose
+// under them described April, three months after the data had moved on.
+var metroMomLab=[/*@metro-mom-lab*/'Amherst-Northampton','Barnstable','Pittsfield','Worcester','Boston Metro Div','Springfield','Cambridge-Newton-Framingham'/*@*/];
+var metroMomData=[/*@metro-mom-data*/0.7,0.5,0.2,0.1,0.1,-0.3,-0.3/*@*/];
+var metroYoyLab=[/*@metro-yoy-lab*/'Barnstable','Worcester','Springfield','Cambridge-Newton-Framingham','Boston Metro Div','Amherst-Northampton','Pittsfield'/*@*/];
+var metroYoyData=[/*@metro-yoy-data*/2.8,1.5,0.3,0.2,0.0,0.0,-0.3/*@*/];
 
 // Foreign-born employed (CPS Table A-7, NSA). Same Oct-2025 hole.
 var fbmLab=[/*@fbm-lab*/'Apr 25','May','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr','May','Jun','Jul','Aug 26'/*@*/];
@@ -1404,6 +1410,10 @@ function renderDerived(){
   var pos=metroYoyLab.filter(function(_,j){return metroYoyData[j]>0});
   var words=['zero','one','two','three','four','five','six','seven'];
   txt('metroPosN',words[pos.length]||String(pos.length));
+  // Top three by YoY, read off the chart's own array so the sentence cannot
+  // name a winner the bars contradict.
+  var top3=metroYoyLab.slice(0,3);
+  txt('metroTopNames',top3.slice(0,-1).join(', ')+' and '+top3[top3.length-1]);
   txt('metroPosNames',pos.length<2?pos.join(''):pos.slice(0,-1).join(', ')+' and '+pos[pos.length-1]);
 
   // ── Latest: the April release record, against the revised series ──
@@ -1579,8 +1589,8 @@ function initCharts(tab){
 
     case 'regions':
       sc('c-metro-mom',{type:'bar',data:{
-        labels:['Barnstable','Amherst-Northampton','Boston Metro Div','Worcester','Springfield','Cambridge-Newton-Framingham','Pittsfield'],
-        datasets:[{label:'MoM % Job Change',data:[3.3,1.3,1.2,0.5,0.3,0.2,-0.1],
+        labels:metroMomLab,
+        datasets:[{label:'MoM % Job Change',data:metroMomData,
           backgroundColor:function(ctx){return ctx.raw<0?R+'cc':G+'cc'},
           borderColor:function(ctx){return ctx.raw<0?R:G},
           borderWidth:1.5,borderRadius:5}]},
