@@ -58,15 +58,24 @@ STAMPS = [
     # Written by update-tax-budget-dashboard.py from the OLDER of its EIA and
     # BLS vintages, so this ages the stalest figure on the page, not the freshest.
     #
-    # 90 days, not the 45 energy uses, because this stamp means something
-    # different. It is the FIRST of the month the data covers, while BLS
-    # publishes a month roughly six weeks after it ends: on 7 Sep the newest CPI
-    # month available is July, already 68 days old by this measure and entirely
-    # current. Month M stays newest until M+1 is released around the 12th of
-    # M+2, about 74 days, so 90 leaves headroom without hiding a real stall.
+    # The limit is set by EIA, not BLS. This was 90 days, reasoned from CPI --
+    # BLS publishes a month about six weeks after it ends, so a stamp of M-01
+    # peaks near 74 days and 90 looked like comfortable headroom. But the stamp
+    # is the OLDER of the two vintages, and EIA electricity is always the older
+    # one, so CPI never governs. Reasoning from the wrong series made this fire
+    # on 2026-09-10 against a stamp that was completely correct: EIA's newest
+    # month really was June, checked against the API.
+    #
+    # EIA's real cadence is on the record in update-energy-data.yml, measured
+    # from runs rather than assumed -- May data appeared between Jul 16 and
+    # Aug 1, June between Aug 26 and Sep 2. Month M lands at the very end of
+    # M+2. So a stamp of M-01 stays newest for about 124 days (Jun 1 to the
+    # release of July around Oct 2), and 140 leaves headroom for a release that
+    # slips a couple of weeks while a genuinely missed month, which would run
+    # past 155, still trips it.
     ("tax-budget-dashboard.html",
-     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 90,
-     "EIA electricity + BLS CPI; stamp is the covered month, BLS lags ~6 weeks"),
+     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 140,
+     "EIA electricity + BLS CPI; stamp is the covered month, EIA lands end of M+2"),
 
     # --- Hand-maintained pages ------------------------------------------------
     # These have no updater. They cannot go stale "quietly" any more, but they can
