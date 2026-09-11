@@ -41,6 +41,22 @@ jobs:
           cd scripts
           node fetch-bls-data.js
 
+      # NY Fed publishes quarterly and has no API, so this reads their .xlsx.
+      # Exit 75 means the download was refused or moved: nothing was written and
+      # the page keeps its current figures, which is a skip rather than a failed
+      # employment refresh.
+      - name: Refresh NY Fed recent-graduate figures
+        run: |
+          set +e
+          python update-nyfed-grads.py
+          code=$?
+          set -e
+          if [ "$code" -eq 75 ]; then
+            echo "::notice::NY Fed workbook unavailable - recent-grad figures left as they were."
+            exit 0
+          fi
+          exit "$code"
+
       - name: Check for changes
         id: changes
         run: |
