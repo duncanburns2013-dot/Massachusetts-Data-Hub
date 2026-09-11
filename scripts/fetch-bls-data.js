@@ -426,6 +426,20 @@ const MA_METRO_SERIES = {
 };
 const METRO_TAGS = ['metro-mom-lab', 'metro-mom-data', 'metro-yoy-lab', 'metro-yoy-data'];
 
+// Unemployment rate for the same seven areas, LAUS, NOT seasonally adjusted.
+// Note the prefix split: the five metropolitan AREAS are LAUMT, while Boston and
+// Cambridge-Newton-Framingham are metropolitan DIVISIONS and only answer to
+// LAUDV. Querying all seven as LAUMT returns five series and two silent blanks.
+const MA_METRO_UR_SERIES = {
+  'Barnstable':                  'LAUMT251270000000003',
+  'Worcester':                   'LAUMT254934000000003',
+  'Springfield':                 'LAUMT254414000000003',
+  'Pittsfield':                  'LAUMT253834000000003',
+  'Amherst-Northampton':         'LAUMT251120000000003',
+  'Boston Metro Div':            'LAUDV251445400000003',
+  'Cambridge-Newton-Framingham': 'LAUDV251576400000003',
+};
+
 function buildMetroCharts(html, find) {
   const pts = {};
   for (const [name, id] of Object.entries(MA_METRO_SERIES)) {
@@ -482,6 +496,44 @@ function buildMetroCharts(html, find) {
 
   console.log(`   ✅ metro charts updated (${ms(k)}): ` +
               yoy.map(([n, v]) => `${n} ${v > 0 ? '+' : ''}${v}%`).join(', '));
+
+  // The sentence under the chart used to assert "rose in nine of twelve labor
+  // market areas" by hand, against April 2025. Twelve is EOLWD's own set of
+  // labour market areas, which BLS does not publish, so it could never be
+  // checked against anything this script fetches -- it just sat there aging.
+  // Counted now over the same seven areas the bars show, so the prose and the
+  // chart cannot tell different stories, and stated as counts with no reading
+  // attached to them.
+  const ur = {};
+  for (const [name, id] of Object.entries(MA_METRO_UR_SERIES)) {
+    const m = monthsOf(find(id));
+    if (m.length) ur[name] = new Map(m.map(p => [mkey(p), p.value]));
+  }
+  const urNames = Object.keys(ur);
+  if (urNames.length === Object.keys(MA_METRO_UR_SERIES).length) {
+    const uk = Math.min(...urNames.map(n => Math.max(...ur[n].keys())));
+    let rose = 0, fell = 0, same = 0, n = 0;
+    for (const name of urNames) {
+      const now = ur[name].get(uk), then = ur[name].get(uk - 100);
+      if (now == null || then == null) continue;
+      n++;
+      const d = Math.round((now - then) * 10) / 10;
+      if (d > 0) rose++; else if (d < 0) fell++; else same++;
+    }
+    if (n) {
+      setField('metro-ur-rose', rose);
+      setField('metro-ur-fell', fell);
+      setField('metro-ur-same', same);
+      setField('metro-ur-n', n);
+      setField('metro-ur-window', `${ms(uk - 100)} \u2192 ${ms(uk)}`);
+      console.log(`   ✅ metro unemployment (${ms(uk)}): ` +
+                  `${rose} rose, ${fell} fell, ${same} unchanged of ${n}`);
+    }
+  } else {
+    console.warn(`   ⚠️  metro unemployment NOT updated — got ${urNames.length} of ` +
+                 `${Object.keys(MA_METRO_UR_SERIES).length} series.`);
+  }
+
   return html;
 }
 
@@ -1348,7 +1400,9 @@ async function main() {
   // ── 2f. MA metro areas (non-critical — feeds the MA Regions charts) ────────
   console.log('\n🔄 Fetching MA metro-area employment (CES metro, SA)...');
   try {
-    const metro = await fetchBLSData(Object.values(MA_METRO_SERIES), currentYear - 2, currentYear);
+    const metro = await fetchBLSData(
+      [...Object.values(MA_METRO_SERIES), ...Object.values(MA_METRO_UR_SERIES)],
+      currentYear - 2, currentYear);
     empSeries.push(...metro);
     console.log(`   ✅ MA metros fetched (${metro.length}/${Object.keys(MA_METRO_SERIES).length})`);
   } catch (err) {
@@ -1381,4 +1435,4 @@ if (process.env.BLS_SKIP_MAIN !== '1') {
   });
 }
 
-export { monthsOf, inject, injectHTMLBlock, buildComparisonBox, CMP_TAGS, buildMetroCharts, METRO_TAGS, MA_METRO_SERIES, updateMASectorSpectrum, MA_SECTOR_SERIES, MA_SECTOR_META, loadReleaseSchedule, releaseDateFor, buildSectorRows, buildRevisionRows, momAdjacent, US_SECTOR_META };
+export { monthsOf, inject, injectHTMLBlock, buildComparisonBox, CMP_TAGS, buildMetroCharts, METRO_TAGS, MA_METRO_SERIES, MA_METRO_UR_SERIES, updateMASectorSpectrum, MA_SECTOR_SERIES, MA_SECTOR_META, loadReleaseSchedule, releaseDateFor, buildSectorRows, buildRevisionRows, momAdjacent, US_SECTOR_META };

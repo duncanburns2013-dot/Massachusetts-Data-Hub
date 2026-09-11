@@ -8,7 +8,7 @@
 // Run: node scripts/test-metro-charts.mjs
 
 process.env.BLS_SKIP_MAIN = '1';
-const { buildMetroCharts, METRO_TAGS, MA_METRO_SERIES } =
+const { buildMetroCharts, METRO_TAGS, MA_METRO_SERIES, MA_METRO_UR_SERIES } =
   await import('./fetch-bls-data.js');
 
 let failed = 0;
@@ -36,22 +36,37 @@ const LEVELS = {
   'Amherst-Northampton':         { 202506: 100, 202605: 100, 202606: 101, 202607: 102 },
 };
 
-function makeFind(levels) {
+// Unemployment rates for the same seven, a year apart: 3 up, 3 down, 1 flat.
+const URS = {
+  'Barnstable':                  { 202506: 3.9, 202606: 4.2 },   // up
+  'Springfield':                 { 202506: 5.9, 202606: 6.0 },   // up
+  'Pittsfield':                  { 202506: 4.1, 202606: 4.5 },   // up
+  'Worcester':                   { 202506: 4.9, 202606: 4.8 },   // down
+  'Cambridge-Newton-Framingham': { 202506: 4.6, 202606: 4.4 },   // down
+  'Amherst-Northampton':         { 202506: 4.3, 202606: 4.2 },   // down
+  'Boston Metro Div':            { 202506: 4.6, 202606: 4.6 },   // flat
+};
+
+function makeFind(levels, urs = URS) {
   const byId = {};
-  for (const [name, id] of Object.entries(MA_METRO_SERIES)) {
-    const lv = levels[name];
+  const put = (id, lv) => {
     byId[id] = lv
       ? { seriesID: id, data: Object.entries(lv).map(([k, v]) =>
             per(Math.floor(k / 100), k % 100, v)) }
       : { seriesID: id, data: [] };
-  }
+  };
+  for (const [name, id] of Object.entries(MA_METRO_SERIES)) put(id, levels[name]);
+  for (const [name, id] of Object.entries(MA_METRO_UR_SERIES)) put(id, urs[name]);
   return (id) => byId[id];
 }
 
 const template =
   METRO_TAGS.map(t => `var x=[/*@${t}*/SEED/*@*/];`).join('\n') +
   '\n<span data-field="metro-mom-head">OLD</span>' +
-  '\n<span data-field="metro-yoy-head">OLD</span>';
+  '\n<span data-field="metro-yoy-head">OLD</span>' +
+  '\n<span data-field="metro-ur-rose">X</span><span data-field="metro-ur-fell">X</span>' +
+  '<span data-field="metro-ur-same">X</span><span data-field="metro-ur-n">X</span>' +
+  '<span data-field="metro-ur-window">OLD</span>';
 
 const out = buildMetroCharts(template, makeFind(LEVELS));
 const grab = (tag) => {
@@ -79,6 +94,23 @@ check('and it is negative',        grab('metro-mom-data').at(-1), '-1');
 check('lab and data lengths agree (mom)', grab('metro-mom-lab').length, grab('metro-mom-data').length);
 check('lab and data lengths agree (yoy)', grab('metro-yoy-lab').length, grab('metro-yoy-data').length);
 check('all seven metros present',        grab('metro-yoy-lab').length, 7);
+
+// 3b. The unemployment sentence is counted, not asserted, over the same seven.
+check('unemployment rose count', field('metro-ur-rose'), '3');
+check('unemployment fell count', field('metro-ur-fell'), '3');
+check('unemployment unchanged count', field('metro-ur-same'), '1');
+check('counted over all seven', field('metro-ur-n'), '7');
+check('counts sum to the total',
+      Number(field('metro-ur-rose')) + Number(field('metro-ur-fell')) + Number(field('metro-ur-same')),
+      Number(field('metro-ur-n')));
+check('unemployment window is year-over-year', field('metro-ur-window'), 'Jun 2025 → Jun 2026');
+
+// 3c. A division queried under the wrong prefix returns nothing; the counts must
+//     then not be published at all rather than silently counting five of seven.
+const partial = { ...URS }; delete partial['Boston Metro Div'];
+const po = buildMetroCharts(template, makeFind(LEVELS, partial));
+check('a missing UR series leaves the counts untouched',
+      (po.match(/data-field="metro-ur-n">([^<]*)</) || [])[1], 'X');
 
 // 4. A missing marker is fatal, not a warning -- inject() alone would log and
 //    carry on, republishing the frozen month.
