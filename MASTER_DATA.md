@@ -194,7 +194,7 @@ price here or there. Values below are the cache as of its 2026-07-17 generation.
 | 2023 | $755,209 | $813,741 | $1,082,495 | $1,113,346 |
 | 2024 | $809,407 | $870,718 | $1,132,849 | $1,234,212 |
 | 2025 | $853,462 | $896,083 | $1,299,708 | $1,325,883 |
-| 2026 | $866,194 | $905,560 | $1,336,097 | $1,231,493 |
+| 2026 | $866,308 | $905,397 | $1,336,097 | $1,228,838 |
 
 - **5-Year Growth (2021→2025):** MA +28.8%, Newburyport +40.8%, Essex +25.6%, Boston +19.6%
 - **Note:** These are AVERAGES (skewed by luxury); Warren Group MEDIANS used for affordability analysis
@@ -202,17 +202,17 @@ price here or there. Values below are the cache as of its 2026-07-17 generation.
 #### Live trailing-12-month window (changes daily — do not transcribe)
 
 The dashboards' last column is **not calendar 2026** — it is a rolling trailing-12-month
-window rewritten every day. As of **September 14, 2026**: MA $866,194 · Essex $905,560 ·
+window rewritten every day. As of **September 15, 2026**: MA $866,308 · Essex $905,397 ·
 Boston $1,336,097. Quote it with its as-of date or not at all.
 
 ### Massachusetts — Market Indicators
 
-| Metric | Calendar 2025 | Trailing 12mo (as of 2026-09-14) | Source |
+| Metric | Calendar 2025 | Trailing 12mo (as of 2026-09-15) | Source |
 |--------|--------------|----------------------------------|--------|
 | Avg DOM | 35.6 days | 38 days | MLS PIN 🔄 |
 | SP/LP Ratio | 101.18% | 100.9% | MLS PIN 🔄 |
-| Units Sold | 38,870 | 39,774 | MLS PIN 🔄 |
-| Median Price | $670,000 | $678,450 | MLS PIN 🔄 |
+| Units Sold | 38,870 | 39,878 | MLS PIN 🔄 |
+| Median Price | $670,000 | $678,388 | MLS PIN 🔄 |
 
 > Earlier revisions listed the trailing-12-month figures under a "2025" heading —
 > most recently "Units Sold 39,323 ✅ Feb 2026", which is the live window, not the
