@@ -53,8 +53,13 @@ DATA = [
 STAMPS = [
     ("ma-housing-dashboard.html", r"DATA_ASOF\s*=\s*'([^']+)'", "%B %d, %Y", 5,
      "MLS tail is refetched nightly"),
-    ("energy-dashboard.html", r"FUEL_NOW = \{asOf:'([^']+)'", "%Y-%m-%d", 45,
-     "EIA weekly retail prices, monthly job"),
+    # 14 days, not 45. This stamp is FUEL_NOW, the weekly EIA pump-price survey,
+    # and 45 was inherited from when the only job touching it ran twice a month -
+    # a limit set to the job's cadence rather than the data's. It let the page
+    # show a 31 Aug price on 18 Sep without complaint. Two missed weekly releases
+    # is the real signal.
+    ("energy-dashboard.html", r"FUEL_NOW = \{asOf:'([^']+)'", "%Y-%m-%d", 14,
+     "EIA weekly retail fuel survey; job runs Tuesdays"),
     # Written by update-tax-budget-dashboard.py from the OLDER of its EIA and
     # BLS vintages, so this ages the stalest figure on the page, not the freshest.
     #

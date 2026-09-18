@@ -33,6 +33,13 @@ name: Update Energy Data
 # finds nothing new costs nothing.
 on:
   schedule:
+    # Gasoline and diesel are WEEKLY EIA series; electricity and natural gas are
+    # monthly. Running only on the 2nd and 28th meant the pump price could sit
+    # two EIA releases behind what the page claimed - it read $4.24 from 31 Aug
+    # on 18 Sep. The monthly runs stay; this adds the weekly one the fuel series
+    # actually needs. EIA posts the weekly survey Monday afternoon ET, so Tuesday
+    # morning is clear of it, and the job commits only when a number moved.
+    - cron: "0 15 * * 2"
     - cron: "0 10 28 * *"
     - cron: "0 10 2 * *"
   workflow_dispatch:
