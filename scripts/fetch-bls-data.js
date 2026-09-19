@@ -15,6 +15,15 @@ const EMPLOYMENT_SERIES = {
   MA_UNEMPLOYMENT_LEVEL: 'LASST250000000000004',
   MA_LABOR_FORCE:        'LASST250000000000006',
   MA_TOTAL_NONFARM:      'SMS25000000000000001',
+  // Participation. The whole LFPR block on the Unemployment tab was hardcoded
+  // and had gone four months stale: it printed MA 65.6% / US 62.5% against an
+  // Apr-2026 column heading while August was published and reading 65.3 / 61.6.
+  // Worse, its narrative said the labour force was "continuing" to shrink —
+  // August was the first monthly RISE in eight months (+908). Fetched now, so
+  // the direction of the story cannot be asserted by a human and left behind.
+  MA_LFPR:               'LASST250000000000008',  // MA participation rate, 16+, SA
+  MA_EMPLOYMENT_LEVEL:   'LASST250000000000005',  // MA employed, level (persons)
+  US_LFPR:               'LNS11300000',           // US participation rate, 16+, SA
   US_UNEMPLOYMENT_RATE:  'LNS14000000',
   // National (Employment Situation) — releases ~3 weeks before the MA state data,
   // so these carry the newest month and drive the "National" block + table.
@@ -682,6 +691,32 @@ function updateCharts(html, find, findLong) {
     html = inject(html, 'ur2-lab', axisLabels(axis));
     html = inject(html, 'ur2-ma',  col(maMap));
     html = inject(html, 'ur2-nat', col(natMap));
+  }
+
+  // Participation, MA vs US, on one shared axis back to the labour-force anchor.
+  // Injected as full arrays rather than as finished sentences: the prose on the
+  // Unemployment tab is derived from these in renderDerived(), so a figure and
+  // the month beside it cannot drift apart the way the hardcoded block did.
+  const maLFPR = monthsOf(find(EMPLOYMENT_SERIES.MA_LFPR)).filter(p => ordOf(p) >= ordOf(LF_ANCHOR));
+  const usLFPR = monthsOf(find(EMPLOYMENT_SERIES.US_LFPR));
+  if (maLFPR.length && usLFPR.length) {
+    const keys = [...new Set([...maLFPR, ...usLFPR].map(mkey))]
+      .sort((a, b) => a - b)
+      .filter(k => k >= mkey(LF_ANCHOR));
+    const axis = keys.map(k => ({ year: Math.floor(k / 100), mon: k % 100 }));
+    const col = (pts) => {
+      const m = new Map(pts.map(p => [mkey(p), p.value]));
+      return keys.map(k => (m.has(k) ? m.get(k).toFixed(1) : 'null')).join(',');
+    };
+    html = inject(html, 'lfpr2-lab', axisLabels(axis));
+    html = inject(html, 'lfpr2-ma',  col(maLFPR));
+    html = inject(html, 'lfpr2-us',  col(usLFPR));
+    const last = maLFPR[maLFPR.length - 1];
+    console.log(`   ✅ participation updated (${MON[last.mon]} ${last.year}): ` +
+                `MA ${last.value}%, US ${usLFPR[usLFPR.length - 1].value}%`);
+  } else {
+    console.warn('   ⚠️  participation NOT updated — missing MA or US LFPR series. ' +
+                 'The tab is still showing the month it was last built with.');
   }
 
   html = buildMetroCharts(html, find);

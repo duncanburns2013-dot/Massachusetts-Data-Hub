@@ -213,7 +213,7 @@ footer a:hover{color:var(--gold)}
        reads backwards. (It had already narrowed from 0.4 to 0.2.) Stating both
        figures and letting the reader see the difference is what stays true. -->
   <div class="alert amber">
-    <h4>⚠️ MA Unemployment <span id="ovUrHead">4.5% (May 2026)</span> — Labor Force Shrinkage Continues</h4>
+    <h4>⚠️ MA Unemployment <span id="ovUrHead">4.5% (May 2026)</span> — <span id="ovLfHead">Labor Force</span></h4>
     <p>MA unemployment was <strong id="ovUrMa">4.5%</strong> in <span id="ovUrMo">May 2026</span>; the national rate for the same month was <span id="ovUrNat">4.3%</span>. The rate <span id="ovUrDir">eased</span> as the number of unemployed <span id="ovUlDir">fell</span> by <strong id="ovUlChg">4,771</strong> — but the labor force <span id="ovLfDir">also contracted</span> by <strong id="ovLfChg">8,965</strong> in <span id="ovLfMo">May 2026</span>. Peak to <span id="ovLfMo2">May 2026</span>: <span id="ovLfPeak">73,000 people have exited the MA labor force since March 2025</span>. Source: BLS LAUS, <span id="ovUrRel">June 23, 2026</span>.</p>
   </div>
 
@@ -261,25 +261,25 @@ footer a:hover{color:var(--gold)}
 
   <div class="info-box">
     <span class="icon">📈</span>
-    <p><strong>Two surveys, two stories.</strong> The payroll (employer) survey shows MA adding jobs most months since Oct 2025 (May was a −2,900 reversal). The household survey shows a shrinking labor force — down roughly 73,000 from the March 2025 peak through May 2026. EOLWD frames this as retirement-driven (25–54 LFPR at a 10-year high), but immigration policy changes are also pulling on the supply side. — BLS LAUS, <span id="ovInfoRel">June 23, 2026</span></p>
+    <p><strong>Two surveys, two stories.</strong> The payroll (employer) survey and the household survey are counting different things and have been telling different stories. Payrolls are <span id="ovInfoNf">—</span> over the last twelve months; the household survey shows the labor force <span id="ovInfoLf">—</span> from its <span id="ovInfoPeakMo">—</span> peak. EOLWD frames the labor-force decline as retirement-driven, but immigration policy is also pulling on the supply side. — BLS LAUS &amp; CES, <span id="ovInfoRel">—</span></p>
   </div>
 </div>
 
 <!-- UNEMPLOYMENT -->
 <div class="tab-content" id="unemployment">
   <div class="section-title">Unemployment Deep Dive</div>
-  <div class="section-desc">4.5% eases (May 2026) · Labor force down ~73K from peak · Prime-age participation at 10-year high (86.7%)</div>
+  <div class="section-desc" id="unSectionDesc">—</div>
 
-  <div class="alert amber">
-    <h4>⚠️ Rate Stable But Labor Force Still Shrinking</h4>
-    <p>MA unemployment eased to <strong>4.5%</strong> in May 2026 (down from 4.7% in April). The labor force fell <strong>−8,965 in May</strong>, continuing the trend from <strong>−11,721 in April</strong> and <strong>−15,051 in March</strong>. Peak (Mar 2025) to May 2026: roughly <strong>−73,000 people</strong> have exited the MA labor force. EOLWD attributes the decline primarily to retirements; the 25–54 prime-age participation rate is at a <strong>10-year high of 86.7%</strong>.</p>
+  <div class="alert amber" id="unAlert">
+    <h4 id="unAlertHead">⚠️ Labor Force</h4>
+    <p id="unAlertBody">—</p>
   </div>
 
   <div class="stat-row">
-    <div class="stat-card"><div class="label">MA Rate — May 2026 (U-3)</div><div class="value amber">4.5%</div><div class="sub">↓ from 4.7% · Pre-COVID (2019): 2.9%</div></div>
+    <div class="stat-card"><div class="label">MA Rate — <span id="urCardLab">—</span> (U-3)</div><div class="value amber" id="urCardVal">—</div><div class="sub"><span id="urCardSub">—</span> · Pre-COVID (2019): 2.9%</div></div>
     <div class="stat-card"><div class="label">MA Rate — <span id="u6CardLab">Q3 2025</span> (U-6)</div><div class="value red" id="u6CardVal">7.2%</div><div class="sub">True underemployment · <span id="u6CardSub">+2.9 pts above U-3 (same quarter)</span></div></div>
-    <div class="stat-card"><div class="label">May 2026 Labor Force Drop</div><div class="value red">−8,965</div><div class="sub">14-mo decline ~73K from peak</div></div>
-    <div class="stat-card"><div class="label">Prime-Age LFPR (25–54)</div><div class="value green">86.7%</div><div class="sub">10-year high · per EOLWD</div></div>
+    <div class="stat-card"><div class="label"><span id="lfCardLab">—</span> Labor Force Change</div><div class="value" id="lfCardVal">—</div><div class="sub" id="lfCardSub">—</div></div>
+    <div class="stat-card"><div class="label">Participation (16+) — <span id="lfprCardLab">—</span></div><div class="value blue" id="lfprCardVal">—</div><div class="sub" id="lfprCardSub">—</div></div>
   </div>
 
   <div class="chart-grid">
@@ -342,17 +342,31 @@ footer a:hover{color:var(--gold)}
     <div class="source">Source: BLS LAUS · Series LASST250000000000006 · Seasonally adjusted · <span id="lfTblRelMo">May 2026</span> released <span id="lfTblRel">June 23, 2026</span></div>
   </div>
 
+  <div class="chart-card">
+    <h3>Labor Force Participation Rate (16+) — MA vs National</h3>
+    <div class="chart-area"><canvas id="c-lfpr2"></canvas></div>
+  </div>
+
   <div class="data-card">
-    <h3>MA Labor Force Participation Rate — by Age Group</h3>
+    <h3>MA Labor Force Participation Rate</h3>
     <table class="data-table">
-      <thead><tr><th>Group</th><th>Apr 2026</th><th>Mar 2026</th><th>Context</th></tr></thead>
+      <thead><tr><th>Group</th><th id="lfprColCur">—</th><th id="lfprColPrev">—</th><th id="lfprColYr">—</th><th>Context</th></tr></thead>
       <tbody>
-        <tr><td>Overall LFPR (16+)</td><td class="td-amber">65.6%</td><td>65.8%</td><td>Down on retirements</td></tr>
-        <tr><td><strong>Prime-age (25–54)</strong></td><td class="td-green"><strong>86.7%</strong></td><td>86.5%</td><td class="td-green">10-year high</td></tr>
-        <tr><td>National LFPR</td><td>62.5%</td><td>62.6%</td><td>MA still well above US</td></tr>
+        <tr><td>Massachusetts (16+)</td><td class="td-amber" id="lfprMaCur">—</td><td id="lfprMaPrev">—</td><td id="lfprMaYr">—</td><td id="lfprMaCtx">—</td></tr>
+        <tr><td>National (16+)</td><td id="lfprUsCur">—</td><td id="lfprUsPrev">—</td><td id="lfprUsYr">—</td><td id="lfprUsCtx">—</td></tr>
       </tbody>
     </table>
-    <div class="source">Source: BLS LAUS / EOLWD · May 22, 2026 · 25–54 highlighted by EOLWD as evidence retirement (not weak demand) drives the headline LFPR decline.</div>
+    <div class="source">Source: BLS LAUS (MA, series LASST250000000000008) and CPS (national, LNS11300000), seasonally adjusted · built from the same arrays as the chart above, so the two cannot disagree · <span id="lfprTblRel">—</span></div>
+  </div>
+
+  <div class="info-box">
+    <span class="icon">📌</span>
+    <p><strong>Prime-age (25–54) participation is not on this page as a live figure.</strong>
+    BLS does not publish a monthly state participation rate by age band, so the
+    <strong>86.7%</strong> "10-year high" widely quoted for Massachusetts is EOLWD's own
+    calculation, <strong>released 22 May 2026</strong> and describing April 2026. It is
+    carried here as a dated citation rather than a current reading, because nothing on
+    this page can refresh it. Treat the headline 16+ rate above as the live number.</p>
   </div>
 </div>
 
@@ -872,7 +886,7 @@ footer a:hover{color:var(--gold)}
           <tr><td>Employed persons since Sep 2025</td><td class="td-red" colspan="2" data-field="nat-cum-sep">−910,000 cumulative</td></tr>
         </tbody>
       </table>
-      <div class="source">Headline aggregates auto-updated <span data-field="nat-src-date">September 18, 2026</span> from BLS CPS/CES. Sector breakdown and revisions are below, from the same CES series.</div>
+      <div class="source">Headline aggregates auto-updated <span data-field="nat-src-date">September 19, 2026</span> from BLS CPS/CES. Sector breakdown and revisions are below, from the same CES series.</div>
     </div>
   </div>
 
@@ -924,7 +938,7 @@ footer a:hover{color:var(--gold)}
        the page reflects the MA April release long after MA had moved to May and
        national to June — provenance contradicting the date stamped beside it. Both
        vintages are read from the series now. -->
-  <span style="margin-top:6px;display:block">Updated <span data-field="foot-updated">September 18, 2026</span> · MA data through <span data-field="foot-ma-mo">August 2026</span> · national data through <span data-field="foot-nat-mo">August 2026</span> · <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">Massachusetts Data Hub</a></span>
+  <span style="margin-top:6px;display:block">Updated <span data-field="foot-updated">September 19, 2026</span> · MA data through <span data-field="foot-ma-mo">August 2026</span> · national data through <span data-field="foot-nat-mo">August 2026</span> · <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">Massachusetts Data Hub</a></span>
 </footer>
 
 <script>
@@ -993,6 +1007,13 @@ var jobsData=[/*@jobs-data*/188400,73400,37400,-4300,-17300/*@*/];
 // appropriations lapse meant BLS published no value for that month.
 var lfLab=[/*@lf-lab*/'Jan 24','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr','May','Jun','Jul','Aug 26'/*@*/];
 var lfData=[/*@lf-data*/3881436,3891422,3900976,3910936,3920289,3926808,3930779,3933101,3935220,3937670,3939859,3944592,3949077,3951911,3952593,3951418,3949636,3948218,3946177,3943000,3939694,3935591,3935586,3926744,3915281,3900230,3888509,3879513,3873490,3870952,3871860/*@*/];
+
+// Participation rate (16+), MA and US on one shared axis. MA is LAUS and has no
+// Oct 2025 (the appropriations lapse); the US CPS series does, so the two columns
+// are aligned by index and a missing month is null, never carried forward.
+var lfprLab=[/*@lfpr2-lab*/'Jan 24','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 25','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Nov','Dec','Jan 26','Feb','Mar','Apr','May','Jun','Jul','Aug 26'/*@*/];
+var lfprMA=[/*@lfpr2-ma*/66.1,66.2,66.3,66.4,66.5,66.5,66.5,66.5,66.5,66.6,66.6,66.6,66.7,66.7,66.7,66.7,66.7,66.6,66.5,66.5,66.4,66.3,66.3,66.2,66.0,65.8,65.6,65.4,65.3,65.3,65.3/*@*/];
+var lfprUS=[/*@lfpr2-us*/62.5,62.6,62.7,62.6,62.6,62.6,62.7,62.7,62.7,62.5,62.4,62.5,62.6,62.5,62.5,62.6,62.4,62.3,62.2,62.3,62.5,62.5,62.4,62.1,62.0,61.9,61.8,61.8,61.5,61.4,61.6/*@*/];
 
 // MA unemployed persons, level (BLS LAUS LASST250000000000004, SA). Fetched every
 // run already but never reached the page, so the paragraph that explains WHY the
@@ -1292,6 +1313,96 @@ function renderDerived(){
     ? Math.abs(lfPeakDrop).toLocaleString('en-US')+' people have exited the MA labor force since '+moS(lfK[lfPeakI])
     : 'the MA labor force is at its highest since '+moS(lfK[0]));
 
+  // ── Participation & the Unemployment tab ──────────────────────────────────
+  // This whole block used to be typed into the HTML. It said 4.5% / May 2026 /
+  // "continuing the trend" of labour-force decline. By August the rate was 4.3%
+  // and the labour force had RISEN — the page was asserting the wrong direction,
+  // not just an old number. Everything below is derived, including the verbs.
+  var lfprK=seriesKeys(lfprLab);
+  function lastIdx(a){ for(var i=a.length-1;i>=0;i--) if(a[i]!=null) return i; return -1; }
+  function prevIdx(a,from){ for(var i=from-1;i>=0;i--) if(a[i]!=null) return i; return -1; }
+  function yrAgoIdx(a,k){ for(var i=0;i<a.length;i++) if(a[i]!=null&&lfprK[i].o===k.o-12) return i; return -1; }
+  var pct=function(v){ return v==null?'—':Number(v).toFixed(1)+'%'; };
+
+  var iMa=lastIdx(lfprMA), iUs=lastIdx(lfprUS);
+  if(iMa>=0){
+    var maNow=Number(lfprMA[iMa]), jMa=prevIdx(lfprMA,iMa), yMa=yrAgoIdx(lfprMA,lfprK[iMa]);
+    var maPrev=jMa>=0?Number(lfprMA[jMa]):null, maYr=yMa>=0?Number(lfprMA[yMa]):null;
+    txt('lfprColCur',moS(lfprK[iMa])); txt('lfprColPrev',jMa>=0?moS(lfprK[jMa]):'—');
+    txt('lfprColYr',yMa>=0?moS(lfprK[yMa]):'—');
+    txt('lfprMaCur',pct(maNow)); txt('lfprMaPrev',pct(maPrev)); txt('lfprMaYr',pct(maYr));
+    txt('lfprMaCtx',maYr==null?'—':(maNow-maYr).toFixed(1)+' pts vs a year ago');
+    txt('lfprCardLab',moS(lfprK[iMa])); txt('lfprCardVal',pct(maNow));
+    txt('lfprTblRel','MA latest: '+moS(lfprK[iMa])+', released '+maRel(lfprK[iMa]));
+    if(iUs>=0){
+      var usNow=Number(lfprUS[iUs]), jUs=prevIdx(lfprUS,iUs), yUs=yrAgoIdx(lfprUS,lfprK[iUs]);
+      txt('lfprUsCur',pct(usNow)); txt('lfprUsPrev',jUs>=0?pct(Number(lfprUS[jUs])):'—');
+      txt('lfprUsYr',yUs>=0?pct(Number(lfprUS[yUs])):'—');
+      txt('lfprUsCtx',(usNow<maNow?'MA is ':'MA is ')+Math.abs(maNow-usNow).toFixed(1)+' pts '+(maNow>usNow?'above':'below')+' the nation');
+      txt('lfprCardSub',Math.abs(maNow-usNow).toFixed(1)+' pts '+(maNow>usNow?'above':'below')+' US '+pct(usNow));
+    }
+  }
+
+  // Headline rate card + the section strap, both from the same arrays the
+  // charts use so a heading can never name a different month from its figure.
+  var ur2K=seriesKeys(ur2Lab), urNow2=null, urPrev2=null;
+  if(typeof ur2MA!=='undefined'){
+    var ui=lastIdx(ur2MA);
+    if(ui>=0){ urNow2=Number(ur2MA[ui]); var uj=prevIdx(ur2MA,ui); if(uj>=0) urPrev2=Number(ur2MA[uj]);
+      txt('urCardLab',moS(ur2K[ui])); txt('urCardVal',urNow2.toFixed(1)+'%');
+      txt('urCardSub',urPrev2==null?'—':(urNow2<urPrev2?'↓':urNow2>urPrev2?'↑':'flat')+' from '+urPrev2.toFixed(1)+'%');
+    }
+  }
+
+  // Latest labour-force move. lfChgAt only returns a value where the two months
+  // are genuinely adjacent, so the Oct-2025 hole can never be read as a change.
+  var lfLastK=lfK[lfK.length-1], lfMove=lfChgAt(lfLastK);
+  txt('lfCardLab',moS(lfLastK));
+  txt('lfCardVal',lfMove==null?'—':(lfMove>0?'+':'−')+Math.abs(lfMove).toLocaleString('en-US'));
+  var lfCardEl=document.getElementById('lfCardVal');
+  if(lfCardEl) lfCardEl.className='value '+(lfMove==null?'':lfMove>0?'green':'red');
+  txt('lfCardSub',lfPeakDrop<0
+    ? Math.abs(lfPeakDrop).toLocaleString('en-US')+' below the '+moS(lfK[lfPeakI])+' peak'
+    : 'at its highest in the series');
+
+  // The strap and the alert. Written as templates so the ADJECTIVES move too:
+  // "shrinking" was hardcoded and survived the month the trend turned.
+  var dirWord=lfMove==null?'moved':lfMove>0?'rose':'fell';
+  txt('unSectionDesc',
+    (urNow2==null?'—':urNow2.toFixed(1)+'% ('+moS(lfLastK)+')')
+    +' · Labor force '+dirWord+' '+(lfMove==null?'—':Math.abs(lfMove).toLocaleString('en-US'))+' in '+moS(lfLastK)
+    +' · Participation '+(iMa>=0?Number(lfprMA[iMa]).toFixed(1)+'%':'—'));
+  txt('unAlertHead', lfMove==null?'⚠️ Labor Force'
+    : lfMove>0?'✅ Labor Force Rose in '+moS(lfLastK)
+    : '⚠️ Labor Force Still Shrinking');
+  var alertEl=document.getElementById('unAlert');
+  if(alertEl&&lfMove!=null) alertEl.className='alert '+(lfMove>0?'green':'amber');
+  txt('unAlertBody',
+    'MA unemployment '+(urPrev2==null?'was':urNow2<urPrev2?'eased to':urNow2>urPrev2?'rose to':'held at')+' '
+    +(urNow2==null?'—':urNow2.toFixed(1)+'%')+' in '+moS(lfLastK)
+    +(urPrev2==null?'':' (from '+urPrev2.toFixed(1)+'%)')+'. '
+    +'The labor force '+dirWord+' '+(lfMove==null?'—':Math.abs(lfMove).toLocaleString('en-US'))
+    +' that month, and stands '+(lfPeakDrop<0?Math.abs(lfPeakDrop).toLocaleString('en-US')+' below its '+moS(lfK[lfPeakI])+' peak':'at a series high')+'. '
+    +'Participation (16+) is '+(iMa>=0?Number(lfprMA[iMa]).toFixed(1)+'%':'—')
+    +(iUs>=0?', against '+Number(lfprUS[iUs]).toFixed(1)+'% nationally':'')+'.');
+
+  // Overview info-box: same figures, stated once.
+  var nfYoY=null;
+  if(typeof momData!=='undefined'&&momData.length>=12){
+    nfYoY=0; for(i=momData.length-12;i<momData.length;i++) nfYoY+=Number(momData[i])||0;
+  }
+  txt('ovInfoNf',nfYoY==null?'—':(nfYoY<0?'down ':'up ')+Math.abs(nfYoY).toLocaleString('en-US')+' jobs');
+  txt('ovInfoLf',lfPeakDrop<0?'down '+Math.abs(lfPeakDrop).toLocaleString('en-US'):'at a high');
+  txt('ovInfoPeakMo',moS(lfK[lfPeakI]));
+
+  // The overview heading said "Labor Force Shrinkage Continues" in hardcoded
+  // text directly above its own sentence reporting that the labour force GREW
+  // by 908. Derived from the same value the sentence uses, so the two cannot
+  // contradict each other again.
+  txt('ovLfHead', lfMove==null ? 'Labor Force'
+    : lfMove>0 ? 'Labor Force Rose in '+moS(lfLastK)
+    : 'Labor Force Shrinkage Continues');
+
   // ── MA citations: the release that actually published each figure ──
   // Keyed off the month the prose just rendered, never off today.
   txt('ovPayRelMo',moS(momLast));   txt('ovPayRel',maRel(momLast));
@@ -1495,6 +1606,16 @@ function initCharts(tab){
           {label:'National',data:ur2Nat,borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:4,borderWidth:2,borderDash:[5,3]}
         ]},
         options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{min:3,max:5.5,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
+      // c-lfpr2 — participation, MA vs nation. spanGaps stays FALSE: MA has no
+      // Oct 2025 (the appropriations lapse) and bridging that hole would draw a
+      // straight line through a month BLS never published.
+      sc('c-lfpr2',{type:'line',data:{
+        labels:lfprLab,
+        datasets:[
+          {label:'Massachusetts (16+)',data:lfprMA,borderColor:R,backgroundColor:R+'18',fill:true,tension:.3,pointRadius:3,borderWidth:2.5,spanGaps:false},
+          {label:'National (16+)',data:lfprUS,borderColor:B,backgroundColor:B+'18',fill:true,tension:.3,pointRadius:3,borderWidth:2,borderDash:[5,3],spanGaps:false}
+        ]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,0.04)'}},x:{grid:{display:false}}}}});
       sc('c-u6',{type:'line',data:{
         labels:u6Lab,
         datasets:[
