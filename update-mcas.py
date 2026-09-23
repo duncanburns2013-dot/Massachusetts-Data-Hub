@@ -681,6 +681,23 @@ def update_boston(sy):
     arr("bos-yoy-s", yoy("State"))
     html = sub(html, r'(data-field="bos-prev-year">)[^<]*(<)', prev_sy,
                "Boston previous-year label", count=0)
+
+    # The six KPI cards at the top of the Education tab. Same oversight as the
+    # statewide page: the charts were wired and the headline cards above them
+    # were not, so the most-read numbers stayed a year behind.
+    def bset(tag, value):
+        nonlocal html
+        html = sub(html, r'(data-field="' + tag + r'">)[^<]*(<)', value,
+                   f"Boston KPI {tag}", count=0)
+
+    be38, bm38 = ovbar_b[0], ovbar_b[1]
+    be10, bm10 = ovbar_b[2], ovbar_b[3]
+    bset("bk-ela38", f"{be38}%")
+    bset("bk-math38", f"{bm38}%")
+    bset("bk-notela38", f"{100 - be38}%")
+    bset("bk-notmath38", f"{100 - bm38}%")
+    bset("bk-notela10", f"{100 - be10}%")
+    bset("bk-notmath10", f"{100 - bm10}%")
     html = sub(html, r'(data-field="bos-mcas-year">)[^<]*(<)', sy,
                    "Boston year label", count=0)
 
@@ -918,6 +935,24 @@ def main():
         "checked": date.today().isoformat(),
         "source": "MA DESE via educationtocareer.data.mass.gov resource i9w6-niyt",
         "url": f"{API}?$where=sy='{sy}' AND org_type='State'",
+        # Per-pupil expenditure is a DIFFERENT DESE release on its own cadence.
+        # Checked 2026-09-23: profiles.doe.mass.edu/statereport/ppx.aspx offers
+        # 2024 as its newest year, and its State Total row is exactly the
+        # $22,413.93 in-district / $23,165.11 total the page shows. So FY2024 is
+        # current, not stale. It is recorded here so the watchdog ages it and
+        # says so when FY2025 lands.
+        #
+        # Do NOT compute a state figure from the Socrata spending tables to get
+        # ahead of that release. The in-district DOLLARS reproduce DESE to
+        # 0.0002% ($19,453,832,785 against $19,453,875,893), but the FTE
+        # denominators do not -- 920,220 against DESE's 867,936.7 -- so the
+        # per-pupil result misses by about 0.5% and would be a number no DESE
+        # page agrees with.
+        "per_pupil": {"fiscal_year": "FY2024",
+                      "total": 23165.11, "in_district": 22413.93,
+                      "source": "DESE Per Pupil Expenditure state report, "
+                                "profiles.doe.mass.edu/statereport/ppx.aspx",
+                      "checked": date.today().isoformat()},
         "note": ("ALL (03-08) SCI covers grades 5 and 8 only. test_grade is "
                  "authoritative for the span; do not infer it from row counts."),
         "state_all_students": {
