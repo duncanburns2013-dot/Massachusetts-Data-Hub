@@ -109,6 +109,213 @@ def sub(html, pattern, value, what, count=1):
     return new
 
 
+# ── The rest of the statewide page ───────────────────────────────────────────
+# Twelve MCAS charts live on education-statewide.html. Three were wired first
+# and the other nine were left carrying 2025 behind headings that said 2025 --
+# which is worse than an obviously old page, because the two halves disagreed.
+# All twelve are written here.
+
+# The four headline cells, in the order overviewCurrent/mcasTrend label them.
+HEADLINE = [("ALL (03-08)", "ELA"), ("ALL (03-08)", "MATH"),
+            ("10", "ELA"), ("10", "MATH")]
+# overviewAll's own order, which is NOT the same.
+EVERY_SUBJECT = [("ALL (03-08)", "ELA"), ("ALL (03-08)", "MATH"), ("ALL (03-08)", "SCI"),
+                 ("08", "CIV"), ("10", "ELA"), ("10", "MATH"), ("10", "SCI")]
+# mcasDecline's subgroups, in its label order.
+DECLINE_GROUPS = [("All Students", "All Students"), ("White", "White"),
+                  ("Black", "Black or African American"),
+                  ("Hispanic", "Hispanic or Latino"), ("Asian", "Asian"),
+                  ("Low Income", "Low Income"),
+                  ("Disabilities", "Students with Disabilities")]
+
+# The 26 Gateway Cities, MGL c.23A s.3A. Every name is checked against the API
+# before use -- a municipality whose district is named differently would
+# silently shrink the aggregate rather than raise anything.
+GATEWAY_CITIES = [
+    "Attleboro", "Barnstable", "Brockton", "Chelsea", "Chicopee", "Everett",
+    "Fall River", "Fitchburg", "Haverhill", "Holyoke", "Lawrence", "Leominster",
+    "Lowell", "Lynn", "Malden", "Methuen", "New Bedford", "Peabody",
+    "Pittsfield", "Quincy", "Revere", "Salem", "Springfield", "Taunton",
+    "Westfield", "Worcester",
+]
+# The fourteen the gatewayCities chart draws. Sorted by ELA at write time, so
+# the labels are written with the bars.
+GATEWAY_CHART = ["Holyoke", "Lynn", "Lawrence", "Fall River", "Brockton",
+                 "Springfield", "Worcester", "Lowell", "Salem", "Malden",
+                 "Westfield", "Leominster", "Attleboro", "Quincy"]
+TREND_BASE = "2019"          # the pre-pandemic bar the trend chart anchors on
+SPEND_FIRST = "2022"
+
+
+def _state_series():
+    """{(sy, grade, subject): row} for every State / All Students row."""
+    rows, err = query("org_type='State' AND stu_grp='All Students'",
+                      "sy,test_grade,subject_code,m_plus_e_pct,e_pct,m_pct,"
+                      "pm_pct,nm_pct,avg_scaled_score,m_plus_e_cnt,stu_cnt",
+                      limit=50000)
+    if err:
+        return None, err
+    return {(r["sy"], r["test_grade"], r["subject_code"]): r for r in rows}, None
+
+
+def update_statewide_rest(html, sy, prev_sy):
+    """Writes the nine remaining charts plus the new year-over-year one."""
+    st, err = _state_series()
+    if err:
+        fail(f"could not reach DESE for the state series: {err}")
+
+    def sme(year, grade, subject):
+        r = st.get((year, grade, subject))
+        return None if r is None else round(float(r["m_plus_e_pct"]) * 100)
+
+    def need(year, grade, subject):
+        v = sme(year, grade, subject)
+        if v is None:
+            fail(f"{year}: State has no {subject} row for grade {grade!r}. "
+                 f"Nothing written.")
+        return v
+
+    def arr(tag, vals):
+        nonlocal html
+        pat = r"(/\*@" + tag + r"\*/)[^/]*(/\*@\*/)"
+        new, n = re.subn(pat, lambda m: f"{m.group(1)}{vals}{m.group(2)}", html, count=1)
+        if not n:
+            fail(f"statewide marker @{tag} not found. Nothing written.")
+        html = new
+
+    nums = lambda v: ",".join(str(x) for x in v)
+
+    # overviewCurrent / mcasTrend / overviewAll
+    cur4 = [need(sy, g, s_) for g, s_ in HEADLINE]
+    arr("mcas-ovcur", nums(cur4))
+    arr("mcas-ovcur-lab", f"'{sy}'")
+    arr("mcas-trend-a", nums([need(TREND_BASE, g, s_) for g, s_ in HEADLINE]))
+    arr("mcas-trend-b", nums([need(prev_sy, g, s_) for g, s_ in HEADLINE]))
+    arr("mcas-trend-b-lab", f"'{prev_sy}'")
+    arr("mcas-trend-c", nums(cur4))
+    arr("mcas-trend-c-lab", f"'{sy}'")
+    arr("mcas-ovall", nums([need(sy, g, s_) for g, s_ in EVERY_SUBJECT]))
+
+    # gapsLevels -- statewide ELA 3-8 achievement levels.
+    r = st.get((sy, "ALL (03-08)", "ELA"))
+    lv = [round(float(r[f]) * 100) for f in ("e_pct", "m_pct", "pm_pct", "nm_pct")]
+    if not 98 <= sum(lv) <= 102:
+        fail(f"{sy}: state ELA levels sum to {sum(lv)}%. Nothing written.")
+    if abs((lv[0] + lv[1]) - cur4[0]) > 1:
+        fail(f"{sy}: levels say {lv[0] + lv[1]}% meeting-or-above, headline says "
+             f"{cur4[0]}%. Nothing written.")
+    arr("mcas-levels", nums(lv))
+
+    # spendProf -- the multi-year line, extended rather than shifted.
+    years = sorted({y for (y, g, sub_) in st
+                    if g == "ALL (03-08)" and sub_ == "ELA" and y >= SPEND_FIRST})
+    arr("mcas-spend-lab", ",".join(f"'{y}'" for y in years))
+    arr("mcas-spend-ela", nums([need(y, "ALL (03-08)", "ELA") for y in years]))
+    arr("mcas-spend-math", nums([need(y, "ALL (03-08)", "MATH") for y in years]))
+
+    # mcasDecline -- grade 10 scaled-score change by subgroup.
+    grp, err = query(
+        f"sy in('{sy}','{prev_sy}') AND org_type='State' AND test_grade='10' "
+        f"AND subject_code in('ELA','MATH')",
+        "sy,stu_grp,subject_code,avg_scaled_score", limit=5000)
+    if err:
+        fail(f"could not reach DESE for subgroup scores: {err}")
+    gm = {(r["sy"], r["stu_grp"], r["subject_code"]): r.get("avg_scaled_score")
+          for r in grp}
+
+    def delta(subject):
+        out = []
+        for label, key in DECLINE_GROUPS:
+            a, b = gm.get((sy, key, subject)), gm.get((prev_sy, key, subject))
+            if a in (None, "") or b in (None, ""):
+                fail(f"{sy}: grade 10 {subject} missing for subgroup {key!r} "
+                     f"(chart label {label!r}). Nothing written.")
+            out.append(round(float(a) - float(b), 1))
+        return out
+
+    arr("mcas-decline-ela", nums(delta("ELA")))
+    arr("mcas-decline-math", nums(delta("MATH")))
+
+    # Gateway Cities. Aggregated as a weighted mean over students, not a mean of
+    # district percentages -- averaging percentages would let Holyoke and
+    # Worcester count the same and quietly flatter the group.
+    names = "','".join(GATEWAY_CITIES)
+    gw, err = query(
+        f"sy='{sy}' AND org_type='Public School District' AND stu_grp='All Students' "
+        f"AND test_grade='ALL (03-08)' AND subject_code in('ELA','MATH') "
+        f"AND dist_name in('{names}')",
+        "dist_name,subject_code,m_plus_e_cnt,stu_cnt,m_plus_e_pct", limit=500)
+    if err:
+        fail(f"could not reach DESE for Gateway Cities: {err}")
+    seen = {r["dist_name"] for r in gw}
+    absent = [c for c in GATEWAY_CITIES if c not in seen]
+    if absent:
+        fail(f"{sy}: no district rows for Gateway {absent}. A renamed district "
+             f"would shrink the aggregate silently. Nothing written.")
+    gwd = {(r["dist_name"], r["subject_code"]): r for r in gw}
+
+    def gw_agg(subject):
+        num = sum(float(gwd[(c, subject)]["m_plus_e_cnt"]) for c in GATEWAY_CITIES)
+        den = sum(float(gwd[(c, subject)]["stu_cnt"]) for c in GATEWAY_CITIES)
+        return round(num / den * 100, 1)
+
+    # "Rest of state" is the state total minus the Gateway share, from counts.
+    def rest_agg(subject):
+        srow = st.get((sy, "ALL (03-08)", subject))
+        tot_n = float(srow["stu_cnt"]) if "stu_cnt" in srow else None
+        if tot_n is None:
+            fail("state row carries no student count; cannot net out Gateway.")
+        tot_me = float(srow["m_plus_e_pct"]) * tot_n
+        gnum = sum(float(gwd[(c, subject)]["m_plus_e_cnt"]) for c in GATEWAY_CITIES)
+        gden = sum(float(gwd[(c, subject)]["stu_cnt"]) for c in GATEWAY_CITIES)
+        return round((tot_me - gnum) / (tot_n - gden) * 100, 1)
+
+    arr("mcas-gwgap-gw", nums([gw_agg("ELA"), gw_agg("MATH")]))
+    arr("mcas-gwgap-rest", nums([rest_agg("ELA"), rest_agg("MATH")]))
+
+    chart = sorted(GATEWAY_CHART,
+                   key=lambda c: round(float(gwd[(c, "ELA")]["m_plus_e_pct"]) * 100))
+    arr("mcas-gwcity-lab", ",".join(f"'{c}'" for c in chart))
+    arr("mcas-gwcity-ela",
+        nums([round(float(gwd[(c, "ELA")]["m_plus_e_pct"]) * 100) for c in chart]))
+    arr("mcas-gwcity-math",
+        nums([round(float(gwd[(c, "MATH")]["m_plus_e_pct"]) * 100) for c in chart]))
+
+    # overviewDist -- how many DISTRICTS fall in each ELA band. The labels carry
+    # the counts, so labels and slices are written together; letting them drift
+    # apart would put one number in the legend and another in the wedge.
+    dist, err = query(
+        f"sy='{sy}' AND org_type='Public School District' AND stu_grp='All Students' "
+        f"AND test_grade='ALL (03-08)' AND subject_code='ELA'",
+        "dist_name,m_plus_e_pct", limit=5000)
+    if err:
+        fail(f"could not reach DESE for the district distribution: {err}")
+    bands = [0, 0, 0, 0]
+    for r in dist:
+        v = float(r["m_plus_e_pct"]) * 100
+        bands[0 if v < 25 else 1 if v < 50 else 2 if v < 75 else 3] += 1
+    if sum(bands) != len(dist):
+        fail("district distribution lost a district. Nothing written.")
+    arr("mcas-ovdist", nums(bands))
+    arr("mcas-ovdist-lab",
+        f"'<25% Meeting ({bands[0]})','25-50% Meeting ({bands[1]})',"
+        f"'50-75% Meeting ({bands[2]})','≥75% Meeting ({bands[3]})'")
+    print(f"  district ELA bands ({len(dist)} districts): {bands}")
+
+    # The new year-over-year chart: percentage-point change on every subject.
+    yoy = []
+    for g, sub_ in EVERY_SUBJECT:
+        a, b = sme(sy, g, sub_), sme(prev_sy, g, sub_)
+        yoy.append(None if (a is None or b is None) else a - b)
+    arr("mcas-yoy", ",".join("null" if v is None else str(v) for v in yoy))
+
+    html = sub(html, r'(data-field="mcas-prev-year">)[^<]*(<)', prev_sy,
+               "previous-year label", count=0)
+    html = sub(html, r'(data-field="mcas-first-year">)[^<]*(<)', years[0],
+               "first-year label", count=0)
+    return html
+
+
 # ── Boston (all-things-boston.html) ──────────────────────────────────────────
 # Nine charts, every one of them Boston against the State on the same cells, so
 # both columns are written from the same pull. The orders below are the chart's
@@ -124,6 +331,27 @@ BOS_OVALL = [("ALL (03-08)", "ELA"), ("ALL (03-08)", "MATH"), ("ALL (03-08)", "S
 BOS_SCI = [("05", "SCI"), ("08", "SCI"), ("08", "CIV"), ("10", "SCI")]
 # Chart label -> the subgroup name DESE actually publishes. "EL" is "English
 # Learners", plural; the singular returns nothing and would silently drop a bar.
+# e2 / gapChange label sets. DESE's names differ from the chart's shorthand:
+# "EconDis" is Low Income, "Sped" is Students with Disabilities.
+BOS_E2_GROUPS = [("All", "All Students"), ("EL", "English Learners"),
+                 ("Black", "Black or African American"),
+                 ("Hispanic", "Hispanic or Latino"), ("EconDis", "Low Income"),
+                 ("Sped", "Students with Disabilities")]
+BOS_SPECIAL = [("All Students", "All Students"), ("High Needs", "High Needs"),
+               ("Low Income", "Low Income"),
+               ("EL/Former EL", "English Learners and Former English Learners"),
+               ("Disability", "Students with Disabilities")]
+BOS_HS_RACE = [("White", "White"), ("Asian", "Asian"),
+               ("Multi-Race", "Multi-Race, Not Hispanic or Latino"),
+               ("All", "All Students"), ("Black", "Black or African American"),
+               ("Hispanic", "Hispanic or Latino"), ("EL", "English Learners"),
+               ("Disability", "Students with Disabilities")]
+BOS_CHG = [("All", "All Students"), ("Asian", "Asian"), ("White", "White"),
+           ("Multi-Race", "Multi-Race, Not Hispanic or Latino"),
+           ("Hispanic", "Hispanic or Latino"),
+           ("Black", "Black or African American"), ("EL", "English Learners"),
+           ("Disability", "Students with Disabilities")]
+
 BOS_GAP_GROUPS = [
     ("White", "White"), ("Asian", "Asian"),
     ("Multi-Race", "Multi-Race, Not Hispanic or Latino"),
@@ -149,6 +377,17 @@ def update_boston(sy):
     for r in rows:
         who = "State" if r["org_type"] == "State" else "Boston"
         by[(who, r["test_grade"], r["subject_code"])] = r
+
+    prev_rows, err = query(
+        f"sy='{int(sy) - 1}' AND stu_grp='All Students' AND ((org_type='State') OR "
+        f"(org_type='Public School District' AND dist_name='Boston'))",
+        "org_type,test_grade,subject_code,m_plus_e_pct")
+    if err:
+        return False, err
+    prev_by = {}
+    for r in prev_rows:
+        who = "State" if r["org_type"] == "State" else "Boston"
+        prev_by[(who, r["test_grade"], r["subject_code"])] = r
 
     def cell(who, g, sub_):
         r = by.get((who, g, sub_))
@@ -220,6 +459,61 @@ def update_boston(sy):
     arr("bos-ssela", ssela);      arr("bos-ssmath", ssmath)
     arr("bos-gsci-b", gsci_b);    arr("bos-gsci-s", gsci_s)
     arr("bos-gapela", gapela);    arr("bos-gapmath", gapmath)
+
+    # The six charts that were missed on the first pass, plus the new
+    # year-over-year pair. All of them are subgroup work, and DESE's subgroup
+    # names are not the chart's shorthand: "EconDis" is Low Income and "Sped" is
+    # Students with Disabilities, so every mapping is spelled out above rather
+    # than guessed from the label.
+    prev_sy = str(int(sy) - 1)
+    sg, err = query(
+        f"sy in('{sy}','{prev_sy}') AND org_type='Public School District' "
+        f"AND dist_name='Boston' AND test_grade in('ALL (03-08)','10') "
+        f"AND subject_code in('ELA','MATH')",
+        "sy,stu_grp,test_grade,subject_code,avg_scaled_score", limit=5000)
+    if err:
+        return False, err
+    sgm = {(r["sy"], r["stu_grp"], r["test_grade"], r["subject_code"]):
+           r.get("avg_scaled_score") for r in sg}
+
+    def score(year, grp, grade, subject, label):
+        v = sgm.get((year, grp, grade, subject))
+        if v in (None, ""):
+            fail(f"{year}: Boston has no {subject} grade-{grade} score for "
+                 f"{grp!r} (chart label {label!r}). Nothing written.")
+        return float(v)
+
+    arr("bos-e6", ssela)
+    arr("bos-gapsp-ela",
+        [score(sy, k, "ALL (03-08)", "ELA", l) for l, k in BOS_SPECIAL])
+    arr("bos-gapsp-math",
+        [score(sy, k, "ALL (03-08)", "MATH", l) for l, k in BOS_SPECIAL])
+    arr("bos-gaphs", [score(sy, k, "10", "ELA", l) for l, k in BOS_HS_RACE])
+    arr("bos-e2", [round(score(sy, k, "10", "ELA", l)
+                         - score(prev_sy, k, "10", "ELA", l), 1)
+                   for l, k in BOS_E2_GROUPS])
+    arr("bos-gapchg", [round(score(sy, k, "10", "ELA", l)
+                             - score(prev_sy, k, "10", "ELA", l), 1)
+                       for l, k in BOS_CHG])
+    html = sub(html, r"(/\*@bos-chg-years\*/)[^/]*(/\*@\*/)",
+               f"'{prev_sy}-{sy}'", "Boston change-years label")
+
+    # Year-over-year, Boston against the state on the same six cells.
+    def yoy(who):
+        out = []
+        for g, sub_ in BOS_OVBAR:
+            a, b = by.get((who, g, sub_)), prev_by.get((who, g, sub_))
+            if a is None or b is None:
+                out.append("null")
+            else:
+                out.append(round(float(a["m_plus_e_pct"]) * 100
+                                 - float(b["m_plus_e_pct"]) * 100))
+        return out
+
+    arr("bos-yoy-b", yoy("Boston"))
+    arr("bos-yoy-s", yoy("State"))
+    html = sub(html, r'(data-field="bos-prev-year">)[^<]*(<)', prev_sy,
+               "Boston previous-year label", count=0)
     html = sub(html, r'(data-field="bos-mcas-year">)[^<]*(<)', sy,
                    "Boston year label", count=0)
 
@@ -357,7 +651,18 @@ def update_merrimack(sy):
                  f"headline says {D['subj'][k][0]}%. Nothing written.")
         D["levels"][k] = lv
 
-    # 5. tested counts.
+    # 5. yoy -- percentage-point change on the same seven cells, for the new
+    #    year-over-year chart. Computed here so it can never disagree with the
+    #    subj bars it sits beside.
+    D["yoy"] = {}
+    for k in MV_DISTRICTS:
+        row_ = []
+        for g, sub_ in MV_SUBJ:
+            a, b = me(cur, k, g, sub_), me(prev, k, g, sub_)
+            row_.append(None if (a is None or b is None) else a - b)
+        D["yoy"][k] = row_
+
+    # 6. tested counts.
     for k in D.get("tested", {}):
         r = row(cur, k, "ALL (03-08)", "ELA")
         if r:
@@ -370,6 +675,8 @@ def update_merrimack(sy):
     html = html[:m.start(2)] + json.dumps(D, separators=(",", ":")) + html[m.end(2):]
     html = sub(html, r'(data-field="mv-mcas-year">)[^<]*(<)', sy,
                "Merrimack year label", count=0)
+    html = sub(html, r'(data-field="mv-prev-year">)[^<]*(<)', str(int(sy) - 1),
+               "Merrimack previous-year label", count=0)
 
     if html != orig:
         with open(MV_FILE, "w", encoding="utf-8") as f:
@@ -428,6 +735,7 @@ def main():
     html = sub(html, r"(data:\[/\*@mcas-sci\*/)[^\]]*(/\*@\*/\])",
                ",".join(map(str, sci)), "Science/Civics bars")
     html = sub(html, r'(data-field="mcas-year">)[^<]*(<)', sy, "year label", count=0)
+    html = update_statewide_rest(html, sy, str(int(sy) - 1))
 
     if html != orig:
         with open(HTML_FILE, "w", encoding="utf-8") as f:

@@ -279,6 +279,7 @@ tr:hover{background:rgba(15,41,66,.02)}.tg{background:rgba(15,41,66,.06);font-we
 <div class="cd full">
 <h3>All Subjects — Boston vs Massachusetts</h3>
 <div class="cw tall"><canvas id="overviewAll"></canvas></div>
+<div class="chart-card"><h3>Year-over-Year Change &mdash; Boston (<span data-field="bos-prev-year">2025</span> to <span data-field="bos-mcas-year">2026</span>, percentage points)</h3><div class="chart-area"><canvas id="bosYoY"></canvas></div></div>
 <div class="co blue"><strong>Key takeaway:</strong> Boston trails the state by 11-20 percentage points across every subject and grade span. Only 22% of students meet science standards in grades 5 & 8, compared to 42% statewide — a 20-point gap.</div>
 </div>
 </div>
@@ -716,6 +717,7 @@ function showSubTab(id,btn){
   btn.classList.add('active');
   if(!I[id]){I[id]=1;init(id);}
 }
+var BOS_CHG_YEARS=/*@bos-chg-years*/'2025-2026'/*@*/;
 function sc(id,cfg){var e=Chart.getChart(id);if(e)e.destroy();return new Chart(document.getElementById(id),cfg);}
 function pct(v){return v+'%';}function dlr(v){return '$'+(v/1000).toFixed(0)+'M';}
 
@@ -789,11 +791,11 @@ if(id==='education'){
 
 if(id==='edu-glance'){
 sc('e1',{type:'bar',data:{labels:['ELA 3-8','Math 3-8','Sci 5&8','ELA HS','Math HS','Sci HS','Civics'],datasets:[{label:'Boston',data:[29,28,22,40,38,33,23],backgroundColor:C.r,borderRadius:4},{label:'State',data:[42,41,42,51,45,46,39],backgroundColor:C.sk,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{max:60,ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0}}}}});
-sc('e2',{type:'bar',data:{labels:['All','EL','Black','Hispanic','EconDis','Sped'],datasets:[{data:[-2.9,-3.9,-3.9,-2.5,-2.7,-1.8],backgroundColor:C.r,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{ticks:{callback:function(v){return v+' pts'}},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('e2',{type:'bar',data:{labels:['All','EL','Black','Hispanic','EconDis','Sped'],datasets:[{data:[/*@bos-e2*/-3.0,1.0,-2.0,-2.0,-2.0,-3.0/*@*/],backgroundColor:C.r,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{ticks:{callback:function(v){return v+' pts'}},grid:{color:G}},x:{grid:{display:0}}}}});
 sc('e3',{type:'bar',data:{labels:['ELA','Math','Sci','ELA Grw','Math Grw','EL Prof','Absent'],datasets:[{label:'Non-HS',data:[2,2,2,2,2,3,3],backgroundColor:C.b,borderRadius:4},{label:'HS (0/4)',data:[0,0,0,2,3,4,4],backgroundColor:function(c){return[0,0,0,2,3,4,4][c.dataIndex]===0?C.r:C.g},borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{max:5,grid:{color:G},ticks:{stepSize:1}},x:{grid:{display:0}}}}});
 sc('e4',{type:'bar',data:{labels:['Asian','White','Multi','Black','All','Hisp','EL','Disab'],datasets:[{data:[91.7,88.7,80.2,79.3,79.7,75.6,68.1,63.8],backgroundColor:function(c){var v=c.raw;return v>=85?C.g:v>=75?C.am:C.r},borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{min:55,max:100,ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0}}}}});
 sc('e5',{type:'bar',data:{labels:['AmInd','Disab','Hisp','LowInc','Black','All','Multi','Asian'],datasets:[{label:'K-8',data:[41,35.5,32.7,31.6,27.2,26.3,26,9.9],backgroundColor:C.o,borderRadius:4},{label:'HS',data:[52,48.1,42.9,40.4,39.3,36.1,38.4,15.6],backgroundColor:C.r,borderRadius:4}]},options:{indexAxis:'y',responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{x:{max:55,ticks:{callback:pct},grid:{color:G}},y:{grid:{display:0}}}}});
-sc('e6',{type:'line',data:{labels:['Gr3','Gr4','Gr5','Gr6','Gr7','Gr8','Gr10'],datasets:[{label:'Boston',data:[488,485,488,485,485,483,492],borderColor:C.r,backgroundColor:C.rA,fill:1,tension:.3,borderWidth:3},{label:'500',data:[500,500,500,500,500,500,500],borderColor:C.sl,borderDash:[5,5],pointRadius:0}]},options:{responsive:1,maintainAspectRatio:0,scales:{y:{min:475,max:510,grid:{color:G}},x:{grid:{display:0}}}}});
+sc('e6',{type:'line',data:{labels:['Gr3','Gr4','Gr5','Gr6','Gr7','Gr8','Gr10'],datasets:[{label:'Boston',data:[/*@bos-e6*/489,486,487,483,486,483,489/*@*/],borderColor:C.r,backgroundColor:C.rA,fill:1,tension:.3,borderWidth:3},{label:'500',data:[500,500,500,500,500,500,500],borderColor:C.sl,borderDash:[5,5],pointRadius:0}]},options:{responsive:1,maintainAspectRatio:0,scales:{y:{min:475,max:510,grid:{color:G}},x:{grid:{display:0}}}}});
 }
 
 if(id==='edu-mcas'){
@@ -810,6 +812,14 @@ labels:['Exceeding','Meeting','Partially Meeting','Not Meeting'],
 datasets:[{data:[/*@bos-ovpie*/6,23,38,33/*@*/],backgroundColor:[EC.g,EC.b,EC.y,EC.r],borderWidth:0}]
 },options:{responsive:true,maintainAspectRatio:false,cutout:'55%',
 plugins:{legend:{position:'bottom'}}}});
+
+sc('bosYoY',{type:'bar',data:{
+labels:['ELA 3-8','Math 3-8','Science 5&8','ELA Gr.10','Math Gr.10','Science Gr.10'],
+datasets:[
+{label:'Boston',data:[/*@bos-yoy-b*/0,1,-7,-5,3,-6/*@*/],backgroundColor:EC.r},
+{label:'State',data:[/*@bos-yoy-s*/-2,0,-6,-1,-1,-5/*@*/],backgroundColor:EC.w}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},
+scales:{y:{grid:{color:EGC},ticks:{callback:function(v){return (v>0?'+':'')+v}}},x:{grid:{display:false}}}}});
 
 sc('overviewAll',{type:'bar',data:{
 labels:['ELA 3-8','Math 3-8','Science 5&8','ELA Gr.10','Math Gr.10','Science Gr.10','Civics Gr.8'],
@@ -861,18 +871,18 @@ backgroundColor:[EC.g,EC.c,EC.p,EC.b,EC.y,EC.o,EC.pk,EC.r]
 sc('gapSpecial',{type:'bar',data:{
 labels:['All Students','High Needs','Low Income','EL/Former EL','Disability'],
 datasets:[
-{label:'ELA',data:[485.8,480.3,479.3,477.2,470.6],backgroundColor:EC.r},
-{label:'Math',data:[485.8,480.6,479.3,479.9,470.8],backgroundColor:EC.o}
+{label:'ELA',data:[/*@bos-gapsp-ela*/486.0,480.0,479.0,476.0,468.0/*@*/],backgroundColor:EC.r},
+{label:'Math',data:[/*@bos-gapsp-math*/487.0,481.0,480.0,480.0,469.0/*@*/],backgroundColor:EC.o}
 ]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:465,max:490,grid:{color:EGC}},x:{grid:{display:false}}}}});
 sc('gapHS',{type:'bar',data:{
 labels:['White','Asian','Multi-Race','All','Black','Hispanic','EL','Disability'],
-datasets:[{label:'HS ELA Score',data:[512.8,509.3,503.7,491.5,487.0,484.4,471.7,476.1],
+datasets:[{label:'HS ELA Score',data:[/*@bos-gaphs*/508.0,508.0,502.0,489.0,485.0,482.0,464.0,472.0/*@*/],
 backgroundColor:[EC.g,EC.c,EC.p,EC.b,EC.y,EC.o,EC.pk,EC.r]}]
 },options:hOpts(465,520)});
 sc('gapChange',{type:'bar',data:{
 labels:['All','Asian','White','Multi-Race','Hispanic','Black','EL','Disability'],
-datasets:[{label:'HS ELA Score Change 2024-2025',
-data:[-2.9,-2.2,-1.8,-0.2,-1.9,-3.9,-3.9,-1.1],
+datasets:[{label:'HS ELA Score Change '+BOS_CHG_YEARS,
+data:[/*@bos-gapchg*/-3.0,-1.0,-5.0,-2.0,-2.0,-2.0,1.0,-3.0/*@*/],
 backgroundColor:function(ctx){var v=ctx.raw;return v<-2?EC.r:v<0?EC.o:EC.g;}}]
 },options:{responsive:true,maintainAspectRatio:false,scales:{y:{grid:{color:EGC}},x:{grid:{display:false}}},plugins:{legend:{display:false}}}});
 }
