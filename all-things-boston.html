@@ -254,7 +254,7 @@ tr:hover{background:rgba(15,41,66,.02)}.tg{background:rgba(15,41,66,.06);font-we
 <button class="sub-btn" onclick="showSubTab('edu-acc',this)">Accountability</button>
 </div>
 <div class="sub-tab active" id="edu-glance">
-<div class="g g2"><div class="cd"><h3>BPS vs State — MCAS (2025)</h3><div class="cw"><canvas id="e1"></canvas></div></div><div class="cd"><h3>HS ELA Decline by Group</h3><div class="cw"><canvas id="e2"></canvas></div></div></div>
+<div class="g g2"><div class="cd"><h3>BPS vs State — MCAS (<span data-field="bos-mcas-year">2026</span>)</h3><div class="cw"><canvas id="e1"></canvas></div></div><div class="cd"><h3>HS ELA Decline by Group</h3><div class="cw"><canvas id="e2"></canvas></div></div></div>
 <div class="g g2"><div class="cd"><h3>Accountability Points</h3><div class="cw"><canvas id="e3"></canvas></div></div><div class="cd"><h3>Grad Rate by Race</h3><div class="cw"><canvas id="e4"></canvas></div></div></div>
 <div class="g g2"><div class="cd"><h3>Chronic Absenteeism</h3><div class="cw"><canvas id="e5"></canvas></div></div><div class="cd"><h3>Scaled Scores by Grade — ELA</h3><div class="cw"><canvas id="e6"></canvas></div></div></div>
 </div>
@@ -444,7 +444,7 @@ tr:hover{background:rgba(15,41,66,.02)}.tg{background:rgba(15,41,66,.06);font-we
 </div>
 </div>
 </div>
-<p class="src">Source: <a href="https://profiles.doe.mass.edu" target="_blank" rel="noopener">Massachusetts DESE School &amp; District Profiles</a> — 2025 MCAS &amp; Accountability Results. Boston District Code 00350000. Compare with <a href="education-merrimack-valley.html">the Merrimack Valley</a> and <a href="education-statewide.html">statewide</a>.</p>
+<p class="src">Source: <a href="https://profiles.doe.mass.edu" target="_blank" rel="noopener">Massachusetts DESE School &amp; District Profiles</a> — <span data-field="bos-mcas-year">2026</span> MCAS; 2025 Accountability Results. Boston District Code 00350000. Compare with <a href="education-merrimack-valley.html">the Merrimack Valley</a> and <a href="education-statewide.html">statewide</a>.</p>
 </div>
 
 <!-- ICE -->
@@ -800,23 +800,23 @@ if(id==='edu-mcas'){
 sc('overviewBar',{type:'bar',data:{
 labels:['ELA 3-8','Math 3-8','ELA Gr.10','Math Gr.10','Science 5&8','Science Gr.10'],
 datasets:[
-{label:'Boston',data:[29,28,40,38,22,33],backgroundColor:EC.r},
-{label:'State',data:[42,41,51,45,42,46],backgroundColor:EC.w}
+{label:'Boston',data:[/*@bos-ovbar-b*/29,29,33,33,25,27/*@*/],backgroundColor:EC.r},
+{label:'State',data:[/*@bos-ovbar-s*/40,41,45,44,41,41/*@*/],backgroundColor:EC.w}
 ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top'}},
 scales:{y:{max:60,ticks:{callback:function(v){return v+'%'}},grid:{color:EGC}},x:{grid:{display:false}}}}});
 
 sc('overviewPie',{type:'doughnut',data:{
 labels:['Exceeding','Meeting','Partially Meeting','Not Meeting'],
-datasets:[{data:[6,24,39,32],backgroundColor:[EC.g,EC.b,EC.y,EC.r],borderWidth:0}]
+datasets:[{data:[/*@bos-ovpie*/6,23,38,33/*@*/],backgroundColor:[EC.g,EC.b,EC.y,EC.r],borderWidth:0}]
 },options:{responsive:true,maintainAspectRatio:false,cutout:'55%',
 plugins:{legend:{position:'bottom'}}}});
 
 sc('overviewAll',{type:'bar',data:{
 labels:['ELA 3-8','Math 3-8','Science 5&8','ELA Gr.10','Math Gr.10','Science Gr.10','Civics Gr.8'],
 datasets:[
-{label:'Boston',data:[29,28,22,40,38,33,23],backgroundColor:'rgba(168,23,51,0.85)'},
-{label:'State',data:[42,41,42,51,45,46,39],backgroundColor:'rgba(135,146,166,0.65)'},
-{label:'Gap',data:[-13,-13,-20,-11,-7,-13,-16],backgroundColor:'rgba(224,122,31,0.6)',type:'bar'}
+{label:'Boston',data:[/*@bos-ovall-b*/29,29,25,33,33,27,26/*@*/],backgroundColor:'rgba(168,23,51,0.85)'},
+{label:'State',data:[/*@bos-ovall-s*/40,41,41,45,44,41,40/*@*/],backgroundColor:'rgba(135,146,166,0.65)'},
+{label:'Gap',data:[/*@bos-ovall-g*/-11,-12,-16,-12,-11,-14,-14/*@*/],backgroundColor:'rgba(224,122,31,0.6)',type:'bar'}
 ]},options:{responsive:true,maintainAspectRatio:false,
 scales:{y:{ticks:{callback:function(v){return v+'%'}},grid:{color:EGC}},x:{grid:{display:false}}},
 plugins:{legend:{position:'top'}}}});
@@ -825,37 +825,37 @@ plugins:{legend:{position:'top'}}}});
 if(id==='edu-grades'){
 var grades=['Gr.3','Gr.4','Gr.5','Gr.6','Gr.7','Gr.8','Gr.10'];
 sc('gradeELA',{type:'bar',data:{labels:grades,datasets:[
-{label:'Boston',data:[31,28,28,30,31,28,40],backgroundColor:EC.r},
-{label:'State',data:[42,40,38,42,42,44,51],backgroundColor:EC.w}
+{label:'Boston',data:[/*@bos-gela-b*/31,27,29,29,31,29,33/*@*/],backgroundColor:EC.r},
+{label:'State',data:[/*@bos-gela-s*/43,37,38,40,40,42,45/*@*/],backgroundColor:EC.w}
 ]},options:bOpts(60,true)});
 sc('gradeMath',{type:'bar',data:{labels:grades,datasets:[
-{label:'Boston',data:[31,29,27,26,28,25,38],backgroundColor:EC.o},
-{label:'State',data:[44,43,40,41,39,38,45],backgroundColor:EC.w}
+{label:'Boston',data:[/*@bos-gmath-b*/30,31,27,30,26,30,33/*@*/],backgroundColor:EC.o},
+{label:'State',data:[/*@bos-gmath-s*/42,43,39,43,37,42,44/*@*/],backgroundColor:EC.w}
 ]},options:bOpts(60,true)});
 sc('gradeScoreELA',{type:'line',data:{labels:grades,datasets:[
-{label:'Boston',data:[488,485,488,485,485,483,492],borderColor:EC.r,backgroundColor:'rgba(168,23,51,0.15)',fill:true,tension:.3,borderWidth:3},
+{label:'Boston',data:[/*@bos-ssela*/489,486,487,483,486,483,489/*@*/],borderColor:EC.r,backgroundColor:'rgba(168,23,51,0.15)',fill:true,tension:.3,borderWidth:3},
 {label:'State Baseline (500)',data:[500,500,500,500,500,500,500],borderColor:EC.w,borderDash:[5,5],pointRadius:0}
 ]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:475,max:510,grid:{color:EGC}},x:{grid:{display:false}}}}});
 sc('gradeScoreMath',{type:'line',data:{labels:grades,datasets:[
-{label:'Boston',data:[487,486,486,486,485,484,493],borderColor:EC.o,backgroundColor:'rgba(224,122,31,0.15)',fill:true,tension:.3,borderWidth:3},
+{label:'Boston',data:[/*@bos-ssmath*/486,487,487,488,486,486,490/*@*/],borderColor:EC.o,backgroundColor:'rgba(224,122,31,0.15)',fill:true,tension:.3,borderWidth:3},
 {label:'State Baseline (500)',data:[500,500,500,500,500,500,500],borderColor:EC.w,borderDash:[5,5],pointRadius:0}
 ]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:475,max:510,grid:{color:EGC}},x:{grid:{display:false}}}}});
 sc('gradeScience',{type:'bar',data:{
 labels:['Science Gr.5','Science Gr.8','Civics Gr.8','Science Gr.10'],
 datasets:[
-{label:'Boston',data:[27,17,23,33],backgroundColor:[EC.p,EC.p,EC.c,EC.p]},
-{label:'State',data:[46,37,39,46],backgroundColor:EC.w}
+{label:'Boston',data:[/*@bos-gsci-b*/27,23,26,27/*@*/],backgroundColor:[EC.p,EC.p,EC.c,EC.p]},
+{label:'State',data:[/*@bos-gsci-s*/43,39,40,41/*@*/],backgroundColor:EC.w}
 ]},options:bOpts(55,true)});
 }
 
 if(id==='edu-gaps'){
 var rL=['White','Asian','Multi-Race','All Students','Black','Hispanic','EL','Disability'];
 sc('gapELA',{type:'bar',data:{labels:rL,datasets:[{
-label:'ELA Avg Score (3-8)',data:[506.7,501.5,499.5,485.8,479.7,478.7,477.2,470.6],
+label:'ELA Avg Score (3-8)',data:[/*@bos-gapela*/508.0,502.0,502.0,486.0,479.0,478.0,466.0,468.0/*@*/],
 backgroundColor:[EC.g,EC.c,EC.p,EC.b,EC.y,EC.o,EC.pk,EC.r]
 }]},options:hOpts(465,510)});
 sc('gapMath',{type:'bar',data:{labels:rL,datasets:[{
-label:'Math Avg Score (3-8)',data:[506.2,508.3,497.6,485.8,477.8,479.1,479.9,470.8],
+label:'Math Avg Score (3-8)',data:[/*@bos-gapmath*/508.0,509.0,500.0,487.0,478.0,480.0,471.0,469.0/*@*/],
 backgroundColor:[EC.g,EC.c,EC.p,EC.b,EC.y,EC.o,EC.pk,EC.r]
 }]},options:hOpts(465,512)});
 sc('gapSpecial',{type:'bar',data:{
