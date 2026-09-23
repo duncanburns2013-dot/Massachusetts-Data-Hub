@@ -35,6 +35,7 @@ No API key needed.
 """
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -44,6 +45,7 @@ from datetime import date
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 HTML_FILE = os.path.join(BASE_DIR, "education-statewide.html")
 BOSTON_FILE = os.path.join(BASE_DIR, "all-things-boston.html")
+MV_FILE = os.path.join(BASE_DIR, "education-merrimack-valley.html")
 DATA_FILE = os.path.join(BASE_DIR, "data", "mcas-latest.json")
 API = "https://educationtocareer.data.mass.gov/resource/i9w6-niyt.json"
 
@@ -229,6 +231,156 @@ def update_boston(sy):
     return True, "Boston already current"
 
 
+# ── Merrimack Valley (education-merrimack-valley.html) ───────────────────────
+# This page drives roughly fifteen charts off a single `const D = {...}` JSON
+# literal, so it is edited as JSON rather than through markers: parse, replace
+# only the MCAS-derived keys, re-serialise. Everything else in D -- growth,
+# accountability points, absenteeism, graduation, money -- comes from other DESE
+# releases this script does not fetch and is left exactly as found.
+MV_DISTRICTS = {"haverhill": "Haverhill", "methuen": "Methuen",
+                "lawrence": "Lawrence", "state": None}   # None = the State rows
+
+# D.subjLabels order.
+MV_SUBJ = [("ALL (03-08)", "ELA"), ("ALL (03-08)", "MATH"), ("ALL (03-08)", "SCI"),
+           ("08", "CIV"), ("10", "ELA"), ("10", "MATH"), ("10", "SCI")]
+MV_GRADES = ["03", "04", "05", "06", "07", "08", "10"]
+
+# D.groupLabels -> the subgroup name DESE publishes.
+MV_GROUPS = [
+    ("All", "All Students"),
+    ("High Needs", "High Needs"),
+    ("Low Income", "Low Income"),
+    ("EL/Former EL", "English Learners and Former English Learners"),
+    ("Disability", "Students with Disabilities"),
+    ("Asian", "Asian"),
+    ("Black", "Black or African American"),
+    ("Hispanic", "Hispanic or Latino"),
+    ("Multi-Race", "Multi-Race, Not Hispanic or Latino"),
+    ("White", "White"),
+]
+
+
+def _mv_fetch(sy):
+    """{(district_key, stu_grp, test_grade, subject): row} for one school year."""
+    names = "','".join(v for v in MV_DISTRICTS.values() if v)
+    rows, err = query(
+        f"sy='{sy}' AND ((org_type='State') OR (org_type='Public School District' "
+        f"AND dist_name in('{names}')))",
+        "org_type,dist_name,stu_grp,test_grade,subject_code,m_plus_e_pct,"
+        "e_pct,m_pct,pm_pct,nm_pct,avg_scaled_score,stu_cnt", limit=50000)
+    if err:
+        return None, err
+    out = {}
+    rev = {v: k for k, v in MV_DISTRICTS.items() if v}
+    for r in rows:
+        key = "state" if r["org_type"] == "State" else rev.get(r["dist_name"])
+        if key:
+            out[(key, r["stu_grp"], r["test_grade"], r["subject_code"])] = r
+    return out, None
+
+
+def update_merrimack(sy):
+    cur, err = _mv_fetch(sy)
+    if err:
+        return False, err
+    prev, err = _mv_fetch(str(int(sy) - 1))
+    if err:
+        return False, err
+
+    with open(MV_FILE, encoding="utf-8") as f:
+        html = orig = f.read()
+    m = re.search(r"(const D = )(\{.*?\})(;\s*\n)", html, re.S)
+    if not m:
+        fail("the D object on the Merrimack page was not found. Nothing written.")
+    D = json.loads(m.group(2))
+
+    def row(store, k, grade, subject, grp="All Students"):
+        return store.get((k, grp, grade, subject))
+
+    def me(store, k, grade, subject, grp="All Students"):
+        r = row(store, k, grade, subject, grp)
+        return None if r is None else round(float(r["m_plus_e_pct"]) * 100)
+
+    def ss(store, k, grade, subject, grp="All Students"):
+        r = row(store, k, grade, subject, grp)
+        v = None if r is None else r.get("avg_scaled_score")
+        return None if v in (None, "") else float(v)
+
+    # 1. subj -- the seven headline cells per entity.
+    for k in MV_DISTRICTS:
+        vals = [me(cur, k, g, sub_) for g, sub_ in MV_SUBJ]
+        if vals[0] is None:
+            fail(f"{sy}: no ELA 3-8 row for {k}. Nothing written.")
+        D["subj"][k] = [v if v is not None else None for v in vals]
+
+    # 2. grades -- percentage and scaled score, by grade.
+    for k in MV_DISTRICTS:
+        D["grades"][k]["ela_me"] = [me(cur, k, g, "ELA") for g in MV_GRADES]
+        D["grades"][k]["math_me"] = [me(cur, k, g, "MATH") for g in MV_GRADES]
+        D["grades"][k]["ela_ss"] = [ss(cur, k, g, "ELA") for g in MV_GRADES]
+        D["grades"][k]["math_ss"] = [ss(cur, k, g, "MATH") for g in MV_GRADES]
+
+    # 3. gaps -- scaled score by subgroup. A suppressed subgroup is null, not a
+    #    failure: DESE withholds small cells routinely and the chart already
+    #    draws gaps for them. Only the All Students row must exist.
+    for k in D["gaps"]:
+        for field, grade, subject in (("ela_nhs", "ALL (03-08)", "ELA"),
+                                      ("math_nhs", "ALL (03-08)", "MATH"),
+                                      ("sci_nhs", "ALL (03-08)", "SCI"),
+                                      ("ela_hs", "10", "ELA"),
+                                      ("math_hs", "10", "MATH"),
+                                      ("sci_hs", "10", "SCI")):
+            now = [ss(cur, k, grade, subject, g) for _, g in MV_GROUPS]
+            if now[0] is None:
+                fail(f"{sy}: no All Students {subject} {grade} row for {k}. "
+                     f"Nothing written.")
+            D["gaps"][k][field] = now
+            chg = field + "_chg"
+            if chg in D["gaps"][k]:
+                was = [ss(prev, k, grade, subject, g) for _, g in MV_GROUPS]
+                D["gaps"][k][chg] = [
+                    None if (a is None or b is None) else round(a - b, 1)
+                    for a, b in zip(now, was)]
+
+    # 4. levels -- the E/M/PM/NM split of ELA 3-8. Checked against subj, because
+    #    a level split whose meeting-or-above half disagrees with the headline
+    #    percentage is the clearest sign the wrong row was read.
+    for k in D["levels"]:
+        r = row(cur, k, "ALL (03-08)", "ELA")
+        if r is None:
+            fail(f"{sy}: no ELA 3-8 levels for {k}. Nothing written.")
+        lv = [round(float(r[f]) * 100) for f in ("e_pct", "m_pct", "pm_pct", "nm_pct")]
+        if not 98 <= sum(lv) <= 102:
+            fail(f"{sy}: {k} ELA levels sum to {sum(lv)}%, not ~100. Nothing written.")
+        if abs((lv[0] + lv[1]) - D["subj"][k][0]) > 1:
+            fail(f"{sy}: {k} levels say {lv[0] + lv[1]}% meeting-or-above but the "
+                 f"headline says {D['subj'][k][0]}%. Nothing written.")
+        D["levels"][k] = lv
+
+    # 5. tested counts.
+    for k in D.get("tested", {}):
+        r = row(cur, k, "ALL (03-08)", "ELA")
+        if r:
+            D["tested"][k] = float(r["stu_cnt"])
+    for k in D.get("tested10", {}):
+        r = row(cur, k, "10", "ELA")
+        if r:
+            D["tested10"][k] = float(r["stu_cnt"])
+
+    html = html[:m.start(2)] + json.dumps(D, separators=(",", ":")) + html[m.end(2):]
+    html = sub(html, r'(data-field="mv-mcas-year">)[^<]*(<)', sy,
+               "Merrimack year label", count=0)
+
+    if html != orig:
+        with open(MV_FILE, "w", encoding="utf-8") as f:
+            f.write(html)
+        return True, ("Merrimack updated -- ELA 3-8 Haverhill "
+                      f"{D['subj']['haverhill'][0]}%, Methuen "
+                      f"{D['subj']['methuen'][0]}%, Lawrence "
+                      f"{D['subj']['lawrence'][0]}%, state {D['subj']['state'][0]}%")
+    return True, "Merrimack already current"
+
+
 def main():
     print("=== MCAS achievement (DESE) ===\n")
 
@@ -306,6 +458,12 @@ def main():
         print(f"  {msg}")
     else:
         print(f"  !! Boston NOT updated: {msg}", file=sys.stderr)
+
+    ok, msg = update_merrimack(sy)
+    if ok:
+        print(f"  {msg}")
+    else:
+        print(f"  !! Merrimack NOT updated: {msg}", file=sys.stderr)
 
     os.makedirs(os.path.dirname(DATA_FILE), exist_ok=True)
     with open(DATA_FILE, "w", encoding="utf-8") as f:

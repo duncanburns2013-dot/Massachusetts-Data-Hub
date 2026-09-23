@@ -45,6 +45,21 @@ jobs:
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
         run: python update-cost-of-living.py
 
+      # MCAS publishes once a year, in the second half of September. Exit 75
+      # means DESE was unreachable: nothing written, the pages keep what they
+      # have, and the freshness watchdog escalates if it actually goes stale.
+      - name: Refresh MCAS (DESE)
+        run: |
+          set +e
+          python update-mcas.py
+          code=$?
+          set -e
+          if [ "$code" -eq 75 ]; then
+            echo "::notice::DESE unreachable - MCAS figures left as they were."
+            exit 0
+          fi
+          exit "$code"
+
       - name: Check for changes
         id: changes
         run: |
@@ -58,6 +73,9 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add immigration-dashboard.html affordability-dashboard.html
+          # MCAS touches three more pages; without these the run reports
+          # success and commits nothing, which is the quiet failure.
+          git add education-statewide.html education-merrimack-valley.html \n                  all-things-boston.html data/mcas-latest.json
           git add data/census-latest.json data/cost-of-living-latest.json
           git commit -m "Auto-update: Census ACS data $(date +'%B %Y')"
           for attempt in 1 2 3 4 5; do
