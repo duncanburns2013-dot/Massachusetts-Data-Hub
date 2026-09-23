@@ -45,6 +45,10 @@ DATA = [
     # year when it does. 400 days so a missed release is impossible to ignore -
     # the number this replaced went a full vintage out of date unnoticed until a
     # newspaper printed the current one.
+    # MCAS publishes once a year, in the second half of September (2026 landed
+    # on the 22nd). 430 days clears a release that slips a few weeks while a
+    # wholly missed year still trips it.
+    ("data/mcas-latest.json",           430,  "DESE MCAS; annual, published each September"),
     ("data/domestic-migration-latest.json", 400,
      "Census population estimates; one vintage a year, each restating the last"),
 ]

@@ -1,0 +1,94 @@
+{
+  "school_year": "2026",
+  "checked": "2026-09-23",
+  "source": "MA DESE via educationtocareer.data.mass.gov resource i9w6-niyt",
+  "url": "https://educationtocareer.data.mass.gov/resource/i9w6-niyt.json?$where=sy='2026' AND org_type='State'",
+  "note": "ALL (03-08) SCI covers grades 5 and 8 only. test_grade is authoritative for the span; do not infer it from row counts.",
+  "state_all_students": {
+    "03_ELA": {
+      "m_plus_e_pct": 43,
+      "avg_scaled_score": "495",
+      "students": 64406
+    },
+    "04_ELA": {
+      "m_plus_e_pct": 37,
+      "avg_scaled_score": "492",
+      "students": 66835
+    },
+    "05_ELA": {
+      "m_plus_e_pct": 38,
+      "avg_scaled_score": "493",
+      "students": 64890
+    },
+    "06_ELA": {
+      "m_plus_e_pct": 40,
+      "avg_scaled_score": "492",
+      "students": 65595
+    },
+    "07_ELA": {
+      "m_plus_e_pct": 40,
+      "avg_scaled_score": "493",
+      "students": 66256
+    },
+    "08_ELA": {
+      "m_plus_e_pct": 42,
+      "avg_scaled_score": "493",
+      "students": 66248
+    },
+    "10_ELA": {
+      "m_plus_e_pct": 45,
+      "avg_scaled_score": "497",
+      "students": 66585
+    },
+    "03_MATH": {
+      "m_plus_e_pct": 42,
+      "avg_scaled_score": "495",
+      "students": 64457
+    },
+    "04_MATH": {
+      "m_plus_e_pct": 43,
+      "avg_scaled_score": "495",
+      "students": 66858
+    },
+    "05_MATH": {
+      "m_plus_e_pct": 39,
+      "avg_scaled_score": "495",
+      "students": 64930
+    },
+    "06_MATH": {
+      "m_plus_e_pct": 43,
+      "avg_scaled_score": "496",
+      "students": 65590
+    },
+    "07_MATH": {
+      "m_plus_e_pct": 37,
+      "avg_scaled_score": "494",
+      "students": 66160
+    },
+    "08_MATH": {
+      "m_plus_e_pct": 42,
+      "avg_scaled_score": "494",
+      "students": 66116
+    },
+    "10_MATH": {
+      "m_plus_e_pct": 44,
+      "avg_scaled_score": "497",
+      "students": 65618
+    },
+    "ALL (03-08)_SCI": {
+      "m_plus_e_pct": 41,
+      "avg_scaled_score": "493",
+      "students": 130517
+    },
+    "08_CIV": {
+      "m_plus_e_pct": 40,
+      "avg_scaled_score": "494",
+      "students": 65656
+    },
+    "10_SCI": {
+      "m_plus_e_pct": 41,
+      "avg_scaled_score": "494",
+      "students": 63841
+    }
+  }
+}
