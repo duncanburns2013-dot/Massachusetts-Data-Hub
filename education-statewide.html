@@ -146,8 +146,8 @@ tr:hover{background:rgba(15,41,66,.02)}
 <h1>Massachusetts K-12 Education Crisis</h1>
 <p class="sub"><span data-field="mcas-year">2026</span> MCAS Performance Dashboard &mdash; Data from Massachusetts DESE</p>
 <div class="stat-row">
-<div class="stat-box"><div class="num">42%</div><div class="lbl">ELA Proficient<br>Grades 3-8</div></div>
-<div class="stat-box"><div class="num">41%</div><div class="lbl">Math Proficient<br>Grades 3-8</div></div>
+<div class="stat-box"><div class="num"><span data-field="kpi-ela38">40%</span></div><div class="lbl">ELA Proficient<br>Grades 3-8</div></div>
+<div class="stat-box"><div class="num"><span data-field="kpi-math38">41%</span></div><div class="lbl">Math Proficient<br>Grades 3-8</div></div>
 <!-- DESE State Total, FY2024: in-district $22,413.93, total $23,165.11. This read
      $21,886 with no year or basis named, which matched neither. -->
 <div class="stat-box"><div class="num">$23,165</div><div class="lbl">Per Pupil<br>Total, FY2024</div></div>
@@ -172,10 +172,10 @@ tr:hover{background:rgba(15,41,66,.02)}
 <!-- ═══ OVERVIEW ═══ -->
 <div class="tab active" id="overview">
 <div class="kpi-grid">
-<div class="kpi red"><div class="val">58%</div><div class="lbl">Not Proficient<br>ELA Statewide</div></div>
-<div class="kpi red"><div class="val">59%</div><div class="lbl">Not Proficient<br>Math Statewide</div></div>
-<div class="kpi yellow"><div class="val">230</div><div class="lbl">Districts Below<br>50% Proficiency</div></div>
-<div class="kpi orange"><div class="val">65%</div><div class="lbl">Districts Under<br>Half Proficient</div></div>
+<div class="kpi red"><div class="val"><span data-field="kpi-notela">60%</span></div><div class="lbl">Not Proficient<br>ELA Statewide</div></div>
+<div class="kpi red"><div class="val"><span data-field="kpi-notmath">59%</span></div><div class="lbl">Not Proficient<br>Math Statewide</div></div>
+<div class="kpi yellow"><div class="val"><span data-field="kpi-distbelow">246</span></div><div class="lbl">Districts Below<br>50% Proficiency</div></div>
+<div class="kpi orange"><div class="val"><span data-field="kpi-distshare">70%</span></div><div class="lbl">Districts Under<br>Half Proficient</div></div>
 <div class="kpi blue"><div class="val">+27%</div><div class="lbl">Spending Above<br>Required</div></div>
 <div class="kpi purple"><div class="val">56%</div><div class="lbl">Homeschool<br>Growth 2019-25</div></div>
 </div>
@@ -187,7 +187,7 @@ tr:hover{background:rgba(15,41,66,.02)}
 <div class="card">
 <h3>District Performance Distribution — ELA</h3>
 <div class="chart-wrap"><canvas id="overviewDist"></canvas></div>
-<div class="insight"><strong>System-wide failure:</strong> 230 of 352 districts (65%) have fewer than half of students meeting standards. Only 6 districts achieve 75%+ proficiency.</div>
+<div class="insight"><strong>System-wide failure:</strong> <span data-field="pr-distbelow">246</span> of <span data-field="pr-disttotal">351</span> districts (<span data-field="pr-distshare">70%</span>) have fewer than half of students meeting standards. Only <span data-field="pr-disttop">4</span> reach 75%+ proficiency.</div>
 </div>
 <div class="card full">
 <h3>Every Subject Tested — Statewide, <span data-field="mcas-year">2026</span></h3>
@@ -197,7 +197,7 @@ tr:hover{background:rgba(15,41,66,.02)}
 <h3>Year-over-Year Change &mdash; <span data-field="mcas-prev-year">2025</span> to <span data-field="mcas-year">2026</span> (percentage points)</h3>
 <p class="section-desc">Change in the share meeting or exceeding, by subject. Bars below the line are declines.</p>
 <div class="chart-wrap"><canvas id="mcasYoY"></canvas></div>
-<div class="insight"><strong>Nothing clears 51%:</strong> Grade 10 ELA is the state's best result at 51% meeting expectations. Civics is the worst at 39%. On six of the seven tests, most Massachusetts students are not meeting grade-level expectations.</div>
+<div class="insight"><strong>Nothing clears <span data-field="pr-bestval">45%</span>:</strong> <span data-field="pr-bestname">Grade 10 ELA</span> is the state's best result at <span data-field="pr-bestval2">45%</span> meeting expectations. <span data-field="pr-worstname">ELA 3-8 and Civics</span> <span data-field="pr-worstverb">are</span> the weakest at <span data-field="pr-worstval">40%</span>. On <span data-field="pr-belowhalf">all seven</span> tests, most Massachusetts students are not meeting grade-level expectations.</div>
 </div>
 </div>
 </div>
@@ -231,26 +231,26 @@ tr:hover{background:rgba(15,41,66,.02)}
      the state's own numbers on their own. -->
 <div class="tab" id="grades">
 <div class="kpi-grid">
-<div class="kpi red"><div class="val">38%</div><div class="lbl">Grade 5 ELA<br>Statewide Low</div></div>
-<div class="kpi red"><div class="val">38%</div><div class="lbl">Grade 8 Math<br>Statewide Low</div></div>
-<div class="kpi orange"><div class="val">37%</div><div class="lbl">Grade 8<br>Science</div></div>
-<div class="kpi blue"><div class="val">51%</div><div class="lbl">Grade 10 ELA<br>Statewide High</div></div>
+<div class="kpi red"><div class="val"><span data-field="kpi-elalow-val">37%</span></div><div class="lbl"><span data-field="kpi-elalow-grade">Grade 4</span> ELA<br>Statewide Low</div></div>
+<div class="kpi red"><div class="val"><span data-field="kpi-mathlow-val">37%</span></div><div class="lbl"><span data-field="kpi-mathlow-grade">Grade 7</span> Math<br>Statewide Low</div></div>
+<div class="kpi orange"><div class="val"><span data-field="kpi-sci8">39%</span></div><div class="lbl">Grade 8<br>Science</div></div>
+<div class="kpi blue"><div class="val"><span data-field="kpi-elahigh-val">45%</span></div><div class="lbl"><span data-field="kpi-elahigh-grade">Grade 10</span> ELA<br>Statewide High</div></div>
 </div>
 <div class="grid grid-2">
 <div class="card">
 <h3>ELA — % Meeting/Exceeding by Grade</h3>
 <div class="chart-wrap"><canvas id="grELA"></canvas></div>
-<div class="insight"><strong>The dip is in the middle:</strong> ELA bottoms out at 38% in Grade 5 before recovering to 51% by Grade 10 — the only grade-and-subject combination in the state where a majority of students meet expectations.</div>
+<div class="insight"><strong>The dip is in the middle:</strong> ELA bottoms out at <span data-field="pr-elalow">37%</span> in <span data-field="pr-elalowgrade">Grade 4</span> and recovers to <span data-field="pr-ela10">45%</span> by Grade 10, its strongest grade. <span data-field="pr-majority">No grade and subject in the state now has a majority meeting expectations.</span></div>
 </div>
 <div class="card">
 <h3>Math — % Meeting/Exceeding by Grade</h3>
 <div class="chart-wrap"><canvas id="grMath"></canvas></div>
-<div class="insight"><strong>Math slides as school goes on:</strong> 44% of third graders meet expectations; by Grade 8 it is 38%. Every grade from 5 through 8 sits below where students started.</div>
+<div class="insight"><strong>Math slides as school goes on:</strong> <span data-field="pr-math3">42%</span> of third graders meet expectations; by Grade 8 it is <span data-field="pr-math8">42%</span>. Every grade from 5 through 8 sits below where students started.</div>
 </div>
 <div class="card full">
 <h3>Science &amp; Civics — Statewide</h3>
 <div class="chart-wrap short"><canvas id="grScience"></canvas></div>
-<div class="insight"><strong>The subjects nobody reports on:</strong> Science across grades 5 and 8 sits at 42% and Civics at 39% — both below the ELA and math figures that lead every headline.</div>
+<div class="insight"><strong>The subjects nobody reports on:</strong> Science across grades 5 and 8 sits at <span data-field="pr-sci58">41%</span> and Civics at <span data-field="pr-civ8">40%</span> — both below the ELA and math figures that lead every headline.</div>
 </div>
 </div>
 </div>
@@ -258,16 +258,16 @@ tr:hover{background:rgba(15,41,66,.02)}
 <!-- ═══ MCAS TRENDS ═══ -->
 <div class="tab" id="mcas">
 <div class="kpi-grid">
-<div class="kpi red"><div class="val">-10pts</div><div class="lbl">ELA (Gr 3-8)<br>vs 2019</div></div>
-<div class="kpi red"><div class="val">-8pts</div><div class="lbl">Math (Gr 3-8)<br>vs 2019</div></div>
-<div class="kpi orange"><div class="val">-10pts</div><div class="lbl">ELA (Gr 10)<br>vs 2019</div></div>
-<div class="kpi orange"><div class="val">-14pts</div><div class="lbl">Math (Gr 10)<br>vs 2019</div></div>
+<div class="kpi red"><div class="val"><span data-field="kpi-d-ela38">-12pts</span></div><div class="lbl">ELA (Gr 3-8)<br>vs 2019</div></div>
+<div class="kpi red"><div class="val"><span data-field="kpi-d-math38">-8pts</span></div><div class="lbl">Math (Gr 3-8)<br>vs 2019</div></div>
+<div class="kpi orange"><div class="val"><span data-field="kpi-d-ela10">-16pts</span></div><div class="lbl">ELA (Gr 10)<br>vs 2019</div></div>
+<div class="kpi orange"><div class="val"><span data-field="kpi-d-math10">-15pts</span></div><div class="lbl">Math (Gr 10)<br>vs 2019</div></div>
 </div>
 <div class="grid grid-2">
 <div class="card full">
 <h3>MCAS % Meeting/Exceeding Expectations (2019 vs <span data-field="mcas-prev-year">2025</span> vs <span data-field="mcas-year">2026</span>)</h3>
 <div class="chart-wrap"><canvas id="mcasTrend"></canvas></div>
-<div class="insight"><strong>Five years post-pandemic, no recovery:</strong> Scores remain catastrophically below 2019 levels. Grade 10 math dropped from 59% to 45% — a 14-point collapse.</div>
+<div class="insight"><strong>Five years post-pandemic, no recovery:</strong> Scores remain far below 2019 levels. Grade 10 math has gone from <span data-field="pr-m10-2019">59%</span> to <span data-field="pr-m10-now">44%</span> — <span data-field="pr-m10-drop">a 15-point</span> fall.</div>
 </div>
 <div class="card">
 <h3>Grade 10 Score Changes (<span data-field="mcas-prev-year">2025</span>&rarr;<span data-field="mcas-year">2026</span>)</h3>
@@ -283,21 +283,21 @@ tr:hover{background:rgba(15,41,66,.02)}
 <!-- ═══ GATEWAY CITIES ═══ -->
 <div class="tab" id="gateway">
 <div class="kpi-grid">
-<div class="kpi red"><div class="val">30.2%</div><div class="lbl">Gateway Cities<br>ELA Average</div></div>
-<div class="kpi red"><div class="val">27.3%</div><div class="lbl">Gateway Cities<br>Math Average</div></div>
-<div class="kpi blue"><div class="val">45.1%</div><div class="lbl">Rest of State<br>ELA Average</div></div>
+<div class="kpi red"><div class="val"><span data-field="kpi-gw-ela">24.8%</span></div><div class="lbl">Gateway Cities<br>ELA Average</div></div>
+<div class="kpi red"><div class="val"><span data-field="kpi-gw-math">24.2%</span></div><div class="lbl">Gateway Cities<br>Math Average</div></div>
+<div class="kpi blue"><div class="val"><span data-field="kpi-rest-ela">45.5%</span></div><div class="lbl">Rest of State<br>ELA Average</div></div>
 <div class="kpi purple"><div class="val">15pts</div><div class="lbl">Achievement<br>Gap</div></div>
 </div>
 <div class="grid grid-2">
 <div class="card">
 <h3>Gateway Cities vs. Rest of State</h3>
 <div class="chart-wrap"><canvas id="gatewayGap"></canvas></div>
-<div class="insight"><strong>Persistent inequality:</strong> Gateway Cities lag 15-16 percentage points behind the rest of Massachusetts in both ELA and Math.</div>
+<div class="insight"><strong>Persistent inequality:</strong> Gateway Cities lag <span data-field="pr-gwgap">21-23</span> percentage points behind the rest of Massachusetts in both ELA and Math.</div>
 </div>
 <div class="card full">
 <h3>Gateway City Performance (MCAS <span data-field="mcas-year">2026</span>)</h3>
 <div class="chart-wrap tall"><canvas id="gatewayCities"></canvas></div>
-<div class="insight"><strong>Holyoke catastrophe:</strong> Only 6% of students meet math expectations — the worst in the state. Lawrence and Lynn also in crisis.</div>
+<div class="insight"><strong>The math floor:</strong> <span data-field="pr-worstdist">Boston Green Academy Horace Mann Charter School</span> is the lowest in the state at <span data-field="pr-worstdistval">5%</span> meeting math expectations, on <span data-field="pr-worstsize">141</span> students tested. Among municipal districts the lowest is <span data-field="pr-worstmuni">Holyoke</span> at <span data-field="pr-worstmunival">6%</span>. Lawrence and Lynn also in crisis.</div>
 </div>
 </div>
 </div>
@@ -360,7 +360,7 @@ tr:hover{background:rgba(15,41,66,.02)}
 <div class="kpi-grid">
 <div class="kpi green"><div class="val">$23,165</div><div class="lbl">Total Per-Pupil<br>FY2024</div></div>
 <div class="kpi yellow"><div class="val">+27%</div><div class="lbl">Above Required<br>Minimum</div></div>
-<div class="kpi red"><div class="val">42%</div><div class="lbl">Students<br>Proficient ELA</div></div>
+<div class="kpi red"><div class="val"><span data-field="kpi-ela38">40%</span></div><div class="lbl">Students<br>Proficient ELA</div></div>
 <div class="kpi orange"><div class="val">No Gain</div><div class="lbl">Achievement<br>Despite Spending</div></div>
 </div>
 <div class="grid grid-2">
@@ -389,7 +389,7 @@ tr:hover{background:rgba(15,41,66,.02)}
 <div class="card">
 <h3>Teacher Evaluation Ratings, 2024-25</h3>
 <div class="chart-wrap short"><canvas id="spendEval"></canvas></div>
-<div class="insight"><strong>96.3% rated Proficient or Exemplary</strong> in a system where 42% of students meet ELA expectations. 0.2% of Massachusetts teachers were rated Unsatisfactory.</div>
+<div class="insight"><strong>96.3% rated Proficient or Exemplary</strong> in a system where <span data-field="pr-ela38">40%</span> of students meet ELA expectations. 0.2% of Massachusetts teachers were rated Unsatisfactory.</div>
 </div>
 </div>
 </div>
@@ -411,7 +411,7 @@ tr:hover{background:rgba(15,41,66,.02)}
 <div class="card">
 <h3>Where Students Land — Grades 3-8 ELA Achievement Levels</h3>
 <div class="chart-wrap"><canvas id="gapsLevels"></canvas></div>
-<div class="insight"><strong>7% of Massachusetts students exceed expectations in ELA.</strong> 39% are only partially meeting them and 20% are not meeting them at all — so 59% of the state sits below "Meeting", which is the same 58-59% the headline proficiency figures describe from the other direction.</div>
+<div class="insight"><strong><span data-field="pr-lvE">7%</span> of Massachusetts students exceed expectations in ELA.</strong> <span data-field="pr-lvPM">39%</span> are only partially meeting them and <span data-field="pr-lvNM">21%</span> are not meeting them at all — so <span data-field="pr-lvbelow">60%</span> of the state sits below "Meeting", the same figure the headline proficiency numbers describe from the other direction.</div>
 </div>
 <div class="card">
 <h3>Graduation Gap vs. Statewide Average</h3>
@@ -424,7 +424,7 @@ tr:hover{background:rgba(15,41,66,.02)}
 </div><!-- container -->
 
 <footer>
-Data: <a href="https://profiles.doe.mass.edu" target="_blank" rel="noopener">Massachusetts DESE MCAS Results 2025</a>, Accountability Data, Per-Pupil Expenditure Reports<br>
+Data: <a href="https://profiles.doe.mass.edu" target="_blank" rel="noopener">Massachusetts DESE MCAS Results <span data-field="mcas-year">2026</span></a>, Accountability Data, Per-Pupil Expenditure Reports<br>
 Dashboard created February 2026
 </footer>
 
@@ -541,8 +541,8 @@ datasets:[{label:/*@mcas-ovcur-lab*/'2026'/*@*/,data:[/*@mcas-ovcur*/40,41,45,44
 },options:bOpts(70,true)});
 
 new Chart(document.getElementById('overviewDist'),{type:'pie',data:{
-labels:[/*@mcas-ovdist-lab*/'<25% Meeting (27)','25-50% Meeting (169)','50-75% Meeting (88)','≥75% Meeting (3)'/*@*/],
-datasets:[{data:[/*@mcas-ovdist*/27,169,88,3/*@*/],backgroundColor:[C.r,C.o,C.y,C.g],borderWidth:0}]
+labels:[/*@mcas-ovdist-lab*/'<25% Meeting (44)','25-50% Meeting (202)','50-75% Meeting (101)','≥75% Meeting (4)'/*@*/],
+datasets:[{data:[/*@mcas-ovdist*/44,202,101,4/*@*/],backgroundColor:[C.r,C.o,C.y,C.g],borderWidth:0}]
 },options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
 
 new Chart(document.getElementById('mcasYoY'),{type:'bar',data:{

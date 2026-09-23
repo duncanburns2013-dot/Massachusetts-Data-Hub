@@ -284,10 +284,16 @@ def update_statewide_rest(html, sy, prev_sy):
     # overviewDist -- how many DISTRICTS fall in each ELA band. The labels carry
     # the counts, so labels and slices are written together; letting them drift
     # apart would put one number in the legend and another in the wedge.
+    # BOTH org types. The page has always counted districts and charter
+    # districts together -- 287 + 64 = 351 -- and narrowing this to
+    # 'Public School District' quietly redefines what the chart measures
+    # while still producing a plausible-looking pie. Checked against 2025,
+    # where the two together reproduce the published [41,188,116,6].
     dist, err = query(
-        f"sy='{sy}' AND org_type='Public School District' AND stu_grp='All Students' "
-        f"AND test_grade='ALL (03-08)' AND subject_code='ELA'",
-        "dist_name,m_plus_e_pct", limit=5000)
+        f"sy='{sy}' AND org_type in('Public School District','Charter District') "
+        f"AND stu_grp='All Students' AND test_grade='ALL (03-08)' "
+        f"AND subject_code='ELA'",
+        "org_name,m_plus_e_pct", limit=5000)
     if err:
         fail(f"could not reach DESE for the district distribution: {err}")
     bands = [0, 0, 0, 0]
@@ -296,6 +302,9 @@ def update_statewide_rest(html, sy, prev_sy):
         bands[0 if v < 25 else 1 if v < 50 else 2 if v < 75 else 3] += 1
     if sum(bands) != len(dist):
         fail("district distribution lost a district. Nothing written.")
+    if len(dist) < 300:
+        fail(f"only {len(dist)} districts returned; the universe should be about "
+             f"351 (districts plus charter districts). Nothing written.")
     arr("mcas-ovdist", nums(bands))
     arr("mcas-ovdist-lab",
         f"'<25% Meeting ({bands[0]})','25-50% Meeting ({bands[1]})',"
@@ -308,6 +317,164 @@ def update_statewide_rest(html, sy, prev_sy):
         a, b = sme(sy, g, sub_), sme(prev_sy, g, sub_)
         yoy.append(None if (a is None or b is None) else a - b)
     arr("mcas-yoy", ",".join("null" if v is None else str(v) for v in yoy))
+
+    # ── The KPI cards ────────────────────────────────────────────────────────
+    # Eighteen hand-typed numbers sat above these charts reading 2025 while the
+    # charts below them read 2026. They are the headline figures, so they were
+    # the most-read wrong numbers on the page.
+    def setf(tag, value):
+        nonlocal html
+        html = sub(html, r'(data-field="' + tag + r'">)[^<]*(<)', value,
+                   f"KPI {tag}", count=0)
+
+    ela38, math38 = cur4[0], cur4[1]
+    setf("kpi-ela38", f"{ela38}%")
+    setf("kpi-math38", f"{math38}%")
+    setf("kpi-notela", f"{100 - ela38}%")
+    setf("kpi-notmath", f"{100 - math38}%")
+
+    below = bands[0] + bands[1]
+    setf("kpi-distbelow", str(below))
+    setf("kpi-distshare", f"{round(below / len(dist) * 100)}%")
+
+    # The extreme cards name a grade, and the extreme grade MOVES: grade 5 was
+    # the ELA floor in 2025, grade 4 in 2026. Writing only the number would
+    # leave the card pointing at the wrong grade with a right-looking figure.
+    per_grade = {g: need(sy, g, "ELA") for g in ELA_GRADES}
+    lo = min(per_grade, key=lambda g: per_grade[g])
+    hi = max(per_grade, key=lambda g: per_grade[g])
+    setf("kpi-elalow-grade", f"Grade {int(lo)}")
+    setf("kpi-elalow-val", f"{per_grade[lo]}%")
+    setf("kpi-elahigh-grade", f"Grade {int(hi)}")
+    setf("kpi-elahigh-val", f"{per_grade[hi]}%")
+
+    per_math = {g: need(sy, g, "MATH") for g in MATH_GRADES}
+    mlo = min(per_math, key=lambda g: per_math[g])
+    setf("kpi-mathlow-grade", f"Grade {int(mlo)}")
+    setf("kpi-mathlow-val", f"{per_math[mlo]}%")
+
+    setf("kpi-sci8", f"{need(sy, '08', 'SCI')}%")
+
+    for tag, grade, subject in (("kpi-d-ela38", "ALL (03-08)", "ELA"),
+                                ("kpi-d-math38", "ALL (03-08)", "MATH"),
+                                ("kpi-d-ela10", "10", "ELA"),
+                                ("kpi-d-math10", "10", "MATH")):
+        d = need(sy, grade, subject) - need(TREND_BASE, grade, subject)
+        setf(tag, f"{d:+d}pts")
+
+    setf("kpi-gw-ela", f"{gw_agg('ELA')}%")
+    setf("kpi-gw-math", f"{gw_agg('MATH')}%")
+    setf("kpi-rest-ela", f"{rest_agg('ELA')}%")
+
+    # ── The prose ────────────────────────────────────────────────────────────
+    # Every analytic line under these charts was hand-written against 2025 and
+    # most had gone false. Two were not merely stale but structurally wrong:
+    # "the only grade-and-subject combination where a majority meet expectations"
+    # describes something 2026 no longer contains, and "Nothing clears 51%"
+    # names a threshold that moves. Those sentences are rebuilt from the data
+    # rather than having a number swapped inside a claim that stopped holding.
+    setf("pr-distbelow", str(below))
+    setf("pr-disttotal", str(len(dist)))
+    setf("pr-distshare", f"{round(below / len(dist) * 100)}%")
+    setf("pr-disttop", str(bands[3]))
+
+    WORDS = ["none", "one", "two", "three", "four", "five", "six", "seven"]
+    named = {"ELA 3-8": ("ALL (03-08)", "ELA"), "Math 3-8": ("ALL (03-08)", "MATH"),
+             "Science 5 and 8": ("ALL (03-08)", "SCI"), "Civics": ("08", "CIV"),
+             "Grade 10 ELA": ("10", "ELA"), "Grade 10 math": ("10", "MATH"),
+             "Grade 10 science": ("10", "SCI")}
+    scored = {n: need(sy, g, sub_) for n, (g, sub_) in named.items()}
+    best = max(scored, key=lambda n: scored[n])
+    worst = min(scored, key=lambda n: scored[n])
+    under = sum(1 for v in scored.values() if v < 50)
+    setf("pr-bestname", best)
+    setf("pr-bestval", f"{scored[best]}%")
+    setf("pr-bestval2", f"{scored[best]}%")
+    # The minimum ties in 2026 (ELA 3-8 and Civics both at 40), so every subject
+    # at the floor is named. Picking one arbitrarily would print "X is the worst"
+    # beside a chart showing two bars the same height.
+    low_v = scored[worst]
+    lows = [n for n, v in scored.items() if v == low_v]
+    setf("pr-worstname",
+         lows[0] if len(lows) == 1
+         else (" and ".join(lows) if len(lows) == 2
+               else ", ".join(lows[:-1]) + " and " + lows[-1]))
+    setf("pr-worstval", f"{low_v}%")
+    setf("pr-worstverb", "is" if len(lows) == 1 else "are")
+    # "seven of the seven tests" reads badly; say "all seven" when it is all of
+    # them. The field carries the whole phrase so the sentence stays grammatical
+    # whichever it is.
+    total_tests = len(scored)
+    setf("pr-belowhalf",
+         f"all {WORDS[total_tests]}" if under == total_tests
+         else f"{WORDS[under]} of the {WORDS[total_tests]}")
+
+    setf("pr-elalow", f"{per_grade[lo]}%")
+    setf("pr-elalowgrade", f"Grade {int(lo)}")
+    setf("pr-ela10", f"{per_grade['10']}%")
+    # This sentence has to survive a year in which some grade DOES clear half.
+    majority = [n for n, v in scored.items() if v >= 50]
+    setf("pr-majority",
+         "No grade and subject in the state now has a majority meeting expectations."
+         if not majority else
+         ("Only " + ", ".join(majority) + " has a majority meeting expectations."
+          if len(majority) == 1 else
+          "Only " + ", ".join(majority[:-1]) + " and " + majority[-1]
+          + " have a majority meeting expectations."))
+
+    setf("pr-math3", f"{per_math['03']}%")
+    setf("pr-math8", f"{per_math['08']}%")
+    setf("pr-sci58", f"{need(sy, 'ALL (03-08)', 'SCI')}%")
+    setf("pr-civ8", f"{need(sy, '08', 'CIV')}%")
+
+    m19, mnow = need(TREND_BASE, "10", "MATH"), need(sy, "10", "MATH")
+    setf("pr-m10-2019", f"{m19}%")
+    setf("pr-m10-now", f"{mnow}%")
+    setf("pr-m10-drop", f"a {abs(mnow - m19)}-point")
+
+    ge, gm = gw_agg("ELA"), gw_agg("MATH")
+    re_, rm = rest_agg("ELA"), rest_agg("MATH")
+    gaps_pts = sorted({round(re_ - ge), round(rm - gm)})
+    setf("pr-gwgap", str(gaps_pts[0]) if len(gaps_pts) == 1
+         else f"{gaps_pts[0]}-{gaps_pts[1]}")
+
+    # The worst district on grade 3-8 math, named rather than assumed. Holyoke
+    # held it in 2025; the sentence should not keep saying so on its own.
+    wd, err = query(
+        f"sy='{sy}' AND org_type in('Public School District','Charter District') "
+        f"AND stu_grp='All Students' AND test_grade='ALL (03-08)' "
+        f"AND subject_code='MATH'", "org_name,org_type,m_plus_e_pct,stu_cnt",
+        limit=5000)
+    if err:
+        fail(f"could not reach DESE for the district floor: {err}")
+    # The floor is a small charter in 2026 (141 students) while the lowest
+    # municipal district is Holyoke with 1,817. Reporting only the first would
+    # put a 141-pupil school where the sentence means a city; reporting only the
+    # second would be choosing the filter that keeps last year's sentence true.
+    # Both are named, with the sizes, and the reader can weigh them.
+    worst_row = min(wd, key=lambda r: float(r["m_plus_e_pct"]))
+    muni = [r for r in wd if r.get("org_type") == "Public School District"]
+    worst_muni = min(muni, key=lambda r: float(r["m_plus_e_pct"])) if muni else None
+    clean = lambda n: n.replace(" (District)", "").strip()
+    setf("pr-worstdist", clean(worst_row["org_name"]))
+    setf("pr-worstdistval", f"{round(float(worst_row['m_plus_e_pct']) * 100)}%")
+    setf("pr-worstsize", f"{int(float(worst_row['stu_cnt'])):,}")
+    if worst_muni is not None:
+        setf("pr-worstmuni", clean(worst_muni["org_name"]))
+        setf("pr-worstmunival",
+             f"{round(float(worst_muni['m_plus_e_pct']) * 100)}%")
+
+    setf("pr-ela38", f"{ela38}%")
+    setf("pr-lvE", f"{lv[0]}%")
+    setf("pr-lvPM", f"{lv[2]}%")
+    setf("pr-lvNM", f"{lv[3]}%")
+    setf("pr-lvbelow", f"{lv[2] + lv[3]}%")
+
+    print(f"  KPIs: ELA {ela38}% / Math {math38}%, {below} of {len(dist)} districts "
+          f"below 50%, ELA floor grade {int(lo)} at {per_grade[lo]}%")
+    print(f"  prose: best {best} {scored[best]}%, worst {worst} {scored[worst]}%, "
+          f"{under} of 7 under half, lowest district "
+          f"{worst_row['org_name'][:24]}")
 
     html = sub(html, r'(data-field="mcas-prev-year">)[^<]*(<)', prev_sy,
                "previous-year label", count=0)
