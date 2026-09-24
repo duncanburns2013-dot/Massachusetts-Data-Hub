@@ -223,11 +223,16 @@ footer a{color:var(--navy);font-weight:600;text-decoration:none;border-bottom:1p
 
 <!-- PRIT FUND -->
 <div id="prit" class="tab-content">
-  <h2 class="section-title">PRIT Fund — The $105 Billion Master Fund</h2>
+  <h2 class="section-title">PRIT Fund — The <span data-field="prit-headline">$130</span> Billion Master Fund</h2>
   <p style="font-size:0.85rem;color:var(--muted);margin-bottom:20px">The Pension Reserves Investment Trust holds assets for SERS, MTRS, Boston Teachers, and ~66 local systems that invest with PRIM.</p>
   <div class="stat-row">
-    <div class="stat-card"><div class="label">Total PRIT Assets</div><div class="value blue">$105.3B</div><div class="sub">FY2024 (June 30, 2024)</div></div>
-    <div class="stat-card"><div class="label">FY2024 Return</div><div class="value green">9.9%</div><div class="sub">9.5% net of fees</div></div>
+    <!-- Written by update-prit.py from PRIM's own quarterly update. These
+         were typed by hand and sat on FY2024 until 2026-09-24, two fiscal
+         years behind: $105.3B against a published $129.5B. The return card
+         used to show a gross figure with the net one underneath it; both
+         cards now carry PRIM's net number, which is what PRIM reports. -->
+    <div class="stat-card"><div class="label">Total PRIT Assets</div><div class="value blue" data-field="prit-assets">$129.5B</div><div class="sub" data-field="prit-asof">FY2026 (June 30, 2026)</div></div>
+    <div class="stat-card"><div class="label" data-field="prit-fy">FY2026 Return</div><div class="value green" data-field="prit-return">12.7%</div><div class="sub" data-field="prit-return-sub">net of fees; a gain of $14.7B</div></div>
     <div class="stat-card"><div class="label">Net Income</div><div class="value green">$9.1B</div><div class="sub">5 of 7 asset classes beat benchmarks</div></div>
     <div class="stat-card"><div class="label">5-Year Return</div><div class="value green">9.17%</div><div class="sub">vs. 7.0% assumed</div></div>
     <div class="stat-card"><div class="label">10-Year Return</div><div class="value green">8.33%</div><div class="sub">Beating 7% target</div></div>

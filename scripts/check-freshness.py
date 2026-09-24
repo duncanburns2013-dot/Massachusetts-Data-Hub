@@ -40,6 +40,10 @@ DATA = [
     # quarters stale unnoticed, because nothing fetched them and nothing here
     # measured them.
     ("data/u6-latest.json",             130,  "BLS state alternative measures; quarterly + ~3wk lag"),
+    # PRIM reports the PRIT fiscal-year balance and net return once a year, in
+    # its August quarterly update. 400 days so a missed August is impossible to
+    # ignore. The typed version of these cards sat on FY2024 for two years.
+    ("data/prit-latest.json",           400,  "PRIM publishes FY figures each August"),
     ("data/cost-of-living-latest.json",  45,  "monthly BEA/MIT; worst real gap 13d"),
     # Polled daily by the self-hosted runner, but only committed when CBP
     # actually publishes -- the updater keeps the old fetched_at on a no-op run

@@ -1,0 +1,75 @@
+# .github/workflows/update-prit.yml
+#
+# PRIT Fund headline figures on pension-dashboard.html, from PRIM's own
+# quarterly update.
+#
+# PRIM states the fiscal-year balance, as-of date and net return in its August
+# report, so this only writes once a year. The other three quarters report a
+# quarter-end balance, which is a different measure from the fiscal-year-end
+# assets the card names -- update-prit.py exits 75 on those and nothing moves.
+# Running monthly rather than annually means a late August report is picked up
+# in September instead of waiting a year.
+
+name: Update PRIT Fund Figures
+
+on:
+  schedule:
+    - cron: '20 12 5 * *'   # the 5th of each month
+  workflow_dispatch:
+
+jobs:
+  update-prit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: push-to-main
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Refresh PRIT Fund figures
+        run: |
+          set +e
+          python update-prit.py
+          code=$?
+          set -e
+          if [ "$code" -eq 75 ]; then
+            echo "::notice::No fiscal-year close in PRIM's current quarterly update - pension figures left as they were."
+            exit 0
+          fi
+          exit "$code"
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet pension-dashboard.html data/prit-latest.json \
+            && echo "changed=false" >> $GITHUB_OUTPUT \
+            || echo "changed=true"  >> $GITHUB_OUTPUT
+
+      - name: Commit and push
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add pension-dashboard.html data/prit-latest.json
+          git commit -m "Auto-update: PRIT Fund figures $(date +'%B %Y')"
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt"
+              exit 0
+            fi
+            echo "Push attempt $attempt rejected - pulling latest and rebasing"
+            if ! git pull --rebase origin main; then
+              git rebase --abort || true
+              echo "::notice::Another run already published this window's data - skipping, nothing lost."
+              exit 0
+            fi
+          done
+          echo "::error::Push failed after 5 attempts"
+          exit 1
