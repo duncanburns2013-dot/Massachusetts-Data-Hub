@@ -308,7 +308,7 @@ tr:hover{background:rgba(15,41,66,.02)}
 <h3>Gateway Cities &mdash; Year-over-Year Change (<span data-field="mcas-prev-year">2025</span> to <span data-field="mcas-year">2026</span>, percentage points)</h3>
 <p class="section-desc">Sorted by ELA change, best first; both panels use that same order so a city sits on the same row in each. Blue is a gain, red a decline, grey unchanged.</p>
 <div class="gwy-pair"><div><h4 class="gwy-h">ELA</h4><div class="chart-wrap gateway"><canvas id="gwyEla"></canvas></div></div><div><h4 class="gwy-h">Math</h4><div class="chart-wrap gateway"><canvas id="gwyMath"></canvas></div></div></div>
-<div class="insight"><strong>Mostly flat or falling:</strong> ELA rose in <span data-field="gwy-elaup">3</span> of the <span data-field="gwy-n">26</span> cities shown and fell in <span data-field="gwy-eladown">17</span>; math rose in <span data-field="gwy-mathup">8</span> and fell in <span data-field="gwy-mathdown">6</span>. <span data-field="gwy-note">Holyoke, the lowest here, was unchanged in both.</span></div>
+<div class="insight"><strong>Mostly flat or falling:</strong> ELA rose in <span data-field="gwy-elaup">3</span> of the <span data-field="gwy-n">26</span> cities shown and fell in <span data-field="gwy-eladown">17</span>; math rose in <span data-field="gwy-mathup">8</span> and fell in <span data-field="gwy-mathdown">6</span>. <span data-field="gwy-note">Holyoke, the lowest here, was unchanged in both.</span> Each bar is DESE's published 2026 rate minus its published 2025 rate. DESE publishes those rates as whole percentages, so a move smaller than half a point shows here as zero; recomputed from DESE's own student counts, three cells do &mdash; Chicopee, Malden and Worcester math, each under a point.</div>
 </div>
 </div>
 </div>
@@ -632,11 +632,22 @@ var gwyZero='#8A9391';
 var gwyEnds={id:'gwyEnds',afterDatasetsDraw:function(ch){
   var x=ch.ctx, meta=ch.getDatasetMeta(0), data=ch.data.datasets[0].data;
   x.save(); x.font='600 11px system-ui,sans-serif'; x.textBaseline='middle';
+  var left=ch.chartArea.left, right=ch.chartArea.right;
   meta.data.forEach(function(bar,i){
-    var v=data[i]; x.fillStyle='#3E4A4D';
-    x.textAlign = v<0 ? 'right' : 'left';
-    var pad = v<0 ? -6 : 6;
-    x.fillText((v>0?'+':'')+v, bar.x+pad, bar.y);
+    var v=data[i], t=(v>0?'+':'')+v, w=x.measureText(t).width;
+    // Outside the bar end by default. A bar that reaches the axis extreme has
+    // no room left -- the label ran onto the city names, so "Fitchburg" read
+    // as "Fitchburg-4". When it would overflow, put it inside the bar in white.
+    var outside = v<0 ? bar.x-6-w : bar.x+6;
+    if(v<0 && outside < left+2){
+      x.fillStyle='#fff'; x.textAlign='left'; x.fillText(t, bar.x+6, bar.y);
+    } else if(v>0 && outside+w > right-2){
+      x.fillStyle='#fff'; x.textAlign='right'; x.fillText(t, bar.x-6, bar.y);
+    } else {
+      x.fillStyle='#3E4A4D';
+      x.textAlign = v<0 ? 'right' : 'left';
+      x.fillText(t, bar.x + (v<0 ? -6 : 6), bar.y);
+    }
   });
   x.restore();
 }};
