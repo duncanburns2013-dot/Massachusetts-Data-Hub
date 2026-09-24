@@ -476,9 +476,15 @@ def update_statewide_rest(html, sy, prev_sy):
         was = round(float(gwpd[(city, subject)]["m_plus_e_pct"]) * 100)
         return now - was
 
-    d_ela = [delta(c, "ELA") for c in chart]
-    d_math = [delta(c, "MATH") for c in chart]
-    arr("gwy-lab", ",".join(f"'{c}'" for c in chart))
+    # Sorted by ELA change, best first. The level chart above is sorted by
+    # LEVEL, so the two deliberately differ: this one answers "who moved", and
+    # ordering it by level buried the movers among 26 near-identical rows.
+    # Both panels here share this one order, so a city holds its row across the
+    # pair -- that is the alignment that matters for reading a change.
+    yoy_order = sorted(chart, key=lambda c: -delta(c, "ELA"))
+    d_ela = [delta(c, "ELA") for c in yoy_order]
+    d_math = [delta(c, "MATH") for c in yoy_order]
+    arr("gwy-lab", ",".join(f"'{c}'" for c in yoy_order))
     arr("gwy-ela", nums(d_ela))
     arr("gwy-math", nums(d_math))
     setf("gwy-n", str(len(chart)))
