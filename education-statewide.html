@@ -57,6 +57,9 @@ nav button.active{color:var(--navy);border-bottom-color:var(--gold)}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.03)}
 .card h3{font-size:.82rem;font-weight:700;color:var(--navy);margin-bottom:10px}
 .chart-wrap{position:relative;height:280px}.chart-wrap.tall{height:340px}
+/* 26 Gateway cities on a horizontal axis. At the .tall 340px the rows are
+   about 11px each and the labels collide; these two get their own height. */
+.chart-wrap.gateway{height:620px}
 /* ---------------------------------------------------------------------------
    These four rules are ported verbatim from education-boston.html and
    education-merrimack-valley.html, which share this stylesheet. This page was
@@ -296,13 +299,13 @@ tr:hover{background:rgba(15,41,66,.02)}
 </div>
 <div class="card full">
 <h3>Gateway City Performance (MCAS <span data-field="mcas-year">2026</span>)</h3>
-<div class="chart-wrap tall"><canvas id="gatewayCities"></canvas></div>
+<div class="chart-wrap gateway"><canvas id="gatewayCities"></canvas></div>
 <div class="insight"><strong>The math floor:</strong> Of the Gateway cities above, <span data-field="gw-low1">Holyoke</span> is lowest at <span data-field="gw-low1v">6%</span> meeting math expectations, then <span data-field="gw-low2">Lynn</span> at <span data-field="gw-low2v">14%</span> and <span data-field="gw-low3">Lawrence</span> at <span data-field="gw-low3v">17%</span>. The statewide Gateway average is <span data-field="gw-avgmath">24.2%</span> against <span data-field="gw-restmath">47.1%</span> in the rest of the state.</div>
 <div class="card full">
 <h3>Gateway Cities &mdash; Year-over-Year Change (<span data-field="mcas-prev-year">2025</span> to <span data-field="mcas-year">2026</span>, percentage points)</h3>
 <p class="section-desc">Same city order as the chart above, so the rows line up. Bars left of zero are declines.</p>
-<div class="chart-wrap tall"><canvas id="gatewayYoY"></canvas></div>
-<div class="insight"><strong>Mostly flat or falling:</strong> ELA rose in <span data-field="gwy-elaup">2</span> of the <span data-field="gwy-n">14</span> cities shown and fell in <span data-field="gwy-eladown">9</span>; math rose in <span data-field="gwy-mathup">5</span> and fell in <span data-field="gwy-mathdown">2</span>. <span data-field="gwy-note">Holyoke, the lowest here, was unchanged in both.</span></div>
+<div class="chart-wrap gateway"><canvas id="gatewayYoY"></canvas></div>
+<div class="insight"><strong>Mostly flat or falling:</strong> ELA rose in <span data-field="gwy-elaup">3</span> of the <span data-field="gwy-n">26</span> cities shown and fell in <span data-field="gwy-eladown">17</span>; math rose in <span data-field="gwy-mathup">8</span> and fell in <span data-field="gwy-mathdown">6</span>. <span data-field="gwy-note">Holyoke, the lowest here, was unchanged in both.</span></div>
 </div>
 </div>
 </div>
@@ -612,19 +615,19 @@ datasets:[
 ]},options:bOpts(50,true)});
 
 new Chart(document.getElementById('gatewayYoY'),{type:'bar',data:{
-labels:[/*@gwy-lab*/'Holyoke','Lynn','Lawrence','Fall River','Brockton','Springfield','Worcester','Lowell','Salem','Westfield','Malden','Attleboro','Leominster','Quincy'/*@*/],
+labels:[/*@gwy-lab*/'Holyoke','Lynn','Lawrence','Chelsea','Fall River','Brockton','New Bedford','Everett','Fitchburg','Springfield','Revere','Pittsfield','Worcester','Haverhill','Barnstable','Chicopee','Lowell','Peabody','Taunton','Methuen','Salem','Westfield','Malden','Attleboro','Leominster','Quincy'/*@*/],
 datasets:[
-{label:'ELA',data:[/*@gwy-ela*/0,-1,-1,-1,-1,0,-1,-1,-2,-4,1,0,2,-3/*@*/],backgroundColor:C.b},
-{label:'Math',data:[/*@gwy-math*/0,0,-2,0,0,0,0,1,1,1,0,-1,4,1/*@*/],backgroundColor:C.p}
+{label:'ELA',data:[/*@gwy-ela*/0,-1,-1,0,-1,-1,-2,1,-4,0,-2,-4,-1,-2,-1,0,-1,-1,-1,0,-2,-4,1,0,2,-3/*@*/],backgroundColor:C.b},
+{label:'Math',data:[/*@gwy-math*/0,0,-2,2,0,0,0,3,-2,0,3,-4,0,0,0,0,1,-1,0,-2,1,1,0,-1,4,1/*@*/],backgroundColor:C.p}
 ]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
 plugins:{legend:{position:'top'}},
 scales:{x:{grid:{color:GC},ticks:{callback:function(v){return (v>0?'+':'')+v}}},y:{grid:{display:false}}}}});
 
 new Chart(document.getElementById('gatewayCities'),{type:'bar',data:{
-labels:[/*@mcas-gwcity-lab*/'Holyoke','Lynn','Lawrence','Fall River','Brockton','Springfield','Worcester','Lowell','Salem','Westfield','Malden','Attleboro','Leominster','Quincy'/*@*/],
+labels:[/*@mcas-gwcity-lab*/'Holyoke','Lynn','Lawrence','Chelsea','Fall River','Brockton','New Bedford','Everett','Fitchburg','Springfield','Revere','Pittsfield','Worcester','Haverhill','Barnstable','Chicopee','Lowell','Peabody','Taunton','Methuen','Salem','Westfield','Malden','Attleboro','Leominster','Quincy'/*@*/],
 datasets:[
-{label:'ELA',data:[/*@mcas-gwcity-ela*/11,16,17,18,20,22,25,27,30,31,35,37,38,43/*@*/],backgroundColor:C.b},
-{label:'Math',data:[/*@mcas-gwcity-math*/6,14,17,18,19,17,24,32,25,35,34,38,39,43/*@*/],backgroundColor:C.p}
+{label:'ELA',data:[/*@mcas-gwcity-ela*/11,16,17,18,18,20,20,22,22,22,24,25,25,26,27,27,27,29,29,30,30,31,35,37,38,43/*@*/],backgroundColor:C.b},
+{label:'Math',data:[/*@mcas-gwcity-math*/6,14,17,22,18,19,19,22,21,17,28,21,24,29,27,27,32,30,23,25,25,35,34,38,39,43/*@*/],backgroundColor:C.p}
 ]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
 scales:{x:{beginAtZero:true,max:50,ticks:{callback:v=>v+'%'},grid:{color:GC}},y:{grid:{display:false}}}}});
 }

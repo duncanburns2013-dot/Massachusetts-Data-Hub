@@ -138,11 +138,13 @@ GATEWAY_CITIES = [
     "Pittsfield", "Quincy", "Revere", "Salem", "Springfield", "Taunton",
     "Westfield", "Worcester",
 ]
-# The fourteen the gatewayCities chart draws. Sorted by ELA at write time, so
-# the labels are written with the bars.
-GATEWAY_CHART = ["Holyoke", "Lynn", "Lawrence", "Fall River", "Brockton",
-                 "Springfield", "Worcester", "Lowell", "Salem", "Malden",
-                 "Westfield", "Leominster", "Attleboro", "Quincy"]
+# The chart draws ALL of them. It inherited a hardcoded fourteen from the
+# hand-built page, which left twelve Gateway Cities off a chart titled "Gateway
+# City Performance" -- Haverhill, Barnstable, Chelsea, Chicopee, Everett,
+# Fitchburg, Methuen, New Bedford, Peabody, Pittsfield, Revere and Taunton --
+# with no stated basis for the cut, while the aggregate beside it used all 26.
+# A chart that names a category must draw the category.
+GATEWAY_CHART = GATEWAY_CITIES
 TREND_BASE = "2019"          # the pre-pandemic bar the trend chart anchors on
 SPEND_FIRST = "2022"
 
