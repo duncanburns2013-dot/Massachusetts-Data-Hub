@@ -57,11 +57,26 @@ jobs:
           fi
           exit "$code"
 
+      # BLS publishes the state U-1..U-6 table quarterly as HTML only and 403s
+      # automated requests, so this reads FRED's mirror. Exit 75 means FRED did
+      # not serve it: nothing written, the page keeps the quarter it has.
+      - name: Refresh MA labor underutilization (U-1..U-6)
+        run: |
+          set +e
+          python update-u6.py
+          code=$?
+          set -e
+          if [ "$code" -eq 75 ]; then
+            echo "::notice::State U-6 table unavailable - underutilization figures left as they were."
+            exit 0
+          fi
+          exit "$code"
+
       - name: Check for changes
         id: changes
         run: |
           git diff --quiet employment-dashboard.html data/employment-latest.json \
-              data/national-payroll-vintages.json \
+              data/national-payroll-vintages.json data/u6-latest.json \
             && echo "changed=false" >> $GITHUB_OUTPUT \
             || echo "changed=true"  >> $GITHUB_OUTPUT
 
@@ -72,6 +87,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git add employment-dashboard.html
           git add data/employment-latest.json
+          git add data/u6-latest.json
           # Append-only record of each month's first-print payroll figure. BLS
           # serves only the current vintage, so a first print not committed here
           # on release day is gone for good and its revision can never be shown.

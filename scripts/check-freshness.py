@@ -34,6 +34,12 @@ DATA = [
     ("data/housing-history-latest.json",  5,  "daily pull; worst real gap 1d"),
     ("data/price-distribution-latest.json", 5, "daily pull; worst real gap 1d"),
     ("data/employment-latest.json",      21,  "tracks BLS releases; worst real gap 7d"),
+    # BLS state U-1..U-6, quarterly, about three weeks after the quarter's final
+    # month. 130 days clears one late release; two quarters missed cannot hide.
+    # These figures were a hand-typed constant until 2026-09-24 and went three
+    # quarters stale unnoticed, because nothing fetched them and nothing here
+    # measured them.
+    ("data/u6-latest.json",             130,  "BLS state alternative measures; quarterly + ~3wk lag"),
     ("data/cost-of-living-latest.json",  45,  "monthly BEA/MIT; worst real gap 13d"),
     # Polled daily by the self-hosted runner, but only committed when CBP
     # actually publishes -- the updater keeps the old fetched_at on a no-op run

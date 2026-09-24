@@ -1,0 +1,110 @@
+{
+  "series": {
+    "U-1": {
+      "value": 1.8,
+      "period": "4-quarter average ending Q2 2026",
+      "national": null,
+      "national_months_averaged": null
+    },
+    "U-2": {
+      "value": 2.4,
+      "period": "4-quarter average ending Q2 2026",
+      "national": null,
+      "national_months_averaged": null
+    },
+    "U-3": {
+      "value": 4.2,
+      "period": "4-quarter average ending Q2 2026",
+      "national": 4.4,
+      "national_months_averaged": 11
+    },
+    "U-4": {
+      "value": 4.5,
+      "period": "4-quarter average ending Q2 2026",
+      "national": 4.6,
+      "national_months_averaged": 11
+    },
+    "U-5": {
+      "value": 5.1,
+      "period": "4-quarter average ending Q2 2026",
+      "national": 5.3,
+      "national_months_averaged": 11
+    },
+    "U-6": {
+      "value": 7.5,
+      "period": "4-quarter average ending Q2 2026",
+      "national": 8.1,
+      "national_months_averaged": 11
+    }
+  },
+  "quarters": [
+    {
+      "quarter": "Q3 2024",
+      "fred_date": "2024-07-01",
+      "u3": 4.0,
+      "u6": 7.1,
+      "labor_force": 3902015
+    },
+    {
+      "quarter": "Q4 2024",
+      "fred_date": "2024-10-01",
+      "u3": 4.0,
+      "u6": 7.2,
+      "labor_force": 3920504
+    },
+    {
+      "quarter": "Q1 2025",
+      "fred_date": "2025-01-01",
+      "u3": 4.2,
+      "u6": 7.2,
+      "labor_force": 3935265
+    },
+    {
+      "quarter": "Q2 2025",
+      "fred_date": "2025-04-01",
+      "u3": 4.4,
+      "u6": 7.3,
+      "labor_force": 3943648
+    },
+    {
+      "quarter": "Q3 2025",
+      "fred_date": "2025-07-01",
+      "u3": 4.3,
+      "u6": 7.2,
+      "labor_force": 3946164
+    },
+    {
+      "quarter": "Q4 2025",
+      "fred_date": "2025-10-01",
+      "u3": 4.5,
+      "u6": 7.6,
+      "labor_force": 3944197
+    },
+    {
+      "quarter": "Q1 2026",
+      "fred_date": "2026-01-01",
+      "u3": 4.5,
+      "u6": 7.6,
+      "labor_force": 3924802
+    },
+    {
+      "quarter": "Q2 2026",
+      "fred_date": "2026-04-01",
+      "u3": 4.2,
+      "u6": 7.5,
+      "labor_force": 3901701
+    }
+  ],
+  "verified": "2026-09-24",
+  "source": "BLS Alternative Measures of Labor Underutilization for States, quarterly 4-quarter moving averages, NSA",
+  "source_url": "https://www.bls.gov/lau/stalt.htm",
+  "retrieved_via": "FRED keyless CSV (U1UNEM1MA..U6UNEM6MA); BLS serves this table as HTML only and 403s automated requests",
+  "national_basis": "mean of the same twelve monthly national NSA rates (U1RATENSA, U2RATENSA, UNRATENSA, U4RATENSA, U5RATENSA, U6RATENSA); October 2025 has no observation, so windows containing it average 11",
+  "meta": {
+    "currency": {
+      "checked": "2026-09-24",
+      "newest_available": "Q2 2026",
+      "cadence": "quarterly, about 3 weeks after the quarter's final month"
+    }
+  }
+}

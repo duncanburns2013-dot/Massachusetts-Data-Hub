@@ -306,21 +306,21 @@ footer a:hover{color:var(--gold)}
          4.5%, so the page carried three mutually inconsistent gaps at once. The
          headcount is anchored to the quarter it belongs to, with its denominator
          named, rather than floating against whatever the labor force is today. -->
-    <p><strong>U-3 vs U-6 — what each measures:</strong> U-3 (<span id="u3q">4.3%</span>) counts only people actively job-searching. U-4 adds discouraged workers. U-5 adds all marginally attached. U-6 (<span id="u6q">7.2%</span>) adds involuntary part-time workers — people who want full-time work but can only find part-time. In <span id="u6qLab">Q3 2025</span> the gap between the two was <strong id="u6gap">2.9 points</strong>, or roughly <strong>114,000 MA residents</strong> measured against that quarter's labor force of about 3.94M. Note: state U-6 is published quarterly by BLS as 4-quarter moving averages, and <span id="u6qLab2">Q3 2025</span> is the latest available — so both rates quoted here are that quarter's, not the current month's headline rate.</p>
+    <p><strong>U-3 vs U-6 — what each measures:</strong> U-3 (<span id="u3q">4.3%</span>) counts only people actively job-searching. U-4 adds discouraged workers. U-5 adds all marginally attached. U-6 (<span id="u6q">7.2%</span>) adds involuntary part-time workers — people who want full-time work but can only find part-time. In <span id="u6qLab">Q3 2025</span> the gap between the two was <strong id="u6gap">2.9 points</strong>, or roughly <strong><span id="u6head">114,000</span> MA residents</strong> measured against that quarter's labor force of about <span id="u6lf">3.94M</span>. Note: state U-6 is published quarterly by BLS as 4-quarter moving averages, and <span id="u6qLab2">Q3 2025</span> is the latest available — so both rates quoted here are that quarter's, not the current month's headline rate.</p>
   </div>
 
   <div class="data-card">
-    <h3>MA Alternative Measures of Labor Underutilization — 2025 Trend</h3>
+    <h3>MA Alternative Measures of Labor Underutilization — Latest Three Quarters</h3>
     <table class="data-table">
-      <thead><tr><th>Measure</th><th>What it includes</th><th>Q1 2025</th><th>Q2 2025</th><th>Q3 2025</th><th>vs. National</th></tr></thead>
+      <thead><tr><th>Measure</th><th>What it includes</th><th data-field="u6t-q1">Q4 2025</th><th data-field="u6t-q2">Q1 2026</th><th data-field="u6t-q3">Q2 2026</th><th>vs. National</th></tr></thead>
       <tbody>
-        <tr><td><strong>U-3</strong> (official)</td><td>Actively unemployed</td><td>4.2%</td><td>4.4%</td><td class="td-amber">4.3%</td><td>National: 4.2%</td></tr>
-        <tr><td><strong>U-4</strong></td><td>+ Discouraged workers</td><td>4.3%</td><td>4.6%</td><td class="td-amber">4.5%</td><td>National: 4.5%</td></tr>
-        <tr><td><strong>U-5</strong></td><td>+ All marginally attached</td><td>4.8%</td><td>5.0%</td><td class="td-amber">5.0%</td><td>National: 5.1%</td></tr>
-        <tr><td><strong>U-6</strong></td><td>+ Involuntary part-time</td><td>7.2%</td><td>7.3%</td><td class="td-red">7.2%</td><td>National: 7.7%</td></tr>
+        <tr><td><strong>U-3</strong> (official)</td><td>Actively unemployed</td><td data-field="u6t-u3-a">4.5%</td><td data-field="u6t-u3-b">4.5%</td><td class="td-amber" data-field="u6t-u3-c">4.2%</td><td>National: <span data-field="u6t-u3-nat">4.4%</span></td></tr>
+        <tr><td><strong>U-4</strong></td><td>+ Discouraged workers</td><td data-field="u6t-u4-a">4.8%</td><td data-field="u6t-u4-b">4.8%</td><td class="td-amber" data-field="u6t-u4-c">4.5%</td><td>National: <span data-field="u6t-u4-nat">4.6%</span></td></tr>
+        <tr><td><strong>U-5</strong></td><td>+ All marginally attached</td><td data-field="u6t-u5-a">5.3%</td><td data-field="u6t-u5-b">5.4%</td><td class="td-amber" data-field="u6t-u5-c">5.1%</td><td>National: <span data-field="u6t-u5-nat">5.3%</span></td></tr>
+        <tr><td><strong>U-6</strong></td><td>+ Involuntary part-time</td><td data-field="u6t-u6-a">7.6%</td><td data-field="u6t-u6-b">7.6%</td><td class="td-red" data-field="u6t-u6-c">7.5%</td><td>National: <span data-field="u6t-u6-nat">8.1%</span></td></tr>
       </tbody>
     </table>
-    <div class="source">Source: BLS Alternative Measures of Labor Underutilization for States (FRED: U1–U6UNEM6MA) · Quarterly 4-quarter moving averages · Latest: <span id="u6qLab3">Q3 2025</span> · Released on the BLS <a href="https://www.bls.gov/lau/stalt.htm" target="_blank" rel="noopener">state alternative-measures schedule</a></div>
+    <div class="source">Source: BLS Alternative Measures of Labor Underutilization for States, retrieved via FRED (U1UNEM1MA–U6UNEM6MA), which mirrors the BLS table · Quarterly 4-quarter moving averages, not seasonally adjusted · The national column is the mean of the same <span data-field="u6t-natmonths">eleven</span> monthly national not-seasonally-adjusted rates, which is how BLS computes its own U.S. line; October 2025 has no observation because the household survey was not collected that month · Latest: <span id="u6qLab3">Q3 2025</span> · Released on the BLS <a href="https://www.bls.gov/lau/stalt.htm" target="_blank" rel="noopener">state alternative-measures schedule</a></div>
   </div>
 
   <div class="data-card">
@@ -1058,13 +1058,20 @@ var joltsNat=[/*@jolts-nat*/5.1,5.1,5.0,4.6,4.7,4.5,4.5,4.6,4.2,4.5,4.6,4.4,4.5,
 // aligned as the national axis above grows past it.
 var joltsMA={'2024-0':5.2,'2024-3':4.9,'2024-6':4.7,'2024-9':4.4,'2025-0':4.5,'2025-3':4.3,'2025-6':4.1,'2025-9':4.2,'2025-11':4.0};
 
-// MA labor underutilization, quarterly 4-quarter moving averages. BLS publishes
-// these quarterly with a long lag and the updater does not fetch them, so they are
-// a verified constant — but they are the ONLY source for the U-3/U-6 gap, and the
-// prose reads both rates from here so it cannot pair one with a different vintage.
-var u6Lab=['Q1 24','Q2 24','Q3 24','Q4 24','Q1 25','Q2 25','Q3 25'];
-var u6U6=[6.4,6.7,7.1,7.2,7.2,7.3,7.2];
-var u6U3=[3.8,3.7,4.0,4.0,4.2,4.4,4.3];
+// MA labor underutilization, quarterly 4-quarter moving averages. These were a
+// hand-maintained constant and sat at Q3 2025 until 2026-09-24, three published
+// quarters behind, because nothing fetched them and nothing checked them.
+// update-u6.py now writes all four arrays from the BLS state table (via FRED),
+// and data/u6-latest.json is in the freshness gate.
+//
+// The card, the chart, the table and the prose all read from here, so they
+// cannot quote rates from different quarters at each other. u6LF is the MA
+// labour force averaged over each quarter's own twelve months, which is what
+// makes the headcount in the prose belong to the quarter beside it.
+var u6Lab=[/*@u6-lab*/'Q3 24','Q4 24','Q1 25','Q2 25','Q3 25','Q4 25','Q1 26','Q2 26'/*@*/];
+var u6U6=[/*@u6-u6*/7.1,7.2,7.2,7.3,7.2,7.6,7.6,7.5/*@*/];
+var u6U3=[/*@u6-u3*/4.0,4.0,4.2,4.4,4.3,4.5,4.5,4.2/*@*/];
+var u6LF=[/*@u6-lf*/3902015,3920504,3935265,3943648,3946164,3944197,3924802,3901701/*@*/];
 
 // MA metro YoY job change — EOLWD Local LMI, April 2026 release. Not fetched.
 // Both metro charts are BLS CES metro-area series (SMS, seasonally adjusted),
@@ -1440,6 +1447,14 @@ function renderDerived(){
   txt('u6CardSub','+'+gap.toFixed(1)+' pts above U-3 (same quarter)');
   txt('u3q',u6U3[q].toFixed(1)+'%'); txt('u6q',u6U6[q].toFixed(1)+'%');
   txt('u6gap',gap.toFixed(1)+' points');
+  // Headcount and denominator come from the same quarter as the two rates.
+  // Typed by hand they read 114,000 against "about 3.94M" while the rates
+  // above them moved, which is three figures that cannot all be right.
+  if(u6LF[q]!=null){
+    var u6n=Math.round(gap/100*u6LF[q]/1000)*1000;
+    txt('u6head',u6n.toLocaleString('en-US'));
+    txt('u6lf',(u6LF[q]/1e6).toFixed(2)+'M');
+  }
   txt('u6qLab',qLab(u6Lab[q])); txt('u6qLab2',qLab(u6Lab[q])); txt('u6qLab3',qLab(u6Lab[q]));
 
   // ── Job growth ──
