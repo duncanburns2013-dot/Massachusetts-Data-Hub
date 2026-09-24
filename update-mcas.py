@@ -451,6 +451,54 @@ def update_statewide_rest(html, sy, prev_sy):
     for n, (name, val) in enumerate(gw_math[:3], start=1):
         setf(f"gw-low{n}", name)
         setf(f"gw-low{n}v", f"{val}%")
+    # Gateway year-over-year. Same city order as the chart above it, so the two
+    # line up row for row -- re-sorting this one would make the eye compare the
+    # wrong cities between the pair.
+    gwp, err = query(
+        f"sy='{prev_sy}' AND org_type='Public School District' "
+        f"AND stu_grp='All Students' AND test_grade='ALL (03-08)' "
+        f"AND subject_code in('ELA','MATH') AND dist_name in('{names}')",
+        "dist_name,subject_code,m_plus_e_pct", limit=500)
+    if err:
+        fail(f"could not reach DESE for last year's Gateway figures: {err}")
+    gwpd = {(r["dist_name"], r["subject_code"]): r for r in gwp}
+    missing_prev = [c for c in chart
+                    if (c, "ELA") not in gwpd or (c, "MATH") not in gwpd]
+    if missing_prev:
+        fail(f"{prev_sy}: no Gateway rows for {missing_prev}. A city absent from "
+             f"the prior year would draw as a flat bar rather than a gap. "
+             f"Nothing written.")
+
+    def delta(city, subject):
+        now = round(float(gwd[(city, subject)]["m_plus_e_pct"]) * 100)
+        was = round(float(gwpd[(city, subject)]["m_plus_e_pct"]) * 100)
+        return now - was
+
+    d_ela = [delta(c, "ELA") for c in chart]
+    d_math = [delta(c, "MATH") for c in chart]
+    arr("gwy-lab", ",".join(f"'{c}'" for c in chart))
+    arr("gwy-ela", nums(d_ela))
+    arr("gwy-math", nums(d_math))
+    setf("gwy-n", str(len(chart)))
+    setf("gwy-elaup", str(sum(1 for v in d_ela if v > 0)))
+    setf("gwy-eladown", str(sum(1 for v in d_ela if v < 0)))
+    setf("gwy-mathup", str(sum(1 for v in d_math if v > 0)))
+    setf("gwy-mathdown", str(sum(1 for v in d_math if v < 0)))
+
+    # The floor city gets its own sentence, because "the worst is also flat" is
+    # the thing a reader is most likely to misread off the bars.
+    floor_city = gw_math[0][0]
+    fe, fm = delta(floor_city, "ELA"), delta(floor_city, "MATH")
+    word = lambda v: "unchanged" if v == 0 else (f"up {v}" if v > 0 else f"down {abs(v)}")
+    setf("gwy-note",
+         f"{floor_city}, the lowest here, was {word(fe)} in ELA and "
+         f"{word(fm)} in math."
+         if not (fe == 0 and fm == 0) else
+         f"{floor_city}, the lowest here, was unchanged in both.")
+    print(f"  Gateway YoY: ELA up in {sum(1 for v in d_ela if v > 0)}, "
+          f"down in {sum(1 for v in d_ela if v < 0)}; {floor_city} "
+          f"ELA {fe:+d}, math {fm:+d}")
+
     setf("gw-avgmath", f"{gw_agg('MATH')}%")
     setf("gw-restmath", f"{rest_agg('MATH')}%")
 
