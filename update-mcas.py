@@ -440,29 +440,19 @@ def update_statewide_rest(html, sy, prev_sy):
 
     # The worst district on grade 3-8 math, named rather than assumed. Holyoke
     # held it in 2025; the sentence should not keep saying so on its own.
-    wd, err = query(
-        f"sy='{sy}' AND org_type in('Public School District','Charter District') "
-        f"AND stu_grp='All Students' AND test_grade='ALL (03-08)' "
-        f"AND subject_code='MATH'", "org_name,org_type,m_plus_e_pct,stu_cnt",
-        limit=5000)
-    if err:
-        fail(f"could not reach DESE for the district floor: {err}")
-    # The floor is a small charter in 2026 (141 students) while the lowest
-    # municipal district is Holyoke with 1,817. Reporting only the first would
-    # put a 141-pupil school where the sentence means a city; reporting only the
-    # second would be choosing the filter that keeps last year's sentence true.
-    # Both are named, with the sizes, and the reader can weigh them.
-    worst_row = min(wd, key=lambda r: float(r["m_plus_e_pct"]))
-    muni = [r for r in wd if r.get("org_type") == "Public School District"]
-    worst_muni = min(muni, key=lambda r: float(r["m_plus_e_pct"])) if muni else None
-    clean = lambda n: n.replace(" (District)", "").strip()
-    setf("pr-worstdist", clean(worst_row["org_name"]))
-    setf("pr-worstdistval", f"{round(float(worst_row['m_plus_e_pct']) * 100)}%")
-    setf("pr-worstsize", f"{int(float(worst_row['stu_cnt'])):,}")
-    if worst_muni is not None:
-        setf("pr-worstmuni", clean(worst_muni["org_name"]))
-        setf("pr-worstmunival",
-             f"{round(float(worst_muni['m_plus_e_pct']) * 100)}%")
+    # This sits under the GATEWAY CITIES chart, so it describes the Gateway
+    # cities. It previously named the statewide floor, which in 2026 is a
+    # 141-pupil Boston charter -- accurate in isolation and absent from the
+    # graph directly above it. A caption that names something the chart does not
+    # draw is worse than a stale one: the reader checks the bars and cannot find
+    # it. Derived from the same fourteen the bars use.
+    gw_math = sorted(((c, round(float(gwd[(c, "MATH")]["m_plus_e_pct"]) * 100))
+                      for c in GATEWAY_CHART), key=lambda t: t[1])
+    for n, (name, val) in enumerate(gw_math[:3], start=1):
+        setf(f"gw-low{n}", name)
+        setf(f"gw-low{n}v", f"{val}%")
+    setf("gw-avgmath", f"{gw_agg('MATH')}%")
+    setf("gw-restmath", f"{rest_agg('MATH')}%")
 
     setf("pr-ela38", f"{ela38}%")
     setf("pr-lvE", f"{lv[0]}%")
@@ -472,9 +462,9 @@ def update_statewide_rest(html, sy, prev_sy):
 
     print(f"  KPIs: ELA {ela38}% / Math {math38}%, {below} of {len(dist)} districts "
           f"below 50%, ELA floor grade {int(lo)} at {per_grade[lo]}%")
-    print(f"  prose: best {best} {scored[best]}%, worst {worst} {scored[worst]}%, "
-          f"{under} of 7 under half, lowest district "
-          f"{worst_row['org_name'][:24]}")
+    print(f"  prose: best {best} {scored[best]}%, weakest {worst} {scored[worst]}%, "
+          f"{under} of 7 under half; Gateway math floor "
+          f"{gw_math[0][0]} {gw_math[0][1]}%")
 
     html = sub(html, r'(data-field="mcas-prev-year">)[^<]*(<)', prev_sy,
                "previous-year label", count=0)
