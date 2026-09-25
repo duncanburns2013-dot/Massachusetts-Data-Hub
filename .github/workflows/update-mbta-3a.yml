@@ -1,0 +1,78 @@
+# .github/workflows/update-mbta-3a.yml
+#
+# MBTA Communities Act (MGL c. 40A s 3A) dashboard, from EOHLC's own published
+# tables: the category/capacity table, the Compliance Status Sheet, and the 3A
+# Development Tracker.
+#
+# EOHLC reissues the compliance sheet and the tracker every few weeks and puts
+# the edition date in the filename, so the updater scrapes the current links off
+# the page rather than carrying a URL that will 404 silently.
+#
+# mass.gov returns 403 to a bare request. It is header-based, not the client
+# fingerprinting cbp.gov does, so curl with a full browser header set works from
+# a hosted runner -- but if that ever changes, update-mbta-3a.py exits 75 and the
+# page keeps the edition it has instead of failing the build.
+
+name: Update MBTA Communities (s 3A)
+
+on:
+  schedule:
+    - cron: '40 11 * * 2'   # Tuesdays
+  workflow_dispatch:
+
+jobs:
+  update-mbta-3a:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: push-to-main
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Refresh s 3A mandate, compliance and development figures
+        run: |
+          set +e
+          python update-mbta-3a.py
+          code=$?
+          set -e
+          if [ "$code" -eq 75 ]; then
+            echo "::notice::EOHLC tables unavailable - the 3A dashboard kept the edition it had."
+            exit 0
+          fi
+          exit "$code"
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet mbta-3a-dashboard.html data/mbta-3a-latest.json \
+            && echo "changed=false" >> $GITHUB_OUTPUT \
+            || echo "changed=true"  >> $GITHUB_OUTPUT
+
+      - name: Commit and push
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add mbta-3a-dashboard.html data/mbta-3a-latest.json
+          git commit -m "Auto-update: MBTA Communities s 3A figures $(date +'%B %Y')"
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt"
+              exit 0
+            fi
+            echo "Push attempt $attempt rejected - pulling latest and rebasing"
+            if ! git pull --rebase origin main; then
+              git rebase --abort || true
+              echo "::notice::Another run already published this edition - skipping, nothing lost."
+              exit 0
+            fi
+          done
+          echo "::error::Push failed after 5 attempts"
+          exit 1

@@ -44,6 +44,10 @@ DATA = [
     # its August quarterly update. 400 days so a missed August is impossible to
     # ignore. The typed version of these cards sat on FY2024 for two years.
     ("data/prit-latest.json",           400,  "PRIM publishes FY figures each August"),
+    # EOHLC reissues the compliance sheet and the 3A development tracker every
+    # few weeks and the filenames carry the edition date, so a stalled feed
+    # shows up here rather than as a page quietly stuck on an old edition.
+    ("data/mbta-3a-latest.json",         60,  "EOHLC reissues the 3A tables every few weeks"),
     ("data/cost-of-living-latest.json",  45,  "monthly BEA/MIT; worst real gap 13d"),
     # Polled daily by the self-hosted runner, but only committed when CBP
     # actually publishes -- the updater keeps the old fetched_at on a no-op run

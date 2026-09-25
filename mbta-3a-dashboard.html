@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="data-checked" content="2026-09-25"><!-- bump when this page is reconciled against its publisher; scripts/check-freshness.py ages it -->
+  <!-- Open Graph / Social Cards -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Massachusetts Data Hub">
+  <meta property="og:title" content="Massachusetts MBTA Communities Act — § 3A Dashboard">
+  <meta property="og:description" content="What MGL c. 40A § 3A requires of 177 Massachusetts communities, what compliance costs, what has actually been built, and who funded the officials who wrote and enforce it.">
+  <meta property="og:url" content="https://massachusettsdatahub.com/mbta-3a-dashboard.html">
+  <meta property="og:image" content="https://massachusettsdatahub.com/cards/mbta-3a-dashboard.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Massachusetts MBTA Communities Act — § 3A Dashboard">
+  <meta name="twitter:description" content="What MGL c. 40A § 3A requires of 177 Massachusetts communities, what compliance costs, what has actually been built, and who funded the officials who wrote and enforce it.">
+  <meta name="twitter:image" content="https://massachusettsdatahub.com/cards/mbta-3a-dashboard.jpg">
+  <meta name="description" content="What MGL c. 40A § 3A requires of 177 Massachusetts communities, what compliance costs, what has actually been built, and who funded the officials who wrote and enforce it.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://massachusettsdatahub.com/mbta-3a-dashboard.html">
+<link rel="icon" href="https://massachusettsdatahub.com/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="https://massachusettsdatahub.com/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="https://massachusettsdatahub.com/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="icon" href="https://massachusettsdatahub.com/favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="https://massachusettsdatahub.com/apple-touch-icon.png">
+<title>Massachusetts MBTA Communities Act — § 3A Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+
+
+:root{--bg:#E9EBEA;--surface:#ffffff;--surface2:#E9EBEA;--border:#CDD3D1;--text:#0B1113;--muted:#5A6467;--accent:#14558F;--accent2:#2A6B44;--red:#A81733;--green:#2A6B44;--blue:#14558F;--amber:#b8860b;--purple:#7e22ce;--navy:#14558F;--gold:#B07C20;--red-bg:rgba(192,57,43,0.06);--blue-bg:rgba(26,68,128,0.06);--green-bg:rgba(26,122,76,0.06);--amber-bg:rgba(184,134,11,0.06);--purple-bg:rgba(126,34,206,0.06)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+.hero{background:var(--navy);color:#fff;padding:2.5rem 1.5rem 2rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,0.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(139,26,26,0.1) 0%,transparent 50%)}
+.hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.4rem,4vw,2.2rem);font-weight:400;margin-bottom:.5rem;position:relative;letter-spacing:-0.01em}
+.hero .sub{opacity:.65;font-size:.78rem;margin-bottom:1.2rem;position:relative;max-width:600px;margin-left:auto;margin-right:auto}
+.hero .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;max-width:800px;margin:0 auto;position:relative}
+.hero .stat-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:12px 8px;min-width:auto}
+.hero .stat-box .num{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.1rem,2.5vw,1.5rem);font-weight:400;color:#B07C20}
+.hero .stat-box .lbl{font-size:0.6875rem;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.5);margin-top:.2rem;font-weight:500}
+nav{display:flex;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.04);justify-content:center}
+nav button{padding:13px 16px;font-size:.72rem;font-weight:600;border:none;background:none;cursor:pointer;color:var(--muted);white-space:nowrap;border-bottom:2px solid transparent;transition:all .25s;text-transform:uppercase;letter-spacing:.05em;font-family:'DM Sans',system-ui,sans-serif}
+nav button:hover{color:var(--text);background:rgba(0,0,0,.02)}
+nav button.active{color:var(--navy);border-bottom-color:var(--gold)}
+.container{max-width:1200px;margin:0 auto;padding:24px}
+.tab{display:none;animation:fadeUp .35s ease}.tab.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 12px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.03);transition:box-shadow .3s,transform .3s}
+.kpi:hover{box-shadow:0 4px 16px rgba(0,0,0,.07);transform:translateY(-2px)}
+.kpi .val{font-family:'DM Serif Display',Georgia,serif;font-size:1.6rem;font-weight:400;line-height:1.1}
+.kpi .lbl{font-size:0.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:4px}
+.kpi.red .val{color:var(--red)}.kpi.blue .val{color:var(--blue)}.kpi.green .val{color:var(--green)}.kpi.orange .val,.kpi.yellow .val{color:var(--amber)}.kpi.purple .val{color:var(--purple)}
+.grid{display:grid;gap:14px;margin-bottom:22px}.grid-2{grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}.grid-3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.card h3{font-size:.82rem;font-weight:700;color:var(--navy);margin-bottom:10px}
+.chart-wrap{position:relative;height:280px}.chart-wrap.tall{height:340px}
+/* 26 Gateway cities on a horizontal axis. At the .tall 340px the rows are
+   about 11px each and the labels collide; these two get their own height. */
+.chart-wrap.gateway{height:620px}
+.gwy-pair{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:820px){.gwy-pair{grid-template-columns:1fr}}
+.gwy-h{margin:0 0 6px;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted)}
+/* ---------------------------------------------------------------------------
+   These four rules are ported verbatim from education-boston.html and
+   education-merrimack-valley.html, which share this stylesheet. This page was
+   already WRITING all three classes -- 7 .insight callouts, 4 .card.full, 1
+   .chart-wrap.short -- and had none of the rules, so every one of them silently
+   rendered as its unstyled default: the callouts as plain body text, the
+   full-width cards squeezed into one grid column, the short chart at 280px.
+   Nothing here is invented; every custom property they use was already defined
+   in :root above. Keep the three files' shared vocabulary in sync -- markup that
+   names a class the sheet does not define fails quietly, which is how this sat.
+   --------------------------------------------------------------------------- */
+.card.full{grid-column:1/-1}
+.chart-wrap.short{height:240px}
+.insight{margin-top:12px;padding:12px 14px;background:var(--surface2);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;font-size:.76rem;line-height:1.6;color:var(--text)}
+.insight strong{color:var(--navy)}
+/* Not used on this page yet, but carried so the vocabulary matches its two
+   siblings -- adding a badge or a table here should not need a CSS trip. */
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:0.6875rem;font-weight:700;letter-spacing:.03em;white-space:nowrap}
+.badge.red{background:var(--red-bg);color:var(--red)}
+.badge.green{background:var(--green-bg);color:var(--green)}
+.badge.yellow,.badge.amber{background:var(--amber-bg);color:var(--amber)}
+.badge.blue{background:var(--blue-bg);color:var(--blue)}
+.table-wrap{overflow-x:auto}
+.callout{background:var(--blue-bg);border:1px solid rgba(26,68,128,.12);border-radius:12px;padding:16px 18px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start;border-left:4px solid var(--blue)}
+.callout.red,.callout.warn{background:var(--red-bg);border-left-color:var(--red);border-color:rgba(192,57,43,.12)}
+.callout.amber{background:var(--amber-bg);border-left-color:var(--amber);border-color:rgba(184,134,11,.15)}
+.callout .ico{font-size:1.1rem;flex-shrink:0}
+.callout p,.callout .text{font-size:.78rem;color:var(--text);line-height:1.6}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px;justify-content:center}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--muted);font-weight:500}
+.legend-dot{width:10px;height:10px;border-radius:50%}
+table{width:100%;border-collapse:collapse;font-size:.78rem}
+th{background:rgba(15,41,66,.04);padding:10px 14px;text-align:left;font-weight:700;color:var(--navy);border-bottom:2px solid var(--navy);font-size:0.6875rem;text-transform:uppercase;letter-spacing:.08em}
+td{padding:10px 14px;border-bottom:1px solid var(--border)}
+tr:hover{background:rgba(15,41,66,.02)}
+.footer{text-align:center;padding:32px 24px;color:var(--muted);font-size:.72rem;border-top:1px solid var(--border);margin-top:30px;background:#fff}
+.footer a{color:var(--navy);text-decoration:none;font-weight:600;border-bottom:1px solid var(--gold)}.footer a:hover{color:var(--gold)}
+@media(max-width:768px){.hero .stat-row{grid-template-columns:repeat(2,1fr)}.grid-2,.grid-3{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}.container{padding:16px}}
+@media(max-width:480px){.hero .stat-row{grid-template-columns:repeat(2,1fr)}.kpi-grid{grid-template-columns:1fr}nav button{padding:10px 10px;font-size:0.6875rem}}
+
+
+
+/* Sourced-here strip. Uses the shared theme's own tokens so it reads as part of
+   whichever dashboard it lands on, and stays quiet: this is a way out to the
+   working, not a call to action. */
+.msrc{max-width:1560px;margin:44px auto 0;padding:16px 24px 0;
+  border-top:1px solid var(--rule,#CDD3D1);
+  font-family:var(--font-mono,ui-monospace,monospace);font-size:11.5px;
+  letter-spacing:.04em;color:var(--muted,#5A6467);text-align:center}
+.msrc a{color:var(--navy,#14558F);font-weight:600;text-decoration:none;
+  border-bottom:1px solid rgba(20,85,143,.35)}
+.msrc a:hover{border-bottom-color:var(--navy,#14558F)}
+.msrc a:focus-visible{outline:2px solid var(--navy,#14558F);outline-offset:3px}
+
+/* ---- page-specific: the town table, the finding cards, the walkthrough ---- */
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.toolbar input,.toolbar select{font:inherit;font-size:.9rem;padding:9px 12px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text)}
+.toolbar input{min-width:260px;flex:1}
+.toolbar .count{font-size:.85rem;color:var(--muted)}
+th[data-sort]{cursor:pointer;user-select:none;white-space:nowrap}
+th[data-sort]:after{content:"\2195";opacity:.3;margin-left:5px;font-size:.85em}
+th[data-sort].up:after{content:"\2191";opacity:.85}
+th[data-sort].down:after{content:"\2193";opacity:.85}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:.74rem;font-weight:600;white-space:nowrap}
+.pill.ok{background:var(--green-bg);color:var(--green)}
+.pill.interim{background:var(--amber-bg);color:var(--amber)}
+.pill.cond{background:var(--blue-bg);color:var(--blue)}
+.pill.no{background:var(--red-bg);color:var(--red)}
+.finding{border:1px solid var(--border);border-left:3px solid var(--red);border-radius:8px;background:var(--surface);margin-bottom:12px;overflow:hidden}
+.finding>summary{cursor:pointer;padding:14px 18px;list-style:none;display:block}
+.finding>summary::-webkit-details-marker{display:none}
+.finding .fh{font-weight:700;font-size:1rem;margin-bottom:3px}
+.finding .fa{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;color:var(--red);font-weight:600}
+.finding .fs{font-size:.9rem;color:var(--muted);margin-top:6px;line-height:1.55}
+.finding .fd{padding:0 18px 16px;font-size:.9rem;line-height:1.7;border-top:1px solid var(--border);margin-top:4px;padding-top:14px}
+.finding>summary:after{content:"\25BC Click for the evidence";display:block;font-size:.75rem;color:var(--muted);margin-top:8px}
+.finding[open]>summary:after{content:"\25B2 Click to collapse"}
+.steps{counter-reset:s;display:grid;gap:10px}
+.step{border:1px solid var(--border);border-radius:8px;background:var(--surface);padding:14px 18px}
+.step .st{font-weight:700;margin-bottom:4px}
+.step .sn{display:inline-block;font-family:ui-monospace,monospace;font-size:.76rem;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:2px 8px;margin-bottom:8px;color:var(--muted)}
+.qa{border-bottom:1px solid var(--border);padding:14px 0}
+.qa:last-child{border-bottom:none}
+.qa .q{font-weight:700;margin-bottom:5px}
+.qa .a{color:var(--muted);line-height:1.7;font-size:.93rem}
+.defn{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;font-size:.92rem}
+.defn dt{font-weight:600;white-space:nowrap}
+.defn dd{color:var(--muted);margin:0}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "@id": "https://massachusettsdatahub.com/mbta-3a-dashboard.html#dataset",
+  "name": "Massachusetts MBTA Communities Act",
+  "description": "What MGL c. 40A § 3A requires of 177 Massachusetts communities, what compliance costs, what has actually been built, and who funded the officials who wrote and enforce it.",
+  "url": "https://massachusettsdatahub.com/mbta-3a-dashboard.html",
+  "inLanguage": "en-US",
+  "isAccessibleForFree": true,
+  "creator": {
+    "@id": "https://massachusettsdatahub.com/about.html#duncan-burns"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "@id": "https://massachusettsdatahub.com/#publisher",
+    "name": "Massachusetts Data Hub",
+    "url": "https://massachusettsdatahub.com/",
+    "founder": {
+      "@id": "https://massachusettsdatahub.com/about.html#duncan-burns"
+    }
+  },
+  "includedInDataCatalog": {
+    "@type": "DataCatalog",
+    "@id": "https://massachusettsdatahub.com/#website",
+    "name": "Massachusetts Data Hub",
+    "url": "https://massachusettsdatahub.com/"
+  },
+  "spatialCoverage": [
+    {
+      "@type": "Place",
+      "name": "Massachusetts"
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<div class="hero">
+<h1>The MBTA Communities Act</h1>
+<p class="sub">MGL c. 40A &sect; 3A &mdash; what it requires of <span data-field="kpi-communities">177</span> communities, what it costs, and what has been built</p>
+<div class="stat-row">
+<div class="stat-box"><div class="num"><span data-field="kpi-communities2">177</span></div><div class="lbl">Communities<br>Mandated</div></div>
+<div class="stat-box"><div class="num"><span data-field="kpi-required">297,190</span></div><div class="lbl">Units of Zoned<br>Capacity Required</div></div>
+<div class="stat-box"><div class="num"><span data-field="kpi-builtunits">10,065</span></div><div class="lbl">Units Tracked<br>in 3A Districts</div></div>
+<div class="stat-box"><div class="num">0</div><div class="lbl">Affordable Units<br>Required by &sect; 3A</div></div>
+</div>
+</div>
+
+<nav>
+<button class="active" onclick="showTab('mandate',this)">The Mandate</button>
+<button onclick="showTab('cost',this)">The Cost Claim</button>
+<button onclick="showTab('towns',this)">All 177 Communities</button>
+<button onclick="showTab('built',this)">What's Been Built</button>
+<button onclick="showTab('money',this)">Follow the Money</button>
+<button onclick="showTab('questions',this)">Open Questions</button>
+</nav>
+
+<div class="container">
+<div class="tab active" id="mandate">
+
+<p class="section-desc">Section 3A of the Zoning Act requires every MBTA community to have at least one
+district of reasonable size where multi-family housing is permitted <em>as of right</em> &mdash; minimum gross
+density 15 units per acre, within half a mile of a station where one applies. Boston, though served by the
+MBTA, is exempt from the Zoning Act and therefore from &sect; 3A.</p>
+
+<div class="kpi-grid">
+<div class="kpi blue"><div class="val"><span data-field="kpi-communities3">177</span></div><div class="lbl">Communities subject to &sect; 3A</div></div>
+<div class="kpi"><div class="val"><span data-field="kpi-stock">1,941,671</span></div><div class="lbl">2020 housing units across them</div></div>
+<div class="kpi purple"><div class="val"><span data-field="kpi-required2">297,190</span></div><div class="lbl">Minimum multi-family unit capacity</div></div>
+<div class="kpi yellow"><div class="val"><span data-field="kpi-sharestock">15.3%</span></div><div class="lbl">Required capacity as a share of stock</div></div>
+</div>
+
+<div class="callout amber">
+<div class="ico">&#9888;</div>
+<div class="text"><strong>Capacity is not construction.</strong> The required figure is zoned capacity under EOHLC's
+compliance model, not a number of homes any community must build or any developer must propose. EOHLC says so itself:
+the model produces &ldquo;reasonable estimates&rdquo; for verifying compliance and does &ldquo;not provide absolute
+measures of development potential.&rdquo; Every capacity number on this page should be read that way.</div>
+</div>
+
+<div class="grid grid-2">
+<div class="card">
+<h3>Community categories</h3>
+<p class="section-desc">Obligation scales with transit access: rapid transit 25% of 2020 housing stock, commuter rail 15%,
+adjacent community 10%, adjacent small town 5% &mdash; capped at 25% where the two calculation methods would exceed it.</p>
+<div class="chart-wrap short"><canvas id="cCat"></canvas></div>
+</div>
+<div class="card">
+<h3>Compliance status</h3>
+<p class="section-desc">As determined by EOHLC. Adopting zoning locally is not the same as being found compliant;
+a community must also apply to EOHLC for a determination.</p>
+<div class="chart-wrap short"><canvas id="cStatus"></canvas></div>
+</div>
+</div>
+
+<div class="card full">
+<h3>The twenty largest capacity requirements</h3>
+<p class="section-desc">In units of zoned capacity. These are the raw obligations, which track population &mdash;
+the proportional burden is a different ranking and is below.</p>
+<div class="chart-wrap"><canvas id="cTop"></canvas></div>
+</div>
+
+<div class="card full">
+<h3>Where the requirement exceeds the community's own category</h3>
+<p class="section-desc">Each category carries a nominal share of 2020 housing stock &mdash; rapid transit 25%,
+commuter rail 15%, adjacent community 10%, adjacent small town 5%. For
+<span data-field="pr-overbase">44</span> of the <span data-field="pr-communities2">177</span> communities the
+requirement lands <em>above</em> that share. This is the gap, in percentage points.</p>
+<div class="chart-wrap gateway"><canvas id="cBurden"></canvas></div>
+<div class="insight"><strong>For small towns the percentage is not what binds &mdash; a unit floor is.</strong>
+Minimum land area is 50 acres, and at the statutory 15 units per acre that works out to a floor of roughly 750 units
+whatever the town's size. Georgetown is an adjacent community, nominally 10%, and is required to zone for capacity
+equal to <span data-field="pr-gtown">24%</span> of its housing stock. Several commuter-rail towns of under 3,000 homes
+land at the 25% cap for the same reason. Ranking communities by raw share hides this completely, because the cap puts
+the largest cities and the smallest towns on the same line.</div>
+</div>
+
+<div class="card full">
+<h3>What the statute actually says</h3>
+<dl class="defn">
+<dt>Requires</dt><dd>At least one district of reasonable size where multi-family housing is permitted as of right, without age restrictions, suitable for families with children.</dd>
+<dt>Density</dt><dd>Minimum gross density of 15 dwelling units per acre, subject to the Wetlands Protection Act and Title 5.</dd>
+<dt>Location</dt><dd>Not more than 0.5 miles from a commuter rail station, subway station, ferry terminal or bus station, if applicable.</dd>
+<dt>Does not require</dt><dd>Construction of any unit. Affordability of any unit. &sect; 3A contains no affordability mandate.</dd>
+<dt>Penalty</dt><dd>A non-compliant community loses eligibility for the Housing Choice Initiative, the Local Capital Projects Fund, MassWorks and HousingWorks.</dd>
+<dt>Exempt</dt><dd>Boston &mdash; served by the MBTA, but carved out of the Zoning Act.</dd>
+</dl>
+</div>
+
+<p class="source">Source: Executive Office of Housing and Livable Communities, &ldquo;Multi-Family Zoning Requirement
+for MBTA Communities,&rdquo; and its published category and capacity table &mdash; both retrieved
+<span data-field="src-retrieved">25 September 2026</span>. Statutory text from MGL c. 40A &sect; 3A; regulations at 760 CMR 72.00.</p>
+</div>
+<div class="tab" id="cost">
+
+<p class="section-desc">The most-quoted number attached to &sect; 3A is a cost estimate that did not come from the
+state. It comes from research prepared by Anne Brensley for the State Auditor, and it estimates one narrow slice of
+compliance cost &mdash; architects' and engineers' base fees &mdash; by applying the state's own DCAMM fee schedule to
+the mandate's required capacity. It is presented here as her attributed estimate, with its inputs shown, because the
+figure only means anything if you can see how it was built.</p>
+
+<div class="callout red">
+<div class="ico">&#9888;</div>
+<div class="text"><strong>Two caveats this page will not bury.</strong> First, the arithmetic in the published
+methodology does not reproduce the headline: 273,080 units &times; 900&nbsp;sf &times; $250/sf gives $61.4B, and 5.9% of
+$61.4B is <strong>$3.63B</strong>, not $4.49B. Reaching $4.49B from that base needs a rate near 7.3%. Second, the unit
+count it uses &mdash; 273,080 &mdash; is no longer EOHLC's published total, which now stands at
+<span data-field="kpi-required3">297,190</span>. Neither point makes the estimate worthless; both mean it should be
+read as an order of magnitude from a stated method, not as a precise liability.</div>
+</div>
+
+<div class="kpi-grid">
+<div class="kpi red"><div class="val">$4.49B</div><div class="lbl">Designer base fees, as Brensley states them</div></div>
+<div class="kpi"><div class="val">$3.63B</div><div class="lbl">What her stated inputs actually multiply out to</div></div>
+<div class="kpi yellow"><div class="val">$15M</div><div class="lbl">Catalyst Fund &mdash; the state appropriation</div></div>
+<div class="kpi purple"><div class="val">&mdash;</div><div class="lbl">Infrastructure cost: never calculated by anyone</div></div>
+</div>
+
+<div class="grid grid-2">
+<div class="card">
+<h3>The assumptions, as published</h3>
+<dl class="defn">
+<dt>Construction cost</dt><dd>$250 per square foot &mdash; deliberately below the roughly $350/sf Massachusetts average</dd>
+<dt>Gross unit size</dt><dd>900 sq ft, including an allocation for common area</dd>
+<dt>Designer fee rate</dt><dd>5.9%, the standard DCAMM schedule</dd>
+<dt>Units applied</dt><dd>273,080 &mdash; EOHLC Compliance Model v1.5, as of the report</dd>
+<dt>Method</dt><dd>units &times; sq ft &times; cost/sf &times; fee rate</dd>
+</dl>
+<div class="insight"><strong>What the estimate assumes.</strong> It prices the design of every unit of zoned
+capacity as though it were going to be built. Since &sect; 3A mandates capacity rather than construction, the
+estimate is better read as the cost of the buildout the zoning contemplates than as a bill any town has received.</div>
+</div>
+<div class="card">
+<h3>What the estimate leaves out</h3>
+<p class="section-desc">Designer fees are the narrow part. None of the following is in the $4.49B, and none of it has
+been quantified by the state either.</p>
+<ul style="margin:0 0 0 18px;line-height:2;font-size:.93rem">
+<li>Land acquisition</li>
+<li>Water and sewer infrastructure &mdash; the binding constraint in septic towns</li>
+<li>Roadway improvements</li>
+<li>Environmental remediation</li>
+<li>Legal and permitting fees</li>
+<li>Financing and carrying costs</li>
+<li>Impact fees and mitigation</li>
+<li>School capacity</li>
+<li>Emergency services scaling</li>
+<li>Municipal staff time for compliance</li>
+</ul>
+</div>
+</div>
+
+<div class="card full">
+<h3>What the courts have said about cost</h3>
+<div class="insight"><strong>&ldquo;The regulations do not compel construction. They merely encourage it.&rdquo;</strong>
+&mdash; Plymouth Superior Court, June 2025. The ruling addressed whether the plaintiffs had quantified a direct cost,
+not whether costs exist. An unquantified cost and a cost of zero are different findings, and only one of them was made.</div>
+</div>
+
+<p class="source">Source: Brensley Cost Impact Report (December 2025), prepared for the Massachusetts State Auditor,
+as summarised in this project's methodology document; DCAMM designer fee schedule; EOHLC Compliance Model v1.5.
+The reconciliation of the arithmetic is this page's own, shown above so it can be checked.</p>
+</div>
+<div class="tab" id="towns">
+
+<p class="section-desc">Every community subject to &sect; 3A, with its category, its 2020 housing stock, the minimum
+multi-family unit capacity EOHLC requires of it, its current compliance determination, and any housing EOHLC has
+tracked inside its 3A district. Search by name, or sort any column.</p>
+
+<div class="card full">
+<div class="toolbar">
+  <input id="tq" type="search" placeholder="Search a community &mdash; Marblehead, Lowell, Duxbury&hellip;" aria-label="Search communities">
+  <select id="tcat" aria-label="Filter by category"><option value="">All categories</option></select>
+  <select id="tstat" aria-label="Filter by compliance status"><option value="">All statuses</option></select>
+  <span class="count" id="tcount"></span>
+</div>
+<div class="table-wrap">
+<table id="ttab">
+<thead><tr>
+<th data-sort="n">Community</th>
+<th data-sort="c">Category</th>
+<th data-sort="h" class="num">2020 units</th>
+<th data-sort="r" class="num">Required capacity</th>
+<th data-sort="pct" class="num">% of stock</th>
+<th data-sort="status">Compliance</th>
+<th data-sort="units" class="num">Units tracked</th>
+</tr></thead>
+<tbody></tbody>
+</table>
+</div>
+</div>
+
+<p class="source">Source: EOHLC, &ldquo;MBTA Communities &mdash; Community Category Designations and Capacity
+Calculations&rdquo; (published table, June 2025 edition); EOHLC Compliance Status Sheet
+(<span data-field="src-status-date">31 August 2026</span>); EOHLC 3A Development Tracker
+(<span data-field="src-dev-date">11 September 2026</span>). Retrieved <span data-field="src-retrieved2">25 September 2026</span>.
+&ldquo;Units tracked&rdquo; is total units in developments EOHLC has associated with 3A zoning, and EOHLC notes that list
+is compiled from third-party information and may not be comprehensive.</p>
+</div>
+<div class="tab" id="built">
+
+<p class="section-desc">EOHLC maintains a tracker of multi-family developments it has determined are associated with
+3A zoning. It is the closest thing to an answer to the question the law's supporters and opponents actually disagree
+about: does rezoning produce housing? Here is what the state's own tracker currently shows.</p>
+
+<div class="kpi-grid">
+<div class="kpi blue"><div class="val"><span data-field="kpi-projects">104</span></div><div class="lbl">Developments tracked in 3A districts</div></div>
+<div class="kpi"><div class="val"><span data-field="kpi-builtunits2">10,065</span></div><div class="lbl">Total units across them</div></div>
+<div class="kpi green"><div class="val"><span data-field="kpi-deed">1,822</span></div><div class="lbl">Deed-restricted units</div></div>
+<div class="kpi yellow"><div class="val"><span data-field="kpi-active">43</span></div><div class="lbl">Of 177 communities with any tracked activity</div></div>
+</div>
+
+<div class="callout amber">
+<div class="ico">&#9888;</div>
+<div class="text"><strong>Tracked is not the same as built.</strong> The tracker mixes completed, permitted and
+proposed developments, and EOHLC compiles it from third-party information. Read it as the visible pipeline, not as a
+completion count.</div>
+</div>
+
+<div class="grid grid-2">
+<div class="card">
+<h3>Pipeline against the mandate</h3>
+<p class="section-desc">Units in the tracker as a share of the zoned capacity the law requires.</p>
+<div class="chart-wrap short"><canvas id="cPipe"></canvas></div>
+<div class="insight"><strong><span data-field="pr-pipeshare">3.4%</span> of required capacity.</strong>
+Five years after the law was signed, the tracked pipeline stands at
+<span data-field="pr-builtunits">10,065</span> units against <span data-field="pr-required">297,190</span> units of
+required capacity, concentrated in <span data-field="pr-active">43</span> of the
+<span data-field="pr-communities">177</span> communities. Whether that reads as early progress or as evidence that
+zoning is not the binding constraint is the argument; the ratio itself is not in dispute.</div>
+</div>
+<div class="card">
+<h3>Where the pipeline is</h3>
+<p class="section-desc">The fifteen communities with the most tracked units. Activity is concentrated, not spread.</p>
+<div class="chart-wrap short"><canvas id="cWhere"></canvas></div>
+</div>
+</div>
+
+<div class="card full">
+<h3>The affordability question, answered by the tracker</h3>
+<div class="insight"><strong>&sect; 3A requires no affordable units, and
+<span data-field="pr-deedshare">18.1%</span> of tracked units are deed-restricted anyway.</strong>
+That share comes from other machinery &mdash; local inclusionary zoning, Chapter 40B, subsidy programs attached to
+individual deals &mdash; not from &sect; 3A, which contains no affordability requirement. It is the strongest available
+evidence on both sides at once: the law is not producing affordability by its own terms, and the units being built
+under it are not uniformly market-rate either.</div>
+</div>
+
+<p class="source">Source: EOHLC 3A Development Tracker, published table as of
+<span data-field="src-dev-date2">11 September 2026</span>, retrieved <span data-field="src-retrieved3">25 September 2026</span>.
+Shares are computed against EOHLC's own published required-capacity total.</p>
+</div>
+<div class="tab" id="money">
+
+<p class="section-desc">This section is carried over from the original &ldquo;Follow the Money&rdquo; investigation and
+is a fixed piece of research, not a live feed. It rests on public records: OCPF campaign finance filings, Secretary of
+the Commonwealth lobbyist registrations, IRS Form 990 filings via ProPublica, corporate registrations, and published
+reporting. Aggregations were performed on roughly 107,900 OCPF contribution records for the four officials who
+authored, implemented or enforce &sect; 3A &mdash; Sen. Brendan Crighton, Gov. Maura Healey, AG Andrea Campbell and
+Rep. Kevin Honan. Full method is in the project's methodology document, linked at the foot of this page.</p>
+
+<div class="callout amber">
+<div class="ico">&#9888;</div>
+<div class="text"><strong>What this shows and what it does not.</strong> Donations, board seats and career moves are
+matters of record. A pattern of giving is not by itself evidence of an agreement, and nothing here alleges one. The
+figures are aggregate totals from filings as of the original analysis (February 2026) and have not been re-run against
+OCPF since; treat them as of that date.</div>
+</div>
+
+<h2 class="section-title">Eight findings</h2>
+<details class="finding"><summary><div class="fh">Two Charlie Bakers — One Convenient Confusion</div><div class="fa">$4,650 in donations</div><div class="fs">DSG co-founder Charlie Baker (Democratic operative) donates to officials who enforce the law that Governor Charlie Baker (Republican) signed. They are not the same person.</div></summary><div class="fd">Governor Charlie Baker (R, Harvard '79) signed § 3A into law in January 2021. He became NCAA president in March 2023. Dewey Square Group co-founder Charlie Baker (D, Harvard '80, BU Law '84) is a lifelong Democratic operative who served under Gov. Dukakis and ran operations for Hillary Clinton's 2016 campaign. From DSG, this Baker donated: $1,000 to Campbell (2/24/25), $1,000 to Campbell (5/6/24), $1,000 to Campbell (8/31/22), $250 to Crighton (12/1/25), $200 to Crighton (11/1/22), $200 to Crighton (1/5/21). DSG also houses Lynda Tocci, president of Healey's dark-money nonprofit One Commonwealth. The lobbying firm funds the enforcers.</div></details>
+<details class="finding"><summary><div class="fh">Patrick's Housing Secretary → Now a Developer</div><div class="fa">$21,200 from Redgate</div><div class="fs">Gregory Bialecki was Gov. Patrick's Secretary of Housing &amp; Economic Development. His work 'helped pave the way' for § 3A. Now at Redgate, a RE development firm donating to Healey, Campbell, and Honan.</div></summary><div class="fd">Bialecki served as Gov. Deval Patrick's Secretary of Housing &amp; Economic Development (2009–2015), helping shape the policy framework that became § 3A. He left government and joined Redgate — a real estate development firm. Redgate employees donated $21,200 across 37 donations to Campbell, Healey, and Honan. The man who helped design the housing policy now profits from the development it mandates. Classic revolving door.</div></details>
+<details class="finding"><summary><div class="fh">Foundation Funds Compliance → Leaders Fund Enforcers</div><div class="fa">$16,000 to Campbell &amp; Healey</div><div class="fs">Barr Foundation gave $1.5M+ to orgs doing 3A compliance work. Co-founder Hostetter and CEO Canales then max-donate to the officials who enforce the mandate.</div></summary><div class="fd">Barr Foundation gave $1M+ to MHP (quasi-state agency) for § 3A compliance technical assistance and $500K to Abundant Housing MA for 3A advocacy. Then: Barbara Hostetter (co-founder) donated $5,000 to Campbell across 5 max donations (2021–2025) and $4,000 to Healey across 4 donations. Jim Canales (CEO) donated $5,000 to Campbell (4 × $1K + 1 × $500) and $2,000 to Healey. Pattern: Fund the compliance apparatus → donate to the enforcers.</div></details>
+<details class="finding"><summary><div class="fh">One Firm, Every Official, Every Year</div><div class="fa">$42K+ across all 4 officials</div><div class="fs">Dewey Square Group employees donated to all 4 key officials. DSG runs Healey's dark-money nonprofit. Michael Whouley alone gave $3K to Campbell, $8K+ to Healey.</div></summary><div class="fd">Dewey Square Group — lobbying firm, $2.7M in salaries 2019–2025. Client: MA Affordable Housing Alliance ($30K/yr). DSG runs Healey's 'One Commonwealth' dark-money nonprofit. Key donors: Michael Whouley → $3,000 to Campbell (3 × $1K), $8,750+ to Healey (multiple max donations), $1,000 to Honan, $250 to Crighton. Joseph Ricca ($300K/yr salary) → Crighton. Daniel Napolitano → Crighton, Campbell. Parisa Golkar → $1K to Healey. Every DSG lobbyist donates to every official in the chain.</div></details>
+<details class="finding"><summary><div class="fh">Commission Member's Firm → 160+ Donations to Officials</div><div class="fa">$50K+ combined to Healey &amp; Campbell</div><div class="fs">Goulston &amp; Storrs partner David Linhart sits on Healey's Housing Commission while 160+ G&amp;S attorneys donate to the officials whose policy his firm profits from.</div></summary><div class="fd">Goulston &amp; Storrs is a major real estate law firm. David Linhart is a partner AND sits on Healey's Unlocking Housing Production Commission — shaping § 3A implementation. Linhart personally donated to Healey ($700+), Campbell ($400), Wu ($1,450), Edwards ($300), and 4 other officials. Meanwhile, 60+ G&amp;S attorneys donated $30K+ to Healey and $20K+ to Campbell. Top donors: Douglas Husid ($1K × 5 to Healey), Bill Dillon ($1K × 3 to Campbell), David Abromowitz ($1K × 4 to Campbell). The firm profits from every real estate transaction § 3A enables.</div></details>
+<details class="finding"><summary><div class="fh">The Builders Writing the Checks</div><div class="fa">$43K+ from Suffolk alone</div><div class="fs">Suffolk Construction — John Fish (CEO) gave $7,500 to Healey. Combined with JMA ($32K), NEI ($17K), Commodore ($15K): the builders donating to the mandate-makers.</div></summary><div class="fd">The construction firms that would build what § 3A mandates are heavy donors: Suffolk Construction: $43,580 across 74 donations. CEO John Fish gave $7,500 to Healey. John Moriarty &amp; Associates: $32,100 across 48 donations. Moriarty lists himself as 'contractor/builder.' NEI General Contracting: $17,125. Commodore Builders: $14,750 (Joe Albanese, CEO). New Boston Ventures: $20,525 (builder/developer). RISE: $7,950 (development &amp; construction). Dagle Electrical: $24,800 — almost entirely to Campbell (the enforcement official). Total from major builders: $160K+.</div></details>
+<details class="finding"><summary><div class="fh">CHAPA Board = Developer Board → They All Donate</div><div class="fa">$47K+ across 5 board members</div><div class="fs">Developers who sit on CHAPA's board or Healey's commissions — shaping § 3A policy — donate to every key official. They shape the rules, then profit from them.</div></summary><div class="fd">Kenan Bigby (Trinity Financial) — CHAPA board + Healey Housing Council → $9,825+ across 50+ donations to Wu, Walsh, Campbell, Galvin, Holmes, and others. Dara Kovel (Beacon Communities) — CHAPA board → $13,400+ across 55+ donations to Healey, Campbell, Driscoll, Wu, Spilka, Collins, Edwards, Honan. Levi Reilly (Marcus Partners) — Housing Production Commission → $15,500+ to Healey ($5,500), Wu, Spilka, Collins, Flynn. David Linhart (Goulston &amp; Storrs) — Housing Production Commission → $3,375 to Healey, Campbell, Wu, Edwards, 3 others. Jason Korb (Capstone) — CHAPA board → $4,875 to Healey, Campbell, Azeem, Laredo.</div></details>
+<details class="finding"><summary><div class="fh">The Bundling Pattern: Same Date, Same Amount, Every Partner</div><div class="fa">$32K coordinated donations</div><div class="fs">Smith, Costello &amp; Crawford: every partner donates identical $200 to the same candidate on the same date. Textbook bundling.</div></summary><div class="fd">Smith, Costello &amp; Crawford — lobbying/government affairs firm. Total: $31,925. The pattern is unmistakable: On 12/7/25: Beth Card ($200), Michael Costello ($200), Jennifer Crawford ($200), Danielle Fleury ($200), James Smith ($200) → ALL to Crighton. Same date, same amount. This pattern repeats: 12/15/24, 1/5/24, 1/6/23, 7/24/21, 8/22/20, 5/24/19, 7/25/18 — always identical $200 from each partner, always same date. Crighton received $9,400 from SCC (16% of his total from lobbying firms). This is textbook bundled fundraising.</div></details>
+
+<div class="card full">
+<h3>Real-estate, development and construction money to the four officials</h3>
+<p class="section-desc">44 firms identified, 1,105 donations, $680,415 in total.
+Sorted by amount.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Firm</th><th>Type</th><th class="num">Total</th><th class="num">Donations</th><th>Recipients</th><th>Notable donor</th></tr></thead>
+<tbody>
+<tr><td><strong>Suffolk Construction</strong></td><td>Builder</td><td class="num">$43,580</td><td class="num">74</td><td>Campbell, Healey</td><td>John Fish (CEO) — $7,500 to Healey</td></tr>
+<tr><td><strong>Markley Group</strong></td><td>Properties</td><td class="num">$34,000</td><td class="num">33</td><td>Healey</td><td>Adam Burnham, Donald Esson</td></tr>
+<tr><td><strong>John Moriarty &amp; Assoc.</strong></td><td>Builder</td><td class="num">$32,100</td><td class="num">48</td><td>Campbell, Healey, Honan</td><td>John Moriarty III — contractor/builder</td></tr>
+<tr><td><strong>Peabody Properties</strong></td><td>Property Mgmt</td><td class="num">$30,750</td><td class="num">43</td><td>ALL FOUR</td><td>Melissa Crane (CEO)</td></tr>
+<tr><td><strong>Newmark</strong></td><td>CRE Brokerage</td><td class="num">$30,175</td><td class="num">39</td><td>Campbell, Healey</td><td>CRE brokers — commissions on every deal</td></tr>
+<tr><td><strong>HYM Investment Group</strong></td><td>Developer</td><td class="num">$28,000</td><td class="num">40</td><td>Campbell, Healey, Honan</td><td>Thomas O'Brien — $1K × 11</td></tr>
+<tr><td><strong>Dagle Electrical</strong></td><td>Builder</td><td class="num">$24,800</td><td class="num">42</td><td>Campbell</td><td>James Dagle (President) — 99% to AG</td></tr>
+<tr><td><strong>Davis Companies</strong></td><td>Developer</td><td class="num">$24,500</td><td class="num">31</td><td>Campbell, Healey, Honan</td><td>Stephen &amp; Jonathan Davis — $1K each</td></tr>
+<tr><td><strong>HNTB</strong></td><td>Engineering</td><td class="num">$23,850</td><td class="num">39</td><td>Healey</td><td>Engineering/infrastructure consulting</td></tr>
+<tr><td><strong>Redgate</strong></td><td>Developer</td><td class="num">$21,200</td><td class="num">37</td><td>Campbell, Healey, Honan</td><td>🚨 Gregory Bialecki (Patrick's Housing Sec)</td></tr>
+<tr><td><strong>Coldwell Banker</strong></td><td>CRE Brokerage</td><td class="num">$20,785</td><td class="num">51</td><td>Campbell, Healey, Honan</td><td>RE agents — listing revenue</td></tr>
+<tr><td><strong>New Boston Ventures</strong></td><td>Builder</td><td class="num">$20,525</td><td class="num">36</td><td>Campbell, Healey, Honan</td><td>Bob Olson, David Goldman — builder</td></tr>
+<tr><td><strong>National Development</strong></td><td>Developer</td><td class="num">$19,590</td><td class="num">46</td><td>Campbell, Healey</td><td>Multiple partners max-donating</td></tr>
+<tr><td><strong>Trinity Financial</strong></td><td>Developer</td><td class="num">$17,345</td><td class="num">48</td><td>Campbell, Healey, Honan</td><td>Kenan Bigby (CHAPA board)</td></tr>
+<tr><td><strong>NEI General Contracting</strong></td><td>Builder</td><td class="num">$17,125</td><td class="num">20</td><td>Campbell, Healey</td><td>President, VP, Chief Estimator</td></tr>
+<tr><td><strong>Schochet Associates</strong></td><td>Property Mgmt</td><td class="num">$16,750</td><td class="num">25</td><td>Campbell, Healey, Honan</td><td>Richard Henken — $10.7K to Honan</td></tr>
+<tr><td><strong>Meredith Management</strong></td><td>Developer</td><td class="num">$16,600</td><td class="num">18</td><td>Campbell, Healey</td><td>John Rosenthal — RE developer</td></tr>
+<tr><td><strong>Beacon Communities</strong></td><td>Developer</td><td class="num">$16,277</td><td class="num">69</td><td>Campbell, Healey, Honan</td><td>Dara Kovel (CHAPA board)</td></tr>
+<tr><td><strong>Marcus Partners</strong></td><td>Developer</td><td class="num">$15,500</td><td class="num">18</td><td>Campbell, Healey</td><td>Levi Reilly (Housing Commission)</td></tr>
+<tr><td><strong>Commodore Builders</strong></td><td>Builder</td><td class="num">$14,750</td><td class="num">30</td><td>Campbell, Healey</td><td>Joe Albanese (CEO)</td></tr>
+<tr><td><strong>Kraft Group</strong></td><td>Properties</td><td class="num">$14,000</td><td class="num">14</td><td>Campbell, Healey</td><td>Jonathan Kraft</td></tr>
+<tr><td><strong>Compass (RE)</strong></td><td>CRE Brokerage</td><td class="num">$13,645</td><td class="num">35</td><td>Campbell, Healey</td><td>RE brokers/agents</td></tr>
+<tr><td><strong>AECOM</strong></td><td>Engineering</td><td class="num">$13,175</td><td class="num">27</td><td>Crighton, Healey</td><td>Engineering/planning firm</td></tr>
+<tr><td><strong>City Realty</strong></td><td>Developer</td><td class="num">$12,500</td><td class="num">17</td><td>Campbell, Healey, Honan</td><td>Steve Whalen (Founder)</td></tr>
+<tr><td><strong>Beacon Residential</strong></td><td>Property Mgmt</td><td class="num">$11,525</td><td class="num">13</td><td>Campbell, Healey</td><td>Howard Cohen (Chairman)</td></tr>
+<tr><td><strong>New England Development</strong></td><td>Developer</td><td class="num">$11,500</td><td class="num">15</td><td>Campbell, Healey, Honan</td><td>Doug Karp (Chairman/CEO)</td></tr>
+<tr><td><strong>Samuels &amp; Associates</strong></td><td>Developer</td><td class="num">$9,000</td><td class="num">14</td><td>Crighton, Healey</td><td>Abe Menzin, Joel Sklar</td></tr>
+<tr><td><strong>Wingate</strong></td><td>Developer</td><td class="num">$9,000</td><td class="num">9</td><td>Campbell, Healey</td><td>Gerald/Mark Schuster</td></tr>
+<tr><td><strong>Paradigm Properties</strong></td><td>Property Mgmt</td><td class="num">$8,750</td><td class="num">12</td><td>Campbell, Healey</td><td>Kevin McCall</td></tr>
+<tr><td><strong>Chestnut Hill Realty</strong></td><td>Developer</td><td class="num">$8,610</td><td class="num">11</td><td>Campbell, Healey, Honan</td><td>Edward Zuker (CEO)</td></tr>
+<tr><td><strong>CBRE</strong></td><td>CRE Brokerage</td><td class="num">$8,350</td><td class="num">17</td><td>Campbell, Healey</td><td>CRE brokers</td></tr>
+<tr><td><strong>Finegold Alexander</strong></td><td>Architecture</td><td class="num">$8,325</td><td class="num">21</td><td>Campbell, Healey</td><td>Architects — every rezoning = work</td></tr>
+<tr><td><strong>Mark Development</strong></td><td>Developer</td><td class="num">$8,200</td><td class="num">9</td><td>Campbell, Healey</td><td>Robert Korff (Owner)</td></tr>
+<tr><td><strong>Maloney Properties</strong></td><td>Property Mgmt</td><td class="num">$8,150</td><td class="num">17</td><td>Campbell, Healey</td><td>Diana Kelly (CEO)</td></tr>
+<tr><td><strong>RISE</strong></td><td>Builder</td><td class="num">$7,950</td><td class="num">11</td><td>Campbell, Healey</td><td>Dev &amp; construction</td></tr>
+<tr><td><strong>Sandra Edgerley</strong></td><td>Developer</td><td class="num">$7,833</td><td class="num">8</td><td>Campbell, Healey</td><td>Individual RE developer</td></tr>
+<tr><td><strong>Fallon Company</strong></td><td>Developer</td><td class="num">$7,700</td><td class="num">12</td><td>Campbell, Healey</td><td>Joseph Fallon (CEO)</td></tr>
+<tr><td><strong>Winn Companies</strong></td><td>Property Mgmt</td><td class="num">$7,400</td><td class="num">9</td><td>Campbell, Healey</td><td>Arthur/Gilbert Winn</td></tr>
+<tr><td><strong>Keith Construction</strong></td><td>Builder</td><td class="num">$6,500</td><td class="num">10</td><td>Healey, Honan</td><td>John Keith (President)</td></tr>
+<tr><td><strong>Dellbrook Construction</strong></td><td>Builder</td><td class="num">$6,100</td><td class="num">12</td><td>Healey, Honan</td><td>Michael Fish (CEO)</td></tr>
+<tr><td><strong>Boylston Properties</strong></td><td>Developer</td><td class="num">$6,000</td><td class="num">7</td><td>Campbell, Healey</td><td>William McQuillan</td></tr>
+<tr><td><strong>Carpenter &amp; Co</strong></td><td>Developer</td><td class="num">$6,000</td><td class="num">6</td><td>Healey</td><td>Richard Friedman — legendary dev</td></tr>
+<tr><td><strong>Cronin Development</strong></td><td>Developer</td><td class="num">$6,000</td><td class="num">6</td><td>Campbell, Healey</td><td>Jon Cronin (Principal)</td></tr>
+<tr><td><strong>Brait Builders</strong></td><td>Builder</td><td class="num">$6,000</td><td class="num">6</td><td>Healey</td><td>Robert Brait</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="card full">
+<h3>Lobbying firms</h3>
+<p class="section-desc">Registered lobbying and government-affairs firms active on housing, with their disclosed
+salaries, their clients, and their connections to the officials.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Firm</th><th class="num">Salaries</th><th>Years</th><th>To officials</th><th>Client</th><th>Connection</th></tr></thead>
+<tbody>
+<tr><td><strong>Dewey Square Group</strong></td><td class="num">$2.7M</td><td>2019–2026</td><td>$42K+ to all 4 officials</td><td>MA Affordable Housing Alliance ($30K/yr)</td><td>Runs Healey's 'One Commonwealth' dark-money nonprofit. Co-founded by Charlie Baker (Democratic operative, not the former governor). Whouley donates $3K+ to Campbell, $8K+ to Healey.</td></tr>
+<tr><td><strong>Smith Costello &amp; Crawford</strong></td><td class="num">N/A (govt affairs)</td><td>2016–2025</td><td>$32K coordinated</td><td>N/A — lobbying/govt affairs</td><td>Textbook bundling: every partner donates $200 to same candidate on same date. $9,400 to Crighton alone (16% of his lobbying money).</td></tr>
+<tr><td><strong>Issues Management Group</strong></td><td class="num">$5.2M</td><td>2022–2026</td><td>$6K+ identified</td><td>Construction Industries of MA ($84K/yr)</td><td>Employees donate coordinated $200 each to all 4 officials. Maureen Glynn ($300K/yr salary) → regular donor.</td></tr>
+<tr><td><strong>Goulston &amp; Storrs</strong></td><td class="num">N/A (law firm)</td><td>Active</td><td>$50K+ to Healey &amp; Campbell</td><td>Real estate practice</td><td>David Linhart: partner AND Healey Commission member. 160+ attorney donations. Hosted NAIOP events with Lt. Gov. Driscoll.</td></tr>
+<tr><td><strong>O'Neill &amp; Associates</strong></td><td class="num">$23K+ identified</td><td>Active</td><td>$23K+ to all 4 officials</td><td>Government relations</td><td>Ben Josephson (COO/Lobbyist), multiple VPs donate across all officials.</td></tr>
+<tr><td><strong>NAIOP (via Sullivan &amp; Worcester)</strong></td><td class="num">$30K (S&amp;W 2022)</td><td>2022</td><td>$4K+ PAC + staff</td><td>Filed amicus brief in Milton case</td><td>CEO Tamara Small on Healey's Commission. Filed brief arguing AG should have enforcement power over towns. Then NAIOP PAC donates to AG.</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="grid grid-2">
+<div class="card">
+<h3>The revolving door</h3>
+<p class="section-desc">People who have moved between state housing agencies, developer boards, advocacy
+organisations and advisory commissions.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Name</th><th>Path</th></tr></thead>
+<tbody>
+<tr><td><strong>Jay Ash</strong></td><td>Baker's Sec. of Housing → CEO of MACP (John Fish's org of 16 CEOs)</td></tr>
+<tr><td><strong>Jesse Kanson-Benanav</strong></td><td>B'nai B'rith Housing (developer) → Healey Transition Committee → Exec Dir of AHMA (501c4)</td></tr>
+<tr><td><strong>Kenan Bigby</strong></td><td>Trinity Financial (developer) → CHAPA Board → Healey's Housing Advisory Council</td></tr>
+<tr><td><strong>Rachel Heller</strong></td><td>CEO of CHAPA (advocacy) → Healey's Housing Advisory Council → quotes in pro-3A coverage</td></tr>
+<tr><td><strong>Tamara Small</strong></td><td>CEO of NAIOP (developer lobby) → Healey's Unlocking Housing Production Commission</td></tr>
+<tr><td><strong>Lynda Tocci</strong></td><td>Healey 2022 campaign advisor → Dewey Square Group (Baker co-founded) → President of One Commonwealth</td></tr>
+<tr><td><strong>Chrystal Kornegay</strong></td><td>MassHousing (quasi-public lender) → Healey's Housing Advisory Council — finances the developers who sit next to her</td></tr>
+<tr><td><strong>Ed Augustus</strong></td><td>Healey's Housing Secretary → announces HDIP awards to developers → attends developer groundbreakings</td></tr>
+</tbody></table></div>
+</div>
+<div class="card">
+<h3>Developers positioned to benefit</h3>
+<p class="section-desc">Firms that receive state housing funds, sit on boards that shape policy, or build in
+as-of-right districts.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Firm</th><th>Position</th></tr></thead>
+<tbody>
+<tr><td><strong>HYM Investment Group</strong></td><td>10,000-unit Suffolk Downs. $5M HDIP grant. $10K to legislator's nonprofit. Suffolk Construction (Fish) is GC.</td></tr>
+<tr><td><strong>Beacon Communities</strong></td><td>Howard Cohen. Dara Kovel on CHAPA board. Multiple Healey-funded projects. $5K to protect 40B. $850K decarbonization grant.</td></tr>
+<tr><td><strong>WinnCompanies</strong></td><td>Larry Curtis / Gilbert Winn. 106,000+ apartments. Nation's largest affordable portfolio. $2B McCormack redevelopment w/ state funding.</td></tr>
+<tr><td><strong>Trinity Financial</strong></td><td>Kenan Bigby on CHAPA board AND Healey's Advisory Council. $360M Curtis Apts w/ state. $1B+ in development managed.</td></tr>
+<tr><td><strong>Suffolk Construction</strong></td><td>John Fish ($2.3B). Chairman MACP. GC on Suffolk Downs Portico. Founded Mass Opportunity Alliance 2024. Donates R and D.</td></tr>
+<tr><td><strong>Peabody Properties</strong></td><td>Fish-Will / Fish-Crane family. 16,350 units. Inspector General probed 40B profits. $22.5K to protect 40B. Salem, Scituate projects.</td></tr>
+</tbody></table></div>
+</div>
+</div>
+
+<div class="card full">
+<h3>The sequence, step by step</h3>
+<div class="steps">
+<div class="step"><div class="sn">Baker → § 3A</div><div class="st">Step 1: The Law</div><div style="color:var(--muted);line-height:1.7;font-size:.93rem">Governor Baker signs § 3A into law (January 2021), mandating 177 towns rezone for multifamily housing near MBTA. No affordability requirements. No construction mandate. Just zoning.</div></div>
+<div class="step"><div class="sn">Bialecki → Redgate / Ash → MACP / Kennealy → Gov Race</div><div class="st">Step 2: The Exit</div><div style="color:var(--muted);line-height:1.7;font-size:.93rem">Three Housing Secretaries leave government for industry. Patrick's Gregory Bialecki (2009–2015) joins Redgate, a RE development firm. Baker's Jay Ash (2015–2018) becomes CEO of MACP, whose board includes John Fish of Suffolk Construction. Baker's Mike Kennealy (2018–2022) now runs for governor.</div></div>
+<div class="step"><div class="sn">Barr → MHP → CHAPA → Compliance $$$</div><div class="st">Step 3: The Money Machine</div><div style="color:var(--muted);line-height:1.7;font-size:.93rem">Barr Foundation gives $1M+ to MHP for § 3A compliance work. $500K to Abundant Housing MA for advocacy. CHAPA — stacked with developers (Bigby, Kovel, Korb) — lobbies for enforcement. The compliance industry is born.</div></div>
+<div class="step"><div class="sn">Healey + Campbell = Enforcement</div><div class="st">Step 4: The Enforcement</div><div style="color:var(--muted);line-height:1.7;font-size:.93rem">Governor Healey creates EOHLC, issues compliance guidelines. AG Campbell gains enforcement power via SJC Milton decision (Jan 2025). NAIOP files amicus brief (via Sullivan &amp; Worcester) arguing for AG authority. Towns face loss of state funding for non-compliance.</div></div>
+<div class="step"><div class="sn">$$$ → Officials → Policy → $$$</div><div class="st">Step 5: The Donations</div><div style="color:var(--muted);line-height:1.7;font-size:.93rem">Now trace the money: Developers who profit from § 3A donate $600K+ to these 4 officials. Lobbying firms donate $600K+. Barr Foundation leaders donate $16K directly. CHAPA board members donate $47K+. DSG’s Charlie Baker (not the governor) donates to Crighton and Campbell. The money flows in circles.</div></div>
+<div class="step"><div class="sn">Developers ↔ Commissions ↔ Policy</div><div class="st">Step 6: The Commissions</div><div style="color:var(--muted);line-height:1.7;font-size:.93rem">Healey appoints to her Housing Commission: Levi Reilly (Marcus Partners, $15K+ in donations), David Linhart (Goulston &amp; Storrs, commission member AND partner at RE law firm), Tamara Small (NAIOP CEO who lobbied for enforcement). The policy-makers ARE the beneficiaries.</div></div>
+<div class="step"><div class="sn">177 Towns Pay → Developers Profit</div><div class="st">Step 7: The Question</div><div style="color:var(--muted);line-height:1.7;font-size:.93rem">A law signed by one governor, enforced by the next. Shaped by three housing secretaries who all left for industry. Enforced by an AG funded by the development industry. Implemented by commissions stacked with developers. Compliance funded by a foundation whose leaders donate to the enforcers. 177 towns pay. Developers profit. Is this housing policy — or something else?</div></div>
+</div>
+</div>
+
+<p class="source">Sources: Massachusetts OCPF contribution filings (approximately 107,900 records analysed);
+Secretary of the Commonwealth Lobbyist Public Search; IRS Form 990 filings via ProPublica Nonprofit Explorer;
+Massachusetts corporate registrations; and reporting by the Boston Globe, Boston Herald, WBUR, Banker &amp; Tradesman
+and CommonWealth Beacon as cited within each finding. Aggregations current as of February 2026.</p>
+</div>
+<div class="tab" id="questions">
+
+<p class="section-desc">The questions the available record raises and does not answer. These are framed as questions
+because that is what they are &mdash; each one is answerable with data that exists but has not been published, or with
+disclosure that is not currently required.</p>
+
+<div class="card full">
+<h3>The short version</h3>
+<div class="table-wrap"><table>
+<thead><tr><th style="width:38%">Question</th><th>What the record shows</th></tr></thead>
+<tbody>
+<tr><td><strong>What does the law require?</strong></td><td>Zoning changes — not construction.</td></tr>
+<tr><td><strong>Does rezoning create housing?</strong></td><td>No. Capital, labor, and market demand create housing.</td></tr>
+<tr><td><strong>Will the rezoned units be affordable?</strong></td><td>No affordability mandate exists in § 3A.</td></tr>
+<tr><td><strong>What does new multifamily cost to build?</strong></td><td>$350+ psf. A 900sf unit = $315K+ construction cost alone.</td></tr>
+<tr><td><strong>Is the market building?</strong></td><td>Permits down 44%. Interest rates 6%+. Market is frozen.</td></tr>
+<tr><td><strong>Who pays for compliance?</strong></td><td>Towns. $4.49B in designer fees. State appropriated $15M (0.3%).</td></tr>
+<tr><td><strong>What happens if towns don't comply?</strong></td><td>They lose state infrastructure funding they already need.</td></tr>
+<tr><td><strong>So what does the law actually accomplish?</strong></td><td>It transfers zoning control from towns to the state — and shifts liability for future development costs to municipalities.</td></tr>
+</tbody></table></div>
+</div>
+
+<div class="card full">
+<h3>Open questions</h3>
+<div class="qa"><div class="q">Why is Boston exempt?</div><div class="a">The city with the most acute housing pressure, the most MBTA service, and the highest rents is carved out of the Zoning Act entirely. If this is about transit-oriented housing, why exclude the transit hub?</div></div>
+<div class="qa"><div class="q">If this is about transit, why are 93 'adjacent' towns with NO transit stations included?</div><div class="a">53% of mandated communities have no MBTA station. They're included because they border a town that does. The 'transit-oriented' framing doesn't hold when the majority of affected towns have no transit to orient to.</div></div>
+<div class="qa"><div class="q">Who owns the land in the rezoned parcels — and did they know before the zoning maps were drawn?</div><div class="a">Rezoning creates instant land value appreciation. If anyone with advance knowledge of district boundaries acquired parcels beforehand, that's worth investigating. Public records exist.</div></div>
+<div class="qa"><div class="q">What's the relationship between housing advocacy orgs and the development industry?</div><div class="a">CHAPA's board includes Trinity Financial's Kenan Bigby, Beacon Communities' Dara Kovel, and Capstone's Jason Korb — developers who directly benefit from as-of-right zoning. AHMA's Kanson-Benanav came from B'nai B'rith Housing (a developer) and was placed on Healey's Transition Committee. The Barr Foundation funds $1.5M+ into MBTA Communities compliance advocacy. The advocates ARE the industry.</div></div>
+<div class="qa"><div class="q">Why does the law contain zero affordability requirements?</div><div class="a">The law is sold as helping 'teachers, nurses, firefighters.' But nothing in § 3A requires a single affordable unit. What gets built is market-rate: $2,500-4,000/month. The people in the talking points can't afford what this law produces.</div></div>
+<div class="qa"><div class="q">What happens to property taxes and school budgets when multifamily goes in?</div><div class="a">Multifamily typically generates less property tax per student than single-family. Towns bear the service costs (schools, fire, police, water) for new residents. The state shifted the zoning obligation — but not the fiscal burden.</div></div>
+<div class="qa"><div class="q">Who produced the Cost Impact Report?</div><div class="a">Anne Brensley, running for lieutenant governor in 2026. Her report used the state's own DCAMM fee schedule against its own mandate and found a $4.48B gap the state never calculated.</div></div>
+<div class="qa"><div class="q">What's the endgame if 3A doesn't produce units?</div><div class="a">Boston Indicators' report already calls for the state to 'bypass local zoning to directly allow different types of housing.' 3A isn't the end — it's the precedent. The next step is eliminating local zoning review entirely.</div></div>
+<div class="qa"><div class="q">Why does the Governor's housing advocacy nonprofit refuse to name its donors?</div><div class="a">One Commonwealth, Healey's 501(c)(4), has spent $250K+ on ads and run pro-compliance messaging in towns — but won't disclose who funds it. Its president Lynda Tocci works at Dewey Square Group, co-founded by a different Charlie Baker (Democratic operative, not the former governor). DraftKings is the only known donor, disclosed only because gaming regulators required it. If the policy is good, why hide who's paying for it?</div></div>
+<div class="qa"><div class="q">Why do developers who benefit from 3A sit on the boards that shape 3A policy?</div><div class="a">Trinity Financial's Bigby sits on CHAPA's board AND Healey's Housing Advisory Council. NAIOP's CEO sits on Healey's Unlocking Housing Production Commission. Beacon Communities' Kovel sits on CHAPA's board while receiving state housing grants. The people advising the Governor on housing policy are the same people who profit from the advice.</div></div>
+<div class="qa"><div class="q">How do developers bypass campaign finance limits via lawmaker nonprofits?</div><div class="a">Boston Globe (April 2025): MA lobbyists are capped at $200 in campaign donations — but can give unlimited, undisclosed amounts to nonprofits run by legislators. HYM gave $10K to Rep. Madaro's nonprofit while building 10,000 units in his district. Federal law prohibits this. Massachusetts does not.</div></div>
+</div>
+
+<div class="card full">
+<h3>Where this page could be wrong</h3>
+<div class="insight"><strong>Stated plainly, because a page that only argues one way is not worth reading.</strong>
+The tracked pipeline is five years into a law whose compliance deadlines mostly fell in 2024 and 2025, so a low
+build-out figure today is consistent both with &ldquo;zoning is not the constraint&rdquo; and with &ldquo;it is too
+early to tell.&rdquo; The cost estimate is a third-party calculation whose own arithmetic does not reconcile, shown
+here with that gap visible. And the campaign-finance section establishes association, not causation: Massachusetts
+development and construction firms donate heavily to statewide Democrats generally, which is an alternative
+explanation the donation totals alone cannot rule out.</div>
+</div>
+
+<p class="source">Sources as cited in each section above. The full source catalogue and analytical method are in the
+project's methodology document, linked below.</p>
+</div>
+</div>
+
+<div class="footer">
+<p><strong>Massachusetts Data Hub</strong> &mdash; MBTA Communities Act &sect; 3A</p>
+<p>Mandate, capacity, compliance and development figures are fetched from the Executive Office of Housing and Livable
+Communities and refresh automatically. The &ldquo;Follow the Money&rdquo; section is a fixed investigation current as of
+February 2026 and is marked as such.</p>
+<p class="msrc">
+<a href="https://www.mass.gov/info-details/multi-family-zoning-requirement-for-mbta-communities" target="_blank" rel="noopener">EOHLC &mdash; MBTA Communities</a> &middot;
+<a href="https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter40A/Section3A" target="_blank" rel="noopener">MGL c. 40A &sect; 3A</a> &middot;
+<a href="https://www.ocpf.us/" target="_blank" rel="noopener">OCPF</a> &middot;
+<a href="https://projects.propublica.org/nonprofits/" target="_blank" rel="noopener">ProPublica Nonprofit Explorer</a> &middot;
+<a href="https://github.com/duncanburns2013-dot/MBTA-Communities-Act/blob/main/DATA_METHODOLOGY.md" target="_blank" rel="noopener">Full methodology</a>
+</p>
+<p><a href="index.html">&larr; All dashboards</a> &middot; <a href="method.html">How this site works</a></p>
+</div>
+<script>
+// The town table is the one thing on this page that has to stay interactive, so
+// it renders from the array update-mbta-3a.py writes rather than from markup.
+// Everything the table shows -- capacity, compliance, tracked units -- comes
+// from EOHLC in one join, so a row can never pair one year's capacity with
+// another year's compliance determination.
+var TOWNS=/*@towns*/[{"n":"Abington","c":"Commuter Rail","h":6811,"r":1022,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Acton","c":"Commuter Rail","h":9219,"r":1383,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Amesbury","c":"Adjacent community","h":7889,"r":789,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":2,"units":507,"net":504,"deed":63},{"n":"Andover","c":"Commuter Rail","h":13541,"r":2031,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":2,"units":441,"net":439,"deed":65},{"n":"Arlington","c":"Adjacent community","h":20461,"r":2046,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":7,"units":99,"net":82,"deed":48},{"n":"Ashburnham","c":"Adjacent small town","h":2730,"r":137,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Ashby","c":"Adjacent small town","h":1243,"r":62,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Ashland","c":"Commuter Rail","h":7495,"r":1124,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Attleboro","c":"Commuter Rail","h":19097,"r":2865,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Auburn","c":"Adjacent community","h":6999,"r":750,"pct":11,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Ayer","c":"Commuter Rail","h":3807,"r":750,"pct":20,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Bedford","c":"Adjacent community","h":5444,"r":750,"pct":14,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":5,"units":75,"net":67,"deed":0},{"n":"Bellingham","c":"Adjacent community","h":6749,"r":750,"pct":11,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Belmont","c":"Commuter Rail","h":10882,"r":1632,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":2,"units":184,"net":104,"deed":147},{"n":"Berkley","c":"Adjacent small town","h":2360,"r":118,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Beverly","c":"Commuter Rail","h":17887,"r":2683,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":1,"units":37,"net":35,"deed":5},{"n":"Billerica","c":"Commuter Rail","h":15485,"r":2323,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":1,"units":255,"net":255,"deed":26},{"n":"Bourne","c":"Adjacent small town","h":11140,"r":557,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Boxborough","c":"Adjacent small town","h":2362,"r":118,"pct":5,"status":"Interim Compliance","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Boxford","c":"Adjacent small town","h":2818,"r":141,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Braintree","c":"Rapid Transit","h":15077,"r":3769,"pct":25,"status":"Compliant","adopted":"Yes","deadline":"12/31/2023","projects":1,"units":752,"net":752,"deed":75},{"n":"Bridgewater","c":"Commuter Rail","h":9342,"r":1401,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Brockton","c":"Commuter Rail","h":37304,"r":5596,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Brookline","c":"Rapid Transit","h":27961,"r":6990,"pct":25,"status":"Compliant","adopted":"Yes","deadline":"12/31/2023","projects":2,"units":181,"net":81,"deed":181},{"n":"Burlington","c":"Adjacent community","h":10431,"r":1043,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Cambridge","c":"Rapid Transit","h":53907,"r":13477,"pct":25,"status":"Compliant","adopted":"Yes","deadline":"12/31/2023","projects":2,"units":124,"net":120,"deed":100},{"n":"Canton","c":"Commuter Rail","h":9930,"r":1490,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":1,"units":50,"net":50,"deed":5},{"n":"Carlisle","c":"Adjacent small town","h":1897,"r":95,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Carver","c":"Adjacent small town","h":4701,"r":235,"pct":5,"status":"Noncompliant","adopted":"No","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Chelmsford","c":"Adjacent community","h":14769,"r":1477,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":1,"units":50,"net":50,"deed":0},{"n":"Chelsea","c":"Rapid Transit","h":14554,"r":3639,"pct":25,"status":"Compliant","adopted":"Yes","deadline":"12/31/2023","projects":0,"units":0,"net":0,"deed":0},{"n":"Cohasset","c":"Commuter Rail","h":3341,"r":638,"pct":19,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":1,"units":48,"net":48,"deed":5},{"n":"Concord","c":"Commuter Rail","h":7295,"r":1094,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Danvers","c":"Adjacent community","h":11763,"r":1176,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":3,"units":76,"net":76,"deed":14},{"n":"Dedham","c":"Commuter Rail","h":10459,"r":1569,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":1,"units":380,"net":380,"deed":38},{"n":"Dover","c":"Adjacent small town","h":2046,"r":102,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Dracut","c":"Adjacent community","h":12325,"r":1233,"pct":10,"status":"Noncompliant","adopted":"No","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Duxbury","c":"Adjacent community","h":6274,"r":750,"pct":12,"status":"Compliant","adopted":"Yes","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"East Bridgewater","c":"Adjacent community","h":5211,"r":750,"pct":14,"status":"Noncompliant","adopted":"No","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Easton","c":"Adjacent community","h":9132,"r":913,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":1,"units":61,"net":56,"deed":5},{"n":"Essex","c":"Adjacent small town","h":1662,"r":83,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Everett","c":"Rapid Transit","h":18208,"r":4552,"pct":25,"status":"Conditional Compliance","adopted":"Yes","deadline":"12/31/2023","projects":2,"units":407,"net":407,"deed":42},{"n":"Fall River","c":"Commuter Rail","h":44346,"r":6652,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Fitchburg","c":"Commuter Rail","h":17452,"r":2618,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Foxborough","c":"Commuter Rail","h":7682,"r":1152,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Framingham","c":"Commuter Rail","h":29033,"r":4355,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":1,"units":48,"net":48,"deed":6},{"n":"Franklin","c":"Commuter Rail","h":12551,"r":1883,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":1,"units":57,"net":57,"deed":6},{"n":"Freetown","c":"Commuter Rail","h":3485,"r":750,"pct":22,"status":"Compliant","adopted":"Yes","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Georgetown","c":"Adjacent community","h":3159,"r":750,"pct":24,"status":"Compliant","adopted":"Yes","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Gloucester","c":"Commuter Rail","h":15133,"r":2270,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Grafton","c":"Adjacent community","h":7760,"r":776,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":1,"units":233,"net":233,"deed":47},{"n":"Groton","c":"Adjacent small town","h":4153,"r":208,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Groveland","c":"Adjacent small town","h":2596,"r":130,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Halifax","c":"Commuter Rail","h":3107,"r":750,"pct":24,"status":"Noncompliant","adopted":"No","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Hamilton","c":"Commuter Rail","h":2925,"r":731,"pct":25,"status":"Compliant","adopted":"Yes","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Hanover","c":"Adjacent community","h":5268,"r":750,"pct":14,"status":"Compliant","adopted":"Yes","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Hanson","c":"Commuter Rail","h":3960,"r":750,"pct":19,"status":"Compliant","adopted":"Yes","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Harvard","c":"Adjacent small town","h":2251,"r":113,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Haverhill","c":"Commuter Rail","h":27927,"r":4189,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Hingham","c":"Commuter Rail","h":9930,"r":1490,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Holbrook","c":"Commuter Rail","h":4414,"r":662,"pct":15,"status":"Interim Compliance","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Holden","c":"Adjacent community","h":7439,"r":750,"pct":10,"status":"Noncompliant","adopted":"No","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Holliston","c":"Adjacent community","h":5562,"r":750,"pct":13,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Hopkinton","c":"Adjacent community","h":6645,"r":750,"pct":11,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Hull","c":"Adjacent community","h":5856,"r":586,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Ipswich","c":"Commuter Rail","h":6476,"r":971,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Kingston","c":"Commuter Rail","h":5364,"r":805,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Lakeville","c":"Adjacent small town","h":4624,"r":231,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Lancaster","c":"Adjacent small town","h":2788,"r":139,"pct":5,"status":"Conditional Compliance","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Lawrence","c":"Commuter Rail","h":30008,"r":4501,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Leicester","c":"Adjacent small town","h":4371,"r":219,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Leominster","c":"Commuter Rail","h":18732,"r":2810,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Lexington","c":"Adjacent community","h":12310,"r":1231,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":15,"units":1577,"net":1564,"deed":229},{"n":"Lincoln","c":"Commuter Rail","h":2771,"r":635,"pct":23,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Littleton","c":"Commuter Rail","h":3889,"r":750,"pct":19,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Lowell","c":"Commuter Rail","h":43482,"r":6522,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":8,"units":290,"net":290,"deed":151},{"n":"Lunenburg","c":"Adjacent small town","h":4805,"r":240,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Lynn","c":"Commuter Rail","h":36782,"r":5517,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Lynnfield","c":"Adjacent community","h":4773,"r":607,"pct":13,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Malden","c":"Rapid Transit","h":27721,"r":6930,"pct":25,"status":"Compliant","adopted":"Yes","deadline":"12/31/2023","projects":0,"units":0,"net":0,"deed":0},{"n":"Manchester","c":"Commuter Rail","h":2433,"r":559,"pct":23,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Mansfield","c":"Commuter Rail","h":9282,"r":1392,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Marblehead","c":"Adjacent community","h":8965,"r":897,"pct":10,"status":"Interim Compliance","adopted":"Yes","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Marlborough","c":"Adjacent community","h":17547,"r":1755,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Marshfield","c":"Adjacent community","h":11575,"r":1158,"pct":10,"status":"Interim Compliance","adopted":"Yes","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Maynard","c":"Adjacent community","h":4741,"r":474,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Medfield","c":"Adjacent community","h":4450,"r":750,"pct":17,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Medford","c":"Rapid Transit","h":25770,"r":6443,"pct":25,"status":"Compliant","adopted":"Yes","deadline":"12/31/2023","projects":1,"units":248,"net":248,"deed":62},{"n":"Medway","c":"Adjacent community","h":4826,"r":750,"pct":16,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":1,"units":24,"net":23,"deed":3},{"n":"Melrose","c":"Commuter Rail","h":12614,"r":1892,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":3,"units":77,"net":75,"deed":12},{"n":"Merrimac","c":"Adjacent small town","h":2761,"r":138,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Methuen","c":"Adjacent community","h":20194,"r":2019,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Middleborough","c":"Commuter Rail","h":9808,"r":1471,"pct":15,"status":"Interim Compliance","adopted":"Yes","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Middleton","c":"Adjacent community","h":3359,"r":750,"pct":22,"status":"Noncompliant","adopted":"No","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Millbury","c":"Adjacent community","h":5987,"r":750,"pct":13,"status":"Compliant","adopted":"Yes","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Millis","c":"Adjacent community","h":3412,"r":750,"pct":22,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Milton","c":"Rapid Transit","h":9844,"r":2461,"pct":25,"status":"Compliant","adopted":"Yes","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Nahant","c":"Adjacent small town","h":1680,"r":84,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Natick","c":"Commuter Rail","h":15680,"r":2352,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Needham","c":"Commuter Rail","h":11891,"r":1784,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":2,"units":203,"net":201,"deed":26},{"n":"New Bedford","c":"Commuter Rail","h":44588,"r":6688,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Newbury","c":"Adjacent small town","h":3072,"r":154,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":1,"units":44,"net":43,"deed":4},{"n":"Newburyport","c":"Commuter Rail","h":8615,"r":1292,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Newton","c":"Rapid Transit","h":33320,"r":8330,"pct":25,"status":"Compliant","adopted":"Yes","deadline":"12/31/2023","projects":15,"units":160,"net":136,"deed":63},{"n":"Norfolk","c":"Commuter Rail","h":3601,"r":750,"pct":21,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":1,"units":11,"net":9,"deed":1},{"n":"North Andover","c":"Adjacent community","h":11914,"r":1191,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"North Attleborough","c":"Adjacent community","h":12551,"r":1255,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"North Reading","c":"Adjacent community","h":5875,"r":750,"pct":13,"status":"Compliant","adopted":"Yes","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Northborough","c":"Adjacent community","h":5897,"r":750,"pct":13,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Northbridge","c":"Adjacent community","h":6691,"r":750,"pct":11,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Norton","c":"Adjacent community","h":6971,"r":750,"pct":11,"status":"Compliant","adopted":"Yes","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Norwell","c":"Adjacent community","h":3805,"r":750,"pct":20,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Norwood","c":"Commuter Rail","h":13634,"r":2045,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":2,"units":277,"net":277,"deed":55},{"n":"Paxton","c":"Adjacent small town","h":1689,"r":84,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Peabody","c":"Adjacent community","h":23191,"r":2319,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Pembroke","c":"Adjacent community","h":7007,"r":750,"pct":11,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":1,"units":356,"net":356,"deed":36},{"n":"Plymouth","c":"Adjacent community","h":28074,"r":2807,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Plympton","c":"Adjacent small town","h":1068,"r":53,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Princeton","c":"Adjacent small town","h":1383,"r":69,"pct":5,"status":"Interim Compliance","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Quincy","c":"Rapid Transit","h":47009,"r":11752,"pct":25,"status":"Compliant","adopted":"Yes","deadline":"12/31/2023","projects":3,"units":551,"net":545,"deed":76},{"n":"Randolph","c":"Commuter Rail","h":12901,"r":1935,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Raynham","c":"Adjacent community","h":5749,"r":750,"pct":13,"status":"Compliant","adopted":"Yes","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Reading","c":"Commuter Rail","h":9952,"r":1493,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Rehoboth","c":"Adjacent small town","h":4611,"r":231,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Revere","c":"Rapid Transit","h":24539,"r":6135,"pct":25,"status":"Compliant","adopted":"Yes","deadline":"12/31/2023","projects":1,"units":12,"net":11,"deed":0},{"n":"Rochester","c":"Adjacent small town","h":2105,"r":105,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Rockland","c":"Adjacent community","h":7263,"r":726,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Rockport","c":"Commuter Rail","h":4380,"r":657,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Rowley","c":"Commuter Rail","h":2405,"r":601,"pct":25,"status":"Compliant","adopted":"Yes","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Salem","c":"Commuter Rail","h":20349,"r":3052,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Salisbury","c":"Adjacent community","h":5305,"r":750,"pct":14,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Saugus","c":"Adjacent community","h":11303,"r":1130,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Scituate","c":"Commuter Rail","h":8260,"r":1239,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Seekonk","c":"Adjacent community","h":6057,"r":750,"pct":12,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Sharon","c":"Commuter Rail","h":6581,"r":987,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Sherborn","c":"Adjacent small town","h":1562,"r":78,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Shirley","c":"Commuter Rail","h":2599,"r":650,"pct":25,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Shrewsbury","c":"Adjacent community","h":14966,"r":1497,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":1,"units":150,"net":150,"deed":23},{"n":"Somerville","c":"Rapid Transit","h":36269,"r":9067,"pct":25,"status":"Compliant","adopted":"Yes","deadline":"12/31/2023","projects":1,"units":69,"net":47,"deed":0},{"n":"Southborough","c":"Commuter Rail","h":3763,"r":750,"pct":20,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":1,"units":60,"net":60,"deed":6},{"n":"Sterling","c":"Adjacent small town","h":3117,"r":156,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Stoneham","c":"Adjacent community","h":10159,"r":1016,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Stoughton","c":"Commuter Rail","h":11739,"r":1761,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":1,"units":18,"net":18,"deed":2},{"n":"Stow","c":"Adjacent small town","h":2770,"r":139,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Sudbury","c":"Adjacent community","h":6556,"r":750,"pct":11,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Sutton","c":"Adjacent small town","h":3612,"r":181,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Swampscott","c":"Commuter Rail","h":6362,"r":954,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Taunton","c":"Commuter Rail","h":24965,"r":3745,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":1,"units":275,"net":275,"deed":0},{"n":"Tewksbury","c":"Adjacent community","h":12139,"r":1214,"pct":10,"status":"Noncompliant","adopted":"No","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Topsfield","c":"Adjacent small town","h":2358,"r":118,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Townsend","c":"Adjacent small town","h":3566,"r":178,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Tyngsborough","c":"Adjacent community","h":4669,"r":750,"pct":16,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Upton","c":"Adjacent small town","h":2995,"r":150,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Wakefield","c":"Commuter Rail","h":11305,"r":1696,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Walpole","c":"Commuter Rail","h":10042,"r":1506,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":1,"units":67,"net":67,"deed":7},{"n":"Waltham","c":"Commuter Rail","h":26545,"r":3982,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Wareham","c":"Adjacent community","h":12967,"r":1297,"pct":10,"status":"Interim Compliance","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Watertown","c":"Adjacent community","h":17010,"r":1701,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":2,"units":193,"net":193,"deed":27},{"n":"Wayland","c":"Adjacent community","h":5296,"r":750,"pct":14,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Wellesley","c":"Commuter Rail","h":9282,"r":1392,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":1,"units":28,"net":28,"deed":6},{"n":"Wenham","c":"Commuter Rail","h":1460,"r":365,"pct":25,"status":"Interim Compliance","adopted":"Yes","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"West Boylston","c":"Adjacent community","h":3052,"r":587,"pct":19,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"West Bridgewater","c":"Adjacent small town","h":2898,"r":145,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"West Newbury","c":"Adjacent small town","h":1740,"r":87,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Westborough","c":"Commuter Rail","h":8334,"r":1250,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Westford","c":"Adjacent community","h":9237,"r":924,"pct":10,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":2,"units":830,"net":830,"deed":83},{"n":"Westminster","c":"Adjacent small town","h":3301,"r":165,"pct":5,"status":"Compliant","adopted":"Yes","deadline":"12/31/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Weston","c":"Commuter Rail","h":4043,"r":750,"pct":19,"status":"Compliant","adopted":"Yes","deadline":"7/14/2025","projects":1,"units":480,"net":480,"deed":72},{"n":"Westwood","c":"Commuter Rail","h":5801,"r":870,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Weymouth","c":"Commuter Rail","h":25419,"r":3813,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Whitman","c":"Commuter Rail","h":5984,"r":898,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Wilmington","c":"Commuter Rail","h":8320,"r":1248,"pct":15,"status":"Noncompliant","adopted":"No","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Winchester","c":"Commuter Rail","h":8135,"r":1220,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Winthrop","c":"Adjacent community","h":8821,"r":882,"pct":10,"status":"Noncompliant","adopted":"No","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0},{"n":"Woburn","c":"Commuter Rail","h":17540,"r":2631,"pct":15,"status":"Interim Compliance","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Worcester","c":"Commuter Rail","h":84281,"r":12642,"pct":15,"status":"Compliant","adopted":"Yes","deadline":"12/31/2024","projects":0,"units":0,"net":0,"deed":0},{"n":"Wrentham","c":"Adjacent community","h":4620,"r":750,"pct":16,"status":"Compliant","adopted":"Yes","deadline":"7/14/2025","projects":0,"units":0,"net":0,"deed":0}]/*@*/;
+var CSS=getComputedStyle(document.documentElement);
+var V=function(n){return CSS.getPropertyValue(n).trim()};
+var BLUE=V('--blue'),RED=V('--red'),GREEN=V('--green'),AMBER=V('--amber'),
+    PURPLE=V('--purple'),MUTED=V('--muted'),GRID='rgba(0,0,0,0.07)';
+Chart.defaults.font.family="'DM Sans',system-ui,sans-serif";
+Chart.defaults.color=MUTED;
+
+var made={};
+function showTab(id,btn){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+  document.querySelectorAll('nav button').forEach(function(b){b.classList.remove('active')});
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  draw(id);
+}
+
+function pill(s){
+  var k=/^Compliant/i.test(s)?'ok':/Interim/i.test(s)?'interim':/Conditional/i.test(s)?'cond':'no';
+  return '<span class="pill '+k+'">'+s+'</span>';
+}
+var sortKey='r', sortDir=-1;
+function render(){
+  var q=(document.getElementById('tq').value||'').toLowerCase().trim();
+  var c=document.getElementById('tcat').value, s=document.getElementById('tstat').value;
+  var rows=TOWNS.filter(function(t){
+    return (!q||t.n.toLowerCase().indexOf(q)>-1)&&(!c||t.c===c)&&(!s||t.status===s);
+  });
+  rows.sort(function(a,b){
+    var x=a[sortKey],y=b[sortKey];
+    if(typeof x==='string')return sortDir*x.localeCompare(y);
+    return sortDir*(x-y);
+  });
+  document.querySelector('#ttab tbody').innerHTML=rows.map(function(t){
+    return '<tr><td><strong>'+t.n+'</strong></td><td>'+t.c+'</td>'
+      +'<td class="num">'+t.h.toLocaleString()+'</td>'
+      +'<td class="num">'+t.r.toLocaleString()+'</td>'
+      +'<td class="num">'+t.pct+'%</td>'
+      +'<td>'+pill(t.status)+'</td>'
+      +'<td class="num">'+(t.units?t.units.toLocaleString():'&mdash;')+'</td></tr>';
+  }).join('');
+  document.getElementById('tcount').textContent=
+    rows.length===TOWNS.length?TOWNS.length+' communities'
+      :rows.length+' of '+TOWNS.length+' communities';
+}
+function initTable(){
+  if(!TOWNS.length)return;
+  var cats=[],stats=[];
+  TOWNS.forEach(function(t){
+    if(cats.indexOf(t.c)<0)cats.push(t.c);
+    if(stats.indexOf(t.status)<0)stats.push(t.status);
+  });
+  cats.sort();stats.sort();
+  var cs=document.getElementById('tcat'),ss=document.getElementById('tstat');
+  cats.forEach(function(x){cs.insertAdjacentHTML('beforeend','<option>'+x+'</option>')});
+  stats.forEach(function(x){ss.insertAdjacentHTML('beforeend','<option>'+x+'</option>')});
+  document.getElementById('tq').addEventListener('input',render);
+  cs.addEventListener('change',render);ss.addEventListener('change',render);
+  document.querySelectorAll('#ttab th[data-sort]').forEach(function(th){
+    th.addEventListener('click',function(){
+      var k=th.getAttribute('data-sort');
+      sortDir=(k===sortKey)?-sortDir:(typeof TOWNS[0][k]==='string'?1:-1);
+      sortKey=k;
+      document.querySelectorAll('#ttab th[data-sort]').forEach(function(o){o.classList.remove('up','down')});
+      th.classList.add(sortDir>0?'up':'down');
+      render();
+    });
+  });
+  render();
+}
+
+function bar(id,labels,data,colour,horiz,unit){
+  return new Chart(document.getElementById(id),{type:'bar',data:{labels:labels,
+    datasets:[{data:data,backgroundColor:colour,borderRadius:3,maxBarThickness:26}]},
+    options:{indexAxis:horiz?'y':'x',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){
+        return c.raw.toLocaleString()+(unit||'')}}}},
+      scales:{x:{grid:{color:GRID},ticks:{callback:function(v){
+                 return horiz?Number(v).toLocaleString():this.getLabelForValue(v)}}},
+              y:{grid:{display:!horiz,color:GRID},ticks:{font:{size:11},callback:function(v){
+                 return horiz?this.getLabelForValue(v):Number(v).toLocaleString()}}}}}});
+}
+
+function draw(id){
+  if(made[id]||!TOWNS.length)return; made[id]=1;
+  if(id==='mandate'){
+    var cat={},st={};
+    TOWNS.forEach(function(t){cat[t.c]=(cat[t.c]||0)+1;st[t.status]=(st[t.status]||0)+1});
+    var ck=Object.keys(cat).sort(function(a,b){return cat[b]-cat[a]});
+    new Chart(document.getElementById('cCat'),{type:'doughnut',
+      data:{labels:ck,datasets:[{data:ck.map(function(k){return cat[k]}),
+        backgroundColor:[BLUE,PURPLE,GREEN,AMBER],borderColor:'#fff',borderWidth:2}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'58%',
+        plugins:{legend:{position:'bottom',labels:{boxWidth:11,padding:12,font:{size:11}}}}}});
+    var sk=['Compliant','Interim Compliance','Conditional Compliance','Noncompliant']
+             .filter(function(k){return st[k]});
+    Object.keys(st).forEach(function(k){if(sk.indexOf(k)<0)sk.push(k)});
+    new Chart(document.getElementById('cStatus'),{type:'doughnut',
+      data:{labels:sk,datasets:[{data:sk.map(function(k){return st[k]}),
+        backgroundColor:[GREEN,AMBER,BLUE,RED],borderColor:'#fff',borderWidth:2}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'58%',
+        plugins:{legend:{position:'bottom',labels:{boxWidth:11,padding:12,font:{size:11}}}}}});
+    var top=TOWNS.slice().sort(function(a,b){return b.r-a.r}).slice(0,20);
+    bar('cTop',top.map(function(t){return t.n}),top.map(function(t){return t.r}),BLUE,true,' units');
+    // Excess over the category's nominal share, not the raw share: the raw
+    // share puts 25 bars at an identical 25% because the regulation caps it
+    // there, which reads as a rendering fault rather than as a finding.
+    var BASE={'Rapid Transit':25,'Commuter Rail':15,
+              'Adjacent community':10,'Adjacent small town':5};
+    var CATC={'Rapid Transit':BLUE,'Commuter Rail':PURPLE,
+              'Adjacent community':AMBER,'Adjacent small town':GREEN};
+    var bur=TOWNS.map(function(t){
+        return {n:t.n,c:t.c,pct:t.pct,base:BASE[t.c]||0,
+                ex:t.pct-(BASE[t.c]||0),r:t.r};
+      }).filter(function(t){return t.ex>0})
+      .sort(function(a,b){return b.ex-a.ex||b.pct-a.pct}).slice(0,22);
+    new Chart(document.getElementById('cBurden'),{type:'bar',
+      data:{labels:bur.map(function(t){return t.n}),
+        datasets:[{data:bur.map(function(t){return t.ex}),
+          backgroundColor:bur.map(function(t){return CATC[t.c]||PURPLE}),
+          borderRadius:3,maxBarThickness:22}]},
+      options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{
+          title:function(c){return bur[c[0].dataIndex].n},
+          label:function(c){var t=bur[c.dataIndex];
+            return [t.c+' \u2014 nominal '+t.base+'%',
+                    'Required '+t.pct+'% of stock (+'+t.ex+' pts)',
+                    t.r.toLocaleString()+' units of capacity'];}}}},
+        scales:{x:{grid:{color:GRID},title:{display:true,
+                   text:'Percentage points above the category share'},
+                   ticks:{callback:function(v){return '+'+v}}},
+                y:{grid:{display:false},ticks:{font:{size:11}}}}}});
+  }
+  if(id==='built'){
+    var units=TOWNS.reduce(function(a,t){return a+t.units},0);
+    var req=TOWNS.reduce(function(a,t){return a+t.r},0);
+    new Chart(document.getElementById('cPipe'),{type:'doughnut',
+      data:{labels:['Units in the 3A tracker','Required capacity not yet in the pipeline'],
+        datasets:[{data:[units,Math.max(req-units,0)],
+          backgroundColor:[GREEN,'rgba(0,0,0,0.10)'],borderColor:'#fff',borderWidth:2}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
+        plugins:{legend:{position:'bottom',labels:{boxWidth:11,padding:12,font:{size:11}}},
+          tooltip:{callbacks:{label:function(c){
+            return c.label+': '+c.raw.toLocaleString()+' units'}}}}}});
+    var w=TOWNS.filter(function(t){return t.units>0})
+               .sort(function(a,b){return b.units-a.units}).slice(0,15);
+    bar('cWhere',w.map(function(t){return t.n}),w.map(function(t){return t.units}),GREEN,true,' units');
+  }
+}
+
+initTable();
+draw('mandate');
+</script>
+</body>
+</html>

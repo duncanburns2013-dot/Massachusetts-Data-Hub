@@ -43,7 +43,12 @@ SECTION = {
 # every dashboard is documented now; anything added here that has no section in
 # MASTER_DATA.md belongs in this tuple until it does, because linking "how this
 # is sourced" to a page that does not source it is worse than not linking
-UNDOCUMENTED = ()
+UNDOCUMENTED = (
+    # Sourced on the page itself (EOHLC for the mandate and compliance
+    # figures, OCPF/990s for the money section) but MASTER_DATA.md has no
+    # zoning section yet. Move it into SECTION once that exists.
+    'mbta-3a-dashboard.html',
+)
 
 F0, F1 = '<!-- == method-link start == -->', '<!-- == method-link end == -->'
 
