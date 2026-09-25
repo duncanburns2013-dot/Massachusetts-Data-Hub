@@ -383,6 +383,97 @@ The MA vintage. Lands ~3 weeks after the national release, which is why the MA b
 
 ---
 
+## 🏗️ Zoning — MBTA Communities Act § 3A
+
+**Feed status:** live. `update-mbta-3a.py` reads three EOHLC tables weekly and
+rewrites `mbta-3a-dashboard.html` plus `data/mbta-3a-latest.json`. Do not hand-edit
+the figures below or on the page — change the source or the updater.
+
+### What the law requires
+
+| Field | Value | Source | Verified |
+|-------|-------|--------|----------|
+| Communities subject to § 3A | 177 | EOHLC (MGL c. 161A definition) | ✅ Sep 2026 |
+| 2020 housing units across them | 1,941,671 | EOHLC capacity table | ✅ Sep 2026 |
+| Minimum multi-family unit capacity | 297,190 | EOHLC capacity table | ✅ Sep 2026 |
+| Minimum gross density | 15 units/acre | MGL c. 40A § 3A | ✅ Sep 2026 |
+| Distance from a station | 0.5 miles | MGL c. 40A § 3A | ✅ Sep 2026 |
+| Affordability required | none | MGL c. 40A § 3A | ✅ Sep 2026 |
+| Boston | exempt from the Zoning Act | EOHLC | ✅ Sep 2026 |
+
+Category shares of 2020 stock: rapid transit 25%, commuter rail 15%, adjacent
+community 10%, adjacent small town 5%. Counts: 12 / 72 / 58 / 35.
+
+- **Capacity is not construction.** The required figure is zoned capacity under
+  EOHLC's compliance model. EOHLC states the model gives "reasonable estimates"
+  and does "not provide absolute measures of development potential."
+- **For 44 of 177 communities the percentage is not what binds.** Minimum land
+  area is 50 acres, and at 15 units/acre that is a floor of about 750 units
+  regardless of town size, which lands above the category share in a small town.
+  Georgetown is nominally a 10% community and is required to zone for 24%.
+
+### Compliance and what has been built
+
+| Field | Value | Source | Verified |
+|-------|-------|--------|----------|
+| Compliant | 157 | EOHLC Compliance Status Sheet (8-31-26) | ✅ Sep 2026 |
+| Interim compliance | 9 | same | ✅ Sep 2026 |
+| Noncompliant | 9 | same | ✅ Sep 2026 |
+| Conditional compliance | 2 | same | ✅ Sep 2026 |
+| Developments tracked in 3A districts | 104 | EOHLC 3A Development Tracker (9-11-26) | ✅ Sep 2026 |
+| Total units in those developments | 10,065 | same | ✅ Sep 2026 |
+| Deed-restricted units | 1,822 | same | ✅ Sep 2026 |
+| Communities with any tracked activity | 43 | same | ✅ Sep 2026 |
+
+- **Tracked is not built.** The tracker mixes completed, permitted and proposed
+  developments, and EOHLC says it is compiled from third-party information and
+  may not be comprehensive.
+- Tracked units are 3.4% of required capacity. Deed-restricted units are 18.1%
+  of tracked units — and they come from local inclusionary zoning, 40B and
+  deal-level subsidy, **not** from § 3A, which requires no affordability.
+
+### Sources and transport
+
+- Page: <https://www.mass.gov/info-details/multi-family-zoning-requirement-for-mbta-communities>
+- Three CSVs are linked from that page and the updater **scrapes the links each
+  run**. Two filenames carry the edition date ("as of 8-31-26"), so a hardcoded
+  URL would 404 silently the moment EOHLC published the next edition.
+- mass.gov returns 403 to a bare request. The filter is **header-based**, not the
+  client fingerprinting that defeats cbp.gov — curl with a full browser header
+  set (including the `Sec-Fetch-*` trio) gets 200, verified from a GitHub-hosted
+  runner. If that ever changes the updater exits 75 and the page keeps its edition.
+
+### ⚠️ The $4.49B cost figure — attributed, and it does not reconcile
+
+The Brensley Cost Impact Report (Dec 2025, prepared for the State Auditor) is
+quoted widely at **$4.49B** in designer base fees. The dashboard reproduces it as
+her attributed estimate **with the arithmetic shown**, because the published
+method does not produce it:
+
+```
+273,080 units x 900 sf x $250/sf = $61.44B construction cost
+$61.44B x 5.9% DCAMM designer fee =  $3.63B   <- not $4.49B
+reaching $4.49B from that base needs a rate of about 7.3%
+```
+
+It also uses 273,080 units, which is no longer EOHLC's published total (297,190).
+Neither point makes the estimate worthless; both mean it is an order of magnitude
+from a stated method, not a precise liability. **Do not restate $4.49B without
+the caveat**, and do not recompute it against 297,190 and present the result as
+Brensley's — that would be this site's arithmetic wearing her attribution.
+
+### ⚠️ The campaign-finance section is fixed, not live
+
+"Follow the Money" on that page is a carried-over investigation current as of
+**February 2026** and is labelled as such on the page. It aggregates roughly
+107,900 OCPF contribution records for the four officials who authored,
+implemented or enforce § 3A (Sen. Brendan Crighton, Gov. Maura Healey, AG
+Andrea Campbell, Rep. Kevin Honan), plus Secretary of the Commonwealth lobbyist
+registrations and IRS Form 990 filings via ProPublica. It has **not** been re-run
+against OCPF since. Donation patterns establish association, not agreement.
+
+---
+
 ## 🏥 Healthcare & Insurance
 
 ### 2026 MA Rate Increases (Division of Insurance)

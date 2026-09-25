@@ -38,17 +38,13 @@ SECTION = {
     'pension-dashboard.html':          ('pensions',                             'Pensions'),
     'pay-to-play-dashboard.html':      ('lobbying-political-spending',          'Lobbying &amp; Political Spending'),
     'all-things-boston.html':          ('boston',                               'Boston'),
+    'mbta-3a-dashboard.html':          ('zoning-mbta-communities-act-3a',       'Zoning &amp; &sect; 3A'),
 }
 
 # every dashboard is documented now; anything added here that has no section in
 # MASTER_DATA.md belongs in this tuple until it does, because linking "how this
 # is sourced" to a page that does not source it is worse than not linking
-UNDOCUMENTED = (
-    # Sourced on the page itself (EOHLC for the mandate and compliance
-    # figures, OCPF/990s for the money section) but MASTER_DATA.md has no
-    # zoning section yet. Move it into SECTION once that exists.
-    'mbta-3a-dashboard.html',
-)
+UNDOCUMENTED = ()
 
 F0, F1 = '<!-- == method-link start == -->', '<!-- == method-link end == -->'
 
