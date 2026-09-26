@@ -1,6 +1,6 @@
 # Massachusetts Data Hub — Master Data Reference
 
-> **Last Reviewed:** August 22, 2026
+> **Last Reviewed:** September 26, 2026
 > **Maintainer:** Duncan Burns
 > **Purpose:** Reference for hand-verified data points used across dashboards
 
@@ -232,13 +232,13 @@ Boston $1,351,034. Quote it with its as-of date or not at all.
 ### New Hampshire — Market Data (PrimeMLS)
 
 🔄 Source of truth: `data/nh-figures.json`, refreshed daily by `update-nh-figures.py`.
-Values below are that file as of **2026-08-01**. (Feed is PrimeMLS, not Paragon.)
+Values below are that file as of **2026-09-26**. (Feed is PrimeMLS, not Paragon.)
 
 | Region | Median Price | Avg Sale | Avg DOM | SP/LP |
 |--------|-------------|----------|---------|-------|
-| NH Statewide | $441,616 | $528,884 | 29 days | 100.41% |
+| NH Statewide | $444,695 | $532,584 | 29 days | 100.37% |
 
-- **Active inventory:** 2,922 listings · median list $649,000 · avg list $864,326
+- **Active inventory:** 3,136 listings · median list $599,999 · avg list $848,362
 - Also tracked per-market: Portsmouth, Salem, Derry, Windham
 
 ### Boston — Commercial Real Estate (CMBS)
@@ -268,16 +268,16 @@ Values below are that file as of **2026-08-01**. (Feed is PrimeMLS, not Paragon.
 ### Massachusetts — Current Labor Market
 
 🔄 Source of truth: `data/employment-latest.json`, refreshed monthly from the BLS API.
-Values below are that file as of **2026-07-31** (reference month June 2026).
+Values below are that file as of **2026-09-25** (reference month August 2026).
 
 | Metric | Value | Period | Source |
 |--------|-------|--------|--------|
-| MA unemployment rate | 4.4% | June 2026 | BLS LAUS 🔄 |
-| MA unemployment level | 170,985 | June 2026 | BLS LAUS 🔄 |
-| MA labor force | 3,873,506 | June 2026 | BLS LAUS 🔄 |
-| MA total nonfarm | 3,719,500 | June 2026 | BLS CES 🔄 |
-| US unemployment rate | 4.2% | June 2026 | BLS 🔄 |
-| US job openings | 7.594M | May 2026 | BLS JOLTS 🔄 |
+| MA unemployment rate | 4.3% | August 2026 | BLS LAUS 🔄 |
+| MA unemployment level | 166,328 | August 2026 | BLS LAUS 🔄 |
+| MA labor force | 3,871,860 | August 2026 | BLS LAUS 🔄 |
+| MA total nonfarm | 3,706,000 | August 2026 | BLS CES 🔄 |
+| US unemployment rate | 4.1% | August 2026 | BLS 🔄 |
+| US job openings | 7.271M | July 2026 | BLS JOLTS 🔄 |
 
 > **⚠️ BLS discontinued monthly state-level JOLTS in 2026.** National JOLTS is still monthly;
 > state figures are annual now, first annual release July 2026. Any "MA job openings rate"
@@ -588,9 +588,9 @@ its own `data-checked` stamp, which the freshness watchdog ages.
 | Federal corporate receipts FY2024 | $529,866,802,638 — FY25 is −14.7% | same | same | ✅ Aug 2026 |
 | MA unfunded pension + OPEB (stock) | $55.8B total · $42.1B pension-only · $19,719/household | Commonwealth ACFR FY2024; PERAC | See pension-dashboard.html | ✅ Aug 2026 |
 | MA annual pension appropriation FY2026 | $4.9B — ~8% of the state budget, **already in Layer 1** | Commonwealth budget FY2026 | same | ✅ Aug 2026 |
-| **MA residential electricity, all-in** | **28.82¢/kWh** (May 2026; 29.90¢ May 2025, −3.6%) | EIA Electric Power Monthly Table 5.6.A via API v2 | api.eia.gov/v2/electricity/retail-sales/data/ | ✅ Aug 2026 |
-| **NH residential electricity, all-in** | **27.33¢/kWh** (May 2026; 24.02¢ May 2025, **+13.8%**) | same | same | ✅ Aug 2026 |
-| US / New England residential electricity | 18.44¢ / 28.14¢ (May 2026) | same | same | ✅ Aug 2026 |
+| **MA residential electricity, all-in** | **29.61¢/kWh** (Jun 2026) | EIA Electric Power Monthly Table 5.6.A via API v2 | api.eia.gov/v2/electricity/retail-sales/data/ | ✅ Aug 2026 |
+| **NH residential electricity, all-in** | **27.01¢/kWh** (Jun 2026) | same | same | ✅ Aug 2026 |
+| US / New England residential electricity | 18.34¢ (Jun 2026) / 28.14¢ (May 2026 — no June New England figure published in this repo; do not advance without one) | same | same | ✅ Aug 2026 |
 | **MA electric policy charges** | **3.789¢/kWh** — EE 2.292 + NMRS 0.625 + SMART 0.583 + EV 0.238 + RE 0.050 + ESMP 0.001 | Eversource MA filed tariff, Rate R1, eff. 1 Jul 2026 | eversource.com/…/electric-delivery-rates/egma | ✅ Aug 2026 |
 | **MA gas policy charges** | **59.08¢/therm** — EE 41.70 + GSEP 17.38 | Eversource MA Summary of Gas Rates | eversource.com/docs/default-source/rates-tariffs/summary-rates-gas.pdf | ✅ Aug 2026 |
 | MA gas commodity cost | 38.42¢/therm (eff. 1 May 2026) — **less than the policy riders above** | Eversource MA Cost of Gas | eversource.com/…/ma-cost-of-gas | ✅ Aug 2026 |
@@ -818,13 +818,13 @@ Figures on `energy-dashboard.html`. Refreshed by `update-energy-dashboard.py` an
 
 | Figure | Source | Updated |
 |--------|--------|---------|
-| Residential Electricity Rates — MA vs. Selected States (¢/kWh) | EIA Electric Power Monthly Table 5.6.A, May 2026 | 🔄 May 2026 |
+| Residential Electricity Rates — MA vs. Selected States (¢/kWh) | EIA Electric Power Monthly Table 5.6.A, Jun 2026 | 🔄 Jun 2026 |
 | MA Rate Premium Over National Average — Historical | EIA, annual residential average rates | 🔄 |
 | MA Electricity Bill Breakdown (Typical Residential) | Eversource/National Grid rate schedules; DPU filings | — |
 | MA vs. National Rate Gap Over Time | EIA Electric Power Monthly | 🔄 |
-| Annual Impact Per Household | EIA May 2026, bill text analysis | May 2026 |
+| Annual Impact Per Household | EIA Jun 2026, bill text analysis | Jun 2026 |
 | Where the "Savings" Actually Come From | Bill sections analyzed against verified Eversource rate breakdown | — |
-| State Comparison — Monthly Bill at 600 kWh | EIA May 2026 rates × 600 kWh/month | 🔄 May 2026 |
+| State Comparison — Monthly Bill at 600 kWh | EIA Jun 2026 rates × 600 kWh/month | 🔄 Jun 2026 |
 | The $14.3B Claim — Credibility Breakdown | S.3143 fact sheet (June 24, 2026); @DuncanBurnsMA analysis | June 2026 |
 | Savings Claims by Category — $M Over 10 Years | S.3143 Senate fact sheet | — |
 | Annual Per-Household Reality Check | EIA | 🔄 |

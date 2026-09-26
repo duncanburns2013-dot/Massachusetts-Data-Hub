@@ -42,3 +42,21 @@ jobs:
       - name: Check headline statistics are documented or script-written
         if: always()
         run: python scripts/check-stats-documented.py
+
+      # Third question, and the one neither check above can ask: does what we
+      # PUBLISH agree with what we FETCHED? MASTER_DATA.md marks rows 🔄 meaning
+      # "a workflow owns this number" - none does, it is hand-kept - and
+      # build_method.py turns it into method.html, which no workflow runs either.
+      #
+      # On 2026-09-26 that chain was a full EIA release behind with every job
+      # green and every freshness age inside its limit: method.html said EIA May
+      # 2026 / MA 28.82c while the dashboards said Jun 2026 / 29.61c, NH median
+      # was $441,616 against a feed saying $444,695, MA unemployment 4.4%
+      # against 4.3%. Nothing had broken. The numbers were typed once and never
+      # re-typed, which an age check cannot see: the FILE is fresh, the CLAIM is
+      # stale.
+      #
+      # always(), for the same reason as above.
+      - name: Check MASTER_DATA.md still matches the feeds it mirrors
+        if: always()
+        run: python scripts/check-consistency.py
