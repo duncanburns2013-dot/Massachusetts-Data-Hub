@@ -53,6 +53,14 @@ DATA = [
     # actually publishes -- the updater keeps the old fetched_at on a no-op run
     # precisely so this check keeps measuring the data and not the heartbeat.
     ("data/cbp-encounters-latest.json",  60,  "monthly source; runner polls daily"),
+    # MA lobbying entity filings. Annual registration year, and the Secretary of
+    # the Commonwealth blocks server-side fetches, so there is no workflow that
+    # can own this -- it is refreshed by hand from a browser session via
+    # The-Peoples-Audit/userscripts/sos-lobbyist-detail-scraper.user.js. That is
+    # exactly why it needs ageing here: a source no job can touch is the one most
+    # likely to rot unnoticed. 400 days so a skipped year cannot hide, given
+    # disclosure closes each registration year the following January 15.
+    ("data/ma-lobbying-firms-latest.json", 400, "annual; manual browser scrape, no workflow can fetch it"),
     ("data/census-latest.json",          75,  "monthly job, annual source; worst gap 26d"),
     ("data/irs-soi-migration-latest.json", 75, "monthly job, annual source; worst gap 31d"),
     # Census releases one vintage a year, in December, and restates every earlier

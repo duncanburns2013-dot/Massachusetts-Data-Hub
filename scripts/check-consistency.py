@@ -80,6 +80,20 @@ def checks():
         out.append(('IRS net AGI, latest year',
                     f'{abs(r["net_agi_billions"])}', 'irs-soi-migration-latest.json'))
 
+    # Lobbying: the dashboard is hand-kept, and its source cannot be fetched by
+    # any workflow (the SOS blocks servers), so the JSON is the only record of
+    # what was actually scraped. Check the PAGE against it -- that is the pair
+    # that silently drifted before, when a 2015-2025 cumulative ranking was
+    # published in a card row that read as current.
+    lob = load('ma-lobbying-firms-latest.json')
+    for f in lob['top_firms'][:4]:
+        out.append((f'Lobbying #{f["rank"]} {f["name"][:22]}',
+                    f'${f["received"] / 1e6:.1f}M',
+                    'ma-lobbying-firms-latest.json'))
+    out.append(('MA lobbying fees, 2025 total',
+                f'${lob["totals"]["fees_received"] / 1e6:.1f}M',
+                'ma-lobbying-firms-latest.json'))
+
     # Electricity lives in the dashboard, not a JSON file: update-energy-dashboard.py
     # writes the page directly. Read it back from there so the comparison is against
     # what readers actually see.
@@ -105,24 +119,35 @@ def main():
     print(f'{"figure".ljust(width)}  {"live value":>14}  status   source')
     print('-' * (width + 46))
 
+    # Most rows are MASTER_DATA.md claims. The lobbying rows are claims made by
+    # pay-to-play-dashboard.html itself, so each row is checked against the file
+    # that publishes it.
+    pages = {'ma-lobbying-firms-latest.json':
+             (REPO / 'pay-to-play-dashboard.html').read_text(encoding='utf-8', errors='replace')}
+
     stale = []
     for label, value, src in rows:
-        ok = value in text
+        ok = value in pages.get(src, text)
         if not ok:
             stale.append((label, value, src))
         print(f'{label.ljust(width)}  {value:>14}  '
               f'{"ok" if ok else "STALE":7s}  {src}')
 
     if stale:
-        print(f'\n{len(stale)} figure(s) in MASTER_DATA.md no longer match the feed:\n')
+        print(f'\n{len(stale)} published figure(s) no longer match the feed:\n')
         for label, value, src in stale:
-            print(f'  {label}: feed says {value} ({src}), MASTER_DATA.md does not contain it')
-        print('\nMASTER_DATA.md generates method.html via build_method.py, so this drift is')
-        print('published as documented fact. Re-sync the rows, then regenerate:')
-        print('    python3 build_method.py')
+            where = 'pay-to-play-dashboard.html' if src in pages else 'MASTER_DATA.md'
+            print(f'  {label}: feed says {value} ({src}), {where} does not contain it')
+        if any(src not in pages for _, _, src in stale):
+            print('\nMASTER_DATA.md generates method.html via build_method.py, so this drift is')
+            print('published as documented fact. Re-sync the rows, then regenerate:')
+            print('    python3 build_method.py')
+        if any(src in pages for _, _, src in stale):
+            print('\nThe rows above are published directly by a dashboard, not by MASTER_DATA.md.')
+            print('Re-sync the figures in that page against the JSON named beside each one.')
         return 1
 
-    print(f'\nAll {len(rows)} feed-backed figures in MASTER_DATA.md match their source.')
+    print(f'\nAll {len(rows)} feed-backed figures match their source.')
     return 0
 
 

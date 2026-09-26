@@ -919,13 +919,23 @@ and a precise citation that might be wrong is worse here than an honest general 
 
 ## 💵 Lobbying & Political Spending
 
-Figures on `pay-to-play-dashboard.html`. Two authorities: OpenSecrets for sector and firm totals, and the state’s own OCPF database for individual donations. Maintained by hand.
+Figures on `pay-to-play-dashboard.html`. Three authorities: OpenSecrets for sector and multi-year firm totals, the Secretary of the Commonwealth’s Lobbyist Public Search for single-year firm filings, and the state’s own OCPF database for individual donations.
+
+The SOS figures are the only ones here backed by a file in `data/`. They cannot be fetched by a workflow — the SOS blocks server-side requests — so they are collected from a browser session with `The-Peoples-Audit/userscripts/sos-lobbyist-detail-scraper.user.js` and land in `data/ma-lobbying-firms-latest.json`. `scripts/check-consistency.py` holds the dashboard to that file, and `scripts/check-freshness.py` ages it at 400 days. Everything else in this section is maintained by hand.
+
+**Registration year 2025:** 175 lobbyist entities reported receiving $88,409,949 in fees and paying $48,327,311 to 1,555 registered lobbyists, across 1,695 clients. Collected 2026-05-28.
 
 | Figure | Source | Updated |
 |--------|--------|---------|
 | Lobbying Spending by Sector — $457M Total (2015–2025) | OpenSecrets, Massachusetts State Lobbying Ranked Sectors (2015–2025) | 2015–2025 |
 | Top 10 Industries by Lobbying Spend (2015–2025) | OpenSecrets, Massachusetts State Lobbying by Industry (2015–2025) | 2015–2025 |
 | 2024 Top Lobbying Spenders — Single Year | Secretary of the Commonwealth, MA Lobbying Reports (2024) | 2024 |
+| Top 10 Firms by 2025 Fees — State Filings ✅ | Secretary of the Commonwealth, Lobbyist Public Search — `data/ma-lobbying-firms-latest.json` | 2025 |
+| A Decade of Lobbying Fees (2016–2025) ✅ | Secretary of the Commonwealth, Lobbyist Public Search — annual entity totals | 2016–2025 |
+| Smith, Costello & Crawford Public Policy Group, LLC — 2025 fees $7.9M, 130 clients ✅ | Secretary of the Commonwealth, Lobbyist Public Search | 2025 |
+| Tremont Strategies Group LLC — 2025 fees $5.7M, 94 clients ✅ | Secretary of the Commonwealth, Lobbyist Public Search | 2025 |
+| O'Neill and Partners LLC. — 2025 fees $4.6M, 78 clients ✅ | Secretary of the Commonwealth, Lobbyist Public Search | 2025 |
+| Dempsey Associates LLC — 2025 fees $4.4M, 67 clients ✅ | Secretary of the Commonwealth, Lobbyist Public Search | 2025 |
 | Healthcare vs. All Other Sectors (2015–2025) | OpenSecrets, Ranked Sectors Massachusetts (2015–2025) | 2015–2025 |
 | Firm Lobbying Income (2015–2025) — Top 10 | OpenSecrets, Top 20 Lobbying Firms, Massachusetts (2015–2025) | 2015–2025 |
 | The $200 Pattern — Donation Amount Distribution (OCPF) | OCPF Campaign Finance Database — ML Strategies, Smith Costello, Bay State Strategies donations | — |
