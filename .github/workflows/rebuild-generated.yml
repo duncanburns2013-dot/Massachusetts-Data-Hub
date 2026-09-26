@@ -1,0 +1,85 @@
+# Keep the generated pages in step with their generators.
+#
+# method.html, about.html and videos.html are not written by hand -- build_method.py,
+# build_about.py and build_videos.py emit them. Nothing ran those scripts, so the
+# generated file and its generator were free to disagree, and did: build_about.py
+# still declared the portrait 400x400 after the asset had been replaced with an
+# 800x800 one and about.html hand-corrected to match. Whoever next ran the builder
+# would have silently reverted that.
+#
+# This does NOT make method.html's CONTENT current. Its source is MASTER_DATA.md,
+# which is hand-kept -- keeping a generator in sync with its input cannot make the
+# input true. scripts/check-consistency.py is the job that catches MASTER_DATA.md
+# drifting from the feeds; this one only guarantees the published page is what the
+# generator would produce today.
+#
+# Runs after the overnight data jobs and commits only when a byte moved, so a day
+# with no source change costs one minute and no commit.
+#
+# build_cards.py is deliberately absent: it renders social cards through headless
+# Chrome and needs Pillow, and by design carries nothing dated -- no count, no
+# date, no address -- so it has nothing to go stale. It is run by hand when a
+# page's og:title or og:description changes.
+name: Rebuild Generated Pages
+
+on:
+  schedule:
+    - cron: "40 13 * * *"   # 09:40 ET, after the data jobs and the freshness check
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: push-to-main
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Rebuild method.html from MASTER_DATA.md
+        run: python build_method.py
+
+      - name: Rebuild about.html
+        run: python build_about.py
+
+      - name: Rebuild videos.html
+        run: python build_videos.py
+
+      - name: Commit if changed
+        run: |
+          # Quoted globs: git expands them, not the shell. An unquoted *.html
+          # matches only what is already in the working directory at the repo
+          # root, which is the bug that once dropped data/*.json from a commit
+          # in update-energy-data.yml.
+          if git diff --quiet -- 'method.html' 'about.html' 'videos.html'; then
+            echo "Generated pages already match their generators - nothing to commit."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add 'method.html' 'about.html' 'videos.html'
+          git commit -m "chore: rebuild generated pages"
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt"
+              exit 0
+            fi
+            echo "Push attempt $attempt rejected - pulling latest and rebasing"
+            if ! git pull --rebase origin main; then
+              # These files are regenerated wholesale, so a conflict means another
+              # run already published this state. Nothing to merge, nothing lost.
+              git rebase --abort || true
+              echo "::notice::Another run already rebuilt these pages - skipping."
+              exit 0
+            fi
+          done
+          echo "::error::Push failed after 5 attempts"
+          exit 1

@@ -23,7 +23,7 @@ BODY = '''
     <section class="abio rv">
       <a class="abio-facelink" href="assets/duncan-burns.jpg"
          aria-label="Enlarge the portrait of Duncan Burns">
-        <img class="abio-face" src="assets/duncan-burns.jpg" width="400" height="400"
+        <img class="abio-face" src="assets/duncan-burns.jpg" width="800" height="800"
              alt="Duncan Burns" loading="eager" fetchpriority="high" decoding="async">
       </a>
       <div class="abio-text">
@@ -251,12 +251,13 @@ LIGHTBOX = """
 <div class="lbox" id="lbox" hidden aria-hidden="true" role="dialog" aria-modal="true"
      aria-label="Portrait of Duncan Burns">
   <button class="lbox-x" type="button" aria-label="Close">&times;</button>
-  <img src="assets/duncan-burns.jpg" width="400" height="400" alt="Duncan Burns">
+  <img src="assets/duncan-burns.jpg" width="800" height="800" alt="Duncan Burns">
 </div>
 <script>
 /* The portrait is a real link to the file, so with scripting off a click still
    opens the image. Here that is intercepted and shown in place instead. The
-   source is 400px square and the panel is capped there, so it is never upscaled. */
+   source is 800px square against a panel capped at 400, so it stays sharp on a
+   retina display and is never upscaled. */
 (function(){
   var link = document.querySelector('.abio-facelink');
   var box  = document.getElementById('lbox');
