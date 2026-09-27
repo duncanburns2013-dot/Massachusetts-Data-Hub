@@ -318,6 +318,20 @@ footer a:hover{color:var(--gold)}
       Registration year 2026 as filed at the July 15 deadline. Collected 2026-09-27.</div>
     </div>
     <div class="chart-card">
+      <h3>What Moved Since 2025</h3>
+      <div class="chart-area chart-tall"><canvas id="chartShareShift"></canvas></div>
+      <div class="source">Change in each sector’s share of all client lobbying spending, full-year
+      2025 against first-half 2026, in percentage points. Shares are used because the two periods are
+      different lengths; a sector can gain share without spending more. The six biggest gains and six biggest losses are shown; the other 23 sectors moved less.</div>
+    </div>
+    <div class="chart-card">
+      <h3>Inside Health: Hospitals Down, Plans Up</h3>
+      <div class="chart-area chart-tall"><canvas id="chartHealthMix"></canvas></div>
+      <div class="source">The four labels the SOS splits health across. Health’s total share barely
+      moved (24.5% → 25.2%), but its composition did: hospitals fell 1.25 points while Healthcare —
+      which holds the insurers and plans — rose 1.69.</div>
+    </div>
+    <div class="chart-card">
       <h3>Health’s Share Holds — 2025 vs 2026</h3>
       <div class="chart-area"><canvas id="chartHealthShare"></canvas></div>
       <div class="source">Secretary of the Commonwealth, Industry Type register, both years joined on the
@@ -606,6 +620,8 @@ function initCharts(tab){
 
     case 'sectors':
       safeChart('chartSpenders2026',{type:'bar',data:{labels:["Mass. Assn of Health Plans", "Fallon Community Health Plan", "Mass. Health & Hospital Assn", "Pharmaceutical Research and Manuf\u2026", "American Families for Vaccines Ac\u2026", "New England Connectivity and Tele\u2026", "Mass. Municipal Assn, INC.", "Mass. Biotechnology Council", "Assn for Behavioral Healthcare", "National Strategies", "Mass. Nurses Assn", "United HealthCare Services"],datasets:[{label:'2026 H1 total reported ($)',data:[752499, 625854, 599952, 592461, 514128, 404771, 399816, 349929, 329439, 301000, 295402, 278569],backgroundColor:'#A81733',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Reported spending ($)'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartShareShift',{type:'bar',data:{labels:["Healthcare", "Insurance (auto/home/life)", "Travel & tourism", "Insurance (medical/dental)", "Energy (oil, hydro, nuclear)", "Information technology", "Marijuana", "Entertainment", "Gaming", "Business associations", "Real estate & development", "Hospitals & health systems"],datasets:[{label:'Change in share (percentage points)',data:[1.69, 0.49, 0.44, 0.43, 0.43, 0.32, -0.26, -0.31, -0.38, -0.74, -0.78, -1.25],backgroundColor:ctx=>ctx.raw>=0?'#A81733':'#14558F',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{y:{ticks:{autoSkip:false,font:{size:11}}},x:{title:{display:true,text:'Percentage points'},grid:{color:ctx=>ctx.tick.value===0?'#1a1a1a':'rgba(0,0,0,.06)',lineWidth:ctx=>ctx.tick.value===0?1.5:1}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.raw>=0?'+':'')+c.raw+' points '+(c.raw>=0?'of share gained':'of share lost')}}}}});
+      safeChart('chartHealthMix',{type:'bar',data:{labels:["Healthcare", "Insurance (medical/dental)", "Pharmaceutical", "Hospitals & health systems"],datasets:[{label:'2025 (full year)',data:[12.83, 2.99, 4.72, 3.94],backgroundColor:'#14558F',borderRadius:4},{label:'2026 (first half)',data:[14.52, 3.42, 4.52, 2.69],backgroundColor:'#A81733',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{y:{ticks:{autoSkip:false}},x:{beginAtZero:true,title:{display:true,text:'Share of all client spending (%)'}}},plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+'% of all client spending'}}}}});
       safeChart('chartHealthShare',{type:'bar',data:{labels:['2025 (full year)','2026 (first half)'],datasets:[{label:'Health',data:[24.48,25.16],backgroundColor:'#A81733',borderRadius:4},{label:'Everything else',data:[75.52,74.84],backgroundColor:'#14558F',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,max:100,title:{display:true,text:'% of all client spending'}}}}});
       safeChart('chartIndustry2026',{type:'bar',data:{labels:["Healthcare", "Education", "Human Services", "Information Technology", "Business Associations, Organi\u2026", "Energy", "Pharmaceutical Industry", "Transportation", "Real Estate", "Environment", "Insurance", "Utilities", "Government", "Hospitals"],datasets:[{label:'2026 H1 spend ($)',data:[9080168, 4598710, 4044642, 3116557, 3041929, 2856357, 2830428, 2267729, 2214777, 2164095, 2142124, 1996976, 1993640, 1685757],backgroundColor:ctx=>[0,6,10,13].includes(ctx.dataIndex)?'#A81733':'#14558F',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Reported spending ($)'}}},plugins:{legend:{display:false}}}});
       safeChart('chartHealthDominance',{type:'doughnut',data:{labels:['Health ($112.7M)','Finance/Insurance/RE ($74.4M)','Misc Business ($63.8M)','Energy ($39.3M)','Labor ($36.7M)','All Other ($130.6M)'],datasets:[{data:[112.7,74.4,63.8,39.3,36.7,130.6],backgroundColor:['#A81733','#14558F','#5C97CC','#B07C20','#46527A','#5A6467']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});
