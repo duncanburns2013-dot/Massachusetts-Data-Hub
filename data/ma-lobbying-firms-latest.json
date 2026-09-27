@@ -1,21 +1,22 @@
 {
-  "year": 2025,
+  "year": 2026,
+  "coverage": "first-half filings only",
   "source": "Massachusetts Secretary of the Commonwealth \u2014 Lobbyist Public Search",
   "source_url": "https://www.sec.state.ma.us/LobbyistPublicSearch/Default.aspx",
-  "collected_via": "The-Peoples-Audit/userscripts/sos-lobbyist-detail-scraper.user.js \u2014 an in-browser userscript. The SOS site blocks server-side fetches, so this cannot be a GitHub Actions job; it is refreshed by hand from a browser session.",
-  "scraped_at": "2026-05-28T16:12:14.982Z",
-  "note": "Entity-level figures: fees Lobbyist Entities reported RECEIVING from clients. This is the firm side of the ledger, not client-side spending, and it excludes in-house lobbying. Current-year scrapes read $0 until the semi-annual disclosure deadlines (Jul 15 / Jan 15) pass.",
-  "registered_2025": {
-    "lobbyist_entities": 175,
-    "lobbyists": 1555,
-    "clients": 1695,
-    "total": 3425
+  "collected_via": "The-Peoples-Audit/userscripts/sos-lobbyist-detail-scraper.user.js \u2014 an in-browser userscript. The SOS blocks server-side fetches, so no workflow can own this; it is refreshed by hand from a browser session.",
+  "scraped_at": "2026-09-27T19:07:08.236Z",
+  "note": "MA lobbying disclosure is semi-annual (filed by Jul 15 and Jan 15). These are registration year 2026 figures as filed at the July deadline, so they cover roughly the first half of the year and are NOT comparable to the full-year totals for 2016-2025. A scrape taken 2026-07-08, a week before the deadline, read $0 for all 162 firms.",
+  "ledger_2026": {
+    "clients_to_firms": 45864364.87,
+    "clients_to_individual_lobbyists": 10798365.84,
+    "client_expenses": 5891459.99,
+    "total_client_outlay": 62554190.7,
+    "reconciliation": "clients_to_firms equals the sum firms reported RECEIVING, and clients_to_individual_lobbyists equals the sum lobbyists reported receiving, both to the cent \u2014 the two sides of each ledger were checked against each other."
   },
-  "totals": {
-    "firms": 175,
-    "fees_received": 88409948.93,
-    "salaries_paid": 48327310.6,
-    "expenses": 9132624.88
+  "counts": {
+    "firms": 169,
+    "clients": 1733,
+    "individual_lobbyists": 1528
   },
   "series": [
     {
@@ -23,192 +24,346 @@
       "firms": 197,
       "received": 61330231.69,
       "paid": 37486371.87,
-      "expenses": 8139743.19
+      "partial": false
     },
     {
       "year": 2017,
       "firms": 193,
       "received": 63257843.47,
       "paid": 37964810.71,
-      "expenses": 7852964.0
+      "partial": false
     },
     {
       "year": 2018,
       "firms": 198,
       "received": 66315933.21,
       "paid": 39228740.9,
-      "expenses": 8294217.12
+      "partial": false
     },
     {
       "year": 2019,
       "firms": 186,
       "received": 68400374.06,
       "paid": 40291404.82,
-      "expenses": 8503325.33
+      "partial": false
     },
     {
       "year": 2020,
       "firms": 180,
       "received": 67784727.6,
       "paid": 40926190.55,
-      "expenses": 8314150.14
+      "partial": false
     },
     {
       "year": 2021,
       "firms": 189,
       "received": 71499694.35,
       "paid": 43214869.24,
-      "expenses": 7835363.97
+      "partial": false
     },
     {
       "year": 2022,
       "firms": 176,
       "received": 73423998.82,
       "paid": 42855461.59,
-      "expenses": 8185860.09
+      "partial": false
     },
     {
       "year": 2023,
       "firms": 160,
       "received": 79308978.25,
       "paid": 44491470.01,
-      "expenses": 8396476.43
+      "partial": false
     },
     {
       "year": 2024,
       "firms": 173,
       "received": 84572129.1,
       "paid": 46426135.11,
-      "expenses": 8377648.39
+      "partial": false
     },
     {
       "year": 2025,
       "firms": 175,
       "received": 88409948.93,
       "paid": 48327310.6,
-      "expenses": 9132624.88
+      "partial": false
+    },
+    {
+      "year": 2026,
+      "firms": 169,
+      "received": 45864364.87,
+      "paid": 23225599.41,
+      "partial": true
     }
   ],
   "top_firms": [
     {
       "rank": 1,
-      "name": "Smith, Costello & Crawford Public Policy Group, LLC",
-      "received": 7899258.68,
-      "paid": 3740000.0,
-      "clients": 130,
+      "name": "Smith Costello & Crawford Public Policy Group, LLC",
+      "received": 4422575.98,
+      "clients": 143,
       "lobbyists": 13
     },
     {
       "rank": 2,
       "name": "Tremont Strategies Group LLC",
-      "received": 5688977.9,
-      "paid": 2330000.0,
-      "clients": 94,
-      "lobbyists": 9
+      "received": 3352840.19,
+      "clients": 112,
+      "lobbyists": 8
     },
     {
       "rank": 3,
       "name": "O'Neill and Partners LLC.",
-      "received": 4583814.0,
-      "paid": 1871000.0,
-      "clients": 78,
-      "lobbyists": 13
+      "received": 2723695.0,
+      "clients": 88,
+      "lobbyists": 12
     },
     {
       "rank": 4,
       "name": "Dempsey Associates LLC",
-      "received": 4388299.91,
-      "paid": 755000.0,
-      "clients": 67,
-      "lobbyists": 2
+      "received": 2313299.96,
+      "clients": 62,
+      "lobbyists": 1
     },
     {
       "rank": 5,
-      "name": "Kearney, Donovan & McGee, LLC",
-      "received": 3692599.96,
-      "paid": 1923739.77,
+      "name": "Kearney Donovan & McGee, LLC",
+      "received": 1985549.98,
       "clients": 59,
       "lobbyists": 6
     },
     {
       "rank": 6,
       "name": "Bay State Strategies Group, LLC",
-      "received": 3168149.92,
-      "paid": 1419011.0,
-      "clients": 50,
+      "received": 1627900.0,
+      "clients": 51,
       "lobbyists": 5
     },
     {
       "rank": 7,
-      "name": "ML Strategies, LLC",
-      "received": 2391831.62,
-      "paid": 1480000.0,
-      "clients": 37,
-      "lobbyists": 8
+      "name": "Issues Management Group Public Affairs, LLC",
+      "received": 1234239.98,
+      "clients": 42,
+      "lobbyists": 12
     },
     {
       "rank": 8,
-      "name": "Issues Management Group Public Affairs, LLC",
-      "received": 2334013.32,
-      "paid": 1335822.0,
-      "clients": 39,
-      "lobbyists": 13
-    },
-    {
-      "rank": 9,
-      "name": "The Suffolk Group, LLC",
-      "received": 2108121.96,
-      "paid": 516000.0,
-      "clients": 41,
-      "lobbyists": 3
-    },
-    {
-      "rank": 10,
-      "name": "Rasky Partners, Inc.",
-      "received": 2085980.0,
-      "paid": 631809.28,
-      "clients": 38,
-      "lobbyists": 7
-    },
-    {
-      "rank": 11,
-      "name": "TSK Associates LLC",
-      "received": 2001840.96,
-      "paid": 2128981.0,
-      "clients": 31,
+      "name": "Preti Strategies, LLC",
+      "received": 1064633.36,
+      "clients": 43,
       "lobbyists": 6
     },
     {
+      "rank": 9,
+      "name": "Rasky Partners, Inc.",
+      "received": 1058350.0,
+      "clients": 36,
+      "lobbyists": 7
+    },
+    {
+      "rank": 10,
+      "name": "ML Strategies, LLC",
+      "received": 1055846.0,
+      "clients": 34,
+      "lobbyists": 8
+    },
+    {
+      "rank": 11,
+      "name": "The Suffolk Group, LLC",
+      "received": 1023245.96,
+      "clients": 44,
+      "lobbyists": 3
+    },
+    {
       "rank": 12,
-      "name": "Preti Strategies, LLC",
-      "received": 1858227.79,
-      "paid": 1274299.28,
-      "clients": 42,
+      "name": "TSK Associates LLC",
+      "received": 989039.53,
+      "clients": 32,
       "lobbyists": 6
     },
     {
       "rank": 13,
-      "name": "BCB Government Relations, Inc.",
-      "received": 1824833.33,
-      "paid": 1100000.0,
-      "clients": 33,
+      "name": "Commonwealth Counsel, LLC",
+      "received": 941099.98,
+      "clients": 28,
       "lobbyists": 3
     },
     {
       "rank": 14,
-      "name": "Benchmark Strategies, Inc.",
-      "received": 1773910.71,
-      "paid": 715000.0,
-      "clients": 29,
-      "lobbyists": 6
+      "name": "BRIAN S HICKEY ASSOCIATES, INC.",
+      "received": 858861.25,
+      "clients": 23,
+      "lobbyists": 5
     },
     {
       "rank": 15,
-      "name": "Commonwealth Counsel, LLC.",
-      "received": 1678999.96,
-      "paid": 633800.0,
-      "clients": 25,
-      "lobbyists": 4
+      "name": "Serlin Haley LLP",
+      "received": 854208.33,
+      "clients": 31,
+      "lobbyists": 3
+    }
+  ],
+  "top_spenders": [
+    {
+      "rank": 1,
+      "name": "Massachusetts Association of Health Plans, Inc",
+      "total": 752499.23,
+      "to_firms": 114800.0,
+      "in_house": 553380.84,
+      "expenses": 84318.39
+    },
+    {
+      "rank": 2,
+      "name": "Fallon Community Health Plan, Inc.",
+      "total": 625853.85,
+      "to_firms": 30000.0,
+      "in_house": 48810.24,
+      "expenses": 547043.61
+    },
+    {
+      "rank": 3,
+      "name": "Massachusetts Health & Hospital Association, Inc.",
+      "total": 599951.56,
+      "to_firms": 159000.0,
+      "in_house": 366193.47,
+      "expenses": 74758.09
+    },
+    {
+      "rank": 4,
+      "name": "Pharmaceutical Research and Manufacturers of America Corporation",
+      "total": 592460.57,
+      "to_firms": 173499.98,
+      "in_house": 9583.37,
+      "expenses": 409377.22
+    },
+    {
+      "rank": 5,
+      "name": "American Families for Vaccines Action Fund, Inc.",
+      "total": 514127.65,
+      "to_firms": 30000.0,
+      "in_house": 36652.38,
+      "expenses": 447475.27
+    },
+    {
+      "rank": 6,
+      "name": "New England Connectivity and Telecommunications Association, Inc.",
+      "total": 404771.4,
+      "to_firms": 98000.0,
+      "in_house": 22000.0,
+      "expenses": 284771.4
+    },
+    {
+      "rank": 7,
+      "name": "Massachusetts Municipal Association, INC.",
+      "total": 399816.28,
+      "to_firms": 0,
+      "in_house": 240533.94,
+      "expenses": 159282.34
+    },
+    {
+      "rank": 8,
+      "name": "Massachusetts Biotechnology Council, Inc.",
+      "total": 349929.0,
+      "to_firms": 255000.0,
+      "in_house": 88000.0,
+      "expenses": 6929.0
+    },
+    {
+      "rank": 9,
+      "name": "Association for Behavioral Healthcare, Inc.",
+      "total": 329438.54,
+      "to_firms": 55593.84,
+      "in_house": 200591.58,
+      "expenses": 73253.12
+    },
+    {
+      "rank": 10,
+      "name": "National Strategies, LLC",
+      "total": 301000.0,
+      "to_firms": 301000.0,
+      "in_house": 0,
+      "expenses": 0
+    },
+    {
+      "rank": 11,
+      "name": "Massachusetts Nurses Association",
+      "total": 295402.35,
+      "to_firms": 79500.0,
+      "in_house": 188834.84,
+      "expenses": 27067.51
+    },
+    {
+      "rank": 12,
+      "name": "United HealthCare Services, Inc.",
+      "total": 278568.84,
+      "to_firms": 87000.0,
+      "in_house": 322.25,
+      "expenses": 191246.59
+    },
+    {
+      "rank": 13,
+      "name": "Blue Cross Blue Shield of Massachusetts, Inc.",
+      "total": 265731.11,
+      "to_firms": 74999.98,
+      "in_house": 125800.0,
+      "expenses": 64931.13
+    },
+    {
+      "rank": 14,
+      "name": "Massachusetts Teachers Association",
+      "total": 257575.6,
+      "to_firms": 0,
+      "in_house": 191998.0,
+      "expenses": 65577.6
+    },
+    {
+      "rank": 15,
+      "name": "Sports Betting Alliance",
+      "total": 255000.0,
+      "to_firms": 255000.0,
+      "in_house": 0,
+      "expenses": 0
+    },
+    {
+      "rank": 16,
+      "name": "BMC Health System, Inc.",
+      "total": 235949.83,
+      "to_firms": 36000.0,
+      "in_house": 63383.0,
+      "expenses": 136566.83
+    },
+    {
+      "rank": 17,
+      "name": "The Children's Hospital Corporation",
+      "total": 230601.77,
+      "to_firms": 20000.0,
+      "in_house": 162029.0,
+      "expenses": 48572.77
+    },
+    {
+      "rank": 18,
+      "name": "The Massachusetts Medical Society",
+      "total": 228995.74,
+      "to_firms": 151500.0,
+      "in_house": 42558.0,
+      "expenses": 34937.74
+    },
+    {
+      "rank": 19,
+      "name": "Sterling Suffolk Racecourse, LLC",
+      "total": 227000.0,
+      "to_firms": 227000.0,
+      "in_house": 0,
+      "expenses": 0
+    },
+    {
+      "rank": 20,
+      "name": "Keolis Commuter Services, LLC",
+      "total": 225000.0,
+      "to_firms": 225000.0,
+      "in_house": 0,
+      "expenses": 0
     }
   ]
 }
