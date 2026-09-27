@@ -90,9 +90,19 @@ def checks():
         out.append((f'Lobbying #{f["rank"]} {f["name"][:22]}',
                     f'${f["received"] / 1e6:.1f}M',
                     'ma-lobbying-firms-latest.json'))
-    out.append(('MA lobbying fees, 2025 total',
-                f'${lob["totals"]["fees_received"] / 1e6:.1f}M',
+    L = lob['ledger_2026']
+    out.append((f'MA lobbying fees to firms, {lob["year"]}',
+                f'${L["clients_to_firms"] / 1e6:.1f}M',
                 'ma-lobbying-firms-latest.json'))
+    # The client side is the half of the ledger the page never had until 2026.
+    # Both totals reconcile to the cent against what firms and lobbyists reported
+    # RECEIVING, so a mismatch here means the page drifted, not the scrape.
+    # Unformatted: the page carries these as a Chart.js data array, so that is the
+    # form to look for. Checking the comma-grouped version would fail on a page
+    # that is perfectly current.
+    for c in lob['top_spenders'][:3]:
+        out.append((f'Top spender #{c["rank"]} {c["name"][:20]}',
+                    str(round(c['total'])), 'ma-lobbying-firms-latest.json'))
 
     # Electricity lives in the dashboard, not a JSON file: update-energy-dashboard.py
     # writes the page directly. Read it back from there so the comparison is against
