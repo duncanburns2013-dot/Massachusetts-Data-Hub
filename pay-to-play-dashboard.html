@@ -242,6 +242,7 @@ footer a:hover{color:var(--gold)}
       <div class="alert-item"><strong>6 of the top 10</strong> spenders are from the healthcare sector — an industry that depends heavily on MassHealth funding</div>
       <div class="alert-item">In 2024 alone: MA Assn of Health Plans spent <strong>$1.3M</strong> and MH&HA spent <strong>$1.1M</strong> — the only two groups over $1M</div>
       <div class="alert-item">Hospitals/Nursing Homes: <strong>$43.4M</strong> in lobbying. Insurance: <strong>$42.8M</strong>. Pharma: <strong>$37.3M</strong></div>
+      <div class="alert-item"><strong>Confirmed by a second source.</strong> The state’s own 2026 industry labels split health across four categories — Healthcare, Pharmaceutical, Medical Insurance and Hospitals. Rolled up they are <strong>$15,738,477 of $62,554,191, or 25.2%</strong> — which independently matches OpenSecrets’ 25% for the health sector over 2015–2025, from a different source and method</div>
       <div class="alert-item">These organizations receive <strong>billions in taxpayer money</strong> via MassHealth, then spend millions lobbying to keep the money flowing</div>
     </div>
   </div>
@@ -253,6 +254,14 @@ footer a:hover{color:var(--gold)}
       <div class="source">Source: Secretary of the Commonwealth, Lobbyist Public Search — what each client
       reported paying: fees to lobbying firms, salaries to its own in-house lobbyists, and expenses.
       Registration year 2026 as filed at the July 15 deadline. Collected 2026-09-27.</div>
+    </div>
+    <div class="chart-card">
+      <h3>Spending by Industry — 2026, the State’s Own Labels</h3>
+      <div class="chart-area chart-tall"><canvas id="chartIndustry2026"></canvas></div>
+      <div class="source">Source: Secretary of the Commonwealth, Lobbyist Public Search — Industry Type.
+      The label is chosen by each client at registration, not inferred by us: 35 labels across
+      1,733 clients, joined to the spending records on the SOS’s own key and matching 1,733 of 1,733.
+      Registration year 2026, first-half filings.</div>
     </div>
     <div class="chart-card">
       <h3>Healthcare vs. All Other Sectors (2015–2025)</h3>
@@ -527,6 +536,7 @@ function initCharts(tab){
 
     case 'sectors':
       safeChart('chartSpenders2026',{type:'bar',data:{labels:["Mass. Assn of Health Plans", "Fallon Community Health Plan", "Mass. Health & Hospital Assn", "Pharmaceutical Research and Manuf\u2026", "American Families for Vaccines Ac\u2026", "New England Connectivity and Tele\u2026", "Mass. Municipal Assn, INC.", "Mass. Biotechnology Council", "Assn for Behavioral Healthcare", "National Strategies", "Mass. Nurses Assn", "United HealthCare Services"],datasets:[{label:'2026 H1 total reported ($)',data:[752499, 625854, 599952, 592461, 514128, 404771, 399816, 349929, 329439, 301000, 295402, 278569],backgroundColor:'#A81733',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Reported spending ($)'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartIndustry2026',{type:'bar',data:{labels:["Healthcare", "Education", "Human Services", "Information Technology", "Business Associations, Organi\u2026", "Energy", "Pharmaceutical Industry", "Transportation", "Real Estate", "Environment", "Insurance", "Utilities", "Government", "Hospitals"],datasets:[{label:'2026 H1 spend ($)',data:[9080168, 4598710, 4044642, 3116557, 3041929, 2856357, 2830428, 2267729, 2214777, 2164095, 2142124, 1996976, 1993640, 1685757],backgroundColor:ctx=>[0,6,10,13].includes(ctx.dataIndex)?'#A81733':'#14558F',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Reported spending ($)'}}},plugins:{legend:{display:false}}}});
       safeChart('chartHealthDominance',{type:'doughnut',data:{labels:['Health ($112.7M)','Finance/Insurance/RE ($74.4M)','Misc Business ($63.8M)','Energy ($39.3M)','Labor ($36.7M)','All Other ($130.6M)'],datasets:[{data:[112.7,74.4,63.8,39.3,36.7,130.6],backgroundColor:['#A81733','#14558F','#5C97CC','#B07C20','#46527A','#5A6467']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});
       break;
 

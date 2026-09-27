@@ -365,5 +365,271 @@
       "in_house": 0,
       "expenses": 0
     }
-  ]
+  ],
+  "industries": {
+    "source": "Massachusetts Secretary of the Commonwealth \u2014 Lobbyist Public Search, Industry Type",
+    "scraped_at": "2026-09-27T19:43:41.285Z",
+    "note": "The SOS\u2019s own labels, chosen by each client at registration \u2014 not an inferred classification. One label per client, 35 of 36 in use (\u201cOther\u201d is empty). Joined to the spending records on sysvalue, matching 1,733 of 1,733 with no duplicates. A name-keyword classifier managed 46.4%.",
+    "label_count": 35,
+    "client_count": 1733,
+    "health_rollup": {
+      "labels": [
+        "Healthcare",
+        "Pharmaceutical Industry",
+        "Insurance: Medical, Dental, Mental Health",
+        "Hospitals: Healthcare Systems, Medical Orgs"
+      ],
+      "spend": 15738476.63,
+      "clients": 305,
+      "share_pct": 25.2,
+      "note": "The SOS splits health across four labels, so the single \"Healthcare\" line understates it. Rolled up it is 25.2%, which independently matches OpenSecrets\u2019 25% for the health sector over 2015-2025 \u2014 a different source, method and window."
+    },
+    "by_spend": [
+      {
+        "industry": "Healthcare",
+        "spend": 9080167.6,
+        "clients": 206,
+        "share_pct": 14.5,
+        "avg_per_client": 44078.48
+      },
+      {
+        "industry": "Education",
+        "spend": 4598710.03,
+        "clients": 160,
+        "share_pct": 7.4,
+        "avg_per_client": 28741.94
+      },
+      {
+        "industry": "Human Services",
+        "spend": 4044642.17,
+        "clients": 143,
+        "share_pct": 6.5,
+        "avg_per_client": 28284.21
+      },
+      {
+        "industry": "Information Technology",
+        "spend": 3116557.23,
+        "clients": 93,
+        "share_pct": 5.0,
+        "avg_per_client": 33511.37
+      },
+      {
+        "industry": "Business Associations, Organizations",
+        "spend": 3041929.21,
+        "clients": 91,
+        "share_pct": 4.9,
+        "avg_per_client": 33427.79
+      },
+      {
+        "industry": "Energy: Petroleum, Hydro, Nuclear, Oil",
+        "spend": 2856356.57,
+        "clients": 81,
+        "share_pct": 4.6,
+        "avg_per_client": 35263.66
+      },
+      {
+        "industry": "Pharmaceutical Industry",
+        "spend": 2830427.92,
+        "clients": 51,
+        "share_pct": 4.5,
+        "avg_per_client": 55498.59
+      },
+      {
+        "industry": "Transportation",
+        "spend": 2267729.08,
+        "clients": 58,
+        "share_pct": 3.6,
+        "avg_per_client": 39098.78
+      },
+      {
+        "industry": "Real Estate: Development and Property",
+        "spend": 2214777.02,
+        "clients": 66,
+        "share_pct": 3.5,
+        "avg_per_client": 33557.23
+      },
+      {
+        "industry": "Environment",
+        "spend": 2164095.35,
+        "clients": 86,
+        "share_pct": 3.5,
+        "avg_per_client": 25163.9
+      },
+      {
+        "industry": "Insurance: Medical, Dental, Mental Health",
+        "spend": 2142123.9,
+        "clients": 15,
+        "share_pct": 3.4,
+        "avg_per_client": 142808.26
+      },
+      {
+        "industry": "Utilities",
+        "spend": 1996975.96,
+        "clients": 39,
+        "share_pct": 3.2,
+        "avg_per_client": 51204.51
+      },
+      {
+        "industry": "Gov't: Agencies, Associations, Organizations",
+        "spend": 1993639.74,
+        "clients": 47,
+        "share_pct": 3.2,
+        "avg_per_client": 42417.87
+      },
+      {
+        "industry": "Hospitals: Healthcare Systems, Medical Orgs",
+        "spend": 1685757.21,
+        "clients": 33,
+        "share_pct": 2.7,
+        "avg_per_client": 51083.55
+      },
+      {
+        "industry": "Gaming",
+        "spend": 1610008.29,
+        "clients": 30,
+        "share_pct": 2.6,
+        "avg_per_client": 53666.94
+      },
+      {
+        "industry": "Labor Unions: PACs",
+        "spend": 1587822.64,
+        "clients": 30,
+        "share_pct": 2.5,
+        "avg_per_client": 52927.42
+      },
+      {
+        "industry": "High Technology",
+        "spend": 1524957.7,
+        "clients": 44,
+        "share_pct": 2.4,
+        "avg_per_client": 34658.13
+      },
+      {
+        "industry": "Insurance: Auto, Home, Life, Other",
+        "spend": 1462573.69,
+        "clients": 40,
+        "share_pct": 2.3,
+        "avg_per_client": 36564.34
+      },
+      {
+        "industry": "Legal Organizations, Services",
+        "spend": 1357771.46,
+        "clients": 32,
+        "share_pct": 2.2,
+        "avg_per_client": 42430.36
+      },
+      {
+        "industry": "Food and Beverage: Industry and Services",
+        "spend": 1234166.48,
+        "clients": 29,
+        "share_pct": 2.0,
+        "avg_per_client": 42557.46
+      },
+      {
+        "industry": "Travel, Tourism, Entertainment",
+        "spend": 1174490.51,
+        "clients": 42,
+        "share_pct": 1.9,
+        "avg_per_client": 27964.06
+      },
+      {
+        "industry": "Finance, Insurance, Real Estate",
+        "spend": 1068024.74,
+        "clients": 38,
+        "share_pct": 1.7,
+        "avg_per_client": 28105.91
+      },
+      {
+        "industry": "Contractors, Subcontractors",
+        "spend": 1051626.97,
+        "clients": 28,
+        "share_pct": 1.7,
+        "avg_per_client": 37558.11
+      },
+      {
+        "industry": "SocialServices",
+        "spend": 991139.65,
+        "clients": 46,
+        "share_pct": 1.6,
+        "avg_per_client": 21546.51
+      },
+      {
+        "industry": "Manufacturing",
+        "spend": 823619.44,
+        "clients": 27,
+        "share_pct": 1.3,
+        "avg_per_client": 30504.42
+      },
+      {
+        "industry": "Banking: Lending, Investment",
+        "spend": 797847.25,
+        "clients": 34,
+        "share_pct": 1.3,
+        "avg_per_client": 23466.1
+      },
+      {
+        "industry": "Automotive Industry",
+        "spend": 760681.02,
+        "clients": 19,
+        "share_pct": 1.2,
+        "avg_per_client": 40035.84
+      },
+      {
+        "industry": "Communication",
+        "spend": 637028.06,
+        "clients": 19,
+        "share_pct": 1.0,
+        "avg_per_client": 33527.79
+      },
+      {
+        "industry": "Police, Fire, Law Enforcement Organizations",
+        "spend": 572427.3,
+        "clients": 20,
+        "share_pct": 0.9,
+        "avg_per_client": 28621.37
+      },
+      {
+        "industry": "Tobacco, Alcohol",
+        "spend": 478494.69,
+        "clients": 22,
+        "share_pct": 0.8,
+        "avg_per_client": 21749.76
+      },
+      {
+        "industry": "Trade: Wholesale or Retail",
+        "spend": 353257.97,
+        "clients": 12,
+        "share_pct": 0.6,
+        "avg_per_client": 29438.16
+      },
+      {
+        "industry": "Marijuana",
+        "spend": 342170.87,
+        "clients": 14,
+        "share_pct": 0.5,
+        "avg_per_client": 24440.78
+      },
+      {
+        "industry": "Agriculture, Forestry, and Fishing",
+        "spend": 282258.61,
+        "clients": 16,
+        "share_pct": 0.5,
+        "avg_per_client": 17641.16
+      },
+      {
+        "industry": "Entertainment",
+        "spend": 215493.71,
+        "clients": 10,
+        "share_pct": 0.3,
+        "avg_per_client": 21549.37
+      },
+      {
+        "industry": "Lobbying Organizations",
+        "spend": 194440.66,
+        "clients": 12,
+        "share_pct": 0.3,
+        "avg_per_client": 16203.39
+      }
+    ]
+  }
 }

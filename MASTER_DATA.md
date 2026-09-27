@@ -942,10 +942,30 @@ had 175 entities receiving $88,409,949.
 Note: the SOS renormalised some registrant names between years (“Smith, Costello & Crawford” in 2025 is
 “Smith Costello & Crawford” in 2026), so join on `sysvalue`, not on name.
 
+**Industry labels are the state’s, not ours.** The SOS’s Industry Type register assigns every client one
+of 36 labels at registration; 35 are in use (“Other” is empty). Joined on `sysvalue` it covers
+**1,733 of 1,733 clients**. A name-keyword classifier managed 46.4%, which is why nothing inferred is
+published here.
+
+The single “Healthcare” line understates health, because the SOS splits it four ways:
+
+| Label | 2026 H1 spend |
+|---|---|
+| Healthcare | $9,080,168 |
+| Pharmaceutical Industry | $2,830,428 |
+| Insurance: Medical, Dental, Mental Health | $2,142,124 |
+| Hospitals: Healthcare Systems, Medical Orgs | $1,685,757 |
+| **Health, rolled up** | **$15,738,477 — 25.2%** |
+
+That 25.2% independently matches OpenSecrets’ 25% for the health sector over 2015–2025 — a different
+source, method and window.
+
 | Figure | Source | Updated |
 |--------|--------|---------|
 | Lobbying Spending by Sector — $457M Total (2015–2025) | OpenSecrets, Massachusetts State Lobbying Ranked Sectors (2015–2025) | 2015–2025 |
 | Top 10 Industries by Lobbying Spend (2015–2025) | OpenSecrets, Massachusetts State Lobbying by Industry (2015–2025) | 2015–2025 |
+| Spending by Industry — 2026, State’s Own Labels ✅ | Secretary of the Commonwealth, Lobbyist Public Search — Industry Type; `data/ma-lobbying-firms-latest.json` | 2026 H1 |
+| Health rolled up across 4 SOS labels — $15,738,477, 25.2% ✅ | Secretary of the Commonwealth, Lobbyist Public Search — Industry Type | 2026 H1 |
 | Top Spenders — 2026 First-Half Filings ✅ | Secretary of the Commonwealth, Lobbyist Public Search — `data/ma-lobbying-firms-latest.json`; client-reported fees, in-house salaries and expenses | 2026 H1 |
 | Top 10 Firms by 2026 Fees — State Filings ✅ | Secretary of the Commonwealth, Lobbyist Public Search — `data/ma-lobbying-firms-latest.json` | 2025 |
 | A Decade of Lobbying Fees (2016–2026) ✅ | Secretary of the Commonwealth, Lobbyist Public Search — annual entity totals | 2016–2025 |
