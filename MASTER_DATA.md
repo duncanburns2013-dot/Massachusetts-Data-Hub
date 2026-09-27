@@ -958,13 +958,42 @@ The single “Healthcare” line understates health, because the SOS splits it f
 | **Health, rolled up** | **$15,738,477 — 25.2%** |
 
 That 25.2% independently matches OpenSecrets’ 25% for the health sector over 2015–2025 — a different
-source, method and window.
+source, method and window — and it holds across a second full scrape:
+
+| | 2025 (full year) | 2026 (first half) |
+|---|---|---|
+| Clients filing | 1,697 | 1,733 |
+| Matched to an SOS label | 100% | 100% |
+| Total client outlay | $119,177,253 | $62,554,191 |
+| Health share | **24.48%** | **25.16%** |
+
+The totals are not comparable — one is a year, the other half of one. The shares are.
+
+### A scrape is a snapshot, not a final figure
+
+The 2025 firm file, scraped 2026-05-28, says firms received $88,409,948.93. The client file scraped
+2026-09-27 says clients paid them $88,602,703.93 — **$192,755.00 more, 0.218%**. It decomposes exactly:
+
+| | pairs | value |
+|---|---|---|
+| Amended amounts | 5 | $130,500.00 |
+| Relationships the May scrape never saw | 3 | $62,255.00 |
+| **Net** | **8** | **$192,755.00** |
+
+**Four of the five amendments are exactly double** the earlier figure — first-half filings that later
+gained their second half. The series above uses the amended $88.6M for 2025 and keeps the scrape-time
+figure alongside it as `received_at_scrape`.
+
+This matters for the 2026 numbers too. They reconcile to the cent because both sides were scraped the
+same day. That is a same-day property, not a permanent one; expect 2026 to drift upward as amendments
+land, exactly as 2025 did.
 
 | Figure | Source | Updated |
 |--------|--------|---------|
 | Lobbying Spending by Sector — $457M Total (2015–2025) | OpenSecrets, Massachusetts State Lobbying Ranked Sectors (2015–2025) | 2015–2025 |
 | Top 10 Industries by Lobbying Spend (2015–2025) | OpenSecrets, Massachusetts State Lobbying by Industry (2015–2025) | 2015–2025 |
 | Spending by Industry — 2026, State’s Own Labels ✅ | Secretary of the Commonwealth, Lobbyist Public Search — Industry Type; `data/ma-lobbying-firms-latest.json` | 2026 H1 |
+| Health share, 2025 full year — 24.48% of $119,177,253 ✅ | Secretary of the Commonwealth, Lobbyist Public Search — Industry Type | 2025 |
 | Health rolled up across 4 SOS labels — $15,738,477, 25.2% ✅ | Secretary of the Commonwealth, Lobbyist Public Search — Industry Type | 2026 H1 |
 | Top Spenders — 2026 First-Half Filings ✅ | Secretary of the Commonwealth, Lobbyist Public Search — `data/ma-lobbying-firms-latest.json`; client-reported fees, in-house salaries and expenses | 2026 H1 |
 | Top 10 Firms by 2026 Fees — State Filings ✅ | Secretary of the Commonwealth, Lobbyist Public Search — `data/ma-lobbying-firms-latest.json` | 2025 |

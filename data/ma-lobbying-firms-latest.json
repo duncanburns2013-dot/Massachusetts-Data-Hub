@@ -85,9 +85,11 @@
     {
       "year": 2025,
       "firms": 175,
-      "received": 88409948.93,
+      "received": 88602703.93,
       "paid": 48327310.6,
-      "partial": false
+      "partial": false,
+      "received_at_scrape": 88409948.93,
+      "amended": true
     },
     {
       "year": 2026,
@@ -631,5 +633,47 @@
         "avg_per_client": 16203.39
       }
     ]
+  },
+  "comparison": {
+    "note": "2025 is a full year; 2026 is first-half filings only. Totals are not comparable, but SHARES are \u2014 and the health share barely moves.",
+    "2025_full_year": {
+      "clients": 1697,
+      "labels": 35,
+      "to_firms": 88602703.93,
+      "to_lobbyists": 20888627.7,
+      "expenses": 9685921.5,
+      "total": 119177253.13,
+      "health_spend": 29174866.13,
+      "health_share_pct": 24.48,
+      "scraped_at": "2026-09-27T20:02:20.654Z"
+    },
+    "2026_first_half": {
+      "clients": 1733,
+      "labels": 35,
+      "to_firms": 45864364.87,
+      "to_lobbyists": 10798365.84,
+      "expenses": 5891459.99,
+      "total": 62554190.7,
+      "health_spend": 15738476.63,
+      "health_share_pct": 25.16,
+      "scraped_at": "2026-09-27T19:43:41.285Z"
+    }
+  },
+  "amendments": {
+    "finding": "A scrape is a snapshot, not a final figure. The 2025 firm file scraped 2026-05-28 says firms received $88,409,948.93; the client file scraped 2026-09-27 says clients paid them $88,602,703.93 \u2014 $192,755.00 more, 0.218%.",
+    "decomposition": {
+      "amended_amounts": {
+        "pairs": 5,
+        "value": 130500.0,
+        "note": "Four of the five are EXACTLY double the earlier figure \u2014 the May scrape had caught first-half-only filings that later gained their second half."
+      },
+      "relationships_absent_from_the_may_scrape": {
+        "pairs": 3,
+        "value": 62255.0
+      },
+      "reconciles": true
+    },
+    "implication": "The 2026 figures on this page reconcile to the cent because both sides were scraped the SAME DAY. That is a same-day property, not a permanent one. Expect 2026 to drift upward as amendments land, exactly as 2025 did.",
+    "corrected_2025_to_firms": 88602703.93
   }
 }
