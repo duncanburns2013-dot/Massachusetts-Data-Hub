@@ -939,8 +939,22 @@ the 169 firms reported receiving, and the client→lobbyist total equals what th
 lobbyists reported receiving. 1,733 clients filed. For reference, registration year 2025 — a full year —
 had 175 entities receiving $88,409,949.
 
-Note: the SOS renormalised some registrant names between years (“Smith, Costello & Crawford” in 2025 is
-“Smith Costello & Crawford” in 2026), so join on `sysvalue`, not on name.
+### Joining these files
+
+**Within a registration year, join on `sysvalue`.** Names drift even inside one year — the SOS
+renormalised “Smith, Costello & Crawford” (2025) to “Smith Costello & Crawford” (2026), and some
+client names carry double spaces in the industry results but not on their own pages.
+
+**Across years, `sysvalue` does not work at all.** It is year-scoped: every 2025 key begins
+`hvS0w46oEfUey9UWwnkaG…` and every 2026 key `j980aMf4IpOwXPZWPGG1x…`. The overlap between the two
+years is **zero** — for clients and for firms. An earlier version of this file said “join on sysvalue,
+not on name” without that qualification, which would lead anyone comparing years to conclude that all
+1,697 clients left and 1,733 different ones arrived.
+
+Year-over-year therefore has to match on **normalised names** (lowercase, punctuation and corporate
+suffixes stripped, whitespace collapsed), which resolves 1,454 of 1,733 clients. The remainder are a
+mix of genuine entries and exits and of names that moved too far to match, so treat churn counts as
+approximate and spend comparisons on matched names as sound.
 
 **Industry labels are the state’s, not ours.** The SOS’s Industry Type register assigns every client one
 of 36 labels at registration; 35 are in use (“Other” is empty). Joined on `sysvalue` it covers
