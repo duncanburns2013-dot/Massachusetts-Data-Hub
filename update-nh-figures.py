@@ -22,6 +22,7 @@ Usage: seed | cities | state | all
 import datetime
 import glob
 import json
+import re
 import statistics
 import sys
 from pathlib import Path
@@ -33,6 +34,7 @@ RAW = HERE / "data" / "_raw_nh"                       # raw records — gitignor
 RAW.mkdir(parents=True, exist_ok=True)
 OUT = HERE / "data" / "nh-figures.json"               # report aggregates — published
 MONTHLY = HERE / "data" / "nh-state-monthly.json"     # statewide monthly sufficient-stats — published (derived)
+MD = HERE / "MASTER_DATA.md"                           # NH block stamped from OUT
 
 START_YEAR = 2020
 TODAY = datetime.date.today()
@@ -200,6 +202,59 @@ def write_out(data):
     print(f"  wrote {OUT} ({len(data['markets'])} markets)")
 
 
+# MASTER_DATA.md's New Hampshire block opens with "🔄 Source of truth:
+# data/nh-figures.json, refreshed daily by update-nh-figures.py". That was not
+# true: this script wrote the JSON and nothing wrote the markdown, so the block
+# was hand-typed against a feed that moves every day. On 2026-09-27 the freshness
+# job went red for exactly that reason -- the feed had moved to 444,723 / 532,614
+# / 3,116 overnight while the table still read yesterday's numbers -- and it would
+# have gone red again every day the feed moved, which is how a useful alert gets
+# switched off.
+#
+# update-mls-figures.py already stamps its own MASTER_DATA rows; this is the same
+# pattern for NH. Anchors that fail to match abort the run rather than silently
+# publishing a half-updated file, per the build rule in PLAYBOOK.md.
+def stamp_master_data(data):
+    sw = data["markets"].get("NH Statewide")
+    if not sw:
+        print("  MASTER_DATA: no NH Statewide in this run - left untouched")
+        return
+
+    md = MD.read_text(encoding="utf-8")
+    before = md
+
+    def money(v):
+        return f"${round(v):,}"
+
+    subs = [
+        (r'(Values below are that file as of \*\*)\d{4}-\d{2}-\d{2}(\*\*)',
+         lambda m: m.group(1) + data["updated"] + m.group(2),
+         'as-of date'),
+        (r'^\| NH Statewide \|[^\n]*$',
+         lambda m: '| NH Statewide | %s | %s | %s days | %s%% |' % (
+             money(sw["median_sale"]), money(sw["avg_sale"]),
+             round(sw["avg_dom"]), sw["splp_pct"]),
+         'statewide table row'),
+        (r'^- \*\*Active inventory:\*\*[^\n]*$',
+         lambda m: '- **Active inventory:** %s listings \u00b7 median list %s \u00b7 avg list %s' % (
+             f'{round(sw["active_count"]):,}',
+             money(sw["active_median_list"]), money(sw["active_avg_list"])),
+         'active inventory bullet'),
+    ]
+
+    for pat, repl, label in subs:
+        md, n = re.subn(pat, repl, md, count=1, flags=re.MULTILINE)
+        if n != 1:
+            sys.exit(f"MASTER_DATA.md: anchor for '{label}' did not match - "
+                     f"refusing to publish a half-updated file")
+
+    if md == before:
+        print("  MASTER_DATA: already current")
+        return
+    MD.write_text(md, encoding="utf-8")
+    print(f"  wrote {MD} (NH block)")
+
+
 def _months():
     y, m = START_YEAR, 1
     while (y, m) <= (TODAY.year, TODAY.month):
@@ -272,4 +327,5 @@ if __name__ == "__main__":
     if monthly is not None:
         MONTHLY.write_text(json.dumps(monthly))
     write_out(data)
+    stamp_master_data(data)
     print("done:", mode)

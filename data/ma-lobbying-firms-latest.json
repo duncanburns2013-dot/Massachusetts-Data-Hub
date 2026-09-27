@@ -1,0 +1,214 @@
+{
+  "year": 2025,
+  "source": "Massachusetts Secretary of the Commonwealth \u2014 Lobbyist Public Search",
+  "source_url": "https://www.sec.state.ma.us/LobbyistPublicSearch/Default.aspx",
+  "collected_via": "The-Peoples-Audit/userscripts/sos-lobbyist-detail-scraper.user.js \u2014 an in-browser userscript. The SOS site blocks server-side fetches, so this cannot be a GitHub Actions job; it is refreshed by hand from a browser session.",
+  "scraped_at": "2026-05-28T16:12:14.982Z",
+  "note": "Entity-level figures: fees Lobbyist Entities reported RECEIVING from clients. This is the firm side of the ledger, not client-side spending, and it excludes in-house lobbying. Current-year scrapes read $0 until the semi-annual disclosure deadlines (Jul 15 / Jan 15) pass.",
+  "registered_2025": {
+    "lobbyist_entities": 175,
+    "lobbyists": 1555,
+    "clients": 1695,
+    "total": 3425
+  },
+  "totals": {
+    "firms": 175,
+    "fees_received": 88409948.93,
+    "salaries_paid": 48327310.6,
+    "expenses": 9132624.88
+  },
+  "series": [
+    {
+      "year": 2016,
+      "firms": 197,
+      "received": 61330231.69,
+      "paid": 37486371.87,
+      "expenses": 8139743.19
+    },
+    {
+      "year": 2017,
+      "firms": 193,
+      "received": 63257843.47,
+      "paid": 37964810.71,
+      "expenses": 7852964.0
+    },
+    {
+      "year": 2018,
+      "firms": 198,
+      "received": 66315933.21,
+      "paid": 39228740.9,
+      "expenses": 8294217.12
+    },
+    {
+      "year": 2019,
+      "firms": 186,
+      "received": 68400374.06,
+      "paid": 40291404.82,
+      "expenses": 8503325.33
+    },
+    {
+      "year": 2020,
+      "firms": 180,
+      "received": 67784727.6,
+      "paid": 40926190.55,
+      "expenses": 8314150.14
+    },
+    {
+      "year": 2021,
+      "firms": 189,
+      "received": 71499694.35,
+      "paid": 43214869.24,
+      "expenses": 7835363.97
+    },
+    {
+      "year": 2022,
+      "firms": 176,
+      "received": 73423998.82,
+      "paid": 42855461.59,
+      "expenses": 8185860.09
+    },
+    {
+      "year": 2023,
+      "firms": 160,
+      "received": 79308978.25,
+      "paid": 44491470.01,
+      "expenses": 8396476.43
+    },
+    {
+      "year": 2024,
+      "firms": 173,
+      "received": 84572129.1,
+      "paid": 46426135.11,
+      "expenses": 8377648.39
+    },
+    {
+      "year": 2025,
+      "firms": 175,
+      "received": 88409948.93,
+      "paid": 48327310.6,
+      "expenses": 9132624.88
+    }
+  ],
+  "top_firms": [
+    {
+      "rank": 1,
+      "name": "Smith, Costello & Crawford Public Policy Group, LLC",
+      "received": 7899258.68,
+      "paid": 3740000.0,
+      "clients": 130,
+      "lobbyists": 13
+    },
+    {
+      "rank": 2,
+      "name": "Tremont Strategies Group LLC",
+      "received": 5688977.9,
+      "paid": 2330000.0,
+      "clients": 94,
+      "lobbyists": 9
+    },
+    {
+      "rank": 3,
+      "name": "O'Neill and Partners LLC.",
+      "received": 4583814.0,
+      "paid": 1871000.0,
+      "clients": 78,
+      "lobbyists": 13
+    },
+    {
+      "rank": 4,
+      "name": "Dempsey Associates LLC",
+      "received": 4388299.91,
+      "paid": 755000.0,
+      "clients": 67,
+      "lobbyists": 2
+    },
+    {
+      "rank": 5,
+      "name": "Kearney, Donovan & McGee, LLC",
+      "received": 3692599.96,
+      "paid": 1923739.77,
+      "clients": 59,
+      "lobbyists": 6
+    },
+    {
+      "rank": 6,
+      "name": "Bay State Strategies Group, LLC",
+      "received": 3168149.92,
+      "paid": 1419011.0,
+      "clients": 50,
+      "lobbyists": 5
+    },
+    {
+      "rank": 7,
+      "name": "ML Strategies, LLC",
+      "received": 2391831.62,
+      "paid": 1480000.0,
+      "clients": 37,
+      "lobbyists": 8
+    },
+    {
+      "rank": 8,
+      "name": "Issues Management Group Public Affairs, LLC",
+      "received": 2334013.32,
+      "paid": 1335822.0,
+      "clients": 39,
+      "lobbyists": 13
+    },
+    {
+      "rank": 9,
+      "name": "The Suffolk Group, LLC",
+      "received": 2108121.96,
+      "paid": 516000.0,
+      "clients": 41,
+      "lobbyists": 3
+    },
+    {
+      "rank": 10,
+      "name": "Rasky Partners, Inc.",
+      "received": 2085980.0,
+      "paid": 631809.28,
+      "clients": 38,
+      "lobbyists": 7
+    },
+    {
+      "rank": 11,
+      "name": "TSK Associates LLC",
+      "received": 2001840.96,
+      "paid": 2128981.0,
+      "clients": 31,
+      "lobbyists": 6
+    },
+    {
+      "rank": 12,
+      "name": "Preti Strategies, LLC",
+      "received": 1858227.79,
+      "paid": 1274299.28,
+      "clients": 42,
+      "lobbyists": 6
+    },
+    {
+      "rank": 13,
+      "name": "BCB Government Relations, Inc.",
+      "received": 1824833.33,
+      "paid": 1100000.0,
+      "clients": 33,
+      "lobbyists": 3
+    },
+    {
+      "rank": 14,
+      "name": "Benchmark Strategies, Inc.",
+      "received": 1773910.71,
+      "paid": 715000.0,
+      "clients": 29,
+      "lobbyists": 6
+    },
+    {
+      "rank": 15,
+      "name": "Commonwealth Counsel, LLC.",
+      "received": 1678999.96,
+      "paid": 633800.0,
+      "clients": 25,
+      "lobbyists": 4
+    }
+  ]
+}

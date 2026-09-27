@@ -263,13 +263,13 @@ footer a:hover{color:var(--gold)}
 <!-- ===== THE HIRED GUNS ===== -->
 <div id="firms" class="tab-content">
   <h2 class="section-title">The Hired Guns — Top Lobbying Firms</h2>
-  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:20px">These firms earn millions lobbying politicians — then their employees personally donate to those same politicians. OCPF records from just 3 firms reveal 4,298 individual donations totaling $822,463.</p>
+  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:20px">These firms earn millions lobbying politicians — then their employees personally donate to those same politicians. OCPF records from just 3 firms reveal 4,298 individual donations totaling $822,463. <strong>The cards below are single-year 2025 fees, from the state’s own filings</strong> — a different order from the eleven-year cumulative totals charted below them.</p>
 
   <div class="stat-row">
-    <div class="stat-card"><div class="label">ML Strategies</div><div class="value red">$25.4M</div><div class="sub">Earned in lobbying fees</div></div>
-    <div class="stat-card"><div class="label">Smith Costello</div><div class="value red">$20.4M</div><div class="sub">Earned in lobbying fees</div></div>
-    <div class="stat-card"><div class="label">Bay State Strategies</div><div class="value red">$17.3M</div><div class="sub">Earned in lobbying fees</div></div>
-    <div class="stat-card"><div class="label">O'Neill & Partners</div><div class="value amber">$13.6M</div><div class="sub">Earned (OCPF not searchable)</div></div>
+    <div class="stat-card"><div class="label">Smith Costello</div><div class="value red">$7.9M</div><div class="sub">2025 fees · 130 clients</div></div>
+    <div class="stat-card"><div class="label">Tremont Strategies</div><div class="value red">$5.7M</div><div class="sub">2025 fees · 94 clients</div></div>
+    <div class="stat-card"><div class="label">O'Neill & Partners</div><div class="value red">$4.6M</div><div class="sub">2025 fees · 78 clients</div></div>
+    <div class="stat-card"><div class="label">Dempsey Associates</div><div class="value amber">$4.4M</div><div class="sub">2025 fees · 67 clients</div></div>
   </div>
 
   <div class="alert">
@@ -280,13 +280,26 @@ footer a:hover{color:var(--gold)}
       <div class="alert-item"><strong>82.3% of all donations</strong> are exactly $200 — the legal maximum for lobbyists</div>
       <div class="alert-item">Another <strong>13.3% are exactly $100</strong> — the two amounts account for 95.6% of all donations</div>
       <div class="alert-item">This is not organic giving — this is a <strong>systematic, coordinated pattern</strong></div>
-      <div class="alert-item">O'Neill & Partners (#4 firm, $13.6M earned) creates an error in OCPF search — <strong>their donations cannot be tracked</strong></div>
+      <div class="alert-item">O'Neill & Partners (3rd-largest in 2025; $13.6M across 2015–2025) creates an error in OCPF search — <strong>their donations cannot be tracked</strong></div>
     </div>
   </div>
 
   <div class="chart-grid">
     <div class="chart-card">
-      <h3>Firm Lobbying Income (2015–2025) — Top 10</h3>
+      <h3>Top 10 Firms by 2025 Fees — State Filings</h3>
+      <div class="chart-area chart-tall"><canvas id="chartFirms2025"></canvas></div>
+      <div class="source">Source: Secretary of the Commonwealth, Lobbyist Public Search — fees Lobbyist Entities reported receiving, registration year 2025 (175 firms, $88.4M). Collected 2026-05-28.</div>
+    </div>
+    <div class="chart-card">
+      <h3>A Decade of Lobbying Fees (2016–2025)</h3>
+      <div class="chart-area chart-tall"><canvas id="chartFeeTrend"></canvas></div>
+      <div class="source">Source: Secretary of the Commonwealth, Lobbyist Public Search — annual totals across all registered Lobbyist Entities.</div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>Firm Lobbying Income (2015–2025) — Top 10 Cumulative</h3>
       <div class="chart-area chart-tall"><canvas id="chartFirmIncome"></canvas></div>
       <div class="source">Source: OpenSecrets, Top 20 Lobbying Firms, Massachusetts (2015–2025)</div>
     </div>
@@ -398,7 +411,7 @@ footer a:hover{color:var(--gold)}
 
   <div class="info-box">
     <h4>📋 What This Data Shows</h4>
-    <p>This is only the <strong>direct campaign donations</strong> from employees of three lobbying firms — it doesn't include the $76.7M in lobbying fees their clients paid, the unlimited donations to lawmaker nonprofits, or the fourth largest firm (O'Neill & Partners, $13.6M earned) whose OCPF data is unsearchable. The real money flowing through this system is orders of magnitude larger than what OCPF captures. And that's exactly how it's designed.</p>
+    <p>This is only the <strong>direct campaign donations</strong> from employees of three lobbying firms — it doesn't include the $76.7M in lobbying fees their clients paid, the unlimited donations to lawmaker nonprofits, or O'Neill & Partners — $13.6M across 2015–2025, 3rd-largest in 2025 — whose OCPF data is unsearchable. The real money flowing through this system is orders of magnitude larger than what OCPF captures. And that's exactly how it's designed.</p>
   </div>
 </div>
 
@@ -464,7 +477,7 @@ footer a:hover{color:var(--gold)}
       <div class="alert-item">State Auditor DiZoglio: agencies can <strong>refuse to cooperate with audits</strong> and face zero consequences</div>
       <div class="alert-item">Supervisor of Records has <strong>no enforcement authority</strong> — agencies can simply ignore requests</div>
       <div class="alert-item">Lawmaker nonprofits have <strong>no disclosure requirements</strong> — the public can't see who's giving</div>
-      <div class="alert-item">The #4 lobbying firm (O'Neill & Partners, <strong>$13.6M earned</strong>) can't even be searched in OCPF — the system returns an error</div>
+      <div class="alert-item">O'Neill & Partners (<strong>$13.6M across 2015–2025</strong>) can't even be searched in OCPF — the system returns an error</div>
     </div>
   </div>
 
@@ -516,6 +529,8 @@ function initCharts(tab){
       break;
 
     case 'firms':
+      safeChart('chartFirms2025',{type:'bar',data:{labels:["Smith Costello", "Tremont Strategies", "O'Neill & Partners", "Dempsey Associates", "Kearney Donovan", "Bay State Strategies", "ML Strategies", "Issues Mgmt Group", "Suffolk Group", "Rasky Partners"],datasets:[{label:'2025 Fees Received ($M)',data:[7.9, 5.69, 4.58, 4.39, 3.69, 3.17, 2.39, 2.33, 2.11, 2.09],backgroundColor:ctx=>ctx.dataIndex<3?'#A81733':'#14558F',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Millions ($)'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartFeeTrend',{type:'line',data:{labels:[2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],datasets:[{label:'Fees received ($M)',data:[61.3, 63.3, 66.3, 68.4, 67.8, 71.5, 73.4, 79.3, 84.6, 88.4],borderColor:'#A81733',backgroundColor:'rgba(168,23,51,.12)',fill:true,tension:.3},{label:'Paid to lobbyists ($M)',data:[37.5, 38.0, 39.2, 40.3, 40.9, 43.2, 42.9, 44.5, 46.4, 48.3],borderColor:'#14558F',backgroundColor:'rgba(20,85,143,.10)',fill:true,tension:.3}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,title:{display:true,text:'Millions ($)'}}}}});
       safeChart('chartFirmIncome',{type:'bar',data:{labels:['ML Strategies','Smith Costello','Bay State Strategies','O\'Neill & Partners','Murphy Donoghue','Tremont Strategies','Preti Strategies','Serlin Haley','Kearney Donovan','O\'Neill & Assoc'],datasets:[{label:'Total Income ($M)',data:[25.4,20.4,17.3,13.6,13.0,12.7,11.4,11.0,10.7,10.4],backgroundColor:ctx=>ctx.dataIndex<3?'#A81733':ctx.dataIndex===3?'#5A6467':'#14558F',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Millions ($)'}}},plugins:{legend:{display:false}}}});
       safeChart('chartDonationDist',{type:'bar',data:{labels:['$200','$100','$500','$150','$250','$125','$1,000','Other'],datasets:[{label:'# of Donations',data:[3539,572,48,34,33,29,12,31],backgroundColor:ctx=>ctx.dataIndex===0?'#A81733':'#14558F',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,title:{display:true,text:'Number of Donations'}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const pct=(ctx.parsed.y/4298*100).toFixed(1);return `${ctx.parsed.y} donations (${pct}%)`}}}}}});
       safeChart('chartFirmDonations',{type:'bar',data:{labels:['ML Strategies','Smith Costello & Crawford','Bay State Strategies'],datasets:[{label:'Total ($)',data:[335496,273517,213450],backgroundColor:['#A81733','#14558F','#B07C20'],borderRadius:8},{label:'# Donations',data:[1809,1379,1110],backgroundColor:['rgba(168,23,51,0.3)','rgba(20,85,143,0.3)','rgba(176,124,32,0.3)'],borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true}},plugins:{legend:{position:'top',labels:{font:{size:11}}}}}});
