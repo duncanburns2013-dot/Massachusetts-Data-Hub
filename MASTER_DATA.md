@@ -109,16 +109,42 @@ FIRST, then update the relevant dashboard.
 | Total annual immigration cost | ~$2.35B | Multiple state sources | ✅ Feb 2026 |
 | Illegal-only cost estimate | $800M–$1.5B | CIS/FAIR/state data | ✅ Feb 2026 |
 | Undocumented tax contributions (MA) | ~$1.4B total ($446M state/local) | ITEP | ✅ Feb 2026 |
+| Immigrant-vendor payments file (28 vendors, 8,883 payments) | $228.6M total; **$46.8M (20.5%)** identifiable immigrant/refugee or shelter programs | Computed from `data/payments.json` (tiers 0+1) | ✅ Sep 2026 |
 
 ### Massachusetts — Shelter Crisis
 
+> **Two definitions, one source. Label every figure with the one it uses.**
+> **Shelter system** = CTHRU (Comptroller budget-vs-actual, Socrata `kv7m-35wn`, field
+> `total_expenses`) summed over EA shelter 7004-0101, HomeBASE 7004-0108, shelter workforce
+> 7004-0109, family shelter diversion 7004-0110 (new FY27), and the shelter and immigrant
+> reserves 1599-0514, 1599-1213, 1599-2625, 1599-0122, 1599-0925. **EA line** = 7004-0101 alone.
+> Neither includes trust fund 7004-4778, which CTHRU budget-vs-actual does not carry.
+> Query: https://cthru.data.socrata.com/resource/kv7m-35wn.json (rows updated 2026-09-30).
+
 | Metric | Figure | Source | Verified |
 |--------|--------|--------|----------|
-| FY2024 shelter spending (actual) | ~$978M | EOHLC / State Auditor | ✅ Feb 2026 |
-| FY2025 shelter spending | ~$978M | EOHLC | ✅ Feb 2026 |
-| FY2026 shelter budget | $276M | Gov. Healey budget | ✅ Feb 2026 |
+| Shelter system, FY2022 actual | $228.53M | CTHRU kv7m-35wn | ✅ Sep 2026 |
+| Shelter system, FY2023 actual | $343.55M | CTHRU kv7m-35wn | ✅ Sep 2026 |
+| Shelter system, FY2024 actual | $803.74M | CTHRU kv7m-35wn | ✅ Sep 2026 |
+| Shelter system, FY2025 actual | $1,042.45M ($1.04B) | CTHRU kv7m-35wn | ✅ Sep 2026 |
+| Shelter system, FY2026 actual (books near-final) | $360.92M | CTHRU kv7m-35wn | ✅ Sep 2026 |
+| Shelter system, FY2027 to date (Jul 1–Sep 30, 2026) | $74.42M | CTHRU kv7m-35wn | ✅ Sep 2026 |
+| Shelter system, FY24 + FY25 | $1.85B ($1,846.19M, derived) | CTHRU kv7m-35wn | ✅ Sep 2026 |
+| Shelter system, FY22–FY25 | $2.42B ($2,418.27M, derived) | CTHRU kv7m-35wn | ✅ Sep 2026 |
+| Shelter system, FY22–FY26 | $2.78B ($2,779.19M, derived) | CTHRU kv7m-35wn | ✅ Sep 2026 |
+| EOHLC all-in FY2026 (shelter $286.8M + exits incl. HomeBASE $153.7M) | $440.5M, incl. $83.0M from trust fund 7004-4778 not in CTHRU | A&F/EOHLC biweekly EA report, 8 Sep 2026 (SD.4220) | ✅ Sep 2026 |
+| EA line 7004-0101, actual | FY22 $202.56M · FY23 $274.38M · FY24 $643.25M · FY25 $326.07M · FY26 $259.54M · FY27 YTD $31.13M | CTHRU kv7m-35wn | ✅ Sep 2026 |
+| HomeBASE 7004-0108, actual | FY22 $25.97M · FY23 $49.41M · FY24 $37.22M · FY25 $57.32M · FY26 $91.35M (incl. $34.07M transferred in) · FY27 YTD $42.90M | CTHRU kv7m-35wn | ✅ Sep 2026 |
+| HomeBASE growth, FY22 → FY26 | +252% (derived) | CTHRU kv7m-35wn | ✅ Sep 2026 |
+| FY2026 projected | EA 7004-0101 $276,421,903 · HomeBASE $91,386,678 | budget.digital.mass.gov FY27 line-item data | ✅ Sep 2026 |
+| FY2027 GAA | EA 7004-0101 $259,900,648 · HomeBASE 7004-0108 $82,322,001 · 7004-0110 $5,000,000 | budget.digital.mass.gov FY27 line-item data | ✅ Sep 2026 |
+| EA caseload, 3 Sep 2026 | 1,533 families in shelter + 55 in clinical safety sites | EA report SD.4220, malegislature.gov/Bills/194/SD4220.pdf | ✅ Sep 2026 |
 | Cost per family per week | $3,496 | State Auditor | ✅ Feb 2026 |
 | $100K fee per shelter family | Proposed | Legislature | ✅ Feb 2026 |
+
+- **HomeBASE spending is reported.** The 8 Sep 2026 EA report carries FY26 "exits" spending ($153.7M), a category that includes HomeBASE; CTHRU carries 7004-0108.
+- **No official migrant share of EA families is published** (checked Sep 2026). Do not apply one.
+- **The immigration dashboard's $1.88B FY25 estimate** = emergency shelter $1.06B + wraparound $150M + modelled CIS K-12 $575M + healthcare $95M. Its shelter part covers every family in emergency shelter, so it is not a count of people here unlawfully. CTHRU's FY25 shelter-system actual is $1.04B, not $1.06B.
 
 ### Massachusetts — H-1B Workers
 
@@ -522,9 +548,29 @@ against OCPF since. Donation patterns establish association, not agreement.
 | Metric | Value | Source | Verified |
 |--------|-------|--------|----------|
 | Expected fraud (national model) | ~$50M | USDA-FNS Trafficking Studies | ✅ Feb 2026 |
-| Detected fraud (MA) | $0.69M | MA BSI Q1 FY2025 | ✅ Feb 2026 |
-| Detection rate | ~1.4% | Calculated | ✅ Feb 2026 |
+| Detected fraud (MA), BSI Q1 FY2025 | $2,549,325 all programs, of which SNAP $1,528,615 | BSI Q1 FY2025 report, malegislature.gov/Bills/194/SD2676.pdf | ✅ Sep 2026 |
+| Detection rate (SNAP, one quarter) | ~3.1% ($1,528,615 ÷ ~$50M) | Calculated | ✅ Sep 2026 |
 | Leading fraud type | Identity fraud (31%) | LexisNexis True Cost of Fraud | ✅ Feb 2026 |
+
+- This row previously read $0.69M, which matches no line of the Q1 FY2025 report. It equals the SNAP figure ($690K) in the FY2025 Q4 program breakdown (inference). The detection rate compares one quarter with a model figure, so treat it as a floor.
+
+### BSI — fraud identified, all programs (State Auditor, Bureau of Special Investigations)
+
+Administrative findings, not convictions. BSI cannot collect settlements; the benefit programs do.
+
+| Period | Fraud identified | Source | Verified |
+|--------|------------------|--------|----------|
+| FY2022 | $13,519,349.55 | BSI FY2022 Annual Report (Wayback of mass.gov) | ✅ Sep 2026 |
+| FY2023 | $12,322,688.13 | BSI FY2023 Annual Report | ✅ Sep 2026 |
+| FY2024 | $10,265,265 | BSI FY2024 Annual Report | ✅ Sep 2026 |
+| FY2025 | $11,952,288 ($11.95M), 4,179 investigations | OSA release, 30 Jan 2026 | ✅ Sep 2026 |
+| FY2026 first half (Q1 + Q2, Jul–Dec 2025) | $4,486,102; civil recoveries $392,713 | malegislature.gov/Bills/194/SD3769.pdf | ✅ Sep 2026 |
+| FY2025 Q1 | $2,549,325 (SNAP $1,528,615) | malegislature.gov/Bills/194/SD2676.pdf | ✅ Sep 2026 |
+| Annual range FY22–FY25 (tax-budget card) | $10.3–13.5M | Derived from the rows above | ✅ Sep 2026 |
+| Detection rate (tax-budget card) | 0.26% = FY25 $11.95M ÷ $4,550M benefit base in the page's own table | Calculated | ✅ Sep 2026 |
+| Program breakdown on tax-budget-dashboard | MassHealth $3.8M, SNAP $690K, PCA $146K, Childcare $135K, TAFDC $23K, EAEDC $9K — **FY2025 Q4 quarterly (Apr–Jun 2025), not annual**; the table's Detected column sums to $4.66M | BSI FY2025 Q4 report | Period label ✅ Sep 2026; PCA $145,638 and EEC $134,526 confirmed (verbatim repost); other values not re-read |
+
+FY2026 full year not yet published (checked 30 Sep 2026).
 
 ---
 
@@ -681,6 +727,11 @@ excluded from both sides):
 | FY27 | 63.400 | — not begun | — |
 
 Plotted as `h5Outturn` on `tax-budget-dashboard.html`.
+
+**FY25 gap = $5.736B** (63.303 − 57.567), used everywhere on `tax-budget-dashboard.html`
+(constants `GAA_FY25_ACTUAL` / `GAA_FY25_ENACTED_LFL`). Label it **supplemental spending above
+the enacted budget, not waste**. It replaced a $6.2B figure computed as a House Ways & Means
+outturn ($64.0B) minus the signed headline ($57.8B), two different scopes.
 
 > **Do not compute this by summing `gaaspend.xlsx` raw.** That file contains inter-fund
 > transfer accounts — `1595-0029` (GF → Education & Transportation Fund) alone is **$5.3B**
@@ -1088,6 +1139,7 @@ redeploys every three hours, and after every one of these runs.
 
 | Date | What Changed | Updated By |
 |------|-------------|------------|
+| 2026-09-30 | **Contradiction fixes, immigration + tax-budget dashboards.** Shelter spending replaced with one CTHRU series (kv7m-35wn) under two stated definitions, shelter system and EA line; two-year and cumulative totals re-derived ($1.85B, $2.42B, $2.78B). HomeBASE $101M → CTHRU $57.3M (FY25) / $91.4M (FY26); HomeBASE-reporting-lapsed claim corrected (SD.4220 carries exits incl. HomeBASE). Caseload 4,800 → 1,533 + 55 (3 Sep 2026). $1.88B estimate relabelled: all shelter families plus modelled CIS costs. BSI program chart relabelled FY25 Q4; BSI trend and cards → annual totals FY22–FY25; Detected column total → $4.66M. SNAP BSI row $0.69M → Q1 FY25 $2,549,325. FY25 gap $6.2B → $5.736B, labelled supplemental spending. Vendor card $142.2M → $46.8M computed from `data/payments.json`. Sources: CTHRU kv7m-35wn, EA report SD.4220, BSI reports SD.2676 / SD.3769 and the FY22–FY25 annual totals, budget.digital.mass.gov FY27 data; retrieved 2026-09-30. | Claude |
 | 2026-08-11 | **FY2027 enacted-budget review against the official mass.gov GAA exports.** Diffed all 860 `LINE_ITEMS` in `tax-budget-dashboard.html` against `gaa1.xlsx`: **zero amount mismatches** — the H.5555 conference data the dashboard was built on *is* the enacted law, because Healey signed with no vetoes. Fixed one account-code typo (`8910-0702` → `8910-8702`). Relabelled the tab, headings, sources and the `FY27_H5555` constant (now `FY27_GAA = 63.416`) from "conference report" to enacted GAA, and replaced the stale "heads to Gov. Healey's desk" line. Added the **scope reconciliation table** above — the headline total excludes Intragovernmental Service Spending — plus FY2027 key figures, the enacted-vs-actual supplemental gap (new `h5Outturn` chart), and the local-aid CSV footer-row gotcha. Added the OPEB finding to `pension-dashboard.html`: the SRBT deposit (line 1595-6152) is down 27% since FY24 while the budget creates a pension COLA reserve. Cleared both long-standing defects — CPS/ACS mislabel and the unlabelled $7,732 property tax figure (now $8,113, FY2026). | Claude + Duncan |
 | 2026-02-05 | Initial creation — all data compiled from prior chats | Claude + Duncan |
 | 2026-08-01 | Refreshed the manual dashboards. Commercial RE → Q2 2026 (C&W Boston 19.0%, US 20.1%; Colliers 23.7%; CBRE 18.7%; Trepp office delinquency 11.57%). Tax & Budget verified already current (FY2027 H.5555 enacted $63.4B, signed 2026-07-09, parsed July 2026). Healthcare held at the 2024 MA/US pair with KFF's 2025 national figure ($26,993) noted, since no MA 2025 comparator is published. Made the CPI badge and immigration hero self-stamping so they can't go stale again. | Claude + Duncan |
