@@ -91,6 +91,11 @@ def checks():
                     f'${f["received"] / 1e6:.1f}M',
                     'ma-lobbying-firms-latest.json'))
     L = lob['ledger_2026']
+    # The hero figures. $104M sat here for the life of the page, in four places,
+    # sourced nowhere -- the one thing a page arguing checkability cannot carry.
+    out.append(('Hero: 2025 lobbying spend',
+                f'${lob["comparison"]["2025_full_year"]["total"] / 1e6:.1f}M',
+                'ma-lobbying-firms-latest.json'))
     out.append((f'MA lobbying fees to firms, {lob["year"]}',
                 f'${L["clients_to_firms"] / 1e6:.1f}M',
                 'ma-lobbying-firms-latest.json'))

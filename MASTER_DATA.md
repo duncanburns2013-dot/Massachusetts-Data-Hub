@@ -1062,6 +1062,8 @@ land, exactly as 2025 did.
 | Spending by Industry — 2026, State’s Own Labels ✅ | Secretary of the Commonwealth, Lobbyist Public Search — Industry Type; `data/ma-lobbying-firms-latest.json` | 2026 H1 |
 | Health share, 2025 full year — 24.48% of $119,177,253 ✅ | Secretary of the Commonwealth, Lobbyist Public Search — Industry Type | 2025 |
 | Health rolled up across 4 SOS labels — $15,738,477, 25.2% ✅ | Secretary of the Commonwealth, Lobbyist Public Search — Industry Type | 2026 H1 |
+| **Hero: total lobbying spend, 2025** — $119.2M ✅ | Secretary of the Commonwealth, Lobbyist Public Search — client filings: $88,602,704 to firms + $20,888,628 to in-house lobbyists + $9,685,922 expenses = $119,177,253 | 2025 |
+| **Hero: lobbyists per lawmaker** — 8:1 ✅ | Secretary of the Commonwealth registrant index: 1,555 registered lobbyists ÷ 200 legislators (160 House + 40 Senate) = 7.78 | 2025 |
 | Top Spenders — 2026 First-Half Filings ✅ | Secretary of the Commonwealth, Lobbyist Public Search — `data/ma-lobbying-firms-latest.json`; client-reported fees, in-house salaries and expenses | 2026 H1 |
 | Top 10 Firms by 2026 Fees — State Filings ✅ | Secretary of the Commonwealth, Lobbyist Public Search — `data/ma-lobbying-firms-latest.json` | 2025 |
 | A Decade of Lobbying Fees (2016–2026) ✅ | Secretary of the Commonwealth, Lobbyist Public Search — annual entity totals | 2016–2025 |
