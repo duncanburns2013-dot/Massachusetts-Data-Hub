@@ -20,8 +20,16 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    # NOT in the shared push-to-main group. This job runs once a month and was
+    # queueing behind the daily ones: the wait grew 16s (Jul) -> 1h40m (Aug) ->
+    # 6h00m (Sep), at which point GitHub cancelled it and cost-of-living went 41
+    # days stale. A monthly job cannot win a queue against daily ones.
+    #
+    # Dropping the group is safe because it was never what made the push correct:
+    # the commit step below already retries five times, rebasing onto main between
+    # attempts, which is what actually handles a concurrent push.
     concurrency:
-      group: push-to-main
+      group: update-census
       cancel-in-progress: false
 
     steps:
@@ -75,7 +83,8 @@ jobs:
           git add immigration-dashboard.html affordability-dashboard.html
           # MCAS touches three more pages; without these the run reports
           # success and commits nothing, which is the quiet failure.
-          git add education-statewide.html education-merrimack-valley.html \n                  all-things-boston.html data/mcas-latest.json
+          git add education-statewide.html education-merrimack-valley.html \
+                  all-things-boston.html data/mcas-latest.json
           git add data/census-latest.json data/cost-of-living-latest.json
           git commit -m "Auto-update: Census ACS data $(date +'%B %Y')"
           for attempt in 1 2 3 4 5; do
