@@ -519,6 +519,58 @@ else:
 
 
 # --------------------------------------------------------------------------
+# MASTER_DATA.md
+# --------------------------------------------------------------------------
+# MASTER_DATA.md carries the same EIA figures this script writes into the
+# dashboard, and nothing kept them in step: on 2026-09-30 the dashboard moved to
+# Jul 2026 (MA 30.49c, US 18.31c) while MASTER_DATA still said Jun 2026 (29.61c,
+# 18.34c), and the freshness job went red. update-nh-figures.py and
+# update-mls-figures.py already stamp their own rows; this is the same pattern.
+#
+# ONLY MA, US and the month are stamped, because only those are fetched. NH is
+# not in STATES -- its 27.01c figure comes from somewhere else and is hand-kept,
+# so advancing it here would be inventing a number. The New England figure is
+# deliberately frozen with its own note in the file. Both are left alone.
+#
+# An anchor that fails to match aborts rather than writing a half-updated file,
+# per PLAYBOOK.md.
+MD_FILE = os.path.join(HERE, "MASTER_DATA.md")
+
+md_subs = [
+    ("MA residential electricity",
+     r'(\| \*\*MA residential electricity, all-in\*\* \| \*\*)[\d.]+(¢/kWh\*\* \()[A-Za-z]{3} \d{4}(\))',
+     rf'\g<1>{cents(ma)}\g<2>{mon_abbr}\g<3>'),
+    ("US residential electricity",
+     r'(\| US / New England residential electricity \| )[\d.]+(¢ \()[A-Za-z]{3} \d{4}(\))',
+     rf'\g<1>{cents(us)}\g<2>{mon_abbr}\g<3>'),
+    ("annual overpayment",
+     r'(\| \*\*MA annual overpayment vs US average\*\* \| \*\*\$)[\d,]+(/household\*\* \()[A-Za-z]{3} \d{4}(\))',
+     rf'\g<1>{dollars(overpay)}\g<2>{mon_abbr}\g<3>'),
+    ("FL comparison rate",
+     r'(\| FL residential electricity — the dashboard’s low-rate comparison \| )[\d.]+(¢/kWh \()[A-Za-z]{3} \d{4}(\))',
+     rf'\g<1>{cents(rate["FL"])}\g<2>{mon_abbr}\g<3>'),
+    ("state-comparison chart row",
+     r'(Residential Electricity Rates — MA vs\. Selected States \(¢/kWh\) \| EIA Electric Power Monthly Table 5\.6\.A, )[A-Za-z]{3} \d{4}( \| 🔄 )[A-Za-z]{3} \d{4}',
+     rf'\g<1>{mon_abbr}\g<2>{mon_abbr}'),
+]
+
+with open(MD_FILE, "r", encoding="utf-8") as f:
+    md = f.read()
+md_before = md
+for label, pat, repl in md_subs:
+    md, n = re.subn(pat, repl, md, count=1)
+    if n != 1:
+        sys.exit(f"MASTER_DATA.md: anchor for '{label}' did not match - "
+                 f"refusing to publish a half-updated file")
+if md == md_before:
+    print("MASTER_DATA.md: already current.")
+else:
+    with open(MD_FILE, "w", encoding="utf-8") as f:
+        f.write(md)
+    print(f"MASTER_DATA.md: EIA rows stamped to {mon_abbr}.")
+
+
+# --------------------------------------------------------------------------
 # Burden constants
 # --------------------------------------------------------------------------
 # The same EIA series the dashboard uses also backs the burden calculators, but
