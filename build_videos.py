@@ -24,6 +24,7 @@ that it shows its working.
 import io, json, re, html, os
 
 VIDEOS = [
+ ('qV369v4lllI','parody',   "A single coined word for the Governor's immigration record, borrowed from a parody account on X."),
  ('j5q_MkabqZI','parody',   'How Massachusetts Democrats actually work, staged as the meeting they would never hold.'),
  ('Opo_qFI7G_0','parody',   'An awards night for the 2025 Massachusetts Democratic Party, staged before the State of the State.'),
  ('guB1b7l0wMs','explainer','The gaslighting on utility bills, set against the law that put those charges on them.'),
