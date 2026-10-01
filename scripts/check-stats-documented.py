@@ -58,7 +58,17 @@ TAG = re.compile(r"<[^>]+>")
 
 
 def digits(text):
-    """The comparable core of a printed statistic."""
+    """The comparable core of a printed statistic.
+
+    HTML entities are stripped FIRST. Without that, the numeric escape in a
+    currency or unit symbol leaks into the comparison: "30.49&#x00A2;" (the cent
+    sign) reduced to "30.49002", which can never match the "30.49" written in
+    method.html. Every cent-denominated figure on the energy dashboard was
+    therefore permanently unverifiable by this check -- it reported them as
+    undocumented no matter what MASTER_DATA.md said. Found 2026-10-01, when the
+    EIA release moved the values and made the breakage visible.
+    """
+    text = re.sub(r"&#?\w+;", "", text)
     d = re.sub(r"[^0-9.]", "", text)
     d = d.rstrip(".").lstrip("0")
     return d or None

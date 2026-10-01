@@ -61,7 +61,19 @@ DATA = [
     # likely to rot unnoticed. 400 days so a skipped year cannot hide, given
     # disclosure closes each registration year the following January 15.
     ("data/ma-lobbying-firms-latest.json", 400, "annual; manual browser scrape, no workflow can fetch it"),
-    ("data/census-latest.json",          75,  "monthly job, annual source; worst gap 26d"),
+    # 75 days was calibrated on a commit cadence that no longer exists. Until
+    # 2026-07-16 this file carried a fetched_at timestamp rewritten on every run,
+    # so the monthly job committed every month whether or not ACS had moved --
+    # the "worst gap 26d" was measuring the heartbeat, not the data. That commit
+    # stopped the timestamp-only writes, and the file has correctly not moved
+    # since: ACS publishes one vintage a year, in December. The old limit was
+    # therefore guaranteed to trip every autumn on a feed that is working
+    # exactly as intended, which it did on 2026-10-01 at 77 days.
+    #
+    # 400 days matches the other annual sources here (prit-latest.json, the ACS
+    # vintage row) and still makes a genuinely skipped December impossible to
+    # miss. A broken job is caught by the workflow going red, not by this.
+    ("data/census-latest.json",         400,  "annual ACS vintage, published each December"),
     ("data/irs-soi-migration-latest.json", 75, "monthly job, annual source; worst gap 31d"),
     # Census releases one vintage a year, in December, and restates every earlier
     # year when it does. 400 days so a missed release is impossible to ignore -
