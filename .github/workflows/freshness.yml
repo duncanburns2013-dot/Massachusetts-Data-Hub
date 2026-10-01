@@ -60,3 +60,22 @@ jobs:
       - name: Check MASTER_DATA.md still matches the feeds it mirrors
         if: always()
         run: python scripts/check-consistency.py
+
+      # Fourth question, and the only one that looks outside this repository:
+      # is the job that writes the feed still running at all?
+      #
+      # The Peoples Audit has nine scheduled workflows and no health check of any
+      # kind. If fetch-cthru-aggregates or fetch-state-contracts started failing,
+      # nothing anywhere would say so until someone opened the Actions tab. It
+      # also catches GitHub silently DISABLING a schedule after 60 days without a
+      # push, which is the quietest stop of all.
+      #
+      # Read-only and unauthenticated against public repos; GITHUB_TOKEN is passed
+      # only for the higher rate limit.
+      #
+      # always(), for the same reason as the checks above.
+      - name: Check the other repos' automation is still running
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/check-repos.py
