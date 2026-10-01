@@ -300,6 +300,7 @@ def main():
     # Aug 20 run emptied nominal_income and the page published "$NaN" and a rank
     # of "0th"; carrying the last good values forward keeps a partial outage
     # from becoming a false figure.
+    prev = {}
     if os.path.exists(OUT):
         try:
             prev = json.load(open(OUT, encoding="utf-8"))
@@ -310,6 +311,26 @@ def main():
                 payload[key] = prev[key]
                 payload.setdefault("meta", {}).setdefault("carried_forward", []).append(key)
                 print(f"  WARNING: {key} came back empty - carried the previous values forward")
+
+    # meta.generated is rewritten on every run, so the file ALWAYS differed and the
+    # monthly job ALWAYS committed -- whether or not BEA had published anything. The
+    # git log therefore recorded the cron, not the data, and the 45-day freshness
+    # limit was calibrated against that heartbeat rather than against the source.
+    #
+    # The source is annual: BEA Regional Price Parities and real per-capita income
+    # publish once a year, and the MIT living-wage figures likewise. Compared on
+    # payload alone, ignoring the timestamp, so a run that finds nothing new leaves
+    # the file untouched and produces no commit. Same fix 9e43ff1 made for
+    # census-latest.json on 2026-07-16.
+    if prev:
+        a = {k: v for k, v in payload.items() if k != "meta"}
+        b = {k: v for k, v in prev.items() if k != "meta"}
+        am = {k: v for k, v in payload.get("meta", {}).items() if k != "generated"}
+        bm = {k: v for k, v in prev.get("meta", {}).items() if k != "generated"}
+        if a == b and am == bm:
+            print("no change since the last run (BEA has not republished) - "
+                  "leaving the file and its timestamp alone")
+            payload["meta"]["generated"] = prev["meta"]["generated"]
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:

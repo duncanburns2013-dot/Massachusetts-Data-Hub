@@ -48,7 +48,14 @@ DATA = [
     # few weeks and the filenames carry the edition date, so a stalled feed
     # shows up here rather than as a page quietly stuck on an old edition.
     ("data/mbta-3a-latest.json",         60,  "EOHLC reissues the 3A tables every few weeks"),
-    ("data/cost-of-living-latest.json",  45,  "monthly BEA/MIT; worst real gap 13d"),
+    # Was 45 days on "worst real gap 13d". That gap was the cron, not the data:
+    # meta.generated was rewritten every run so the file committed monthly whether
+    # or not BEA had published. With that heartbeat removed the file only moves
+    # when the source does, and BEA publishes Regional Price Parities and real
+    # per-capita income once a year. 45 days could not survive a single missed
+    # run -- and one was missed, when the Sep 20 job sat 6 hours in the
+    # push-to-main queue and was cancelled.
+    ("data/cost-of-living-latest.json", 400,  "annual BEA RPP + MIT living wage"),
     # Polled daily by the self-hosted runner, but only committed when CBP
     # actually publishes -- the updater keeps the old fetched_at on a no-op run
     # precisely so this check keeps measuring the data and not the heartbeat.
