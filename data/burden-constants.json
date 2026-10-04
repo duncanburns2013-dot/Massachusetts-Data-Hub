@@ -360,7 +360,7 @@
       "utility": {
         "retailElectricCentsPerKwh": {
           "value": 30.49,
-          "note": "VERIFIED BASELINE, period 2026-07. Residential average retail price (was 29.90c in May 2025, so MA fell 3.6% year over year). Not a policy charge -- this is the all-in price and acts as the upper bound and sanity check on the policy component below. US average 18.44c; New England 28.14c. EIA published the June release on 2026-08-26 (MA 29.61c, US 18.34c). This constant advances Massachusetts and New Hampshire together on the next automated run, so the MA-vs-NH comparison never mixes two EIA months.",
+          "note": "VERIFIED BASELINE. Residential average retail price, EIA API v2 retail-sales sector RES. The value and period fields are rewritten by the automated EIA run -- do not restate either of them in this note. That is how the previous note came to describe June's figures under a July period label, and nothing caught it. Not a policy charge: this is the all-in price, and it bounds the policy component below. Massachusetts and New Hampshire advance together, so the comparison never mixes two EIA months.",
           "source": "EIA Electric Power Monthly Table 5.6.A, via the EIA API v2 (retail-sales, sectorid=RES)",
           "url": "https://api.eia.gov/v2/electricity/retail-sales/data/?frequency=monthly&data[0]=price&facets[sectorid][]=RES&facets[stateid][]=MA",
           "verified": "2026-10-02",
@@ -592,7 +592,7 @@
       "utility": {
         "retailElectricCentsPerKwh": {
           "value": 26.6,
-          "note": "VERIFIED BASELINE, period 2026-07. Residential average retail price. New Hampshire is 2.60c/kWh cheaper than Massachusetts on the all-in price (27.01c against 29.61c), and the gap WIDENED sharply this release: in 2026-05 it was 1.49c, because NH fell from 27.33c while Massachusetts rose from 28.82c. The previous note here read that NH was 'closing fast' on Massachusetts and that this 'materially weakens the Layer 4 is a genuine NH advantage claim' -- both were true of the May figures and are now the opposite of what the June figures show. Direction of travel is one month of data either way, so treat it as a snapshot, not a trend.",
+          "note": "VERIFIED BASELINE. Residential average retail price, EIA API v2 retail-sales sector RES. DO NOT READ A TREND INTO THE MA-NH GAP. Five consecutive months, Mar-Jul 2026, gave 3.29c, 2.21c, 1.49c, 2.60c and 3.89c -- it swings by more than two cents with no direction. An earlier note here said NH was 'closing fast' on Massachusetts and that this 'materially weakens the Layer 4 is a genuine NH advantage claim'; the next release reversed it and the one after reversed it again. Each reading was one month wearing the clothes of a trend. Quote the level, not the direction, without a year of data. Current values live in the value fields, which the automated run maintains; this note deliberately does not repeat them.",
           "source": "EIA Electric Power Monthly Table 5.6.A, via the EIA API v2 (retail-sales, sectorid=RES)",
           "url": "https://api.eia.gov/v2/electricity/retail-sales/data/?frequency=monthly&data[0]=price&facets[sectorid][]=RES&facets[stateid][]=NH",
           "verified": "2026-10-02",
