@@ -204,7 +204,10 @@ The figures below are that file's current contents; the Feb 2026 column showed a
 |--------|--------|--------|----------|
 | IRS returns lost (cumulative 2011–2023) | 184,719 | IRS SOI | 🔄 Aug 2026 |
 | AGI lost (cumulative 2011–2023) | $24.7B | IRS SOI | 🔄 Aug 2026 |
-| Net outflow, latest year (2022-23) | 16,921 returns | IRS SOI | 🔄 Aug 2026 |
+| Net outflow, latest year (2022-23) | 16,921 returns — **includes moves abroad** | IRS SOI | 🔄 Aug 2026 |
+
+The 16,921 is inflow 102,076 against outflow 85,155, and both totals include the foreign category. It is therefore NOT comparable with a domestic-only net migration count, which is a smaller number. Say which one a card means before putting the two near each other.
+
 | Net domestic out-migration, 2020-2025 | 182,145 people | US Census Bureau, Population Estimates (NST-EST2025 components of change) | 🔄 Sep 2026 |
 | Net AGI loss, latest year (2022-23) | $4.18B | IRS SOI | 🔄 Aug 2026 |
 | 2024 US growth from immigration | 84% | Census | ✅ Jan 2026 |
@@ -559,17 +562,21 @@ against OCPF since. Donation patterns establish association, not agreement.
 | MA SNAP persons, a year earlier | 1,079,234 (June 2025) | same file | ✅ Oct 2026 |
 | Change over the year | −17.6% (about −190,000 people) | same file | ✅ Oct 2026 |
 | MA poverty rate | 9.7% | Census ACS 1-year 2024, table S1701 (API, retrieved 4 Oct 2026) | ✅ Oct 2026 |
-| MA SNAP participation rate | 15.6% — **needs re-checking** | USDA-FNS FY2024 | ⚠️ stale |
+| MA residents receiving SNAP | 15.6% of the state population | USDA-FNS FY2024 persons over 2024 population (derived) | ✅ Oct 2026, relabelled |
 
 - **The headcount fell hard.** MA SNAP enrolment is down 17.6% year over year on
   USDA's own monthly series. The figure this table carried until 4 Oct 2026 was
   1.11M, which overstated it by roughly 190,000 people.
-- **Do not recompute the participation rate from the headcount.** USDA's
-  "participation rate" is the share of *eligible* people who enrol, published
-  annually with a long lag — not persons divided by state population. Dividing
-  889,327 by MA population gives about 12.5%, which is a different statistic and
-  must not be published under USDA's attribution. The FY2025 rate replaces it
-  when USDA publishes it.
+- **That 15.6% was mislabelled, and this is the correction.** It is the share of
+  Massachusetts *residents* on SNAP, derived as FY2024 persons over 2024
+  population. USDA's own "participation rate" is a different measure entirely —
+  the share of *eligible* people who enrol — and for Massachusetts it is reported
+  at the 100% cap. The two are not interchangeable and must never be swapped for
+  one another. See `E:\Research\MA-SNAP-vs-poverty-2026.md` section 5 for the
+  working; the 100% figure is carried from there and has not been re-derived here.
+- On the current headcount the share of residents would be about 12.5% (889,327
+  over roughly 7.1M), but that pairs a June 2026 count with an older population
+  denominator, so it is not published as a figure.
 - **The old "gap (SNAP − poverty) 5.2 pp" row is dropped**, because it
   subtracted a participation rate from a poverty rate — two different
   denominators over two different years. It was arithmetic, not a finding.
