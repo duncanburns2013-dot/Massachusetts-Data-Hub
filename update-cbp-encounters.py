@@ -597,6 +597,42 @@ def main():
     else:
         print("  !! chart footnote anchor not found -- NOT updated")
 
+    # ---- Do not let a stale export publish over fresher data ----------------
+    #
+    # The exports in data/_raw_cbp are downloaded by hand, because CBP serves
+    # them through a Tableau embed behind an AWS WAF captcha. They are preferred
+    # over scraping, which is correct -- the scrape cannot see the OFO component.
+    # But a hand-downloaded file goes stale on its own schedule, and when it does
+    # this script will happily republish an older month over a newer one.
+    #
+    # That happened on 2026-10-04: a July export (pulled 15 Aug) overwrote a
+    # scraped August, taking FY2026 from 89,760 across 11 months down to 80,882
+    # across 10, and the run exited 0. A feed that moves backwards while
+    # reporting success is worse than one that stops.
+    _json_path = os.path.join(BASE_DIR, "data", "cbp-encounters-latest.json")
+    try:
+        with open(_json_path, encoding="utf-8") as _f:
+            _published = json.load(_f).get("fy_totals", {})
+    except (OSError, ValueError):
+        _published = {}
+    _backwards = []
+    for _fy, _v in fetched.items():
+        _was = _published.get(f"FY{_fy}")
+        if _was and _v[1] < _was.get("months_reported", 0):
+            _backwards.append(
+                f"FY{_fy}: {_was['months_reported']} months "
+                f"({_was.get('last_month', '?')}) already published, this run "
+                f"has only {_v[1]} ({fmt_month(*_v[3])})")
+    if _backwards:
+        print("\nREFUSING TO WRITE - the source went backwards:", file=sys.stderr)
+        for _b in _backwards:
+            print(f"  {_b}", file=sys.stderr)
+        print("\nThe exports in data/_raw_cbp are almost certainly stale. "
+              "Download the\ncurrent month from "
+              "https://www.cbp.gov/document/stats/nationwide-encounters\n"
+              "and replace them. Nothing was written.", file=sys.stderr)
+        sys.exit(EXIT_BLOCKED)
+
     if html != orig:
         with open(IMMIGRATION_HTML, "w", encoding="utf-8") as f:
             f.write(html)
