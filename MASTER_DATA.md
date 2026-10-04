@@ -67,13 +67,30 @@ FIRST, then update the relevant dashboard.
 
 | Year | NIM (persons) | Source | Verified |
 |------|--------------|--------|----------|
-| 2019 | 1,031,000 | Census Vintage 2025 | ✅ Feb 2026 |
-| 2020 | 818,000 | Census Vintage 2025 | ✅ Feb 2026 |
-| 2021 | 1,041,000 | Census Vintage 2025 | ✅ Feb 2026 |
-| 2022 | 2,020,000 | Census Vintage 2025 | ✅ Feb 2026 |
-| 2023 | 2,358,000 | Census Vintage 2025 | ✅ Feb 2026 |
-| 2024 | 2,384,000 | Census Vintage 2025 | ✅ Feb 2026 |
-| 2025 proj | 321,000 | Census Vintage 2025 | ✅ Feb 2026 |
+| 2020 | 19,892 | Census Vintage 2025 | ✅ Oct 2026 |
+| 2021 | 376,026 | Census Vintage 2025 | ✅ Oct 2026 |
+| 2022 | 1,672,112 | Census Vintage 2025 | ✅ Oct 2026 |
+| 2023 | 2,264,137 | Census Vintage 2025 | ✅ Oct 2026 |
+| 2024 | 2,734,468 | Census Vintage 2025 | ✅ Oct 2026 |
+| 2025 | 1,262,202 | Census Vintage 2025 | ✅ Oct 2026 |
+
+Read from `NST-EST2025-ALLDATA.csv`, United States row, `INTERNATIONALMIG2020`
+through `INTERNATIONALMIG2025`, retrieved 2026-10-04 — the same file and URL
+template `update-domestic-migration.py` already uses.
+
+**Every row of this table used to disagree with the vintage it named.** It read
+818,000 / 1,041,000 / 2,020,000 / 2,358,000 / 2,384,000 / 321,000 for 2020–25,
+plus a 2019 row that Vintage 2025 cannot supply at all, since the series begins
+at 2020. The issues audit of 2026-10-04 flagged two of those rows; checking the
+file showed all of them were wrong.
+
+Those figures were not invented — they look like an earlier vintage, and 321,000
+appears elsewhere in this project as a Federal Reserve Bank of San Francisco
+estimate on a different basis. That is what made it survive: a real number under
+the wrong source label reads as plausible on every line, which is harder to
+catch than a typo. **Do not mix vintages in one table.** Census revises this
+series heavily — 2024 moved from 2,384,000 to 2,734,468, a 15% revision, in one
+vintage step.
 
 - **Census methodology revision (Dec 2024):** 69–102% undercount in prior estimates
 - **2022-24 revised total:** +6.8M (revised upward)
