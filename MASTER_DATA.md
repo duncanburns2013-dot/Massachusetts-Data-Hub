@@ -538,10 +538,26 @@ against OCPF since. Donation patterns establish association, not agreement.
 
 | Metric | Value | Source | Verified |
 |--------|-------|--------|----------|
-| MA SNAP participation rate | 15.6% | USDA-FNS FY2024 | ✅ Feb 2026 |
-| MA poverty rate | 10.4% | Census ACS 2023 | ✅ Feb 2026 |
-| MA SNAP beneficiaries | 1.11M | USDA-FNS | ✅ Feb 2026 |
-| Gap (SNAP - poverty) | 5.2 pp | Calculated | ✅ Feb 2026 |
+| MA SNAP persons participating | 889,327 (June 2026, initial) | USDA-FNS SNAP Data Tables, `snap-persons-9.xlsx`, data as of 11 Sep 2026 | ✅ Oct 2026 |
+| MA SNAP persons, a year earlier | 1,079,234 (June 2025) | same file | ✅ Oct 2026 |
+| Change over the year | −17.6% (about −190,000 people) | same file | ✅ Oct 2026 |
+| MA poverty rate | 9.7% | Census ACS 1-year 2024, table S1701 (API, retrieved 4 Oct 2026) | ✅ Oct 2026 |
+| MA SNAP participation rate | 15.6% — **needs re-checking** | USDA-FNS FY2024 | ⚠️ stale |
+
+- **The headcount fell hard.** MA SNAP enrolment is down 17.6% year over year on
+  USDA's own monthly series. The figure this table carried until 4 Oct 2026 was
+  1.11M, which overstated it by roughly 190,000 people.
+- **Do not recompute the participation rate from the headcount.** USDA's
+  "participation rate" is the share of *eligible* people who enrol, published
+  annually with a long lag — not persons divided by state population. Dividing
+  889,327 by MA population gives about 12.5%, which is a different statistic and
+  must not be published under USDA's attribution. The FY2025 rate replaces it
+  when USDA publishes it.
+- **The old "gap (SNAP − poverty) 5.2 pp" row is dropped**, because it
+  subtracted a participation rate from a poverty rate — two different
+  denominators over two different years. It was arithmetic, not a finding.
+- ACS 1-year 2025 was not yet on the Census API on 4 Oct 2026; 2024 is the
+  newest published year.
 
 ### SNAP Fraud Detection
 
