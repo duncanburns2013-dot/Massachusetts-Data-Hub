@@ -33,7 +33,13 @@ exit /b 1
 
 :committed
 
-git add data/nh-figures.json data/nh-state-monthly.json
+REM MASTER_DATA.md is staged here because update-nh-figures.py stamps its
+REM New Hampshire block from the feed. Leaving it out is what made the
+REM Data Freshness job red on 2026-10-03: this task committed the JSON at
+REM 08:03, the markdown it is mirrored into stayed behind, and the next
+REM run's `git reset --hard` threw the stamp away. update-nh.yml already
+REM stages all three for exactly this reason.
+git add data/nh-figures.json data/nh-state-monthly.json MASTER_DATA.md
 git diff --cached --quiet && (echo No changes to commit. & exit /b 0)
 
 git commit -m "Auto-update: NH PrimeMLS figures"
