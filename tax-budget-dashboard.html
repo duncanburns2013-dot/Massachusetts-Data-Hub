@@ -605,9 +605,9 @@ footer a:hover{color:var(--gold)}
       <p class="source">Source: U.S. Energy Information Administration, Electric Power Monthly (Jul 2026)</p>
     </div>
     <div class="chart-card">
-      <h3>Annual Cost of Infant Childcare by State</h3>
+      <h3>Annual Childcare Cost in Massachusetts, by Number of Children</h3>
       <div class="chart-area"><canvas id="chartChildcare"></canvas></div>
-      <p class="source">Source: Economic Policy Institute / DOL; SmartAsset 2025 (MIT Living Wage Calculator)</p>
+      <p class="source">Source: MIT Living Wage Calculator, Massachusetts, 2026 edition &mdash; read from livingwage.mit.edu/states/25 on 4 October 2026. Assumes every adult in the household works; MIT budgets $0 for childcare where one adult of a couple does not, so the same family can show $41,712 or nothing depending only on that. This chart previously compared ten states with no year and no single source, on figures matching neither Child Care Aware edition. Cross-state childcare levels are not reliable: the DOL state file scales every state by a flat 1.1771, and Child Care Aware editions change coverage year to year. Use the rank for those, never the level.</p>
     </div>
   </div>
 
@@ -2001,8 +2001,8 @@ function initCharts(tab) {
       safeChart('chartChildcare', {
         type: 'bar',
         data: {
-          labels: ['DC','Massachusetts','Minnesota','California','New York','US Average','Florida','Texas','North Carolina','Mississippi'],
-          datasets: [{ label: 'Annual Infant Care Cost ($)', data: [28356,26709,20226,19552,18394,14802,11460,11107,10684,6868], backgroundColor: ctx => ctx.raw > 20000 ? '#A81733' : ctx.raw > 14000 ? '#B07C20' : '#2A6B44', borderRadius: 6 }]
+          labels: ['One child','Two children','Three children'],
+          datasets: [{ label: 'Annual childcare cost ($)', data: [23448,41712,51443], backgroundColor: ctx => ctx.raw > 45000 ? '#A81733' : ctx.raw > 30000 ? '#B07C20' : '#14558F', borderRadius: 6 }]
         },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, title: { display: true, text: 'Annual Cost ($)' } } }, plugins: { legend: { display: false } } }
       });
