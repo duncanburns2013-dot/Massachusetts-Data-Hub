@@ -23,7 +23,9 @@ REM exit 0 and let Task Scheduler record a clean run. Anything else is real.
 REM Checked high-to-low: `errorlevel N` means "N or greater".
 if errorlevel 76 goto :realerror
 if errorlevel 75 (
-  echo SKIPPED: cbp.gov blocked the fetch - nothing committed. Next run will retry.
+  echo SKIPPED: nothing committed - either cbp.gov blocked the fetch, or the
+  echo exports in data\_raw_cbp are older than what is already published.
+  echo See the lines above; a stale export needs replacing by hand.
   exit /b 0
 )
 if errorlevel 1 goto :realerror
