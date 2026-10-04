@@ -558,6 +558,21 @@ against OCPF since. Donation patterns establish association, not agreement.
   denominators over two different years. It was arithmetic, not a finding.
 - ACS 1-year 2025 was not yet on the Census API on 4 Oct 2026; 2024 is the
   newest published year.
+- **SNAP covering more people than are in poverty is what the rules produce, not
+  a red flag.** Massachusetts uses broad-based categorical eligibility, which
+  sets the gross income limit at 200% of the federal poverty line with no asset
+  test. In 2024 there were 671,003 people below 100% FPL and 1,395,144 below
+  200%; SNAP covered about 1.12M. The caseload sits between those two bounds,
+  which is where the eligibility rule puts it. The gap is not, on its face,
+  evidence of fraud, and nothing on this site says otherwise — but the fraud
+  table directly below invites the inference, so the rule is stated here.
+- **The fall has a cause.** The decline from mid-2025 follows P.L. 119-21, whose
+  SNAP provisions states had to implement by 1 Nov 2025. The national drop over
+  the same period was 12.8% against Massachusetts' 17.6%.
+- Fuller workings, including the 2020–2026 series, ACS margins of error and the
+  EBT-skimming figures, are in `E:\Research\MA-SNAP-vs-poverty-2026.md`
+  (retrieved 2026-09-30). Its June-2026 headcount and year-over-year change were
+  derived independently of the 4 Oct 2026 pull above and match it exactly.
 
 ### SNAP Fraud Detection
 
