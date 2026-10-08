@@ -363,7 +363,7 @@
           "note": "VERIFIED BASELINE. Residential average retail price, EIA API v2 retail-sales sector RES. The value and period fields are rewritten by the automated EIA run -- do not restate either of them in this note. That is how the previous note came to describe June's figures under a July period label, and nothing caught it. Not a policy charge: this is the all-in price, and it bounds the policy component below. Massachusetts and New Hampshire advance together, so the comparison never mixes two EIA months.",
           "source": "EIA Electric Power Monthly Table 5.6.A, via the EIA API v2 (retail-sales, sectorid=RES)",
           "url": "https://api.eia.gov/v2/electricity/retail-sales/data/?frequency=monthly&data[0]=price&facets[sectorid][]=RES&facets[stateid][]=MA",
-          "verified": "2026-10-02",
+          "verified": "2026-10-08",
           "period": "2026-07",
           "usAverageCentsPerKwh": 18.31,
           "premiumPctVsUs": 67
@@ -595,7 +595,7 @@
           "note": "VERIFIED BASELINE. Residential average retail price, EIA API v2 retail-sales sector RES. DO NOT READ A TREND INTO THE MA-NH GAP. Five consecutive months, Mar-Jul 2026, gave 3.29c, 2.21c, 1.49c, 2.60c and 3.89c -- it swings by more than two cents with no direction. An earlier note here said NH was 'closing fast' on Massachusetts and that this 'materially weakens the Layer 4 is a genuine NH advantage claim'; the next release reversed it and the one after reversed it again. Each reading was one month wearing the clothes of a trend. Quote the level, not the direction, without a year of data. Current values live in the value fields, which the automated run maintains; this note deliberately does not repeat them.",
           "source": "EIA Electric Power Monthly Table 5.6.A, via the EIA API v2 (retail-sales, sectorid=RES)",
           "url": "https://api.eia.gov/v2/electricity/retail-sales/data/?frequency=monthly&data[0]=price&facets[sectorid][]=RES&facets[stateid][]=NH",
-          "verified": "2026-10-02",
+          "verified": "2026-10-08",
           "period": "2026-07",
           "usAverageCentsPerKwh": 18.31,
           "premiumPctVsUs": 45
