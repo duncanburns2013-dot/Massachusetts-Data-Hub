@@ -305,10 +305,6 @@ subs = [
      r'(EIA Electric Power Monthly, Table 5\.6\.A, )[A-Za-z]+ \d{4}',
      rf'\g<1>{mon_full}', F),
 
-    ("sector-table note — period + MA rate",
-     r'(Residential rate updated to )[A-Za-z]+ \d{4} \([\d.]+(&#x00A2;\) in hero stats)',
-     rf'\g<1>{mon_abbr} ({cents(ma)}\g<2>', F),
-
     ("H.5151 chart source — period",
      r'(Source: EIA )[A-Za-z]+ \d{4}(, bill text analysis)',
      rf'\g<1>{mon_abbr}\g<2>', F),
