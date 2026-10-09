@@ -11,9 +11,9 @@
       "avg_sale": 951411,
       "avg_dom": 30,
       "splp_pct": 99.29,
-      "active_count": 47,
-      "active_avg_list": 1681206,
-      "active_median_list": 1325000,
+      "active_count": 49,
+      "active_avg_list": 1650647,
+      "active_median_list": 1100000,
       "by_bedroom": {
         "1": {
           "avg": 550938,
@@ -134,9 +134,9 @@
       "avg_sale": 591226,
       "avg_dom": 19,
       "splp_pct": 101.58,
-      "active_count": 25,
-      "active_avg_list": 789464,
-      "active_median_list": 649900,
+      "active_count": 23,
+      "active_avg_list": 734635,
+      "active_median_list": 625000,
       "by_bedroom": {
         "1": {
           "avg": 394224,
@@ -257,9 +257,9 @@
       "avg_sale": 502883,
       "avg_dom": 18,
       "splp_pct": 102.52,
-      "active_count": 30,
-      "active_avg_list": 838698,
-      "active_median_list": 627363,
+      "active_count": 31,
+      "active_avg_list": 831640,
+      "active_median_list": 625000,
       "by_bedroom": {
         "1": {
           "avg": 303305,
@@ -380,9 +380,9 @@
       "avg_sale": 827050,
       "avg_dom": 30,
       "splp_pct": 100.98,
-      "active_count": 28,
-      "active_avg_list": 953946,
-      "active_median_list": 799450,
+      "active_count": 29,
+      "active_avg_list": 1008293,
+      "active_median_list": 799000,
       "by_bedroom": {
         "1": {
           "avg": 215133,
@@ -498,34 +498,34 @@
       ]
     },
     "NH Statewide": {
-      "volume": 94689,
-      "median_sale": 445538,
-      "avg_sale": 533763,
+      "volume": 94722,
+      "median_sale": 445556,
+      "avg_sale": 533791,
       "avg_dom": 29,
       "splp_pct": 100.35,
-      "active_count": 3083,
-      "active_avg_list": 850793,
+      "active_count": 3110,
+      "active_avg_list": 850084,
       "active_median_list": 599900,
       "by_bedroom": {
         "1": {
-          "avg": 250145,
-          "n": 1578
+          "avg": 250194,
+          "n": 1580
         },
         "2": {
-          "avg": 365633,
-          "n": 14619
+          "avg": 365661,
+          "n": 14627
         },
         "3": {
-          "avg": 483447,
-          "n": 50023
+          "avg": 483461,
+          "n": 50035
         },
         "4": {
-          "avg": 672842,
-          "n": 23659
+          "avg": 672898,
+          "n": 23668
         },
         "5+": {
-          "avg": 1008888,
-          "n": 4619
+          "avg": 1008977,
+          "n": 4621
         }
       },
       "by_year": {
@@ -560,9 +560,9 @@
           "avg": 637769
         },
         "2026": {
-          "n": 9598,
-          "median": 565130,
-          "avg": 675692
+          "n": 9631,
+          "median": 564825,
+          "avg": 675477
         }
       },
       "distribution": [
@@ -572,27 +572,27 @@
         },
         {
           "band": "$200-300K",
-          "count": 12563
+          "count": 12567
         },
         {
           "band": "$300-400K",
-          "count": 18973
+          "count": 18979
         },
         {
           "band": "$400-500K",
-          "count": 18192
+          "count": 18202
         },
         {
           "band": "$500-600K",
-          "count": 12624
+          "count": 12626
         },
         {
           "band": "$600-700K",
-          "count": 8969
+          "count": 8974
         },
         {
           "band": "$700-800K",
-          "count": 5453
+          "count": 5454
         },
         {
           "band": "$800-900K",
@@ -600,26 +600,26 @@
         },
         {
           "band": "$900K-1M",
-          "count": 1996
+          "count": 1997
         },
         {
           "band": "$1-1.25M",
-          "count": 2123
+          "count": 2124
         },
         {
           "band": "$1.25-1.5M",
-          "count": 1341
+          "count": 1342
         },
         {
           "band": "$1.5-2M",
-          "count": 1215
+          "count": 1216
         },
         {
           "band": "$2M+",
-          "count": 1232
+          "count": 1233
         }
       ]
     }
   },
-  "updated": "2026-10-08"
+  "updated": "2026-10-09"
 }
