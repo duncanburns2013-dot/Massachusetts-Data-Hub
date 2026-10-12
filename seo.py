@@ -65,9 +65,10 @@ DESC = {
 # ---------------------------------------------------------------- structured data
 # Pages that are a body of figures get Dataset. The two names that a plain title
 # split would mangle are overridden; the rest come from the page's own <title>.
-NOT_A_DATASET = {'index.html', 'about.html', 'videos.html', 'method.html'}
+NOT_A_DATASET = {'index.html', 'about.html', 'videos.html', 'method.html', 'corporate-ledger-method.html'}
 DATASET_NAME = {
     'instrument.html':          'Massachusetts municipal tax and affordability, all 351 municipalities',
+    'corporate-ledger.html':    'Corporate penalties beside state payments, employee donations and lobbying in Massachusetts',
     'tax-burden-dashboard.html': 'The five layers of Massachusetts and New Hampshire tax burden',
 }
 # where the figures are about, which is not always Massachusetts

@@ -1,0 +1,338 @@
+{
+ "counts": {
+  "registry_only": 19,
+  "registry_verified_by_doj": 18,
+  "registry_corrected_from_doj": 4,
+  "verified": 252,
+  "verified_manual": 20,
+  "fetch_failed": 16,
+  "amount_not_found": 1
+ },
+ "unverified": [
+  {
+   "id": "cpr:c5b42b7cedade:2310",
+   "defendant": "Elan Pharmaceuticals",
+   "date": "2011-03-01",
+   "amount": 202650000.0,
+   "url": "https://corporate-prosecution-registry.com/media/corp-crime.csv",
+   "verdict": "registry_only",
+   "note": "no release found by title; the sweep read the filed plea agreement (fine $97,050,266, forfeiture $3,600,000) and the civil settlement ($102,890,517), which tota"
+  },
+  {
+   "id": "cpr:ca46270c98978:3692",
+   "defendant": "Schering Sales Corp.",
+   "date": "2011-10-14",
+   "amount": 180000000.0,
+   "url": "https://corporate-prosecution-registry.com/media/corp-crime.csv",
+   "verdict": "registry_only",
+   "note": "no release found by title"
+  },
+  {
+   "id": "cpr:c7c4c2f10fd99:3687",
+   "defendant": "SB Pharmco Puerto Rico, Inc.",
+   "date": "2010-11-18",
+   "amount": 150000000.0,
+   "url": "https://corporate-prosecution-registry.com/media/corp-crime.csv",
+   "verdict": "registry_only",
+   "note": "no release found by title; the same $150 million as the 2010-10-21 row, counted once"
+  },
+  {
+   "id": "cpr:ca7394abd0f80:4526",
+   "defendant": "Bay State Gas Co.",
+   "date": "2020-06-24",
+   "amount": 53030125.0,
+   "url": "https://corporate-prosecution-registry.com/media/corp-crime.csv",
+   "verdict": "registry_only",
+   "note": "no release found by title; not counted (same fine as the NiSource row)"
+  },
+  {
+   "id": "cpr:ca7394abd0f80:4525",
+   "defendant": "NiSource, Inc.",
+   "date": "2020-02-26",
+   "amount": 53030116.0,
+   "url": "https://corporate-prosecution-registry.com/media/corp-crime.csv",
+   "verdict": "registry_only",
+   "note": "no release found by title; the sweep read the U.S. Attorney's release through Oversight.gov: criminal fine of $53,030,116"
+  },
+  {
+   "id": "rel:ma-ag-2010-morgan-stanley:1",
+   "defendant": "Morgan Stanley",
+   "date": "2010-06-24",
+   "amount": 44900000.0,
+   "url": "https://web.archive.org/web/20101009120219/http://www.mass.gov/?pageID=cagopressrelease&L=1&L0=Home&sid=Cago&b=pressrelease&f=2010_06_24_ms_settlement&csid=Cago",
+   "verdict": "fetch_failed",
+   "note": ""
+  },
+  {
+   "id": "rel:ma-mgc-2019-wynn:1",
+   "defendant": "Wynn Resorts, Limited and Wynn MA, LLC",
+   "date": "2019-04-30",
+   "amount": 35000000.0,
+   "url": "https://web.archive.org/web/20210623183623/https://massgaming.com/wp-content/uploads/19-018decisionandorder.pdf",
+   "verdict": "fetch_failed",
+   "note": ""
+  },
+  {
+   "id": "rel:ma-sec-2013-citigroup-global-markets:1",
+   "defendant": "Citigroup Global Markets Inc.",
+   "date": "2013-10-02",
+   "amount": 30000000.0,
+   "url": "https://web.archive.org/web/20210426132504/http://www.sec.state.ma.us/sct/archived/sctcitigroup/citigroup-consent-order.pdf",
+   "verdict": "fetch_failed",
+   "note": ""
+  },
+  {
+   "id": "cpr:c309be11a441f:1778",
+   "defendant": "Biovail Pharmaceuticals, LLC",
+   "date": "2009-09-22",
+   "amount": 24647876.0,
+   "url": "https://corporate-prosecution-registry.com/media/corp-crime.csv",
+   "verdict": "registry_only",
+   "note": "no release found by title"
+  },
+  {
+   "id": "rel:ma-sec-2013-deutsche-bank:1",
+   "defendant": "Deutsche Bank Securities Inc.",
+   "date": "2013-03-13",
+   "amount": 17500000.0,
+   "url": "https://www.sec.state.ma.us/sct/archived/sctdb/db_consent.pdf",
+   "verdict": "fetch_failed",
+   "note": ""
+  },
+  {
+   "id": "cpr:c7435465119a7:4213",
+   "defendant": "Chitron Electronics, Inc.",
+   "date": "2011-02-08",
+   "amount": 15500000.0,
+   "url": "https://corporate-prosecution-registry.com/media/corp-crime.csv",
+   "verdict": "registry_only",
+   "note": "no release found by title"
+  },
+  {
+   "id": "cpr:ceacbcf6a8018:3857",
+   "defendant": "Stryker Biotech, LLC",
+   "date": "2012-01-18",
+   "amount": 15000000.0,
+   "url": "https://corporate-prosecution-registry.com/media/corp-crime.csv",
+   "verdict": "registry_only",
+   "note": "no release found by title"
+  },
+  {
+   "id": "cpr:c9348ee743d14:49",
+   "defendant": "Orthofix, Inc.",
+   "date": "2012-12-18",
+   "amount": 7765737.0,
+   "url": "https://corporate-prosecution-registry.com/media/corp-crime.csv",
+   "verdict": "registry_only",
+   "note": "a release was found (Another Orthofix Defendant Sentenced for Committing Medicare Fraud) but the amount is not in it"
+  },
+  {
+   "id": "rel:ma-sec-2024-robinhood:1",
+   "defendant": "Robinhood Financial LLC",
+   "date": "2024-01-18",
+   "amount": 7500000.0,
+   "url": "https://web.archive.org/web/20240122160024/https://www.sec.state.ma.us/divisions/securities/download/RH-Consent-Order.pdf",
+   "verdict": "fetch_failed",
+   "note": ""
+  },
+  {
+   "id": "cpr:ccefd8ac2e233:3330",
+   "defendant": "Ortho-McNeil Pharmaceutical, LLC",
+   "date": "2010-05-28",
+   "amount": 6143407.0,
+   "url": "https://corporate-prosecution-registry.com/media/corp-crime.csv",
+   "verdict": "registry_only",
+   "note": "no release found by title"
+  },
+  {
+   "id": "cpr:r1098:1098",
+   "defendant": "Ortho-McNeil-Janssen Pharmaceuticals, Inc.",
+   "date": "2010-04-26",
+   "amount": 6143407.0,
+   "url": "https://corporate-prosecution-registry.com/media/corp-crime.csv",
+   "verdict": "registry_only",
+   "note": "no release found by title"
+  },
+  {
+   "id": "rel:ma-sec-2012-morgan-stanley:1",
+   "defendant": "Morgan Stanley & Co. LLC",
+   "date": "2012-12-17",
+   "amount": 5000000.0,
+   "url": "https://www.sec.state.ma.us/divisions/securities/pdf-html/docket_no_2012-0042.htm",
+   "verdict": "fetch_failed",
+   "note": ""
+  },
+  {
+   "id": "rel:ma-sec-2012-state-street-ssga:1",
+   "defendant": "State Street Global Advisors, a division of State Street Bank and Trust Company",
+   "date": "2012-02-27",
+   "amount": 5000000.0,
+   "url": "https://web.archive.org/web/20150920111257/http://www.sec.state.ma.us/sct/archived/sctssga/State_Street_Consent_Order.pdf",
+   "verdict": "fetch_failed",
+   "note": ""
+  },
+  {
+   "id": "rel:ofccp-2017-state-street:1",
+   "defendant": "State Street Corporation",
+   "date": "2017-09-29",
+   "amount": 5000000.0,
+   "url": "https://web.archive.org/web/20180520030506/https://www.dol.gov/ofccp/foia/files/State_Street_Corporation_CA_Redacted.pdf",
+   "verdict": "fetch_failed",
+   "note": ""
+  },
+  {
+   "id": "cpr:r4453:4453",
+   "defendant": "Elan Corp. plc",
+   "date": "2010-12-08",
+   "amount": 3600000.0,
+   "url": "https://corporate-prosecution-registry.com/media/corp-crime.csv",
+   "verdict": "registry_only",
+   "note": "no release found by title; the $3.6 million forfeiture is already inside the Elan Pharmaceuticals plea row"
+  },
+  {
+   "id": "cpr:c514cb582a4ad:1756",
+   "defendant": "Berkshire Power Company, LLC",
+   "date": "2017-03-22",
+   "amount": 2750000.0,
+   "url": "https://corporate-prosecution-registry.com/media/corp-crime.csv",
+   "verdict": "registry_only",
+   "note": "no release found by title"
+  },
+  {
+   "id": "cpr:cda34d072824f:4789",
+   "defendant": "Greater Boston Behavioral Health, LLC",
+   "date": "2023-05-16",
+   "amount": 2587267.0,
+   "url": "https://corporate-prosecution-registry.com/media/corp-crime.csv",
+   "verdict": "registry_only",
+   "note": "no release found by title"
+  },
+  {
+   "id": "rel:ma-sec-2023-stifel-nicolaus:1",
+   "defendant": "Stifel, Nicolaus & Company, Inc.",
+   "date": "2023-04-28",
+   "amount": 2500000.0,
+   "url": "https://web.archive.org/web/20230519183353/https://www.sec.state.ma.us/divisions/securities/download/may-01-2023.pdf",
+   "verdict": "fetch_failed",
+   "note": ""
+  },
+  {
+   "id": "rel:sec-2021-mml-investors:1",
+   "defendant": "MML Investors Services, LLC",
+   "date": "2021-09-10",
+   "amount": 2109458.0,
+   "url": "https://www.sec.gov/files/litigation/admin/2021/34-92935.pdf",
+   "verdict": "fetch_failed",
+   "note": ""
+  },
+  {
+   "id": "cpr:c4823e9952beb:320",
+   "defendant": "Consultores de Navegacion S.A.",
+   "date": "2009-07-28",
+   "amount": 2083333.0,
+   "url": "https://corporate-prosecution-registry.com/media/corp-crime.csv",
+   "verdict": "registry_only",
+   "note": "no release found by title"
+  },
+  {
+   "id": "rel:ma-sec-2012-citigroup-global-markets:1",
+   "defendant": "Citigroup Global Markets Inc.",
+   "date": "2012-10-26",
+   "amount": 2000000.0,
+   "url": "https://www.sec.state.ma.us/divisions/securities/pdf-html/citi_consent.htm",
+   "verdict": "fetch_failed",
+   "note": ""
+  },
+  {
+   "id": "cpr:c05d973df753b:5278",
+   "defendant": "V.J. Associates Inc. of Suffolk",
+   "date": "2021-01-20",
+   "amount": 1819801.0,
+   "url": "https://corporate-prosecution-registry.com/media/corp-crime.csv",
+   "verdict": "registry_only",
+   "note": "no release found by title"
+  },
+  {
+   "id": "rel:ttb-2021-smith-wesson:1",
+   "defendant": "Smith & Wesson Sales Company",
+   "date": "2021-06-18",
+   "amount": 1729000.0,
+   "url": "https://www.ttb.gov/images/pdfs/fo-compromise/2021/abstmt-sw-20210618_redacted.pdf",
+   "verdict": "fetch_failed",
+   "note": ""
+  },
+  {
+   "id": "rel:sec-2012-massmutual:1",
+   "defendant": "Massachusetts Mutual Life Insurance Company",
+   "date": "2012-11-15",
+   "amount": 1625000.0,
+   "url": "https://www.sec.gov/litigation/admin/2012/ic-30264.pdf",
+   "verdict": "fetch_failed",
+   "note": ""
+  },
+  {
+   "id": "rel:whd-2024-gate-solution-systems:2",
+   "defendant": "Gate Solution Systems Inc. and Healthcare Services Group Inc.",
+   "date": "2024-12-03",
+   "amount": 1435576.1,
+   "url": "https://web.archive.org/web/20260113201847/https://www.dol.gov/sites/dolgov/files/OPA/newsreleases/2024/11/WHD-SOL20242478_GSSHSG_CJ%20Entered.pdf",
+   "verdict": "fetch_failed",
+   "note": ""
+  },
+  {
+   "id": "rel:ma-sec-2017-morgan-stanley-smith-barney:1",
+   "defendant": "Morgan Stanley Smith Barney LLC",
+   "date": "2017-04-07",
+   "amount": 1000000.0,
+   "url": "https://www.sec.state.ma.us/divisions/securities/pdf-html/executed-consent-order-docket-no-e-2016-0055.htm",
+   "verdict": "fetch_failed",
+   "note": ""
+  },
+  {
+   "id": "rel:ny-dfs-2022-liberty-mutual-dmv:1",
+   "defendant": "Liberty Mutual Group, including Liberty Mutual Insurance Company and affiliated insurers",
+   "date": "2022-12-19",
+   "amount": 1000000.0,
+   "url": "https://www.dfs.ny.gov/system/files/documents/2022/12/ea20221219_liberty_mutual_dmv_iies.pdf",
+   "verdict": "amount_not_found",
+   "note": ""
+  },
+  {
+   "id": "rel:whd-2024-gate-solution-systems:1",
+   "defendant": "Gate Solution Systems Inc. and Healthcare Services Group Inc.",
+   "date": "2024-12-03",
+   "amount": 990000.0,
+   "url": "https://web.archive.org/web/20260113201847/https://www.dol.gov/sites/dolgov/files/OPA/newsreleases/2024/11/WHD-SOL20242478_GSSHSG_CJ%20Entered.pdf",
+   "verdict": "fetch_failed",
+   "note": ""
+  },
+  {
+   "id": "cpr:ce8bdf942ac1d:655",
+   "defendant": "SMI Demolition, Inc.",
+   "date": "2018-03-27",
+   "amount": 703331.0,
+   "url": "https://corporate-prosecution-registry.com/media/corp-crime.csv",
+   "verdict": "registry_only",
+   "note": "no release found by title"
+  },
+  {
+   "id": "cpr:c7435465119a7:4214",
+   "defendant": "Chitron Electronics Co., Ltd.",
+   "date": "2012-04-24",
+   "amount": 0.0,
+   "url": "https://corporate-prosecution-registry.com/media/corp-crime.csv",
+   "verdict": "registry_only",
+   "note": ""
+  },
+  {
+   "id": "cpr:r1056:1056",
+   "defendant": "Merck & Co., Inc.",
+   "date": "2011-11-07",
+   "amount": 0.0,
+   "url": "https://corporate-prosecution-registry.com/media/corp-crime.csv",
+   "verdict": "registry_only",
+   "note": ""
+  }
+ ],
+ "checked": "2026-10-12"
+}

@@ -29,6 +29,7 @@ Interactive dashboards and data analysis covering housing, immigration, educatio
 | [Pensions](pension-dashboard.html) | $55.8B unfunded, PRIT, 99 municipal systems | ✅ Live | ACFR, PERAC, PPD, PRIT |
 | [Energy](energy-dashboard.html) | RGGI carbon cost, electricity rates, Mass Save, GSEP | ✅ Live | EIA, RGGI Inc, ISO-NE, DPU |
 | [Pay-to-Play](pay-to-play-dashboard.html) | OCPF donations from lobbying firms, sector rankings | ✅ Live | OCPF, OpenSecrets, SOC |
+| [Corporate Ledger](corporate-ledger.html) | Government penalties beside state payments, employee donations and lobbying, company by company | Snapshot | Agency releases, CTHRU, OCPF, FEC, SOC |
 
 ## 📁 Repository Structure
 
@@ -55,6 +56,9 @@ Massachusetts-Data-Hub/
 ├── pension-dashboard.html              ← Unfunded liabilities
 ├── energy-dashboard.html               ← Energy policy & carbon cost
 ├── pay-to-play-dashboard.html          ← Lobbying & campaign finance
+├── corporate-ledger.html               ← Penalties beside state payments, donations, lobbying
+├── corporate-ledger-method.html        ← How the ledger counts, and what it leaves out
+├── data/corporate-ledger/              ← The ledger's data files, copied from its research build
 ├── data/burden-constants.json          ← Shared constants for BOTH burden dashboards
 ├── update-burden-constants.py          ← Regenerates the K block in both; see below
 ├── make-watermark.py                   ← Builds the MA/NH map watermark on the share cards

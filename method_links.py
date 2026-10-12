@@ -37,6 +37,7 @@ SECTION = {
     'energy-dashboard.html':           ('energy',                               'Energy'),
     'pension-dashboard.html':          ('pensions',                             'Pensions'),
     'pay-to-play-dashboard.html':      ('lobbying-political-spending',          'Lobbying &amp; Political Spending'),
+    'corporate-ledger.html':           ('corporate-penalties-political-money',  'Corporate Penalties &amp; Political Money'),
     'all-things-boston.html':          ('boston',                               'Boston'),
     'mbta-3a-dashboard.html':          ('zoning-mbta-communities-act-3a',       'Zoning &amp; &sect; 3A'),
 }

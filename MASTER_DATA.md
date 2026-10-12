@@ -1153,6 +1153,21 @@ Figures on `all-things-boston.html`. The page states its sources in prose rather
 | Assessed property values | City of Boston Assessing Department | — |
 
 ---
+## ⚖️ Corporate Penalties & Political Money
+
+Figures on `corporate-ledger.html` and `corporate-ledger-method.html`. The page lists companies with at least $1 million in government penalties dated July 2009 (fiscal 2010) or later and a Massachusetts tie, and sets each beside what the state paid it, what its employees gave to Massachusetts candidates, what it paid to lobby and what officials disclosed about it. Every row links to the document it came from. The data files in `data/corporate-ledger/` are built in a separate research project and copied here; no workflow refreshes them. Counting rules (cash actually paid; a payment listed twice counts once; a total shared with people outside the company counts for no company) and everything left out are stated on the page and in the method notes.
+
+| Figure | Source | Updated |
+|--------|--------|---------|
+| Penalty amounts, dates and agencies | The issuing agency's own release or order, linked on each row: Massachusetts Attorney General, U.S. Attorneys and the Justice Department, SEC, EPA ECHO, Department of Labor and others. Criminal rows from the Corporate Prosecution Registry are checked against Justice Department releases and corrected where they differ | Releases through 2026-09-03; pages re-read 2026-10-12 ✅ |
+| Which companies are included | At least $1 million in penalties since July 2009 and conduct in Massachusetts or a headquarters here at the time; each headquarters is sourced in the research project's company list | 2026-10-12 ✅ |
+| State payments to each company | CTHRU (the Comptroller's spending records), plus the MBTA, Massport and the School Building Authority from their own payment records. Net payments by fiscal year, FY2010 to date; only vendor names confirmed as the company count | 2026-10-12 |
+| Employee donations | OCPF state bulk files and FEC individual-contribution files, matched by the donor's reported employer. Only confirmed matches count; memo entries, pass-throughs, refunds and in-kind gifts are left out. Street and ZIP are not shown | 2026-10-10 |
+| Lobbying | Secretary of the Commonwealth lobbyist disclosures: firm fees from 2010, in-house costs for 2025 and 2026 only | 2026-10-11 |
+| Officials' disclosed ties | Statements of Financial Interest, filings for 2019 to 2025. A tie carries no amount and is not a payment | 2026-10-10 |
+| Amounts not counted | The register on the page's Amounts not counted tab: each headline figure that was not cash paid, with the document it comes from | 2026-10-12 ✅ |
+
+---
 ## 🔗 Dashboard Registry
 
 All dashboards live at `https://massachusettsdatahub.com/<file>`.
@@ -1177,6 +1192,7 @@ names the script that actually writes each page.
 | Commercial RE | `commercial-re-dashboard.html` | &mdash; | manual |
 | Pension | `pension-dashboard.html` | &mdash; | manual |
 | Pay to Play | `pay-to-play-dashboard.html` | &mdash; | manual |
+| Corporate Ledger | `corporate-ledger.html` | &mdash; | manual |
 
 Consumer-price figures refresh on the 10th&ndash;16th (`update-cpi.yml`) and feed the
 affordability and energy pages rather than a page of their own. The site itself

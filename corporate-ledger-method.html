@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="data-checked" content="2026-10-12"><!-- bump when this page is reconciled against its publisher; scripts/check-freshness.py ages it -->
+  <!-- Open Graph / Social Cards -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Massachusetts Data Hub">
+  <meta property="og:title" content="Corporate Ledger: How the Numbers Are Counted">
+  <meta property="og:description" content="Sources, match rules, exclusions, coverage and reconciliation checks behind the Corporate Ledger.">
+  <meta property="og:url" content="https://massachusettsdatahub.com/corporate-ledger-method.html">
+  <meta name="twitter:title" content="Corporate Ledger: How the Numbers Are Counted">
+  <meta name="twitter:description" content="Sources, match rules, exclusions, coverage and reconciliation checks behind the Corporate Ledger.">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="canonical" href="https://massachusettsdatahub.com/corporate-ledger-method.html">
+<link rel="icon" href="https://massachusettsdatahub.com/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="https://massachusettsdatahub.com/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="https://massachusettsdatahub.com/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="icon" href="https://massachusettsdatahub.com/favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="https://massachusettsdatahub.com/apple-touch-icon.png">
+<meta property="og:image" content="https://massachusettsdatahub.com/cards/corporate-ledger-method.jpg">
+<meta name="twitter:image" content="https://massachusettsdatahub.com/cards/corporate-ledger-method.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<title>Corporate Ledger: method notes | Massachusetts Data Hub</title>
+<meta name="description" content="Sources, match rules, exclusions, coverage and reconciliation checks behind the Corporate Ledger.">
+<style>
+/* Same shell as corporate-ledger.html (hero, sections, notes, footer); colours and type come only from the Hub
+   tokens in assets/hub-theme.css. */
+:root{--radius:6px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);line-height:1.55;font-size:16px}
+::selection{background:var(--bay);color:#fff}
+a{color:var(--bay);text-underline-offset:.18em;text-decoration-thickness:1px}
+a:hover{color:var(--cran)}
+:focus-visible{outline:2px solid var(--bay);outline-offset:2px;border-radius:2px}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.hero{background:var(--navy);color:#fff;padding:44px 24px 36px}
+.hero-in{max-width:1200px;margin:0 auto}
+.hero h1{font-family:var(--font-display);font-size:clamp(2rem,5vw,3rem);font-weight:700;line-height:1.05;letter-spacing:-.02em}
+.hero .hero-sub{max-width:68ch;margin-top:14px;font-size:1.0625rem;line-height:1.5}
+.hero-meta{margin-top:18px;font-size:.8125rem;display:flex;flex-wrap:wrap;gap:6px 18px;color:rgba(255,255,255,.82)}
+.hero-meta a{color:#fff}
+.toc{background:var(--card);border-bottom:1px solid var(--border);padding:10px max(16px,calc((100% - 1200px)/2))}
+.toc ol{list-style:none;display:flex;flex-wrap:wrap;gap:4px 18px;font-size:.8125rem}
+.section{max-width:1200px;margin:0 auto;padding:28px 24px}
+.window{background:var(--card);border:1px solid var(--border);border-top:3px solid var(--cran);border-radius:0;
+  padding:14px 18px;font-size:1rem;max-width:80ch}
+.window.rule{border-top-color:var(--navy);margin-top:12px}
+.doc{max-width:80ch;margin-top:18px}
+.doc h2{font-family:var(--font-display);font-size:1.3rem;font-weight:700;margin:34px 0 6px;scroll-margin-top:12px}
+.doc h3{font-family:var(--font-display);font-size:1rem;font-weight:700;margin:18px 0 4px}
+.doc p{margin-top:8px}
+.doc ul{margin:8px 0 0 1.2em}
+.doc li{margin-top:5px}
+.doc code,.doc .file{font-family:var(--font-mono);font-size:.875em}
+.tcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-top:12px;max-width:1000px}
+table.mt{width:100%;border-collapse:collapse;font-size:.875rem}
+.mt th{font-size:.8125rem;font-weight:600;color:var(--muted);text-align:left;padding:9px 12px;border-bottom:1px solid var(--text);vertical-align:bottom}
+.mt td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.mt tr:last-child td{border-bottom:0}
+.mt td.span{font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.source{font-family:var(--font-mono);font-size:.75rem;color:var(--muted);margin-top:10px;max-width:110ch}
+.footer{border-top:1px solid var(--border);margin-top:36px;padding:22px 24px 40px;font-size:.875rem;color:var(--slate)}
+.footer-in{max-width:1200px;margin:0 auto}
+@media (max-width:768px){
+  .hero{padding:32px 16px 26px}
+  .section{padding:22px 16px}
+}
+@media (max-width:640px){
+  table.mt,.mt tbody{display:block}
+  .mt thead{display:none}
+  .mt tr{display:block;padding:10px 12px;border-bottom:1px solid var(--border)}
+  .mt tr:last-child{border-bottom:0}
+  .mt td{display:block;padding:2px 0;border:0}
+  .mt td::before{content:attr(data-label);display:block;font-size:.75rem;color:var(--muted);line-height:1.25}
+  .mt td.span{white-space:normal}
+}
+</style>
+<!-- The Hub page loads its Adobe Fonts kit here (https://use.typekit.net/irk1bar.css). It is domain-locked,
+     so the local prototype omits it and renders in the theme's fallbacks. -->
+<link rel="stylesheet" href="assets/hub-theme.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-in">
+    <h1>Method notes</h1>
+    <p class="hero-sub">Where each number in the Corporate Ledger comes from, how records are tied to a company, what is left out and why, and how the totals were checked.</p>
+    <div class="hero-meta">
+      <span class="mono">Updated <span id="updated-date">(loading)</span></span>
+      <a href="corporate-ledger.html">Back to the Corporate Ledger</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="On this page">
+  <ol>
+    <li><a href="#sources">Sources</a></li>
+    <li><a href="#matching">Match rules</a></li>
+    <li><a href="#excluded">Left out</a></li>
+    <li><a href="#amounts">Penalty amounts</a></li>
+    <li><a href="#overlaps">Overlaps</a></li>
+    <li><a href="#groups">Co-defendant groups</a></li>
+    <li><a href="#coverage">Coverage</a></li>
+    <li><a href="#reconciliation">Checks</a></li>
+    <li><a href="#limits">Known limits</a></li>
+    <li><a href="#opinion">Opinion</a></li>
+  </ol>
+</nav>
+
+<main class="section">
+  <p class="window">This ledger starts in fiscal 2010 (July 2009), the first year Massachusetts put its spending records online. Penalties, donations and lobbying before then are left out so every comparison covers the same years.</p>
+  <p class="window rule">How penalty amounts are counted: each row counts the cash the defendant actually paid (penalties, restitution, damages, fees). Press-release headline figures are often larger because they include debt relief, forgiven debt or rent, bill credits, conditional amounts, or proposed penalties that can still be contested. Those parts are not counted here. Every one is listed under <a href="corporate-ledger.html?tab=excluded">Amounts not counted</a>, with the headline figure, what we counted, the reason and the source. Where a release does not state the split between cash and relief, the case is left out of the totals and listed there.</p>
+
+  <div class="doc">
+    <p>A company enters the ledger with at least $1 million in government penalties dated July 2009 or later, and a Massachusetts tie: the penalty covers conduct in Massachusetts (the "Massachusetts case" lens) or the company had its headquarters here when it was penalized (the "Massachusetts headquarters" lens). Suffolk Construction is in the ledger below that threshold because it has a case file. Every record on the page links to the document or data file it came from.</p>
+
+    <h2 id="sources">Sources, by stream</h2>
+  </div>
+  <div class="tcard">
+    <table class="mt">
+      <thead><tr><th scope="col">Stream</th><th scope="col">Where the records come from</th><th scope="col">Read as</th></tr></thead>
+      <tbody>
+        <tr><td data-label="Stream"><b>Penalties</b></td><td data-label="Source">Agency releases and orders: Massachusetts Attorney General, U.S. Attorneys and the Justice Department, SEC, Massachusetts Securities Division, Division of Banks and Gaming Commission, federal regulators (HHS Inspector General, OFAC, OFCCP, Wage and Hour Division, Employee Benefits Security Administration and others) and a few other states' regulators. EPA ECHO enforcement cases. Criminal agreements from the Corporate Prosecution Registry (University of Virginia and Duke Law).</td><td data-label="Read as">One row per agency action: date, agency, civil or criminal, agreement type, amount, whether fault was admitted.</td></tr>
+        <tr><td data-label="Stream"><b>State payments</b></td><td data-label="Source">CTHRU (the Comptroller's spending records), plus the MBTA, Massport and the Massachusetts School Building Authority from their own payment records.</td><td data-label="Read as">Net payments to the vendor, summed by fiscal year and payer.</td></tr>
+        <tr><td data-label="Stream"><b>Employee donations, state</b></td><td data-label="Source">OCPF bulk contribution files: gifts to state legislators, governors and lieutenant governors, sitting or running since July 2009.</td><td data-label="Read as">Each gift with donor name, town, state, reported employer and occupation. Street and ZIP are not shown.</td></tr>
+        <tr><td data-label="Stream"><b>Employee donations, federal</b></td><td data-label="Source">FEC bulk individual-contribution files, kept to the committees of Massachusetts's U.S. senators and representatives and candidates since July 2009.</td><td data-label="Read as">As for state gifts. State and federal money sit in separate columns and are never added together.</td></tr>
+        <tr><td data-label="Stream"><b>Lobbying</b></td><td data-label="Source">Secretary of the Commonwealth lobbyist disclosures. Firm fees from 2010; in-house costs for 2025 and 2026 only.</td><td data-label="Read as">What the company paid outside lobbying firms (firm fees) and what it reported for its own staff lobbyists (in-house), by calendar year.</td></tr>
+        <tr><td data-label="Stream"><b>Disclosed ties</b></td><td data-label="Source">Officials' Statements of Financial Interest, filings for 2019 to 2025.</td><td data-label="Read as">A row where an official names the company, for example as an employer of the official or a spouse. A tie carries no amount and is not a payment.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="source">Source: Corporate Ledger build (pipeline in the project repo); each stream's rows carry a source URL and a retrieval date.</p>
+
+  <div class="doc">
+    <p>Violation Tracker was read one company page at a time as a cross-check (see <a href="#reconciliation">Checks</a>). It is never a source of rows.</p>
+
+    <h2 id="lobbying-2010">How the 2010 to 2015 lobbying pages were read</h2>
+    <p>Lobbying firm fees from 2016 on come from files the Peoples-Audit project had already built from the Secretary of the Commonwealth's Lobbyist Public Search. For 2010 to 2015 the project read the same public search itself, on 2026-10-11, in a browser session. For each registration year the search page's year selector was set, with the type "Lobbyist or Lobbying Entity" and all results shown. Each lobbying firm's summary page (listed as "Lobbyist Entity") was then opened one at a time, at least 2 seconds apart: 1,223 firm pages over the six years. From each page the client list was copied as filed: client name, amount paid to the firm, employment dates and the purpose text, and the page address is kept as the source of every row. One 2010 firm page (Entity One) returned the site's own error page on two reads and is not in the table. The site's robots.txt file disallows the lowercase paths /lobbyist and /lobbyists; it does not list /LobbyistPublicSearch, the case-sensitive path these pages are on. The copied pages are in the project repo under sources/lobbying-2010-2015, with their sizes and checksums in sources/manifest.csv.</p>
+
+    <h2 id="matching">Match rules and tiers</h2>
+    <p>Each company has a canonical name and a list of aliases: former names, spelling variants, subsidiaries and the other entities named in its penalty records. Names are compared after normalization (upper case, punctuation and legal-form words such as Inc., LLC and Corp. removed).</p>
+    <ul>
+      <li><b>Confirmed.</b> The vendor name, the donor's reported employer, the lobbying client or the disclosed name equals an alias exactly after normalization, or a reviewer confirmed the name with a logged reason. Only confirmed records count toward any total.</li>
+      <li><b>Probable.</b> A name that starts with an alias or matches it loosely. It goes to a review file and stays out of every total until a reviewer confirms it.</li>
+      <li><b>Held.</b> A reviewed name that may be an affiliate, a parent or an unrelated business sharing a word, for example "General Electric Capital" against General Electric, or "State Street Global Advisors" as a donor's employer. It needs an ownership source before it counts, and until then it is out of every total.</li>
+      <li><b>Named individual.</b> A person is linked to a criminal case only when a primary document names them in that case and a donation under their name matches on name plus town or employer. These links are listed beside the company's records and never added into a company total.</li>
+    </ul>
+    <p>Donations are gifts by people who report the company as their employer. They are not company money. An employer bundle flag marks three or more matched donors giving to the same official within 30 days; it describes timing only.</p>
+
+    <h2 id="excluded">What is left out, and why</h2>
+    <ul>
+      <li><b>Probable and held matches</b>, in every stream, as above. A wrong match would put a stranger's money in a company's column.</li>
+      <li><b>Memo entries</b> (FEC memo code X). The same money appears on another line of the filing, so counting the memo would count it twice.</li>
+      <li><b>Pass-through donations</b>: gifts routed through a joint-fundraising committee and passed on to a candidate. The receiving committee reports them again.</li>
+      <li><b>Conduit copies and refunds.</b> ActBlue conduit rows restate gifts the receiving committee already reports; refunds to donors are not gifts.</li>
+      <li><b>In-kind contributions</b>, which have a stated value but are not cash.</li>
+      <li><b>Private lawsuits</b>, which are not government penalties, and anything dated before July 2009.</li>
+      <li><b>In-house lobbying before 2025.</b> What a company spent on its own staff lobbyists is entered only for 2025 and 2026. Before 2025 a lobbying figure is firm fees only, not a full lobbying total.</li>
+    </ul>
+
+    <h2 id="amounts">How penalty amounts are counted</h2>
+    <p>Each penalty row counts the cash the defendant pays: penalties, restitution, damages, fees and payments into funds the order names. A release's headline often adds things that are not cash from the defendant: loan modifications and principal reduction, forgiven or waived debt, forgiven rent, credits on accounts or bills, amounts that are owed only if the company breaks the agreement, "up to" amounts, and proposed penalties that can still be contested. Those parts are not in any row or total.</p>
+    <p>Every part left out is a row of the <a href="corporate-ledger.html?tab=excluded">Amounts not counted</a> register (repo file data/manual/excluded-amounts.csv), with the headline figure, the amount counted, the difference, a category, the reason quoted from the release, the source link and the date the source was read. Where a release does not say how much of a payment is cash and how much is relief, that part is left out and listed. Where it is the whole case, the row stays in the ledger at $0 so the company and the case remain visible. Cases skipped before entry under the same rule are listed too, with the headline the primary release states.</p>
+    <p>Refunds are read as cash unless the release says they are credits. A cash payment the release does not split between several companies is listed as a shared payment and is in no company's total. The register also lists a few cash parts left out for other reasons (amounts paid by individuals, a fee or a project payment the row did not add), so they are visible.</p>
+    <p id="amounts-count" class="muted"></p>
+
+    <h2 id="overlaps">Duplicates and shared totals: counted and gross penalties</h2>
+    <p>Gross is every penalty row on record. Counted leaves out a row when its dollars are already counted on another row, or cannot be given to one company. Two rules decide it. Every row they touch is listed under <a href="corporate-ledger.html?tab=excluded">Amounts not counted</a> with the document behind the call, and no source row is ever deleted.</p>
+    <p class="window rule" id="dup-rule-text">How duplicates are counted: when two records describe the same payment, it is counted once. A record is left out only when a primary document read for this ledger shows the dollars are the same. When that document cannot be read, a strong match is still counted once and is marked 'possible duplicate, counted once until verified'. Records for different payments are all counted, even when the amounts are equal. Every record left out stays in the gross figure and is listed under Amounts not counted, with the document behind the call.</p>
+    <p class="window rule" id="shared-rule-text">How shared totals are counted: when several defendants pay one total, each company counts only the share its primary document states. If the document gives a total and no split, and the payers include anyone outside the one company (another company, or individuals such as owners), the total is counted for no company: it stays in the gross figure and is listed under Amounts not counted. Where every payer named belongs to the one company, the whole total counts once, in full, for that company.</p>
+
+    <h3 id="duplicates">How the duplicate rule was applied</h3>
+    <p>A program (pipeline/dedupe_audit.py) reads every pair of penalty rows, counted or not, and lists each pair that could be one payment: equal amounts within about a year, the same docket, case or release, a note that states another row's amount, a plea and the agreement that goes with it, a total beside its parts. A person then reads the primary document for each candidate and records the call, with a short quote, a link and the date read, in review/penalty-dup-decisions.csv. The build stops if a candidate has no decision, if a decision has no evidence, or if the counting does not follow the decision. Where the Justice Department's own site blocks scripted reads, the copy that was read (the U.S. Attorney's archive, HHS-OIG, Oversight.gov, the Wayback Machine) is named in the decision.</p>
+    <ul>
+      <li><b>Counted once: the same payment.</b> State Street 2010: the Attorney General's recovery (about $310 million for investors plus a $10 million penalty, $320 million in the ledger) and the SEC's $313.3 million settlement (which includes more than $255 million in investor payments) repay the same investors in State Street's subprime-exposed funds. The Attorney General row is counted and the SEC row is not. The SEC's own $50 million penalty and $8.3 million disgorgement are not restated in the Attorney General row, so the counted figure can be low by up to $58.3 million. State Street 2019: the Attorney General's restitution (expected to exceed $48 million) and the SEC's $48.78 million disgorgement both repay the same custody overcharges. The SEC row ($88.78 million) is counted and the Attorney General row ($53.5 million) is not, which can understate the total by up to the Attorney General's $5.5 million penalty. OneBeacon 2010: one release entered twice, counted once. The Corporate Prosecution Registry sometimes records one criminal resolution twice, as the plea and as the agreement that goes with it, with the same dollars: GlaxoSmithKline 2010, Ortho-McNeil 2010, Aegerion 2017, Insys 2019 and NiSource with Bay State Gas 2020 are counted once, and the $3.6 million forfeiture on the Elan Corp. plc record is part of the Elan Pharmaceuticals plea row and is counted once there.</li>
+      <li><b>Possible duplicate, counted once until verified.</b> State Street 2016: the Massachusetts Attorney General's $75 million disgorgement equals the $75 million of profits the SEC's order finds, and the Attorney General calls its agreement part of the $382 million federal-state resolution, but its executed agreement is not published and no document says one payment satisfies the other. The SEC row is counted and the Attorney General row ($75.5 million) is not, which takes $75.5 million out of the Massachusetts-case total. If the agreement shows separate cash, the row comes back.</li>
+      <li><b>Different payments, all counted.</b> Twelve close groups of rows were read and kept as separate payments because the documents show different conduct, different payees or no offset: State Street's 2016 Justice Department, SEC and Labor Department parts, State Street's 2016 foreign-exchange case against its 2017 transition-management case, State Street's 2017 criminal and SEC penalties, DraftKings and FanDuel, Merck's 2011 criminal fine and civil settlement, NiSource's criminal fine and the Attorney General's fund, Boston Scientific's 2011 criminal and civil matters, Aegerion's SEC penalty and plea, MassMutual's SEC and Massachusetts Securities Division orders, Liberty Mutual's New York Attorney General and DFS orders, the two Steward hospitals of 2020, and Barnhardt's EPA and Attorney General settlements. Equal amounts alone never leave a row out.</li>
+    </ul>
+
+    <h3 id="shared">How the shared-total rule was applied</h3>
+    <p>Every row whose source total covers more than one defendant was listed (review/penalty-shared-candidates.csv) and read against its primary document. The result for each row is in data/manual/shared-allocations.csv, with the document, a short quote and the date read.</p>
+    <ul>
+      <li><b>A stated share counts at that share.</b> The court order in the R M Packer and Tisbury Towing case gives each defendant's amount ($1,157,000 and $143,000); before, both rows carried the $1,300,000 case total and the case counted twice. Healthcare Services Group's own $990,000 in the Gate Solution Systems judgment counts the same way.</li>
+      <li><b>Counted in full for one company.</b> Where every payer named is part of the one company (a hospital and its physician organization, a parent and its listed subsidiaries), the document's whole total counts once, for that company.</li>
+      <li><b>Counted for no company.</b> Where the document gives one total for a company and individuals such as owners, or for several companies, and no split, the total stays in gross and counts for no company, including the one federal EPA penalty of $100,000 shared by five respondents that includes Suffolk Construction. Individuals are not entered as rows, so a share cannot be given to them either.</li>
+    </ul>
+    <p id="integrity-count" class="muted"></p>
+    <p>The lens totals above the ledger table also count once a payment shared by several companies in one joint settlement.</p>
+
+    <h2 id="groups">Co-defendant groups</h2>
+    <p>When a penalty names several companies in one case, the ledger keeps them together under the first-named company and credits that group with the state payments, donations and lobbying of every entity the case names. A company row then shows "Includes:" with each entity's name, and its expanded records show a "matched as" tag where a record was filed under a name other than the row's name.</p>
+    <p>Read these groups as the defendants of one case, not as one corporate family. Some examples from the current build:</p>
+    <ul>
+      <li>Payments to Stantec Consulting Services appear under the Eurovia Atlantic Coast group, because Stantec is a co-defendant in that case.</li>
+      <li>EasCare is grouped with Brewster Ambulance Service, HRI Clinics with Universal Health Services, and Southcoast Emergency Medical Services with STAT Ambulance.</li>
+      <li>The case names Centrus Premier Home Care "doing business as" Maxim Healthcare Services. Maxim is a national company, so lobbying and disclosed ties filed under Maxim's name may concern the parent rather than the Massachusetts entity.</li>
+      <li>Some aliases are a bare brand or a common name. "Merck" as an employer may include staff of the unrelated German company Merck KGaA, and "Mercy Medical Center" is a name several unrelated hospitals use.</li>
+    </ul>
+    <p id="groups-count" class="muted"></p>
+
+    <h2 id="coverage">Coverage, by stream</h2>
+    <p>The spans below are read from the ledger file each time this page loads. The newest fiscal year of state payments is partial.</p>
+  </div>
+  <div class="tcard">
+    <table class="mt">
+      <thead><tr><th scope="col">Stream</th><th scope="col">From</th><th scope="col">To</th><th scope="col">Note</th></tr></thead>
+      <tbody id="coverage-rows"><tr><td colspan="4">Loading the coverage from the ledger file (data/ledger.json).</td></tr></tbody>
+    </table>
+  </div>
+  <p class="source">Source: corporate ledger table (ledger.json), coverage block.</p>
+
+  <div class="doc">
+    <h2 id="reconciliation">Checks against other tallies</h2>
+    <p>The full notes, with every table, are in the project's repo file checks/reconcile.md. In plain terms, as of the 2026-10-10 build:</p>
+    <ul>
+      <li><b>Ledger audit.</b> A separate script recomputed every company's penalties, payments, donations, lobbying and disclosed ties from the raw table rows, with its own arithmetic, and matched each listed record back to a row. It found no difference for any company.</li>
+      <li><b>Federal donations against an independent tally.</b> FEC receipts for Sen. Ed Markey's committees were compared, election cycle by cycle, with the owner's separate Markey dashboard data. Cycles 2012 through 2026 agree within 4 percent, and all but 2014 within 1 percent. The 2010 cycle reads 18 percent lower here because this ledger starts in July 2009 and the FEC cycle starts in January 2009. The 2014 gap traces to rows the other tally holds that are absent from the FEC bulk files. Two loader faults found this way were fixed: a joint-fundraising committee had not been loaded, and refunds had been read as gifts.</li>
+      <li><b>State donations against an independent tally.</b> OCPF receipts for Sen. Barry Finegold were compared year by year with the figures from the owner's Finegold repo. Over the whole window this ledger is 2.8 percent higher. The candidate's own gifts, which the other tally leaves out, explain 2014; organization contributions explain 2010 and 2018; for 2026 this ledger's file runs to October and the other tally's date was not recorded.</li>
+      <li><b>Lobbying 2010 to 2015 against the client's own page.</b> For State Street and Liberty Mutual in 2012 and 2014, the firms and amounts on each company's own client page match the firm-page rows exactly ($86,400 and $140,400 for State Street; $162,500 and $210,000 for Liberty Mutual).</li>
+      <li><b>Penalties against Violation Tracker.</b> General Electric and Biogen match record for record. State Street's gross total is $20.5 million above Violation Tracker's records in the same window; three rows explain it. The 2010 Attorney General row is $320 million (about $310 million for investors plus a $10 million penalty) where Violation Tracker lists $300 million; the 2017 OFCCP row is the full $5 million fund where Violation Tracker lists $4.49 million; and the 2024 OFAC row is not rounded.</li>
+    </ul>
+
+    <h2 id="limits">Known limits</h2>
+    <ul>
+      <li>The window starts at fiscal 2010 because the state's online spending records start there. Older penalties, such as the 2008 Big Dig settlements, fall outside it.</li>
+      <li>Donor matching depends on the employer each donor reports. Donors who leave it blank or write "self-employed" are missed.</li>
+      <li>Corporate parents change. The ledger does not split a company's records at a sale or merger, so a row can hold records from before and after one.</li>
+      <li>Totals are nominal dollars, not adjusted for inflation.</li>
+      <li>Penalty amounts are the cash the release or order says the defendant pays, under the rule <a href="#amounts">above</a>. Some are restitution, investor payments or funds set aside for back pay rather than fines; the note on each record says which.</li>
+      <li>The Explorer and the expanded rows find a donation's or a lobbying payment's records by name, because the record files carry no committee or firm number. Where two committees or firms share a name, the list says the records may be mixed.</li>
+    </ul>
+
+    <h2 id="opinion">Opinion</h2>
+    <p>The page states records, dates, amounts and sources. It does not state motive, intent or cause. The owner's opinion appears only inside a box labeled "Opinion"; until he writes one for a case file, the box is not shown. Pay-to-play appears only as a regulator's own finding, quoted and attributed, or as the table of donations near case dates, which lists dates and amounts and gives no reason.</p>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-in">
+    <p><a href="corporate-ledger.html">Corporate Ledger</a></p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var NAMES = { penalties: 'Penalties', contracts: 'State payments', donations_ocpf: 'Employee donations to state officials (OCPF)',
+    donations_fec: 'Employee donations to federal officials (FEC)', lobbying: 'Lobbying', holdings: 'Disclosed ties' };
+  var NOTES = { penalties: 'Government penalties only. Under the headquarters lens a row counts from the date the company was based in Massachusetts.',
+    contracts: 'Net payments by fiscal year; the newest fiscal year is partial. Payers: CTHRU, MBTA, Massport, MSBA.',
+    donations_ocpf: 'Confirmed employer matches, cash gifts only. Newest gift in the file.',
+    donations_fec: 'Confirmed employer matches, cash gifts only. Newest gift in the file.',
+    lobbying: 'Firm fees from 2010; in-house costs for 2025 and 2026 only, so earlier years are firm fees alone.',
+    holdings: 'Filing years of the Statements of Financial Interest.' };
+  function td(label, text, cls) {
+    var c = document.createElement('td');
+    c.setAttribute('data-label', label);
+    if (cls) c.className = cls;
+    c.textContent = text;
+    return c;
+  }
+  // A year after the current calendar year can only be a fiscal year; FY values already say so.
+  function span(v) { return v === null || v === undefined ? 'none' : String(v); }
+  fetch('data/corporate-ledger/ledger.json').then(function (r) {
+    if (!r.ok) throw new Error(r.status);
+    return r.json();
+  }).then(function (d) {
+    document.getElementById('updated-date').textContent = d.generated || 'unknown';
+    var body = document.getElementById('coverage-rows');
+    body.innerHTML = '';
+    Object.keys(NAMES).forEach(function (k) {
+      var c = (d.coverage || {})[k];
+      if (!c) return;
+      var tr = document.createElement('tr');
+      tr.appendChild(td('Stream', NAMES[k]));
+      tr.appendChild(td('From', span(c.from), 'span'));
+      tr.appendChild(td('To', span(c.to), 'span'));
+      tr.appendChild(td('Note', NOTES[k]));
+      body.appendChild(tr);
+    });
+    var n = (d.companies || []).filter(function (c) { return c.entities && c.entities.length > 1; }).length;
+    var xa = (d.excluded_amounts || {}).totals;
+    if (xa) {
+      var m = function (v) { return '$' + (v >= 1e9 ? (v / 1e9).toPrecision(3) + 'B' : v >= 1e6 ? (v / 1e6).toPrecision(3) + 'M' : Math.round(v).toLocaleString('en-US')); };
+      document.getElementById('amounts-count').textContent = 'In this build the register has ' + xa.n + ' rows. Where a headline is entered, releases headlined ' +
+        m(xa.headline_total) + ' and the ledger counts ' + m(xa.counted_total) + '; ' + m(xa.not_counted_total) + ' is not counted in all.';
+    }
+    var du = xa && xa.duplicates, st = (d.excluded_amounts || {}).shared_totals;
+    if (du && st) {
+      var ic = document.getElementById('integrity-count');
+      var by = st.by_basis || {}, ns = by.not_stated || { n: 0, shared_total_not_counted: 0 };
+      ic.textContent = 'In this build, ' + du.n + ' rows are left out because another row counts the same dollars (' + du.n_possible +
+        ' of them a possible duplicate), ' + ns.n + ' shared totals count for no company (' + Math.round(ns.shared_total_not_counted).toLocaleString('en-US') +
+        ' dollars, in gross), ' + ((by.whole_total || {}).n || 0) + ' rows count their whole total once for one company and ' + ((by.allocated || {}).n || 0) +
+        ' rows count a share or an amount the document states.';
+    }
+    document.getElementById('groups-count').textContent = 'In this build, ' + n + ' of the ' + (d.companies || []).length +
+      ' companies and institutions carry an "Includes:" list.';
+  }).catch(function () {
+    document.getElementById('coverage-rows').innerHTML = '<tr><td colspan="4">The ledger file (data/ledger.json) could not be loaded. Reload the page to try again.</td></tr>';
+    document.getElementById('updated-date').textContent = 'unknown';
+  });
+})();
+</script>
+</body>
+</html>

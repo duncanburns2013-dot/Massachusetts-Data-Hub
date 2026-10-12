@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="data-checked" content="2026-10-12"><!-- bump when this page is reconciled against its publisher; scripts/check-freshness.py ages it -->
+  <!-- Open Graph / Social Cards -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Massachusetts Data Hub">
+  <meta property="og:title" content="Corporate Ledger: Penalties, State Payments, Donations and Lobbying">
+  <meta property="og:description" content="Companies with at least $1 million in government penalties since fiscal 2010, tied to Massachusetts, beside their state payments, employer-matched donations, lobbying and officials' disclosed ties.">
+  <meta property="og:url" content="https://massachusettsdatahub.com/corporate-ledger.html">
+  <meta name="twitter:title" content="Corporate Ledger: Penalties, State Payments, Donations and Lobbying">
+  <meta name="twitter:description" content="Companies with at least $1 million in government penalties since fiscal 2010, tied to Massachusetts, beside their state payments, employer-matched donations, lobbying and officials' disclosed ties.">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="canonical" href="https://massachusettsdatahub.com/corporate-ledger.html">
+<link rel="icon" href="https://massachusettsdatahub.com/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="https://massachusettsdatahub.com/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="https://massachusettsdatahub.com/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="icon" href="https://massachusettsdatahub.com/favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="https://massachusettsdatahub.com/apple-touch-icon.png">
+<meta property="og:image" content="https://massachusettsdatahub.com/cards/corporate-ledger.jpg">
+<meta name="twitter:image" content="https://massachusettsdatahub.com/cards/corporate-ledger.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<title>Corporate Ledger | Massachusetts Data Hub</title>
+<meta name="description" content="Companies with at least $1 million in government penalties since fiscal 2010, tied to Massachusetts, beside their state payments, employer-matched donations, lobbying and officials' disclosed ties.">
+<style>
+/* Layout follows the Hub dashboards (pay-to-play, energy, pension): Bay Blue hero with a centred headline, a one-line
+   subtitle and a row of six translucent KPI tiles; a centred white tab strip; a tinted callout; dense white chart cards
+   on a 12-column grid with a Source: line under each chart.
+   SOLVED BUGS kept from the Hub template (do not revert):
+   - Tab system uses onclick="showTab(this,'name')", never event.target
+   - Charts are created lazily when their tab is shown and destroyed on tab change
+   - Grids stack on mobile; below 640px the ledger table becomes cards
+   Colours and type come from the Hub tokens in assets/hub-theme.css (loaded after this block). The stream colours
+   are defined once, here, and every script reads them from these variables (checks/test_site.py). */
+:root{
+  /* one colour per stream, validated by the dataviz skill (checks/dataviz-palette.txt); text never wears them */
+  --s-penalty:#A81733;      /* Cranberry family: the validated edge step of #680A1D */
+  --s-contract:#14558F;     /* Bay Blue */
+  --s-donation:#388557;     /* Berkshire Green, state (OCPF), solid */
+  --s-donation-fed:#7DB894; /* Berkshire Green light step, federal (FEC), always hatched */
+  --s-lobbying:#B07C20;     /* Hub amber, firm fees */
+  --s-lobbying-in:#D6AD62;  /* amber light step, in-house, always hatched */
+  --s-holding:#D0559A;      /* validated pink (the Hub purple #46527A fails the validator against Bay Blue) */
+  --s-person:#3E4A4D;
+  /* state payments by payer: one Bay Blue ramp, darkest at the base of the stack */
+  --pay-cthru:#14558F;--pay-mbta:#3570AA;--pay-massport:#5E8EC4;--pay-msba:#8DB3DE;
+  /* the same streams as light steps for numerals on the Bay Blue hero (each at least 4.5:1 on #14558F) */
+  --h-penalty:#FFB3BE;--h-contract:#B9D8F5;--h-donation:#8FD9AE;--h-donation-fed:#C5EBD3;--h-lobbying:#F5D08A;--h-holding:#F6B8DC;
+  --wash:#EEF3F1;           /* soft Berkshire-neutral chart well (Explorer canvas) */
+  --radius:14px;--radius-s:8px;--gap:14px;--pad:16px;--wrap:1360px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);line-height:1.5;font-size:15px}
+::selection{background:var(--bay);color:#fff}
+a{color:var(--bay);text-underline-offset:.18em;text-decoration-thickness:1px}
+a:hover{color:var(--cran)}
+:focus-visible{outline:2px solid var(--bay);outline-offset:2px;border-radius:2px}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- hero (Hub pattern) ---------- */
+.hero{background:var(--bay) linear-gradient(160deg,rgba(255,255,255,.07) 0%,rgba(255,255,255,0) 45%,rgba(0,0,0,.06) 100%);color:#fff;padding:34px 24px 26px;text-align:center}
+.hero h1{font-family:var(--font-display);font-size:clamp(1.75rem,3.2vw,2.6rem);font-weight:400;line-height:1.15;letter-spacing:-.01em;margin-bottom:6px}
+.hero .hero-sub{font-size:.85rem;letter-spacing:.005em;max-width:1300px;margin:0 auto;color:rgba(255,255,255,.86)}
+.hero .hero-note{font-size:.75rem;margin:6px auto 0;display:flex;flex-wrap:wrap;justify-content:center;gap:2px 16px}
+.hero .hero-note a{color:#fff}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;max-width:1240px;margin:20px auto 0}
+.kpi{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 10px 11px;
+  color:#fff;text-align:center;cursor:pointer;font:inherit;display:flex;flex-direction:column;align-items:center;gap:2px;
+  transition:background .2s,border-color .2s}
+.kpi:hover{background:rgba(255,255,255,.11)}
+.kpi[aria-pressed="true"]{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.55)}
+.kpi:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.kpi-v{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-size:clamp(1.15rem,1.9vw,1.55rem);line-height:1.2;letter-spacing:-.03em;color:var(--kc)}
+.kpi-g{font-family:var(--font-mono);font-size:.72rem;color:rgba(255,255,255,.82)}
+.kpi-l{font-size:.6875rem;text-transform:uppercase;letter-spacing:.08em;font-weight:500;color:rgba(255,255,255,.82);display:flex;align-items:center;gap:6px;line-height:1.3}
+.kpi-sw{width:26px;height:5px;border-radius:3px;flex:none;background:var(--sc);box-shadow:0 0 0 1px rgba(255,255,255,.85);margin-bottom:5px}
+.kpi-sw.hatch{background:repeating-linear-gradient(135deg,var(--sc) 0 2px,#fff 2px 4px)}
+
+/* ---------- tab strip (Hub pattern: centred, uppercase, amber underline) ---------- */
+.tab-nav{display:flex;justify-content:center;background:var(--card);border-bottom:1px solid var(--border);overflow-x:auto;
+  -webkit-overflow-scrolling:touch;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.tab-btn{padding:14px 22px;font-size:.78rem;font-weight:600;border:0;border-bottom:2px solid transparent;background:none;cursor:pointer;
+  color:var(--muted);white-space:nowrap;text-transform:uppercase;letter-spacing:.06em}
+.tab-btn:hover{color:var(--text);background:rgba(0,0,0,.02)}
+.tab-btn.active{color:var(--bay);border-bottom-color:var(--amber)}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* ---------- page grid ---------- */
+.wrap{max-width:var(--wrap);margin:0 auto;padding:16px 24px 8px}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--gap)}
+.s3{grid-column:span 3}.s4{grid-column:span 4}.s5{grid-column:span 5}.s6{grid-column:span 6}.s7{grid-column:span 7}.s8{grid-column:span 8}.s12{grid-column:1/-1}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:var(--pad);box-shadow:0 1px 3px rgba(0,0,0,.03);min-width:0}
+.section-title{font-family:var(--font-display);font-size:1.15rem;font-weight:700;color:var(--text);margin:0 0 4px}
+.lede{font-size:.875rem;color:var(--slate);max-width:110ch}
+.source{font-size:.6875rem;color:var(--muted);margin-top:8px;font-style:italic;line-height:1.5}
+
+/* ---------- the two rules: one tinted callout, two columns (Hub .alert) ---------- */
+.alert{background:var(--red-bg);border:1px solid rgba(168,23,51,.15);border-left:4px solid var(--red);border-radius:var(--radius);
+  padding:12px 18px 12px;margin-bottom:var(--gap)}
+.alert h2{font-family:var(--font-display);color:var(--red);font-size:.88rem;font-weight:700;letter-spacing:.02em;margin-bottom:6px}
+.alert-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:6px 28px}
+.window{font-size:.8125rem;line-height:1.55;color:var(--text)}
+.window.rule b{font-weight:700}
+
+/* ---------- toolbar ---------- */
+.toolbar{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 18px;padding:12px var(--pad)}
+.ctl-label{display:block;font-size:.72rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em;font-weight:500}
+.seg{display:inline-flex;border:1px solid var(--border);border-radius:var(--radius-s);background:var(--card);overflow:hidden}
+.seg button{border:0;background:none;padding:7px 12px;font-size:.8125rem;cursor:pointer;color:var(--slate);border-right:1px solid var(--border);white-space:nowrap}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--bay);color:#fff}
+.search{flex:1 1 200px;max-width:300px}
+.search input,.sortsel select{width:100%;font-size:.9375rem;padding:7px 10px;border:1px solid var(--border);border-radius:var(--radius-s);background:var(--card);color:var(--text)}
+.sortsel{display:none}
+.fchips{display:flex;flex-wrap:wrap;gap:6px}
+.fchip{font-size:.78rem;border:1px solid var(--border);background:var(--card);color:var(--slate);border-radius:999px;padding:5px 11px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.fchip[aria-pressed="true"]{background:var(--blue-bg);border-color:var(--bay);color:var(--bay);font-weight:600}
+.fchip[aria-pressed="true"]::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--bay)}
+.colmenu{position:relative}
+.colmenu summary{list-style:none;font-size:.78rem;border:1px solid var(--border);border-radius:var(--radius-s);padding:7px 11px;cursor:pointer;color:var(--slate);background:var(--card)}
+.colmenu summary::-webkit-details-marker{display:none}
+.colmenu[open] summary{border-color:var(--bay);color:var(--bay)}
+.colmenu .menu{position:absolute;right:0;top:calc(100% + 4px);z-index:60;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-s);
+  padding:8px 12px;box-shadow:0 6px 18px rgba(0,0,0,.08);min-width:230px}
+.colmenu label{display:flex;gap:8px;align-items:center;font-size:.8125rem;padding:3px 0;cursor:pointer;white-space:nowrap}
+.colmenu input{accent-color:var(--bay);width:15px;height:15px}
+.tool-end{margin-left:auto;display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}
+.selchip{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;border-radius:999px;padding:4px 6px 4px 11px;background:var(--blue-bg);
+  border:1px solid var(--bay);color:var(--bay);font-weight:600;max-width:100%}
+.selchip.all{background:var(--card);border-color:var(--border);color:var(--slate);font-weight:500;padding-right:11px}
+.selchip button{border:0;background:var(--bay);color:#fff;border-radius:999px;width:18px;height:18px;line-height:18px;font-size:.75rem;cursor:pointer;flex:none}
+.selchip .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.linkbtn{background:none;border:0;padding:0;font:inherit;color:var(--bay);text-decoration:underline;cursor:pointer}
+.lens-sum{font-size:.8125rem;color:var(--slate);margin:8px 2px var(--gap);max-width:150ch}
+.lens-sum b{font-weight:700;color:var(--text)}
+
+/* ---------- chart cards ---------- */
+.chart-card{display:flex;flex-direction:column}
+.chart-card > .source{margin-top:auto;padding-top:8px}
+.ch-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 10px;margin-bottom:6px}
+.chart-card h3{font-family:var(--font-display);font-size:.85rem;font-weight:700;color:var(--bay);line-height:1.35}
+.scope{font-size:.72rem;font-weight:600;border-radius:999px;padding:2px 9px;background:var(--paper);color:var(--slate);white-space:nowrap;
+  display:inline-flex;align-items:center;gap:6px;max-width:100%}
+.scope.co{background:var(--blue-bg);color:var(--bay);border:1px solid rgba(20,85,143,.35)}
+.scope button{border:0;background:none;color:inherit;cursor:pointer;font-size:.8rem;padding:0 2px;line-height:1}
+.scope .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:26ch}
+.ch-sub{font-size:.75rem;color:var(--muted);margin:-2px 0 6px}
+.legend{display:flex;flex-wrap:wrap;gap:3px 14px;font-size:.75rem;color:var(--slate);margin-bottom:4px}
+.lg{display:inline-flex;align-items:center;gap:6px}
+.lg-sw{width:11px;height:11px;border-radius:2px;background:var(--c);flex:none}
+.lg-sw.hatch{background:repeating-linear-gradient(135deg,var(--c) 0 2px,#fff 2px 4px);box-shadow:inset 0 0 0 1px var(--c)}
+.lg-dot{width:10px;height:10px;border-radius:50%;background:var(--c);flex:none}
+.plot{position:relative;width:100%;flex:1 1 auto;min-height:120px}
+.plot svg{display:block;width:100%;overflow:visible}
+.plot .empty-plot{font-size:.8125rem;color:var(--muted);padding:18px 0}
+svg .ax{font-family:var(--font-mono);font-size:10px;fill:var(--muted)}
+svg .lab{font-family:var(--font-text);font-size:11px;fill:var(--text)}
+svg .val{font-family:var(--font-mono);font-size:11px;fill:var(--slate)}
+svg .note-t{font-family:var(--font-text);font-size:11px;fill:var(--muted)}
+svg .grid-l{stroke:var(--border);stroke-width:1}
+svg .base-l{stroke:var(--slate);stroke-width:1}
+svg .mk{cursor:pointer}
+svg .mk:focus{outline:none}
+svg .mk:focus .hit,svg .mk.hl .hit{fill:rgba(20,85,143,.08)}
+svg .mk.sel .lab{font-weight:700}
+svg .mk.sel .hit{fill:rgba(20,85,143,.12)}
+svg .hit{fill:transparent}
+details.dt{margin-top:6px;font-size:.75rem}
+details.dt summary{cursor:pointer;color:var(--bay);width:max-content}
+details.dt .tscroll{max-height:220px;overflow:auto;margin-top:4px}
+table.mini{border-collapse:collapse;width:100%;font-size:.75rem}
+.mini th{text-align:right;font-weight:600;color:var(--muted);border-bottom:1px solid var(--text);padding:3px 6px;position:sticky;top:0;background:var(--card)}
+.mini td{text-align:right;border-bottom:1px solid var(--border);padding:3px 6px;font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.mini th:first-child,.mini td:first-child{text-align:left}
+.tip{position:fixed;z-index:300;background:var(--text);color:#fff;font-size:.78rem;line-height:1.4;padding:7px 10px;border-radius:6px;
+  max-width:320px;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.tip[hidden]{display:none}
+.tip b{font-weight:600}
+.tip .t-src{display:block;font-family:var(--font-mono);font-size:.7rem;color:rgba(255,255,255,.78);margin-top:3px}
+.pulse{animation:pulse 1.2s ease-out 1}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(20,85,143,.45)}100%{box-shadow:0 0 0 14px rgba(20,85,143,0)}}
+
+/* ---------- company panel ---------- */
+.co-panel{margin-top:var(--gap)}
+.co-panel[hidden]{display:none}
+.cp-head{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:6px 16px}
+.cp-head h2{font-family:var(--font-display);font-size:1.3rem;font-weight:700;line-height:1.2}
+.cp-facts{display:flex;flex-wrap:wrap;gap:4px 18px;margin-top:6px;font-size:.78rem;color:var(--slate)}
+.cp-facts b{font-family:var(--font-mono);font-weight:400;color:var(--text)}
+.cp-empty{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-size:.875rem;color:var(--slate)}
+.cp-empty .fchip{color:var(--bay)}
+.tline{margin-top:12px;border:1px solid var(--border);border-radius:10px;padding:12px 14px 10px}
+.tline h3{font-family:var(--font-display);font-size:.85rem;font-weight:700;color:var(--bay)}
+#cp-records{margin-top:16px}
+.tl h3{font-family:var(--font-display);font-size:.95rem;margin-bottom:4px}
+.tl .note{font-size:.8125rem;color:var(--muted);max-width:110ch}
+.chips{display:flex;flex-wrap:wrap;gap:0;margin:10px 0 4px;border-bottom:1px solid var(--border)}
+.chips button{font-size:.75rem;border:0;border-bottom:2px solid transparent;background:none;color:var(--muted);padding:7px 11px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.chips button[aria-pressed="true"]{color:var(--bay);border-bottom-color:var(--amber)}
+.yrchip{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;margin:6px 0 0;background:var(--blue-bg);color:var(--bay);border-radius:999px;padding:2px 4px 2px 10px}
+.yrchip button{border:0;background:var(--bay);color:#fff;border-radius:999px;width:17px;height:17px;font-size:.7rem;cursor:pointer}
+.sw{width:9px;height:9px;border-radius:2px;flex:none;background:var(--s-person)}
+.s-penalty .sw,.sw.s-penalty{background:var(--s-penalty)}
+.s-contract .sw,.sw.s-contract{background:var(--s-contract)}
+.s-donation .sw,.sw.s-donation{background:var(--s-donation)}
+.s-lobbying .sw,.sw.s-lobbying{background:var(--s-lobbying)}
+.s-holding .sw,.sw.s-holding{background:var(--s-holding)}
+.s-person_link .sw,.sw.s-person_link{background:var(--s-person)}
+.tag{display:inline-block;font-family:var(--font-mono);font-size:.7rem;color:var(--slate);border:1px solid var(--border);border-radius:3px;padding:0 5px;font-weight:400}
+.incl{display:block;font-size:.72rem;line-height:1.35;color:var(--slate);margin:3px 0 0 1.4em;font-weight:400;cursor:help;overflow-wrap:anywhere}
+.mchip{display:inline-block;font-family:var(--font-mono);font-size:.7rem;font-weight:400;color:var(--slate);border:1px dashed var(--slate);border-radius:3px;padding:0 5px;margin-left:6px;overflow-wrap:anywhere}
+.tl .incl-note{color:var(--text);margin:2px 0 6px}
+ol.events{list-style:none;margin-top:4px}
+.ev{display:grid;grid-template-columns:86px 118px 92px minmax(0,1fr) auto;gap:3px 14px;padding:7px 0;border-top:1px solid var(--border);font-size:.8125rem;align-items:baseline}
+.ev time,.ev .amt{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-size:.78rem;white-space:nowrap}
+.ev .amt{text-align:right}
+.chip{font-size:.72rem;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;color:var(--slate)}
+.ev .what b{font-weight:600}
+.ev .det{display:block;color:var(--muted);font-size:.78rem;margin-top:2px;overflow-wrap:anywhere}
+.ev .src{font-family:var(--font-mono);font-size:.72rem;white-space:nowrap}
+.more{margin-top:10px;font-size:.8125rem;border:1px solid var(--border);background:var(--card);border-radius:var(--radius-s);padding:6px 12px;cursor:pointer;color:var(--bay)}
+.xbox{border-left:3px solid var(--red);background:var(--red-bg);padding:8px 12px;margin:8px 0 10px;font-size:.8125rem;border-radius:0 8px 8px 0}
+.xbox ul{list-style:none;margin-top:4px}
+.xbox li{padding:4px 0;border-top:1px solid rgba(168,23,51,.15)}
+.xbox .mono{font-size:.78rem}
+.prox{margin-top:16px}
+.prox details{border-top:1px solid var(--border);padding:7px 0}
+.prox summary{cursor:pointer;font-size:.8125rem}
+.prox summary .mono{font-size:.78rem}
+.prox summary span{margin-right:.6em}
+.tscroll{overflow-x:auto;margin-top:6px}
+table.pt{border-collapse:collapse;font-size:.78rem;min-width:620px;width:100%}
+.pt th{font-weight:600;color:var(--muted);text-align:right;padding:4px 8px;border-bottom:1px solid var(--text);font-size:.72rem;line-height:1.25;vertical-align:bottom}
+.pt td{padding:4px 8px;border-bottom:1px solid var(--border);text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.pt th:first-child,.pt td:first-child,.pt th:nth-child(2),.pt td:nth-child(2){text-align:left}
+.pt td:first-child,.pt td:nth-child(2){font-family:var(--font-text)}
+
+/* ---------- ledger table ---------- */
+.table-card{margin-top:var(--gap);padding:12px 0 12px}
+.table-card .tc-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 12px;padding:0 var(--pad) 6px}
+.table-card .tc-head h2{font-family:var(--font-display);font-size:.95rem;font-weight:700;color:var(--bay)}
+.table-card > .source,.table-card > .tc-foot{padding:0 var(--pad)}
+.tc-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin-top:8px;font-size:.8125rem;color:var(--slate)}
+table.ledger{width:100%;border-collapse:collapse;font-size:.8125rem}
+.ledger>thead>tr>th{position:sticky;top:var(--navh,47px);background:var(--card);z-index:2}
+.ledger>thead>tr.cols>th{top:calc(var(--navh,47px) + var(--grph,26px))}
+.ledger .grp th{font-size:.7rem;font-weight:600;color:var(--slate);text-align:center;padding:6px 8px 2px;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em}
+.ledger .grp th.g{border-bottom:2px solid var(--border)}
+.ledger .cols th{font-size:.75rem;font-weight:600;color:var(--muted);text-align:right;padding:5px 10px 7px;border-bottom:1px solid var(--text);vertical-align:bottom;line-height:1.25}
+.ledger .cols th:first-child{text-align:left;padding-left:var(--pad)}
+.sort{background:none;border:0;font:inherit;color:inherit;cursor:pointer;text-align:inherit;padding:0;line-height:1.25}
+.sort:hover{color:var(--text)}
+.sort[aria-sort="descending"]::after{content:" \2193";color:var(--cran)}
+.sort[aria-sort="ascending"]::after{content:" \2191";color:var(--cran)}
+.ledger>tbody>tr>td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top;text-align:right}
+.ledger>tbody>tr>td.co{text-align:left;width:26%;padding-left:var(--pad)}
+.ledger tr.row{cursor:pointer}
+.ledger tr.row:hover>td,.ledger tr.row.hl>td{background:rgba(20,85,143,.05)}
+.ledger tr.row.open>td{background:rgba(20,85,143,.09)}
+.ledger tr.row.open>td.co{box-shadow:inset 3px 0 0 var(--bay)}
+.co-btn{background:none;border:0;font:inherit;color:var(--text);text-align:left;cursor:pointer;font-weight:600;display:flex;gap:8px;align-items:flex-start;line-height:1.3}
+.co-btn .dot{flex:none;width:8px;height:8px;border-radius:50%;margin-top:.35em;background:var(--border)}
+.row.open .co-btn .dot{background:var(--bay)}
+.co .tag{margin:3px 0 0 1.4em}
+.v{font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap;font-size:.8125rem}
+.sub{display:block;font-family:var(--font-mono);font-size:.7rem;color:var(--muted);white-space:nowrap;margin-top:2px}
+.sub a{color:var(--muted)}
+.zero{color:var(--muted)}
+.hnote{display:block;font-weight:400;font-size:.7rem;color:var(--muted);margin-top:3px;white-space:nowrap;line-height:1.3}
+.hnote a{color:var(--bay)}
+.xmark{font-size:.8125rem;font-weight:700;margin-left:2px;text-decoration:none;color:var(--cran)}
+.xmark:hover{text-decoration:underline}
+.fnmark{font-size:.8125rem;font-weight:700;margin-left:2px;text-decoration:none;color:var(--bay)}
+.footnote{padding:0 var(--pad);margin:8px 0 0;font-size:.8125rem;color:var(--slate);max-width:120ch;line-height:1.5}
+.footnote .fnmark{margin-left:0}
+.cdot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:.08em;background:var(--c)}
+.cdot.hatch{background:repeating-linear-gradient(135deg,var(--c) 0 1.5px,#fff 1.5px 3px);box-shadow:inset 0 0 0 1px var(--c)}
+.spark{display:block;margin:3px 0 0 auto}
+.mnote{display:none;font-size:.78rem;color:var(--muted);margin:0 0 8px}
+.empty{padding:24px;text-align:center;color:var(--muted)}
+
+/* ---------- notes ---------- */
+.notes{margin-top:var(--gap)}
+.notes h3{font-family:var(--font-display);font-size:.9rem;font-weight:700;color:var(--bay);margin-bottom:4px}
+.notes p{font-size:.8125rem;line-height:1.55}
+
+/* ---------- amounts not counted ---------- */
+.xa-sum{font-size:.875rem;margin:0;max-width:140ch}
+.xa-wrap{overflow-x:auto;padding:0}
+table.xa{border-collapse:collapse;font-size:.78rem;width:100%;min-width:980px}
+.xa th{font-weight:600;color:var(--muted);text-align:left;padding:8px 8px 6px;border-bottom:1px solid var(--text);font-size:.72rem;vertical-align:bottom;white-space:nowrap}
+.xa td{padding:7px 8px;border-bottom:1px solid var(--border);vertical-align:top}
+.xa th:first-child,.xa td:first-child{padding-left:var(--pad)}
+.xa td.n,.xa th.n{text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.xa td.why{min-width:36ch;max-width:60ch;color:var(--slate)}
+.xa td.co{min-width:13ch}
+.xa td.case{min-width:16ch}
+.xa tfoot td{font-weight:700;border-top:2px solid var(--text);border-bottom:0}
+.xa-tnote{display:block;font-weight:400;font-size:.7rem;color:var(--muted);margin-top:2px;max-width:48ch}
+.xa .cat{font-size:.72rem;min-width:13ch;max-width:18ch}
+.xa a{overflow-wrap:anywhere}
+.xa-other ul{margin:6px 0 0 1.1em;font-size:.8125rem;columns:2 340px;column-gap:28px}
+.xa-other li{margin-top:3px;break-inside:avoid}
+.xa-other p{font-size:.8125rem}
+
+/* ---------- case files ---------- */
+.case-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:var(--gap)}
+.case-card{display:block;text-align:left;background:var(--card);border:1px solid var(--border);border-top:3px solid var(--border);
+  border-radius:var(--radius);padding:14px var(--pad);cursor:pointer;color:var(--text);font:inherit}
+.case-card:hover{border-top-color:var(--bay)}
+.case-card[aria-pressed="true"]{border-top-color:var(--cran);box-shadow:inset 0 0 0 1px var(--bay)}
+.cc-name{display:block;font-family:var(--font-display);font-size:1.15rem;font-weight:700;color:var(--bay)}
+.cc-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:3px 18px;margin-top:8px}
+.cc-fact{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:.78rem;border-top:1px solid var(--border);padding-top:3px;min-width:0}
+.cc-k{color:var(--muted);font-family:var(--font-text);flex:none}
+.cc-v{font-family:var(--font-mono);font-variant-numeric:tabular-nums;text-align:right;overflow-wrap:anywhere}
+.pf{margin-top:var(--gap)}
+.pf-title{font-family:var(--font-display);font-size:1.15rem;font-weight:700;color:var(--bay)}
+.pf .search{display:block;max-width:420px;margin-top:10px}
+.pf-list{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:6px var(--gap)}
+.pf-list a{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;
+  background:var(--card);color:var(--text);text-decoration:none;font-size:.85rem;min-width:0}
+.pf-list a:hover,.pf-list a:focus-visible{border-color:var(--bay)}
+.pf-list .pf-name{overflow-wrap:anywhere;color:var(--bay);font-weight:600}
+.pf-list .pf-sub{flex:none;font-family:var(--font-mono);font-size:.72rem;color:var(--muted);text-align:right}
+.pf-empty{font-size:.85rem;color:var(--muted);margin-top:10px}
+.case-view{margin-top:var(--gap)}
+.case-view[hidden]{display:none}
+.case-head{border-bottom:1px solid var(--border);padding-bottom:10px}
+.case-title{font-family:var(--font-display);font-size:clamp(1.3rem,2.4vw,1.7rem);line-height:1.2;font-weight:700}
+.case-meta{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:.78rem;margin-top:6px;color:var(--muted)}
+.tag-toggle{display:inline-flex;align-items:center;gap:8px;margin-top:8px;font-size:.8125rem;cursor:pointer}
+.tag-toggle input{width:16px;height:16px;accent-color:var(--bay)}
+.tag-note{font-size:.75rem;color:var(--muted);margin-top:3px;max-width:110ch}
+.case-view > .window.rule{background:var(--red-bg);border-left:4px solid var(--red);border-radius:0 10px 10px 0;padding:10px 14px}
+.case-sec{margin-top:18px}
+.case-sec > h4{font-family:var(--font-display);font-size:1.05rem;font-weight:700;color:var(--bay);border-top:1px solid var(--border);padding-top:12px;margin-bottom:6px}
+.case-sec.opinion{border:2px solid var(--text);padding:12px 14px;border-radius:10px}
+.case-sec.opinion > h4{border-top:0;padding-top:0}
+/* Each section is one flow: its chart (if it has one) and its text, in that order. Below 1000 px the flow is a single
+   column (text lines capped at 80ch). From 1000 px cases.js tries the arrangements named .lay-* below on each section,
+   measures the empty space each leaves and keeps the first that leaves no large empty block (layoutSection). */
+.cs-flow{display:flex;flex-direction:column;row-gap:6px}   /* flex with a gap: the chart's and the text's margins add up as they did in the old grid */
+.case-body{font-size:.9rem;max-width:80ch;line-height:1.6}
+.case-body p,.case-body ul,.case-body ol,.case-body blockquote{margin-top:8px}
+.case-body .cu{margin-top:8px}
+.case-body .cu > :first-child{margin-top:0}
+.case-body .tw{margin-top:8px;overflow-x:auto}
+.case-body .tw table{margin-top:0}
+.case-body h3{font-family:var(--font-display);font-size:.95rem;margin-top:14px}
+.case-body ul,.case-body ol{padding-left:1.2em}
+.case-body li{margin-top:4px}
+.case-body a{overflow-wrap:anywhere}
+.case-body blockquote{border-left:3px solid var(--border);padding-left:12px;color:var(--slate)}
+.case-body table{border-collapse:collapse;font-size:.8125rem;width:100%}
+.case-body th{text-align:left;font-weight:600;color:var(--muted);font-size:.75rem;border-bottom:1px solid var(--text);padding:4px 10px 4px 0;vertical-align:bottom}
+.case-body td{border-bottom:1px solid var(--border);padding:4px 10px 4px 0;vertical-align:top}
+@media (min-width:641px){.case-body td.nw{white-space:nowrap}}
+.case-body .ref{display:none;font-family:var(--font-mono);font-size:.7rem;color:var(--muted);overflow-wrap:anywhere}
+.case-body .ref-mark{font-family:var(--font-mono);font-size:.7rem;color:var(--muted);vertical-align:super;line-height:0;margin-left:1px;cursor:help}
+.tags-on .case-body .ref{display:inline}
+.tags-on .case-body .ref-mark{display:none}
+.cfig{margin:6px 0 10px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px 10px}
+.cfig-h{font-family:var(--font-display);font-size:.85rem;font-weight:700;color:var(--bay);line-height:1.35}
+.cfig-sub{font-size:.75rem;color:var(--muted);margin-top:3px}
+.cfig-warn{font-size:.8125rem;color:var(--red);border-left:3px solid var(--red);padding-left:8px;margin-top:8px}
+.cfig-legend{display:flex;flex-wrap:wrap;gap:3px 14px;margin-top:8px;font-size:.75rem;color:var(--slate)}
+.cwrap{position:relative;margin-top:8px;width:100%}
+.cfig .source{margin-top:8px}
+.cfig.is-grown{display:flex;flex-direction:column}
+.cfig.is-grown .cwrap{flex:1 0 auto}
+.cfig.is-grown .more{align-self:flex-start}
+@media (min-width:1200px){
+  .case-body{font-size:.95rem}   /* columns of 580 to 620 px: 75 to 85 characters a line */
+}
+@media (min-width:1000px){
+  /* .lay-cols: balanced newspaper columns; the chart is the first block of the first column, the text runs on beneath it */
+  .cs-flow.lay-cols{display:flow-root;columns:2;column-gap:36px;column-fill:balance}
+  .cs-flow.lay-cols > .case-body,.cs-flow.lay-mason > .case-body{display:contents}
+  .lay-cols .cfig,.lay-cols .cu-tbl,.lay-cols .cu-keep{break-inside:avoid}
+  .lay-cols .cu > p:first-child,.lay-cols h3{break-after:avoid}
+  .lay-cols li{orphans:2;widows:2}
+  .lay-cols .kp{break-inside:avoid}
+  /* .lay-span: the chart takes the full width above the columns; .lay-tw: tables take the full width between column bands */
+  .lay-cols.lay-span > .cfig,.lay-cols.lay-tw .cu-tbl{column-span:all}
+  .lay-tw .cu-tbl{margin-bottom:10px}
+  .lay-tw .cu-tbl > p{max-width:100ch}
+  /* .lay-mason: two tracks, each block placed in the shorter one (cases.js sets grid-column and grid-row from measured heights) */
+  .cs-flow.lay-mason{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:36px;row-gap:0;grid-auto-rows:1px;align-items:start}
+  .lay-mason > .cfig,.lay-mason .case-body > *{margin:0;min-width:0;align-self:start}
+}
+
+/* ---------- explorer ---------- */
+.ex-top{align-items:start}
+.ex-controls{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 18px}
+.ex-search{position:relative;flex:1 1 260px;max-width:460px}
+.ex-search input{width:100%;font-size:.9375rem;padding:8px 10px;border:1px solid var(--bay);border-radius:var(--radius-s);background:var(--card);color:var(--text)}
+.ex-suggest{position:absolute;left:0;right:0;top:100%;z-index:50;list-style:none;background:var(--card);border:1px solid var(--bay);
+  border-top:0;border-radius:0 0 var(--radius-s) var(--radius-s);max-height:320px;overflow:auto;box-shadow:0 6px 18px rgba(0,0,0,.08)}
+.ex-suggest .opt{padding:7px 10px;cursor:pointer;display:flex;flex-direction:column;border-top:1px solid var(--border);font-size:.875rem}
+.ex-suggest .opt.on,.ex-suggest .opt:hover{background:var(--blue-bg)}
+.opt-k{font-size:.72rem;color:var(--muted)}
+.ex-time-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
+.ex-btn{font-size:.8125rem;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:var(--radius-s);padding:6px 11px;cursor:pointer}
+.ex-btn[aria-pressed="true"]{background:var(--bay);border-color:var(--bay);color:#fff}
+.ex-btn:disabled{opacity:.45;cursor:default}
+.ex-year-out{font-size:1.05rem;font-weight:600;margin-left:4px;color:var(--bay)}
+.ex-slider{display:flex;align-items:center;gap:10px;margin:8px 0 4px;font-size:.78rem;color:var(--muted)}
+.ex-slider input{flex:1;accent-color:var(--bay);height:26px}
+.ex-note{font-size:.75rem;color:var(--muted);margin-top:4px}
+.ex-legend{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:.78rem;color:var(--slate)}
+.ex-help{border:1px solid var(--border);border-radius:var(--radius-s);background:var(--card);padding:8px 14px;margin-bottom:12px}
+.ex-help > summary{cursor:pointer;font-weight:700;color:var(--bay);font-size:.9rem}
+.ex-help-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:10px 26px;margin-top:10px}
+.ex-help h3{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;margin-bottom:4px}
+.ex-help ul{list-style:none;margin:0;padding:0;font-size:.8125rem;line-height:1.45}
+.ex-help li{display:flex;align-items:baseline;gap:8px;margin-top:5px}
+.ex-help li > span.ex-sw{flex:none;display:inline-block;width:36px;line-height:0;align-self:center}
+.ex-help li:not(:has(.ex-sw)){display:block}
+.ex-help .ex-t{flex:1;min-width:0}
+.ex-help p{font-size:.8125rem;line-height:1.45}
+.ex-help-warn{border-left:3px solid var(--cran);padding-left:10px}
+.ex-status{font-size:.875rem;margin:8px 0 6px}
+.ex-more{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.ex-more .more{margin-top:0}
+#ex-incl .ex-incl{font-size:.8125rem;color:var(--slate);margin:0 0 6px;max-width:130ch}
+.xl-node .ex-incl{margin:2px 0 6px;font-size:.8125rem;color:var(--slate)}
+.ex-graph{background:var(--wash);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;min-height:120px}
+.ex-svg{display:block;width:100%;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.ex-svg .e-hit{stroke:transparent;stroke-width:14;cursor:pointer}
+.ex-svg .e-line{pointer-events:none;opacity:.88}
+.ex-svg .edge:hover .e-line,.ex-svg .edge:focus .e-line,.ex-svg .edge.on .e-line{opacity:1;filter:drop-shadow(0 0 1.5px var(--wash))}
+.ex-svg .edge:focus{outline:none}
+.ex-svg .edge:focus .e-hit{stroke:rgba(20,85,143,.18)}
+.ex-svg .node{cursor:grab;touch-action:none}
+.ex-svg .node:focus{outline:none}
+.ex-svg .node:focus .n-hit{fill:rgba(20,85,143,.16)}
+.ex-svg .n-hit{fill:transparent}
+.ex-svg .n-co,.ex-legend .n-co,.ex-help .n-co{fill:var(--bay);stroke:#fff;stroke-width:1.5}
+.ex-svg .n-of,.ex-legend .n-of,.ex-help .n-of{fill:#fff;stroke:var(--slate);stroke-width:2}
+.ex-svg .n-ag,.ex-legend .n-ag,.ex-help .n-ag{fill:var(--slate);stroke:#fff;stroke-width:1.5}
+.ex-svg .node.exp .n-co,.ex-svg .node.exp .n-of,.ex-svg .node.exp .n-ag{stroke:var(--text);stroke-width:2.5}
+/* labels sit on lines: a halo in the canvas tint keeps them readable */
+.ex-svg .n-lab{font-family:var(--font-text);font-size:12px;fill:var(--text);paint-order:stroke fill;stroke:var(--wash);stroke-width:4px;stroke-linejoin:round;stroke-opacity:.95;pointer-events:none}
+.ex-svg .n-lab.exp{font-size:13.5px;font-weight:700}
+.ex-hint{font-size:.78rem;color:var(--muted);margin-top:8px}
+.ex-tip{position:fixed;z-index:200;background:var(--text);color:#fff;font-size:.78rem;line-height:1.35;padding:7px 10px;border-radius:6px;
+  max-width:300px;pointer-events:none;display:flex;flex-direction:column}
+.ex-tip[hidden]{display:none}
+.ex-tip strong{font-weight:600}
+.ex-records{margin:var(--gap) 0 0}
+.ex-records h3:focus{outline:none}
+.ex-list{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px var(--pad)}
+.ex-list[hidden],.ex-records[hidden]{display:none}
+.xl-node+.xl-node{margin-top:16px;border-top:1px solid var(--border);padding-top:12px}
+.xl-node h3{font-family:var(--font-display);font-size:1.05rem}
+.xl-node h4{font-size:.875rem;margin-top:12px;display:flex;align-items:center;gap:8px}
+.xl-sw{width:28px;height:0;border-top:3px var(--d) var(--c);flex:none}
+ul.xl{list-style:none;margin-top:4px}
+ul.xl li{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 12px;padding:5px 0;border-top:1px solid var(--border);font-size:.8125rem}
+.xl-name{background:none;border:0;padding:0;font:inherit;font-weight:600;color:var(--text);text-align:left;cursor:pointer;text-decoration:underline;text-decoration-color:var(--border)}
+.xl-meta{font-size:.78rem;color:var(--slate)}
+.xl-rec{margin-left:auto;font-size:.78rem;border:1px solid var(--border);background:var(--card);border-radius:var(--radius-s);padding:2px 9px;cursor:pointer;color:var(--bay)}
+.placeholder{color:var(--muted);font-size:.875rem}
+
+/* ---------- footer ---------- */
+.footer{border-top:1px solid var(--border);margin-top:22px;padding:16px 24px 30px;font-size:.78rem;color:var(--slate)}
+.footer-in{max-width:var(--wrap);margin:0 auto;display:grid;grid-template-columns:minmax(0,3fr) minmax(0,1fr);gap:8px 28px}
+.footer ul{margin:4px 0 0 1.1em;columns:2 320px;column-gap:28px}
+.footer li{margin-top:2px;break-inside:avoid}
+
+/* ---------- how it connects (tab=connects; assets/connects.js builds it from ledger.json "intertwined") ----------
+   Same tokens and stream colours as the rest of the page; only the bar greys and the hatch are new here. Numbers are never
+   written in this file or in the HTML: connects.js fills every one from the audited statistics. */
+:root{--cx-none:#778284;--cx-dot:18px;--cx-pitch:24px}
+.hero-teaser{font-size:.875rem;margin:10px auto 0;max-width:1100px;color:rgba(255,255,255,.94)}
+.hero-teaser a{color:#fff;font-weight:600;white-space:nowrap}
+.hero-teaser b{font-family:var(--font-mono);font-weight:500;letter-spacing:-.03em}
+.cx-stack{display:grid;gap:var(--gap);margin-top:var(--gap)}
+.cx-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,380px);gap:12px 40px;align-items:start}
+.cx-lens .seg{display:flex;width:100%}
+.cx-lens .seg button{flex:1 1 auto;padding:7px 8px;white-space:normal;text-align:center}
+.cx-headline{font-size:clamp(1.3rem,2.3vw,1.95rem);line-height:1.3;font-weight:400;max-width:62ch}
+.cx-headline .num{font-family:var(--font-mono)!important;font-weight:600;font-size:.9em;letter-spacing:-.04em}
+.cx-keyline{font-size:.8125rem;color:var(--slate);margin-top:10px;max-width:90ch}
+.cx-lens-note{font-size:.75rem;color:var(--muted);margin-top:8px}
+.cx-rules{margin-top:var(--gap);margin-bottom:0}
+.cx-sec > .section-title{margin-bottom:2px}
+.cx-sec > .lede{margin-bottom:8px}
+.cx-tools{display:flex;flex-wrap:wrap;align-items:flex-end;gap:8px 16px;margin:6px 0 8px}
+.cx-grid{display:grid;gap:18px 36px;margin-top:8px;align-items:start}
+.cx-grid.ov{grid-template-columns:minmax(0,1.75fr) minmax(250px,1fr)}
+.cx-grid.seq{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
+.cx-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+/* few combinations: the chart is short, so the two aside blocks sit side by side under it */
+.cx-grid.ov.few{grid-template-columns:minmax(0,1fr)}
+.cx-grid.ov.few > .cx-aside{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 36px;align-items:start}
+.cx-h4{font-family:var(--font-display);font-size:.85rem;font-weight:700;color:var(--bay);margin:0 0 4px;line-height:1.35}
+.cx-sub{font-size:.75rem;color:var(--muted);margin:0 0 6px}
+.cx-grid > div > .cx-h4:not(:first-child),.cx-grid > div > * + .cx-h4{margin-top:18px}
+.cx-note{font-size:.8125rem;color:var(--text);margin-top:10px;max-width:120ch}
+.cx-legend{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:.78rem;color:var(--slate);margin:0 0 6px}
+.cx-legend .lg-d{display:inline-flex;align-items:center;gap:6px}
+/* upset-style rows: dots show which records, the bar is the number of companies */
+.cx-up{list-style:none}
+.cx-up li + li{border-top:1px solid var(--border)}
+.cx-up-btn{display:grid;grid-template-columns:calc(var(--cx-pitch)*4) minmax(0,1fr) minmax(0,1.15fr) 3.2ch;align-items:center;gap:2px 14px;width:100%;
+  text-align:left;background:none;border:0;padding:8px 8px;cursor:pointer;color:var(--text);font-size:.8125rem;line-height:1.3;border-radius:6px}
+.cx-up-btn:hover{background:rgba(20,85,143,.06)}
+.cx-up-lab{overflow-wrap:anywhere}
+.cx-up-n{text-align:right;font-size:.875rem}
+.cx-dots{position:relative;display:flex;gap:calc(var(--cx-pitch) - var(--cx-dot));height:var(--cx-dot);align-items:center}
+.cx-dots::before{content:"";position:absolute;top:50%;height:3px;margin-top:-1.5px;background:var(--slate);opacity:.6;
+  left:calc(var(--cx-dot)/2 + var(--a,0)*var(--cx-pitch));width:calc((var(--b,0) - var(--a,0))*var(--cx-pitch))}
+.cx-dots i{position:relative;z-index:1;display:block;width:var(--cx-dot);height:var(--cx-dot);border-radius:50%;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--border)}
+.cx-dots i.on{background:var(--c);box-shadow:0 0 0 2px var(--card)}
+.cx-bar{display:block;height:14px}
+.cx-fill{display:block;height:14px;border-radius:2px;background:var(--bay);min-width:2px}
+.cx-fill.none{background:var(--cx-none)}
+.cx-fill.all{background:var(--red)}
+.cx-fill.s{background:var(--c)}
+.cx-fill.hatch{background:repeating-linear-gradient(135deg,var(--c) 0 2px,#fff 2px 4px);box-shadow:inset 0 0 0 1px var(--c)}
+.cx-hint{font-size:.78rem;color:var(--muted);margin-top:8px}
+.cx-each{list-style:none}
+.cx-each li{padding:7px 0;border-top:1px solid var(--border);font-size:.8125rem}
+.cx-each li:first-child{border-top:0}
+.cx-each .r1{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.cx-each .r1 > span:last-child{font-size:.875rem;white-space:nowrap}
+.cx-each .r2{display:block;margin-top:5px}
+.cx-each .cx-fill{height:8px}
+.cx-each .fine{display:block;font-size:.75rem;color:var(--muted);margin-top:3px}
+table.cx-tab{border-collapse:collapse;width:100%;font-size:.8125rem}
+.cx-tab th{text-align:left;font-weight:600;color:var(--muted);font-size:.75rem;border-bottom:1px solid var(--text);padding:5px 10px 5px 0;vertical-align:bottom}
+.cx-tab td{border-bottom:1px solid var(--border);padding:6px 10px 6px 0;vertical-align:top}
+.cx-tab .n{text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.cx-tab th.n{text-align:right}
+/* the ledgers, side by side: no shared scale on purpose */
+.cx-leds{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin-top:8px}
+.cx-led{padding:2px 16px;border-left:1px solid var(--border);min-width:0}
+.cx-led:first-child{border-left:0;padding-left:0}
+.cx-led h4{font-family:var(--font-display);font-size:.8125rem;font-weight:700;line-height:1.3;display:flex;align-items:flex-start;gap:6px}
+.cx-led h4 .cdot{margin-top:.3em;flex:none}
+.cx-led-v{font-size:clamp(1.3rem,2vw,1.75rem);letter-spacing:-.04em;margin:6px 0 2px;line-height:1.15}
+.cx-led-m{font-size:.78rem;color:var(--slate)}
+.cx-led-m .mono{white-space:nowrap}
+.cx-led-m span{display:block}
+.cx-led-n{font-size:.75rem;color:var(--muted);margin-top:6px}
+.cx-led .hnote{white-space:normal}
+/* sequence */
+.cx-meter{list-style:none}
+.cx-meter li{padding:7px 0;border-top:1px solid var(--border);font-size:.8125rem}
+.cx-meter li:first-child{border-top:0;padding-top:0}
+.cx-meter .r1{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.cx-meter .r1 > span:last-child{white-space:nowrap;font-size:.875rem}
+.cx-meter .cx-track{display:block;height:8px;margin-top:5px;background:rgba(20,85,143,.1);border-radius:2px}
+.cx-meter .cx-fill{height:8px}
+.cx-dol{list-style:none;margin-top:12px}
+.cx-dol li{display:grid;grid-template-columns:minmax(7ch,auto) minmax(0,1fr);gap:2px 14px;padding:7px 0;border-top:1px solid var(--border);font-size:.8125rem;align-items:baseline}
+.cx-dol .mono{font-size:1.05rem;letter-spacing:-.04em}
+.cx-ex{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px}
+.cx-ex li{padding:8px 0;border-top:1px solid var(--border);font-size:.8125rem;min-width:0}
+.cx-ex .xl-name{font-size:.875rem;text-align:left;overflow-wrap:anywhere}
+.cx-ex .l2{display:block;margin-top:2px;color:var(--text)}
+.cx-ex .l3{display:block;margin-top:1px;color:var(--slate);font-size:.78rem}
+.cx-pager{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.8125rem}
+/* criminal cases */
+table.cx-crim{border-collapse:collapse;width:100%;font-size:.8125rem}
+.cx-crim th{text-align:left;font-weight:600;color:var(--muted);font-size:.75rem;border-bottom:1px solid var(--text);padding:6px 12px 6px 0;vertical-align:bottom}
+.cx-crim td{border-bottom:1px solid var(--border);padding:8px 12px 8px 0;vertical-align:top;overflow-wrap:anywhere}
+.cx-crim td.co{min-width:18ch}
+.cx-crim th.c1{width:21%}.cx-crim th.c2{width:31%}.cx-crim th.c3{width:17%}.cx-crim th.c4{width:18%}.cx-crim th.c5{width:13%}
+.cx-crim .case{display:block}
+.cx-crim .nw{white-space:nowrap}
+.cx-crim td.nr{color:var(--muted)}
+.cx-crim .xl-name{text-align:left;font-weight:600;font-size:.8125rem;text-decoration:none}
+.cx-crim .row-dots{display:block;margin-top:6px}
+.cx-crim .row-dots .cx-dots{--cx-dot:12px;--cx-pitch:17px}
+.cx-crim .none{color:var(--muted)}
+.cx-crim .k{display:block;font-size:.75rem;color:var(--slate)}
+.cx-crim .case + .case{margin-top:5px}
+.cx-people{margin-top:16px;border-top:1px solid var(--border);padding-top:10px}
+.cx-people ul{list-style:none;margin-top:6px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 36px}
+.cx-people li{padding:8px 0;border-top:1px solid var(--border);font-size:.8125rem;min-width:0;overflow-wrap:anywhere}
+.cx-people li > span{display:block}
+.cx-people li > span + span{margin-top:2px}
+/* recipients, officials: ranked bars */
+.cx-rank{list-style:none}
+.cx-rank li{display:grid;grid-template-columns:1.8em minmax(0,1fr) auto;gap:1px 8px;padding:6px 0;border-top:1px solid var(--border);font-size:.8125rem;align-items:baseline}
+.cx-rank li:first-child{border-top:0}
+.cx-rank .rk{font-family:var(--font-mono);color:var(--muted);font-size:.75rem;text-align:right}
+.cx-rank .nm{overflow-wrap:anywhere;min-width:0}
+.cx-rank .nm .xl-name{text-align:left;font-size:.8125rem}
+.cx-rank .nm .off{color:var(--muted);font-size:.75rem;margin-left:6px}
+.cx-rank .v1{font-size:.8125rem;white-space:nowrap}
+.cx-rank .bar{grid-column:2/4;display:block}
+.cx-rank .bar .cx-fill{height:9px}
+.cx-rank .meta{grid-column:2/4;font-size:.75rem;color:var(--slate)}
+.cx-kinds{list-style:none;margin-top:6px}
+.cx-kinds li{padding:6px 0;border-top:1px solid var(--border);font-size:.8125rem}
+.cx-kinds li:first-child{border-top:0}
+.cx-kinds .r1{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.cx-kinds .cx-fill{height:8px;margin-top:5px}
+.cx-big{font-family:var(--font-display);font-size:1.35rem;line-height:1.3;font-weight:400;max-width:48ch;margin-bottom:14px}
+.cx-big .num{font-family:var(--font-mono)!important;font-weight:600;font-size:.9em;letter-spacing:-.04em}
+.cx-apart{margin-top:14px;border:1px dashed var(--slate);border-radius:var(--radius-s);padding:10px 12px;font-size:.8125rem;max-width:120ch}
+.cx-apart strong{font-weight:600}
+/* regulator finding */
+.cx-quote{margin:6px 0 0;background:var(--paper);border:1px solid var(--border);border-radius:var(--radius-s);padding:12px 14px;font-size:.9rem;line-height:1.55;max-width:80ch}
+.cx-fmeta{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:8px;font-size:.78rem;color:var(--slate)}
+.cx-fmeta b{font-family:var(--font-mono);font-weight:400;color:var(--text)}
+.cx-plain{font-family:var(--font-display);font-size:1.1rem;line-height:1.4;max-width:80ch}
+.cx-fixed{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:6px 36px;align-items:start;margin:8px 0 6px}
+.cx-fixed .cx-sub{max-width:110ch;margin:0 0 6px}
+.cx-fixed .more{margin-top:6px}
+.cx-finds{display:grid;gap:0;margin-top:10px}
+.cx-find{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:6px 36px;align-items:start;border-top:1px solid var(--border);padding:14px 0}
+.cx-find .cx-quote{max-width:none}
+.cx-find .cx-note{margin-top:8px}
+.cx-facts{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 14px;font-size:.8125rem;margin:0 0 8px}
+.cx-facts dt{color:var(--muted)}
+.cx-facts dd{margin:0;overflow-wrap:anywhere}
+.cx-find-tools{display:flex;flex-wrap:wrap;gap:4px 32px;border-top:1px solid var(--border);padding-top:6px}
+.cx-find-tools details.cx-det{margin-top:4px}
+.cx-mortgage{grid-column:1/-1;font-size:.8125rem;color:var(--slate);margin:0;max-width:130ch}
+.cx-mortgage[hidden]{display:none}
+.cx-held{font-size:.8125rem;margin-top:12px;border:1px dashed var(--slate);border-radius:var(--radius-s);padding:10px 12px;max-width:110ch}
+.cx-conc{max-width:140ch}
+.cx-kindline{margin-top:-2px}
+.cx-rank .meta.kind{color:var(--text)}
+details.cx-det{margin-top:10px;font-size:.8125rem}
+details.cx-det summary{cursor:pointer;color:var(--bay);width:max-content;max-width:100%}
+details.cx-det ul{margin:6px 0 0 1.1em;max-width:100ch}
+details.cx-det li{margin-top:5px}
+/* caveats: always shown with their statistic */
+.cx-cav{margin-top:12px;border-top:1px solid var(--border);padding-top:8px}
+.cx-cav h4{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+.cx-cav ul{margin:4px 0 0 1.1em;font-size:.78rem;color:var(--slate);columns:2 360px;column-gap:32px}
+.cx-cav li{margin-top:3px;break-inside:avoid}
+/* owner's view and the limits box */
+.cx-final{margin-top:var(--gap)}
+.cx-owner{border:2px solid var(--text)}
+.cx-owner .tag{margin-left:8px;vertical-align:middle}
+.cx-owner-q{font-family:var(--font-display)!important;font-size:clamp(1.45rem,3vw,2.4rem);line-height:1.25;margin:12px 0 14px;max-width:30ch;font-weight:400}
+.cx-owner-note{font-size:.8125rem;color:var(--slate);max-width:80ch}
+.cx-limits h3{margin-bottom:6px}
+.cx-limits ul{margin:6px 0 0 1.1em;font-size:.8125rem}
+.cx-limits li{margin-top:5px}
+.cx-limits .yes{font-weight:600;margin-top:2px}
+
+/* ---------- responsive ---------- */
+@media (max-width:1180px){
+  .cx-leds{grid-template-columns:repeat(6,minmax(0,1fr));row-gap:16px}
+  .cx-led{grid-column:span 2}
+  .cx-led:nth-child(n+4){grid-column:span 3}
+  .cx-led:nth-child(4){border-left:0;padding-left:0}
+  .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .ch-top{grid-column:1/-1}.ch-pay{grid-column:1/-1}.ch-don,.ch-lob{grid-column:span 6}
+  .alert-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:860px){
+  .cx-head,.cx-grid.ov,.cx-grid.seq,.cx-grid.two,.cx-find,.cx-people ul,.cx-fixed,.cx-grid.ov.few > .cx-aside{grid-template-columns:minmax(0,1fr)}
+  .cx-led:nth-child(n){grid-column:span 3;border-left:1px solid var(--border);padding-left:16px}
+  .cx-led:nth-child(5){grid-column:span 6}
+  .cx-led:nth-child(odd){border-left:0;padding-left:0}
+  .cx-ex{grid-template-columns:minmax(0,1fr)}
+  .s3,.s4,.s5,.s6,.s7,.s8{grid-column:1/-1}
+  .ch-don,.ch-lob{grid-column:1/-1}
+  .alert-grid{grid-template-columns:1fr}
+  .footer-in{grid-template-columns:1fr}
+}
+@media (max-width:768px){
+  .hero{padding:26px 16px 20px}
+  .wrap{padding:12px 12px 6px}
+  .tab-nav{justify-content:flex-start}
+  .tab-btn{padding:13px 13px;font-size:.72rem}
+  .tool-end{margin-left:0}
+}
+@media (max-width:640px){
+  :root{--pad:12px;--gap:12px}
+  .cx-leds{grid-template-columns:minmax(0,1fr)}
+  .cx-led:nth-child(n){grid-column:auto;border-left:0;padding-left:0;border-top:1px solid var(--border);padding-top:10px}
+  .cx-led:first-child{border-top:0;padding-top:2px}
+  .cx-up-btn{grid-template-columns:calc(var(--cx-pitch)*4) minmax(0,1fr) 3.2ch}
+  .cx-up-btn .cx-bar{grid-column:1/-1;grid-row:2}
+  .cx-up-btn .cx-up-n{grid-column:3;grid-row:1}
+  .cx-rank.stack-v li{grid-template-columns:1.8em minmax(0,1fr)}
+  .cx-rank.stack-v .v1{grid-column:2;white-space:normal}
+  .cx-rank.stack-v .bar{grid-column:2}
+  table.cx-crim,.cx-crim tbody{display:block}
+  .cx-crim thead{display:none}
+  .cx-crim tr{display:block;padding:10px 0;border-bottom:1px solid var(--border)}
+  .cx-crim td{display:block;border:0;padding:3px 0;width:auto!important;min-width:0!important}
+  .cx-crim td:not(.co)::before{content:attr(data-label);display:block;font-size:.75rem;color:var(--muted);line-height:1.2}
+  table.cx-tab.stack,.cx-tab.stack tbody{display:block}
+  .cx-tab.stack thead{display:none}
+  .cx-tab.stack tr{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:8px 0;border-bottom:1px solid var(--border)}
+  .cx-tab.stack td{display:block;border:0;padding:0}
+  .cx-tab.stack td:first-child{grid-column:1/-1;font-weight:600}
+  .cx-tab.stack td.n{text-align:left}
+  .cx-tab.stack td:nth-child(n+2)::before{content:attr(data-label);display:block;font-family:var(--font-text);font-size:.75rem;color:var(--muted)}
+  .cx-cav ul{columns:1}
+  .case-body .tw table{width:auto}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .kpi{padding:10px 6px}
+  .sortsel{display:block;flex:1 1 150px}
+  .search{max-width:none;flex-basis:100%}
+  .seg{display:flex;width:100%}
+  .toolbar > div:not(.tool-end){flex:1 1 100%}
+  .seg button{flex:1;padding:7px 4px;font-size:.75rem;white-space:normal}
+  .colmenu{display:none}
+  .table-card{background:none;border:0;box-shadow:none;padding:0}
+  .table-card .tc-head{padding:0 2px 6px}
+  table.ledger,.ledger tbody{display:block}
+  .ledger thead{display:none}
+  .ledger tr.row{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 12px;margin-bottom:8px}
+  .ledger tr.row td{display:block;padding:0;border:0;text-align:left;background:none!important;width:auto;box-shadow:none!important}
+  .ledger tr.row td.co{grid-column:1/-1;width:auto;padding-left:0}
+  .ledger tr.row.open{border-color:var(--bay);box-shadow:inset 3px 0 0 var(--bay)}
+  .ledger tr.row td:not(.co)::before{content:attr(data-label);display:block;font-size:.7rem;color:var(--muted);line-height:1.25;margin-bottom:1px}
+  .spark{margin:3px 0 0}
+  .mnote{display:block}
+  table.xa,.xa tbody,.xa tfoot{display:block;min-width:0}
+  .xa thead{display:none}
+  .xa tr{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px 10px;padding:10px 12px;border-bottom:1px solid var(--border)}
+  .xa td{display:block;padding:0!important;border:0;text-align:left!important;max-width:none!important;min-width:0!important;overflow-wrap:anywhere}
+  .xa-wrap{overflow-x:visible}
+  .xa td.n{white-space:normal}
+  .xa td.co,.xa td.case,.xa td.why,.xa td.src{grid-column:1/-1}
+  .xa td::before{content:attr(data-label);display:block;font-family:var(--font-text);font-size:.7rem;color:var(--muted);font-weight:400}
+  .xa tfoot td.lab{grid-column:1/-1}
+  .ev{grid-template-columns:auto 1fr auto;gap:2px 10px}
+  .ev .chip{grid-column:2}
+  .ev .amt{grid-column:3;grid-row:1}
+  .ev .what{grid-column:1/-1}
+  .ev .src{grid-column:1/-1;white-space:normal;overflow-wrap:anywhere}
+  .tscroll{overflow:visible}
+  table.pt,.pt tbody{display:block;min-width:0}
+  .pt thead{display:none}
+  .pt tr{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 10px;padding:8px 0;border-bottom:1px solid var(--border)}
+  .pt td{display:block;padding:0;border:0;text-align:left!important;font-size:.78rem}
+  .pt td:first-child{grid-column:1/3;font-weight:600}
+  .pt td:nth-child(2){grid-column:3}
+  .pt td:nth-child(n+3)::before{content:attr(data-label);display:block;font-family:var(--font-text);font-size:.7rem;color:var(--muted);line-height:1.2}
+  .chips button{padding:7px 8px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+<!-- The Hub's Adobe Fonts kit (Halyard Display / Text and IBM Plex Mono); where it does not load the theme's fallbacks render. -->
+<link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
+<link rel="stylesheet" href="assets/hub-theme.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "@id": "https://massachusettsdatahub.com/corporate-ledger.html#dataset",
+  "name": "Corporate penalties beside state payments, employee donations and lobbying in Massachusetts",
+  "description": "Companies with at least $1 million in government penalties since fiscal 2010, tied to Massachusetts, beside their state payments, employer-matched donations, lobbying and officials' disclosed ties.",
+  "url": "https://massachusettsdatahub.com/corporate-ledger.html",
+  "inLanguage": "en-US",
+  "isAccessibleForFree": true,
+  "creator": {
+    "@id": "https://massachusettsdatahub.com/about.html#duncan-burns"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "@id": "https://massachusettsdatahub.com/#publisher",
+    "name": "Massachusetts Data Hub",
+    "url": "https://massachusettsdatahub.com/",
+    "founder": {
+      "@id": "https://massachusettsdatahub.com/about.html#duncan-burns"
+    }
+  },
+  "includedInDataCatalog": {
+    "@type": "DataCatalog",
+    "@id": "https://massachusettsdatahub.com/#website",
+    "name": "Massachusetts Data Hub",
+    "url": "https://massachusettsdatahub.com/"
+  },
+  "spatialCoverage": [
+    {
+      "@type": "Place",
+      "name": "Massachusetts"
+    }
+  ],
+  "dateModified": "2026-10-12"
+}
+</script>
+</head>
+<body>
+
+<header class="hero">
+  <h1>Corporate Ledger</h1>
+  <p class="hero-sub">Companies and institutions with at least $1 million in headline government penalties since fiscal 2010 and a Massachusetts tie in the sources searched, beside state payments, employee donations, lobbying and officials' disclosed ties.</p>
+  <p class="hero-note"><span>Private lawsuits and unconfirmed donor matches are not in it. Lobbying counts firm fees from 2010; in-house lobbying costs exist only for 2025 and 2026.</span>
+    <span class="mono" id="updated">Updated <span id="updated-date">(loading)</span></span>
+    <a href="corporate-ledger-method.html">Method notes</a></p>
+  <p class="hero-teaser" id="cx-teaser" hidden></p>
+  <div class="kpis" id="kpis" role="group" aria-label="Totals under the selected lens; each one sorts the table and shows its chart">
+    <button type="button" class="kpi" data-kpi="pen" style="--kc:var(--h-penalty);--sc:var(--s-penalty)"><span class="kpi-sw" aria-hidden="true"></span><span class="kpi-v" id="k-pen">&nbsp;</span><span class="kpi-g" id="k-pen-g">&nbsp;</span><span class="kpi-l"><span id="k-pen-l">Penalties counted</span></span></button>
+    <button type="button" class="kpi" data-kpi="con" style="--kc:var(--h-contract);--sc:var(--s-contract)"><span class="kpi-sw" aria-hidden="true"></span><span class="kpi-v" id="k-con">&nbsp;</span><span class="kpi-g" id="k-con-g">&nbsp;</span><span class="kpi-l">State payments, FY2010 on</span></button>
+    <button type="button" class="kpi" data-kpi="ocpf" style="--kc:var(--h-donation);--sc:var(--s-donation)"><span class="kpi-sw" aria-hidden="true"></span><span class="kpi-v" id="k-ocpf">&nbsp;</span><span class="kpi-g" id="k-ocpf-g">&nbsp;</span><span class="kpi-l">Employee donations to state officials (OCPF)</span></button>
+    <button type="button" class="kpi" data-kpi="fec" style="--kc:var(--h-donation-fed);--sc:var(--s-donation-fed)"><span class="kpi-sw hatch" aria-hidden="true"></span><span class="kpi-v" id="k-fec">&nbsp;</span><span class="kpi-g" id="k-fec-g">&nbsp;</span><span class="kpi-l">Employee donations to federal officials (FEC)</span></button>
+    <button type="button" class="kpi" data-kpi="lob" style="--kc:var(--h-lobbying);--sc:var(--s-lobbying)"><span class="kpi-sw" aria-hidden="true"></span><span class="kpi-v" id="k-lob">&nbsp;</span><span class="kpi-g" id="k-lob-g">&nbsp;</span><span class="kpi-l">Lobbying, 2010 on</span></button>
+    <button type="button" class="kpi" data-kpi="hold" style="--kc:var(--h-holding);--sc:var(--s-holding)"><span class="kpi-sw" aria-hidden="true"></span><span class="kpi-v" id="k-hold">&nbsp;</span><span class="kpi-g" id="k-hold-g">&nbsp;</span><span class="kpi-l">Officials' disclosed ties</span></button>
+  </div>
+</header>
+
+<nav class="tab-nav" aria-label="Sections">
+  <button class="tab-btn active" id="btn-ledger" onclick="showTab(this,'ledger')">Ledger</button>
+  <button class="tab-btn" id="btn-connects" onclick="showTab(this,'connects')">How it connects</button>
+  <button class="tab-btn" id="btn-cases" onclick="showTab(this,'cases')">Case files</button>
+  <button class="tab-btn" id="btn-explorer" onclick="showTab(this,'explorer')">Explorer</button>
+  <button class="tab-btn" id="btn-excluded" onclick="showTab(this,'excluded')">Amounts not counted</button>
+</nav>
+
+<main>
+<section id="tab-ledger" class="tab-content active" aria-labelledby="btn-ledger">
+  <div class="wrap">
+    <div class="alert">
+      <h2>Two rules behind every total</h2>
+      <div class="alert-grid">
+        <p class="window">This ledger starts in fiscal 2010 (July 2009), the first year Massachusetts put its spending records online. Penalties, donations and lobbying before then are left out so every comparison covers the same years.</p>
+        <p class="window rule" id="amount-rule">How penalty amounts are counted: each row counts the cash the defendant actually paid (penalties, restitution, damages, fees). Press-release headline figures are often larger because they include debt relief, forgiven debt or rent, bill credits, conditional amounts, or proposed penalties that can still be contested. Those parts are not counted here. Every one is listed under <a href="?tab=excluded">Amounts not counted</a>, with the headline figure, what we counted, the reason and the source. Where a release does not state the split between cash and relief, the case is left out of the totals and listed there.</p>
+      </div>
+    </div>
+
+    <div class="alert" style="margin-top:var(--gap)">
+      <h2>Two rules for duplicates and shared totals</h2>
+      <div class="alert-grid">
+        <p class="window rule" id="dup-rule">How duplicates are counted: when two records describe the same payment, it is counted once. A record is left out only when a primary document read for this ledger shows the dollars are the same. When that document cannot be read, a strong match is still counted once and is marked 'possible duplicate, counted once until verified'. Records for different payments are all counted, even when the amounts are equal. Every record left out stays in the gross figure and is listed under Amounts not counted, with the document behind the call.</p>
+        <p class="window rule" id="shared-rule">How shared totals are counted: when several defendants pay one total, each company counts only the share its primary document states. If the document gives a total and no split, and the payers include anyone outside the one company (another company, or individuals such as owners), the total is counted for no company: it stays in the gross figure and is listed under Amounts not counted. Where every payer named belongs to the one company, the whole total counts once, in full, for that company.</p>
+      </div>
+    </div>
+    <div class="card toolbar" id="toolbar">
+      <div>
+        <span class="ctl-label" id="lens-label">Penalties counted under</span>
+        <div class="seg" role="group" aria-labelledby="lens-label" id="lens">
+          <button type="button" data-lens="ma_conduct" aria-pressed="true">Massachusetts case</button>
+          <button type="button" data-lens="ma_hq" aria-pressed="false">Massachusetts headquarters</button>
+          <button type="button" data-lens="all" aria-pressed="false">All</button>
+        </div>
+      </div>
+      <label class="search"><span class="ctl-label">Find a company</span>
+        <input type="search" id="q" placeholder="Name" autocomplete="off"></label>
+      <div>
+        <span class="ctl-label" id="kind-label">Show</span>
+        <div class="seg" role="group" aria-labelledby="kind-label" id="kind">
+          <button type="button" data-kind="all" aria-pressed="true">All</button>
+          <button type="button" data-kind="company" aria-pressed="false">Companies</button>
+          <button type="button" data-kind="inst" aria-pressed="false">Institutions</button>
+        </div>
+      </div>
+      <div>
+
+        <span class="ctl-label" id="f-label">Only those with</span>
+        <div class="fchips" role="group" aria-labelledby="f-label" id="fchips">
+          <button type="button" class="fchip" data-f="crim" aria-pressed="false">Criminal case</button>
+          <button type="button" class="fchip" data-f="xa" aria-pressed="false">Amounts not counted</button>
+          <button type="button" class="fchip" data-f="don" aria-pressed="false">Donations</button>
+          <button type="button" class="fchip" data-f="lob" aria-pressed="false">Lobbying</button>
+          <button type="button" class="fchip" data-f="grp" aria-pressed="false">Co-defendant group</button>
+        </div>
+      </div>
+      <div id="cb-box" hidden>
+        <span class="ctl-label">In exactly these records</span>
+        <span class="selchip"><span class="nm" id="cb-nm"></span><button type="button" id="cb-clear" aria-label="Remove the records filter">&#215;</button></span>
+        <a class="linkbtn" href="?tab=connects" style="font-size:.78rem;margin-left:6px">Back to How it connects</a>
+      </div>
+      <label class="sortsel"><span class="ctl-label">Sort by</span>
+        <select id="sortsel"></select></label>
+      <div class="tool-end">
+        <div><span class="ctl-label">Selected</span><span id="selchip" class="selchip all">All companies</span></div>
+        <button type="button" class="linkbtn" id="reset" style="font-size:.78rem;margin-bottom:6px">Reset view</button>
+      </div>
+    </div>
+    <p class="lens-sum" id="lens-sum" aria-live="polite"></p>
+    <p class="mnote">Penalties: cash paid only. <a href="?tab=excluded">Amounts not counted</a></p>
+
+    <div class="grid" id="charts">
+      <figure class="card chart-card s4 ch-top" id="ch-top" style="grid-row:span 2">
+        <div class="ch-head"><h3>Top 15 companies by counted penalties</h3><span class="scope" data-scope="top"></span></div>
+        <p class="ch-sub" id="ch-top-sub">Select a bar to open that company below.</p>
+        <div class="plot" id="p-top" aria-describedby="ch-top-sub"></div>
+        <p class="source">Source: corporate ledger table (ledger.json), penalties counted under the selected lens, from agency penalty releases, EPA ECHO, U.S. Department of Labor enforcement data and the Corporate Prosecution Registry. The table below lists every company.</p>
+      </figure>
+      <figure class="card chart-card s8 ch-pay" id="ch-pay">
+        <div class="ch-head"><h3>State payments by fiscal year, stacked by payer</h3><span class="scope" data-scope="pay"></span></div>
+        <div class="legend" id="lg-pay"></div>
+        <div class="plot" id="p-pay"></div>
+        <p class="source">Source: connections table (graph.json, contract links by payer and fiscal year) from CTHRU (Comptroller), MBTA, Massport and MSBA payment records; net payments, fiscal 2027 is partial.</p>
+      </figure>
+      <figure class="card chart-card s4 ch-don" id="ch-don">
+        <div class="ch-head"><h3>Confirmed donations by year, state vs federal</h3><span class="scope" data-scope="don"></span></div>
+        <div class="legend" id="lg-don"></div>
+        <div class="plot" id="p-don"></div>
+        <p class="source">Source: connections table (graph.json, donation links) from OCPF and FEC contribution files, confirmed employer matches; state and federal are drawn side by side and never added.</p>
+      </figure>
+      <figure class="card chart-card s4 ch-lob" id="ch-lob">
+        <div class="ch-head"><h3>Lobbying by year, firm fees vs in-house</h3><span class="scope" data-scope="lob"></span></div>
+        <div class="legend" id="lg-lob"></div>
+        <div class="plot" id="p-lob"></div>
+        <p class="source">Source: corporate ledger table (ledger.json, lobbying by year) from Secretary of the Commonwealth lobbying disclosures. Firm fees from 2010; in-house costs for 2025 and 2026 only.</p>
+      </figure>
+    </div>
+
+    <div class="card co-panel" id="co-panel" role="region" aria-label="Selected company" tabindex="-1">
+      <div id="cp-body">
+        <div class="cp-empty"><span>Select a company (a bar above or a row below) to see its penalties, state payments, donations, lobbying and disclosed ties on one timeline, with every record and its source. For example:</span><span id="cp-examples"></span></div>
+      </div>
+    </div>
+
+    <div class="card table-card">
+      <div class="tc-head">
+        <h2 class="section-title">Penalties, state payments, donations, lobbying and disclosed ties, by company</h2>
+        <details class="colmenu" id="colmenu"><summary>Columns</summary><div class="menu" id="colmenu-list" role="group" aria-label="Show or hide columns"></div></details>
+      </div>
+      <table class="ledger" id="ledger">
+        <thead>
+          <tr class="grp" id="grp"></tr>
+          <tr class="cols" id="cols"></tr>
+        </thead>
+        <tbody id="rows"><tr><td colspan="9" class="empty">Loading the ledger</td></tr></tbody>
+      </table>
+      <div class="tc-foot" id="tc-foot"></div>
+      <p class="footnote" id="shared-fn" hidden></p>
+      <p class="source">Source: corporate ledger table (ledger.json), built from agency penalty releases (Massachusetts Attorney General, U.S. Attorneys, SEC, Massachusetts Securities Division and other regulators), EPA ECHO, U.S. Department of Labor enforcement data and the Corporate Prosecution Registry; CTHRU, MBTA, Massport and MSBA payment records; OCPF and FEC contribution files; Secretary of the Commonwealth lobbying disclosures; officials' Statements of Financial Interest.</p>
+    </div>
+
+    <div class="grid notes">
+      <div class="card s6">
+        <h3 id="overlaps">Counted and gross penalties</h3>
+        <p>Gross is every penalty row on record. Counted leaves out a row when its dollars are already counted on another row (for example a state and a federal release announcing one settlement, or a plea and the agreement that goes with it, which the Corporate Prosecution Registry lists as two records), when it may be a duplicate that has not been verified (counted once until verified), and when its single payment is shared by several defendants and not split between them by the primary document, so each dollar is counted once and an unsplit payment counts for no company. A payment whose document states each defendant's share counts at that share. Where the two differ, the table shows gross under the counted figure. Every row left out is listed under <a href="?tab=excluded">Amounts not counted</a>.</p>
+      </div>
+      <div class="card s6">
+        <h3>Columns</h3>
+        <p>Without admitting fault is the share of the company's counted amount (both lenses) settled with no admission or with "neither admits nor denies"; the share whose record does not say is shown as unknown. State payments are net payments by fiscal year, fiscal 2010 on; the newest fiscal year is partial. Donations are gifts by people who report the company as their employer, matched exactly; they are not company money, and state (OCPF) and federal (FEC) totals are never added together. Disclosed ties are rows in officials' Statements of Financial Interest that name the company, 2019 to 2025.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tab-connects" class="tab-content" aria-labelledby="btn-connects">
+  <div class="wrap">
+    <div class="card cx-head">
+      <div>
+        <h2 class="cx-headline" id="cx-headline" aria-live="polite">Loading the overlap counts</h2>
+        <p class="cx-keyline" id="cx-keyline"></p>
+      </div>
+      <div class="cx-lens">
+        <span class="ctl-label" id="cx-lens-label">Penalties counted under</span>
+        <div class="seg" role="group" aria-labelledby="cx-lens-label" id="cx-lens">
+          <button type="button" data-lens="ma_conduct" aria-pressed="true">Massachusetts case</button>
+          <button type="button" data-lens="ma_hq" aria-pressed="false">Massachusetts headquarters</button>
+          <button type="button" data-lens="all" aria-pressed="false">All</button>
+        </div>
+        <p class="cx-lens-note" id="cx-lens-note"></p>
+      </div>
+      <p class="cx-mortgage" id="cx-mortgage" hidden></p>
+    </div>
+    <div class="alert cx-rules" id="cx-rules" hidden>
+      <h2>Two rules behind every total</h2>
+      <div class="alert-grid">
+        <p class="window" id="cx-rule-window"></p>
+        <p class="window rule" id="cx-rule-amount"></p>
+      </div>
+    </div>
+    <div class="cx-stack" id="cx-body"></div>
+    <div class="grid cx-final" id="cx-final">
+      <div class="card cx-owner s7" id="cx-owner">
+        <h3 class="section-title">Owner's view<span class="tag">draft, owner to confirm</span></h3>
+        <p class="cx-owner-q">It's a sad and tragic joke in Massachusetts that this is how business is done here. Everyone knows it.</p>
+        <p class="cx-owner-note">This is the owner's opinion. It is not a statistic and not a finding, and it follows the audited facts above rather than resting on any one of them. In the sense the Hub's <a href="pay-to-play-dashboard.html">pay-to-play dashboard</a> gives the term, pay to play describes organizations that depend on state funding, lobby the officials who control that funding, and have employees who donate to those officials. The facts shown for each named person or company stay what their own records say: donated, was paid by the state, lobbied, or disclosed a tie.</p>
+        <p class="cx-owner-note" id="cx-owner-caveat"></p>
+      </div>
+      <div class="card cx-limits s5" id="cx-limits">
+        <h3 class="section-title">What these numbers do and do not show</h3>
+        <p class="yes">They show which penalized companies also appear in other public records, and in what order the dates fall.</p>
+        <ul>
+          <li>They do not show that one thing caused another. Overlap is not causation: a donation, a lobbying filing or a state payment near a penalty is a correlation in the records and nothing more.</li>
+          <li>They do not allege that any donation or lobbying filing broke a campaign-finance or lobbying rule. That money is reported in public filings. The regulator findings (improper payments to officials and political finance) are listed under Regulator findings, with their sources.</li>
+          <li>Donations are gifts by individuals whose records show them working at a company. They are not payments by the company.</li>
+          <li>A company missing from a list may be there under a name the matching did not catch. The gaps in each record are listed with its caveats.</li>
+        </ul>
+      </div>
+      <div class="card s12" id="cx-window">
+      <div class="alert-grid" style="margin-top:6px">
+        <p class="window rule" id="cx-rule-dup"></p>
+        <p class="window rule" id="cx-rule-shared"></p>
+      </div>
+        <p class="window" id="cx-disclaimer"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tab-cases" class="tab-content" aria-labelledby="btn-cases">
+  <div class="wrap">
+    <div class="card" style="margin-bottom:var(--gap)">
+      <h2 class="section-title">Case files</h2>
+      <p class="lede">Two companies, read record by record: what the government charged, what the state paid them, and who their employees gave to. Choose one.</p>
+    </div>
+    <div id="cases-root">
+      <div class="case-cards" id="case-cards"></div>
+      <div class="card pf" id="profile-find">
+        <h3 class="pf-title">A data profile for every company</h3>
+        <p class="lede">Every one of the <span id="pf-n">...</span> companies and institutions in the ledger has a data-only profile: the same charts, tables and sources as a case file, with no written analysis. Search by name, or start from the largest.</p>
+        <label class="search"><span class="ctl-label">Find a company</span>
+          <input type="search" id="pf-q" placeholder="Name" autocomplete="off" aria-controls="pf-list"></label>
+        <ul class="pf-list" id="pf-list" aria-label="Matching companies"></ul>
+      </div>
+      <div class="case-view card" id="case-view" hidden></div>
+    </div>
+  </div>
+</section>
+
+<section id="tab-explorer" class="tab-content" aria-labelledby="btn-explorer">
+  <div class="wrap">
+    <div class="grid ex-top">
+      <div class="card s12">
+        <h2 class="section-title">Explorer: pull the thread</h2>
+        <p class="lede">Start from one company or official and follow its connections: penalties, state payments, donations, lobbying and officials' disclosed ties. Select a connected name to open its connections too.</p>
+        <div class="ex-controls" style="margin-top:10px">
+          <div class="ex-search">
+            <label class="ctl-label" for="ex-q">Find a company or official</label>
+            <input type="search" id="ex-q" placeholder="Name, at least 2 letters" autocomplete="off" role="combobox"
+              aria-autocomplete="list" aria-expanded="false" aria-controls="ex-suggest">
+            <ul id="ex-suggest" class="ex-suggest" role="listbox" aria-label="Matching names" hidden></ul>
+          </div>
+          <div>
+            <span class="ctl-label" id="ex-view-label">Show as</span>
+            <div class="seg" role="group" aria-labelledby="ex-view-label" id="ex-viewseg">
+              <button type="button" data-view="graph" aria-pressed="true">Graph</button>
+              <button type="button" data-view="list" aria-pressed="false">List</button>
+            </div>
+          </div>
+          <div style="flex:1 1 360px">
+            <div class="ex-time-row">
+              <button type="button" class="ex-btn" id="ex-play" aria-pressed="false">Play from 2010</button>
+              <button type="button" class="ex-btn" id="ex-prev" aria-label="One year back">Year back</button>
+              <button type="button" class="ex-btn" id="ex-next" aria-label="One year forward">Year forward</button>
+              <output id="ex-year-out" class="ex-year-out mono" for="ex-year" aria-live="polite"></output>
+            </div>
+            <div class="ex-slider">
+              <span class="mono" id="ex-year-min">2010</span>
+              <input type="range" id="ex-year" min="2010" max="2027" step="1" value="2027" aria-label="Show connections through this year">
+              <span class="mono" id="ex-year-max"></span>
+            </div>
+          </div>
+        </div>
+        <p class="ex-note">Years are fiscal years for state payments (fiscal 2027 began in July 2026) and calendar years for the other records; gifts and filings from July to December 2009 fall in fiscal 2010 and are shown from the first step. Line width follows the summed amount; disclosed ties carry no amount. Employee donation lines are gifts by individuals who report the company as employer; they are not company money.</p>
+      </div>
+    </div>
+
+    <div class="alert" style="margin-top:var(--gap)">
+      <h2>Four rules behind every total</h2>
+      <div class="alert-grid">
+        <p class="window">This ledger starts in fiscal 2010 (July 2009), the first year Massachusetts put its spending records online. Penalties, donations and lobbying before then are left out so every comparison covers the same years.</p>
+        <p class="window rule">How penalty amounts are counted: each row counts the cash the defendant actually paid (penalties, restitution, damages, fees). Press-release headline figures are often larger because they include debt relief, forgiven debt or rent, bill credits, conditional amounts, or proposed penalties that can still be contested. Those parts are not counted here. Every one is listed under <a href="?tab=excluded">Amounts not counted</a>, with the headline figure, what we counted, the reason and the source. Where a release does not state the split between cash and relief, the case is left out of the totals and listed there.</p>
+              <p class="window rule">How duplicates are counted: when two records describe the same payment, it is counted once. A record is left out only when a primary document read for this ledger shows the dollars are the same. When that document cannot be read, a strong match is still counted once and is marked 'possible duplicate, counted once until verified'. Records for different payments are all counted, even when the amounts are equal. Every record left out stays in the gross figure and is listed under Amounts not counted, with the document behind the call.</p>
+        <p class="window rule">How shared totals are counted: when several defendants pay one total, each company counts only the share its primary document states. If the document gives a total and no split, and the payers include anyone outside the one company (another company, or individuals such as owners), the total is counted for no company: it stays in the gross figure and is listed under Amounts not counted. Where every payer named belongs to the one company, the whole total counts once, in full, for that company.</p>
+</div>
+    </div>
+
+    <div class="card">
+      <details class="ex-help" id="ex-help" open>
+        <summary>How to read this picture</summary>
+        <div class="ex-help-grid">
+          <div>
+            <h3>The dots</h3>
+            <ul>
+              <li><span class="ex-sw" data-k="company"></span><span class="ex-t"><b>Filled circle:</b> a company or institution that was penalized.</span></li>
+              <li><span class="ex-sw" data-k="official"></span><span class="ex-t"><b>Hollow circle:</b> an official, or a campaign committee that received gifts.</span></li>
+              <li><span class="ex-sw" data-k="agency"></span><span class="ex-t"><b>Square:</b> an agency that imposed a penalty (the SEC, the Attorney General's office), a payer of state money (CTHRU, MBTA, Massport, MSBA) or a lobbying firm.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h3>The lines</h3>
+            <ul>
+              <li><span class="ex-sw" data-t="penalty"></span><span class="ex-t"><b>Red, solid:</b> a penalty, between the company and the agency that imposed it.</span></li>
+              <li><span class="ex-sw" data-t="contract"></span><span class="ex-t"><b>Blue, dashed:</b> money the state or one of its authorities paid the company.</span></li>
+              <li><span class="ex-sw" data-t="donation"></span><span class="ex-t"><b>Green, dotted:</b> gifts to a campaign by people who list the company as their employer. They are the employees' own gifts, not company money.</span></li>
+              <li><span class="ex-sw" data-t="lobbying"></span><span class="ex-t"><b>Gold, dash-dot:</b> lobbying fees the company paid a firm, or its own lobbying costs (recorded from 2025).</span></li>
+              <li><span class="ex-sw" data-t="holding"></span><span class="ex-t"><b>Pink, dashed:</b> an official's financial disclosure that lists the company (a job, a mortgage or an investment). It carries no dollar amount.</span></li>
+              <li>A thicker line means more dollars added up across the years shown.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Using it</h3>
+            <ul>
+              <li>Select a name to open its connections. Drag a dot to move it.</li>
+              <li>Select a line to list the records behind it, with links to the sources.</li>
+              <li>The year slider replays the picture from 2010, year by year.</li>
+              <li>A "record" is one kind of connection in one year, for example one year of state payments. "Not drawn yet" means connections held back to keep the picture readable; the button adds 40 more.</li>
+            </ul>
+          </div>
+          <div class="ex-help-warn">
+            <h3>What it does not show</h3>
+            <p>A line means a record exists in the public data. It does not say one thing caused another. Two names connected is an overlap in the records, not a finding of wrongdoing.</p>
+          </div>
+        </div>
+      </details>
+      <div class="ex-legend" id="ex-legend" aria-label="Key"></div>
+      <p class="ex-status" id="ex-status" role="status"></p>
+      <div id="ex-incl"></div>
+      <div id="ex-more" class="ex-more"></div>
+      <div id="ex-graph" class="ex-graph"></div>
+      <div id="ex-list" class="ex-list" hidden></div>
+      <p class="ex-hint">Drag a node to move it. Select a line, or press Enter on it, to list its records with their sources. <button type="button" class="linkbtn" id="ex-reset">Release dragged nodes</button></p>
+      <p class="source">Source: connections table (graph.json, summed by company, counterpart, type and year) and the company files (companies/&lt;id&gt;.json) behind each line, built from agency penalty releases and the Corporate Prosecution Registry; CTHRU, MBTA, Massport and MSBA payment records; OCPF and FEC contribution files (confirmed employer matches); Secretary of the Commonwealth lobbying disclosures; officials' Statements of Financial Interest.</p>
+    </div>
+    <div id="ex-records" class="card tl ex-records" hidden></div>
+    <div id="ex-tip" class="ex-tip" role="tooltip" hidden></div>
+  </div>
+</section>
+
+<section id="tab-excluded" class="tab-content" aria-labelledby="btn-excluded">
+  <div class="wrap">
+    <div class="alert">
+      <h2>Amounts not counted</h2>
+      <p class="window rule">How penalty amounts are counted: each row counts the cash the defendant actually paid (penalties, restitution, damages, fees). Press-release headline figures are often larger because they include debt relief, forgiven debt or rent, bill credits, conditional amounts, or proposed penalties that can still be contested. Those parts are not counted here. Every one is listed under <b>Amounts not counted</b>, with the headline figure, what we counted, the reason and the source. Where a release does not state the split between cash and relief, the case is left out of the totals and listed there.</p>
+    </div>
+    <div class="alert" style="margin-top:var(--gap)">
+      <h2>Two rules for duplicates and shared totals</h2>
+      <div class="alert-grid">
+        <p class="window rule">How duplicates are counted: when two records describe the same payment, it is counted once. A record is left out only when a primary document read for this ledger shows the dollars are the same. When that document cannot be read, a strong match is still counted once and is marked 'possible duplicate, counted once until verified'. Records for different payments are all counted, even when the amounts are equal. Every record left out stays in the gross figure and is listed under Amounts not counted, with the document behind the call.</p>
+        <p class="window rule">How shared totals are counted: when several defendants pay one total, each company counts only the share its primary document states. If the document gives a total and no split, and the payers include anyone outside the one company (another company, or individuals such as owners), the total is counted for no company: it stays in the gross figure and is listed under Amounts not counted. Where every payer named belongs to the one company, the whole total counts once, in full, for that company.</p>
+      </div>
+    </div>
+    <div class="card toolbar">
+      <p class="xa-sum" id="xa-sum" aria-live="polite" style="flex:1 1 520px">Loading the register</p>
+      <label class="search"><span class="ctl-label">Find a company or case</span>
+        <input type="search" id="xa-q" placeholder="Name" autocomplete="off"></label>
+
+    </div>
+    <div class="card table-card xa-wrap">
+      <table class="xa" id="xa-table">
+        <thead><tr id="xa-cols"></tr></thead>
+        <tbody id="xa-rows"></tbody>
+        <tfoot id="xa-foot"></tfoot>
+      </table>
+      <p class="source">Source: amounts-not-counted register (repo file data/manual/excluded-amounts.csv, copied into ledger.json), read from each case's agency release; skipped cases from the release-sourcing skip logs (repo folder review/batches).</p>
+    </div>
+    <div class="card xa-other" id="xa-other" style="margin-top:var(--gap)"></div>
+    <div class="card xa-other" id="xa-gap" style="margin-top:var(--gap)"></div>
+    <div class="card xa-other" id="xa-auth" style="margin-top:var(--gap)"></div>
+  </div>
+</section>
+</main>
+
+<div id="tip" class="tip" role="tooltip" hidden></div>
+
+<footer class="footer">
+  <div class="footer-in">
+    <div>
+      <strong>Limits of this ledger</strong>
+      <ul>
+        <li>Donor matching uses the employer each donor reports. Donors who leave it blank or write self-employed are missed.</li>
+        <li>Probable (fuzzy) employer matches and matches still under review are left out of every total.</li>
+        <li>Lobbying firm fees start in 2010. In-house lobbying costs (a company's own staff lobbyists) are entered only for 2025 and 2026, so before 2025 a lobbying figure is firm fees only.</li>
+        <li>Coverage is not complete. The penalty rows come from the Corporate Prosecution Registry, EPA enforcement records and agency releases found one by one; settlements that the U.S. Attorney's Office for Massachusetts announced with companies not yet in the ledger are listed under <a href="?tab=excluded">Amounts not counted</a>, and so is how each row was checked against its source.</li>
+        <li>Totals are nominal dollars.</li>
+        <li>Penalty amounts are the cash paid; headline figures that include relief, credits, conditional or proposed amounts are larger. <a href="?tab=excluded">Amounts not counted</a> lists every part left out. Duplicates are counted once and shared totals follow their document; both rules are stated at the top of the page.</li>
+      </ul>
+    </div>
+    <p><a href="corporate-ledger-method.html">Method notes</a></p>
+  </div>
+</footer>
+
+<script>
+// Tab system from the Hub template: showTab receives the button itself (never event.target).
+// Tabs with charts register an init and a cleanup; charts are built when shown and destroyed when left.
+var TAB_INIT = {}, TAB_CLEANUP = {};
+var currentTab = 'ledger';
+function showTab(btn, tabName) {
+  document.querySelectorAll('.tab-content').forEach(function (el) { el.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function (el) { el.classList.remove('active'); el.removeAttribute('aria-current'); });
+  if (TAB_CLEANUP[currentTab] && currentTab !== tabName) TAB_CLEANUP[currentTab]();
+  document.getElementById('tab-' + tabName).classList.add('active');
+  btn.classList.add('active');
+  btn.setAttribute('aria-current', 'page');
+  currentTab = tabName;
+  if (TAB_INIT[tabName]) TAB_INIT[tabName]();
+}
+</script>
+<script src="assets/corporate-ledger/ledger.js"></script>
+<script src="assets/corporate-ledger/connects.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" integrity="sha384-9nhczxUqK87bcKHh20fSQcTGD4qq5GhayNYSYWqwBkINBhOfQLg/P5HG5lF1urn4" crossorigin="anonymous"></script>
+<script src="assets/corporate-ledger/cases.js"></script>
+<!-- d3 7.9.0 (cdnjs) carries d3-force 3.0.0; cdnjs publishes no files for the standalone d3-force 3.x package.
+     SRI computed from the downloaded file (sha384); its sha512 equals the one cdnjs publishes. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
+<script src="assets/corporate-ledger/explorer.js"></script>
+<script src="assets/corporate-ledger/excluded.js"></script>
+<script>
+(function () {
+  var t = new URLSearchParams(location.search).get('tab');
+  var b = t && document.getElementById('btn-' + t);
+  if (b) showTab(b, t);
+  // In-page links such as ?tab=excluded&xq=<company> switch tabs without a reload.
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href^="?tab="]');
+    if (!a || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    var q = new URLSearchParams(a.getAttribute('href').slice(1));
+    var btn = document.getElementById('btn-' + q.get('tab'));
+    if (!btn) return;
+    e.preventDefault();
+    history.pushState(null, '', a.getAttribute('href'));
+    showTab(btn, q.get('tab'));
+    if (q.get('tab') === 'excluded' && window.XA_FILTER) window.XA_FILTER(q.get('xq') || '');
+    window.scrollTo(0, document.querySelector('.tab-nav').offsetTop);
+  });
+})();
+</script>
+<!-- == method-link start == -->
+<style>
+/* Sourced-here strip. Uses the shared theme's own tokens so it reads as part of
+   whichever dashboard it lands on, and stays quiet: this is a way out to the
+   working, not a call to action. */
+.msrc{max-width:1560px;margin:44px auto 0;padding:16px 24px 0;
+  border-top:1px solid var(--rule,#CDD3D1);
+  font-family:var(--font-mono,ui-monospace,monospace);font-size:11.5px;
+  letter-spacing:.04em;color:var(--muted,#5A6467);text-align:center}
+.msrc a{color:var(--navy,#14558F);font-weight:600;text-decoration:none;
+  border-bottom:1px solid rgba(20,85,143,.35)}
+.msrc a:hover{border-bottom-color:var(--navy,#14558F)}
+.msrc a:focus-visible{outline:2px solid var(--navy,#14558F);outline-offset:3px}
+</style>
+<p class="msrc">Every figure on this page is listed with its source in the <a href="method.html#corporate-penalties-political-money">Corporate Penalties &amp; Political Money section of the method</a>.</p>
+<!-- == method-link end == -->
+</body>
+</html>
