@@ -566,13 +566,35 @@ the 2025 US average is not the MEPS-IC figure. ✅ Oct 2026.
 | Personal health care spending per capita, 2020 | MA $13,319, 3rd of 50 states (NY $14,007, AK $13,642; DC $14,381); US $10,191 | CMS Health Expenditures by State of Residence, US_PER_CAPITA20.CSV (newest state edition, 1991-2020) | ✅ Oct 2026 |
 | Employer family premium, 2025 | MA $29,619, 4th of 50; US $26,281 | AHRQ MEPS-IC 2025 via KFF | ✅ Oct 2026 |
 
-**Not yet reconciled:** the healthcare dashboard's 2020-2023 premium trend (MA $23,541,
-$24,805, $25,262, $27,240) does not match MEPS-IC (MA $21,965, $22,163, $23,348, $26,355).
-Only 2024 agrees.
+### Family premium series (healthcare dashboard trend, contribution and cost-vs-income charts)
 
-- **MA premium cost growth (2021-23):** +12.1%
-- **MA wage growth (2021-23):** +9.7%
-- **Sources:** KFF Employer Health Benefits Survey, CHIA Annual Reports
+AHRQ MEPS-IC state tables, Table II (private sector), downloaded from
+meps.ahrq.gov/mepsweb/data_stats/state_tables.jsp (Massachusetts{year}.xlsx, UnitedStates{year}.xlsx).
+KFF State Health Facts republishes the same values. ✅ Oct 2026.
+
+| Year | MA family premium (II.D.1) | US family premium | MA employee contribution (II.D.2) | US employee contribution |
+|------|---:|---:|---:|---:|
+| 2020 | $21,965 | $20,758 | $5,741 | $5,978 |
+| 2021 | $22,163 | $21,381 | $5,976 | $6,174 |
+| 2022 | $23,348 | $21,931 | $5,875 | $6,492 |
+| 2023 | $26,355 | $23,938 | $7,597 | $6,889 |
+| 2024 | $28,151 | $24,540 | $7,811 | $7,216 |
+| 2025 | $29,619 | $26,281 | $7,501 | $7,314 |
+
+- **MA family premium growth:** +28.2% 2020-2024; +34.8% 2020-2025; +5.2% 2024-2025 (derived).
+- **Comparators on the cost-vs-income tab, 2020-2024:** MA median household income +23.2% (ACS
+  5-year B19013: $84,385, $89,026, $96,505, $101,341, $103,960); Boston CPI-U +18.3% (BLS
+  CUURS11ASA0 annual averages: 284.266, 293.521, 314.356, 326.016, 336.376). ✅ Oct 2026.
+- **Premium as a share of median income, 2024:** MA 27.1% ($28,151 / $103,960); US 30.4%
+  ($24,540 / $80,734, ACS 2024 5-year). Both on the same income basis. ✅ Oct 2026.
+
+The series these replaced (MA $23,541, $24,805, $25,262, $27,240 for 2020-2023, labelled "KFF
+EHBS") matched no MEPS-IC year but 2024. With them the page said premiums "roughly track
+inflation" (+19.6%); on MEPS-IC they outran both inflation and income. The old affordability
+card put the US premium at 24.2% of income against its own figures' 30.4%, and mixed an ACS
+2023 1-year US income ($80,610) with MA 5-year income.
+
+- **Sources:** AHRQ MEPS-IC state tables (premiums); KFF State Health Facts (state rankings, republishing MEPS-IC)
 
 ---
 
