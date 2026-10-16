@@ -219,6 +219,7 @@ The 16,921 is outflow 102,076 against inflow 85,155 (returns, 2022-23; data/irs-
 | Natural change (births less deaths), 2020-2025 | +26,617 people | US Census Bureau, Population Estimates (NST-EST2025 components of change) | 🔄 Oct 2026 |
 | Population change, 2020-2025 | +120,972 people (2024-25: +15,524; July 2025 population 7,154,084) | US Census Bureau, Population Estimates (NST-EST2025 components of change) | 🔄 Oct 2026 |
 | Net AGI loss, latest year (2022-23) | $4.18B | IRS SOI | 🔄 Aug 2026 |
+| Average AGI per return, leaving vs arriving (2022-23) | $116,360 leaving (11,877,573K / 102,076) vs $90,442 arriving (7,701,622K / 85,155) | IRS SOI State-to-State Migration Data, data/irs-soi-migration-latest.json | 🔄 Oct 2026 |
 | 2024 US growth from immigration | 84% | Census | ✅ Jan 2026 |
 | MA NIM "nosedive" (2025 proj) | Historic decline | Census Vintage 2025 | ✅ Feb 2026 |
 
