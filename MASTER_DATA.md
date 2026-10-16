@@ -208,7 +208,13 @@ The figures below are that file's current contents; the Feb 2026 column showed a
 
 The 16,921 is inflow 102,076 against outflow 85,155, and both totals include the foreign category. It is therefore NOT comparable with a domestic-only net migration count, which is a smaller number. Say which one a card means before putting the two near each other.
 
+| Metric | Figure | Source | Verified |
+|--------|--------|--------|----------|
 | Net domestic out-migration, 2020-2025 | 182,145 people | US Census Bureau, Population Estimates (NST-EST2025 components of change) | 🔄 Sep 2026 |
+| Net international migration, 2020-2025 | +286,765 people (2024-25: +40,240; 2023-24: +77,957) | US Census Bureau, Population Estimates (NST-EST2025 components of change) | 🔄 Oct 2026 |
+| Net migration, domestic plus international, 2020-2025 | +104,620 people | US Census Bureau, Population Estimates (NST-EST2025 components of change) | 🔄 Oct 2026 |
+| Natural change (births less deaths), 2020-2025 | +26,617 people | US Census Bureau, Population Estimates (NST-EST2025 components of change) | 🔄 Oct 2026 |
+| Population change, 2020-2025 | +120,972 people (2024-25: +15,524; July 2025 population 7,154,084) | US Census Bureau, Population Estimates (NST-EST2025 components of change) | 🔄 Oct 2026 |
 | Net AGI loss, latest year (2022-23) | $4.18B | IRS SOI | 🔄 Aug 2026 |
 | 2024 US growth from immigration | 84% | Census | ✅ Jan 2026 |
 | MA NIM "nosedive" (2025 proj) | Historic decline | Census Vintage 2025 | ✅ Feb 2026 |

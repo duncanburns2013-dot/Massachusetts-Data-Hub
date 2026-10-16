@@ -103,7 +103,7 @@ def scan():
             if not d or len(d) < 2:      # single digits are noise, not claims
                 continue
             anchored = ("id=" in attrs or "data-field=" in attrs
-                        or "data-field=" in block)
+                        or "data-field=" in block or "data-mig=" in block)
             if anchored or d in documented:
                 continue
             label = re.sub(r"\s+", " ", TAG.sub(" ", block[v.end():])).strip()[:60]

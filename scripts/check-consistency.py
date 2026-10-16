@@ -74,6 +74,16 @@ def checks():
         out.append(('MA median household income',
                     money(cen['ma_median_hh_income']), 'census-latest.json'))
 
+    mig = load('domestic-migration-latest.json')
+    out.append(('Net domestic out-migration', money(mig['net_domestic_outmigration']),
+                'domestic-migration-latest.json'))
+    for comp, label in [('intl', 'Net international migration'),
+                        ('netmig', 'Net migration'), ('popchg', 'Population change')]:
+        if comp in mig.get('components', {}):
+            out.append((label + ', cumulative',
+                        money(sum(mig['components'][comp].values())),
+                        'domestic-migration-latest.json'))
+
     irs = load('irs-soi-migration-latest.json')
     if irs.get('results'):
         r = irs['results'][0]
