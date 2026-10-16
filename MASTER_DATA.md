@@ -764,6 +764,30 @@ $B. Source: official mass.gov GAA export `gaabudgets.xlsx`. ✅ Verified Aug 202
 matching `summary-fy-27-enacted-budget-summary.csv`'s Total row of **$63,416,035,478** to
 the dollar, and the press release's "$63.42 billion".
 
+### Enacted budgets FY2018–FY2027, headline scope (`GAA_SIGNED` + `FY27_GAA`)
+
+| Fiscal year | Enacted, headline scope ($B) | Source | Verified |
+|---|---:|---|---|
+| FY2018 | 40.197 | `gaabudgets` FY21 workbook; statewide summary TOTAL $40,196,899K (budget.digital.mass.gov/bb/gaa/fy2018) | ✅ Oct 2026 |
+| FY2019 | 41.883 | `gaabudgets` FY21 workbook; statewide summary TOTAL $41,883,308K (bb/gaa/fy2019) | ✅ Oct 2026 |
+| FY2020 | 43.590 | `gaabudgets` FY21 workbook | ✅ Oct 2026 |
+| FY2021 | 46.459 | `gaabudgets` FY24 workbook | ✅ Oct 2026 |
+| FY2022 | 48.085 | `gaabudgets` FY25 workbook | ✅ Oct 2026 |
+| FY2023 | 52.444 | `gaabudgets` FY26 workbook | ✅ Oct 2026 |
+| FY2024 | 56.063 | `gaabudgets` FY27 workbook | ✅ Oct 2026 |
+| FY2025 | 57.718 | `gaabudgets` FY27 workbook | ✅ Oct 2026 |
+| FY2026 | 60.974 | `gaabudgets` FY27 workbook (after overrides; the FY26 workbook read 60.904 at signing) | ✅ Oct 2026 |
+| FY2027 | 63.416 | `gaabudgets` FY27 workbook | ✅ Oct 2026 |
+| Growth, FY2018 to FY2026 | +51.7% (derived) | above | ✅ Oct 2026 |
+| Growth, FY2018 to FY2027 | +57.8% (derived) | above | ✅ Oct 2026 |
+
+Each year is taken from the newest workbook that carries it (budget.digital.mass.gov,
+summary/fyNN/downloads), because a later workbook restates the year after overrides. Every
+workbook that carries a year agrees on it to the nearest $1M, except FY26 as noted. The series
+this replaced on the dashboard (39.4, 42.7, 44.6, 45.9, 49.7, 52.7, 56.2, 57.8, 60.9) mixed
+scopes and was off by up to $1.6B in both directions; it had put FY2018-to-FY2026 growth at
++54.6%.
+
 ### FY2027 enacted — key figures
 
 | Figure | Value | Source | Verified |
