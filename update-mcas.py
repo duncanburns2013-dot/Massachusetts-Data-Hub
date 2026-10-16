@@ -439,6 +439,10 @@ def update_statewide_rest(html, sy, prev_sy):
     gaps_pts = sorted({round(re_ - ge), round(rm - gm)})
     setf("pr-gwgap", str(gaps_pts[0]) if len(gaps_pts) == 1
          else f"{gaps_pts[0]}-{gaps_pts[1]}")
+    # The Gateway tab's gap card said "15pts" by hand while the sentence under it,
+    # computed from the same averages, said 21-23. Same figure, same source now.
+    setf("kpi-gw-gap", (str(gaps_pts[0]) if len(gaps_pts) == 1
+                        else f"{gaps_pts[0]}-{gaps_pts[1]}") + "pts")
 
     # The worst district on grade 3-8 math, named rather than assumed. Holyoke
     # held it in 2025; the sentence should not keep saying so on its own.
