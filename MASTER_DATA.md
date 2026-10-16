@@ -552,8 +552,22 @@ against OCPF since. Donation patterns establish association, not agreement.
 
 | Year | MA Family Premium | US Average | MA Premium Gap |
 |------|-------------------|------------|----------------|
-| 2024 | $28,151 | $24,540 | +14.7% |
-| 2025 | — | $26,993 | — |
+| 2024 | $28,151 (1st of 50) | $24,540 | +14.7% |
+| 2025 | $29,619 (4th of 50; AK $30,132, NY $29,752, NJ $29,666 higher) | $26,281 | +12.7% |
+
+Family premiums: AHRQ MEPS-IC private-sector state estimates, as published in KFF State Health
+Facts (kff.org/private-insurance/state-indicator/family-coverage). The state figures are MEPS-IC,
+not the KFF Employer Health Benefits Survey, which is national. The $26,993 previously listed as
+the 2025 US average is not the MEPS-IC figure. ✅ Oct 2026.
+
+| Metric | Value | Source | Verified |
+|--------|-------|--------|----------|
+| Personal health care spending per capita, 2020 | MA $13,319, 3rd of 50 states (NY $14,007, AK $13,642; DC $14,381); US $10,191 | CMS Health Expenditures by State of Residence, US_PER_CAPITA20.CSV (newest state edition, 1991-2020) | ✅ Oct 2026 |
+| Employer family premium, 2025 | MA $29,619, 4th of 50; US $26,281 | AHRQ MEPS-IC 2025 via KFF | ✅ Oct 2026 |
+
+**Not yet reconciled:** the healthcare dashboard's 2020-2023 premium trend (MA $23,541,
+$24,805, $25,262, $27,240) does not match MEPS-IC (MA $21,965, $22,163, $23,348, $26,355).
+Only 2024 agrees.
 
 - **MA premium cost growth (2021-23):** +12.1%
 - **MA wage growth (2021-23):** +9.7%
