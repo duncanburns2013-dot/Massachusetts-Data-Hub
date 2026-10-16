@@ -155,7 +155,10 @@ vintage step.
 | HomeBASE growth, FY22 → FY26 | +252% (derived) | CTHRU kv7m-35wn | ✅ Sep 2026 |
 | FY2026 projected | EA 7004-0101 $276,421,903 · HomeBASE $91,386,678 | budget.digital.mass.gov FY27 line-item data | ✅ Sep 2026 |
 | FY2027 GAA | EA 7004-0101 $259,900,648 · HomeBASE 7004-0108 $82,322,001 · 7004-0110 $5,000,000 | budget.digital.mass.gov FY27 line-item data | ✅ Sep 2026 |
-| EA caseload, 3 Sep 2026 | 1,533 families in shelter + 55 in clinical safety sites | EA report SD.4220, malegislature.gov/Bills/194/SD4220.pdf | ✅ Sep 2026 |
+| EA caseload, 1 Oct 2026 | 1,536 families in shelter + 47 in clinical safety sites | Biweekly EA report to House and Senate Ways and Means, 5 Oct 2026 (SD.4288), malegislature.gov/Bills/194/SD4288.pdf | ✅ Oct 2026 |
+| EA caseload, 25 Jul 2024 | 7,367 families in shelters, hotels or motels (Appendix A total) + 340 in overflow | Biweekly EA report, 29 Jul 2024 (SD.3359), malegislature.gov/Bills/193/SD3359.pdf | ✅ Oct 2026 |
+| Caseload change, Jul 2024 to Oct 2026 | -79% (7,367 to 1,536, derived) | SD.3359, SD.4288 | ✅ Oct 2026 |
+| Cost per family per week, current | $1,241 (average shelter provider rates, FY27 contracts) | EA report SD.4288 | ✅ Oct 2026 |
 | Cost per family per week | $3,496 | State Auditor | ✅ Feb 2026 |
 | $100K fee per shelter family | Proposed | Legislature | ✅ Feb 2026 |
 
