@@ -524,7 +524,7 @@ footer a:hover{color:var(--gold)}
     <div class="alert-item">Boston headline looks lower because MA avoided the worst energy spikes. <strong>Shelter numbers:</strong> Boston <strong id="dsBosSh">—</strong> cumulative vs. <strong id="dsNatSh">—</strong> national</div>
     <div class="alert-item">Boston tuition &amp; childcare rose <strong>6.7% YoY</strong> in Jan 2026 — at the time the steepest rise since BLS began the series in 2018</div>
     <div class="alert-item">All of this sits <strong>on top of</strong> MA's cost-of-living premium — BEA RPP 2024 puts MA at <span id="rppLvl2">—</span> against a national 100, so you were already paying <strong id="rppPrem2">—</strong> more <em>before</em> inflation hit</div>
-    <div class="alert-item">A $100 grocery run in Jan 2021 now costs <strong id="dsBask">—</strong> nationally (BLS CPI-U, compounded since Jan 2021) — and MA starts from the higher base noted above</div>
+    <div class="alert-item">A $100 grocery run in Jan 2021 now costs <strong id="dsBask">—</strong> nationally (BLS CPI-U food at home, seasonally adjusted, compounded since Jan 2021) — and MA starts from the higher base noted above</div>
     <div class="alert-item">In March 2026, national CPI jumped <strong>0.9% in a single month</strong> as gasoline surged 21.2% — a reminder of how fast a single energy spike moves the headline number</div>
   </div></div>
 
@@ -1856,6 +1856,8 @@ function initCharts(tab) {
       var cumNat=[0.0,2.2,4.3,7.6,10.9,12.8,14.4,15.5,17.0,17.9,19.2,19.8,21.4,22.1,23.4,24.3,28.0];
       var cumBos=[0.0,1.8,2.9,6.3,9.4,11.2,13.1,13.4,14.1,15.4,17.8,18.0,19.8,21.4,21.9,21.5,26.5];
       var cumNatCore=[0.0,2.0,3.8,6.8,9.8,11.5,12.9,13.9,15.2,16.0,17.2,17.7,19.2,19.8,20.9,21.7,25.1];
+      // Food at home (CUSR0000SAF11), same snapshots; written by update_cumulative_inflation.py.
+      var cumNatFood=[0.0,1.0,3.9,7.4,13.1,17.4,19.5,19.7,20.2,20.8,20.9,21.7,23.1,23.7,24.9,25.8,27.2];
       var cumNatSh=[0.0,1.5,3.3,5.7,8.6,11.6,14.4,15.9,17.8,19.7,21.2,22.6,24.3,26.0,27.3,28.6,31.6];
       var cumBosSh=[0.0,0.4,1.7,5.6,7.6,9.7,14.5,14.6,14.9,18.5,21.3,21.3,24.7,27.3,26.8,27.0,32.4];
       var cumWage=[0.0,1.6,3.5,5.6,7.3,8.8,10.3,11.9,13.6,15.2,16.6,18.1,19.7,21.2,22.6,24.1,26.3];
@@ -1917,7 +1919,9 @@ function initCharts(tab) {
       // BEA's published RPP by 1-4 points (checked against FRED MARPPALL for 2022-24).
       // The premium is stated as its own fact instead of being multiplied in.
       var iNat=lastIdx(cumNat);
-      if(iNat>=0) setTxt('dsBask','~$'+(100*(1+cumNat[iNat]/100)).toFixed(0));
+      // The grocery line reads the grocery index, not all-items CPI.
+      var iFood=lastIdx(cumNatFood);
+      if(iFood>=0) setTxt('dsBask','~$'+(100*(1+cumNatFood[iFood]/100)).toFixed(0)+' ('+cumL[iFood]+')');
 
       var iBos=lastIdx(cumBos);
       if(iBos>=0) setTxt('cavBos','+'+cumBos[iBos].toFixed(1)+'%');
