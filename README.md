@@ -130,7 +130,7 @@ On that test, from the filed tariffs:
 
 | | Massachusetts | New Hampshire |
 |---|---|---|
-| Electric | **3.789¢/kWh** — EE 2.292, NMRS 0.625, SMART 0.583, EV 0.238, RE 0.050, ESMP 0.001 | **0.618¢/kWh** — System Benefits Charge only |
+| Electric | **3.663¢/kWh** (from 1 Sep 2026) — EE 2.292, NMRS 0.625, SMART 0.583, EV 0.104, RE 0.050, PSPF 0.008, ESMP 0.001 | **0.618¢/kWh** — System Benefits Charge only |
 | Gas | **59.08¢/therm** — EE 41.70 + GSEP 17.38 | **16.30¢/therm** — Liberty LDAC |
 
 Excluded on both sides as infrastructure or mechanism: distribution, transmission,
