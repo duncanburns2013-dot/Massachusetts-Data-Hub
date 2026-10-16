@@ -209,7 +209,7 @@ The figures below are that file's current contents; the Feb 2026 column showed a
 | AGI lost (cumulative 2011–2023) | $24.7B | IRS SOI | 🔄 Aug 2026 |
 | Net outflow, latest year (2022-23) | 16,921 returns — **includes moves abroad** | IRS SOI | 🔄 Aug 2026 |
 
-The 16,921 is inflow 102,076 against outflow 85,155, and both totals include the foreign category. It is therefore NOT comparable with a domestic-only net migration count, which is a smaller number. Say which one a card means before putting the two near each other.
+The 16,921 is outflow 102,076 against inflow 85,155 (returns, 2022-23; data/irs-soi-migration-latest.json), and both totals include the foreign category. It is therefore NOT comparable with a domestic-only net migration count, which is a smaller number. Say which one a card means before putting the two near each other.
 
 | Metric | Figure | Source | Verified |
 |--------|--------|--------|----------|
