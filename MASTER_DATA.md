@@ -282,9 +282,9 @@ Values below are that file as of **2026-10-16**. (Feed is PrimeMLS, not Paragon.
 
 | Region | Median Price | Avg Sale | Avg DOM | SP/LP |
 |--------|-------------|----------|---------|-------|
-| NH Statewide | $445,877 | $534,083 | 29 days | 100.34% |
+| NH Statewide | $445,881 | $534,080 | 29 days | 100.34% |
 
-- **Active inventory:** 3,091 listings · median list $599,900 · avg list $858,316
+- **Active inventory:** 3,089 listings · median list $599,900 · avg list $858,453
 - Also tracked per-market: Portsmouth, Salem, Derry, Windham
 
 ### Boston — Commercial Real Estate (CMBS)
