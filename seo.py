@@ -58,7 +58,7 @@ DESC = {
    'where the money goes.',
  'ma-housing-dashboard.html':
    'Massachusetts MLS data for the state, Boston, Essex County and Greater '
-   'Newburyport: median prices, days on market, sale-to-list ratios and '
+   'Newburyport: average sale prices, days on market, sale-to-list ratios and '
    'affordability, every year since 2014.',
 }
 
