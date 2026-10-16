@@ -72,6 +72,14 @@ jobs:
           fi
           exit "$code"
 
+      # Runs last, after every step that writes data into the page. The page's own
+      # renderDerived() is executed against the new arrays and its output is written
+      # into the static HTML, so the no-JavaScript source (crawlers, search snippets,
+      # anyone quoting the file) shows the same month as the rendered page. It once
+      # sat five months behind while the screen was current.
+      - name: Bake computed figures into the static HTML
+        run: node scripts/bake-static-fallback.mjs employment-dashboard.html
+
       - name: Check for changes
         id: changes
         run: |

@@ -41,6 +41,11 @@ jobs:
           BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
         run: cd scripts && node fetch-bls-data.js
 
+      # Same bake as update-employment.yml: write renderDerived()'s figures into the
+      # static HTML so the source never lags the rendered page.
+      - name: "Employment - bake static fallback"
+        run: node scripts/bake-static-fallback.mjs employment-dashboard.html
+
       - name: "Energy (EIA)"
         env:
           EIA_API_KEY: ${{ secrets.EIA_API_KEY }}
