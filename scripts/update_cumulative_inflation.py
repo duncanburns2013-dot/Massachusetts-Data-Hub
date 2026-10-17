@@ -42,6 +42,9 @@ MONTH_NAME = {1:"January",2:"February",3:"March",4:"April",5:"May",6:"June",
 BLS_SERIES = {
     "nat_cpi":    "CUSR0000SA0",
     "nat_shelter":"CUSR0000SAH",
+    # Food at home, SA. The "$100 grocery run" line used all-items CPI, which is
+    # not grocery prices; this is the BLS grocery index.
+    "nat_food_home":"CUSR0000SAF11",
     "wages":      "CES0500000003",
 }
 
@@ -223,6 +226,7 @@ def main():
     print("\nParsing BLS series:")
     nat_cpi     = parse_bls_series(bls_response, BLS_SERIES["nat_cpi"])
     nat_shelter = parse_bls_series(bls_response, BLS_SERIES["nat_shelter"])
+    nat_food    = parse_bls_series(bls_response, BLS_SERIES["nat_food_home"])
     wages       = parse_bls_series(bls_response, BLS_SERIES["wages"])
 
     # ── Fetch FRED (Boston) ──
@@ -247,6 +251,7 @@ def main():
     cum_nat      = cumulative_pct(nat_cpi,     snapshots)
     cum_bos      = cumulative_pct(bos_cpi,     snapshots)
     cum_nat_sh   = cumulative_pct(nat_shelter, snapshots)
+    cum_nat_food = cumulative_pct(nat_food,    snapshots)
     cum_bos_sh   = cumulative_pct(bos_shelter, snapshots)
     cum_wage     = cumulative_pct(wages,       snapshots)
     cum_nat_core = [round(v * 0.895, 1) if v is not None else None for v in cum_nat]
@@ -269,6 +274,7 @@ def main():
     html = replace_var(html, "cumBos",     js_array(cum_bos))
     html = replace_var(html, "cumNatCore", js_array(cum_nat_core))
     html = replace_var(html, "cumNatSh",   js_array(cum_nat_sh))
+    html = replace_var(html, "cumNatFood", js_array(cum_nat_food))
     html = replace_var(html, "cumBosSh",   js_array(cum_bos_sh))
     html = replace_var(html, "cumWage",    js_array(cum_wage))
     html = replace_var(html, "cumYoY",     js_array(yoy))

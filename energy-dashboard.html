@@ -235,7 +235,7 @@ footer a:hover{color:var(--gold)}
       "name": "Massachusetts"
     }
   ],
-  "dateModified": "2026-10-12"
+  "dateModified": "2026-10-16"
 }
 </script>
 </head>
@@ -297,15 +297,15 @@ footer a:hover{color:var(--gold)}
 <div id="rates" class="tab-content">
 <h2 class="section-title">Electricity Rate Deep Dive</h2>
 <div class="alert"><h4>&#x26A0;&#xFE0F; What's Actually On Your Bill</h4><div class="alert-grid">
-<div class="alert-item"><strong>Supply charge:</strong> Actual cost of generating electricity &#x2014; only ~40% of your bill</div>
-<div class="alert-item"><strong>Distribution charge:</strong> Eversource/National Grid delivery &#x2014; ~30% of bill</div>
-<div class="alert-item"><strong>Renewable energy charge:</strong> RPS compliance costs passed to you &#x2014; ~10%</div>
-<div class="alert-item"><strong>Energy efficiency charge:</strong> Mass Save programs you may never use &#x2014; ~7%</div>
-<div class="alert-item"><strong>Transition charge:</strong> Paying off old utility contracts from deregulation &#x2014; ~8%</div>
+<div class="alert-item"><strong>Supply (Basic Service, 17.323&#x00A2;/kWh):</strong> <span id="bbSupply">46.0%</span> of the bill. Renewable-portfolio and clean-energy compliance costs are inside this price, not broken out</div>
+<div class="alert-item"><strong>Distribution (9.837&#x00A2;/kWh):</strong> <span id="bbDist">26.1%</span>. It also carries residential-assistance, long-term renewable contract and solar program adjustments that the bill does not list</div>
+<div class="alert-item"><strong>Transmission (4.673&#x00A2;/kWh):</strong> <span id="bbTrans">12.4%</span></div>
+<div class="alert-item"><strong>Policy line items (<span id="bbPolC">3.663</span>&#x00A2;/kWh):</strong> <span id="bbPol">9.7%</span>. Mass Save energy efficiency 2.292, net metering recovery 0.625, SMART solar 0.583, EV program 0.104, Renewable Energy Charge (statutory, funds MassCEC) 0.050, provisional system planning 0.008, grid modernization plan 0.001. A floor: the policy items inside distribution and supply are not counted</div>
+<div class="alert-item"><strong>Customer charge ($10/month) and other delivery:</strong> <span id="bbRest">5.7%</span>. The transition charge from deregulation is now a small credit (&minus;0.077&#x00A2;)</div>
 <div class="alert-item"><strong>RGGI costs:</strong> $1.36B in carbon auction costs since 2008 &#x2014; passed to ratepayers</div>
 </div></div>
 <div class="chart-grid">
-<div class="chart-card"><h3>MA Electricity Bill Breakdown (Typical Residential)</h3><div class="chart-area"><canvas id="chartBillBreak"></canvas></div><div class="source">Source: Eversource/National Grid rate schedules; DPU filings</div></div>
+<div class="chart-card"><h3>One Residential Bill, Line by Line (Eversource R-1, 600 kWh/month)</h3><div class="chart-area"><canvas id="chartBillBreak"></canvas></div><div class="source">Source: Eversource (NSTAR Electric) filed rates, Rate R-1, Greater Boston: delivery rates effective 1 Sep 2026; Basic Service fixed price 17.323&#x00A2;/kWh from 1 Aug 2026 (M.D.P.U. No. 1-26-E). One utility, not a statewide average. Bill at 600 kWh: <span id="bbTotal">$225.75</span>/month.</div></div>
 <div class="chart-card"><h3>MA vs. National Rate Gap Over Time</h3><div class="chart-area"><canvas id="chartGapTime"></canvas></div><div class="source">Source: EIA Electric Power Monthly, <span id="yrRangeGap">&#x2014;</span></div></div>
 </div>
 <div class="data-card"><h3>New England Electricity Rates &#x2014; All Among the Highest (EIA Jul 2026)</h3>
@@ -558,15 +558,15 @@ footer a:hover{color:var(--gold)}
 <h3>Your Bill Line-by-Line &#x2014; Each Charge Linked to Its Statute</h3>
 <p style="font-size:0.72rem;color:var(--muted);margin-bottom:12px">The legislature writes the mandate. The statute creates the charge. You pay the bill. Here's the complete chain for every line item.</p>
 <table class="data-table"><thead><tr><th>Bill Line Item</th><th>% of Bill</th><th>Statutory Authority</th><th>What the Law Says</th></tr></thead><tbody>
-<tr><td class="highlight">Renewable Energy Charge</td><td class="highlight">~8%</td><td><strong>M.G.L. c. 25A, &#x00A7;11F</strong></td><td>RPS mandate — distribution companies must procure qualifying renewable energy and recover costs from customers</td></tr>
-<tr><td class="highlight">Energy Efficiency / Mass Save</td><td class="highlight">~7%</td><td><strong>M.G.L. c. 25, &#x00A7;21</strong></td><td>Requires distribution companies to fund energy efficiency programs — costs recovered through customer charges</td></tr>
-<tr><td class="highlight">Clean Energy / Offshore Wind</td><td class="highlight">~4%</td><td><strong>Ch. 169, Acts of 2008, &#x00A7;83C<br>(as amended St. 2016, c. 188, &#x00A7;12)</strong></td><td>Statute: utilities &ldquo;entitled to cost recovery of payments made under a long-term contract&rdquo;. In effect, full cost recovery: all PPA costs pass through to ratepayers; utilities receive up to 2.75% remuneration</td></tr>
-<tr><td>RGGI Carbon Pass-Through</td><td>~2%</td><td><strong>M.G.L. c. 21N, &#x00A7;&#x00A7;1&#x2013;9</strong></td><td>Cap-and-trade carbon auction costs — $200M/yr extracted, passed to ratepayers through supply charges</td></tr>
-<tr><td>Transmission Charge</td><td>~13%</td><td><strong>M.G.L. c. 164, &#x00A7;1</strong></td><td>ISO-NE grid fees and capacity market costs — constrained by blocked pipeline infrastructure</td></tr>
-<tr><td>Distribution Charge</td><td>~30%</td><td><strong>M.G.L. c. 164, &#x00A7;1A</strong></td><td>DPU-regulated delivery charge — includes GSEP pipe replacement costs (untouched by H.5175)</td></tr>
-<tr><td>Supply Charge</td><td>~40%</td><td>Market rate</td><td>Actual generation cost — elevated by pipeline constraints (ISO-NE confirms gas dependency drives winter spikes)</td></tr>
+<tr><td class="highlight">RPS compliance (inside supply)</td><td class="highlight">Not broken out</td><td><strong>M.G.L. c. 25A, &#x00A7;11F</strong></td><td>RPS mandate — distribution companies must procure qualifying renewable energy and recover costs from customers</td></tr>
+<tr><td class="highlight">Energy Efficiency / Mass Save</td><td class="highlight"><span id="bbEe">6.1%</span></td><td><strong>M.G.L. c. 25, &#x00A7;21</strong></td><td>Requires distribution companies to fund energy efficiency programs — costs recovered through customer charges</td></tr>
+<tr><td class="highlight">Clean Energy / Offshore Wind</td><td class="highlight">Inside distribution, not broken out</td><td><strong>Ch. 169, Acts of 2008, &#x00A7;83C<br>(as amended St. 2016, c. 188, &#x00A7;12)</strong></td><td>Statute: utilities &ldquo;entitled to cost recovery of payments made under a long-term contract&rdquo;. In effect, full cost recovery: all PPA costs pass through to ratepayers; utilities receive up to 2.75% remuneration</td></tr>
+<tr><td>RGGI Carbon Pass-Through</td><td>Inside supply, not broken out</td><td><strong>M.G.L. c. 21N, &#x00A7;&#x00A7;1&#x2013;9</strong></td><td>Cap-and-trade carbon auction costs — $200M/yr extracted, passed to ratepayers through supply charges</td></tr>
+<tr><td>Transmission Charge</td><td><span id="bbTrans2">12.4%</span></td><td><strong>M.G.L. c. 164, &#x00A7;1</strong></td><td>ISO-NE grid fees and capacity market costs — constrained by blocked pipeline infrastructure</td></tr>
+<tr><td>Distribution Charge</td><td><span id="bbDist2">26.1%</span></td><td><strong>M.G.L. c. 164, &#x00A7;1A</strong></td><td>DPU-regulated delivery charge — includes GSEP pipe replacement costs (untouched by H.5175)</td></tr>
+<tr><td>Supply Charge</td><td><span id="bbSupply2">46.0%</span></td><td>Market rate</td><td>Actual generation cost — elevated by pipeline constraints (ISO-NE confirms gas dependency drives winter spikes)</td></tr>
 </tbody></table>
-<div class="source">Source: M.G.L. c. 25A &#x00A7;11F; M.G.L. c. 25 &#x00A7;21; Ch. 169/2008 &#x00A7;83C; Ch. 188/2016 &#x00A7;12; M.G.L. c. 21N; M.G.L. c. 164; Eversource/NGrid rate schedules; DPU filings</div>
+<div class="source">Source: M.G.L. c. 25A &#x00A7;11F; M.G.L. c. 25 &#x00A7;21; Ch. 169/2008 &#x00A7;83C; Ch. 188/2016 &#x00A7;12; M.G.L. c. 21N; M.G.L. c. 164. Shares: the Eversource R-1 Greater Boston bill at 600 kWh/month on the Rates tab (filed rates, Sep 2026). The separate Renewable Energy Charge on the bill is 0.050&#x00A2;/kWh under M.G.L. c. 25 &#x00A7;20 and funds MassCEC; it is not the RPS.</div>
 </div>
 
 <!-- NEW: Legislative Vote Record -->
@@ -786,7 +786,7 @@ footer a:hover{color:var(--gold)}
 <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">Released April 27, 2026, Wu's 110-page plan adds a new layer of mandates on top of the state policies already driving MA electricity to <span id="bosIntroRate">&#x2014;</span> &#x2014; <span id="bosIntroRank">&#x2014;</span>. The same political party that created the cost crisis now claims to be solving it.</p>
 <div class="alert"><h4>&#x26A0;&#xFE0F; The Core Contradiction</h4><div class="alert-grid">
 <div class="alert-item">Wu claims plan will <strong>"lower energy costs"</strong> &#x2014; while mandating building electrification that Eversource projects will <strong>increase electricity demand 33% by 2033</strong></div>
-<div class="alert-item">BCCE "saves $200/yr" &#x2014; but only on <strong>supply (~40% of bill)</strong>. The $877/yr mandate premium is untouched.</div>
+<div class="alert-item">BCCE "saves $200/yr" &#x2014; but only on <strong>supply (<span id="bbSupply3">46.0%</span> of an Eversource R-1 bill)</strong>. The $877/yr mandate premium is untouched.</div>
 <div class="alert-item">BERDO forces large buildings to <strong>net-zero by 2050</strong> &#x2014; compliance costs passed to <strong>tenants and ratepayers</strong></div>
 <div class="alert-item">Plan celebrates <strong>"48% reduction without new plan"</strong> then adds massive new mandates anyway</div>
 <div class="alert-item"><strong>$105M+ in federal climate funding rescinded</strong> by Trump &#x2014; who fills the gap? You do.</div>
@@ -804,7 +804,7 @@ footer a:hover{color:var(--gold)}
 <div class="chart-card"><h3>What BCCE Actually Covers vs. Your Full Bill</h3><div class="chart-area"><canvas id="chartBCCE"></canvas></div><div class="source">Source: Eversource rate schedules; BCCE program data; DPU filings. BCCE only affects the supply portion.</div></div>
 <div class="chart-card"><h3>BCCE "Savings" vs. Mandate Premium &#x2014; Annual $</h3><div class="chart-area"><canvas id="chartBCCEvMandate"></canvas></div><div class="source">Source: BCCE program ($200/yr avg); EIA rate data ($877/yr overpayment vs US avg at 600 kWh/mo)</div></div>
 </div>
-<div class="info-box"><h4>&#x1F4CB; How the BCCE Shell Game Works</h4><p>Boston Community Choice Electricity (authorized under <strong>M.G.L. c. 164, &#x00A7; 134</strong>) is a municipal aggregation program. It replaces Eversource as your <em>electricity supplier</em> at a lower rate: $0.13644/kWh (BCCE Basic) vs. $0.15629/kWh (Eversource residential). That's real &#x2014; about $200/yr for a typical household.<br><br>But here's what Wu leaves out: <strong>BCCE only affects the supply charge, which is ~40% of your total electric bill.</strong> The other 60% &#x2014; distribution, transmission, RPS compliance, RGGI pass-through, Mass Save surcharge, transition charges &#x2014; is completely untouched. Those are the charges driven by the state mandate stack that Wu and Healey both championed. You "save" $200 on supply while paying $877 in mandate premiums. That's not a solution &#x2014; it's a distraction.</p></div>
+<div class="info-box"><h4>&#x1F4CB; How the BCCE Shell Game Works</h4><p>Boston Community Choice Electricity (authorized under <strong>M.G.L. c. 164, &#x00A7; 134</strong>) is a municipal aggregation program. It replaces Eversource as your <em>electricity supplier</em> at a lower rate: $0.13644/kWh (BCCE Basic) vs. $0.15629/kWh (Eversource residential). That's real &#x2014; about $200/yr for a typical household.<br><br>But here's what Wu leaves out: <strong>BCCE only affects the supply charge, which is <span id="bbSupply4">46.0%</span> of an Eversource R-1 bill at 600 kWh.</strong> The other <span id="bbNonSupply">54.0%</span> &#x2014; distribution, transmission, the policy line items (Mass Save efficiency, net metering, SMART solar) and the customer charge &#x2014; is completely untouched. (RPS compliance and RGGI costs sit inside the supply price itself.) Those are the charges driven by the state mandate stack that Wu and Healey both championed. You "save" $200 on supply while paying $877 in mandate premiums. That's not a solution &#x2014; it's a distraction.</p></div>
 <div class="section-title" style="margin-top:24px">The Legislation That's Actually Driving Your Bill</div>
 <p style="font-size:0.8rem;color:var(--muted);margin-bottom:14px">Wu's plan <em>never mentions</em> these laws. Every one was supported or signed by the same political party now claiming to lower your costs.</p>
 <div class="data-card"><h3>Massachusetts Laws Driving Energy Costs &#x2014; Chapter &amp; Section</h3>
@@ -812,7 +812,7 @@ footer a:hover{color:var(--gold)}
 <tr><td class="highlight">Global Warming Solutions Act</td><td><strong>Ch. 298, Acts of 2008 &#x2192; M.G.L. Ch. 21N</strong></td><td>Mandates 50% emissions cut by 2030, 75% by 2040, net-zero 2050</td><td class="highlight">Authorizes ALL market-based pricing mechanisms on your bill</td><td class="highlight">Both support &#x2014; Wu mirrors at city level</td></tr>
 <tr><td class="highlight">Green Communities Act &#x2014; Section 83C</td><td><strong>Ch. 169, Acts of 2008, &#x00A7;83C</strong></td><td>Offshore wind procurement mandate; utilities &ldquo;entitled to cost recovery of payments made under a long-term contract&rdquo;</td><td class="highlight">Ratepayers absorb 100% of wind contract costs + 2.75% utility profit</td><td class="highlight">Both support expanded wind mandates</td></tr>
 <tr><td>Utility Remuneration (amended)</td><td><strong>Ch. 179, Acts of 2022</strong></td><td>Reduced utility cut from 2.75% to 2.25% on wind contracts</td><td>Marginal reduction &#x2014; core cost recovery untouched</td><td>Baker signed Aug 2022</td></tr>
-<tr><td class="highlight">Renewable Portfolio Standard</td><td><strong>M.G.L. Ch. 25A, &#x00A7;11F</strong></td><td>35%+ renewable by 2030, increasing annually</td><td class="highlight">RPS compliance charges on every bill (~10% of total)</td><td class="highlight">Both support increases</td></tr>
+<tr><td class="highlight">Renewable Portfolio Standard</td><td><strong>M.G.L. Ch. 25A, &#x00A7;11F</strong></td><td>35%+ renewable by 2030, increasing annually</td><td class="highlight">RPS compliance costs built into the supply price (not broken out on the bill)</td><td class="highlight">Both support increases</td></tr>
 <tr><td class="highlight">RGGI Participation</td><td><strong>Ch. 21N, &#x00A7;&#x00A7;1&#x2013;9</strong></td><td>Cap-and-trade carbon auction &#x2014; $1.36B extracted since 2008</td><td class="highlight">$200M/yr and rising &#x2014; passed to ratepayers</td><td class="highlight">Both support</td></tr>
 <tr><td>2024 Climate Law (&ldquo;...Protecting Ratepayers&rdquo;)</td><td><strong>St. 2024, c. 239, &#x00A7;83E</strong></td><td>5,000 MW storage mandate with guaranteed cost pass-through</td><td class="highlight">Full cost recovery &#x2014; ratepayers pay for all storage contracts</td><td>Healey signed Nov 2024</td></tr>
 <tr><td>H.5175 &#x2192; H.5175</td><td><strong>194th Session, 2026</strong></td><td>10 GW wind + 10 GW solar mandates, 30-yr contract authority</td><td class="highlight">New procurement costs, ratepayer-funded</td><td>Wu praised; Healey proposed</td></tr>
@@ -939,6 +939,46 @@ const KWH_YR=7200;      // 600 kWh/mo, annualized
 const THERMS_YR=700;
 const GALLONS_YR=500;
 const MPG=28;
+
+// One residential bill built from the filed tariff: Eversource (NSTAR Electric) Rate
+// R-1, Greater Boston. Delivery rates effective 1 Sep 2026 ("2026 Summary of Eastern
+// Massachusetts Electric Rates for Greater Boston Service Area"); Basic Service fixed
+// price 17.323c from 1 Aug 2026 (NSTAR summary M.D.P.U. No. 1-26-E). ONE UTILITY, not
+// a statewide average. Policy line items follow the inclusion rule in
+// data/burden-constants.json (electricPolicyCentsPerKwh); keep the two in step.
+// Checked 2026-10-16.
+const R1_BILL={kwh:KWH_YR/12, customer:10.00, supply:17.323, distribution:9.837,
+  transmission:4.673, transition:-0.077, decoupling:0.539,
+  policy:{ee:2.292, nmrs:0.625, smart:0.583, ev:0.104, re:0.050, pspf:0.008, esmp:0.001}};
+function r1Bill(){
+  const b=R1_BILL, k=b.kwh, c=v=>v*k/100;
+  const pol=Object.values(b.policy).reduce((a,v)=>a+v,0);
+  const parts=[
+    {key:'supply', label:'Supply (Basic Service)', usd:c(b.supply)},
+    {key:'dist',   label:'Distribution', usd:c(b.distribution)},
+    {key:'trans',  label:'Transmission', usd:c(b.transmission)},
+    {key:'policy', label:'Policy line items', usd:c(pol)},
+    {key:'cust',   label:'Customer charge', usd:b.customer},
+    {key:'other',  label:'Decoupling & transition', usd:c(b.decoupling+b.transition)}];
+  const total=parts.reduce((a,p)=>a+p.usd,0);
+  parts.forEach(p=>p.pct=p.usd/total*100);
+  return {parts, total, policyCents:pol, by:Object.fromEntries(parts.map(p=>[p.key,p]))};
+}
+// Every share quoted in text on this page reads off the same bill, so the list on the
+// Rates tab, the statutes table and the doughnut cannot disagree.
+(function fillBillShares(){
+  const rb=r1Bill(), put=(id,v)=>{const e=document.getElementById(id); if(e) e.textContent=v;};
+  const pc=k=>rb.by[k].pct.toFixed(1)+'%';
+  put('bbSupply',pc('supply')); put('bbSupply2',pc('supply'));
+  put('bbSupply3',pc('supply')); put('bbSupply4',pc('supply'));
+  put('bbNonSupply',(100-rb.by.supply.pct).toFixed(1)+'%');
+  put('bbDist',pc('dist'));     put('bbDist2',pc('dist'));
+  put('bbTrans',pc('trans'));   put('bbTrans2',pc('trans'));
+  put('bbPol',pc('policy'));    put('bbPolC',rb.policyCents.toFixed(3));
+  put('bbEe',(R1_BILL.policy.ee*R1_BILL.kwh/100/rb.total*100).toFixed(1)+'%');
+  put('bbRest',(rb.by.cust.pct+rb.by.other.pct).toFixed(1)+'%');
+  put('bbTotal','$'+rb.total.toFixed(2));
+})();
 
 // ── Derived figures ─────────────────────────────────────────────────────────
 // update-energy-dashboard.py rewrites the New England rate table's <tbody> from
@@ -1197,7 +1237,12 @@ function initCharts(tab){
     safeChart('chartRateHistory',{type:'line',data:{labels:YEARS,datasets:[{label:'MA Premium %',data:ELEC_MA.map((m,i)=>+((m/ELEC_US[i]-1)*100).toFixed(1)),borderColor:C.red,backgroundColor:'rgba(168,23,51,0.08)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'+'+c.parsed.y+'% above US avg'}}}}});
   }
   if(tab==='rates'){
-    safeChart('chartBillBreak',{type:'doughnut',data:{labels:['Supply (~40%)','Distribution (~30%)','Renewable/RPS (~10%)','Energy Efficiency (~7%)','Transition (~8%)','RGGI/Other (~5%)'],datasets:[{data:[40,30,10,7,8,5],backgroundColor:[C.blue,C.navy,C.red,C.amber,'#46527A','#3E4A4D'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:10}}}}});
+    // Built from R1_BILL (the filed tariff), not typed percentages. The doughnut this
+    // replaced put policy charges near 30% on hand-typed, unsourced shares, and called
+    // the Renewable Energy Charge "RPS compliance" (it is a 0.05c statutory MassCEC
+    // charge; RPS sits inside supply).
+    const rb=r1Bill();
+    safeChart('chartBillBreak',{type:'doughnut',data:{labels:rb.parts.map(p=>p.label+' ('+p.pct.toFixed(1)+'%)'),datasets:[{data:rb.parts.map(p=>+p.usd.toFixed(2)),backgroundColor:[C.blue,C.navy,C.red,C.amber,'#46527A','#3E4A4D'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:10}}}}});
     safeChart('chartGapTime',{type:'line',data:{labels:YEARS,datasets:[{label:'MA (¢/kWh)',data:ELEC_MA,borderColor:C.red,backgroundColor:'rgba(168,23,51,0.08)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:3},{label:'US Avg (¢/kWh)',data:ELEC_US,borderColor:C.green,borderWidth:2,tension:0.4,pointRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:true,labels:{font:{size:9}}}}}});
   }
   if(tab==='legislation'){
@@ -1250,7 +1295,8 @@ function initCharts(tab){
     buildGauge();buildEquivBars();
   }
   if(tab==='boston'){
-    safeChart('chartBCCE',{type:'doughnut',data:{labels:['BCCE Covers (Supply ~40%)','Untouched by BCCE (60%)'],datasets:[{data:[40,60],backgroundColor:[C.green,'rgba(168,23,51,0.25)'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},boxWidth:12}}}}});
+    const rbB=r1Bill(), supB=+rbB.by.supply.pct.toFixed(1);
+    safeChart('chartBCCE',{type:'doughnut',data:{labels:['BCCE Covers (Supply '+supB.toFixed(1)+'%)','Untouched by BCCE ('+(100-supB).toFixed(1)+'%)'],datasets:[{data:[supB,+(100-supB).toFixed(1)],backgroundColor:[C.green,'rgba(168,23,51,0.25)'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},boxWidth:12}}}}});
     // Same defect as c1a: the mandate-premium bar was frozen at $922 while every
     // "$765/yr mandate premium" caption on this tab had moved on.
     safeChart('chartBCCEvMandate',{type:'bar',data:{labels:['BCCE Supply Savings','Mandate Premium Untouched'],datasets:[{data:[BCCE_SAVINGS,OVERPAY],backgroundColor:[C.green,C.red],borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/yr'}}}}});

@@ -150,7 +150,7 @@ footer a:hover{color:var(--gold)}
       "name": "Massachusetts"
     }
   ],
-  "dateModified": "2026-10-12"
+  "dateModified": "2026-10-16"
 }
 </script>
 </head>
@@ -260,8 +260,8 @@ footer a:hover{color:var(--gold)}
 <div class="stat-card"><div class="label">Governor&rsquo;s Vetoes</div><div class="value red">$0</div><div class="sub">None. Last year: $130M</div></div>
 </div>
 <h2 class="section-title">&#x1F4B0; The Budget Is Not What Gets Spent</h2>
-<div class="info-box red"><h4>Every enacted budget is a floor, not a ceiling</h4><p>The Commonwealth enacts a budget in July and then raises it all year with supplemental appropriations. <strong>FY2025 was enacted at $57.6B and spent $63.3B &mdash; $5.736B (10.0%) of supplemental spending above the enacted budget.</strong> That is money appropriated after July, not waste. FY2026 is already tracking $3.9B (+6.4%) above its own enacted budget. FY2024, for contrast, landed almost exactly on target &mdash; the overrun is a pattern, not a law. So the &ldquo;$63.4B&rdquo; headline for FY2027 is the opening figure, not the final one, and the supplementals that close the gap arrive long after the &ldquo;no new taxes&rdquo; coverage has run.</p></div>
-<div class="chart-card" style="margin-bottom:22px"><h3>Enacted Budget vs. Actual Spending ($B)</h3><div class="chart-area"><canvas id="h5Outturn"></canvas></div><div class="source">Source: official mass.gov GAA exports &mdash; <em>gaabudgets.xlsx</em> (enacted) and <em>gaaspend.xlsx</em> (actual / projected). Like-for-like: identical 913-account universe, headline scope, and inter-fund transfer lines (1595-0029 and similar) excluded from both sides so nothing is double-counted. FY2026 is the Comptroller&rsquo;s projection; FY2027 has not begun.</div></div>
+<div class="info-box red"><h4>Every enacted budget is a floor, not a ceiling</h4><p>The Commonwealth enacts a budget in July and then raises it all year with supplemental appropriations. <strong>FY2025 was enacted at $57.6B and spent $63.3B &mdash; $5.736B (10.0%) of supplemental spending above the enacted budget</strong> (both like-for-like, on the same accounts; the headline enacted total is $57.7B). That is money appropriated after July, not waste. FY2026 is already tracking $3.9B (+6.4%) above its own enacted budget. FY2024, for contrast, landed almost exactly on target &mdash; the overrun is a pattern, not a law. So the &ldquo;$63.4B&rdquo; headline for FY2027 is the opening figure, not the final one, and the supplementals that close the gap arrive long after the &ldquo;no new taxes&rdquo; coverage has run.</p></div>
+<div class="chart-card" style="margin-bottom:22px"><h3>Enacted Budget vs. Actual Spending ($B)</h3><div class="chart-area"><canvas id="h5Outturn"></canvas></div><div class="source">Source: official mass.gov GAA exports &mdash; <em>gaabudgets.xlsx</em> (enacted) and <em>gaaspend.xlsx</em> (actual / projected). Like-for-like: identical 913-account universe, headline scope, and inter-fund transfer lines (1595-0029 and similar) excluded from both sides so nothing is double-counted. That is why the enacted bars sit below the headline totals quoted elsewhere on this page ($56.063B, $57.718B, $60.974B, $63.416B for FY2024&ndash;FY2027): same budgets, narrower scope. FY2026 is the Comptroller&rsquo;s projection; FY2027 has not begun.</div></div>
 <h2 class="section-title">&#x1F4C8; Biggest Year-Over-Year Increases &mdash; Enacted FY2026 &rarr; FY2027</h2>
 <div class="info-box amber"><h4>Clean budget-to-budget change</h4><p>This compares the <strong>enacted FY2026 appropriation</strong> to the <strong>enacted FY2027 appropriation</strong>, line by line &mdash; apples to apples, no accounting noise. Sorted by dollar increase; use the dropdown to flip to percent, or search a program. (788 of 860 lines matched to a prior-year appropriation; the rest are new FY27 lines.)</p></div>
 <div class="chart-card" style="margin-bottom:22px"><h3>Top 14 Line Items by Dollar Increase (FY2026 &rarr; FY2027, $ millions)</h3><div class="chart-area tall"><canvas id="h5YoY"></canvas></div><div class="source">Source: FY2026 enacted GAA vs. FY2027 enacted GAA. Hover a bar for the % and the before/after.</div></div>
@@ -524,7 +524,7 @@ footer a:hover{color:var(--gold)}
     <div class="alert-item">Boston headline looks lower because MA avoided the worst energy spikes. <strong>Shelter numbers:</strong> Boston <strong id="dsBosSh">—</strong> cumulative vs. <strong id="dsNatSh">—</strong> national</div>
     <div class="alert-item">Boston tuition &amp; childcare rose <strong>6.7% YoY</strong> in Jan 2026 — at the time the steepest rise since BLS began the series in 2018</div>
     <div class="alert-item">All of this sits <strong>on top of</strong> MA's cost-of-living premium — BEA RPP 2024 puts MA at <span id="rppLvl2">—</span> against a national 100, so you were already paying <strong id="rppPrem2">—</strong> more <em>before</em> inflation hit</div>
-    <div class="alert-item">A $100 grocery run in Jan 2021 now costs <strong id="dsBask">—</strong> nationally (BLS CPI-U, compounded since Jan 2021) — and MA starts from the higher base noted above</div>
+    <div class="alert-item">A $100 grocery run in Jan 2021 now costs <strong id="dsBask">—</strong> nationally (BLS CPI-U food at home, seasonally adjusted, compounded since Jan 2021) — and MA starts from the higher base noted above</div>
     <div class="alert-item">In March 2026, national CPI jumped <strong>0.9% in a single month</strong> as gasoline surged 21.2% — a reminder of how fast a single energy spike moves the headline number</div>
   </div></div>
 
@@ -683,7 +683,7 @@ footer a:hover{color:var(--gold)}
       <div class="alert-item">BSI examines <strong>0.07%</strong> of benefit recipients — of those examined, <strong>6.6%</strong> are confirmed fraud</div>
       <div class="alert-item">BSI has <strong>~15–20 investigators</strong> for <strong>2.2 million</strong> benefit recipients statewide</div>
       <div class="alert-item">Return on investment: <strong>$6.17 detected per $1 spent</strong> on investigation — yet staffing hasn't increased</div>
-      <div class="alert-item">Gov. Healey's administration <strong>refused to share SNAP data</strong> with USDA (November 2024)</div>
+      <div class="alert-item">USDA demanded SNAP recipients' personal data from the states in 2025. Massachusetts <strong>declined and sued</strong> with other states; a federal court has blocked USDA from penalizing them (TRO 18 Sep 2025, preliminary injunction 15 Oct 2025)</div>
       <div class="alert-item">MA is the <strong>only state</strong> where the governor's office, judiciary, and legislature are all exempt from public records law</div>
       <div class="alert-item">Emergency shelter costs <strong>$3,870/week per family</strong> — national average: $700–$1,050/week (3.7–5.5× higher)</div>
     </div>
@@ -756,7 +756,7 @@ footer a:hover{color:var(--gold)}
   </div>
   <div class="info-box">
     <h4>📋 Why Detection Is So Low</h4>
-    <p>Massachusetts relies on self-reported income for benefit eligibility — no IRS cross-check, no SSA cross-check, no employer verification. The Bureau of Special Investigations has roughly 15–20 investigators for 2.2 million benefit recipients, yet every dollar spent on investigation returns $6.17 in detected fraud. The state refused to share SNAP recipient data with the USDA in November 2024, and Massachusetts remains the only state in the country where the governor's office, judiciary, and legislature are all exempt from public records law — making independent oversight nearly impossible.</p>
+    <p>Massachusetts relies on self-reported income for benefit eligibility — no IRS cross-check, no SSA cross-check, no employer verification. The Bureau of Special Investigations has roughly 15–20 investigators for 2.2 million benefit recipients, yet every dollar spent on investigation returns $6.17 in detected fraud. When USDA demanded SNAP recipient data in 2025, the state declined and joined the multistate suit against the demand, which a federal court has enjoined; and Massachusetts remains the only state in the country where the governor's office, judiciary, and legislature are all exempt from public records law — making independent oversight nearly impossible.</p>
   </div>
   <div class="info-box">
     <h4>ℹ️ Data Sources</h4>
@@ -765,7 +765,7 @@ footer a:hover{color:var(--gold)}
     <strong>GAO</strong>: Government Accountability Office report on SNAP fraud detection (2019).<br>
     <strong>LexisNexis</strong>: True Cost of Fraud™ Study for SNAP Agencies — $3.72 multiplier.<br>
     <strong>New England First Amendment Coalition</strong>: MA public records law exemption analysis.<br>
-    <strong>Gov. Healey / USDA</strong>: SNAP data sharing refusal (November 2024).</p>
+    <strong>SNAP data demand</strong>: <em>State of California v. U.S. Department of Agriculture</em>, N.D. Cal. No. 3:25-cv-06310 (filed 28 Jul 2025; Massachusetts a plaintiff state), ECF 83 (TRO, 18 Sep 2025) and ECF 106 (preliminary injunction, 15 Oct 2025).</p>
   </div>
 </div>
 
@@ -908,7 +908,7 @@ footer a:hover{color:var(--gold)}
     <div class="stat-card"><div class="label">Surtax Revenue (FY24+FY25)</div><div class="value green" id="mgSurtaxCum2">—</div><div class="sub" id="mgSurtaxCumBasis">—</div></div>
     <div class="stat-card"><div class="label">Net AGI Outflow (2020-22)</div><div class="value red">-$8.2B</div><div class="sub">$4.3B + $3.9B lost to migration</div></div>
     <div class="stat-card"><div class="label">FY25 Actual vs. Budget</div><div class="value red" id="mgOverrun2">—</div><div class="sub" id="mgOverrunBasis">—</div></div>
-    <div class="stat-card"><div class="label">FY26 Budgeted Surtax</div><div class="value amber">$2.4B</div><div class="sub">Already baked into $60.9B budget</div></div>
+    <div class="stat-card"><div class="label">FY26 Budgeted Surtax</div><div class="value amber">$2.4B</div><div class="sub">Already baked into $61.0B budget</div></div>
   </div>
   <div class="chart-grid">
     <div class="chart-card">
@@ -929,9 +929,9 @@ footer a:hover{color:var(--gold)}
         <tr><th>Period</th><th>Surtax Collected</th><th>Net AGI Outflow (IRS)</th><th>Net Balance</th><th>Budget (Signed)</th><th>Budget (Actual)</th></tr>
       </thead>
       <tbody>
-        <tr><td>FY2024 / CY 2021-22</td><td class="good">+$2.4B</td><td class="highlight">-$3.9B</td><td class="highlight">-$1.5B</td><td>$56.2B</td><td>—</td></tr>
-        <tr><td>FY2025 / CY 2020-21</td><td class="good">+$3.0B</td><td class="highlight">-$4.3B</td><td class="highlight">-$1.3B</td><td>$57.6B</td><td>$63.3B</td></tr>
-        <tr style="background:rgba(26,68,128,0.04)"><td>FY2026 / CY 2022-23 ★</td><td style="color:var(--amber);font-weight:600">$2.4B (est.)</td><td class="highlight">-$4.18B (IRS released)</td><td class="highlight">-$1.78B</td><td>$60.9B</td><td>—</td></tr>
+        <tr><td>FY2024 / CY 2021-22</td><td class="good">+$2.4B</td><td class="highlight">-$3.9B</td><td class="highlight">-$1.5B</td><td>$56.1B</td><td>—</td></tr>
+        <tr><td>FY2025 / CY 2020-21</td><td class="good">+$3.0B</td><td class="highlight">-$4.3B</td><td class="highlight">-$1.3B</td><td>$57.7B</td><td>$63.3B (vs $57.6B like-for-like)</td></tr>
+        <tr style="background:rgba(26,68,128,0.04)"><td>FY2026 / CY 2022-23 ★</td><td style="color:var(--amber);font-weight:600">$2.4B (est.)</td><td class="highlight">-$4.18B (IRS released)</td><td class="highlight">-$1.78B</td><td>$61.0B</td><td>—</td></tr>
         <tr style="font-weight:700;border-top:2px solid var(--navy)"><td>Cumulative</td><td class="good" id="mgTblSurtax">—</td><td class="highlight">-$24.7B (12yr)</td><td class="highlight" id="mgTblNet">—</td><td colspan="2">Spending <span id="mgTblSpend">—</span> since FY18</td></tr>
       </tbody>
     </table>
@@ -960,7 +960,7 @@ footer a:hover{color:var(--gold)}
   <div class="alert" style="background:var(--blue-bg);border-color:rgba(26,68,128,0.15);border-left-color:var(--blue)">
     <h4 style="color:var(--blue)">📊 The Short Version</h4>
     <div class="alert-grid">
-      <div class="alert-item">In 2022-23, the average person <strong>leaving</strong> Massachusetts earned <strong>$116,360</strong>. The average person <strong>moving in</strong> earned only <strong>$90,440</strong>. That's a gap of nearly $26,000 per household.</div>
+      <div class="alert-item">In 2022-23, the average person <strong>leaving</strong> Massachusetts earned <strong>$116,360</strong>. The average person <strong>moving in</strong> earned only <strong>$90,442</strong>. That's a gap of nearly $26,000 per household.</div>
       <div class="alert-item">That <strong>$26,000 gap is the biggest we've ever seen</strong> — and it showed up in the very first year the new 4% surtax was in effect. Earners over $200K drove an estimated <strong>70% of the $4.2B net income lost</strong> in 2022-23 (Pioneer Institute analysis of IRS data).</div>
       <div class="alert-item">For the 10 years before the surtax, the people leaving and arriving earned <strong>roughly the same amount</strong>. Migration was basically income-neutral.</div>
       <div class="alert-item">The number of Massachusetts residents in the top 1% of earners: <strong id="erCntFirst">—</strong> in <span id="erCntFirstYr">—</span>, <strong id="erCntPeak">—</strong> at its highest in <span id="erCntPeakYr">—</span>, and <strong id="erCntLast">—</strong> in <span id="erCntLastYr">—</span>. Note the count is a fixed 1% of all filers, so it tracks the size of the filing population. The 2023 numbers are not out yet.</div>
@@ -971,7 +971,7 @@ footer a:hover{color:var(--gold)}
 
   <div class="stat-row">
     <div class="stat-card"><div class="label">Avg Income — People Leaving MA (2022-23)</div><div class="value red">$116,360</div><div class="sub">Per household that moved out</div></div>
-    <div class="stat-card"><div class="label">Avg Income — People Moving Into MA (2022-23)</div><div class="value green">$90,440</div><div class="sub">Per household that moved in</div></div>
+    <div class="stat-card"><div class="label">Avg Income — People Moving Into MA (2022-23)</div><div class="value green">$90,442</div><div class="sub">Per household that moved in</div></div>
     <div class="stat-card"><div class="label">How Much Richer Are the Leavers?</div><div class="value red">29% more</div><div class="sub">Biggest gap in 10 years — first year of new surtax</div></div>
     <div class="stat-card"><div class="label">Top 1% Earners Still in MA (2022)</div><div class="value blue" id="erCntLast2">—</div><div class="sub">Highest was <span id="erCntPeak2">—</span> in <span id="erCntPeakYr2">—</span> — 2023 data not yet out</div></div>
   </div>
@@ -984,7 +984,7 @@ footer a:hover{color:var(--gold)}
         <div style="width:72px;text-align:right;flex-shrink:0"><span style="font-size:0.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--green)">Moving<br>in</span></div>
         <div style="flex:1;position:relative;height:44px;background:#f5f5f2;border-radius:4px;overflow:hidden">
           <div style="position:absolute;left:0;top:0;height:100%;width:69.8%;background:var(--green);border-radius:4px;display:flex;align-items:center;padding-left:14px">
-            <span style="font-family:'DM Serif Display',Georgia,serif;font-size:1.15rem;color:#fff;white-space:nowrap">$90,440</span>
+            <span style="font-family:'DM Serif Display',Georgia,serif;font-size:1.15rem;color:#fff;white-space:nowrap">$90,442</span>
           </div>
         </div>
         <div style="width:52px;flex-shrink:0"><span style="font-size:0.6875rem;color:var(--muted)">per<br>household</span></div>
@@ -1456,9 +1456,17 @@ const charts = {};
 // from all three of its own sources; +26% in particular was the cumulative
 // since-Jan-2021 CPI (cumNat's last value) wearing the since-FY2018 label.
 
-// Signed General Appropriations Act, $B. chartBudget and chartBudgetGap plot this.
+// Signed General Appropriations Act, $B, headline scope (same definition as FY27_GAA
+// below), after vetoes and overrides. chartBudget and chartBudgetGap plot this.
+// Each year is summed from the official gaabudgets workbook on budget.digital.mass.gov
+// (summary/fyNN/downloads), taking the newest workbook that carries the year, because a
+// later workbook restates it after overrides: FY18-FY20 from fy21, FY21 from fy24, FY22
+// from fy25, FY23 from fy26, FY24-FY26 from fy27. FY18 and FY19 match the statewide
+// summary TOTAL rows (bb/gaa/fy2018, fy2019) to the thousand. FY26 is 60.974 after
+// overrides; the fy26 workbook, at signing, read 60.904. Checked 2026-10-16.
+// The previous series (39.4, 42.7, ... 60.9) mixed scopes and was off by up to $1.6B.
 const GAA_LABELS = ['FY18','FY19','FY20','FY21','FY22','FY23','FY24','FY25','FY26'];
-const GAA_SIGNED = [39.4,42.7,44.6,45.9,49.7,52.7,56.2,57.8,60.9];
+const GAA_SIGNED = [40.197,41.883,43.590,46.459,48.085,52.444,56.063,57.718,60.974];
 // FY2025 enacted vs spent, like-for-like: gaabudgets.xlsx vs gaaspend.xlsx on the same
 // 913-account universe, inter-fund transfer lines excluded from both sides (see
 // outturnChart and MASTER_DATA.md). This replaces a 64.0 House Ways & Means outturn that,
@@ -1499,8 +1507,8 @@ const ITEP_RATES = [8.2, 9.4, 10.0, 9.0, 7.9, 8.9];
 // ── Derived once, read everywhere ───────────────────────────────────────────
 const gaaAt = fy => GAA_SIGNED[GAA_LABELS.indexOf(fy)];
 const sinceFY18 = v => (v / gaaAt('FY18') - 1) * 100;
-const SPEND_GROWTH_FY26 = sinceFY18(gaaAt('FY26'));          // +54.6%
-const SPEND_GROWTH_FY27 = sinceFY18(FY27_GAA);             // +60.9%
+const SPEND_GROWTH_FY26 = sinceFY18(gaaAt('FY26'));          // +51.7%
+const SPEND_GROWTH_FY27 = sinceFY18(FY27_GAA);             // +57.8%
 const CPI_GROWTH_FY18_26 = (CPI_FY2026 / CPI_FY2018 - 1) * 100;  // +32.0%
 const FY25_OVERRUN = GAA_FY25_ACTUAL - GAA_FY25_ENACTED_LFL;  // $5.736B supplemental spending above enacted
 const SURTAX_CUM_ACTUAL = SURTAX_FY24_ACTUAL + SURTAX_FY25_ACTUAL;  // $5.4B (FY24+FY25)
@@ -1522,8 +1530,9 @@ const SURTAX_CUM_ACTUAL = SURTAX_FY24_ACTUAL + SURTAX_FY25_ACTUAL;  // $5.4B (FY
 // organization, whose own source line called it "MOA analysis of BEA MA personal income".
 // Going to BEA directly rather than trusting an advocacy group's arithmetic on it moved
 // the number ~7 points. The page's claim survives on official data but by a smaller
-// margin than it asserted: spending +54.6% (GAA) against income +48.9% (BEA) is a
-// 5.7-point gap, where 42% implied 12.6. chartGrowth plots both and names each basis.
+// margin than it asserted: spending +51.7% (GAA, headline scope) against income +48.9%
+// (BEA) is a 2.8-point gap, where 42% implied 12.6. (Before the GAA series was put on one
+// scope in Oct 2026 it read +54.6% and 5.7 points.) chartGrowth plots both and names each basis.
 const INC_FY2018 = 472310.9;   // $M, mean of 2017Q3–2018Q2
 const INC_FY2026 = 703330.1;   // $M, mean of 2025Q3–2026Q1 (3 of 4 quarters)
 const INCOME_GROWTH_FY18_26 = (INC_FY2026 / INC_FY2018 - 1) * 100;  // +48.9%
@@ -1557,7 +1566,7 @@ const INCOME_GROWTH_FY18_26 = (INC_FY2026 / INC_FY2018 - 1) * 100;  // +48.9%
 //     nobody asked, and choosing how to net the federal money out would be one more
 //     undocumented construction of exactly the kind that got MOA removed.
 // So the comparison is not rebuilt on a shorter official window either. MA's own growth
-// is still on the page and still official: SPEND_GROWTH_FY26 (+54.6%) is derived from
+// is still on the page and still official: SPEND_GROWTH_FY26 (+51.7%) is derived from
 // GAA_SIGNED, the Commonwealth's own signed appropriations acts. What is gone is the
 // claim that it is faster than other states' — which no official data now supports here.
 
@@ -1651,15 +1660,20 @@ function outturnChart(){
   // matched 913-account universe with fund-transfer lines removed from BOTH sides. Summing the
   // raw spend file instead overstates FY25 by ~$8.4B of pure inter-fund transfers (1595-0029
   // alone is $5.3B) that were never appropriated. Do not 'simplify' this back to a raw sum.
+  // These enacted figures are deliberately NOT the headline totals in GAA_SIGNED / FY27_GAA:
+  // the transfer lines removed to match the spending file are part of the headline. The
+  // tooltip states the headline beside each one so the two scopes are never confused.
   var GAA_ENACTED=[55.870,57.567,60.956,63.400], SPENT=[55.958,63.303,64.859,null];
+  var HEADLINE=[gaaAt('FY24'),gaaAt('FY25'),gaaAt('FY26'),FY27_GAA];
   safeChart('h5Outturn',{type:'bar',data:{labels:['FY24','FY25','FY26','FY27'],datasets:[
-    {label:'Enacted budget ($B)',data:GAA_ENACTED,backgroundColor:HX.navy,borderRadius:4},
-    {label:'Actual spending ($B)',data:SPENT,backgroundColor:HX.red,borderRadius:4}
+    {label:'Enacted, like-for-like ($B)',data:GAA_ENACTED,backgroundColor:HX.navy,borderRadius:4},
+    {label:'Actual spending, like-for-like ($B)',data:SPENT,backgroundColor:HX.red,borderRadius:4}
   ]},options:{responsive:true,maintainAspectRatio:false,
     plugins:{legend:{position:'top',labels:{font:{size:10}}},tooltip:{callbacks:{afterBody:function(items){
       var i=items[0].dataIndex,g=GAA_ENACTED[i],a=SPENT[i];
-      if(a===null) return 'FY2027 has not begun.';
-      return 'Supplemental spending above enacted: +$'+(a-g).toFixed(3)+'B ('+((a/g-1)*100).toFixed(1)+'%)';
+      var h='Headline enacted total: $'+HEADLINE[i].toFixed(3)+'B (includes the transfer lines this comparison removes)';
+      if(a===null) return [h,'FY2027 has not begun.'];
+      return [h,'Supplemental spending above enacted: +$'+(a-g).toFixed(3)+'B ('+((a/g-1)*100).toFixed(1)+'%)'];
     }}}},
     scales:{y:{min:50,title:{display:true,text:'Billions ($)'},ticks:{callback:function(v){return '$'+v+'B';}}},
             x:{grid:{display:false}}}}});
@@ -1842,6 +1856,8 @@ function initCharts(tab) {
       var cumNat=[0.0,2.2,4.3,7.6,10.9,12.8,14.4,15.5,17.0,17.9,19.2,19.8,21.4,22.1,23.4,24.3,28.0];
       var cumBos=[0.0,1.8,2.9,6.3,9.4,11.2,13.1,13.4,14.1,15.4,17.8,18.0,19.8,21.4,21.9,21.5,26.5];
       var cumNatCore=[0.0,2.0,3.8,6.8,9.8,11.5,12.9,13.9,15.2,16.0,17.2,17.7,19.2,19.8,20.9,21.7,25.1];
+      // Food at home (CUSR0000SAF11), same snapshots; written by update_cumulative_inflation.py.
+      var cumNatFood=[0.0,1.0,3.9,7.4,13.1,17.4,19.5,19.7,20.2,20.8,20.9,21.7,23.1,23.7,24.9,25.8,27.2];
       var cumNatSh=[0.0,1.5,3.3,5.7,8.6,11.6,14.4,15.9,17.8,19.7,21.2,22.6,24.3,26.0,27.3,28.6,31.6];
       var cumBosSh=[0.0,0.4,1.7,5.6,7.6,9.7,14.5,14.6,14.9,18.5,21.3,21.3,24.7,27.3,26.8,27.0,32.4];
       var cumWage=[0.0,1.6,3.5,5.6,7.3,8.8,10.3,11.9,13.6,15.2,16.6,18.1,19.7,21.2,22.6,24.1,26.3];
@@ -1903,7 +1919,9 @@ function initCharts(tab) {
       // BEA's published RPP by 1-4 points (checked against FRED MARPPALL for 2022-24).
       // The premium is stated as its own fact instead of being multiplied in.
       var iNat=lastIdx(cumNat);
-      if(iNat>=0) setTxt('dsBask','~$'+(100*(1+cumNat[iNat]/100)).toFixed(0));
+      // The grocery line reads the grocery index, not all-items CPI.
+      var iFood=lastIdx(cumNatFood);
+      if(iFood>=0) setTxt('dsBask','~$'+(100*(1+cumNatFood[iFood]/100)).toFixed(0)+' ('+cumL[iFood]+')');
 
       var iBos=lastIdx(cumBos);
       if(iBos>=0) setTxt('cavBos','+'+cumBos[iBos].toFixed(1)+'%');

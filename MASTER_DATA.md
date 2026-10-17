@@ -155,7 +155,10 @@ vintage step.
 | HomeBASE growth, FY22 → FY26 | +252% (derived) | CTHRU kv7m-35wn | ✅ Sep 2026 |
 | FY2026 projected | EA 7004-0101 $276,421,903 · HomeBASE $91,386,678 | budget.digital.mass.gov FY27 line-item data | ✅ Sep 2026 |
 | FY2027 GAA | EA 7004-0101 $259,900,648 · HomeBASE 7004-0108 $82,322,001 · 7004-0110 $5,000,000 | budget.digital.mass.gov FY27 line-item data | ✅ Sep 2026 |
-| EA caseload, 3 Sep 2026 | 1,533 families in shelter + 55 in clinical safety sites | EA report SD.4220, malegislature.gov/Bills/194/SD4220.pdf | ✅ Sep 2026 |
+| EA caseload, 1 Oct 2026 | 1,536 families in shelter + 47 in clinical safety sites | Biweekly EA report to House and Senate Ways and Means, 5 Oct 2026 (SD.4288), malegislature.gov/Bills/194/SD4288.pdf | ✅ Oct 2026 |
+| EA caseload, 25 Jul 2024 | 7,367 families in shelters, hotels or motels (Appendix A total) + 340 in overflow | Biweekly EA report, 29 Jul 2024 (SD.3359), malegislature.gov/Bills/193/SD3359.pdf | ✅ Oct 2026 |
+| Caseload change, Jul 2024 to Oct 2026 | -79% (7,367 to 1,536, derived) | SD.3359, SD.4288 | ✅ Oct 2026 |
+| Cost per family per week, current | $1,241 (average shelter provider rates, FY27 contracts) | EA report SD.4288 | ✅ Oct 2026 |
 | Cost per family per week | $3,496 | State Auditor | ✅ Feb 2026 |
 | $100K fee per shelter family | Proposed | Legislature | ✅ Feb 2026 |
 
@@ -206,10 +209,17 @@ The figures below are that file's current contents; the Feb 2026 column showed a
 | AGI lost (cumulative 2011–2023) | $24.7B | IRS SOI | 🔄 Aug 2026 |
 | Net outflow, latest year (2022-23) | 16,921 returns — **includes moves abroad** | IRS SOI | 🔄 Aug 2026 |
 
-The 16,921 is inflow 102,076 against outflow 85,155, and both totals include the foreign category. It is therefore NOT comparable with a domestic-only net migration count, which is a smaller number. Say which one a card means before putting the two near each other.
+The 16,921 is outflow 102,076 against inflow 85,155 (returns, 2022-23; data/irs-soi-migration-latest.json), and both totals include the foreign category. It is therefore NOT comparable with a domestic-only net migration count, which is a smaller number. Say which one a card means before putting the two near each other.
 
+| Metric | Figure | Source | Verified |
+|--------|--------|--------|----------|
 | Net domestic out-migration, 2020-2025 | 182,145 people | US Census Bureau, Population Estimates (NST-EST2025 components of change) | 🔄 Sep 2026 |
+| Net international migration, 2020-2025 | +286,765 people (2024-25: +40,240; 2023-24: +77,957) | US Census Bureau, Population Estimates (NST-EST2025 components of change) | 🔄 Oct 2026 |
+| Net migration, domestic plus international, 2020-2025 | +104,620 people | US Census Bureau, Population Estimates (NST-EST2025 components of change) | 🔄 Oct 2026 |
+| Natural change (births less deaths), 2020-2025 | +26,617 people | US Census Bureau, Population Estimates (NST-EST2025 components of change) | 🔄 Oct 2026 |
+| Population change, 2020-2025 | +120,972 people (2024-25: +15,524; July 2025 population 7,154,084) | US Census Bureau, Population Estimates (NST-EST2025 components of change) | 🔄 Oct 2026 |
 | Net AGI loss, latest year (2022-23) | $4.18B | IRS SOI | 🔄 Aug 2026 |
+| Average AGI per return, leaving vs arriving (2022-23) | $116,360 leaving (11,877,573K / 102,076) vs $90,442 arriving (7,701,622K / 85,155) | IRS SOI State-to-State Migration Data, data/irs-soi-migration-latest.json | 🔄 Oct 2026 |
 | 2024 US growth from immigration | 84% | Census | ✅ Jan 2026 |
 | MA NIM "nosedive" (2025 proj) | Historic decline | Census Vintage 2025 | ✅ Feb 2026 |
 
@@ -543,12 +553,48 @@ against OCPF since. Donation patterns establish association, not agreement.
 
 | Year | MA Family Premium | US Average | MA Premium Gap |
 |------|-------------------|------------|----------------|
-| 2024 | $28,151 | $24,540 | +14.7% |
-| 2025 | — | $26,993 | — |
+| 2024 | $28,151 (1st of 50) | $24,540 | +14.7% |
+| 2025 | $29,619 (4th of 50; AK $30,132, NY $29,752, NJ $29,666 higher) | $26,281 | +12.7% |
 
-- **MA premium cost growth (2021-23):** +12.1%
-- **MA wage growth (2021-23):** +9.7%
-- **Sources:** KFF Employer Health Benefits Survey, CHIA Annual Reports
+Family premiums: AHRQ MEPS-IC private-sector state estimates, as published in KFF State Health
+Facts (kff.org/private-insurance/state-indicator/family-coverage). The state figures are MEPS-IC,
+not the KFF Employer Health Benefits Survey, which is national. The $26,993 previously listed as
+the 2025 US average is not the MEPS-IC figure. ✅ Oct 2026.
+
+| Metric | Value | Source | Verified |
+|--------|-------|--------|----------|
+| Personal health care spending per capita, 2020 | MA $13,319, 3rd of 50 states (NY $14,007, AK $13,642; DC $14,381); US $10,191 | CMS Health Expenditures by State of Residence, US_PER_CAPITA20.CSV (newest state edition, 1991-2020) | ✅ Oct 2026 |
+| Employer family premium, 2025 | MA $29,619, 4th of 50; US $26,281 | AHRQ MEPS-IC 2025 via KFF | ✅ Oct 2026 |
+
+### Family premium series (healthcare dashboard trend, contribution and cost-vs-income charts)
+
+AHRQ MEPS-IC state tables, Table II (private sector), downloaded from
+meps.ahrq.gov/mepsweb/data_stats/state_tables.jsp (Massachusetts{year}.xlsx, UnitedStates{year}.xlsx).
+KFF State Health Facts republishes the same values. ✅ Oct 2026.
+
+| Year | MA family premium (II.D.1) | US family premium | MA employee contribution (II.D.2) | US employee contribution |
+|------|---:|---:|---:|---:|
+| 2020 | $21,965 | $20,758 | $5,741 | $5,978 |
+| 2021 | $22,163 | $21,381 | $5,976 | $6,174 |
+| 2022 | $23,348 | $21,931 | $5,875 | $6,492 |
+| 2023 | $26,355 | $23,938 | $7,597 | $6,889 |
+| 2024 | $28,151 | $24,540 | $7,811 | $7,216 |
+| 2025 | $29,619 | $26,281 | $7,501 | $7,314 |
+
+- **MA family premium growth:** +28.2% 2020-2024; +34.8% 2020-2025; +5.2% 2024-2025 (derived).
+- **Comparators on the cost-vs-income tab, 2020-2024:** MA median household income +23.2% (ACS
+  5-year B19013: $84,385, $89,026, $96,505, $101,341, $103,960); Boston CPI-U +18.3% (BLS
+  CUURS11ASA0 annual averages: 284.266, 293.521, 314.356, 326.016, 336.376). ✅ Oct 2026.
+- **Premium as a share of median income, 2024:** MA 27.1% ($28,151 / $103,960); US 30.4%
+  ($24,540 / $80,734, ACS 2024 5-year). Both on the same income basis. ✅ Oct 2026.
+
+The series these replaced (MA $23,541, $24,805, $25,262, $27,240 for 2020-2023, labelled "KFF
+EHBS") matched no MEPS-IC year but 2024. With them the page said premiums "roughly track
+inflation" (+19.6%); on MEPS-IC they outran both inflation and income. The old affordability
+card put the US premium at 24.2% of income against its own figures' 30.4%, and mixed an ACS
+2023 1-year US income ($80,610) with MA 5-year income.
+
+- **Sources:** AHRQ MEPS-IC state tables (premiums); KFF State Health Facts (state rankings, republishing MEPS-IC)
 
 ---
 
@@ -694,7 +740,8 @@ its own `data-checked` stamp, which the freshness watchdog ages.
 | US / New England residential electricity | 18.31¢ (Jul 2026) / 28.14¢ (May 2026 — the newest New England figure in this repo. The MA and US cells are stamped from the EIA fetch by update-energy-dashboard.py; this one is not fetched, so it stays put until a newer New England figure is actually published here) | same | same | ✅ Aug 2026 |
 | **MA annual overpayment vs US average** | **$877/household** (Jul 2026) | Derived: (MA rate − US rate) × 7,200 kWh/yr | same | ✅ Oct 2026 |
 | FL residential electricity — the dashboard’s low-rate comparison | 15.03¢/kWh (Jul 2026) | EIA Electric Power Monthly Table 5.6.A via API v2 | api.eia.gov/v2/electricity/retail-sales/data/ | ✅ Oct 2026 |
-| **MA electric policy charges** | **3.789¢/kWh** — EE 2.292 + NMRS 0.625 + SMART 0.583 + EV 0.238 + RE 0.050 + ESMP 0.001 | Eversource MA filed tariff, Rate R1, eff. 1 Jul 2026 | eversource.com/…/electric-delivery-rates/egma | ✅ Aug 2026 |
+| **MA electric policy charges** | **3.663¢/kWh** — EE 2.292 + NMRS 0.625 + SMART 0.583 + EV 0.104 + RE 0.050 + PSPF 0.008 + ESMP 0.001 (was 3.789 for 1 Jul - 31 Aug 2026) | Eversource MA filed rates, Rate R1, Greater Boston, eff. 1 Sep 2026 | eversource.com/docs/default-source/rates-tariffs/ema-greater-boston-rates.pdf | ✅ Oct 2026 |
+| **Eversource R-1 bill at 600 kWh/month** | $225.75: supply 46.0%, distribution 26.1%, transmission 12.4%, **policy line items 9.7%**, customer charge 4.4%, decoupling and transition 1.2% (derived; policy items inside distribution and supply not counted) | Same rate summary; Basic Service fixed 17.323¢ from 1 Aug 2026 (NSTAR summary M.D.P.U. No. 1-26-E) | eversource.com/docs/default-source/rates-tariffs/ma-electric-supply-rate-archive/july-2026-summary-rate-table.pdf | ✅ Oct 2026 |
 | **MA gas policy charges** | **59.08¢/therm** — EE 41.70 + GSEP 17.38 | Eversource MA Summary of Gas Rates | eversource.com/docs/default-source/rates-tariffs/summary-rates-gas.pdf | ✅ Aug 2026 |
 | MA gas commodity cost | 38.42¢/therm (eff. 1 May 2026) — **less than the policy riders above** | Eversource MA Cost of Gas | eversource.com/…/ma-cost-of-gas | ✅ Aug 2026 |
 | MA electric distribution / transmission | 9.443¢ / 4.673¢ per kWh — excluded as infrastructure | same tariff | same | ✅ Aug 2026 |
@@ -754,6 +801,30 @@ $B. Source: official mass.gov GAA export `gaabudgets.xlsx`. ✅ Verified Aug 202
 **Proof the definition is right, not inferred:** 60.292 + 2.288 + 0.836 = **$63.416B**,
 matching `summary-fy-27-enacted-budget-summary.csv`'s Total row of **$63,416,035,478** to
 the dollar, and the press release's "$63.42 billion".
+
+### Enacted budgets FY2018–FY2027, headline scope (`GAA_SIGNED` + `FY27_GAA`)
+
+| Fiscal year | Enacted, headline scope ($B) | Source | Verified |
+|---|---:|---|---|
+| FY2018 | 40.197 | `gaabudgets` FY21 workbook; statewide summary TOTAL $40,196,899K (budget.digital.mass.gov/bb/gaa/fy2018) | ✅ Oct 2026 |
+| FY2019 | 41.883 | `gaabudgets` FY21 workbook; statewide summary TOTAL $41,883,308K (bb/gaa/fy2019) | ✅ Oct 2026 |
+| FY2020 | 43.590 | `gaabudgets` FY21 workbook | ✅ Oct 2026 |
+| FY2021 | 46.459 | `gaabudgets` FY24 workbook | ✅ Oct 2026 |
+| FY2022 | 48.085 | `gaabudgets` FY25 workbook | ✅ Oct 2026 |
+| FY2023 | 52.444 | `gaabudgets` FY26 workbook | ✅ Oct 2026 |
+| FY2024 | 56.063 | `gaabudgets` FY27 workbook | ✅ Oct 2026 |
+| FY2025 | 57.718 | `gaabudgets` FY27 workbook | ✅ Oct 2026 |
+| FY2026 | 60.974 | `gaabudgets` FY27 workbook (after overrides; the FY26 workbook read 60.904 at signing) | ✅ Oct 2026 |
+| FY2027 | 63.416 | `gaabudgets` FY27 workbook | ✅ Oct 2026 |
+| Growth, FY2018 to FY2026 | +51.7% (derived) | above | ✅ Oct 2026 |
+| Growth, FY2018 to FY2027 | +57.8% (derived) | above | ✅ Oct 2026 |
+
+Each year is taken from the newest workbook that carries it (budget.digital.mass.gov,
+summary/fyNN/downloads), because a later workbook restates the year after overrides. Every
+workbook that carries a year agrees on it to the nearest $1M, except FY26 as noted. The series
+this replaced on the dashboard (39.4, 42.7, 44.6, 45.9, 49.7, 52.7, 56.2, 57.8, 60.9) mixed
+scopes and was off by up to $1.6B in both directions; it had put FY2018-to-FY2026 growth at
++54.6%.
 
 ### FY2027 enacted — key figures
 

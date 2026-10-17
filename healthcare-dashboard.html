@@ -156,14 +156,14 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
       "name": "Massachusetts"
     }
   ],
-  "dateModified": "2026-09-07"
+  "dateModified": "2026-10-16"
 }
 </script>
 </head>
 <body>
 
 <div class="hero">
-  <div class="hero-badge">🛡️ DOI · CHIA · KFF · CMS · CAR · Census · BLS</div>
+  <div class="hero-badge">🛡️ DOI · CHIA · AHRQ · CMS · CAR · Census · BLS</div>
   <h1>All Things Insurance</h1>
   <p class="hero-sub">Massachusetts' full insurance picture — health, homeowners, auto, affordability, market conduct, licensing. Every figure on this page is sourced from a primary official report. Sources cited in every card, chart, and callout.</p>
 </div>
@@ -171,9 +171,9 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
 <div class="summary-row">
   <div class="sc red">
     <div class="sc-label">Avg Family Health Premium</div>
-    <div class="sc-val red">$28,151</div>
-    <div class="sc-ctx">+14.7% above US average ($24,540)</div>
-    <div class="sc-src">Source: Kaiser Family Foundation EHBS 2024</div>
+    <div class="sc-val red">$29,619</div>
+    <div class="sc-ctx">+12.7% above US average ($26,281) &middot; 4th-highest of 50 states (2025)</div>
+    <div class="sc-src">Source: AHRQ Medical Expenditure Panel Survey, Insurance Component (MEPS-IC) 2025, private-sector state estimates, as published in KFF State Health Facts</div>
   </div>
   <div class="sc amber">
     <div class="sc-label">2026 Approved Health Rates</div>
@@ -215,9 +215,9 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
 <div class="tab-panel active" id="tab-overview">
   <div class="section">
     <div class="sec-title">Massachusetts Insurance at a Glance</div>
-    <div class="sec-desc">The Commonwealth leads the nation in healthcare costs, saw a dramatic spike in homeowners premium in 2024, and has one of the most concentrated auto markets in the country.</div>
+    <div class="sec-desc">Massachusetts is among the costliest states for health care, not the costliest: 3rd-highest per-capita health spending of the 50 states (CMS, 2020, the newest state data) and the 4th-highest employer family premium (AHRQ MEPS-IC, 2025; 1st in 2024). It also saw a dramatic spike in homeowners premium in 2024, and has one of the most concentrated auto markets in the country.</div>
 
-    <div class="hl"><div class="hl-label">⚠️ Health premium gap</div><div class="hl-val">MA families pay $3,611 MORE per year than the national average</div><div class="hl-ctx">$28,151 (MA) vs $24,540 (US) — 14.7% above national</div><div class="hl-src">Source: Kaiser Family Foundation EHBS 2024</div></div>
+    <div class="hl"><div class="hl-label">⚠️ Health premium gap</div><div class="hl-val">MA family coverage costs $3,338 MORE per year than the national average</div><div class="hl-ctx">$29,619 (MA) vs $26,281 (US), 2025 — 12.7% above national, 4th-highest of 50 states</div><div class="hl-src">Source: AHRQ Medical Expenditure Panel Survey, Insurance Component (MEPS-IC) 2025, private-sector state estimates, as published in KFF State Health Facts</div></div>
 
     <div class="hl amber"><div class="hl-label">⚠️ Home insurance surge</div><div class="hl-val">MA homeowner premium jumped 12.7% in 2024 alone — and 35.9% since 2021</div><div class="hl-ctx">Average premium: $1,744 (2021) → $1,818 (2022) → $2,054 (2023) → $2,371 (2024). Total written premium: $3.6B in 2024.</div><div class="hl-src">Source: MA DOI Annual Home Insurance Report 2024</div></div>
 
@@ -234,11 +234,11 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
         <div class="card-title">Year-over-Year Premium Growth by Line</div>
         <div class="card-sub">% change, MA market, 2020–2024</div>
         <div class="card-canvas"><canvas id="c-ov-growth"></canvas></div>
-        <div class="card-src">Sources: KFF EHBS (health); DOI Annual Home Insurance Report (home); DOI 2022-2023 Annual Report (auto)</div>
+        <div class="card-src">Sources: AHRQ MEPS-IC 2025 via KFF State Health Facts (health); DOI Annual Home Insurance Report (home); DOI 2022-2023 Annual Report (auto)</div>
       </div>
     </div>
 
-    <div class="info"><div class="info-icon">ℹ️</div><div class="info-text"><strong>Reading this dashboard:</strong> every KPI, chart caption, callout, and table row lists its source document. Primary sources are MA DOI annual reports, MA CHIA annual and cost trends reports, KFF, CMS, Census Bureau ACS, BLS, and the official CAR Annual Reports. For details on each pipeline, see the Sources tab.</div></div>
+    <div class="info"><div class="info-icon">ℹ️</div><div class="info-text"><strong>Reading this dashboard:</strong> every KPI, chart caption, callout, and table row lists its source document. Primary sources are MA DOI annual reports, MA CHIA annual and cost trends reports, AHRQ MEPS-IC, CMS, Census Bureau ACS, BLS, and the official CAR Annual Reports. For details on each pipeline, see the Sources tab.</div></div>
   </div>
 </div>
 
@@ -248,17 +248,17 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
     <div class="sec-title">Health Premium Comparison</div>
     <div class="sec-desc">Massachusetts vs. national employer-sponsored family premiums</div>
 
-    <div class="info warn"><div class="info-icon">&#8505;</div><div class="info-text"><strong>Newer national data exists; the pair below is held at 2024 deliberately.</strong> KFF's 2025 survey puts the US family premium at <strong>$26,993</strong> (+6% year over year, worker contribution $6,850). There is no published Massachusetts 2025 comparator yet &mdash; KFF's national survey does not break out states, and the state-level source (AHRQ MEPS-IC) lags by roughly a year. Pairing MA 2024 against US 2025 would overstate the gap, so both figures below stay on 2024 until the MA number catches up.</div></div>
+    <div class="info"><div class="info-icon">&#8505;</div><div class="info-text"><strong>Why these premiums come from MEPS-IC.</strong> AHRQ&rsquo;s Medical Expenditure Panel Survey, Insurance Component, is the federal survey that publishes employer premiums state by state; its 2025 tables are the newest. The KFF Employer Health Benefits Survey covers the nation only, so its US average is not comparable with the state figures below and is not used.</div></div>
 
     <div class="grid-3">
-      <div class="card"><div class="dc-label">MA Family Premium (2024)</div><div class="dc-val red">$28,151</div><div class="dc-meta"><div><div class="dc-ml">Monthly</div><div class="dc-mv">$2,346</div></div><div><div class="dc-ml">Employee Share ~28%</div><div class="dc-mv">$7,882</div></div></div><div class="dc-src">Source: KFF EHBS 2024</div></div>
-      <div class="card"><div class="dc-label">US Family Premium (2024)</div><div class="dc-val blue">$24,540</div><div class="dc-meta"><div><div class="dc-ml">Monthly</div><div class="dc-mv">$2,045</div></div><div><div class="dc-ml">Employee Share</div><div class="dc-mv">$6,296</div></div></div><div class="dc-src">Source: KFF EHBS 2024</div></div>
-      <div class="card"><div class="dc-label">MA Premium Gap</div><div class="dc-val red">+$3,611</div><div class="dc-meta"><div><div class="dc-ml">% Above National</div><div class="dc-mv" style="color:var(--red)">+14.7%</div></div><div><div class="dc-ml">Rank</div><div class="dc-mv" style="color:var(--red)">#1 Highest</div></div></div><div class="dc-src">Source: KFF EHBS 2024</div></div>
+      <div class="card"><div class="dc-label">MA Family Premium (2025)</div><div class="dc-val red">$29,619</div><div class="dc-meta"><div><div class="dc-ml">Monthly</div><div class="dc-mv">$2,468</div></div><div><div class="dc-ml">Employee Share ~25%</div><div class="dc-mv">$7,501</div></div></div><div class="dc-src">Source: AHRQ MEPS-IC 2025 (via KFF)</div></div>
+      <div class="card"><div class="dc-label">US Family Premium (2025)</div><div class="dc-val blue">$26,281</div><div class="dc-meta"><div><div class="dc-ml">Monthly</div><div class="dc-mv">$2,190</div></div><div><div class="dc-ml">Employee Share</div><div class="dc-mv">$7,314</div></div></div><div class="dc-src">Source: AHRQ MEPS-IC 2025 (via KFF)</div></div>
+      <div class="card"><div class="dc-label">MA Premium Gap (2025)</div><div class="dc-val red">+$3,338</div><div class="dc-meta"><div><div class="dc-ml">% Above National</div><div class="dc-mv" style="color:var(--red)">+12.7%</div></div><div><div class="dc-ml">Rank</div><div class="dc-mv" style="color:var(--red)">4th of 50 (1st in 2024)</div></div></div><div class="dc-src">Source: AHRQ MEPS-IC 2025 and 2024 (via KFF); behind AK, NY, NJ</div></div>
     </div>
 
     <div class="grid-2">
-      <div class="card"><div class="card-title">Family Premium Trend: MA vs. US</div><div class="card-sub">Annual family premiums, 2020–2024</div><div class="card-canvas"><canvas id="c-prem-trend"></canvas></div><div class="card-src">Source: KFF Employer Health Benefits Survey, annual editions 2020–2024</div></div>
-      <div class="card"><div class="card-title">Employee Out-of-Pocket Share</div><div class="card-sub">Annual worker contribution</div><div class="card-canvas"><canvas id="c-oop"></canvas></div><div class="card-src">Source: KFF EHBS, annual editions 2020–2024</div></div>
+      <div class="card"><div class="card-title">Family Premium Trend: MA vs. US</div><div class="card-sub">Average total family premium per enrolled employee, private sector, 2020–2025</div><div class="card-canvas"><canvas id="c-prem-trend"></canvas></div><div class="card-src">Source: AHRQ MEPS-IC, Table II.D.1 (Massachusetts and United States state tables), 2020–2025</div></div>
+      <div class="card"><div class="card-title">Employee Out-of-Pocket Share</div><div class="card-sub">Annual employee contribution to family coverage</div><div class="card-canvas"><canvas id="c-oop"></canvas></div><div class="card-src">Source: AHRQ MEPS-IC, Table II.D.2, 2020–2025</div></div>
     </div>
   </div>
 </div>
@@ -304,7 +304,7 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
     <div class="sec-desc">Total Massachusetts health care expenditures against the state's cost-growth benchmark, plus MassHealth — the state's Medicaid / CHIP program and the single largest taxpayer-funded health coverage in the Commonwealth.</div>
 
     <div class="grid-2">
-      <div class="card"><div class="card-title">Per-Capita Spending: MA vs. US</div><div class="card-sub">$13,319 (MA) vs $10,191 (US) — +30.7% above national</div><div class="card-canvas"><canvas id="c-percap"></canvas></div><div class="card-src">Source: CMS State Health Expenditure Accounts (2020 latest)</div></div>
+      <div class="card"><div class="card-title">Per-Capita Spending: MA vs. US</div><div class="card-sub">$13,319 (MA) vs $10,191 (US) — +30.7% above national; 3rd-highest of 50 states, behind NY and AK (DC is higher still)</div><div class="card-canvas"><canvas id="c-percap"></canvas></div><div class="card-src">Source: CMS Health Expenditures by State of Residence, personal health care per capita, 2020 (the newest state edition; checked Oct 2026)</div></div>
       <div class="card"><div class="card-title">THCE Growth vs. CHIA Benchmark</div><div class="card-sub">Actual 8.6% vs. 3.6% benchmark — 139% above target</div><div class="card-canvas"><canvas id="c-thce"></canvas></div><div class="card-src">Source: CHIA Annual Report 2025 (FY 2023 data)</div></div>
     </div>
 
@@ -342,15 +342,15 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
 
     <div class="grid-2">
       <div class="card"><div class="card-title">Affordability Issues by Race/Ethnicity</div><div class="card-sub">% reporting difficulty affording healthcare</div><div class="card-canvas"><canvas id="c-race"></canvas></div><div class="card-src">Source: CHIA 2025 Massachusetts Health Insurance Survey / CHIA Annual Report 2025</div></div>
-      <div class="card"><div class="card-title">Premium as % of Median Income (MA vs US)</div><div class="card-sub">Family premium burden</div><div class="card-canvas"><canvas id="c-burden"></canvas></div><div class="card-src">Sources: KFF EHBS 2024; US Census Bureau ACS 2023/2024</div></div>
+      <div class="card"><div class="card-title">Premium as % of Median Income (MA vs US)</div><div class="card-sub">Family premium burden, 2024</div><div class="card-canvas"><canvas id="c-burden"></canvas></div><div class="card-src">Sources: AHRQ MEPS-IC 2024, Table II.D.1; US Census Bureau ACS 2024 5-year, B19013 (both MA and US)</div></div>
     </div>
 
     <div class="info danger"><div class="info-icon">🔴</div><div class="info-text"><strong>58.2% of Hispanic/Latino residents report difficulty affording healthcare</strong> vs. 39.2% of white residents. Near-universal coverage hasn't erased cost barriers for communities of color.<span class="info-src">Source: CHIA Annual Report 2025</span></div></div>
 
     <div class="grid-3">
-      <div class="card"><div class="dc-label">MA Family Premium as % of Median Income</div><div class="dc-val red">27.1%</div><div class="dc-meta"><div><div class="dc-ml">MA Median HH Income (2024)</div><div class="dc-mv">$103,960</div></div><div><div class="dc-ml">Family Premium</div><div class="dc-mv">$28,151</div></div></div><div class="dc-src">Sources: Census ACS 2024; KFF EHBS 2024</div></div>
-      <div class="card"><div class="dc-label">US Family Premium as % of Median Income</div><div class="dc-val blue">24.2%</div><div class="dc-meta"><div><div class="dc-ml">US Median HH Income</div><div class="dc-mv">$80,610</div></div><div><div class="dc-ml">Family Premium</div><div class="dc-mv">$24,540</div></div></div><div class="dc-src">Sources: Census ACS; KFF EHBS 2024</div></div>
-      <div class="card"><div class="dc-label">MA Income Advantage</div><div class="dc-val green">+$23.4K</div><div class="dc-meta"><div><div class="dc-ml">Income Above US</div><div class="dc-mv" style="color:var(--green)">+29.0%</div></div><div><div class="dc-ml">But Premium Gap</div><div class="dc-mv" style="color:var(--red)">+$3,611</div></div></div><div class="dc-src">Sources: Census ACS; KFF EHBS 2024</div></div>
+      <div class="card"><div class="dc-label">MA Family Premium as % of Median Income (2024)</div><div class="dc-val red">27.1%</div><div class="dc-meta"><div><div class="dc-ml">MA Median HH Income (ACS 2024 5-yr)</div><div class="dc-mv">$103,960</div></div><div><div class="dc-ml">Family Premium</div><div class="dc-mv">$28,151</div></div></div><div class="dc-src">Sources: Census ACS 2024 5-year; AHRQ MEPS-IC 2024</div></div>
+      <div class="card"><div class="dc-label">US Family Premium as % of Median Income (2024)</div><div class="dc-val blue">30.4%</div><div class="dc-meta"><div><div class="dc-ml">US Median HH Income (ACS 2024 5-yr)</div><div class="dc-mv">$80,734</div></div><div><div class="dc-ml">Family Premium</div><div class="dc-mv">$24,540</div></div></div><div class="dc-src">Sources: Census ACS 2024 5-year; AHRQ MEPS-IC 2024</div></div>
+      <div class="card"><div class="dc-label">MA Income Advantage (2024)</div><div class="dc-val green">+$23.2K</div><div class="dc-meta"><div><div class="dc-ml">Income Above US</div><div class="dc-mv" style="color:var(--green)">+28.8%</div></div><div><div class="dc-ml">Premium Gap</div><div class="dc-mv" style="color:var(--red)">+$3,611</div></div></div><div class="dc-src">Sources: Census ACS 2024 5-year; AHRQ MEPS-IC 2024. The higher income more than covers the higher premium: as a share of income, the MA family premium is lower than the US one.</div></div>
     </div>
   </div>
 </div>
@@ -359,34 +359,34 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
 <div class="tab-panel" id="tab-costincome">
   <div class="section">
     <div class="sec-title">Insurance Cost Growth vs. Income &amp; Inflation</div>
-    <div class="sec-desc">Do Massachusetts insurance premiums outpace household income growth and consumer inflation? Compiled from official MA DOI, KFF, Census Bureau, and BLS figures.</div>
+    <div class="sec-desc">Do Massachusetts insurance premiums outpace household income growth and consumer inflation? Compiled from official MA DOI, AHRQ MEPS-IC, Census Bureau, and BLS figures.</div>
 
-    <div class="hl"><div class="hl-label">⚠️ Home insurance is the real outlier</div><div class="hl-val">MA homeowner premium grew 35.9% from 2021 to 2024</div><div class="hl-ctx">That's almost 2× faster than MA median household income (+~19% over the same 3 years) and almost 3× faster than Boston CPI (~13%). The average homeowner premium went from $1,744 to $2,371.</div><div class="hl-src">Sources: MA DOI Annual Home Insurance Report 2024; US Census Bureau ACS; BLS CPI-U Boston-Cambridge-Newton</div></div>
+    <div class="hl"><div class="hl-label">⚠️ Home insurance is the real outlier</div><div class="hl-val">MA homeowner premium grew 35.9% from 2021 to 2024</div><div class="hl-ctx">That is about twice the growth in MA median household income over the same three years (+16.8%, ACS 5-year) and about 2.5 times Boston CPI (+14.6%, annual averages). The average homeowner premium went from $1,744 to $2,371.</div><div class="hl-src">Sources: MA DOI Annual Home Insurance Report 2024; US Census Bureau ACS; BLS CPI-U Boston-Cambridge-Newton</div></div>
 
-    <div class="hl amber"><div class="hl-label">⚠️ Health premium roughly tracks inflation — for now</div><div class="hl-val">Family health premium +19.6% from 2020 to 2024, vs Boston CPI +19%</div><div class="hl-ctx">Health has moved roughly in line with inflation over the 4-year window, but lags MA income growth (+23.2%). The 2026 DOI-approved rates of 7.1–12.2% will break this pattern — 2026 Boston CPI is tracking at 1.4%.</div><div class="hl-src">Sources: KFF EHBS 2020–2024; US Census Bureau ACS 2020–2024; BLS CPI-U Boston-Cambridge-Newton</div></div>
+    <div class="hl amber"><div class="hl-label">⚠️ Health premiums outran inflation and income</div><div class="hl-val">Family health premium +28.2% from 2020 to 2024, against Boston CPI +18.3% and MA median household income +23.2%</div><div class="hl-ctx">The average Massachusetts family premium went from $21,965 in 2020 to $28,151 in 2024, then to $29,619 in 2025, up 5.2% in a single year. The Division of Insurance approved 2026 rate increases of 7.1% to 12.2%.</div><div class="hl-src">Sources: AHRQ MEPS-IC Table II.D.1, 2020–2025; US Census Bureau ACS 5-year; BLS CPI-U Boston-Cambridge-Newton annual averages; MA DOI (2026 rates)</div></div>
 
     <div class="hl blue"><div class="hl-label">⚠️ Auto had a single-year shock in 2023</div><div class="hl-val">MA average auto premium jumped $152 in 2023 alone</div><div class="hl-ctx">From 2013 through 2022, annual changes ranged from -$13 to +$40. Then 2023 posted a +$152 jump — the single largest in the decade. Cumulative auto-expenditure growth: 3.1% per year since 2013.</div><div class="hl-src">Source: MA DOI 2022-2023 Annual Report (Private Passenger Automobile Insurance section)</div></div>
 
     <div class="grid-2">
-      <div class="card"><div class="card-title">Cumulative Growth, Indexed (2020 = 100)</div><div class="card-sub">How premiums compare to income and inflation since 2020</div><div class="card-canvas"><canvas id="c-ci-index"></canvas></div><div class="card-src">Sources: KFF EHBS (health), MA DOI Home Insurance Reports (home, 2021 base), US Census Bureau ACS (income), BLS CPI-U Boston-Cambridge-Newton (inflation)</div></div>
-      <div class="card"><div class="card-title">Annual % Change, 2021–2024</div><div class="card-sub">Year-over-year comparison</div><div class="card-canvas"><canvas id="c-ci-yoy"></canvas></div><div class="card-src">Sources: KFF EHBS; MA DOI Home Insurance Reports; US Census Bureau ACS; BLS CPI-U Boston</div></div>
+      <div class="card"><div class="card-title">Cumulative Growth, Indexed (2020 = 100)</div><div class="card-sub">How premiums compare to income and inflation since 2020</div><div class="card-canvas"><canvas id="c-ci-index"></canvas></div><div class="card-src">Sources: AHRQ MEPS-IC (health), MA DOI Home Insurance Reports (home, 2021 base), US Census Bureau ACS (income), BLS CPI-U Boston-Cambridge-Newton (inflation)</div></div>
+      <div class="card"><div class="card-title">Annual % Change, 2021–2024</div><div class="card-sub">Year-over-year comparison</div><div class="card-canvas"><canvas id="c-ci-yoy"></canvas></div><div class="card-src">Sources: AHRQ MEPS-IC; MA DOI Home Insurance Reports; US Census Bureau ACS; BLS CPI-U Boston</div></div>
     </div>
 
     <div class="table-wrap">
       <table>
         <thead><tr><th>Metric</th><th>2020</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>Cumulative</th><th>Source</th></tr></thead>
         <tbody>
-          <tr><td>MA Family Health Premium</td><td>$23,541</td><td>$24,805</td><td>$25,262</td><td>$27,240</td><td>$28,151</td><td class="td-red">+19.6%</td><td>KFF EHBS</td></tr>
+          <tr><td>MA Family Health Premium</td><td>$21,965</td><td>$22,163</td><td>$23,348</td><td>$26,355</td><td>$28,151</td><td class="td-red">+28.2%</td><td>AHRQ MEPS-IC (II.D.1)</td></tr>
           <tr><td>MA Avg Homeowner Premium</td><td>—</td><td>$1,744</td><td>$1,818</td><td>$2,054</td><td>$2,371</td><td class="td-red">+35.9%*</td><td>MA DOI Home Ins. Report</td></tr>
-          <tr><td>MA Median Household Income</td><td>$84,385</td><td>$89,645</td><td>$96,505</td><td>$101,341</td><td>$103,960</td><td class="td-green">+23.2%</td><td>US Census Bureau ACS</td></tr>
-          <tr><td>Boston CPI-U (cumulative)</td><td>100.0</td><td>104.6</td><td>112.2</td><td>116.7</td><td>119.1</td><td class="td-amber">+19.1%</td><td>BLS Boston-Cambridge-Newton</td></tr>
+          <tr><td>MA Median Household Income</td><td>$84,385</td><td>$89,026</td><td>$96,505</td><td>$101,341</td><td>$103,960</td><td class="td-green">+23.2%</td><td>US Census Bureau ACS 5-year (B19013)</td></tr>
+          <tr><td>Boston CPI-U (cumulative)</td><td>100.0</td><td>103.3</td><td>110.6</td><td>114.7</td><td>118.3</td><td class="td-amber">+18.3%</td><td>BLS CPI-U Boston-Cambridge-Newton (CUURS11ASA0), annual averages</td></tr>
           <tr><td>MA Avg Auto Premium Change/yr</td><td>-$13</td><td>-$5</td><td>+$12</td><td>+$152</td><td>—</td><td class="td-amber">+3.1%/yr since 2013</td><td>MA DOI 2022-2023 Annual Report</td></tr>
         </tbody>
       </table>
     </div>
-    <div class="card-src" style="margin-bottom:22px">* Home premium percentage covers 2021→2024 (3 years) because DOI reports the $1,744 figure from the 2021 baseline. Boston CPI values are indexed to 2020=100.</div>
+    <div class="card-src" style="margin-bottom:22px">* Home premium percentage covers 2021→2024 (3 years) because DOI reports the $1,744 figure from the 2021 baseline. Boston CPI values are BLS annual averages indexed to 2020=100. Income is the ACS 5-year estimate for each year.</div>
 
-    <div class="info warn"><div class="info-icon">⚠️</div><div class="info-text"><strong>Bottom line:</strong> home insurance is growing at roughly twice the rate of income and inflation — the affordability crisis driven by coastal exposure, reinsurance costs, and climate risk is real and measurable. Health insurance has kept pace with inflation in recent years, but the approved 2026 rates of 7.1–12.2% will push it well past inflation again. Auto premiums saw a historic single-year shock in 2023.<span class="info-src">Analysis: MA DOI Home Insurance Report 2024; KFF EHBS; Census ACS; BLS CPI-U Boston</span></div></div>
+    <div class="info warn"><div class="info-icon">⚠️</div><div class="info-text"><strong>Bottom line:</strong> home insurance is growing at roughly twice the rate of income and inflation — the affordability crisis driven by coastal exposure, reinsurance costs, and climate risk is real and measurable. Employer family health premiums have outrun both inflation and income since 2020, and the approved 2026 rates of 7.1–12.2% extend that run. Auto premiums saw a historic single-year shock in 2023.<span class="info-src">Analysis: MA DOI Home Insurance Report 2024; AHRQ MEPS-IC; Census ACS; BLS CPI-U Boston</span></div></div>
   </div>
 </div>
 
@@ -531,7 +531,7 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
       <table>
         <thead><tr><th>Source</th><th>Status</th><th>Format</th><th>Cadence</th><th>Used For</th></tr></thead>
         <tbody>
-          <tr><td><strong>Kaiser Family Foundation — EHBS</strong></td><td><span class="pill green">Live</span></td><td>Report + CSV</td><td>Annual</td><td>Family premium MA vs. US (2020–2024)</td></tr>
+          <tr><td><strong>AHRQ MEPS-IC — state tables (Table II, private sector)</strong></td><td><span class="pill green">Live</span></td><td>XLSX</td><td>Annual</td><td>Family premium and employee contribution, MA vs. US (2020–2025); state ranks via KFF State Health Facts</td></tr>
           <tr><td><strong>MA DOI — Annual Home Insurance Report 2024</strong></td><td><span class="pill green">Live</span></td><td>PDF</td><td>Annual</td><td>$3.6B premium, 8.7% FAIR Plan, carrier market share, wind deductibles, catastrophes</td></tr>
           <tr><td><strong>MA DOI — Statistical Supplement 2024</strong></td><td><span class="pill green">Live</span></td><td>PDF</td><td>Annual</td><td>Zip-code-level home insurance detail</td></tr>
           <tr><td><strong>MA DOI — 2022-2023 Annual Report</strong></td><td><span class="pill green">Live</span></td><td>PDF</td><td>Biennial</td><td>Auto premium, residual market, licensee counts, complaints, Merit Rating Board</td></tr>
@@ -567,7 +567,7 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
 <div class="footer">
   <div class="footer-sources">
     <p><strong>Primary Sources Cited on This Page:</strong></p>
-    <p>• Kaiser Family Foundation, <em>2024 Employer Health Benefits Survey</em>; annual editions 2020–2024 · kff.org</p>
+    <p>• Agency for Healthcare Research and Quality, <em>Medical Expenditure Panel Survey, Insurance Component</em>, state tables 2020–2025 (Table II.D) · meps.ahrq.gov; state rankings as republished in KFF State Health Facts · kff.org</p>
     <p>• Massachusetts Division of Insurance — <em>2024 Annual Home Insurance Report</em>, <em>Statistical Supplement 2024</em>, <em>2022-2023 Annual Report</em>, and <em>2026 Rate Filing Decisions</em> (July 2025) · mass.gov/orgs/division-of-insurance</p>
     <p>• Massachusetts Center for Health Information and Analysis, <em>Annual Report 2025</em> and <em>Annual Report 2026</em> · chiamass.gov</p>
     <p>• Centers for Medicare &amp; Medicaid Services, <em>State Health Expenditure Accounts</em> · cms.gov</p>
@@ -612,8 +612,8 @@ function initCharts(tab){
       break;
 
     case 'premiums':
-      safeChart('c-prem-trend',{type:'line',data:{labels:['2020','2021','2022','2023','2024'],datasets:[{label:'Massachusetts',data:[23541,24805,25262,27240,28151],borderColor:R,backgroundColor:R+'22',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:R,borderWidth:2.5},{label:'US Average',data:[21342,22221,22463,23968,24540],borderColor:B,backgroundColor:B+'22',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:B,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{ticks:{callback:nF}},x:{grid:{display:false}}}}});
-      safeChart('c-oop',{type:'bar',data:{labels:['2020','2021','2022','2023','2024'],datasets:[{label:'MA Employee Share',data:[6591,6945,7073,7627,7882],backgroundColor:R+'cc',borderColor:R,borderWidth:1.5,borderRadius:6},{label:'US Employee Share',data:[5588,5969,6106,6575,6296],backgroundColor:B+'cc',borderColor:B,borderWidth:1.5,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{ticks:{callback:nF}},x:{grid:{display:false}}}}});
+      safeChart('c-prem-trend',{type:'line',data:{labels:['2020','2021','2022','2023','2024','2025'],datasets:[{label:'Massachusetts',data:[21965,22163,23348,26355,28151,29619],borderColor:R,backgroundColor:R+'22',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:R,borderWidth:2.5},{label:'US Average',data:[20758,21381,21931,23938,24540,26281],borderColor:B,backgroundColor:B+'22',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:B,borderWidth:2.5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{ticks:{callback:nF}},x:{grid:{display:false}}}}});
+      safeChart('c-oop',{type:'bar',data:{labels:['2020','2021','2022','2023','2024','2025'],datasets:[{label:'MA Employee Share',data:[5741,5976,5875,7597,7811,7501],backgroundColor:R+'cc',borderColor:R,borderWidth:1.5,borderRadius:6},{label:'US Employee Share',data:[5978,6174,6492,6889,7216,7314],backgroundColor:B+'cc',borderColor:B,borderWidth:1.5,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{ticks:{callback:nF}},x:{grid:{display:false}}}}});
       break;
 
     case 'rates':
@@ -632,22 +632,22 @@ function initCharts(tab){
 
     case 'healthaff':
       safeChart('c-race',{type:'bar',data:{labels:['Hispanic/Latino','Black','White'],datasets:[{data:[58.2,49.1,39.2],backgroundColor:[R+'cc',Y+'cc',B+'cc'],borderColor:[R,Y,B],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'% report difficulty'}}}},scales:{y:{beginAtZero:true,max:65,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
-      safeChart('c-burden',{type:'bar',data:{labels:['MA','US'],datasets:[{label:'Premium % of Median Income',data:[27.1,24.2],backgroundColor:[R+'cc',B+'cc'],borderColor:[R,B],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'% of median income'}}}},scales:{y:{beginAtZero:true,max:30,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      safeChart('c-burden',{type:'bar',data:{labels:['MA','US'],datasets:[{label:'Premium % of Median Income',data:[27.1,30.4],backgroundColor:[R+'cc',B+'cc'],borderColor:[R,B],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'% of median income'}}}},scales:{y:{beginAtZero:true,max:35,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
       break;
 
     case 'costincome':
       // Indexed at 2020 = 100 (home starts 2021, auto shown separately)
       safeChart('c-ci-index',{type:'line',data:{labels:['2020','2021','2022','2023','2024'],datasets:[
         {label:'MA Homeowner Premium (2021=100)',data:[null,100,104.2,117.8,135.9],borderColor:G,backgroundColor:G+'22',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:G,borderWidth:3},
-        {label:'MA Family Health Premium (2020=100)',data:[100,105.4,107.3,115.7,119.6],borderColor:R,backgroundColor:R+'22',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:R,borderWidth:3},
-        {label:'MA Median Household Income (2020=100)',data:[100,106.2,114.4,120.1,123.2],borderColor:B,backgroundColor:B+'22',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:B,borderWidth:3},
-        {label:'Boston CPI-U (2020=100)',data:[100,104.6,112.2,116.7,119.1],borderColor:SL,backgroundColor:SL+'22',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:SL,borderWidth:2,borderDash:[5,5]}
+        {label:'MA Family Health Premium (2020=100)',data:[100,100.9,106.3,120.0,128.2],borderColor:R,backgroundColor:R+'22',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:R,borderWidth:3},
+        {label:'MA Median Household Income (2020=100)',data:[100,105.5,114.4,120.1,123.2],borderColor:B,backgroundColor:B+'22',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:B,borderWidth:3},
+        {label:'Boston CPI-U (2020=100)',data:[100,103.3,110.6,114.7,118.3],borderColor:SL,backgroundColor:SL+'22',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:SL,borderWidth:2,borderDash:[5,5]}
       ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:10,font:{size:10}}},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw}}}},scales:{y:{ticks:{callback:function(v){return v}},min:95},x:{grid:{display:false}}}}});
       safeChart('c-ci-yoy',{type:'bar',data:{labels:['2021','2022','2023','2024'],datasets:[
         {label:'Home Premium',data:[null,4.2,13.0,15.4],backgroundColor:G+'cc',borderColor:G,borderWidth:1.5,borderRadius:6},
-        {label:'Health Premium',data:[5.4,1.8,7.8,3.3],backgroundColor:R+'cc',borderColor:R,borderWidth:1.5,borderRadius:6},
-        {label:'MA Median Income',data:[6.2,7.7,5.0,2.6],backgroundColor:B+'cc',borderColor:B,borderWidth:1.5,borderRadius:6},
-        {label:'Boston CPI-U',data:[4.6,7.3,4.0,2.1],backgroundColor:SL+'cc',borderColor:SL,borderWidth:1.5,borderRadius:6}
+        {label:'Health Premium',data:[0.9,5.3,12.9,6.8],backgroundColor:R+'cc',borderColor:R,borderWidth:1.5,borderRadius:6},
+        {label:'MA Median Income',data:[5.5,8.4,5.0,2.6],backgroundColor:B+'cc',borderColor:B,borderWidth:1.5,borderRadius:6},
+        {label:'Boston CPI-U',data:[3.3,7.1,3.7,3.2],backgroundColor:SL+'cc',borderColor:SL,borderWidth:1.5,borderRadius:6}
       ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:10,font:{size:10}}}},scales:{y:{ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
       break;
 
