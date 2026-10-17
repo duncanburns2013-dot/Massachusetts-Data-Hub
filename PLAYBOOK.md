@@ -72,6 +72,12 @@ and you publish a page that tells search engines it is a different page.
 The general rule: **any script that borrows another page's shell must be
 followed by the script that owns page identity.**
 
+Automation included. `rebuild-generated.yml` ran `build_method.py` daily without
+`seo.py`, so the published Method page claimed to be About. It now
+runs `python seo.py method.html about.html videos.html`: the scoped form stamps
+only the named pages, because an unscoped run also re-dates every dashboard from
+its last commit and leaves changes the job would not commit.
+
 ---
 
 ## 3. Make every build script idempotent, with fences

@@ -53,6 +53,14 @@ jobs:
       - name: Rebuild videos.html
         run: python build_videos.py
 
+      # build_method.py builds Method on About's shell, so until seo.py runs the
+      # page claims About's og:url, cards and JSON-LD and has no canonical: every
+      # daily rebuild republished Method as the About page. Scoped to the three
+      # generated pages, so the run neither re-dates the dashboards nor leaves
+      # changes outside what this job commits.
+      - name: Restore each generated page's own identity
+        run: python seo.py method.html about.html videos.html
+
       - name: Commit if changed
         run: |
           # Quoted globs: git expands them, not the shell. An unquoted *.html

@@ -9,8 +9,19 @@ between them unless every page names which one is real.
 
 Re-runnable. Existing canonical and og:url tags are replaced rather than
 duplicated, and pages that already carry a description are left alone.
+
+    python seo.py                                     # every page
+    python seo.py method.html about.html videos.html  # only these pages
+
+The scoped form is for rebuild-generated.yml. build_method.py builds Method on
+About's shell, so until this runs Method claims About's og:url, cards and
+JSON-LD and has no canonical. Run over every page, though, this also restamps
+each dashboard's dateModified from its last commit, so a daily job would commit
+date churn across the site. The scoped form writes only the pages named: no
+sitemap, robots.txt or embed key, so the job's working tree holds nothing it
+does not commit (a stray change would break its pull --rebase retry).
 """
-import io, re, glob, os, json, html, subprocess
+import io, re, glob, os, json, html, subprocess, sys
 
 BASE = 'https://massachusettsdatahub.com/'
 CARDS_DIR = 'cards'      # per-page social cards, rendered by build_cards.py
@@ -155,6 +166,11 @@ def schema_for(p, s, url):
     return ordered
 
 pages = sorted(p for p in glob.glob('*.html') if not p.startswith('_'))
+only = sys.argv[1:]
+unknown = [a for a in only if a not in pages]
+if unknown:
+    sys.exit('not a page here: ' + ', '.join(unknown))
+stamp = [p for p in pages if p in only] if only else pages
 added_desc = added_canon = fixed_og = added_noindex = moved = 0
 added_icons = added_card = added_ld = 0
 fixed_social = 0
@@ -179,7 +195,7 @@ ICONS = (
     '<link rel="apple-touch-icon" href="%sapple-touch-icon.png">',
 )
 
-for p in pages:
+for p in stamp:
     s = orig = io.open(p, encoding='utf-8').read()
     url = BASE + ('' if p == 'index.html' else p)
 
@@ -309,6 +325,11 @@ for p in pages:
 
     if s != orig:
         io.open(p, 'w', encoding='utf-8', newline='\n').write(s)
+
+if only:
+    print('stamped only       : %s' % ', '.join(stamp))
+    print('og:url normalised  : %d changed' % fixed_og)
+    sys.exit(0)
 
 # ------------------------------------------------------- cache-busting the embed
 # The instrument is an iframe, and Pages serves it with max-age=600. A browser
