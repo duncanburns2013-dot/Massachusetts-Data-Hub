@@ -752,12 +752,24 @@ its own `data-checked` stamp, which the freshness watchdog ages.
 
 | Vintage | Value | Concept | Use |
 |---|---|---|---|
-| Census **CPS ASEC** via FRED `MEHOINUSMAA646N` | **$113,900** | Median household income 2024 | Context / presets |
+| Census **CPS ASEC** via FRED `MEHOINUSMAA646N` | **$118,500** | Median household income **2025** | Context / presets |
+| Census **CPS ASEC**, same series | $112,300 | Median household income 2024 | superseded |
 | Census **ACS 1-year** B19013 | **$104,828** | Median household income 2024 | Context / presets |
+| Census **ACS 5-year** B19013 | $103,960 | Median household income 2024 | `data/census-latest.json`, checked by check-consistency |
 | Census **ACS 1-year** B19025 ÷ B11001 | **$144,312** | *Mean* household income | **Allocation divisor** |
 
-CPS and ACS disagree by ~$9K on the same concept. Carry both and cite which one any
-given chart uses — this is exactly the kind of thing a hostile reader finds first.
+CPS and ACS disagree by roughly $14K on the same concept. Carry both and cite which one
+any given chart uses — this is exactly the kind of thing a hostile reader finds first.
+
+**Updated 2026-10-18.** CPS ASEC 2025 is published, so the dashboard moved to $118,500
+(US $87,460, +35.5%). Two things were wrong before that and are worth recording: the
+$113,900 this table carried was not the CPS 2024 value either — FRED gives $112,300 —
+and the dashboard's US comparator read $83,730 against an actual $83,160.
+
+**This section earned its keep on 2026-10-18.** An audit of the cost-burden table flagged
+the income row as contradicting `census-latest.json`, and the first fix swapped it to ACS
+5-year. That would have re-broken the defect closed on 2026-08-11. Reading this section is
+what caught it. Keep it; it is doing work.
 
 **~~Known defect to fix~~ — FIXED 2026-08-11.** `tax-budget-dashboard.html` labelled
 $113,900 as "Census 2024 ACS"; it is the **CPS** figure and is now labelled "Census CPS
@@ -766,7 +778,8 @@ carried an unlabelled "$7,732/year" property tax figure; the hero stat, the pros
 stat card now read **$8,113 (FY2026)**. The FY2025 county table keeps its own FY2025
 source line — it was already labelled correctly and its county figures are FY2025.
 
-The `chartIncomeReal` cross-state bar series still uses 113,900 for MA. Left alone
+The `chartIncomeReal` cross-state bar series still uses 113,900 for MA, now a year
+and a revision out of date while the table beside it reads 118,500. Left alone
 deliberately: the other seven states' vintage is undocumented, and swapping MA to ACS
 without knowing theirs would trade a labelling error for a comparability error. **Open
 item:** establish the vintage of the other states, then make all eight consistent.
