@@ -96,6 +96,20 @@ DATA = [
 
 # Figures whose freshness lives in the page, not in a data file.
 STAMPS = [
+    # The front page's own "Last refreshed", written by update-homepage-stats.py
+    # from the newest commit touching data/. It is first in this list because it
+    # is the first figure any reader sees and the one that went wrong worst: it
+    # sat on a typed "18 Aug 2026" for 63 days, under a label claiming it was
+    # computed, while every feed underneath it was current to the hour. Nothing
+    # here could see it, because this file ages the figures a page PUBLISHES and
+    # that was a figure about the publishing.
+    #
+    # 5 days, and it catches both failure directions. If the feeds stall, the
+    # stamp stops advancing and ages. If the feeds keep running but the rebuild
+    # job stops writing the stamp, it freezes and ages just the same.
+    ("index.html",
+     r'data-field="hub-updated">([^<]+)<', "%d %b %Y", 5,
+     "newest data/ commit, written daily by update-homepage-stats.py"),
     ("ma-housing-dashboard.html", r"DATA_ASOF\s*=\s*'([^']+)'", "%B %d, %Y", 5,
      "MLS tail is refetched nightly"),
     # 14 days, not 45. This stamp is FUEL_NOW, the weekly EIA pump-price survey,
