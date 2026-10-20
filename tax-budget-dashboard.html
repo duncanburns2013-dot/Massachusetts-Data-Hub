@@ -165,7 +165,7 @@ footer a:hover{color:var(--gold)}
     <div class="hero-stat"><div class="val bad">$8,113</div><div class="lbl">Avg SF Tax Bill (FY2026)</div></div>
     <div class="hero-stat"><div class="val bad">$64B</div><div class="lbl">FY2025 Actual Spending</div></div>
     <div class="hero-stat"><div class="val bad">~$3B</div><div class="lbl">Surtax Revenue FY2025</div></div>
-    <div class="hero-stat"><div class="val bad">105.8</div><div class="lbl">BEA Cost of Living (US=100)</div></div>
+    <div class="hero-stat"><div class="val bad"><span data-field="rpp-ma">105.8</span></div><div class="lbl">BEA Cost of Living (US=100)</div></div>
   </div>
 </div>
 
@@ -471,8 +471,8 @@ footer a:hover{color:var(--gold)}
   <p style="font-size:0.85rem;color:var(--muted);margin-bottom:20px">Every data point below is from official U.S. government sources — BEA, BLS, Census Bureau, EIA, DOL. No think tanks. No advocacy groups.</p>
 
   <div class="stat-row">
-    <div class="stat-card"><div class="label">BEA Regional Price Parity</div><div class="value red">105.8</div><div class="sub">5.8% above national average (BEA 2024)</div></div>
-    <div class="stat-card"><div class="label">$100 Buys Only</div><div class="value red">$94.56</div><div class="sub">In real purchasing power</div></div>
+    <div class="stat-card"><div class="label">BEA Regional Price Parity</div><div class="value red"><span data-field="rpp-ma">105.8</span></div><div class="sub"><span data-field="rpp-prem">5.8%</span> above national average (BEA <span data-field="rpp-year">2024</span>)</div></div>
+    <div class="stat-card"><div class="label">$100 Buys Only</div><div class="value red"><span data-field="rpp-buys">$94.56</span></div><div class="sub">In real purchasing power</div></div>
     <div class="stat-card"><div class="label">Electricity Rate</div><div class="value red">30.49¢/kWh</div><div class="sub">vs 18.31¢ national avg (EIA, Jul 2026)</div></div>
     <div class="stat-card"><div class="label">Infant Childcare</div><div class="value red">$24K+/yr</div><div class="sub">#2 most expensive (DOL/EPI)</div></div>
   </div>
@@ -595,7 +595,7 @@ footer a:hover{color:var(--gold)}
 
   <div class="info-box">
     <h4>ℹ️ What Is the BEA Regional Price Parity?</h4>
-    <p>The U.S. Bureau of Economic Analysis (BEA) publishes Regional Price Parities (RPPs) that measure how much prices differ across states compared to the national average (100). An RPP of 105.8 means Massachusetts costs are 5.8% above the national average across all goods and services. The RPPs are built from BLS Consumer Price Index data and Census Bureau American Community Survey housing data — the most comprehensive official cost-of-living measure available. When applied to income, RPP-adjusted "real" income shows actual purchasing power.</p>
+    <p>The U.S. Bureau of Economic Analysis (BEA) publishes Regional Price Parities (RPPs) that measure how much prices differ across states compared to the national average (100). An RPP of <span data-field="rpp-ma">105.8</span> means Massachusetts costs are <span data-field="rpp-prem">5.8%</span> above the national average across all goods and services. The RPPs are built from BLS Consumer Price Index data and Census Bureau American Community Survey housing data — the most comprehensive official cost-of-living measure available. When applied to income, RPP-adjusted "real" income shows actual purchasing power.</p>
   </div>
 
   <div class="chart-grid">
@@ -616,7 +616,7 @@ footer a:hover{color:var(--gold)}
     <table class="data-table">
       <thead><tr><th>Category</th><th>Massachusetts</th><th>US Average</th><th>MA Premium</th><th>Source</th></tr></thead>
       <tbody>
-        <tr><td>Overall Cost of Living (RPP)</td><td class="highlight">105.8</td><td>100.0</td><td class="highlight">+5.8%</td><td>BEA SARPP (2024)</td></tr>
+        <tr><td>Overall Cost of Living (RPP)</td><td class="highlight"><span data-field="rpp-ma">105.8</span></td><td>100.0</td><td class="highlight">+<span data-field="rpp-prem">5.8%</span></td><td>BEA SARPP (<span data-field="rpp-year">2024</span>)</td></tr>
         <tr><td>Residential Electricity</td><td class="highlight">30.49¢/kWh</td><td>18.31¢/kWh</td><td class="highlight">~67%</td><td>EIA Electric Power Monthly (Jul 2026)</td></tr>
         <tr><td>Median Household Income</td><td class="highlight">$118,500</td><td>$87,460</td><td class="good">+35.5% nominal</td><td>Census CPS ASEC (2025)</td></tr>
         <tr><td>After RPP Adjustment</td><td class="highlight">~$112,049</td><td>$87,460</td><td>+28.1% real</td><td>CPS 2025 income &divide; BEA RPP 2024</td></tr>

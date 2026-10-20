@@ -175,6 +175,73 @@ def sub_once(html, pattern, build, what):
     return html[:m.start()] + new + html[m.end():], True
 
 
+def set_field_all(html, tag, value, what):
+    """Write EVERY occurrence of one data-field. Returns (html, changed).
+
+    sub_once deliberately rewrites only the first match, which is right for a
+    stamp that appears once. These fields do not: rpp-ma is printed four times
+    on this page -- hero strip, stat card, the sentence explaining how to read
+    the index, and the cost-burden table -- and the whole reason they were wrong
+    is that each copy was maintained by hand and none agreed with the feed. A
+    field that exists in several places has to be written in all of them or the
+    page contradicts itself, which is worse than being uniformly stale.
+    """
+    pat = r'(data-field="' + re.escape(tag) + r'">)[^<]*(<)'
+    n = len(re.findall(pat, html))
+    if n == 0:
+        fail(f"{what}: data-field=\"{tag}\" not found -- NOT updated")
+        return html, False
+    new = re.sub(pat, lambda m: m.group(1) + value + m.group(2), html)
+    if new == html:
+        return html, False
+    print(f"  {what}: {value} ({n} place{'s' if n > 1 else ''})")
+    return new, True
+
+
+def rpp_fields(html):
+    """Massachusetts' BEA Regional Price Parity, from the feed that owns it.
+
+    These four figures -- the index, the premium over 100, what $100 is worth,
+    and the vintage year -- were hand-typed in nine places between them. BEA
+    publishes RPP once a year, so they were right when written and then simply
+    sat there: the index is the single most quoted number on this page and
+    nothing could move it.
+
+    The source of truth is data/cost-of-living-latest.json, written by
+    update-cost-of-living.py from the BEA regional zips. Reading the feed rather
+    than re-fetching BEA keeps one fetch behind one figure and means this page
+    cannot disagree with the affordability dashboard about the same index.
+    """
+    f = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                     "data", "cost-of-living-latest.json")
+    if not os.path.exists(f):
+        fail("data/cost-of-living-latest.json missing -- RPP figures NOT updated")
+        return html
+    with open(f, encoding="utf-8") as fh:
+        d = json.load(fh)
+    try:
+        rpp = float(d["rpp"]["MA"]["all"])
+        year = str(d["meta"]["rpp_year"])
+    except (KeyError, TypeError, ValueError) as e:
+        fail(f"cost-of-living feed shape unexpected ({e}) -- RPP figures NOT updated")
+        return html
+    # An index at or below 100 would invert every claim built on it, so it is a
+    # refusal and not a rounding question.
+    if not 80 < rpp < 150:
+        fail(f"RPP {rpp} outside 80-150 -- refusing to publish it")
+        return html
+
+    print("")
+    print(f"BEA RPP (MA, {year}): {rpp}")
+    for tag, val, what in (
+            ("rpp-ma",    f"{rpp:.1f}",            "RPP index"),
+            ("rpp-prem",  f"{rpp - 100:.1f}%",     "RPP premium over US"),
+            ("rpp-buys",  f"${100 / (rpp / 100):.2f}", "what $100 buys"),
+            ("rpp-year",  year,                    "RPP vintage")):
+        html, _ = set_field_all(html, tag, val, what)
+    return html
+
+
 def cents_row(html, label, ma, us, prem, period, what):
     """A table row: <strong>LABEL</strong></td><td..>XX.XX¢/kWh</td><td>YY.YY¢/kWh</td><td..>~ZZ%</td>..(EIA, Mon YYYY)"""
     pat = (r"(<strong>" + re.escape(label) + r"</strong></td><td[^>]*>)[\d.]+(¢/kWh</td><td[^>]*>)"
@@ -196,6 +263,9 @@ def main():
     with open(HTML_FILE, "r", encoding="utf-8") as f:
         html = f.read()
     orig = html
+
+    # ── BEA Regional Price Parity, from the cost-of-living feed ──
+    html = rpp_fields(html)
 
     # ── EIA electricity ──
     print("Fetching EIA (all chart states)...")

@@ -49,6 +49,32 @@ MV_FILE = os.path.join(BASE_DIR, "education-merrimack-valley.html")
 DATA_FILE = os.path.join(BASE_DIR, "data", "mcas-latest.json")
 API = "https://educationtocareer.data.mass.gov/resource/i9w6-niyt.json"
 
+
+# Per-pupil expenditure is a DIFFERENT DESE release on its own cadence, so it is
+# recorded here rather than fetched -- see the long note at the JSON writer for
+# why computing it from the Socrata spending tables produces a figure no DESE
+# page agrees with.
+#
+# It lives at module level because it was previously typed in three places: here
+# (as a literal in the JSON writer), and twice more as plain text in
+# education-statewide.html, where nothing could keep them in step. The page's
+# ppx-* fields are now written from this dict.
+#
+# CHECKED is a real verification date, not date.today(). It used to be
+# date.today().isoformat(), which stamped "verified today" on a hand-recorded
+# constant every single run -- the same heartbeat that made
+# cost-of-living-latest.json look fresh while BEA had published nothing. With a
+# fixed date the watchdog ages the actual check, so when FY2025 lands this goes
+# stale and says so instead of claiming to have been confirmed this morning.
+PER_PUPIL = {
+    "fiscal_year": "FY2024",
+    "total": 23165.11,
+    "in_district": 22413.93,
+    "source": ("DESE Per Pupil Expenditure state report, "
+               "profiles.doe.mass.edu/statereport/ppx.aspx"),
+    "checked": "2026-09-23",
+}
+
 # Exit code for "the source gave us nothing usable, nothing written" -- a
 # neutral skip, same convention as update-cbp-encounters.py.
 EXIT_BLOCKED = 75
@@ -334,6 +360,14 @@ def update_statewide_rest(html, sy, prev_sy):
     setf("kpi-math38", f"{math38}%")
     setf("kpi-notela", f"{100 - ela38}%")
     setf("kpi-notmath", f"{100 - math38}%")
+
+    # Per-pupil expenditure, in all four places the page prints it -- two KPI
+    # cards, a chart heading and a sentence of prose. Every one of them was a
+    # hand-typed literal, so a new DESE release moved none of them. setf uses
+    # count=0, so one call covers every occurrence of each field.
+    setf("ppx-total", f"${PER_PUPIL['total']:,.0f}")
+    setf("ppx-indistrict", f"${PER_PUPIL['in_district']:,.0f}")
+    setf("ppx-fy", PER_PUPIL["fiscal_year"])
 
     below = bands[0] + bands[1]
     setf("kpi-distbelow", str(below))
@@ -998,11 +1032,7 @@ def main():
         # denominators do not -- 920,220 against DESE's 867,936.7 -- so the
         # per-pupil result misses by about 0.5% and would be a number no DESE
         # page agrees with.
-        "per_pupil": {"fiscal_year": "FY2024",
-                      "total": 23165.11, "in_district": 22413.93,
-                      "source": "DESE Per Pupil Expenditure state report, "
-                                "profiles.doe.mass.edu/statereport/ppx.aspx",
-                      "checked": date.today().isoformat()},
+        "per_pupil": dict(PER_PUPIL),
         "note": ("ALL (03-08) SCI covers grades 5 and 8 only. test_grade is "
                  "authoritative for the span; do not infer it from row counts."),
         "state_all_students": {
