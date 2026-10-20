@@ -70,6 +70,14 @@ jobs:
         run: python seo.py method.html about.html videos.html
 
       - name: Commit if changed
+        # Runs even when an updater above failed, because a failure there is
+        # usually ONE transient fetch, not a bad page -- every script here either
+        # writes a complete page or writes nothing. Without this, a step that is
+        # 1 of 9 EIA requests short discards the work of every step before it.
+        # That is how 2026-09-20 lost a whole census pass and how 2026-10-20
+        # threw away a successful energy write. The job still reports failure, so
+        # the problem stays visible; it just no longer costs the good work too.
+        if: ${{ !cancelled() }}
         run: |
           # Quoted globs: git expands them, not the shell. An unquoted *.html
           # matches only what is already in the working directory at the repo

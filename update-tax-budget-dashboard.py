@@ -43,7 +43,7 @@ Env:
   EIA_API_KEY  (free — www.eia.gov/opendata/register.php). Without it the EIA half is
                skipped loudly; the BLS half needs no key.
 """
-import json, os, re, sys
+import json, os, re, sys, time
 from urllib.request import urlopen, Request
 from datetime import datetime
 
@@ -81,13 +81,31 @@ def eia_fetch(state):
            f"?api_key={EIA_KEY}&frequency=monthly&data[0]=price"
            f"&facets[sectorid][]=RES&facets[stateid][]={state}"
            "&sort[0][column]=period&sort[0][direction]=desc&length=1")
-    try:
-        with urlopen(Request(url, headers={"User-Agent": "MA-Data-Hub/1.0"}), timeout=25) as r:
-            row = json.loads(r.read())["response"]["data"][0]
-        return float(row["price"]), row["period"]
-    except Exception as e:
-        fail(f"EIA fetch failed ({state}): {e}")
-        return None, None
+    # Retried, because a single EIA wobble used to take the whole script down and
+    # with it the work of every step before this one. On 2026-10-20 MA and RI both
+    # read-timed-out, this returned None for them, the partial-figure guard
+    # correctly refused to publish, the script exited non-zero -- and the
+    # workflow's commit step was then SKIPPED, discarding a successful energy
+    # dashboard write from four steps earlier. Two transient timeouts out of nine
+    # requests threw away the whole run.
+    #
+    # 3 tries x 25s + 8s of backoff, over 9 states, is about 12 minutes worst
+    # case, inside this job's 30-minute ceiling. Same reasoning as get() in
+    # update-cost-of-living.py, which was given retries after all 50 of its state
+    # requests timed out on 2026-08-22.
+    last = None
+    for attempt in range(3):
+        try:
+            with urlopen(Request(url, headers={"User-Agent": "MA-Data-Hub/1.0"}),
+                         timeout=25) as r:
+                row = json.loads(r.read())["response"]["data"][0]
+            return float(row["price"]), row["period"]
+        except Exception as e:
+            last = e
+            if attempt < 2:
+                time.sleep(4 * (attempt + 1))
+    fail(f"EIA fetch failed ({state}) after 3 tries: {last}")
+    return None, None
 
 
 def bls_cpi(series_ids, start_yr, end_yr):
