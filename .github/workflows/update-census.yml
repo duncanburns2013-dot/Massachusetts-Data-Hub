@@ -67,6 +67,10 @@ jobs:
       - name: Rebuild cost-of-living dataset (BEA + MIT)
         env:
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+          # nominal_income() reads FRED through api.stlouisfed.org, which
+          # needs this key. Without it the script now raises instead of
+          # silently returning a short series.
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: python update-cost-of-living.py
 
       # MCAS publishes once a year, in the second half of September. Exit 75

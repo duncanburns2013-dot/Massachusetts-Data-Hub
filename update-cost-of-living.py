@@ -19,7 +19,7 @@ anchors silently stopped matching and the page sat on stale numbers for months
 while still committing daily. This one has exactly one HTML anchor, and a
 failure to match is fatal rather than silent.
 """
-import csv, html as _html, io, json, os, re, sys, time, urllib.error, urllib.request, zipfile
+import csv, html as _html, io, json, os, re, sys, time, urllib.error, urllib.parse, urllib.request, zipfile
 
 html_unescape = _html.unescape
 from datetime import datetime, timezone
@@ -158,6 +158,33 @@ def metro_table():
 
 
 # ── FRED: nominal per-capita personal income, pinned to the BEA vintage ──────
+FRED_KEY = os.environ.get("FRED_API_KEY", "").strip()
+
+
+def fred_url(series_id):
+    """One series from the FRED API, on the host that actually answers.
+
+    This used fred.stlouisfed.org/graph/fredgraph.csv -- the WEB front end,
+    keyless. On 2026-10-20 that host stopped responding entirely: it timed out
+    from the GitHub runner and from a second network, while
+    api.stlouisfed.org answered the same query in 0.19s. Two independent
+    networks timing out on one host and not its sibling is the host, not us.
+
+    So this now uses the API, with FRED_API_KEY -- which has been a repo secret
+    since 2026-06-03, and which scripts/update_cumulative_inflation.py has been
+    using against this same endpoint all along. This script was simply never
+    brought over to it.
+    """
+    if not FRED_KEY:
+        raise RuntimeError(
+            "FRED_API_KEY is not set. It is a repo secret; the workflow step "
+            "that runs this script has to pass it through in `env:`.")
+    return ("https://api.stlouisfed.org/fred/series/observations?"
+            + urllib.parse.urlencode({"series_id": series_id,
+                                      "api_key": FRED_KEY,
+                                      "file_type": "json"}))
+
+
 def nominal_income(year):
     """Every request used to fail silently into `continue`, so a bad run
     returned {} and the writer published it. Failures are counted now and a
@@ -180,14 +207,13 @@ def nominal_income(year):
                 f"{len(out)} of {len(STATES)} states ({len(failed)} failed) - "
                 "stopping rather than being killed mid-run by the job timeout")
         try:
-            txt = get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={st}PCPI",
-                      timeout=25)
+            txt = get(fred_url(f"{st}PCPI"), timeout=25)
         except Exception as e:
             failed.append(f"{st}:{type(e).__name__}")
             continue
-        for row in list(csv.reader(io.StringIO(txt)))[1:]:
-            if row and row[0][:4] == year:
-                out[st] = num(row[1])
+        for obs in json.loads(txt).get("observations", []):
+            if obs.get("date", "")[:4] == year and obs.get("value") != ".":
+                out[st] = num(obs["value"])
     if failed:
         print(f"  nominal_income: {len(failed)} state(s) failed: {', '.join(failed[:8])}")
     if len(out) < 45:
