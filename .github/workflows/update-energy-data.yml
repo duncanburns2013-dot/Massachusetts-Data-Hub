@@ -50,6 +50,7 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     concurrency:
       group: push-to-main
       cancel-in-progress: false

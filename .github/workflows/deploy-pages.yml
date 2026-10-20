@@ -52,6 +52,7 @@ jobs:
       name: github-pages
       url: https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -23,6 +23,7 @@ on:
 jobs:
   update-mbta-3a:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     permissions:
       contents: write
     concurrency:

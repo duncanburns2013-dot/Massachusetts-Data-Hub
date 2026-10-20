@@ -20,14 +20,30 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    # NOT in the shared push-to-main group. This job runs once a month and was
-    # queueing behind the daily ones: the wait grew 16s (Jul) -> 1h40m (Aug) ->
-    # 6h00m (Sep), at which point GitHub cancelled it and cost-of-living went 41
-    # days stale. A monthly job cannot win a queue against daily ones.
+    # Kept out of the shared push-to-main group, which is still right: a monthly
+    # job cannot win a queue against daily ones, and the commit step below
+    # already retries five times, rebasing onto main between attempts, which is
+    # what actually makes the push correct.
     #
-    # Dropping the group is safe because it was never what made the push correct:
-    # the commit step below already retries five times, rebasing onto main between
-    # attempts, which is what actually handles a concurrent push.
+    # But the 16s (Jul) -> 1h40m (Aug) -> 6h00m (Sep) progression was NOT queue
+    # wait, and reading it that way left the real fault in place for a month.
+    # On Sep 20 the job's startedAt equalled its createdAt and steps 1-4 all
+    # SUCCEEDED -- it never waited for anything, it ran for six hours and was
+    # killed inside step 5, "Rebuild cost-of-living dataset". A job stuck in a
+    # queue does not complete four steps first. On Oct 20, alone in this group
+    # with nothing to queue behind, it hung in exactly the same step again.
+    #
+    # The cost was in update-cost-of-living.py: 51 sequential FRED fetches at
+    # 4 tries x 120s + 30s backoff is a 7.2-hour worst case inside a 6-hour
+    # ceiling, so a slow upstream did not fail the run, it got the run cancelled
+    # with every later step skipped. That loop now carries a 15-minute budget.
+    #
+    # timeout-minutes is the backstop: a normal pass is under a minute and the
+    # worst legitimate one observed was 100, so 120 cannot kill working work,
+    # and it turns any future runaway into a red job at 2h instead of a silent
+    # cancellation at 6.
+    timeout-minutes: 120
+
     concurrency:
       group: update-census
       cancel-in-progress: false

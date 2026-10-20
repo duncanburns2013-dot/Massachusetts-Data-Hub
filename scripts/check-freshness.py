@@ -53,8 +53,10 @@ DATA = [
     # or not BEA had published. With that heartbeat removed the file only moves
     # when the source does, and BEA publishes Regional Price Parities and real
     # per-capita income once a year. 45 days could not survive a single missed
-    # run -- and one was missed, when the Sep 20 job sat 6 hours in the
-    # push-to-main queue and was cancelled.
+    # run -- and one was missed: the Sep 20 job was cancelled at the 6-hour
+    # ceiling. Not in a queue, as first recorded here: it started on time and
+    # was killed INSIDE update-cost-of-living.py, whose 51-state FRED loop had
+    # a 7.2-hour worst case. That loop is now budgeted and the job timed out.
     ("data/cost-of-living-latest.json", 400,  "annual BEA RPP + MIT living wage"),
     # Polled daily by the self-hosted runner, but only committed when CBP
     # actually publishes -- the updater keeps the old fetched_at on a no-op run

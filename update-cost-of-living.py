@@ -56,7 +56,7 @@ MA_METROS = {
 }
 
 
-def get(url, binary=False, tries=4):
+def get(url, binary=False, tries=4, timeout=120):
     """Fetch a URL, retrying transient failures.
 
     This had no retry at all. On 2026-08-22 every one of the 50 state income
@@ -70,7 +70,7 @@ def get(url, binary=False, tries=4):
     for attempt in range(tries):
         last = attempt == tries - 1
         try:
-            raw = urllib.request.urlopen(req, timeout=120).read()
+            raw = urllib.request.urlopen(req, timeout=timeout).read()
             return raw if binary else raw.decode("utf-8", "replace")
         except urllib.error.HTTPError as e:
             if e.code in (429, 500, 502, 503, 504) and not last:
@@ -163,9 +163,25 @@ def nominal_income(year):
     returned {} and the writer published it. Failures are counted now and a
     result too small to be real raises instead of shipping."""
     out, failed = {}, []
+    # This loop's worst case used to exceed the job it runs in. 51 states x
+    # (4 tries x 120s timeout + 30s backoff) is about 7.2 hours, against a
+    # GitHub ceiling of 6 -- so a slow FRED did not fail the run, it got the run
+    # KILLED, with every step after this one skipped. That is what happened on
+    # 2026-09-20 (cancelled at exactly 360 minutes, inside this step) and it is
+    # why cost-of-living-latest.json then sat 60 days old. A normal pass takes
+    # under a minute, so a budget this generous only ever bites the degraded
+    # path, and the <45 guard below still decides whether what we got is
+    # publishable.
+    deadline = time.monotonic() + 15 * 60
     for st in STATES.values():
+        if time.monotonic() > deadline:
+            raise RuntimeError(
+                f"nominal_income exceeded its 15-minute budget after "
+                f"{len(out)} of {len(STATES)} states ({len(failed)} failed) - "
+                "stopping rather than being killed mid-run by the job timeout")
         try:
-            txt = get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={st}PCPI")
+            txt = get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={st}PCPI",
+                      timeout=25)
         except Exception as e:
             failed.append(f"{st}:{type(e).__name__}")
             continue
