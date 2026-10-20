@@ -116,6 +116,36 @@ def query(where, select, limit=2000):
             pass
 
 
+def query_resource(endpoint, where, select, limit=2000):
+    """query(), but against any Socrata resource rather than only the MCAS one.
+
+    The two DESE datasets this script now also reads -- attendance and
+    graduation -- sit on the same domain behind the same bot filter, so they
+    need the same curl transport. Only the endpoint differs.
+    """
+    qs = urllib.parse.urlencode({"$select": select, "$where": where,
+                                 "$limit": str(limit)})
+    fd, out = tempfile.mkstemp(suffix=".json")
+    os.close(fd)
+    try:
+        p = subprocess.run(["curl", "-sS", "--max-time", "120", "-o", out,
+                            "-w", "%{http_code}", f"{endpoint}?{qs}"],
+                           capture_output=True, text=True)
+        if p.returncode != 0:
+            return None, f"curl exit {p.returncode}: {p.stderr.strip()[:160]}"
+        if p.stdout.strip() != "200":
+            return None, f"HTTP {p.stdout.strip()}"
+        with open(out, encoding="utf-8") as f:
+            return json.load(f), None
+    except ValueError as e:
+        return None, f"bad JSON: {e}"
+    finally:
+        try:
+            os.remove(out)
+        except OSError:
+            pass
+
+
 def pct(row):
     """Socrata stores the percentage as a fraction. 0.43 -> 43."""
     return round(float(row["m_plus_e_pct"]) * 100)
@@ -956,6 +986,120 @@ def update_merrimack(sy):
     return True, "Merrimack already current"
 
 
+ABSENCE_API = "https://educationtocareer.data.mass.gov/resource/ak6h-9k7x.json"
+GRAD_API = "https://educationtocareer.data.mass.gov/resource/n2xa-p822.json"
+
+
+def update_absence_and_graduation(html):
+    """Chronic absenteeism and four-year graduation rates, both from DESE.
+
+    Thirteen figures across two tabs were hand-typed, and the absence block had
+    already gone a full school year stale without anything noticing: it read the
+    2024-25 values (All Students 18.8%, Hispanic 29.5%, Asian 10.9%, low income
+    28.9%) while DESE had published 2025-26 at 17.1% / 27.3% / 9.6% / 27.3%.
+    Nothing aged them, because check-freshness.py ages data files and page
+    stamps, and these were neither -- just text.
+
+    Both datasets live on the same Socrata domain update-mcas.py already reads,
+    so this is the same transport, the same bot-filter workaround, and the same
+    failure handling: a fetch that does not answer leaves the page alone rather
+    than writing a partial set.
+
+    Measures, stated because each has a near neighbour that is not the one on
+    the page: absence is pct_chron_abs_10, absent 10% or more of enrolled days,
+    at attend_period 'End of Year' (not 'March', which is a partial year);
+    graduation is grad_pct at grad_rate_type '4-Year Graduation Rate' (not the
+    5-year rate).
+
+    A second absence card on this page -- Asian 11.6%, White 18.3%, Hispanic/EL
+    38.3%, gap 27pts -- is deliberately NOT wired here. Those values match no
+    DESE state figure at either the 10-day or 20-day threshold in any of the last
+    five school years, so there is no source to anchor them to. Guessing one
+    would make them look verified. They stay flagged instead.
+    """
+    out = {}
+
+    rows, err = query_resource(
+        ABSENCE_API,
+        "org_type='State' AND attend_period='End of Year'",
+        "sy,stu_grp,pct_chron_abs_10", limit=600)
+    if err:
+        print(f"  !! chronic absence NOT updated: {err}", file=sys.stderr)
+    else:
+        by_sy = {}
+        for r in rows:
+            v = r.get("pct_chron_abs_10")
+            if v in (None, ""):
+                continue
+            by_sy.setdefault(r["sy"], {})[r["stu_grp"]] = float(v) * 100
+        if by_sy:
+            sy = max(by_sy, key=int)
+            cur = by_sy[sy]
+            prev = by_sy.get(str(int(sy) - 1), {})
+            GRP = {"abs-all": "All Students", "abs-hisp": "Hispanic or Latino",
+                   "abs-asian": "Asian", "abs-lowinc": "Low Income"}
+            missing = [g for g in GRP.values() if g not in cur]
+            if missing:
+                print(f"  !! chronic absence NOT updated: sy{sy} missing "
+                      f"{', '.join(missing)}", file=sys.stderr)
+            else:
+                for tag, grp in GRP.items():
+                    out[tag] = f"{cur[grp]:.1f}%"
+                # School year 2026 is the 2025-26 year; the label reads that way.
+                # The sentence's own lead-in used to read "Nearly one student
+                # in five", which was true at 18.8% and false at 17.1%. A
+                # derived claim in prose goes wrong silently, so it is derived.
+                out["abs-ratio"] = f"{round(100 / cur['All Students'])}"
+                out["abs-sy"] = f"{int(sy) - 1}-{str(int(sy))[2:]}"
+                out["abs-prev-sy"] = f"{int(sy) - 2}-{str(int(sy) - 1)[2:]}"
+                if "All Students" in prev:
+                    d = cur["All Students"] - prev["All Students"]
+                    out["abs-delta"] = f"{d:+.1f}pt"
+                print(f"  chronic absence sy{sy}: all {cur['All Students']:.1f}%, "
+                      f"Hispanic {cur['Hispanic or Latino']:.1f}%, "
+                      f"Asian {cur['Asian']:.1f}%")
+
+    rows, err = query_resource(
+        GRAD_API,
+        "org_type='State' AND grad_rate_type='4-Year Graduation Rate'",
+        "sy,stu_grp,grad_pct", limit=600)
+    if err:
+        print(f"  !! graduation rates NOT updated: {err}", file=sys.stderr)
+    else:
+        by_sy = {}
+        for r in rows:
+            v = r.get("grad_pct")
+            if v in (None, ""):
+                continue
+            by_sy.setdefault(r["sy"], {})[r["stu_grp"]] = float(v) * 100
+        if by_sy:
+            sy = max(by_sy, key=int)
+            cur = by_sy[sy]
+            prev = by_sy.get(str(int(sy) - 1), {})
+            GRP = {"grad-all": "All Students", "grad-el": "English Learners",
+                   "grad-swd": "Students with Disabilities"}
+            missing = [g for g in GRP.values() if g not in cur]
+            if missing:
+                print(f"  !! graduation NOT updated: sy{sy} missing "
+                      f"{', '.join(missing)}", file=sys.stderr)
+            else:
+                for tag, grp in GRP.items():
+                    out[tag] = f"{cur[grp]:.1f}%"
+                out["grad-class"] = sy
+                out["grad-prev-class"] = str(int(sy) - 1)
+                if "All Students" in prev:
+                    d = cur["All Students"] - prev["All Students"]
+                    out["grad-delta"] = f"{d:+.1f}pt"
+                print(f"  graduation class of {sy}: all {cur['All Students']:.1f}%, "
+                      f"EL {cur['English Learners']:.1f}%, "
+                      f"SWD {cur['Students with Disabilities']:.1f}%")
+
+    for tag, value in out.items():
+        html = sub(html, r'(data-field="' + tag + r'">)[^<]*(<)', value,
+                   f"DESE {tag}", count=0)
+    return html
+
+
 def main():
     print("=== MCAS achievement (DESE) ===\n")
 
@@ -1004,6 +1148,7 @@ def main():
                ",".join(map(str, sci)), "Science/Civics bars")
     html = sub(html, r'(data-field="mcas-year">)[^<]*(<)', sy, "year label", count=0)
     html = update_statewide_rest(html, sy, str(int(sy) - 1))
+    html = update_absence_and_graduation(html)
 
     if html != orig:
         with open(HTML_FILE, "w", encoding="utf-8") as f:

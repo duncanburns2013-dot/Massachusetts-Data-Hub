@@ -317,16 +317,16 @@ tr:hover{background:rgba(15,41,66,.02)}
 <!-- ═══ ABSENTEEISM ═══ -->
 <div class="tab" id="absent">
 <div class="kpi-grid">
-<div class="kpi orange"><div class="val">18.8%</div><div class="lbl">All Students<br>Chronically Absent</div></div>
-<div class="kpi red"><div class="val">29.5%</div><div class="lbl">Hispanic<br>Students</div></div>
-<div class="kpi green"><div class="val">10.9%</div><div class="lbl">Asian<br>Students</div></div>
-<div class="kpi blue"><div class="val">-0.9pt</div><div class="lbl">Change vs<br>2023-24</div></div>
+<div class="kpi orange"><div class="val"><span data-field="abs-all">17.1%</span></div><div class="lbl">All Students<br>Chronically Absent</div></div>
+<div class="kpi red"><div class="val"><span data-field="abs-hisp">27.3%</span></div><div class="lbl">Hispanic<br>Students</div></div>
+<div class="kpi green"><div class="val"><span data-field="abs-asian">9.6%</span></div><div class="lbl">Asian<br>Students</div></div>
+<div class="kpi blue"><div class="val"><span data-field="abs-delta">-1.7pt</span></div><div class="lbl">Change vs<br><span data-field="abs-prev-sy">2024-25</span></div></div>
 </div>
 <div class="grid grid-2">
 <div class="card full">
-<h3>Chronic Absenteeism by Student Group, 2024-25</h3>
+<h3>Chronic Absenteeism by Student Group, <span data-field="abs-sy">2025-26</span></h3>
 <div class="chart-wrap"><canvas id="absGroup"></canvas></div>
-<div class="insight"><strong>Nearly one student in five:</strong> 18.8% of Massachusetts students were chronically absent. Among low-income students it is 28.9% and among Hispanic students 29.5% — close to triple the 10.9% rate for Asian students.</div>
+<div class="insight"><strong>About one student in <span data-field="abs-ratio">6</span>:</strong> <span data-field="abs-all">17.1%</span> of Massachusetts students were chronically absent. Among low-income students it is <span data-field="abs-lowinc">27.3%</span> and among Hispanic students <span data-field="abs-hisp">27.3%</span> — close to triple the <span data-field="abs-asian">9.6%</span> rate for Asian students.</div>
 </div>
 <div class="card full">
 <h3>Change from 2023-24 to 2024-25</h3>
@@ -344,10 +344,10 @@ tr:hover{background:rgba(15,41,66,.02)}
 <!-- ═══ GRADUATION ═══ -->
 <div class="tab" id="graduation">
 <div class="kpi-grid">
-<div class="kpi green"><div class="val">89.3%</div><div class="lbl">Four-Year Rate<br>Class of 2025</div></div>
-<div class="kpi red"><div class="val">71.1%</div><div class="lbl">English<br>Learners</div></div>
-<div class="kpi orange"><div class="val">78.7%</div><div class="lbl">Students with<br>Disabilities</div></div>
-<div class="kpi blue"><div class="val">+0.9pt</div><div class="lbl">vs Class<br>of 2024</div></div>
+<div class="kpi green"><div class="val"><span data-field="grad-all">89.3%</span></div><div class="lbl">Four-Year Rate<br>Class of <span data-field="grad-class">2025</span></div></div>
+<div class="kpi red"><div class="val"><span data-field="grad-el">71.1%</span></div><div class="lbl">English<br>Learners</div></div>
+<div class="kpi orange"><div class="val"><span data-field="grad-swd">78.7%</span></div><div class="lbl">Students with<br>Disabilities</div></div>
+<div class="kpi blue"><div class="val"><span data-field="grad-delta">+0.9pt</span></div><div class="lbl">vs Class<br>of <span data-field="grad-prev-class">2024</span></div></div>
 </div>
 <div class="grid grid-2">
 <div class="card full">
