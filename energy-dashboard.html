@@ -297,15 +297,15 @@ footer a:hover{color:var(--gold)}
 <div id="rates" class="tab-content">
 <h2 class="section-title">Electricity Rate Deep Dive</h2>
 <div class="alert"><h4>&#x26A0;&#xFE0F; What's Actually On Your Bill</h4><div class="alert-grid">
-<div class="alert-item"><strong>Supply (Basic Service, 17.323&#x00A2;/kWh):</strong> <span id="bbSupply">46.0%</span> of the bill. Renewable-portfolio and clean-energy compliance costs are inside this price, not broken out</div>
-<div class="alert-item"><strong>Distribution (9.837&#x00A2;/kWh):</strong> <span id="bbDist">26.1%</span>. It also carries residential-assistance, long-term renewable contract and solar program adjustments that the bill does not list</div>
-<div class="alert-item"><strong>Transmission (4.673&#x00A2;/kWh):</strong> <span id="bbTrans">12.4%</span></div>
-<div class="alert-item"><strong>Policy line items (<span id="bbPolC">3.663</span>&#x00A2;/kWh):</strong> <span id="bbPol">9.7%</span>. Mass Save energy efficiency 2.292, net metering recovery 0.625, SMART solar 0.583, EV program 0.104, Renewable Energy Charge (statutory, funds MassCEC) 0.050, provisional system planning 0.008, grid modernization plan 0.001. A floor: the policy items inside distribution and supply are not counted</div>
-<div class="alert-item"><strong>Customer charge ($10/month) and other delivery:</strong> <span id="bbRest">5.7%</span>. The transition charge from deregulation is now a small credit (&minus;0.077&#x00A2;)</div>
+<div class="alert-item"><strong>Supply (Basic Service, <span id="bbSupplyC">17.323</span>&#x00A2;/kWh):</strong> <span id="bbSupply">46.0%</span> of the bill. Renewable-portfolio and clean-energy compliance costs are inside this price, not broken out</div>
+<div class="alert-item"><strong>Distribution (<span id="bbDistC">9.837</span>&#x00A2;/kWh):</strong> <span id="bbDist">26.1%</span>. It also carries residential-assistance, long-term renewable contract and solar program adjustments that the bill does not list</div>
+<div class="alert-item"><strong>Transmission (<span id="bbTransC">4.673</span>&#x00A2;/kWh):</strong> <span id="bbTrans">12.4%</span></div>
+<div class="alert-item"><strong>Policy line items (<span id="bbPolC">3.663</span>&#x00A2;/kWh):</strong> <span id="bbPol">9.7%</span>. Mass Save energy efficiency <span id="bbEeC">2.292</span>, net metering recovery <span id="bbNmrsC">0.625</span>, SMART solar <span id="bbSmartC">0.583</span>, EV program <span id="bbEvC">0.104</span>, Renewable Energy Charge (statutory, funds MassCEC) <span id="bbReC">0.050</span>, provisional system planning <span id="bbPspfC">0.008</span>, grid modernization plan <span id="bbEsmpC">0.001</span>. A floor: the policy items inside distribution and supply are not counted</div>
+<div class="alert-item"><strong>Customer charge ($10/month) and other delivery:</strong> <span id="bbRest">5.7%</span>. The transition charge from deregulation is now a small credit (&minus;<span id="bbTransitionC">0.077</span>&#x00A2;)</div>
 <div class="alert-item"><strong>RGGI costs:</strong> $1.36B in carbon auction costs since 2008 &#x2014; passed to ratepayers</div>
 </div></div>
 <div class="chart-grid">
-<div class="chart-card"><h3>One Residential Bill, Line by Line (Eversource R-1, 600 kWh/month)</h3><div class="chart-area"><canvas id="chartBillBreak"></canvas></div><div class="source">Source: Eversource (NSTAR Electric) filed rates, Rate R-1, Greater Boston: delivery rates effective 1 Sep 2026; Basic Service fixed price 17.323&#x00A2;/kWh from 1 Aug 2026 (M.D.P.U. No. 1-26-E). One utility, not a statewide average. Bill at 600 kWh: <span id="bbTotal">$225.75</span>/month.</div></div>
+<div class="chart-card"><h3>One Residential Bill, Line by Line (Eversource R-1, 600 kWh/month)</h3><div class="chart-area"><canvas id="chartBillBreak"></canvas></div><div class="source">Source: Eversource (NSTAR Electric) filed rates, Rate R-1, Greater Boston: delivery rates effective 1 Sep 2026; Basic Service fixed price <span id="bbSupplyC2">17.323</span>&#x00A2;/kWh from 1 Aug 2026 (M.D.P.U. No. 1-26-E). One utility, not a statewide average. Bill at 600 kWh: <span id="bbTotal">$225.75</span>/month.</div></div>
 <div class="chart-card"><h3>MA vs. National Rate Gap Over Time</h3><div class="chart-area"><canvas id="chartGapTime"></canvas></div><div class="source">Source: EIA Electric Power Monthly, <span id="yrRangeGap">&#x2014;</span></div></div>
 </div>
 <div class="data-card"><h3>New England Electricity Rates &#x2014; All Among the Highest (EIA Jul 2026)</h3>
@@ -566,7 +566,7 @@ footer a:hover{color:var(--gold)}
 <tr><td>Distribution Charge</td><td><span id="bbDist2">26.1%</span></td><td><strong>M.G.L. c. 164, &#x00A7;1A</strong></td><td>DPU-regulated delivery charge — includes GSEP pipe replacement costs (untouched by H.5175)</td></tr>
 <tr><td>Supply Charge</td><td><span id="bbSupply2">46.0%</span></td><td>Market rate</td><td>Actual generation cost — elevated by pipeline constraints (ISO-NE confirms gas dependency drives winter spikes)</td></tr>
 </tbody></table>
-<div class="source">Source: M.G.L. c. 25A &#x00A7;11F; M.G.L. c. 25 &#x00A7;21; Ch. 169/2008 &#x00A7;83C; Ch. 188/2016 &#x00A7;12; M.G.L. c. 21N; M.G.L. c. 164. Shares: the Eversource R-1 Greater Boston bill at 600 kWh/month on the Rates tab (filed rates, Sep 2026). The separate Renewable Energy Charge on the bill is 0.050&#x00A2;/kWh under M.G.L. c. 25 &#x00A7;20 and funds MassCEC; it is not the RPS.</div>
+<div class="source">Source: M.G.L. c. 25A &#x00A7;11F; M.G.L. c. 25 &#x00A7;21; Ch. 169/2008 &#x00A7;83C; Ch. 188/2016 &#x00A7;12; M.G.L. c. 21N; M.G.L. c. 164. Shares: the Eversource R-1 Greater Boston bill at 600 kWh/month on the Rates tab (filed rates, Sep 2026). The separate Renewable Energy Charge on the bill is <span id="bbReC2">0.050</span>&#x00A2;/kWh under M.G.L. c. 25 &#x00A7;20 and funds MassCEC; it is not the RPS.</div>
 </div>
 
 <!-- NEW: Legislative Vote Record -->
@@ -975,6 +975,25 @@ function r1Bill(){
   put('bbDist',pc('dist'));     put('bbDist2',pc('dist'));
   put('bbTrans',pc('trans'));   put('bbTrans2',pc('trans'));
   put('bbPol',pc('policy'));    put('bbPolC',rb.policyCents.toFixed(3));
+  // The filed tariff rates themselves, not just their shares. They were prose
+  // literals until 2026-10-20, which meant the page carried the same number in
+  // two places and update-energy-dashboard.py's staleness guard -- correctly --
+  // refused to write anything while an unowned figure sat in a live region. It
+  // blocked every energy run from 2026-10-16 on. One source, rendered.
+  const cents = v => Math.abs(v).toFixed(3);
+  put('bbSupplyC',  cents(R1_BILL.supply));
+  put('bbSupplyC2', cents(R1_BILL.supply));
+  put('bbDistC',    cents(R1_BILL.distribution));
+  put('bbTransC',   cents(R1_BILL.transmission));
+  put('bbTransitionC', cents(R1_BILL.transition));
+  put('bbEeC',    cents(R1_BILL.policy.ee));
+  put('bbNmrsC',  cents(R1_BILL.policy.nmrs));
+  put('bbSmartC', cents(R1_BILL.policy.smart));
+  put('bbEvC',    cents(R1_BILL.policy.ev));
+  put('bbReC',    cents(R1_BILL.policy.re));
+  put('bbReC2',   cents(R1_BILL.policy.re));
+  put('bbPspfC',  cents(R1_BILL.policy.pspf));
+  put('bbEsmpC',  cents(R1_BILL.policy.esmp));
   put('bbEe',(R1_BILL.policy.ee*R1_BILL.kwh/100/rb.total*100).toFixed(1)+'%');
   put('bbRest',(rb.by.cust.pct+rb.by.other.pct).toFixed(1)+'%');
   put('bbTotal','$'+rb.total.toFixed(2));
