@@ -167,6 +167,94 @@ const MAX_RETRIES  = 3;
 const RETRY_DELAY  = 5000; // 5s base — doubles each attempt
 
 // ── Retry fetch ───────────────────────────────────────────────────────────────
+// ── MASTER_DATA.md's employment block ─────────────────────────────────────
+// That block opens with "🔄 Source of truth: data/employment-latest.json,
+// refreshed monthly from the BLS API", and until now that was not true: this
+// script wrote the JSON and the dashboard, and nothing wrote the markdown. So
+// six figures were hand-typed against a feed that moves every month, and they
+// drifted the moment a release landed.
+//
+// On 2026-10-20 the September release put five of the six out of date -- level
+// 166,328 -> 166,882, labor force 3,871,860 -> 3,880,158, nonfarm 3,706,000 ->
+// 3,711,000, US rate 4.1% -> 4.2%, job openings 7.271M -> 7.079M -- and
+// check-consistency.py went red. It only has accessors for two of them, so the
+// other three were wrong and silent.
+//
+// update-nh-figures.py and update-mls-figures.py already stamp their own
+// MASTER_DATA rows, for exactly this reason, documented in the NH script. This
+// is the same pattern for employment. An anchor that fails to match aborts
+// rather than publishing a half-updated file.
+const MASTER_DATA_PATH = path.join(__dirname, '..', 'MASTER_DATA.md');
+
+function fmtInt(v) {
+  return Number(v).toLocaleString('en-US');
+}
+
+async function stampMasterData(data) {
+  let md;
+  try {
+    md = await fs.readFile(MASTER_DATA_PATH, 'utf-8');
+  } catch (e) {
+    throw new Error(`MASTER_DATA.md unreadable (${e.message}) -- nothing stamped`);
+  }
+  const before = md;
+
+  const get = (key) => {
+    const l = data[key] && data[key].latest;
+    if (!l || l.value === undefined || l.value === null) {
+      throw new Error(`employment feed has no ${key} -- MASTER_DATA NOT stamped`);
+    }
+    return l;
+  };
+
+  // metric label -> [formatted value, period]
+  const maRate = get('ma_unemployment_rate');
+  const maLvl = get('ma_unemployment_level');
+  const maLf = get('ma_labor_force');
+  const maNf = get('ma_total_nonfarm');
+  const usRate = get('us_unemployment_rate');
+  const usJo = get('us_job_openings');
+
+  const rows = [
+    ['MA unemployment rate', `${maRate.value.toFixed(1)}%`, maRate.date],
+    ['MA unemployment level', fmtInt(maLvl.value), maLvl.date],
+    ['MA labor force', fmtInt(maLf.value), maLf.date],
+    // CES reports in thousands; the table has always printed whole jobs.
+    ['MA total nonfarm', fmtInt(Math.round(maNf.value) * 1000), maNf.date],
+    ['US unemployment rate', `${usRate.value.toFixed(1)}%`, usRate.date],
+    // JOLTS is in thousands too, printed as millions to three places.
+    ['US job openings', `${(usJo.value / 1000).toFixed(3)}M`, usJo.date],
+  ];
+
+  for (const [metric, value, period] of rows) {
+    // Anchored on the metric name and the trailing source cell, so the value and
+    // the period are both rewritten and nothing else on the row is touched.
+    const re = new RegExp(
+      '(\\| ' + metric.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ' \\| )[^|]*(\\| )[^|]*(\\| [^|]*\\|)');
+    if (!re.test(md)) {
+      throw new Error(`MASTER_DATA.md row "${metric}" not found -- nothing stamped`);
+    }
+    md = md.replace(re, `$1${value} $2${period} $3`);
+  }
+
+  // The block's own as-of line, so the stamp cannot claim a month older than
+  // the rows beneath it.
+  const asOf = new Date().toISOString().slice(0, 10);
+  const hdr = /(refreshed monthly from the BLS API\.\s*\nValues below are that file as of \*\*)[^*]*(\*\* \(reference month )[^)]*(\))/;
+  if (!hdr.test(md)) {
+    throw new Error('MASTER_DATA.md employment as-of line not found -- nothing stamped');
+  }
+  md = md.replace(hdr, `$1${asOf}$2${maRate.date}$3`);
+
+  if (md === before) {
+    console.log('📘 MASTER_DATA.md employment block already current');
+    return;
+  }
+  await fs.writeFile(MASTER_DATA_PATH, md);
+  console.log(`📘 Stamped MASTER_DATA.md employment block -> ${maRate.date}`);
+}
+
+
 async function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -1459,6 +1547,9 @@ async function main() {
   await fs.writeFile(DASHBOARD_PATH, updatedHtml);
   console.log('📄 Updated employment-dashboard.html');
 
+  // ── 5. Stamp MASTER_DATA.md's employment rows ───────────────────────────
+  await stampMasterData(data);
+
   console.log('\n✨ Done!');
 }
 
@@ -1470,4 +1561,4 @@ if (process.env.BLS_SKIP_MAIN !== '1') {
   });
 }
 
-export { monthsOf, inject, injectHTMLBlock, buildComparisonBox, CMP_TAGS, buildMetroCharts, METRO_TAGS, MA_METRO_SERIES, MA_METRO_UR_SERIES, updateMASectorSpectrum, MA_SECTOR_SERIES, MA_SECTOR_META, loadReleaseSchedule, releaseDateFor, buildSectorRows, buildRevisionRows, momAdjacent, US_SECTOR_META };
+export { stampMasterData, monthsOf, inject, injectHTMLBlock, buildComparisonBox, CMP_TAGS, buildMetroCharts, METRO_TAGS, MA_METRO_SERIES, MA_METRO_UR_SERIES, updateMASectorSpectrum, MA_SECTOR_SERIES, MA_SECTOR_META, loadReleaseSchedule, releaseDateFor, buildSectorRows, buildRevisionRows, momAdjacent, US_SECTOR_META };

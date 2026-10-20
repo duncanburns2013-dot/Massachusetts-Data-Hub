@@ -324,16 +324,16 @@ Values below are that file as of **2026-10-20**. (Feed is PrimeMLS, not Paragon.
 ### Massachusetts — Current Labor Market
 
 🔄 Source of truth: `data/employment-latest.json`, refreshed monthly from the BLS API.
-Values below are that file as of **2026-09-25** (reference month August 2026).
+Values below are that file as of **2026-10-20** (reference month September 2026).
 
 | Metric | Value | Period | Source |
 |--------|-------|--------|--------|
-| MA unemployment rate | 4.3% | August 2026 | BLS LAUS 🔄 |
-| MA unemployment level | 166,328 | August 2026 | BLS LAUS 🔄 |
-| MA labor force | 3,871,860 | August 2026 | BLS LAUS 🔄 |
-| MA total nonfarm | 3,706,000 | August 2026 | BLS CES 🔄 |
-| US unemployment rate | 4.1% | August 2026 | BLS 🔄 |
-| US job openings | 7.271M | July 2026 | BLS JOLTS 🔄 |
+| MA unemployment rate | 4.3% | September 2026 | BLS LAUS 🔄 |
+| MA unemployment level | 166,882 | September 2026 | BLS LAUS 🔄 |
+| MA labor force | 3,880,158 | September 2026 | BLS LAUS 🔄 |
+| MA total nonfarm | 3,711,000 | September 2026 | BLS CES 🔄 |
+| US unemployment rate | 4.2% | September 2026 | BLS 🔄 |
+| US job openings | 7.079M | August 2026 | BLS JOLTS 🔄 |
 
 > **⚠️ BLS discontinued monthly state-level JOLTS in 2026.** National JOLTS is still monthly;
 > state figures are annual now, first annual release July 2026. Any "MA job openings rate"

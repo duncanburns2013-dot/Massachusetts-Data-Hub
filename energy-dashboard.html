@@ -246,10 +246,10 @@ footer a:hover{color:var(--gold)}
 <div class="hero-stats">
 <div class="hero-stat"><div class="val bad">30.49&#x00A2;</div><div class="lbl">Per kWh (EIA Jul 2026)</div></div>
 <div class="hero-stat"><div class="val bad">+67%</div><div class="lbl">Above National Avg</div></div>
-<div class="hero-stat"><div class="val bad">128-27</div><div class="lbl">H.5175 House Vote</div></div>
+<div class="hero-stat"><div data-frozen="a recorded roll call on H.5175; a vote does not get re-taken" class="val bad">128-27</div><div class="lbl">H.5175 House Vote</div></div>
 <div class="hero-stat"><div class="val bad">$1.36B</div><div class="lbl">RGGI Carbon Tax Total</div></div>
 <div class="hero-stat"><div class="val bad"><span id="equivHeroStat">&#x2014;</span></div><div class="lbl">Gas/Gal Equivalence</div></div>
-<div class="hero-stat"><div class="val bad">$534K</div><div class="lbl">To Hide Non-Compliance</div></div>
+<div class="hero-stat"><div data-frozen="a specific assessed legal-fee total, not a running figure" class="val bad">$534K</div><div class="lbl">To Hide Non-Compliance</div></div>
 </div>
 </div>
 <nav class="tab-nav">
@@ -284,7 +284,7 @@ footer a:hover{color:var(--gold)}
 <div class="stat-card"><div class="label">Annual Overpayment</div><div class="value red">$877</div><div class="sub">Per household vs US avg</div></div>
 <div class="stat-card"><div class="label">H.5175 Relief</div><div class="value amber">~$150</div><div class="sub">Per year &#x2014; <span id="reliefGapPct">&#x2014;</span> of gap</div></div>
 <div class="stat-card"><div class="label">FL Rate</div><div class="value green">15.03&#x00A2;</div><div class="sub">Per kWh &#x2014; half of MA</div></div>
-<div class="stat-card"><div class="label">2025 Annual Avg Premium</div><div class="value red">+76%</div><div class="sub">30.48&#x00A2; MA vs 17.30&#x00A2; US &#x2014; full-year EIA</div></div>
+<div class="stat-card" data-owned-by="update-energy-dashboard.py"><div class="label">2025 Annual Avg Premium</div><div class="value red">+76%</div><div class="sub">30.48&#x00A2; MA vs 17.30&#x00A2; US &#x2014; full-year EIA</div></div>
 </div>
 <div class="chart-grid">
 <div class="chart-card"><h3>Residential Electricity Rates &#x2014; MA vs. Selected States (&#x00A2;/kWh)</h3><div class="chart-area"><canvas id="chartRatesOverview"></canvas></div><div class="source">Source: EIA Electric Power Monthly Table 5.6.A, July 2026</div></div>
@@ -500,7 +500,7 @@ footer a:hover{color:var(--gold)}
 <div id="wind" class="tab-content">
 <h2 class="section-title">Offshore Wind &#x2014; Billions in Costs, Foreign Profits</h2>
 <div class="stat-row">
-<div class="stat-card"><div class="label">Vineyard Wind Settlement</div><div class="value red">$10.5M</div><div class="sub">Nantucket blade failure</div></div>
+<div class="stat-card"><div class="label">Vineyard Wind Settlement</div><div data-frozen="cost of one event, the Nantucket blade failure" class="value red">$10.5M</div><div class="sub">Nantucket blade failure</div></div>
 <div class="stat-card"><div class="label">Plymouth Turbine</div><div class="value red">Collapsed</div><div class="sub">Nov 2025 &#x2014; blade in cranberry bog</div></div>
 <div class="stat-card"><div class="label">Contract Structure</div><div class="value red">Full Cost Recovery</div><div class="sub">Ratepayers absorb ALL costs</div></div>
 <div class="stat-card"><div class="label">Developer Origins</div><div class="value amber">&#x1F1EA;&#x1F1F8; &#x1F1E9;&#x1F1F0; &#x1F1F3;&#x1F1F1;</div><div class="sub">Spain, Denmark, Netherlands</div></div>
@@ -602,7 +602,7 @@ footer a:hover{color:var(--gold)}
 <div class="stat-row">
 <div class="stat-card"><div class="label">RGGI Total (2008&#x2013;2025)</div><div class="value red">$1.36B</div><div class="sub">Carbon tax from MA ratepayers</div></div>
 <div class="stat-card"><div class="label">2025 Alone</div><div class="value red">$200.4M</div><div class="sub">Up from $28M in 2008</div></div>
-<div class="stat-card"><div class="label">Recent 5-Year Avg</div><div class="value amber">$149.6M</div><div class="sub">2021&#x2013;2025 average per year</div></div>
+<div class="stat-card"><div class="label">Recent 5-Year Avg</div><div data-frozen="average over the closed 2021-2025 window" class="value amber">$149.6M</div><div class="sub">2021&#x2013;2025 average per year</div></div>
 <div class="stat-card"><div class="label">Direct Bill Relief</div><div class="value blue">~15%</div><div class="sub">Of RGGI proceeds returned</div></div>
 </div>
 <div class="chart-grid">
@@ -648,7 +648,7 @@ footer a:hover{color:var(--gold)}
 <h2 class="section-title">$534K to Hide Climate Non-Compliance</h2>
 <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">They mandate the rules, then don't follow them. Then spend your money hiding it.</p>
 <div class="expose-grid">
-<div class="expose-card hl-red"><h4>Legal Fees to Fight Disclosure</h4><div class="num red">$534K</div><p>Paid to a Boston law firm since April 2025. $417K from "Climate Adaptation" funds.</p></div>
+<div class="expose-card hl-red"><h4>Legal Fees to Fight Disclosure</h4><div data-frozen="a specific assessed legal-fee total, not a running figure" class="num red">$534K</div><p>Paid to a Boston law firm since April 2025. $417K from "Climate Adaptation" funds.</p></div>
 <div class="expose-card hl-purple"><h4>Agency Compliance Reports Filed</h4><div class="num purple">ZERO</div><p>State agencies required to file annual emissions reports since 2019. Not a single report.</p></div>
 <div class="expose-card"><h4>Healey Climate Agenda Estimate</h4><div class="num red">$130B</div><p>Administration's own estimate through 2050. Independent estimate: $400B+.</p></div>
 <div class="expose-card"><h4>Records Request Response</h4><div class="num blue">NONE</div><p>Both DEP and the Comptroller claimed "no responsive records."</p></div>
@@ -796,7 +796,7 @@ footer a:hover{color:var(--gold)}
 <div class="stat-card"><div class="label">BCCE "Savings"</div><div class="value green">$200/yr</div><div class="sub">Supply charge only &#x2014; 40% of bill</div></div>
 <div class="stat-card"><div class="label">Mandate Premium</div><div class="value red">$877/yr</div><div class="sub">What policy actually costs you</div></div>
 <div class="stat-card"><div class="label">Demand Increase</div><div class="value red">+33%</div><div class="sub">Eversource ESMP projection by 2033</div></div>
-<div class="stat-card"><div class="label">BERDO Deadline</div><div class="value amber">Net-Zero 2050</div><div class="sub">Large buildings &#x2014; costs to tenants</div></div>
+<div class="stat-card"><div class="label">BERDO Deadline</div><div data-frozen="a statutory target date, not a measurement" class="value amber">Net-Zero 2050</div><div class="sub">Large buildings &#x2014; costs to tenants</div></div>
 <div class="stat-card"><div class="label">Federal $ Lost</div><div class="value red">$105M+</div><div class="sub">Rescinded since Jan 2025</div></div>
 </div>
 <div class="section-title" style="margin-top:20px">The BCCE Illusion &#x2014; What Wu Won't Tell You</div>

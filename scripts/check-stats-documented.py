@@ -93,8 +93,42 @@ def method_numbers():
     return out
 
 
-def scan():
-    """Every headline statistic that is neither anchored nor documented."""
+FROZEN = re.compile(r'data-frozen="([^"]{8,})"')
+# A figure can also be owned by a markup-anchored regex substitution rather than
+# by a data-field. update-energy-dashboard.py works that way throughout -- 31
+# labelled substitutions that match on surrounding markup and rewrite the value
+# in place -- so its figures ARE script-written, and this check could not see it.
+# "+76%" on the annual-average card is written by substitution 17 every run, and
+# was being reported as unaccountable anyway.
+#
+# Adding a data-field there is not free: those regexes match the value element's
+# own tag, so a new attribute on it breaks the writer. data-owned-by goes on the
+# CARD instead, naming the script, which no substitution matches against.
+OWNED_BY = re.compile(r'data-owned-by="([a-z0-9_.-]+\.py)"')
+
+
+def scan(collect_frozen=None):
+    """Every headline statistic that is neither anchored, frozen, nor documented.
+
+    THREE ways a figure can be accounted for, and the third was missing:
+
+      anchored    carries id= or data-field=, so an updater writes it
+      documented  its digits appear in method.html
+      FROZEN      carries data-frozen="<why>", declaring it a point-in-time
+                  claim that must NOT track the newest release
+
+    Without the third, this check could not tell a deliberate vintage from a
+    forgotten number, and both sat in the same undifferentiated backlog. They
+    want opposite treatment. "+8,500 -- as first reported, since revised to
+    +7,400" is CORRECT precisely because it does not move; wiring it to a feed
+    would destroy the claim. "105.8 BEA Cost of Living" was simply unwired.
+    Lumping them together meant the real backlog could never be driven to zero,
+    so nobody tried.
+
+    data-frozen takes a reason of at least 8 characters, because "frozen" with
+    no stated why is how a stale figure gets relabelled instead of fixed. The
+    reason is on the page, next to the figure, where the next reader finds it.
+    """
     documented = method_numbers()
     found = []
     for f in sorted(REPO.glob("*.html")):
@@ -103,6 +137,12 @@ def scan():
         html = f.read_text(encoding="utf-8")
         for card in CARD.finditer(html):
             block = card.group(1)
+            # The whole match, opening tag included. CARD's capture group starts
+            # AFTER the card's own tag, so a data-frozen or data-owned-by placed
+            # on the card element itself is invisible to `block` -- and the card
+            # is exactly where data-owned-by has to go, since the writers' regexes
+            # match the value element's tag and a new attribute there breaks them.
+            whole = card.group(0)
             v = VALUE.search(block)
             if not v:
                 continue
@@ -113,7 +153,12 @@ def scan():
                 continue
             anchored = ("id=" in attrs or "data-field=" in attrs
                         or "data-field=" in block or "data-mig=" in block)
-            if anchored or d in documented:
+            frozen = FROZEN.search(whole)
+            owned_by = OWNED_BY.search(whole)
+            if frozen and collect_frozen is not None:
+                collect_frozen.append({"page": f.name, "value": raw[:24],
+                                       "why": frozen.group(1)})
+            if anchored or frozen or owned_by or d in documented:
                 continue
             label = re.sub(r"\s+", " ", TAG.sub(" ", block[v.end():])).strip()[:60]
             found.append({"page": f.name, "value": raw[:24], "label": label})
@@ -125,7 +170,8 @@ def key(item):
 
 
 def main():
-    found = scan()
+    frozen = []
+    found = scan(collect_frozen=frozen)
     update = "--update" in sys.argv
 
     if update:
@@ -160,6 +206,17 @@ def main():
     print("  found now       : %d" % len(seen))
     print("  newly appeared  : %d" % len(new))
     print("  since documented: %d" % len(fixed))
+
+    # Frozen figures are accounted for, not invisible. A declaration that is
+    # never shown again is how a figure gets quietly relabelled instead of
+    # fixed, so every one is listed with the reason it carries, for a human to
+    # disagree with.
+    if frozen:
+        print()
+        print("%d frozen as point-in-time claims (must NOT track the newest "
+              "release):" % len({(f["page"], f["value"]) for f in frozen}))
+        for f in sorted({(f["page"], f["value"], f["why"]) for f in frozen}):
+            print("   %-28s %-14s %s" % (f[0], f[1], f[2]))
 
     if fixed:
         print()
