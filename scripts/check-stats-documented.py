@@ -43,6 +43,15 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
+# The figures this script prints are the ones off the page, so they carry the
+# page's typography -- U+2212 MINUS SIGN among it. On Windows the default console
+# encoding is cp1252, which cannot encode it, so printing the report raised
+# UnicodeEncodeError and the script exited 1 with its real verdict ("No new
+# unaccountable figures") already on screen above the traceback. The weekly local
+# health check read that as a failed gate. Same idiom as pdftext.py.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 BASELINE = Path(__file__).resolve().parent / "stat-baseline.json"
 
 SKIP = {"template.html", "404.html", "method.html", "instrument.html"}
