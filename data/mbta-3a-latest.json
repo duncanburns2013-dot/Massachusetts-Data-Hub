@@ -10,9 +10,9 @@
     "Rapid Transit": 12
   },
   "by_compliance_status": {
-    "Compliant": 157,
+    "Compliant": 158,
     "Interim Compliance": 9,
-    "Noncompliant": 9,
+    "Noncompliant": 8,
     "Conditional Compliance": 2
   },
   "tracker": {
@@ -25,7 +25,7 @@
     "deed_restricted_pct_of_tracked": 18.1,
     "edition": "2026-09-11"
   },
-  "compliance_edition": "2026-08-31",
+  "compliance_edition": "2026-10-19",
   "towns": [
     {
       "n": "Abington",
@@ -2105,7 +2105,7 @@
       "h": 12139,
       "r": 1214,
       "pct": 10,
-      "status": "Noncompliant",
+      "status": "Interim Compliance",
       "adopted": "No",
       "deadline": "7/14/2025",
       "projects": 0,
@@ -2469,7 +2469,7 @@
       "h": 17540,
       "r": 2631,
       "pct": 15,
-      "status": "Interim Compliance",
+      "status": "Compliant",
       "adopted": "Yes",
       "deadline": "12/31/2024",
       "projects": 0,
@@ -2506,18 +2506,18 @@
       "deed": 0
     }
   ],
-  "verified": "2026-09-25",
+  "verified": "2026-10-20",
   "source": "Massachusetts Executive Office of Housing and Livable Communities -- published category/capacity table, Compliance Status Sheet, and 3A Development Tracker",
   "source_url": "https://www.mass.gov/info-details/multi-family-zoning-requirement-for-mbta-communities",
   "source_files": {
     "capacity": "https://www.mass.gov/files/csv/2025-06/MBTA%20Communities%20Community%20Categories%20and%20Capacity%20Calculations%20for%20web_June2025.csv",
-    "compliance": "https://www.mass.gov/files/csv/2026-08/Compliance%20Status%20Sheet%20as%20of%208-31-26.csv",
+    "compliance": "https://www.mass.gov/files/csv/2026-10/Compliance%20Status%20Sheet%20as%20of%2010-19-26.csv",
     "tracker": "https://www.mass.gov/files/csv/2026-09/3A%20Development%20Tracker%20as%20of%209-11-26.csv"
   },
   "notes": "Required capacity is zoned capacity under EOHLC's compliance model, not a construction requirement. Tracker rows mix completed, permitted and proposed developments and EOHLC states the list may not be comprehensive.",
   "meta": {
     "currency": {
-      "checked": "2026-09-25",
+      "checked": "2026-10-20",
       "newest_available": "2026-09-11",
       "cadence": "EOHLC reissues the compliance sheet and the development tracker every few weeks; the capacity table changes rarely"
     }
