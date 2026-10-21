@@ -35,6 +35,17 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SPEC = os.path.join(ROOT, "data", "retired-figures.json")
 
+# Wrap a published correction note in these and the figures it quotes are not
+# treated as live claims:
+#
+#   <!--retired-quote-->This read "$87,548", which counted salaries
+#   only...<!--/retired-quote-->
+#
+# Comment delimiters rather than a class attribute, so the same convention
+# works in Markdown and in HTML, and so no tag nesting has to be parsed.
+QUOTE = re.compile(r"<!--\s*retired-quote\s*-->.*?<!--\s*/\s*retired-quote\s*-->",
+                   re.S)
+
 
 def candidate_files(spec):
     pats = spec["scan"]["files"]
@@ -72,6 +83,12 @@ def read_scannable(rel, spec):
     cut = spec["scan"].get("skip_after_heading", {}).get(rel)
     if cut and cut in text:
         text = text.split(cut, 1)[0]
+    # A page that tells the reader what it used to say has to name the old
+    # figure, and that sentence is the opposite of the problem -- it is the
+    # correction being shown rather than hidden. Wrapping it in these markers
+    # takes it out of the scan, for every entry at once. Newlines are kept so
+    # reported line numbers stay right.
+    text = QUOTE.sub(lambda mt: "\n" * mt.group(0).count("\n"), text)
     return text
 
 

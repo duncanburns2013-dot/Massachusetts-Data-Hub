@@ -1,7 +1,7 @@
 {
  "what_this_is": "Figures that were published and turned out to be wrong. Each one is recorded here so it cannot come back. scripts/check-retired-figures.py fails the build if a retired value reappears anywhere near its own subject.",
  "why": "Every wrong figure on this hub so far was found by a person reading a page, not by a check. The register catches a hero figure no script owns, and check-consistency catches MASTER_DATA drifting from a feed, but nothing stopped a figure that had already been corrected once from being re-typed somewhere else. Three of the figures below were corrected on 2026-09-30 and were still live on another page three weeks later.",
- "how_to_add": "When you correct a published figure, add an entry here in the same commit. 'wrong' lists every written form of the bad value. 'context' is a regex that must appear within context_window characters for a hit to count, so an unrelated use of the same digits does not fail the build.",
+ "how_to_add": "When you correct a published figure, add an entry here in the same commit. 'wrong' lists every written form of the bad value. 'context' is a regex that must appear within context_window characters for a hit to count, so an unrelated use of the same digits does not fail the build. Set context_window wide enough to clear any correction note sitting between the subject and the figure -- 900 is the working default; 200 missed a live error on its first run.",
  "scan": {
   "files": [
    "*.html",
@@ -112,13 +112,16 @@
    "id": "mira-lobbying-salaries",
    "subject": "MIRA Coalition lobbying, 2022-2025",
    "wrong": [
+    "$87,548",
+    "$87.5K",
+    "+$87.5K",
     "87,548",
-    "$87,548"
+    "87.5K"
    ],
    "right": "$451,299 total 2020-2026 (salaries, firm payments and expenses); salaries alone 2022-2025 are $86,971.60",
    "context": "(?i)mira|immigrant and refugee advocacy",
-   "context_window": 300,
-   "why": "Counted salaries only, and excluded payments to Charles Group Consulting and reported expenses, which understated the money by about 5x. Read from the Secretary of the Commonwealth's Lobbyist Public Search on 2026-10-21.",
+   "context_window": 900,
+   "why": "Counted salaries only, and excluded payments to Charles Group Consulting and reported expenses, which understated the money by about 5x. Read from the Secretary of the Commonwealth's Lobbyist Public Search on 2026-10-21. The abbreviated form ($87.5K) sat in a callout beside the corrected paragraph and was missed on the first pass: the correction note itself is ~700 characters, so the subject word was outside a 300-character window. Hence 900.",
    "retired_on": "2026-10-21",
    "allow": [
     "data/retired-figures.json",
@@ -131,13 +134,14 @@
    "id": "mira-contracts",
    "subject": "MIRA Coalition state payments",
    "wrong": [
-    "7,662,233",
-    "$7.66M"
+    "$11.9M",
+    "$7.66M",
+    "7,662,233"
    ],
    "right": "$11,853,078 — CTHRU, payments under tier-1 appropriations",
    "context": "(?i)mira|immigrant and refugee advocacy",
-   "context_window": 300,
-   "why": "Understated by about 35%; the earlier figure missed payments under the reserve accounts.",
+   "context_window": 900,
+   "why": "Understated by about 35%; the earlier figure missed payments under the reserve accounts. Found in three written forms on one page: $7,662,233, and $7.66M twice more in a card and a callout.",
    "retired_on": "2026-10-21",
    "allow": [
     "data/retired-figures.json",
