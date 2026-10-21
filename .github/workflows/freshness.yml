@@ -84,7 +84,22 @@ jobs:
         if: always()
         run: python scripts/check-retired-figures.py
 
-      # Fifth question, and the only one that looks outside this repository:
+      # Fifth question: do two pages publish different values for the same
+      # named quantity?
+      #
+      # This is the one that would have caught HomeBASE directly. The figure
+      # was $91.35M on the immigration dashboard and $57.29M in the register,
+      # and no check held the two side by side. It binds a figure to its name
+      # structurally -- a table cell to its row AND column label, a card
+      # figure to a label under the same parent -- never by proximity, which
+      # was tried first and reported every figure in a table as a conflict.
+      #
+      # always(), for the same reason as above.
+      - name: Check no two pages disagree on the same figure
+        if: always()
+        run: python scripts/check-cross-page.py
+
+      # Sixth question, and the only one that looks outside this repository:
       # is the job that writes the feed still running at all?
       #
       # The Peoples Audit has nine scheduled workflows and no health check of any

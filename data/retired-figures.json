@@ -42,10 +42,11 @@
     "MASTER_DATA.md",
     "data/retired-figures.json",
     "method.html",
+    "scripts/check-cross-page.py",
     "scripts/check-retired-figures.py",
     "update-immigrant-spending.py"
    ],
-   "allow_note": "method.html is generated from MASTER_DATA.md and renders its update log. Its register rows are checked upstream by update-immigrant-spending.py, which writes them. MASTER_DATA.md keeps the budget-document projection as its own clearly labelled row, because the distinction between a projection and an actual is the thing that went wrong and the register is where it has to be recorded. update-immigrant-spending.py names the figure in the comment explaining why it writes this series."
+   "allow_note": "method.html is generated from MASTER_DATA.md and renders its update log. Its register rows are checked upstream by update-immigrant-spending.py, which writes them. MASTER_DATA.md keeps the budget-document projection as its own clearly labelled row, because the distinction between a projection and an actual is the thing that went wrong and the register is where it has to be recorded. update-immigrant-spending.py names the figure in the comment explaining why it writes this series. scripts/check-cross-page.py names the figure in the docstring explaining what the check exists to catch."
   },
   {
    "id": "homebase-fy26-transfer",
@@ -65,10 +66,11 @@
     "MASTER_DATA.md",
     "data/retired-figures.json",
     "method.html",
+    "scripts/check-cross-page.py",
     "scripts/check-retired-figures.py",
     "update-immigrant-spending.py"
    ],
-   "allow_note": "Same rows: the register states the arithmetic that produced the false transfer, so a reader can see it was derived rather than read."
+   "allow_note": "Same rows: the register states the arithmetic that produced the false transfer, so a reader can see it was derived rather than read. scripts/check-cross-page.py names the figure in the docstring explaining what the check exists to catch."
   },
   {
    "id": "homebase-growth",
@@ -85,10 +87,11 @@
    "allow": [
     "data/retired-figures.json",
     "method.html",
+    "scripts/check-cross-page.py",
     "scripts/check-retired-figures.py",
     "update-immigrant-spending.py"
    ],
-   "allow_note": "Named in the script comment that explains the correction."
+   "allow_note": "Named in the script comment that explains the correction. scripts/check-cross-page.py names the figure in the docstring explaining what the check exists to catch."
   },
   {
    "id": "homebase-101m",
