@@ -171,7 +171,7 @@ FY2024 was appropriated <span data-field="fy2024-enacted-inline">$627.9M</span> 
 <h2 class="sec-title">Every organisation paid under these appropriations</h2>
 <p class="sec-desc">From CTHRU's payment records, FY2022 onward. Sorted by total received. Searchable.</p>
 
-<div class="caveat"><strong>Checked against the IRS, and most of this money is not going to charities.</strong> Every name here was matched to the IRS Exempt Organizations file for Massachusetts. <strong><span data-field="irs-c3-count">100</span> of <span data-field="irs-org-count">392</span></strong> are confirmed 501(c)(3), taking <strong><span data-field="irs-c3-dollars">$106.7M</span></strong> &mdash; <strong><span data-field="irs-c3-pct">32.1%</span></strong> of the <span data-field="irs-total-dollars">$332.0M</span>. The largest recipients are for-profit contractors. <em>Not in the file</em> is not evidence against an organisation: a charity incorporated outside Massachusetts, or paid through a fiscal sponsor, will not appear in the Massachusetts file.</div>
+<div class="caveat"><strong>Checked against the IRS, and most of this money is not going to charities.</strong> Every name here was matched to the IRS Exempt Organizations file for Massachusetts. <strong><span data-field="irs-c3-count">101</span> of <span data-field="irs-org-count">392</span></strong> are confirmed 501(c)(3), taking <strong><span data-field="irs-c3-dollars">$112.0M</span></strong> &mdash; <strong><span data-field="irs-c3-pct">33.1%</span></strong> of the <span data-field="irs-total-dollars">$338.1M</span>. The largest recipients are for-profit contractors. <em>Not in the file</em> is not evidence against an organisation: a charity incorporated outside Massachusetts, or paid through a fiscal sponsor, will not appear in the Massachusetts file.</div>
 
 <input class="srch" id="q" placeholder="Search organisations&hellip;" oninput="filt()">
 <div class="card"><div class="table-wrap">
@@ -364,34 +364,22 @@ MIRA&rsquo;s registration names immigration bills directly &mdash; S.1681, H.258
 <div class="caveat"><strong>The lesson this page is built on.</strong> An earlier version of this analysis matched vendor names against the substrings <code>IMMIGRANT</code>, <code>REFUGEE</code>, <code>MIRA</code> and <code>NEIGHBOR</code> and reported $228.6M. Its own README documents what that produced: the three largest &ldquo;immigrant vendors&rdquo; were federally qualified health centres billing MassHealth for every patient, matched on <code>NEIGHBOR</code>; <code>MIRA</code> matched a dentist, a daycare and two people named Miranda. 78.4% of the total was MassHealth claims. Asking what an appropriation <em>funds</em> cannot make that mistake.</p></div>
 
 <div class="grid-2">
-<div class="card"><div class="card-title">Tier 1 &mdash; 15 accounts</div>
-<div class="table-wrap"><table class="rec-table"><thead><tr><th>Account</th><th>Name</th></tr></thead><tbody>
-<tr><td><code>1599-0122</code></td><td>Immigrants and Refugees Housing Reserve</td></tr>
-<tr><td><code>1599-0514</code></td><td>Family Shelter and Services Reserve</td></tr>
-<tr><td><code>1599-0924</code></td><td>Immigration and Refugee Reserve</td></tr>
-<tr><td><code>1599-0925</code></td><td>Immigrants and Refugees Supports Reserve</td></tr>
-<tr><td><code>1599-1213</code></td><td>Family Shelter and Services Reserve</td></tr>
-<tr><td><code>1599-2625</code></td><td>Family Shelter / Supplemental Shelter Costs Reserve</td></tr>
-<tr><td><code>4003-0111</code></td><td>Office of Refugees and Immigrants Administration</td></tr>
-<tr><td><code>4003-0122</code></td><td>Low-Income Citizenship Program</td></tr>
-<tr><td><code>4003-0123</code></td><td>For Resettlement Agencies</td></tr>
-<tr><td><code>4403-2120</code></td><td>For Family Shelter / Transitional Housing</td></tr>
-<tr><td><code>7004-0101</code></td><td>Emergency Assistance - Family Shelters and Services</td></tr>
-<tr><td><code>7004-0103</code></td><td>Homeless Family EA Shelter Overflow - Hotels and Motels</td></tr>
-<tr><td><code>7004-0108</code></td><td>MA Short-Term Housing Transition Program (HomeBASE)</td></tr>
-<tr><td><code>7004-0109</code></td><td>Shelter Workforce Assistance</td></tr>
-<tr><td><code>7004-0110</code></td><td>Family Shelter Diversion</td></tr>
-</tbody></table></div></div>
+<div class="card"><div class="card-title">Tier 1 &mdash; <span data-field="t1-count">16</span> accounts</div>
+<div class="table-wrap"><table class="rec-table"><thead><tr><th>Account</th><th>Name</th></tr></thead><tbody id="t1-accts"><tr><td colspan="2" style="color:var(--muted)">Loading&hellip;</td></tr></tbody></table></div></div>
 <div class="card"><div class="card-title">Tier 2 &mdash; general rental assistance</div>
-<div class="table-wrap"><table class="rec-table"><thead><tr><th>Account</th><th>Name</th></tr></thead><tbody>
-<tr><td><code>7004-9024</code></td><td>MRVP rental vouchers</td></tr>
-<tr><td><code>7004-9316</code></td><td>RAFT / Homeless Housing (rental and mortgage aid)</td></tr>
-</tbody></table></div>
+<div class="table-wrap"><table class="rec-table"><thead><tr><th>Account</th><th>Name</th></tr></thead><tbody id="t2-accts"><tr><td colspan="2" style="color:var(--muted)">Loading&hellip;</td></tr></tbody></table></div>
 <p class="card-sub" style="margin-top:10px">Reported, never blended into tier 1.</p></div>
 </div>
 
+<div class="card"><div class="card-title">What the search returns and this page leaves out</div>
+<p class="card-sub" id="excl-why">Loading&hellip;</p>
+<div class="table-wrap"><table class="rec-table"><thead><tr><th>Account</th><th>Name</th><th>Why it is not in tier 1</th></tr></thead><tbody id="excl-accts"><tr><td colspan="3" style="color:var(--muted)">Loading&hellip;</td></tr></tbody></table></div>
+<p class="card-sub" style="margin-top:10px">An exclusion nobody can see is indistinguishable from an oversight. On 21 Oct 2026 one of these turned out to be exactly that: the Immigration Legal Assistance Fund (4003-0124) was missing because the search term was <code>IMMIGRAN</code>, which matches &ldquo;Immigrant&rdquo; but not &ldquo;Immigration&rdquo;. It is now in tier 1, and the updater re-runs this search on every run and refuses to publish if an account appears that is in no tier and on no list.</p></div>
+
+</div>
+
 <div class="card"><div class="card-title">Reproduce it</div>
-<p class="card-sub">Accounts were found by searching <code>appropriation_account_name</code> for the purpose words &mdash; IMMIGRAN, REFUGEE, ASYLUM, SHELTER, CITIZENSHIP, MIGRANT, RESETTLE, EMERGENCY ASSISTANCE, HOUSING TRANS. Re-run that search against CTHRU to audit the list; it is the Commonwealth's naming, not ours. Totals sum every fund row per account per year, which is what reproduces the state's own published figures.</p>
+<p class="card-sub">Accounts were found by searching <code>appropriation_account_name</code> for the purpose words &mdash; <span data-field="search-terms">IMMIGRA, REFUGEE, ASYLUM, SHELTER, CITIZENSHIP, MIGRANT, RESETTLE, EMERGENCY ASSISTANCE, HOUSING TRANS, NEW AMERICAN, UNACCOMPANIED, HOMELESS</span>. Re-run that search against CTHRU to audit the list; it is the Commonwealth's naming, not ours. Totals sum every fund row per account per year, which is what reproduces the state's own published figures.</p>
 <p class="card-sub" style="margin-top:8px"><code>python update-immigrant-spending.py</code></p></div>
 </div>
 </div>
@@ -436,6 +424,35 @@ fetch('data/immigrant-spending-latest.json').then(function(r){return r.json()}).
   document.getElementById('payroll').innerHTML=PAY.map(function(r){
     return '<tr><td>'+r.vendor+'</td><td class="num">'+money(r.total)+'</td><td class="num">'+r.payments+'</td></tr>'
   }).join('');
+
+  // The account tables render from the feed rather than being typed here. They
+  // were typed here until 21 Oct 2026, and said "Tier 1 - 15 accounts" after a
+  // sixteenth was added, which is the whole failure mode in one line.
+  function dash(a){ return a.length===8 ? a.slice(0,4)+'-'+a.slice(4) : a; }
+  function acctRows(obj){
+    return Object.keys(obj).sort().map(function(k){
+      return '<tr><td><code>'+dash(k)+'</code></td><td>'+obj[k]+'</td></tr>';
+    }).join('');
+  }
+  var t1a=document.getElementById('t1-accts');
+  if(t1a) t1a.innerHTML=acctRows(d.tier1.accounts);
+  var t2a=document.getElementById('t2-accts');
+  if(t2a) t2a.innerHTML=acctRows(d.tier2.accounts);
+  var t1c=document.querySelector('[data-field="t1-count"]');
+  if(t1c) t1c.textContent=Object.keys(d.tier1.accounts).length;
+
+  var sel=d.account_selection;
+  if(sel){
+    var st=document.querySelector('[data-field="search-terms"]');
+    if(st) st.textContent=sel.search_terms.join(', ');
+    var why=document.getElementById('excl-why');
+    if(why) why.textContent=sel.excluded_reason;
+    var ex=document.getElementById('excl-accts');
+    if(ex) ex.innerHTML=(sel.excluded||[]).map(function(r){
+      return '<tr><td><code>'+dash(r.account)+'</code></td><td>'+r.name+
+             '</td><td>'+r.reason+'</td></tr>';
+    }).join('');
+  }
 }).catch(function(e){
   document.getElementById('recs').innerHTML='<tr><td colspan="4" style="color:var(--red)">Could not load data/immigrant-spending-latest.json &mdash; '+e+'</td></tr>';
 });

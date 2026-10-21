@@ -65,9 +65,51 @@ SPEND = f"{DOMAIN}/pegc-naaa.json"      # the checkbook
 
 EXIT_BLOCKED = 75
 
-# Found by searching appropriation_account_name for: IMMIGRAN, REFUGEE, ASYLUM,
-# SHELTER, CITIZENSHIP, MIGRANT, RESETTLE, EMERGENCY ASSISTANCE, HOUSING TRANS.
-# Re-run that search to audit this list; it is the state's naming, not ours.
+# The search that produces this list. Re-run it to audit the list; it is the
+# state's naming, not ours.
+#
+# IMMIGRA, not IMMIGRAN: the original term matched "Immigrant" and "Immigrants"
+# and silently missed "Immigration", which cost the headline the Immigration
+# Legal Assistance Fund (4003-0124, $6,355,787 FY22-27). A substring that
+# matches one word form of a purpose and not another is not a search, and the
+# only reason it was found is that another page on this hub carried the
+# account and the two disagreed.
+SEARCH_TERMS = ["IMMIGRA", "REFUGEE", "ASYLUM", "SHELTER", "CITIZENSHIP",
+                "MIGRANT", "RESETTLE", "EMERGENCY ASSISTANCE", "HOUSING TRANS",
+                "NEW AMERICAN", "UNACCOMPANIED", "HOMELESS"]
+
+# Accounts the search returns that are deliberately NOT in tier 1, with the
+# reason, because an exclusion nobody can see is indistinguishable from an
+# oversight -- which is what 4003-0124 turned out to be. Published on the page.
+EXCLUDED = {
+    "70040102": ("Homeless Individuals Assistance", "general homelessness"),
+    "50462000": ("Services to the Homeless Mentally Ill", "general homelessness"),
+    "70350008": ("Homeless Student Transportation", "general homelessness"),
+    "70350005": ("Homeless Student Transportation", "general homelessness"),
+    "70040100": ("Operation of Homeless Programs", "general homelessness"),
+    "40000007": ("Unaccompanied Homeless Youth Services", "general homelessness"),
+    "70040202": ("Homeless Individuals Rapid Re-Housing", "general homelessness"),
+    "14100250": ("Assistance to Homeless Veterans", "general homelessness"),
+    "70040106": ("Homeless Family Preference in Private Multi-Family",
+                 "general family homelessness, not the EA shelter system"),
+    "91101700": ("Elder Homeless Placement", "general homelessness"),
+    "15990017": ("End Family Homelessness Reserve Fund",
+                 "general family homelessness, not the EA shelter system"),
+    "15991004": ("Commission to End Homelessness Recommendations Reserve",
+                 "general homelessness"),
+    "70040002": ("Friends of the Homeless (Springfield)", "general homelessness"),
+    "05242022": ("New American Voters Grant Program",
+                 "voter registration, not an immigrant service or shelter"),
+}
+EXCLUDED_REASON = (
+    "These accounts match the purpose-word search but are general homelessness "
+    "programs, not immigrant-designated ones. They carry $939M in FY2022-FY2027 "
+    "spending between them. Folding that into an immigrant-spending headline "
+    "would repeat exactly the overreach this page was built to avoid -- the "
+    "earlier version of this analysis counted three federally qualified health "
+    "centres as immigrant vendors because their names contained NEIGHBOR. A "
+    "homeless shelter is not an immigrant program because both involve shelter.")
+
 TIER1 = {
     "15990122": "Immigrants and Refugees Housing Reserve",
     "15990514": "Family Shelter and Services Reserve",
@@ -78,6 +120,7 @@ TIER1 = {
     "40030111": "Office of Refugees and Immigrants Administration",
     "40030122": "Low-Income Citizenship Program",
     "40030123": "For Resettlement Agencies",
+    "40030124": "Immigration Legal Assistance Fund",
     "44032120": "For Family Shelter / Transitional Housing",
     "70040101": "Emergency Assistance - Family Shelters and Services",
     "70040103": "Homeless Family EA Shelter Overflow - Hotels and Motels",
@@ -156,6 +199,44 @@ def fy_of(row):
 
 def quoted(codes):
     return ",".join(f"'{c}'" for c in codes)
+
+
+def check_account_coverage():
+    """Re-run the purpose-word search and account for every hit.
+
+    The list of accounts was written once and then trusted. When the search
+    term was wrong, nothing noticed for as long as the list sat there -- an
+    account can only go missing silently if nobody re-runs the search. This
+    runs it every time and refuses to publish if an account turns up that is
+    in neither tier nor the excluded register.
+
+    New accounts appear in the real world: the Immigration Legal Assistance
+    Fund has rows only from FY2026. A list that is never re-derived goes out of
+    date by sitting still.
+    """
+    seen = {}
+    for term in SEARCH_TERMS:
+        qs = urllib.parse.urlencode({
+            "$select": "appropriation_account_number,appropriation_account_name",
+            "$where": (f"upper(appropriation_account_name) like '%{term}%' "
+                       f"AND fiscal_year>={FIRST_FY}"),
+            "$limit": "5000",
+        })
+        for r in get(f"{BUDGET}?{qs}"):
+            acct = (r.get("appropriation_account_number") or "").strip()
+            if acct:
+                seen[acct] = (r.get("appropriation_account_name") or "").strip()
+    known = set(TIER1) | set(TIER2) | set(EXCLUDED)
+    new = {k: v for k, v in seen.items() if k not in known}
+    print(f"\n  account coverage: {len(seen)} accounts match the purpose words; "
+          f"{len(TIER1)} tier 1, {len(TIER2)} tier 2, {len(EXCLUDED)} excluded")
+    if new:
+        lines = "\n  ".join(f"{k}  {v}" for k, v in sorted(new.items()))
+        blocked("the purpose-word search returned accounts that are in no "
+                "tier and in no excluded register. Each needs a decision "
+                "recorded in this script before the figures can be "
+                f"republished:\n  {lines}")
+    return seen
 
 
 def build_series(rows, newest):
@@ -458,6 +539,8 @@ def latest_payment_date(codes):
 def main():
     print("=== MA immigrant, refugee and family-shelter spending (CTHRU) ===\n")
 
+    check_account_coverage()
+
     all_codes = list(TIER1) + list(TIER2)
     rows = budget_rows(all_codes)
     if not rows:
@@ -532,6 +615,18 @@ def main():
         "newest_fiscal_year": newest,
         "newest_payment_date": last_date,
         "cthru_row_created": last_create,
+        "account_selection": {
+            "search_terms": SEARCH_TERMS,
+            "dataset": "kv7m-35wn, appropriation_account_name, FY2022 onward",
+            "tier1_accounts": len(TIER1),
+            "excluded": [{"account": k, "name": v[0], "reason": v[1]}
+                         for k, v in sorted(EXCLUDED.items())],
+            "excluded_reason": EXCLUDED_REASON,
+            "audit": ("Re-run the search over the terms above and every account "
+                      "it returns is either in tier 1, in tier 2, or in the "
+                      "excluded list with a reason. check_account_coverage() "
+                      "fails the run if a new one appears in none of the three."),
+        },
         "method_note": ("Accounts selected by searching appropriation_account_name "
                         "for purpose words. Classifying by appropriation asks what "
                         "the money was appropriated to do. A vendor-name match "
