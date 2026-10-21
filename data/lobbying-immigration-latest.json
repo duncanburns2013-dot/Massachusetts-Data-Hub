@@ -1,0 +1,123 @@
+{
+ "verified_at": "2026-10-21",
+ "verified_by": "read directly from the Secretary of the Commonwealth's Lobbyist Public Search, in a browser session",
+ "source": "Massachusetts Secretary of the Commonwealth, Lobbyist Public Search",
+ "source_url": "https://www.sec.state.ma.us/LobbyistPublicSearch/Default.aspx",
+ "why_no_updater": "The Secretary blocks server-side fetches, so no workflow can refresh this. It is read by hand from a browser session, which is the same constraint data/ma-lobbying-firms-latest.json lives with.",
+ "filing_cycle": "Semi-annual. The Jan 1 - Jun 30 report is due Jul 15; the Jul 1 - Dec 31 report is due Jan 15. As of 2026-10-21 the first-half 2026 filing is the newest that exists; second-half 2026 cannot be filed until January 2027.",
+ "period": "2026-01-01 to 2026-06-30",
+ "period_is_partial_year": true,
+ "entities": {
+  "mira": {
+   "name": "Massachusetts Immigrant and Refugee Advocacy Coalition, Inc.",
+   "short": "MIRA Coalition",
+   "registration_type": "Client",
+   "registration_year": 2026,
+   "address": "69 Canal Street, Ste. 3, Boston, MA 02114",
+   "scope": "immigration-specific",
+   "scope_evidence": "The registration names the bills directly: An Act to protect the civil rights and safety of all Massachusetts residents (S.1681, H.2580) and An Act ensuring access to equitable representation (S.1127, H.1954), plus budget legislation and executive-branch policy benefiting immigrants and refugees.",
+   "salaries": 16793.3,
+   "entity_payments": 23000.0,
+   "entity_paid": "Charles Group Consulting",
+   "expenses_operating": 1640.53,
+   "expenses_additional": 28207.13,
+   "expenses_total": 29847.66,
+   "total": 69640.96,
+   "lobbyists": [
+    {
+     "name": "Amy M Grunder",
+     "amount": 8887.22
+    },
+    {
+     "name": "Maroni Minter",
+     "amount": 3335.85
+    },
+    {
+     "name": "Gilberto Javier Calderin",
+     "amount": 2584.43
+    },
+    {
+     "name": "Elizabeth Sweet",
+     "amount": 1985.8
+    }
+   ]
+  },
+  "aclu": {
+   "name": "American Civil Liberties Union of Massachusetts, Inc.",
+   "short": "ACLU of Massachusetts",
+   "registration_type": "Client",
+   "registration_year": 2026,
+   "scope": "all civil liberties and civil rights",
+   "scope_warning": "NOT immigration-specific. ACLU-MA's registered purpose covers all matters related to the protection and advancement of civil liberties and civil rights. Do not describe this as immigration lobbying -- the registration does not support it. MIRA's does.",
+   "salaries": 112213.0,
+   "entity_payments": 37500.0,
+   "entity_paid": "Isaacson Political Consulting",
+   "expenses_total": 58504.16,
+   "total": 208217.16,
+   "lobbyists": [
+    {
+     "name": "Gavi Wolfe",
+     "amount": 52863.0
+    },
+    {
+     "name": "Kade Crockford",
+     "amount": 22500.0
+    },
+    {
+     "name": "Laura Rótolo",
+     "amount": 12500.0
+    },
+    {
+     "name": "Gideon Epstein",
+     "amount": 9375.0
+    },
+    {
+     "name": "Carol Rose",
+     "amount": 7000.0
+    },
+    {
+     "name": "William Newman",
+     "amount": 4975.0
+    },
+    {
+     "name": "Eva de Charleroy",
+     "amount": 3000.0
+    },
+    {
+     "name": "Daniel McFadden",
+     "amount": 0.0
+    },
+    {
+     "name": "Javier Luengo-Garrido",
+     "amount": 0.0
+    },
+    {
+     "name": "Jessica Rossman",
+     "amount": 0.0
+    },
+    {
+     "name": "Julia Schlozman",
+     "amount": 0.0
+    },
+    {
+     "name": "Katy Naples-Mitchell",
+     "amount": 0.0
+    },
+    {
+     "name": "Olivia Santoro",
+     "amount": 0.0
+    },
+    {
+     "name": "Traci Griffith",
+     "amount": 0.0
+    },
+    {
+     "name": "Whitney Taylor",
+     "amount": 0.0
+    }
+   ],
+   "prior_years_note": "Full-year totals 2020-2025 came to $2,333,600, peaking at $465,709 in 2025. Those figures were transcribed from page renders in duncanburns2013-dot/The-Invasion and have NOT been re-read from the registry; only the 2026 figures above were verified on 2026-10-21."
+  }
+ },
+ "verification_note": "Every 2026 figure above was read from the Secretary's own summary page on 2026-10-21 and matched, to the cent, the figures carried in duncanburns2013-dot/The-Invasion, which had been transcribed from PNG page renders. Salaries, entity payments and expenses each reconcile to the published totals, and the named lobbyist amounts sum to the salary line in both cases. One name was initially dropped from the ACLU list -- Laura Rótolo, $12,500 -- because an accented character defeated the pattern used to read the page. The reconciliation check caught it: the named amounts summed $12,500 short of the registry's own salary total. Every list here now sums to its stated total."
+}

@@ -32,6 +32,11 @@ DATA = [
     # CTHRU posts the Comptroller checkbook daily, but the payments in it run
     # about a month behind (payments through 17 Sep were posted 20 Oct when this
     # was built). 21 days ages a stopped feed without firing on that normal lag.
+    # Semi-annual filings (due Jul 15 and Jan 15) read by hand from a browser
+    # session -- the Secretary blocks server-side fetches, so no workflow can
+    # own this. 200 days clears one full cycle; a skipped filing cannot hide.
+    ("data/lobbying-immigration-latest.json", 200,
+     "MA SoC lobbyist registry; semi-annual, manual browser read, no workflow can fetch it"),
     ("data/immigrant-spending-latest.json", 21,
      "CTHRU budget-vs-actual + Comptroller spending; posted daily, ~1 month lag"),
     ("data/nh-figures.json",              7,  "daily pull; worst real gap 3d"),
