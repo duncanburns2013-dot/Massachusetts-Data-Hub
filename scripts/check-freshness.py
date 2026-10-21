@@ -29,6 +29,11 @@ TODAY = datetime.date.today()
 
 # path, max age in days, why that number
 DATA = [
+    # CTHRU posts the Comptroller checkbook daily, but the payments in it run
+    # about a month behind (payments through 17 Sep were posted 20 Oct when this
+    # was built). 21 days ages a stopped feed without firing on that normal lag.
+    ("data/immigrant-spending-latest.json", 21,
+     "CTHRU budget-vs-actual + Comptroller spending; posted daily, ~1 month lag"),
     ("data/nh-figures.json",              7,  "daily pull; worst real gap 3d"),
     ("data/nh-state-monthly.json",        7,  "daily pull; worst real gap 3d"),
     ("data/housing-history-latest.json",  5,  "daily pull; worst real gap 1d"),

@@ -1,0 +1,65 @@
+# CTHRU posts the Comptroller's checkbook daily, so this runs daily. The
+# payments inside it lag about a month -- payments through 17 Sep were posted on
+# 20 Oct -- which is the source's cadence, not a fault, and the page says so.
+#
+# No API key: both datasets are open Socrata endpoints on cthru.data.socrata.com.
+name: Update Shelter & Immigrant Spending
+
+on:
+  schedule:
+    - cron: "15 11 * * *"   # 07:15 ET, after the overnight CTHRU posting
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    # A normal pass is well under a minute. 20 minutes turns any runaway into a
+    # red job rather than a silent cancellation six hours later -- the failure
+    # mode that cost update-census a month.
+    timeout-minutes: 20
+
+    concurrency:
+      group: update-immigrant-spending
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Refresh appropriations and recipients from CTHRU
+        run: python update-immigrant-spending.py
+
+      - name: Commit if changed
+        # Runs even when the step above failed: the updater exits 75 on a CTHRU
+        # outage and writes nothing, so there is nothing to lose, and a later
+        # partial failure must not discard an earlier good write.
+        if: ${{ !cancelled() }}
+        run: |
+          if git diff --quiet -- 'data/immigrant-spending-latest.json' 'shelter-immigrant-spending.html'; then
+            echo "No change - CTHRU has not moved since the last run."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add 'data/immigrant-spending-latest.json' 'shelter-immigrant-spending.html'
+          git commit -m "Auto-update: shelter and immigrant spending (CTHRU)"
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt"
+              exit 0
+            fi
+            echo "Push attempt $attempt rejected - pulling latest and rebasing"
+            if ! git pull --rebase origin main; then
+              git rebase --abort || true
+              echo "::notice::Another run already updated this - skipping."
+              exit 0
+            fi
+          done
+          echo "::error::Push failed after 5 attempts"
+          exit 1

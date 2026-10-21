@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="data-checked" content="2026-10-21"><!-- written by update-immigrant-spending.py; scripts/check-freshness.py ages it -->
+  <!-- Open Graph / Social Cards -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Massachusetts Data Hub">
+  <meta property="og:title" content="Massachusetts Shelter &amp; Immigrant Services Spending">
+  <meta property="og:description" content="What Massachusetts appropriates and actually spends on emergency family shelter and immigrant and refugee services, by fiscal year, with every organisation paid under those appropriations. Live from CTHRU.">
+  <meta property="og:url" content="https://massachusettsdatahub.com/shelter-immigrant-spending.html">
+  <meta property="og:image" content="https://massachusettsdatahub.com/cards/shelter-immigrant-spending.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Massachusetts Shelter &amp; Immigrant Services Spending">
+  <meta name="twitter:description" content="What Massachusetts appropriates and actually spends on emergency family shelter and immigrant and refugee services, by fiscal year, with every organisation paid under those appropriations. Live from CTHRU.">
+  <meta name="twitter:image" content="https://massachusettsdatahub.com/cards/shelter-immigrant-spending.jpg">
+  <meta name="description" content="What Massachusetts appropriates and actually spends on emergency family shelter and immigrant and refugee services, by fiscal year, with every organisation paid under those appropriations. Live from CTHRU.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="canonical" href="https://massachusettsdatahub.com/shelter-immigrant-spending.html">
+<link rel="icon" href="https://massachusettsdatahub.com/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="https://massachusettsdatahub.com/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="https://massachusettsdatahub.com/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="icon" href="https://massachusettsdatahub.com/favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="https://massachusettsdatahub.com/apple-touch-icon.png">
+<title>Massachusetts Shelter &amp; Immigrant Services Spending</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f8f7f4;--card:#fff;--border:#e8e5df;--text:#1a1a1a;--muted:#7a756e;--red:#c0392b;--green:#1a7a4c;--blue:#1a4480;--amber:#b8860b;--purple:#7e22ce;--navy:#0f2942;--gold:#c9a84c;--red-bg:rgba(192,57,43,0.06);--blue-bg:rgba(26,68,128,0.06);--green-bg:rgba(26,122,76,0.06);--amber-bg:rgba(184,134,11,0.06)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.hero{background:var(--navy);color:#fff;padding:48px 24px 72px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,0.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(139,26,26,0.1) 0%,transparent 50%)}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);padding:6px 18px;border-radius:50px;font-size:.72rem;font-weight:500;margin-bottom:18px;position:relative}
+.hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.6rem,4.5vw,2.5rem);font-weight:400;margin-bottom:8px;position:relative;letter-spacing:-0.01em}
+.hero-sub{font-size:.85rem;opacity:.65;max-width:600px;margin:0 auto;position:relative}
+.summary-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:-40px auto 32px;max-width:1200px;padding:0 24px;position:relative;z-index:2}
+.sc{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.06);border-top:4px solid var(--navy)}
+.sc.red{border-top-color:var(--red)}.sc.green{border-top-color:var(--green)}.sc.amber{border-top-color:var(--amber)}.sc.purple{border-top-color:var(--purple)}
+.sc-label{font-size:0.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px}
+.sc-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.5rem;font-weight:400}
+.sc-val.red{color:var(--red)}.sc-val.blue{color:var(--blue)}.sc-val.green{color:var(--green)}.sc-val.amber{color:var(--amber)}
+.sc-ctx{font-size:0.6875rem;color:var(--muted);margin-top:4px}
+.tabs-wrap{max-width:1200px;margin:0 auto 24px;padding:0 24px}
+.tabs{display:flex;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.04);padding:0}
+.tab-btn{flex-shrink:0;padding:13px 18px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',system-ui,sans-serif;font-size:.72rem;font-weight:600;border-radius:0;cursor:pointer;transition:all .25s;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid transparent}
+.tab-btn:hover{color:var(--text);background:rgba(0,0,0,.02)}
+.tab-btn.active{background:transparent;color:var(--navy);box-shadow:none;border-bottom-color:var(--gold)}
+.tab-panel{display:none}.tab-panel.active{display:block;animation:fadeUp .35s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.section{max-width:1200px;margin:0 auto 32px;padding:0 24px}
+.sec-title{font-family:'DM Serif Display',Georgia,serif;font-size:1.3rem;font-weight:400;margin-bottom:4px;color:var(--navy)}
+.sec-desc{font-size:.82rem;color:var(--muted);margin-bottom:20px}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:14px;margin-bottom:22px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:22px}
+.card{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.03);border:1px solid var(--border)}
+.card-title{font-size:.82rem;font-weight:700;margin-bottom:4px;color:var(--navy)}
+.card-sub{font-size:0.6875rem;color:var(--muted);margin-bottom:14px}
+.card-canvas{position:relative;height:280px}
+.hl{background:var(--red-bg);border-left:4px solid var(--red);border-radius:0 12px 12px 0;padding:16px 20px;margin-bottom:18px}
+.hl .hl-label{font-size:0.6875rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.08em}
+.hl .hl-val{font-size:1.1rem;font-weight:700;color:var(--red);margin-top:2px}
+.hl .hl-ctx{font-size:.72rem;color:var(--muted);margin-top:2px}
+.hl-green{background:var(--green-bg);border-left:4px solid var(--green);border-radius:0 12px 12px 0;padding:16px 20px;margin-bottom:18px}
+.hl-green .hl-label{font-size:0.6875rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.08em}
+.hl-green .hl-val{font-size:1.1rem;font-weight:700;color:var(--green);margin-top:2px}
+.hl-green .hl-ctx{font-size:.72rem;color:var(--muted);margin-top:2px}
+.info{background:var(--blue-bg);border:1px solid rgba(26,68,128,.12);border-radius:12px;padding:16px 20px;margin-bottom:22px;display:flex;gap:12px;align-items:flex-start;border-left:4px solid var(--blue)}
+.info.warn{background:var(--amber-bg);border-color:rgba(184,134,11,.15);border-left-color:var(--amber)}
+.info.danger{background:var(--red-bg);border-color:rgba(192,57,43,.12);border-left-color:var(--red)}
+.info-icon{font-size:1.2rem;flex-shrink:0}
+.info-text{font-size:.78rem;color:var(--text);line-height:1.6}
+.table-wrap{background:var(--card);border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.03);border:1px solid var(--border);overflow-x:auto;margin-bottom:22px}
+table{width:100%;border-collapse:collapse;font-size:.78rem}
+thead th{background:rgba(15,41,66,.04);padding:10px 14px;text-align:left;font-weight:700;color:var(--navy);border-bottom:2px solid var(--navy);white-space:nowrap;font-size:0.6875rem;text-transform:uppercase;letter-spacing:.08em}
+tbody td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text)}
+tbody tr:hover{background:rgba(15,41,66,.02)}
+.td-red{color:var(--red);font-weight:700}.td-green{color:var(--green);font-weight:600}.td-amber{color:var(--amber);font-weight:600}
+.dc-label{font-size:0.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px}
+.dc-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.5rem;font-weight:400;margin-bottom:8px}
+.dc-val.red{color:var(--red)}.dc-val.blue{color:var(--blue)}.dc-val.green{color:var(--green)}.dc-val.amber{color:var(--amber)}
+.dc-meta{display:flex;flex-wrap:wrap;gap:14px}
+.dc-ml{font-size:0.6875rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}.dc-mv{font-size:.8rem;font-weight:600;color:var(--text)}
+.footer{text-align:center;padding:32px 24px;color:var(--muted);font-size:.72rem;border-top:1px solid var(--border);margin-top:40px;background:#fff}
+.footer strong{color:var(--text)}.footer a{color:var(--navy);text-decoration:none;font-weight:600;border-bottom:1px solid var(--gold)}.footer a:hover{color:var(--gold)}
+@media(max-width:768px){.summary-row{grid-template-columns:repeat(2,1fr)}.grid-2,.grid-3{grid-template-columns:1fr}.tabs{gap:2px}.tab-btn{padding:10px 12px;font-size:0.6875rem}}
+@media(max-width:480px){.summary-row{grid-template-columns:1fr}}
+.rec-table{width:100%;border-collapse:collapse;font-size:.8rem}
+.rec-table th{text-align:left;padding:8px 10px;border-bottom:2px solid var(--border);font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.rec-table td{padding:7px 10px;border-bottom:1px solid var(--border)}
+.rec-table td.num{text-align:right;font-variant-numeric:tabular-nums}
+.rec-table tbody tr:hover{background:rgba(0,0,0,.015)}
+.caveat{background:var(--amber-bg);border-left:3px solid var(--amber);padding:14px 16px;border-radius:0 8px 8px 0;font-size:.82rem;margin:16px 0}
+.caveat strong{color:var(--amber)}
+.gap{background:var(--red-bg);border-left:3px solid var(--red);padding:14px 16px;border-radius:0 8px 8px 0;font-size:.82rem;margin:12px 0}
+.gap strong{color:var(--red)}
+.srch{width:100%;max-width:340px;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:.82rem;margin-bottom:14px}
+</style>
+</head>
+<body>
+
+<div class="hero">
+<div class="hero-badge">&#x1F4CA; CTHRU &middot; Comptroller of the Commonwealth &middot; updates daily</div>
+<h1>Shelter &amp; Immigrant Services Spending</h1>
+<p class="hero-sub">What Massachusetts appropriated, what it actually spent, and every organisation paid &mdash; straight from the state's own checkbook.</p>
+</div>
+
+<div class="summary-row">
+<div class="sc red"><div class="sc-label">FY2027 spent so far</div><div class="sc-val red"><span data-field="cur-actual">$93.7M</span></div><div class="sc-ctx">of <span data-field="cur-enacted">$359.8M</span> enacted &middot; <span data-field="cur-pct">26%</span></div></div>
+<div class="sc amber"><div class="sc-label">Peak year, actual</div><div class="sc-val amber"><span data-field="peak-actual">$1.049B</span></div><div class="sc-ctx">FY<span data-field="peak-fy">2025</span> &middot; against <span data-field="peak-enacted">$995.9M</span> enacted</div></div>
+<div class="sc"><div class="sc-label">Appropriations tracked</div><div class="sc-val"><span data-field="acct-count">15</span></div><div class="sc-ctx">named by the Commonwealth for this purpose</div></div>
+<div class="sc green"><div class="sc-label">Payments posted through</div><div class="sc-val green"><span data-field="newest-payment">2026-09-17</span></div><div class="sc-ctx">CTHRU updated <span data-field="cthru-created">2026-10-20</span></div></div>
+</div>
+
+<div class="tabs-wrap"><div class="tabs">
+<button class="tab-btn active" onclick="sw(event,'cost')">The cost</button>
+<button class="tab-btn" onclick="sw(event,'who')">Who gets paid</button>
+<button class="tab-btn" onclick="sw(event,'hidden')">What isn't disclosed</button>
+<button class="tab-btn" onclick="sw(event,'est')">If it were all public</button>
+<button class="tab-btn" onclick="sw(event,'method')">Method</button>
+</div></div>
+
+<!-- ============ COST ============ -->
+<div class="tab-panel active" id="t-cost">
+<div class="section">
+<h2 class="sec-title">Enacted against actual, by fiscal year</h2>
+<p class="sec-desc">Tier 1 &mdash; the 15 appropriation accounts whose own names identify an immigrant, refugee or family-shelter purpose. Red means the state spent more than it appropriated.</p>
+<div class="card"><div class="table-wrap">
+<table class="rec-table">
+<thead><tr><th>Fiscal year</th><th>Enacted</th><th>Actual</th><th>Spent</th></tr></thead>
+<tbody>
+<tr><td>FY2022</td><td><span data-field="fy2022-enacted">$275.0M</span></td><td class=""><span data-field="fy2022-actual">$249.7M</span></td><td><span data-field="fy2022-pct">91%</span></td></tr>
+<tr><td>FY2023</td><td><span data-field="fy2023-enacted">$642.6M</span></td><td class=""><span data-field="fy2023-actual">$359.0M</span></td><td><span data-field="fy2023-pct">56%</span></td></tr>
+<tr><td>FY2024</td><td><span data-field="fy2024-enacted">$627.9M</span></td><td class="td-red"><span data-field="fy2024-actual">$850.0M</span></td><td><span data-field="fy2024-pct">135%</span></td></tr>
+<tr><td>FY2025</td><td><span data-field="fy2025-enacted">$995.9M</span></td><td class="td-red"><span data-field="fy2025-actual">$1.049B</span></td><td><span data-field="fy2025-pct">105%</span></td></tr>
+<tr><td>FY2026</td><td><span data-field="fy2026-enacted">$346.3M</span></td><td class="td-red"><span data-field="fy2026-actual">$363.3M</span></td><td><span data-field="fy2026-pct">105%</span></td></tr>
+<tr><td>FY2027 <span class="hl">in progress</span></td><td><span data-field="fy2027-enacted">$359.8M</span></td><td class=""><span data-field="fy2027-actual">$93.7M</span></td><td><span data-field="fy2027-pct">26%</span></td></tr>
+</tbody></table></div>
+<p class="card-sub" style="margin-top:12px">FY2027 is the year in progress, so its actual figure rises as the Comptroller posts payments. The percentage is spend against enacted, not a forecast.</p>
+</div>
+
+<div class="gap"><strong>The overspend is the story the enacted column hides.</strong>
+FY2024 was appropriated <span data-field="fy2024-enacted-inline">$627.9M</span> and spent <span data-field="fy2024-actual-inline">$850.0M</span>
+&mdash; the supplemental and reserve accounts carried the difference. Reading the budget alone would have missed it.</div>
+</div>
+
+<div class="section">
+<h2 class="sec-title">Second tier &mdash; general rental assistance</h2>
+<p class="sec-desc">MRVP and RAFT. Real housing money, but <strong>not immigrant-designated</strong>, so it is never added to the figures above.</p>
+<div class="card"><div class="table-wrap">
+<table class="rec-table">
+<thead><tr><th>Fiscal year</th><th>Enacted</th><th>Actual</th></tr></thead>
+<tbody>
+<tr><td>FY2022</td><td><span data-field="t2-fy2022-enacted">$252.0M</span></td><td><span data-field="t2-fy2022-actual">$173.5M</span></td></tr>
+<tr><td>FY2023</td><td><span data-field="t2-fy2023-enacted">$320.0M</span></td><td><span data-field="t2-fy2023-actual">$399.8M</span></td></tr>
+<tr><td>FY2024</td><td><span data-field="t2-fy2024-enacted">$376.9M</span></td><td><span data-field="t2-fy2024-actual">$377.3M</span></td></tr>
+<tr><td>FY2025</td><td><span data-field="t2-fy2025-enacted">$459.6M</span></td><td><span data-field="t2-fy2025-actual">$465.1M</span></td></tr>
+<tr><td>FY2026</td><td><span data-field="t2-fy2026-enacted">$460.8M</span></td><td><span data-field="t2-fy2026-actual">$470.1M</span></td></tr>
+<tr><td>FY2027</td><td><span data-field="t2-fy2027-enacted">$487.3M</span></td><td><span data-field="t2-fy2027-actual">$152.5M</span></td></tr>
+</tbody></table></div>
+<p class="card-sub" style="margin-top:12px">Published separately on purpose. Blending these into the headline would repeat the error this page was built to avoid &mdash; see Method.</p>
+</div>
+</div>
+</div>
+
+<!-- ============ WHO ============ -->
+<div class="tab-panel" id="t-who">
+<div class="section">
+<h2 class="sec-title">Every organisation paid under these appropriations</h2>
+<p class="sec-desc">From CTHRU's payment records, FY2022 onward. Sorted by total received. Searchable.</p>
+
+<div class="caveat"><strong>Tax status is not asserted here.</strong> CTHRU gives a vendor name and an amount, not a 501(c)(3) determination. Some of these are non-profits, some are for-profit contractors, and the record alone does not say which. Confirming charitable status needs the IRS Business Master File, which is a separate pass &mdash; until it is done, no row on this page claims to be a non-profit.</div>
+
+<input class="srch" id="q" placeholder="Search organisations&hellip;" oninput="filt()">
+<div class="card"><div class="table-wrap">
+<table class="rec-table">
+<thead><tr><th>Organisation</th><th class="num">Total received</th><th class="num">Payments</th><th>Legal form in name</th></tr></thead>
+<tbody id="recs"><tr><td colspan="4" style="color:var(--muted)">Loading from data/immigrant-spending-latest.json&hellip;</td></tr></tbody>
+</table></div>
+<p class="card-sub" style="margin-top:12px" id="rec-note"></p>
+</div>
+</div>
+
+<div class="section">
+<h2 class="sec-title">State agency payroll, separated</h2>
+<p class="sec-desc">CTHRU files agency payroll as a vendor. These are state salaries drawn on the same appropriations, not grants to organisations, so they are listed apart rather than counted as recipients.</p>
+<div class="card"><div class="table-wrap">
+<table class="rec-table">
+<thead><tr><th>Payroll line</th><th class="num">Total</th><th class="num">Payments</th></tr></thead>
+<tbody id="payroll"></tbody>
+</table></div></div>
+</div>
+</div>
+
+<!-- ============ HIDDEN ============ -->
+<div class="tab-panel" id="t-hidden">
+<div class="section">
+<h2 class="sec-title">What no public record itemizes</h2>
+<p class="sec-desc">The limits of this page, stated rather than filled with an estimate.</p>
+
+<div class="grid-2">
+<div class="card"><div class="card-title">MassHealth claims</div>
+<p class="card-sub">Individual medical claims. Not itemized by recipient in any public record; aggregate appropriation totals only.</p></div>
+<div class="card"><div class="card-title">SNAP / EBT</div>
+<p class="card-sub">Federally protected recipient data. Not itemized by recipient in any public record.</p></div>
+</div>
+
+<div class="gap"><strong>Why there is no estimate in that gap.</strong> An earlier version of this page carried $670M of modelled education and healthcare cost from the Center for Immigration Studies, an advocacy organisation. A model is not a record, so the boundary is stated instead of filled.</div>
+
+<div class="card"><div class="card-title">What that means for the headline</div>
+<p class="card-sub">The figures on this page are appropriation and payment records: what the legislature set aside and what the Comptroller paid out. They are not a total cost of immigration to Massachusetts, and nothing here should be quoted as one. Health coverage and food assistance are real costs that sit behind a disclosure wall, and the honest thing to report is the wall.</p></div>
+</div>
+</div>
+
+
+<!-- ============ ESTIMATE ============ -->
+<div class="tab-panel" id="t-est">
+<div class="section">
+<h2 class="sec-title">If every cost were public, what would it come to?</h2>
+<p class="sec-desc">The records on this site stop at appropriations and payments. This is the part they cannot reach &mdash; built from a sourced household budget, with the two contested numbers left as dials you can move.</p>
+
+<div class="caveat"><strong>This is an estimate, and it is not a record.</strong> Everything on the other tabs is the Commonwealth's own accounting. Nothing here is. It multiplies a published household budget by a household count that no public record provides, so treat the output as arithmetic you can audit, not as a figure the state has confirmed. The inputs are deliberately exposed: move them and watch the answer move.</div>
+
+<div class="grid-2">
+<div class="card">
+<div class="card-title">The household budget &mdash; sourced</div>
+<p class="card-sub">What it costs to keep one household going in Massachusetts for a year, from the MIT Living Wage Calculator. A household needs what any household needs; this is that list, not a special one.</p>
+<label style="display:block;margin:14px 0 6px;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Household composition</label>
+<select id="comp" class="srch" style="max-width:100%" onchange="est()">
+<option value="0">1 adult</option>
+<option value="1">1 adult, 1 child</option>
+<option value="2">1 adult, 2 children</option>
+<option value="3">1 adult, 3 children</option>
+<option value="4">2 adults (1 working)</option>
+<option value="5">2 adults (1 working), 1 child</option>
+<option value="6" selected>2 adults (1 working), 2 children</option>
+<option value="7">2 adults (1 working), 3 children</option>
+<option value="8">2 adults (both working)</option>
+<option value="9">2 adults (both working), 1 child</option>
+<option value="10">2 adults (both working), 2 children</option>
+<option value="11">2 adults (both working), 3 children</option>
+</select>
+<div class="table-wrap" style="margin-top:14px">
+<table class="rec-table"><tbody id="bud"></tbody></table>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">The two numbers nobody publishes</div>
+
+<label style="display:block;margin:10px 0 4px;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">How many households</label>
+<input type="range" id="hh" min="1000" max="400000" step="1000" value="9236" oninput="est()" style="width:100%">
+<div style="display:flex;justify-content:space-between;font-size:.74rem;color:var(--muted)"><span>1,000</span><strong id="hhv" style="color:var(--navy);font-size:.95rem"></strong><span>400,000</span></div>
+<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+<button class="tab-btn" style="padding:5px 10px;border:1px solid var(--border);border-radius:6px" onclick="setHH(9236)">9,236 &mdash; counted</button>
+<button class="tab-btn" style="padding:5px 10px;border:1px solid var(--border);border-radius:6px" onclick="setHH(7367)">7,367 &mdash; EA peak</button>
+<button class="tab-btn" style="padding:5px 10px;border:1px solid var(--border);border-radius:6px" onclick="setHH(150000)">400k people</button>
+</div>
+
+<label style="display:block;margin:16px 0 4px;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Share the household earns itself</label>
+<input type="range" id="earn" min="0" max="100" step="5" value="0" oninput="est()" style="width:100%">
+<div style="display:flex;justify-content:space-between;font-size:.74rem;color:var(--muted)"><span>0% &mdash; fully supported</span><strong id="earnv" style="color:var(--navy);font-size:.95rem"></strong><span>100% &mdash; self-sufficient</span></div>
+<p class="card-sub" style="margin-top:12px">At 100% the household covers its own budget and pays <span id="taxback" style="font-weight:600"></span> a year in tax. That offset is part of the arithmetic and is shown rather than dropped &mdash; a figure that ignores it will not survive its first hostile reader.</p>
+</div>
+</div>
+
+<div class="summary-row" style="margin-top:4px">
+<div class="sc amber"><div class="sc-label">Full household cost</div><div class="sc-val amber" id="e-gross"></div><div class="sc-ctx" id="e-gross-ctx"></div></div>
+<div class="sc red"><div class="sc-label">Not covered by earnings</div><div class="sc-val red" id="e-public"></div><div class="sc-ctx">the part someone else carries</div></div>
+<div class="sc green"><div class="sc-label">Tax paid back</div><div class="sc-val green" id="e-tax"></div><div class="sc-ctx">at the earnings share set above</div></div>
+<div class="sc"><div class="sc-label">Visible in the records</div><div class="sc-val" id="e-visible"></div><div class="sc-ctx">tier-1 appropriations, FY<span id="e-fy"></span></div></div>
+</div>
+
+<div class="gap"><strong>The gap is the point.</strong> <span id="e-sentence"></span></div>
+
+<div class="card">
+<div class="card-title">What this does and does not say</div>
+<p class="card-sub"><strong>It says:</strong> a household in Massachusetts costs a known amount per year, and if you multiply that by a count, you get a total. Both halves are stated.</p>
+<p class="card-sub" style="margin-top:8px"><strong>It does not say:</strong> that the taxpayer pays all of it, that every household in the count is in any particular immigration status, or that this is the Commonwealth's own figure. Households earn, and the earnings dial is there because pretending otherwise is how an estimate gets dismissed.</p>
+<p class="card-sub" style="margin-top:8px"><strong>On the 400,000:</strong> that is a commonly cited estimate of people living in Massachusetts without legal status. It is offered as a scenario button, converted to households at the composition you pick. It is <em>not</em> a Massachusetts record and no state source on this site publishes it &mdash; DHS and Migration Policy Institute state pages did not resolve when this page was built on 21 October 2026. Treat it as someone's estimate, which is what it is.</p>
+</div>
+
+<div class="card" style="margin-top:14px">
+<div class="card-title">Sources for every input</div>
+<p class="card-sub">Household budget: MIT Living Wage Calculator, Massachusetts, via <code>data/cost-of-living-latest.json</code>, generated 2026-10-20. Household anchors: 7,367 families in EA shelter at peak (25 July 2024, EA report SD.3359); 1,536 families plus 47 in clinical safety sites (1 October 2026, EA report SD.4288); 7,700+ families on HomeBASE. Visible spending: CTHRU, as on the other tabs.</p>
+</div>
+</div>
+</div>
+
+<!-- ============ METHOD ============ -->
+<div class="tab-panel" id="t-method">
+<div class="section">
+<h2 class="sec-title">How the accounts were chosen</h2>
+<p class="sec-desc">state appropriations and actual expenses on accounts the Commonwealth names for immigrant, refugee or family-shelter purposes; recipients classified by appropriation, never by vendor name</p>
+
+<div class="card"><div class="card-title">By appropriation, never by vendor name</div>
+<p class="card-sub">Accounts selected by searching appropriation_account_name for purpose words. Classifying by appropriation asks what the money was appropriated to do. A vendor-name match cannot: the prior version of this analysis caught three federally qualified health centres on the substring NEIGHBOR and a dentist on MIRA.</p></div>
+
+<div class="caveat"><strong>The lesson this page is built on.</strong> An earlier version of this analysis matched vendor names against the substrings <code>IMMIGRANT</code>, <code>REFUGEE</code>, <code>MIRA</code> and <code>NEIGHBOR</code> and reported $228.6M. Its own README documents what that produced: the three largest &ldquo;immigrant vendors&rdquo; were federally qualified health centres billing MassHealth for every patient, matched on <code>NEIGHBOR</code>; <code>MIRA</code> matched a dentist, a daycare and two people named Miranda. 78.4% of the total was MassHealth claims. Asking what an appropriation <em>funds</em> cannot make that mistake.</p></div>
+
+<div class="grid-2">
+<div class="card"><div class="card-title">Tier 1 &mdash; 15 accounts</div>
+<div class="table-wrap"><table class="rec-table"><thead><tr><th>Account</th><th>Name</th></tr></thead><tbody>
+<tr><td><code>1599-0122</code></td><td>Immigrants and Refugees Housing Reserve</td></tr>
+<tr><td><code>1599-0514</code></td><td>Family Shelter and Services Reserve</td></tr>
+<tr><td><code>1599-0924</code></td><td>Immigration and Refugee Reserve</td></tr>
+<tr><td><code>1599-0925</code></td><td>Immigrants and Refugees Supports Reserve</td></tr>
+<tr><td><code>1599-1213</code></td><td>Family Shelter and Services Reserve</td></tr>
+<tr><td><code>1599-2625</code></td><td>Family Shelter / Supplemental Shelter Costs Reserve</td></tr>
+<tr><td><code>4003-0111</code></td><td>Office of Refugees and Immigrants Administration</td></tr>
+<tr><td><code>4003-0122</code></td><td>Low-Income Citizenship Program</td></tr>
+<tr><td><code>4003-0123</code></td><td>For Resettlement Agencies</td></tr>
+<tr><td><code>4403-2120</code></td><td>For Family Shelter / Transitional Housing</td></tr>
+<tr><td><code>7004-0101</code></td><td>Emergency Assistance - Family Shelters and Services</td></tr>
+<tr><td><code>7004-0103</code></td><td>Homeless Family EA Shelter Overflow - Hotels and Motels</td></tr>
+<tr><td><code>7004-0108</code></td><td>MA Short-Term Housing Transition Program (HomeBASE)</td></tr>
+<tr><td><code>7004-0109</code></td><td>Shelter Workforce Assistance</td></tr>
+<tr><td><code>7004-0110</code></td><td>Family Shelter Diversion</td></tr>
+</tbody></table></div></div>
+<div class="card"><div class="card-title">Tier 2 &mdash; general rental assistance</div>
+<div class="table-wrap"><table class="rec-table"><thead><tr><th>Account</th><th>Name</th></tr></thead><tbody>
+<tr><td><code>7004-9024</code></td><td>MRVP rental vouchers</td></tr>
+<tr><td><code>7004-9316</code></td><td>RAFT / Homeless Housing (rental and mortgage aid)</td></tr>
+</tbody></table></div>
+<p class="card-sub" style="margin-top:10px">Reported, never blended into tier 1.</p></div>
+</div>
+
+<div class="card"><div class="card-title">Reproduce it</div>
+<p class="card-sub">Accounts were found by searching <code>appropriation_account_name</code> for the purpose words &mdash; IMMIGRAN, REFUGEE, ASYLUM, SHELTER, CITIZENSHIP, MIGRANT, RESETTLE, EMERGENCY ASSISTANCE, HOUSING TRANS. Re-run that search against CTHRU to audit the list; it is the Commonwealth's naming, not ours. Totals sum every fund row per account per year, which is what reproduces the state's own published figures.</p>
+<p class="card-sub" style="margin-top:8px"><code>python update-immigrant-spending.py</code></p></div>
+</div>
+</div>
+
+<div class="footer">
+<p><strong>Sources:</strong> Massachusetts CTHRU &mdash; Budget vs Actual (<code>kv7m-35wn</code>) for appropriation and expense totals; Comptroller Spending (<code>pegc-naaa</code>) for payments by vendor. Both are the Commonwealth's own published records.</p>
+<p style="margin-top:8px;font-size:0.78rem;color:#8e95a2">Payments posted through <span data-field="newest-payment">2026-09-17</span>; CTHRU's rows were written <span data-field="cthru-created">2026-10-20</span>, so the checkbook runs roughly a month behind. The fiscal year in progress rises as payments post. Tax status of recipients is unverified &mdash; see Who gets paid.</p>
+<p style="margin-top:8px">Refreshed from CTHRU by <code>update-immigrant-spending.py</code> &middot; <a href="immigration-dashboard.html">Immigration dashboard</a> &middot; <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">Massachusetts Data Hub</a></p>
+</div>
+
+<script>
+function sw(e,id){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));e.currentTarget.classList.add('active');document.getElementById('t-'+id).classList.add('active')}
+
+var REC=[],PAY=[];
+function money(v){return '$'+Math.round(v).toLocaleString('en-US')}
+function draw(list){
+  var b=document.getElementById('recs');
+  if(!list.length){b.innerHTML='<tr><td colspan="4" style="color:var(--muted)">No match.</td></tr>';return}
+  b.innerHTML=list.map(function(r){
+    return '<tr><td>'+r.vendor+'</td><td class="num">'+money(r.total)+'</td><td class="num">'+r.payments+'</td><td style="color:var(--muted);font-size:.74rem">'+r.form_hint+'</td></tr>'
+  }).join('');
+}
+function filt(){
+  var q=document.getElementById('q').value.trim().toUpperCase();
+  draw(q?REC.filter(function(r){return r.vendor.toUpperCase().indexOf(q)>-1}):REC);
+}
+fetch('data/immigrant-spending-latest.json').then(function(r){return r.json()}).then(function(d){
+  REC=d.recipients.organisations||[];PAY=d.recipients.agency_payroll||[];
+  draw(REC);
+  var tot=REC.reduce(function(a,r){return a+r.total},0);
+  document.getElementById('rec-note').textContent=
+    REC.length+' organisations, '+money(tot)+' total, under tier-1 appropriations since FY2022. '+d.recipients.tax_status;
+  var t1=d.tier1.by_fiscal_year, fy=String(d.newest_fiscal_year);
+  VISIBLE=t1[fy]?t1[fy].enacted:null;
+  var el=document.getElementById('e-fy'); if(el) el.textContent=fy;
+  est();
+  document.getElementById('payroll').innerHTML=PAY.map(function(r){
+    return '<tr><td>'+r.vendor+'</td><td class="num">'+money(r.total)+'</td><td class="num">'+r.payments+'</td></tr>'
+  }).join('');
+}).catch(function(e){
+  document.getElementById('recs').innerHTML='<tr><td colspan="4" style="color:var(--red)">Could not load data/immigrant-spending-latest.json &mdash; '+e+'</td></tr>';
+});
+
+var LW={"columns": ["1 adult", "1 adult, 1 child", "1 adult, 2 children", "1 adult, 3 children", "2 adults (1 working)", "2 adults (1 working), 1 child", "2 adults (1 working), 2 children", "2 adults (1 working), 3 children", "2 adults (both working)", "2 adults (both working), 1 child", "2 adults (both working), 2 children", "2 adults (both working), 3 children"], "items": {"food": [4944.0, 7253.0, 10867.0, 14463.0, 9064.0, 11249.0, 14469.0, 17654.0, 9064.0, 11249.0, 14469.0, 17654.0], "child care": [0.0, 23448.0, 41712.0, 51443.0, 0.0, 0.0, 0.0, 0.0, 0.0, 23448.0, 41712.0, 51443.0], "medical": [4097.0, 10465.0, 10655.0, 10861.0, 7365.0, 11654.0, 12039.0, 12471.0, 7365.0, 11654.0, 12039.0, 12471.0], "housing": [23305.0, 30181.0, 30181.0, 36618.0, 24651.0, 30181.0, 30181.0, 36618.0, 24651.0, 30181.0, 30181.0, 36618.0], "transportation": [8178.0, 9464.0, 11921.0, 13717.0, 9464.0, 11921.0, 13717.0, 15357.0, 9464.0, 11921.0, 13717.0, 15357.0], "civic": [3456.0, 5834.0, 7694.0, 8762.0, 5834.0, 7694.0, 8762.0, 9810.0, 5834.0, 7694.0, 8762.0, 9810.0], "internet & mobile": [2004.0, 2004.0, 2004.0, 2004.0, 2579.0, 2579.0, 2579.0, 2579.0, 2579.0, 2579.0, 2579.0, 2579.0], "other": [4715.0, 8573.0, 9371.0, 10204.0, 8573.0, 9598.0, 10204.0, 11424.0, 8573.0, 9598.0, 10204.0, 11424.0]}, "gross": [63610.0, 121175.0, 159222.0, 192104.0, 81792.0, 99961.0, 105800.0, 121371.0, 81660.0, 131488.0, 164780.0, 197514.0], "tax": [12913.0, 23953.0, 34819.0, 44033.0, 14262.0, 15086.0, 13849.0, 15460.0, 14130.0, 23164.0, 31117.0, 40161.0], "vintage": "MIT Living Wage Calculator, Massachusetts", "generated": "2026-10-20"};
+var VISIBLE=null;
+function money(v){return '$'+Math.round(v).toLocaleString('en-US')}
+function big(v){
+  if(Math.abs(v)>=1e9) return '$'+(v/1e9).toFixed(2)+'B';
+  if(Math.abs(v)>=1e6) return '$'+(v/1e6).toFixed(0)+'M';
+  return money(v);
+}
+function setHH(n){document.getElementById('hh').value=n;est()}
+function est(){
+  var i=+document.getElementById('comp').value;
+  var hh=+document.getElementById('hh').value;
+  var earn=+document.getElementById('earn').value/100;
+  var gross=LW.gross[i], tax=LW.tax[i];
+
+  var rows='';
+  for(var k in LW.items){
+    rows+='<tr><td style="text-transform:capitalize">'+k+'</td><td class="num">'+money(LW.items[k][i])+'</td></tr>';
+  }
+  rows+='<tr><td style="font-weight:700">Required before tax</td><td class="num" style="font-weight:700">'+money(gross)+'</td></tr>';
+  document.getElementById('bud').innerHTML=rows;
+
+  document.getElementById('hhv').textContent=hh.toLocaleString('en-US')+' households';
+  document.getElementById('earnv').textContent=Math.round(earn*100)+'%';
+  document.getElementById('taxback').textContent=money(tax);
+
+  var total=gross*hh, unmet=total*(1-earn), paid=tax*hh*earn;
+  document.getElementById('e-gross').textContent=big(total);
+  document.getElementById('e-gross-ctx').textContent=money(gross)+' x '+hh.toLocaleString('en-US');
+  document.getElementById('e-public').textContent=big(unmet);
+  document.getElementById('e-tax').textContent=big(paid);
+  if(VISIBLE!==null){
+    document.getElementById('e-visible').textContent=big(VISIBLE);
+    var mult=VISIBLE?(unmet/VISIBLE):0;
+    document.getElementById('e-sentence').textContent=
+      'At '+hh.toLocaleString('en-US')+' households of this composition and '+Math.round(earn*100)+
+      '% self-support, the unmet household cost is '+big(unmet)+'. The appropriations this site can actually see came to '+
+      big(VISIBLE)+' that year — a factor of '+mult.toFixed(1)+'. The difference is not hidden spending; it is cost that no single public record adds up.';
+  }
+}
+</script>
+</body>
+</html>
