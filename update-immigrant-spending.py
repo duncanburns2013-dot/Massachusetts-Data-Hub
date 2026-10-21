@@ -95,6 +95,20 @@ TIER2 = {
 
 FIRST_FY = 2022
 
+# The two series the immigration dashboard and MASTER_DATA.md publish by name.
+# They were hand-maintained until 2026-10-21 and had drifted: the register
+# carried HomeBASE FY26 at $91.35M "verified against CTHRU" when CTHRU says
+# $57.29M, and explained the $34.07M gap as a transfer when CTHRU's own
+# transfer_in for that account and year is $2,575. The gap was in fact the
+# difference between an appropriation and a figure taken from a different
+# source (the FY27 budget documents' FY26 projected column). Nothing checked
+# it, so it survived six weeks and reached three pages. These are now written
+# from CTHRU by this script and must not be edited by hand.
+SHELTER_SYSTEM = ["70040101", "70040108", "70040109", "70040110",
+                  "15990514", "15991213", "15992625", "15990122", "15990925"]
+EA_LINE = "70040101"
+HOMEBASE = "70040108"
+
 # Agency payroll, not grant recipients. CTHRU files these as vendors.
 PAYROLL_MARK = "SUMMARY PAYROLL"
 
@@ -144,6 +158,200 @@ def quoted(codes):
     return ",".join(f"'{c}'" for c in codes)
 
 
+def build_series(rows, newest):
+    """The published shelter series, per fiscal year, straight off CTHRU.
+
+    Three measures, each with its account set stated so a reader can re-run it:
+    the shelter system (nine accounts, reserves included), the EA line alone,
+    and HomeBASE alone. transfer_in is carried because the register once
+    asserted a transfer that the field does not show.
+    """
+    years = sorted({fy for (_a, fy) in rows}, key=int)
+    out = {}
+    for fy in years:
+        def agg(codes):
+            e = a = t = 0.0
+            for c in codes:
+                v = rows.get((c, fy))
+                if v:
+                    e += v["enacted"]
+                    a += v["actual"]
+                    t += v["transfer_in"]
+            return {"enacted": round(e, 2), "actual": round(a, 2),
+                    "transfer_in": round(t, 2)}
+        out[str(fy)] = {
+            "shelter_system": agg(SHELTER_SYSTEM),
+            "ea_line": agg([EA_LINE]),
+            "homebase": agg([HOMEBASE]),
+            "complete": int(fy) < newest,
+        }
+    return out
+
+
+def m(v):
+    """$xxx.xxM, the form both the register and the chart use."""
+    return v / 1_000_000.0
+
+
+def stamp_chart(series, newest):
+    """Rewrite the dashboard's SHIFT array from the series.
+
+    Only the numbers are written. The per-year prose lives in SHIFT_NOTES,
+    which a human edits and this never touches -- regexing prose to keep it
+    current fails silently, and on this repo it already has.
+    """
+    page = os.path.join(ROOT, "immigration-dashboard.html")
+    if not os.path.exists(page):
+        return "immigration-dashboard.html missing"
+    with open(page, encoding="utf-8") as fh:
+        html = fh.read()
+    lines = []
+    for fy in sorted(series, key=int):
+        s = series[fy]
+        if s["complete"]:
+            # A closed year shows what was actually spent.
+            lines.append(
+                "      {{ fy: 'FY{0}', shelter: {1:.2f}, home: {2:.2f}, "
+                "xfer: {3:.2f}, kind: 'actual' }}".format(
+                    str(fy)[-2:], m(s["ea_line"]["actual"]),
+                    m(s["homebase"]["actual"]), m(s["homebase"]["transfer_in"])))
+        else:
+            # The year in progress shows the enacted appropriation, so the bar
+            # is comparable with the full years beside it, and carries spending
+            # to date separately rather than pretending it is a year's total.
+            lines.append(
+                "      {{ fy: 'FY{0}', shelter: {1:.2f}, home: {2:.2f}, "
+                "xfer: {3:.2f}, kind: 'enacted', ytdShelter: {4:.2f}, "
+                "ytdHome: {5:.2f} }}".format(
+                    str(fy)[-2:], m(s["ea_line"]["enacted"]),
+                    m(s["homebase"]["enacted"]), m(s["homebase"]["transfer_in"]),
+                    m(s["ea_line"]["actual"]), m(s["homebase"]["actual"])))
+    block = ("var SHIFT = [\n" + ",\n".join(lines) + "\n    ];")
+    start = "/* BEGIN owned:update-immigrant-spending.py SHIFT */"
+    end = "/* END owned:update-immigrant-spending.py SHIFT */"
+    if start not in html or end not in html:
+        return "SHIFT ownership markers not found in immigration-dashboard.html"
+    pre, rest = html.split(start, 1)
+    _old, post = rest.split(end, 1)
+    html = pre + start + "\n    " + block + "\n    " + end + post
+    with open(page, "w", encoding="utf-8") as fh:
+        fh.write(html)
+    return None
+
+
+def stamp_register(series, newest):
+    """Rewrite the shelter rows of MASTER_DATA.md, keyed on the row label.
+
+    The label is the key, so nothing here matches on prose. A row this owns
+    carries "written by update-immigrant-spending.py" in its verified column
+    instead of a hand-verified tick, because a tick on a figure no one checks
+    is the thing that went wrong.
+    """
+    reg = os.path.join(ROOT, "MASTER_DATA.md")
+    if not os.path.exists(reg):
+        return "MASTER_DATA.md missing"
+    yrs = sorted(series, key=int)
+    src = "CTHRU kv7m-35wn"
+    # The register's own "refreshed by a feed" mark, plus the owner's name. A
+    # hand-verified tick is what these rows used to carry, and a tick on a
+    # figure nothing re-checks is how the wrong HomeBASE number kept its
+    # credentials for six weeks.
+    own = "\U0001f504 written by `update-immigrant-spending.py`"
+
+    def fy_list(key):
+        parts = []
+        for fy in yrs:
+            s = series[fy]
+            tag = "" if s["complete"] else " YTD"
+            parts.append("FY{0}{1} ${2:,.2f}M".format(
+                str(fy)[-2:], tag, m(s[key]["actual"])))
+        return " · ".join(parts)
+
+    sys_tot = {fy: m(series[fy]["shelter_system"]["actual"]) for fy in yrs}
+    done = [fy for fy in yrs if series[fy]["complete"]]
+    hb_first, hb_last = yrs[0], (done[-1] if done else yrs[-1])
+    hb_a = m(series[hb_first]["homebase"]["actual"])
+    hb_b = m(series[hb_last]["homebase"]["actual"])
+    growth = (hb_b / hb_a - 1) * 100 if hb_a else 0.0
+
+    # An ordered list, not a dict scan: the register is published, so the rows
+    # go out in year order however the previous file had them arranged.
+    rowmap = {}
+    order = []
+
+    def row(lbl, val):
+        rowmap[lbl] = val
+        order.append(lbl)
+
+    for fy in yrs:
+        s = series[fy]
+        lbl = ("Shelter system, FY{0} actual".format(fy) if s["complete"]
+               else "Shelter system, FY{0} to date".format(fy))
+        row(lbl, "${0:,.2f}M".format(sys_tot[fy]))
+    for a, b, lbl in ((2024, 2025, "Shelter system, FY24 + FY25"),
+                      (2022, 2025, "Shelter system, FY22–FY25"),
+                      (2022, 2026, "Shelter system, FY22–FY26")):
+        span = [fy for fy in yrs if a <= int(fy) <= b]
+        if len(span) == (b - a + 1):
+            t = sum(sys_tot[fy] for fy in span)
+            # Billions first, to two places: that is the form the dashboards
+            # print ("$1.85B"), and check-stats-documented.py matches the
+            # register on the literal. Emitting only the precise millions form
+            # left the page's own card undocumented.
+            row(lbl, "${0:,.2f}B (${1:,.2f}M, derived)".format(t / 1000, t))
+    row("EA line 7004-0101, actual", fy_list("ea_line"))
+    hb = fy_list("homebase")
+    xfer = series[hb_last]["homebase"]["transfer_in"]
+    row("HomeBASE 7004-0108, actual",
+        "{0} — CTHRU transfer_in into 7004-0108 is ${1:,.0f} in FY{2}, "
+        "not a material top-up".format(hb, xfer, hb_last))
+    row("HomeBASE growth, FY{0} → FY{1}".format(
+        str(hb_first)[-2:], str(hb_last)[-2:]),
+        "{0:+.0f}% (derived, ${1:,.2f}M → ${2:,.2f}M)".format(
+            growth, hb_a, hb_b))
+
+    with open(reg, encoding="utf-8") as fh:
+        lines = fh.read().split("\n")
+
+    # Every row this script owns is removed and the whole block re-emitted in
+    # one place, in order. Replacing rows where they sit cannot do that: a label
+    # carries its own fiscal year ("FY2027 to date"), so when the year turns the
+    # old label is dead and the new one has nowhere to go but the end. Rebuilding
+    # the block is also idempotent, which replacing-plus-appending was not.
+    owned_now = set(rowmap)
+    # A label whose year has turned. These are the labels this script generates,
+    # with the year loosened -- never a general prefix match on the register.
+    def is_owned(label):
+        if label in owned_now:
+            return True
+        return (label.startswith("Shelter system, FY2")
+                or label.startswith("HomeBASE growth, FY")
+                or label in ("EA line 7004-0101, actual",
+                             "HomeBASE 7004-0108, actual"))
+
+    first = None
+    kept = []
+    for ln in lines:
+        label = None
+        if ln.startswith("|"):
+            cells = [c.strip() for c in ln.strip("|").split("|")]
+            if len(cells) == 4:
+                label = cells[0]
+        if label is not None and is_owned(label):
+            if first is None:
+                first = len(kept)
+            continue
+        kept.append(ln)
+    if first is None:
+        return "no owned rows found in MASTER_DATA.md; refusing to guess a position"
+    block = ["| {0} | {1} | {2} | {3} |".format(k, rowmap[k], src, own)
+             for k in order]
+    kept[first:first] = block
+    with open(reg, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(kept))
+    return None
+
+
 def budget_rows(codes):
     """Enacted and actual per (account, fiscal year), summed over funds.
 
@@ -154,7 +362,8 @@ def budget_rows(codes):
     qs = urllib.parse.urlencode({
         "$select": ("fiscal_year,appropriation_account_number,"
                     "appropriation_account_name,"
-                    "total_enacted_budget_appropriation,total_expenses"),
+                    "total_enacted_budget_appropriation,total_expenses,"
+                    "transfer_in"),
         "$where": (f"appropriation_account_number in({quoted(codes)}) "
                    f"AND fiscal_year>={FIRST_FY}"),
         "$limit": "5000",
@@ -167,10 +376,11 @@ def budget_rows(codes):
         if fy is None or not acct:
             continue
         k = (acct, fy)
-        cur = out.setdefault(k, {"enacted": 0.0, "actual": 0.0,
+        cur = out.setdefault(k, {"enacted": 0.0, "actual": 0.0, "transfer_in": 0.0,
                                  "name": r.get("appropriation_account_name", "")})
         cur["enacted"] += num(r.get("total_enacted_budget_appropriation"))
         cur["actual"] += num(r.get("total_expenses"))
+        cur["transfer_in"] += num(r.get("transfer_in"))
     return out
 
 
@@ -289,6 +499,15 @@ def main():
         except (OSError, ValueError) as e:
             print(f"  note: could not read previous file ({e}); no regression check")
 
+    series = build_series(rows, newest)
+    print("\n  shelter series, from CTHRU:")
+    for fy in sorted(series, key=int):
+        s = series[fy]
+        print("    FY{0}  system {1:>12,.2f}M   EA {2:>9,.2f}M   "
+              "HomeBASE {3:>8,.2f}M  (transfer_in {4:>10,.0f})".format(
+                  fy, m(s["shelter_system"]["actual"]), m(s["ea_line"]["actual"]),
+                  m(s["homebase"]["actual"]), s["homebase"]["transfer_in"]))
+
     orgs, payroll = recipients(set(TIER1), FIRST_FY)
     print(f"\n  recipients under tier-1 appropriations since FY{FIRST_FY}: "
           f"{len(orgs)} organisations, {len(payroll)} agency-payroll rows")
@@ -331,6 +550,21 @@ def main():
                                 "organisation. A model is not a record, so the "
                                 "boundary is stated instead of filled."),
         },
+        "series": {
+            "label": ("the shelter series the immigration dashboard and "
+                      "MASTER_DATA.md publish, per fiscal year"),
+            "account_sets": {
+                "shelter_system": SHELTER_SYSTEM,
+                "ea_line": [EA_LINE],
+                "homebase": [HOMEBASE],
+            },
+            "owned_by": "update-immigrant-spending.py",
+            "hand_editing": ("These figures are written by this script into "
+                             "MASTER_DATA.md and into the dashboard's SHIFT "
+                             "array. Editing either by hand will be overwritten "
+                             "and check-shelter-series.py will fail the build."),
+            "by_fiscal_year": series,
+        },
         "tier1": {
             "label": ("accounts whose own name identifies an immigrant, refugee "
                       "or family-shelter purpose"),
@@ -359,6 +593,15 @@ def main():
         json.dump(doc, fh, indent=1)
         fh.write("\n")
     print(f"\nWrote {OUT}")
+
+    for what, err in (("immigration-dashboard.html SHIFT array",
+                       stamp_chart(series, newest)),
+                      ("MASTER_DATA.md shelter rows",
+                       stamp_register(series, newest))):
+        if err:
+            print(f"  WARNING: did not stamp {what}: {err}")
+        else:
+            print(f"  stamped {what}")
 
 
 if __name__ == "__main__":

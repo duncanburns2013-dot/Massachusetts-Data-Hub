@@ -1,0 +1,168 @@
+{
+ "what_this_is": "Figures that were published and turned out to be wrong. Each one is recorded here so it cannot come back. scripts/check-retired-figures.py fails the build if a retired value reappears anywhere near its own subject.",
+ "why": "Every wrong figure on this hub so far was found by a person reading a page, not by a check. The register catches a hero figure no script owns, and check-consistency catches MASTER_DATA drifting from a feed, but nothing stopped a figure that had already been corrected once from being re-typed somewhere else. Three of the figures below were corrected on 2026-09-30 and were still live on another page three weeks later.",
+ "how_to_add": "When you correct a published figure, add an entry here in the same commit. 'wrong' lists every written form of the bad value. 'context' is a regex that must appear within context_window characters for a hit to count, so an unrelated use of the same digits does not fail the build.",
+ "scan": {
+  "files": [
+   "*.html",
+   "*.md",
+   "*.js",
+   "*.py",
+   "data/*.json"
+  ],
+  "skip_dirs": [
+   "node_modules",
+   "data/_raw_irs",
+   "data/corporate-ledger",
+   ".git",
+   "__pycache__"
+  ],
+  "skip_after_heading": {
+   "MASTER_DATA.md": "## 📝 Update Log",
+   "note": "The update log records what was corrected, so it necessarily names the old value. It is a history, not a claim."
+  }
+ },
+ "retired": [
+  {
+   "id": "homebase-fy26-actual",
+   "subject": "HomeBASE (7004-0108) actual spending, FY2026",
+   "wrong": [
+    "91.35",
+    "91,386,678",
+    "91386678",
+    "$91.4M",
+    "91.39"
+   ],
+   "right": "$57.29M ($57,286,763) — CTHRU kv7m-35wn, account 70040108, fiscal_year 2026, total_expenses",
+   "context": "(?i)homebase|7004-0108|70040108",
+   "context_window": 260,
+   "why": "Published as a CTHRU actual. CTHRU's actual for that account and year is $57,286,763. The $91,386,678 figure is from a different source — the FY27 budget documents' FY2026 projected column — and was carried into the CTHRU series as though it were an actual.",
+   "retired_on": "2026-10-21",
+   "allow": [
+    "MASTER_DATA.md",
+    "data/retired-figures.json",
+    "method.html",
+    "scripts/check-retired-figures.py",
+    "update-immigrant-spending.py"
+   ],
+   "allow_note": "method.html is generated from MASTER_DATA.md and renders its update log. Its register rows are checked upstream by update-immigrant-spending.py, which writes them. MASTER_DATA.md keeps the budget-document projection as its own clearly labelled row, because the distinction between a projection and an actual is the thing that went wrong and the register is where it has to be recorded. update-immigrant-spending.py names the figure in the comment explaining why it writes this series."
+  },
+  {
+   "id": "homebase-fy26-transfer",
+   "subject": "transfers into HomeBASE (7004-0108), FY2026",
+   "wrong": [
+    "34.07",
+    "34,064,677",
+    "$34.1M in transfers",
+    "topped up by $34.1M"
+   ],
+   "right": "$2,575 — CTHRU kv7m-35wn transfer_in for account 70040108, fiscal_year 2026",
+   "context": "(?i)homebase|7004-0108|70040108",
+   "context_window": 260,
+   "why": "This was not read from CTHRU. $91,386,678 minus the $57,322,001 appropriation is $34,064,677 — the figure was derived from the gap between two incompatible sources and then described as a transfer, which made the contradiction look explained. CTHRU's transfer_in field for that account and year is $2,575.",
+   "retired_on": "2026-10-21",
+   "allow": [
+    "MASTER_DATA.md",
+    "data/retired-figures.json",
+    "method.html",
+    "scripts/check-retired-figures.py",
+    "update-immigrant-spending.py"
+   ],
+   "allow_note": "Same rows: the register states the arithmetic that produced the false transfer, so a reader can see it was derived rather than read."
+  },
+  {
+   "id": "homebase-growth",
+   "subject": "HomeBASE growth, FY2022 to FY2026",
+   "wrong": [
+    "252%",
+    "+252%"
+   ],
+   "right": "+121% ($25.97M → $57.29M), derived from CTHRU actuals",
+   "context": "(?i)homebase|7004-0108|70040108",
+   "context_window": 260,
+   "why": "Derived from the wrong FY2026 figure above.",
+   "retired_on": "2026-10-21",
+   "allow": [
+    "data/retired-figures.json",
+    "method.html",
+    "scripts/check-retired-figures.py",
+    "update-immigrant-spending.py"
+   ],
+   "allow_note": "Named in the script comment that explains the correction."
+  },
+  {
+   "id": "homebase-101m",
+   "subject": "HomeBASE spending, pre-CTHRU figure",
+   "wrong": [
+    "$101M",
+    "101M"
+   ],
+   "right": "the CTHRU series in data/immigrant-spending-latest.json, written by update-immigrant-spending.py",
+   "context": "(?i)homebase|7004-0108|70040108",
+   "context_window": 200,
+   "why": "Superseded on 2026-09-30 by the CTHRU series; recorded here so it cannot return.",
+   "retired_on": "2026-10-21",
+   "allow": [
+    "data/retired-figures.json",
+    "scripts/check-retired-figures.py",
+    "method.html"
+   ]
+  },
+  {
+   "id": "mira-lobbying-salaries",
+   "subject": "MIRA Coalition lobbying, 2022-2025",
+   "wrong": [
+    "87,548",
+    "$87,548"
+   ],
+   "right": "$451,299 total 2020-2026 (salaries, firm payments and expenses); salaries alone 2022-2025 are $86,971.60",
+   "context": "(?i)mira|immigrant and refugee advocacy",
+   "context_window": 300,
+   "why": "Counted salaries only, and excluded payments to Charles Group Consulting and reported expenses, which understated the money by about 5x. Read from the Secretary of the Commonwealth's Lobbyist Public Search on 2026-10-21.",
+   "retired_on": "2026-10-21",
+   "allow": [
+    "data/retired-figures.json",
+    "scripts/check-retired-figures.py",
+    "data/lobbying-immigration-latest.json",
+    "method.html"
+   ]
+  },
+  {
+   "id": "mira-contracts",
+   "subject": "MIRA Coalition state payments",
+   "wrong": [
+    "7,662,233",
+    "$7.66M"
+   ],
+   "right": "$11,853,078 — CTHRU, payments under tier-1 appropriations",
+   "context": "(?i)mira|immigrant and refugee advocacy",
+   "context_window": 300,
+   "why": "Understated by about 35%; the earlier figure missed payments under the reserve accounts.",
+   "retired_on": "2026-10-21",
+   "allow": [
+    "data/retired-figures.json",
+    "scripts/check-retired-figures.py",
+    "method.html"
+   ]
+  },
+  {
+   "id": "homepage-hardcoded-stamp",
+   "subject": "the homepage 'last refreshed' date",
+   "wrong": [
+    "18 Aug 2026"
+   ],
+   "right": "written by scripts/update-homepage-stats.py from the newest commit touching data/",
+   "context": "(?i)last refreshed|computed at runtime|turn-upd",
+   "context_window": 200,
+   "why": "A hardcoded date sat under the words 'Computed at runtime from official sources' and went 63 days stale, which is the single most damaging kind of error this hub can make: it was wrong about its own freshness while claiming to be live.",
+   "retired_on": "2026-10-21",
+   "allow": [
+    "data/retired-figures.json",
+    "method.html",
+    "scripts/check-retired-figures.py",
+    "scripts/update-homepage-stats.py"
+   ],
+   "allow_note": "The script's own docstring names the stale date it was written to replace."
+  }
+ ]
+}

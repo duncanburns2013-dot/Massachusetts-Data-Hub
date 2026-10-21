@@ -233,7 +233,11 @@ def build():
     print('sections: %d | tables: %d | rows: %d | notes: %d' % (
         len(sections), page.count('<table'), page.count('<tr>') - page.count('<thead'),
         page.count('mk-note')))
-    print('status chips: verified %d, live %d' % (page.count('mk-v">'), page.count('mk-l">')))
+    # Count the class, not the class-plus-closing-bracket: the emitted spans
+    # carry a title= between the class and the '>', so 'mk-v">' matched only
+    # the legend and this reported "verified 1" on a page with 400+ ticks.
+    print('status chips: verified %d, live %d'
+          % (page.count('mk mk-v'), page.count('mk mk-l')))
 
 
 build()

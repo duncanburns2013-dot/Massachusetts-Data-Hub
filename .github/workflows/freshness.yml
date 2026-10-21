@@ -62,7 +62,29 @@ jobs:
         if: always()
         run: python scripts/check-consistency.py
 
-      # Fourth question, and the only one that looks outside this repository:
+      # Fourth question, and the one the three above between them still missed:
+      # has a figure we ALREADY corrected come back somewhere else?
+      #
+      # On 2026-09-30 HomeBASE's FY2026 spending was corrected from a budget
+      # projection to the CTHRU actual. On 2026-10-21 the old value was still
+      # published on the immigration dashboard, in MASTER_DATA.md and in
+      # method.html. Every check above was green the whole time, correctly: the
+      # feed was fresh, the figure was script-owned somewhere, and the rows
+      # check-consistency watches were not these rows. The same week, a MIRA
+      # figure corrected in its long form ($7,662,233) stayed live in its short
+      # form ($7.66M) two cards away. Three weeks, three pages, and a person
+      # reading the site found it rather than a job.
+      #
+      # data/retired-figures.json is the tombstone register: a corrected figure
+      # is recorded there with a context regex, and this fails if it reappears
+      # near its own subject. Adding the entry is part of making the correction.
+      #
+      # always(), for the same reason as above.
+      - name: Check no corrected figure has come back
+        if: always()
+        run: python scripts/check-retired-figures.py
+
+      # Fifth question, and the only one that looks outside this repository:
       # is the job that writes the feed still running at all?
       #
       # The Peoples Audit has nine scheduled workflows and no health check of any

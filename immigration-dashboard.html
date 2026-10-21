@@ -875,7 +875,7 @@ tr:hover td{background:var(--surface)}
      run (not only when a figure moves), so it cannot drift the way the hand-typed
      "Updated February 2026" did: five months wrong, sitting on the one page whose
      feed had been failing silently since July. -->
-<p class="sub">Official data from Census Bureau, CBP, ICE, IRS, DHS, CBO &bull; Updated <span data-field="page-updated">Aug 2026</span></p>
+<p class="sub">Official data from Census Bureau, CBP, ICE, IRS, DHS, CBO &bull; Border data through <span data-field="page-updated">Aug 2026</span></p>
 <div class="stat-row">
 <div class="stat-box"><div class="num" style="color:#f87171">10.8M</div><div class="lbl">Biden Encounters</div></div>
 <div class="stat-box"><div class="num" style="color:#60a5fa">7.4M</div><div class="lbl">Net Stayed (est)</div></div>
@@ -1010,6 +1010,11 @@ tr:hover td{background:var(--surface)}
             <span><i class="shift-key" style="background:#680A1D"></i>Emergency Assistance shelter (7004-0101)</span>
             <span><i class="shift-key" style="background:#B07C20"></i>HomeBASE rental assistance (7004-0108)</span>
           </div>
+          <!-- The hover layer. The .shift-tip styles and the handler that writes
+               into this were both already here; the element itself never was, so
+               every hover on this chart threw and the per-year detail has never
+               once been visible. -->
+          <div class="shift-tip" id="shiftTip" role="status" aria-live="polite"></div>
           <p class="shift-caption">FY22–FY26 are actual spending (CTHRU, Comptroller budget-vs-actual); FY27 is the enacted appropriation. These are the two line items only, not the whole shelter system: in FY25 most shelter spending was charged to reserve accounts (1599-2625 and others), which is why the EA line dips in FY25 while total shelter-system spending peaked at $1.04B that year. Shelter spending has fallen steeply as the caseload dropped — but <strong>Share&nbsp;%</strong> shows HomeBASE taking a growing slice of what remains, and <strong>Indexed</strong> shows the two lines moving in opposite directions from the same FY22 baseline.</p>
         </div>
 
@@ -1705,7 +1710,7 @@ tr:hover td{background:var(--surface)}
                 <div class="org-name">MIRA Coalition</div>
                 <span class="org-type advocacy">ADVOCACY + LOBBYING</span>
               </div>
-              <div class="org-amount" style="color: var(--crimson);">$7.66M</div>
+              <div class="org-amount" style="color: var(--crimson);">$11.85M</div>
             </div>
             <div class="org-footer program">
               <span>100% Actual Programs</span>
@@ -1802,7 +1807,7 @@ tr:hover td{background:var(--surface)}
         <h3 style="font-family: 'Playfair Display', Georgia, serif; font-size: 18px; margin-bottom: 16px;">Now the State's Program Administrator</h3>
         <div class="conflict-box" style="margin-bottom: 20px;">
           <div class="conflict-label">BEYOND CONTRACTS</div>
-          <p>The $7.66M above is direct contracts (FY20–FY25). Since 2023, MIRA has also become the state's <strong>administrator</strong> of two fast-growing pots — it now decides how the money is distributed to other organizations, a far larger footprint than the contract total suggests.</p>
+          <p>The $11.85M above is money paid directly to MIRA, fiscal 2010 to date, 95% of it from the Office for Refugees and Immigrants. Since 2023, MIRA has also become the state's <strong>administrator</strong> of two fast-growing pots — it now decides how the money is distributed to other organizations, a far larger footprint than the contract total suggests.</p>
         </div>
         <div class="card" style="margin-bottom: 28px;">
           <div class="data-row">
@@ -2420,7 +2425,7 @@ tr:hover td{background:var(--surface)}
 </div><!-- /container -->
 
 <div class="footer">
-Data compiled <span data-field="page-updated">Aug 2026</span> &bull; All data from official government sources &bull;
+Border data through <span data-field="page-updated">Aug 2026</span> &bull; All data from official government sources &bull;
 <a href="https://github.com/duncanburns2013-dot/Massachusetts-Data-Hub">View on GitHub</a>
 </div>
 
@@ -2757,14 +2762,27 @@ initChart('n-overview');
     // FY22-26: CTHRU budget-vs-actual (kv7m-35wn) total_expenses, retrieved 2026-09-30.
     // FY27: enacted GAA. Reserve-account shelter spending (large in FY24-25) is NOT in
     // these two lines; the shelter-system series on the Fiscal tab carries it.
+    // Prose only, no figures. A human edits this; the numbers below are written
+    // from CTHRU by update-immigrant-spending.py and are not editable here.
+    var SHIFT_NOTES = {
+      FY22: 'Pre-surge baseline',
+      FY23: 'Surge begins; families enter shelter',
+      FY24: 'Peak EA-line spending',
+      FY25: 'Hotel shelters closed; most FY25 shelter cost was charged to reserve accounts, not this line',
+      FY26: 'Caseload capped; families move from shelter onto rental assistance',
+      FY27: 'Enacted appropriation, for comparability with the full years beside it; the year is in progress, so spending to date is shown separately'
+    };
+    /* BEGIN owned:update-immigrant-spending.py SHIFT */
     var SHIFT = [
-      { fy: 'FY22', shelter: 202.56, home: 25.97, kind: 'actual',  note: 'Pre-surge baseline' },
-      { fy: 'FY23', shelter: 274.38, home: 49.41, kind: 'actual',  note: 'Surge begins; families enter shelter' },
-      { fy: 'FY24', shelter: 643.25, home: 37.22, kind: 'actual',  note: 'Peak EA-line spending' },
-      { fy: 'FY25', shelter: 326.07, home: 57.32, kind: 'actual',  note: 'Hotel shelters closed; most FY25 shelter cost was charged to reserve accounts, not this line' },
-      { fy: 'FY26', shelter: 259.54, home: 91.35, kind: 'actual',  note: 'Caseload capped; HomeBASE topped up by $34.1M in transfers' },
-      { fy: 'FY27', shelter: 259.9,  home: 82.3,  kind: 'enacted', note: 'EA line down 6% on FY26 projected; HomeBASE up 44% on its FY26 appropriation' }
+      { fy: 'FY22', shelter: 202.56, home: 25.97, xfer: 15.45, kind: 'actual' },
+      { fy: 'FY23', shelter: 274.38, home: 49.41, xfer: 47.16, kind: 'actual' },
+      { fy: 'FY24', shelter: 643.25, home: 37.22, xfer: 13.91, kind: 'actual' },
+      { fy: 'FY25', shelter: 326.07, home: 57.32, xfer: 1.16, kind: 'actual' },
+      { fy: 'FY26', shelter: 259.54, home: 57.29, xfer: 0.00, kind: 'actual' },
+      { fy: 'FY27', shelter: 259.90, home: 82.32, xfer: 0.00, kind: 'enacted', ytdShelter: 49.44, ytdHome: 43.47 }
     ];
+    /* END owned:update-immigrant-spending.py SHIFT */
+    SHIFT.forEach(function (d) { d.note = SHIFT_NOTES[d.fy] || ''; });
     var C_SHELTER = '#680A1D', C_HOME = '#B07C20';
     var svg = document.querySelector('.shift-svg');
     var tip = document.getElementById('shiftTip');
@@ -2845,10 +2863,25 @@ initChart('n-overview');
         var hit = ns('rect', { x: cx - step / 2, y: padT, width: step, height: plotH, fill: 'transparent' });
         g.appendChild(hit);
         g.addEventListener('mousemove', function (e) {
+          var extra = '';
+          if (d.ytdShelter != null) {
+            extra += '<br><span style="opacity:.75">To date: ' + fmtM(d.ytdShelter) +
+                     ' shelter, ' + fmtM(d.ytdHome) + ' HomeBASE</span>';
+          }
+          // Derived, never typed. The figure this replaces was hand-written and
+          // had gone stale against the series it describes.
+          var prev = SHIFT[i - 1];
+          if (prev && prev.kind === d.kind) {
+            var ds = (d.shelter / prev.shelter - 1) * 100;
+            var dh = (d.home / prev.home - 1) * 100;
+            extra += '<br><span style="opacity:.75">On ' + prev.fy + ': shelter ' +
+                     (ds >= 0 ? '+' : '') + ds.toFixed(1) + '%, HomeBASE ' +
+                     (dh >= 0 ? '+' : '') + dh.toFixed(1) + '%</span>';
+          }
           tip.innerHTML = '<strong>' + d.fy + '</strong> · ' + d.kind + '<br>' +
             'Shelter: <strong>' + fmtM(d.shelter) + '</strong><br>' +
-            'HomeBASE: <strong>' + fmtM(d.home) + '</strong><br>' +
-            '<span style="opacity:.75">' + d.note + '</span>';
+            'HomeBASE: <strong>' + fmtM(d.home) + '</strong>' + extra +
+            '<br><span style="opacity:.75">' + d.note + '</span>';
           tip.classList.add('on');
           var w = tip.offsetWidth, h = tip.offsetHeight;
           tip.style.left = Math.min(window.innerWidth - w - 12, Math.max(8, e.clientX + 14)) + 'px';
