@@ -40,7 +40,62 @@
      "name": "Elizabeth Sweet",
      "amount": 1985.8
     }
-   ]
+   ],
+   "prior_years": [
+    {
+     "year": 2020,
+     "salaries": 22968.66,
+     "entity_payments": 20000.0,
+     "expenses_total": 10364.92,
+     "total": 53333.58,
+     "partial": false,
+     "verified": "2026-10-21"
+    },
+    {
+     "year": 2022,
+     "salaries": 11954.49,
+     "entity_payments": 20000.0,
+     "expenses_total": 107935.41,
+     "total": 139889.9,
+     "partial": false,
+     "verified": "2026-10-21"
+    },
+    {
+     "year": 2023,
+     "salaries": 25981.24,
+     "entity_payments": 29500.0,
+     "expenses_total": 7622.71,
+     "total": 63103.95,
+     "partial": false,
+     "verified": "2026-10-21"
+    },
+    {
+     "year": 2024,
+     "salaries": 23575.0,
+     "entity_payments": 27500.0,
+     "expenses_total": 3932.8,
+     "total": 55007.8,
+     "partial": false,
+     "verified": "2026-10-21"
+    },
+    {
+     "year": 2025,
+     "salaries": 25460.87,
+     "entity_payments": 42000.0,
+     "expenses_total": 2861.98,
+     "total": 70322.85,
+     "partial": false,
+     "verified": "2026-10-21"
+    }
+   ],
+   "prior_years_total_full": 381658.08,
+   "no_registration_years": [
+    2021
+   ],
+   "no_registration_note": "A broad search of registration year 2021 for any name containing 'Immigrant', all account types, returned no records. ACLU-MA's 2021 filing is present in the same registry, so 2021 data exists and MIRA's absence is a non-registration, not a gap.",
+   "salaries_only_2022_2025": 86971.6,
+   "salaries_only_discrepancy": "duncanburns2013-dot/The-Invasion reports $87,548 for 2022-2025 salaries only. Reading each year from the registry gives $86,971.60, a difference of $576.40. The registry figures above are what its own summary pages state; the source of the earlier number's extra amount has not been identified.",
+   "prior_years_verification": "Each year read from the Secretary's own summary page on 2026-10-21. Note the entity is filed as 'Massachusetts Immigrant and Refugee Advocacy Coalition' (no 'Inc.') in 2020 and with 'Inc.' from 2022 -- a name-variant that would hide the 2020 filing from an exact-name search."
   },
   "aclu": {
    "name": "American Civil Liberties Union of Massachusetts, Inc.",
