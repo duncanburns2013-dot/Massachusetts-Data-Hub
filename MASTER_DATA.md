@@ -1252,6 +1252,84 @@ Figures on `corporate-ledger.html` and `corporate-ledger-method.html`. The page 
 | Amounts not counted | The register on the page's Amounts not counted tab: each headline figure that was not cash paid, with the document it comes from | 2026-10-12 ✅ |
 
 ---
+## 📌 Headline figures no workflow owns
+
+Every figure here is printed in a headline card on a dashboard, carries a source
+on the page, and is **maintained by hand** — no updater writes it, and none can
+without new plumbing. They are recorded here so `check-stats-documented.py` can
+account for them and so a reader can follow each one to its publisher.
+
+**Read the date column as "when the page says it was checked", not "verified
+today".** These were transcribed from the published pages on 2026-10-20 with the
+sources those pages cite; they were **not** independently re-fetched from IRS,
+DLS, OCPF, RGGI or CBP in the process. That is why none of them carries the ✅
+hand-verified mark. The pages' own `data-checked` stamps are what age them, and
+`check-freshness.py` already registers those stamps.
+
+Anything in this table that acquires a feed should move out of it into the
+section for that feed, and lose its row here.
+
+### Tax & budget — `tax-budget-dashboard.html` (page checked 2026-07-01)
+
+| Metric | Value | Period | Source |
+|--------|-------|--------|--------|
+| Income tax competitiveness rank | #42 (9th worst) | 2026 index | Tax Foundation State Tax Competitiveness Index — their index, cited as theirs |
+| Debt service, annual | $2.24B | FY2026 | mass.gov GAA export, appropriation line 0699-0015 |
+| Total statewide property levy | $24.0B | FY2026 | MA DLS, FY2026 Tax Levies Report |
+| Estimated SNAP fraud, actual | $135–225M | FY2023–FY2025 | MA State Auditor BSI reports + USDA-FNS national trafficking rates — an estimate, and a range |
+| Net AGI outflow | −$8.2B | CY2020–22 | IRS SOI state-to-state migration ($4.3B + $3.9B) |
+| Top 1% share of federal income tax paid by MA filers | 38.2% | TY2022 | IRS SOI In-State AGI Shares |
+| Top 5% share of federal income tax paid by MA filers | 58.8% | TY2022 | IRS SOI In-State AGI Shares |
+| Bottom 50% share of federal income tax paid by MA filers | 3.9% | TY2022 | IRS SOI In-State AGI Shares |
+| Top 1% share of all capital gains | 76.0% | TY2022 | IRS SOI In-State AGI Shares |
+
+The four IRS SOI shares are one release and move together. If one is updated and
+the others are not, the page will contradict itself — update the set or none of
+it. IRS SOI publishes state AGI-share data annually and well behind the tax year,
+so TY2022 being the newest is the source's cadence, not neglect.
+
+### Energy — `energy-dashboard.html`
+
+| Metric | Value | Period | Source |
+|--------|-------|--------|--------|
+| RGGI carbon-auction cost to MA ratepayers, cumulative | $1.36B | since 2008 | RGGI Inc. auction results |
+
+Cumulative, so it grows with every quarterly auction — the one figure in this
+table that goes stale on a known schedule rather than annually.
+
+### Pay to play — `pay-to-play-dashboard.html` (page checked 2026-02-01)
+
+| Metric | Value | Period | Source |
+|--------|-------|--------|--------|
+| Donations at exactly the $200 reporting threshold | 82.3% | — | OCPF filings |
+| Donations from three firms alone | $822K | — | OCPF filings |
+| Health sector lobbying, #1 | $112.7M | — | Secretary of the Commonwealth lobbying disclosure |
+| Finance / insurance / real estate lobbying, #2 | $74.4M | — | Secretary of the Commonwealth lobbying disclosure |
+| Energy / natural resources lobbying, #4 | $39.3M | — | Secretary of the Commonwealth lobbying disclosure |
+
+This page has no updater by design: the Secretary of the Commonwealth blocks
+server-side fetches, which is the same reason `data/ma-lobbying-firms-latest.json`
+is refreshed from a browser session rather than a workflow. The three sector
+totals sit beside a `ma-lobbying-firms-latest.json` feed that holds firm-level
+figures, not sector rollups, so they are not the same numbers and must not be
+cross-checked against each other.
+
+### Immigration — `immigration-dashboard.html`
+
+| Metric | Value | Period | Source |
+|--------|-------|--------|--------|
+| CBP encounters recorded in Massachusetts | 2,836 | FY2026, Oct–Jul | CBP Nationwide Encounters, state breakdown (`nationwide-encounters-fy23-fy26-jul-state.csv`) |
+| Single adults as a share of those encounters | 93% | FY2026, Oct–Jul | same file (2,629 of 2,836) |
+
+The Oct–Jul window is deliberate and the page explains why: comparing three full
+years against a 10-month FY2026 measured the calendar as much as the trend, and
+on equal windows the shape reverses. Keep the window when this updates.
+
+These are the one group here that a workflow could plausibly own. The blocker is
+transport, not sourcing: cbp.gov fingerprints the client, so only the self-hosted
+runner (`duncanburns2013-dot/ma-data-hub-runner`, which fetches via curl) can
+retrieve the file — the same constraint `update-cbp.yml` already lives with.
+
 ## 🔗 Dashboard Registry
 
 All dashboards live at `https://massachusettsdatahub.com/<file>`.

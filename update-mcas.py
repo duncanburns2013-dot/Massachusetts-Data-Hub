@@ -1050,6 +1050,20 @@ def update_absence_and_graduation(html):
                 # in five", which was true at 18.8% and false at 17.1%. A
                 # derived claim in prose goes wrong silently, so it is derived.
                 out["abs-ratio"] = f"{round(100 / cur['All Students'])}"
+                # The Achievement Gaps tab's absence cards. These read 11.6 /
+                # 18.3 / 38.3 / 27pts, which matched no DESE state figure at
+                # either the 10-day or the 20-day threshold in any of the last
+                # five school years -- and the third merged "Hispanic/EL", two
+                # groups DESE reports separately, into one number that was
+                # neither of them. Sourced and split now.
+                for tag, grp in (("gap-abs-asian", "Asian"),
+                                 ("gap-abs-white", "White"),
+                                 ("gap-abs-hisp", "Hispanic or Latino")):
+                    if grp in cur:
+                        out[tag] = f"{cur[grp]:.1f}%"
+                if "Hispanic or Latino" in cur and "Asian" in cur:
+                    out["gap-abs-spread"] = (
+                        f"{cur['Hispanic or Latino'] - cur['Asian']:.1f}pts")
                 out["abs-sy"] = f"{int(sy) - 1}-{str(int(sy))[2:]}"
                 out["abs-prev-sy"] = f"{int(sy) - 2}-{str(int(sy) - 1)[2:]}"
                 if "All Students" in prev:

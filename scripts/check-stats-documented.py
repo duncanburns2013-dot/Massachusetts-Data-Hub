@@ -158,7 +158,18 @@ def scan(collect_frozen=None):
             if frozen and collect_frozen is not None:
                 collect_frozen.append({"page": f.name, "value": raw[:24],
                                        "why": frozen.group(1)})
-            if anchored or frozen or owned_by or d in documented:
+            # A RANGE is documented when both its endpoints are. digits()
+            # collapses "$135-225M" to "135225", which method_numbers() can
+            # never produce: it reads numbers one at a time, so the same figure
+            # appears there as "135" and "225". Without this, a range is
+            # permanently unaccountable no matter how well it is documented --
+            # which is what happened to the SNAP fraud estimate after it was
+            # written into MASTER_DATA.md with its Auditor and USDA sources.
+            parts = [digits(x) for x in re.split(r'[–—-]', raw)]
+            parts = [x for x in parts if x and len(x) >= 2]
+            ranged = len(parts) > 1 and all(x in documented for x in parts)
+
+            if anchored or frozen or owned_by or d in documented or ranged:
                 continue
             label = re.sub(r"\s+", " ", TAG.sub(" ", block[v.end():])).strip()[:60]
             found.append({"page": f.name, "value": raw[:24], "label": label})
