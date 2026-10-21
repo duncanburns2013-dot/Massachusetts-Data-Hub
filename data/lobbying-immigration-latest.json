@@ -116,8 +116,69 @@
      "amount": 0.0
     }
    ],
-   "prior_years_note": "Full-year totals 2020-2025 came to $2,333,600, peaking at $465,709 in 2025. Those figures were transcribed from page renders in duncanburns2013-dot/The-Invasion and have NOT been re-read from the registry; only the 2026 figures above were verified on 2026-10-21."
+   "prior_years": [
+    {
+     "year": 2020,
+     "salaries": 230595.16,
+     "entity_payments": 80000.0,
+     "expenses_total": 132996.93,
+     "total": 443592.09,
+     "partial": false,
+     "verified": "2026-10-21"
+    },
+    {
+     "year": 2021,
+     "salaries": 202985.0,
+     "entity_payments": 80000.0,
+     "expenses_total": 65572.83,
+     "total": 348557.83,
+     "partial": false,
+     "verified": "2026-10-21"
+    },
+    {
+     "year": 2022,
+     "salaries": 206888.77,
+     "entity_payments": 85000.0,
+     "expenses_total": 52765.89,
+     "total": 344654.66,
+     "partial": false,
+     "verified": "2026-10-21"
+    },
+    {
+     "year": 2023,
+     "salaries": 219234.0,
+     "entity_payments": 90000.0,
+     "expenses_total": 84894.59,
+     "total": 394128.59,
+     "partial": false,
+     "verified": "2026-10-21"
+    },
+    {
+     "year": 2024,
+     "salaries": 170359.0,
+     "entity_payments": 95000.0,
+     "expenses_total": 71598.96,
+     "total": 336957.96,
+     "partial": false,
+     "verified": "2026-10-21"
+    },
+    {
+     "year": 2025,
+     "salaries": 221769.0,
+     "entity_payments": 97500.0,
+     "expenses_total": 146439.67,
+     "total": 465708.67,
+     "partial": false,
+     "verified": "2026-10-21"
+    }
+   ],
+   "prior_years_total_2020_2025": 2333599.8,
+   "prior_years_peak": {
+    "year": 2025,
+    "total": 465708.67
+   },
+   "prior_years_verification": "All six years read from the Secretary's own summary page on 2026-10-21, one search per registration year -- the registry has no year selector on the detail page. Every figure matched the totals carried in duncanburns2013-dot/The-Invasion, which had been transcribed from PNG page renders. Salaries, firm payments and expenses reconcile to each year's stated total."
   }
  },
- "verification_note": "Every 2026 figure above was read from the Secretary's own summary page on 2026-10-21 and matched, to the cent, the figures carried in duncanburns2013-dot/The-Invasion, which had been transcribed from PNG page renders. Salaries, entity payments and expenses each reconcile to the published totals, and the named lobbyist amounts sum to the salary line in both cases. One name was initially dropped from the ACLU list -- Laura Rótolo, $12,500 -- because an accented character defeated the pattern used to read the page. The reconciliation check caught it: the named amounts summed $12,500 short of the registry's own salary total. Every list here now sums to its stated total."
+ "verification_note": "Every 2026 figure above was read from the Secretary's own summary page on 2026-10-21 and matched, to the cent, the figures carried in duncanburns2013-dot/The-Invasion, which had been transcribed from PNG page renders. Salaries, entity payments and expenses each reconcile to the published totals, and the named lobbyist amounts sum to the salary line in both cases. One name was initially dropped from the ACLU list -- Laura Rótolo, $12,500 -- because an accented character defeated the pattern used to read the page. The reconciliation check caught it: the named amounts summed $12,500 short of the registry's own salary total. Every list here now sums to its stated total. Prior years 2020-2025 were subsequently verified the same way on the same day; all six reconcile."
 }
