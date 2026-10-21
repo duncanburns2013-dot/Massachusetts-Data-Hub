@@ -35,6 +35,15 @@ jobs:
       - name: Refresh appropriations and recipients from CTHRU
         run: python update-immigrant-spending.py
 
+      - name: Fetch the IRS exempt-organizations file (Massachusetts)
+        run: |
+          mkdir -p data/_raw_irs
+          curl -sS --fail --max-time 180 -A "MA-Data-Hub/1.0"             -o data/_raw_irs/eo_ma.csv             https://www.irs.gov/pub/irs-soi/eo_ma.csv
+          wc -l data/_raw_irs/eo_ma.csv
+
+      - name: Verify recipient tax status against the IRS file
+        run: python scripts/verify-nonprofit-status.py
+
       - name: Commit if changed
         # Runs even when the step above failed: the updater exits 75 on a CTHRU
         # outage and writes nothing, so there is nothing to lose, and a later

@@ -171,12 +171,12 @@ FY2024 was appropriated <span data-field="fy2024-enacted-inline">$627.9M</span> 
 <h2 class="sec-title">Every organisation paid under these appropriations</h2>
 <p class="sec-desc">From CTHRU's payment records, FY2022 onward. Sorted by total received. Searchable.</p>
 
-<div class="caveat"><strong>Tax status is not asserted here.</strong> CTHRU gives a vendor name and an amount, not a 501(c)(3) determination. Some of these are non-profits, some are for-profit contractors, and the record alone does not say which. Confirming charitable status needs the IRS Business Master File, which is a separate pass &mdash; until it is done, no row on this page claims to be a non-profit.</div>
+<div class="caveat"><strong>Checked against the IRS, and most of this money is not going to charities.</strong> Every name here was matched to the IRS Exempt Organizations file for Massachusetts. <strong><span data-field="irs-c3-count">100</span> of <span data-field="irs-org-count">392</span></strong> are confirmed 501(c)(3), taking <strong><span data-field="irs-c3-dollars">$106.7M</span></strong> &mdash; <strong><span data-field="irs-c3-pct">32.1%</span></strong> of the <span data-field="irs-total-dollars">$332.0M</span>. The largest recipients are for-profit contractors. <em>Not in the file</em> is not evidence against an organisation: a charity incorporated outside Massachusetts, or paid through a fiscal sponsor, will not appear in the Massachusetts file.</div>
 
 <input class="srch" id="q" placeholder="Search organisations&hellip;" oninput="filt()">
 <div class="card"><div class="table-wrap">
 <table class="rec-table">
-<thead><tr><th>Organisation</th><th class="num">Total received</th><th class="num">Payments</th><th>Legal form in name</th></tr></thead>
+<thead><tr><th>Organisation</th><th class="num">Total received</th><th class="num">Payments</th><th>IRS status</th></tr></thead>
 <tbody id="recs"><tr><td colspan="4" style="color:var(--muted)">Loading from data/immigrant-spending-latest.json&hellip;</td></tr></tbody>
 </table></div>
 <p class="card-sub" style="margin-top:12px" id="rec-note"></p>
@@ -348,7 +348,12 @@ function draw(list){
   var b=document.getElementById('recs');
   if(!list.length){b.innerHTML='<tr><td colspan="4" style="color:var(--muted)">No match.</td></tr>';return}
   b.innerHTML=list.map(function(r){
-    return '<tr><td>'+r.vendor+'</td><td class="num">'+money(r.total)+'</td><td class="num">'+r.payments+'</td><td style="color:var(--muted);font-size:.74rem">'+r.form_hint+'</td></tr>'
+    var i=r.irs||{}, st;
+    if(i.is_501c3) st='<span style="color:var(--green);font-weight:600">501(c)(3)</span> <span style="color:var(--muted)">EIN '+i.ein+'</span>';
+    else if(r.nonprofit_verified) st='<span style="color:var(--blue)">exempt, subsection '+i.subsection+'</span>';
+    else if(i.match==='ambiguous') st='<span style="color:var(--amber)">name matches several EINs</span>';
+    else st='<span style="color:var(--muted)">not in the MA exempt file</span>';
+    return '<tr><td>'+r.vendor+'</td><td class="num">'+money(r.total)+'</td><td class="num">'+r.payments+'</td><td style="font-size:.74rem">'+st+'</td></tr>'
   }).join('');
 }
 function filt(){

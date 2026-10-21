@@ -15,3 +15,6 @@ data/_raw_cbp/
 
 # local scheduled-task logs
 _scheduled/*.log
+
+# IRS exempt-organizations file: fetched by the workflow, not published
+data/_raw_irs/
