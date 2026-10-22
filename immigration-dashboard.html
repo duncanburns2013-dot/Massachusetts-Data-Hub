@@ -2338,7 +2338,6 @@ function showSection(id,btn){
 
 function showTab(id,btn){
   // The Invasion's payment explorer fetches 340KB; load it on first open.
-  if(id==='i-explorer'&&window.__invLoadExplorer)window.__invLoadExplorer();
   var prefix=id.split('-')[0]+'-';
   document.querySelectorAll('.tab').forEach(function(t){if(t.id.indexOf(prefix)===0)t.classList.remove('active')});
   var navEl=document.getElementById('nav-'+currentSection);
@@ -2610,7 +2609,6 @@ initChart('n-overview');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     });
-    window.__invLoadExplorer = function () { loadExplorer(); };
 
     var fmt = function (n) { return '$' + Math.round(n).toLocaleString('en-US'); };
     var fmtM = function (n) {
@@ -2994,38 +2992,7 @@ initChart('n-overview');
     var TIER_NAME = ['Immigrant/refugee', 'Shelter reserve', 'MassHealth', 'False positive'];
     var TIER_COLOR = ['#2f7d32', '#B07C20', '#2f6ea5', '#680A1D'];
 
-    function loadExplorer() {
-      if (DATA || loading) return;
-      loading = true;
-      fetch('data/payments.json')
-        .then(function (r) {
-          if (!r.ok) throw new Error('HTTP ' + r.status);
-          return r.json();
-        })
-        .then(function (j) {
-          DATA = j;
-          var c = j.cols, L = j.lookups;
-          for (var i = 0; i < c.m.length; i++) {
-            rows.push({
-              date: c.p[i], vendor: L.vendor[c.v[i]], approp: L.approp[c.a[i]],
-              dept: L.dept[c.d[i]], city: L.city[c.c[i]], fy: c.y[i],
-              tier: c.t[i], amount: c.m[i] / 100
-            });
-          }
-          var fySel = document.getElementById('expFy');
-          Array.from(new Set(rows.map(function (r) { return r.fy; }))).sort().forEach(function (f) {
-            var o = document.createElement('option'); o.value = f; o.textContent = 'FY' + f; fySel.appendChild(o);
-          });
-          drawEvidence();
-          apply();
-        })
-        .catch(function (e) {
-          document.getElementById('expBody').innerHTML =
-            '<tr><td colspan="6" class="exp-empty">Could not load the payment data (' + e.message +
-            ').<br>If you are opening this file directly from disk, run a local server — <code>python -m http.server</code> — so the browser can fetch it.</td></tr>';
-        })
-        .finally(function () { loading = false; });
-    }
+
 
     function drawEvidence() {
       var bar = document.getElementById('evidBar');
