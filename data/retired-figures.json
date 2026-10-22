@@ -124,14 +124,16 @@
    "right": "$451,299 total 2020-2026 (salaries, firm payments and expenses); salaries alone 2022-2025 are $86,971.60",
    "context": "(?i)mira|immigrant and refugee advocacy",
    "context_window": 900,
-   "why": "Counted salaries only, and excluded payments to Charles Group Consulting and reported expenses, which understated the money by about 5x. Read from the Secretary of the Commonwealth's Lobbyist Public Search on 2026-10-21. The abbreviated form ($87.5K) sat in a callout beside the corrected paragraph and was missed on the first pass: the correction note itself is ~700 characters, so the subject word was outside a 300-character window. Hence 900.",
+   "why": "Counted salaries only, and excluded payments to Charles Group Consulting and reported expenses, which understated the money by about 5x. Read from the Secretary of the Commonwealth's Lobbyist Public Search on 2026-10-21. The abbreviated form ($87.5K) sat in a callout beside the corrected paragraph and was missed on the first pass: the correction note itself is ~700 characters, so the subject word was outside a 300-character window. Hence 900. It also survived in DECOMPOSED form until 2026-10-21: the dashboard listed its four components ($61,132 + $20,000 + $4,626 + $1,790) as a 'Registered Lobbyists' table, and no cell on the page held $87,548 so this check could not see it. A retired figure split across four cells is still the retired figure. Replaced by the registry's own per-year totals, which reconcile to the $451,299 headline.",
    "retired_on": "2026-10-21",
    "allow": [
-    "data/retired-figures.json",
-    "scripts/check-retired-figures.py",
     "data/lobbying-immigration-latest.json",
-    "method.html"
-   ]
+    "data/retired-figures.json",
+    "method.html",
+    "scripts/check-retired-figures.py",
+    "scripts/stamp-mira-lobbying.py"
+   ],
+   "allow_note": " scripts/stamp-mira-lobbying.py names the figure in the docstring explaining what it replaced and why."
   },
   {
    "id": "mira-contracts",

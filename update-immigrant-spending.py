@@ -201,6 +201,100 @@ def quoted(codes):
     return ",".join(f"'{c}'" for c in codes)
 
 
+MIRA_VENDOR = "MASSACHUSETTS IMMIGRANT"   # CTHRU truncates the full name
+
+
+def mira_breakdown(top=6):
+    """MIRA's payments by the appropriation they came from.
+
+    The immigration dashboard carried a five-row breakdown totalling $7.48M
+    under an $11.85M heading: no row for the missing $4.37M and no period
+    stated. Two rows were also wrong against CTHRU -- legal assistance was
+    listed at $930,314 where the checkbook has $4,963,800. A breakdown that
+    does not sum to its own headline invites exactly the question it should be
+    answering, so this one carries an explicit remainder row.
+    """
+    qs = urllib.parse.urlencode({
+        "$select": ("appropriation_code,appropriation_name,"
+                    "sum(amount) as total,count(*) as payments"),
+        "$where": f"vendor like '%{MIRA_VENDOR}%'",
+        "$group": "appropriation_code,appropriation_name",
+        "$order": "total DESC",
+        "$limit": "200",
+    })
+    rows = get(f"{SPEND}?{qs}")
+    if not rows:
+        return None
+    clean = []
+    for r in rows:
+        # CTHRU prefixes the name with the code in brackets.
+        name = (r.get("appropriation_name") or "").strip()
+        if name.startswith("("):
+            name = name.split(")", 1)[-1].strip()
+        clean.append({"code": r.get("appropriation_code"),
+                      "name": name.title(),
+                      "total": num(r.get("total")),
+                      "payments": int(num(r.get("payments")))})
+    total = sum(c["total"] for c in clean)
+    head, tail = clean[:top], clean[top:]
+    return {
+        "vendor_match": MIRA_VENDOR,
+        "total": round(total, 2),
+        "accounts": len(clean),
+        "top": head,
+        "other": {"total": round(sum(c["total"] for c in tail), 2),
+                  "accounts": len(tail)},
+        "basis": ("every payment CTHRU's Comptroller checkbook (pegc-naaa) "
+                  "records to this vendor, fiscal 2010 to date, grouped by "
+                  "the appropriation it was paid from"),
+    }
+
+
+def stamp_mira(bd):
+    """Write the breakdown rows into the dashboard, between markers."""
+    page = os.path.join(ROOT, "immigration-dashboard.html")
+    if not bd:
+        return "no breakdown data"
+    if not os.path.exists(page):
+        return "immigration-dashboard.html missing"
+    with open(page, encoding="utf-8") as fh:
+        html = fh.read()
+    start = "<!-- BEGIN owned:update-immigrant-spending.py MIRA-PAY -->"
+    end = "<!-- END owned:update-immigrant-spending.py MIRA-PAY -->"
+    if start not in html or end not in html:
+        return "MIRA-PAY markers not found"
+    row = ('          <div class="data-row"><div>'
+           '<div class="data-label">{label}</div>'
+           '<div class="data-desc">{desc}</div></div>'
+           '<div class="data-value gold">{amt}</div></div>')
+    out = []
+    for a in bd["top"]:
+        out.append(row.format(
+            label=a["name"],
+            desc="{0} · {1} payments".format(a["code"], a["payments"]),
+            amt="${0:,.0f}".format(a["total"])))
+    o = bd["other"]
+    if o["accounts"]:
+        out.append(row.format(
+            label="All other appropriations",
+            desc="{0} further accounts".format(o["accounts"]),
+            amt="${0:,.0f}".format(o["total"])))
+    out.append(
+        '          <div class="data-row" style="border-top:2px solid '
+        'var(--navy);margin-top:4px;padding-top:12px"><div>'
+        '<div class="data-label"><strong>Total paid to MIRA</strong></div>'
+        '<div class="data-desc">{0} appropriations, fiscal 2010 to date'
+        '</div></div><div class="data-value gold"><strong>${1:,.0f}</strong>'
+        '</div></div>'.format(bd["accounts"], bd["total"]))
+    pre, rest = html.split(start, 1)
+    _old, post = rest.split(end, 1)
+    body = "\n".join(out)
+    html = pre + start + "\n" + body + "\n          " + end + post
+    with open(page, "w", encoding="utf-8") as fh:
+        fh.write(html)
+    return None
+
+
 def check_account_coverage():
     """Re-run the purpose-word search and account for every hit.
 
@@ -689,7 +783,19 @@ def main():
         fh.write("\n")
     print(f"\nWrote {OUT}")
 
-    for what, err in (("immigration-dashboard.html SHIFT array",
+    bd = mira_breakdown()
+    if bd:
+        print(f"\n  MIRA: ${bd['total']:,.0f} across {bd['accounts']} "
+              f"appropriations; top {len(bd['top'])} = "
+              f"${sum(a['total'] for a in bd['top']):,.0f}")
+        doc["mira"] = bd
+        with open(OUT, "w", encoding="utf-8") as fh:
+            json.dump(doc, fh, indent=1)
+            fh.write("\n")
+
+    for what, err in (("immigration-dashboard.html MIRA breakdown",
+                       stamp_mira(bd)),
+                      ("immigration-dashboard.html SHIFT array",
                        stamp_chart(series, newest)),
                       ("MASTER_DATA.md shelter rows",
                        stamp_register(series, newest))):

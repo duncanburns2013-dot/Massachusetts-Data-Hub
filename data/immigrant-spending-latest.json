@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-10-22T00:24:54Z",
+ "fetched_at": "2026-10-22T00:50:54Z",
  "source": "Massachusetts CTHRU -- Budget vs Actual (kv7m-35wn) for appropriation totals; Comptroller Spending (pegc-naaa) for payments by vendor",
  "source_url": "https://cthru.data.socrata.com/",
  "measure": "state appropriations and actual expenses on accounts the Commonwealth names for immigrant, refugee or family-shelter purposes; recipients classified by appropriation, never by vendor name",
@@ -1770,16 +1770,16 @@
     "nonprofit_verified": false
    },
    {
-    "vendor": "CITY OF HAVERHILL",
+    "vendor": "CITY OF LYNN",
     "total": 100000.0,
-    "payments": 4,
+    "payments": 3,
     "form_hint": "unclear from name",
     "nonprofit_verified": false
    },
    {
-    "vendor": "CITY OF LYNN",
+    "vendor": "CITY OF HAVERHILL",
     "total": 100000.0,
-    "payments": 3,
+    "payments": 4,
     "form_hint": "unclear from name",
     "nonprofit_verified": false
    },
@@ -1931,17 +1931,17 @@
     "nonprofit_verified": false
    },
    {
-    "vendor": "SOUTH SHORE COMM ACTION",
-    "total": 76923.0,
-    "payments": 1,
-    "form_hint": "unclear from name",
-    "nonprofit_verified": false
-   },
-   {
     "vendor": "SELF HELP INC",
     "total": 76923.0,
     "payments": 1,
     "form_hint": "corporate or charitable form in name",
+    "nonprofit_verified": false
+   },
+   {
+    "vendor": "SOUTH SHORE COMM ACTION",
+    "total": 76923.0,
+    "payments": 1,
+    "form_hint": "unclear from name",
     "nonprofit_verified": false
    },
    {
@@ -1994,16 +1994,16 @@
     "nonprofit_verified": false
    },
    {
-    "vendor": "CITY OF FALL RIVER",
+    "vendor": "CITY OF SPRINGFIELD",
     "total": 75000.0,
-    "payments": 6,
+    "payments": 2,
     "form_hint": "unclear from name",
     "nonprofit_verified": false
    },
    {
-    "vendor": "CITY OF SPRINGFIELD",
+    "vendor": "CITY OF FALL RIVER",
     "total": 75000.0,
-    "payments": 2,
+    "payments": 6,
     "form_hint": "unclear from name",
     "nonprofit_verified": false
    },
@@ -2078,17 +2078,17 @@
     "nonprofit_verified": false
    },
    {
-    "vendor": "RASHIDI PROPERTY SERVICES LLC",
-    "total": 70000.0,
-    "payments": 4,
-    "form_hint": "for-profit form in name",
-    "nonprofit_verified": false
-   },
-   {
     "vendor": "HEALTH IMPERATIVES, INC",
     "total": 70000.0,
     "payments": 2,
     "form_hint": "corporate or charitable form in name",
+    "nonprofit_verified": false
+   },
+   {
+    "vendor": "RASHIDI PROPERTY SERVICES LLC",
+    "total": 70000.0,
+    "payments": 4,
+    "form_hint": "for-profit form in name",
     "nonprofit_verified": false
    },
    {
@@ -2162,14 +2162,14 @@
     "nonprofit_verified": false
    },
    {
-    "vendor": "MASS ASSOCS OF TEACHERS OF SPEAKER",
+    "vendor": "FRENCH RIVER EDUCATION CTR",
     "total": 62500.0,
     "payments": 2,
     "form_hint": "unclear from name",
     "nonprofit_verified": false
    },
    {
-    "vendor": "FRENCH RIVER EDUCATION CTR",
+    "vendor": "MASS ASSOCS OF TEACHERS OF SPEAKER",
     "total": 62500.0,
     "payments": 2,
     "form_hint": "unclear from name",
@@ -2323,17 +2323,17 @@
     "nonprofit_verified": false
    },
    {
-    "vendor": "TOWN OF RANDOLPH",
-    "total": 50000.0,
-    "payments": 2,
-    "form_hint": "unclear from name",
-    "nonprofit_verified": false
-   },
-   {
     "vendor": "AIDS PROJECT WORCESTER INC",
     "total": 50000.0,
     "payments": 2,
     "form_hint": "corporate or charitable form in name",
+    "nonprofit_verified": false
+   },
+   {
+    "vendor": "TOWN OF RANDOLPH",
+    "total": 50000.0,
+    "payments": 2,
+    "form_hint": "unclear from name",
     "nonprofit_verified": false
    },
    {
@@ -2491,14 +2491,14 @@
     "nonprofit_verified": false
    },
    {
-    "vendor": "PATHWAYS FOR CHILDREN INC",
+    "vendor": "COMMUNITIES UNITED INC",
     "total": 38462.0,
     "payments": 1,
     "form_hint": "corporate or charitable form in name",
     "nonprofit_verified": false
    },
    {
-    "vendor": "COMMUNITIES UNITED INC",
+    "vendor": "PATHWAYS FOR CHILDREN INC",
     "total": 38462.0,
     "payments": 1,
     "form_hint": "corporate or charitable form in name",
@@ -2568,6 +2568,13 @@
     "nonprofit_verified": false
    },
    {
+    "vendor": "NEIGHBORHEALTH CORPORATION",
+    "total": 30000.0,
+    "payments": 1,
+    "form_hint": "corporate or charitable form in name",
+    "nonprofit_verified": false
+   },
+   {
     "vendor": "STANLEY STREET TREATMENT & RESOURCES INC",
     "total": 30000.0,
     "payments": 2,
@@ -2579,13 +2586,6 @@
     "total": 30000.0,
     "payments": 1,
     "form_hint": "unclear from name",
-    "nonprofit_verified": false
-   },
-   {
-    "vendor": "NEIGHBORHEALTH CORPORATION",
-    "total": 30000.0,
-    "payments": 1,
-    "form_hint": "corporate or charitable form in name",
     "nonprofit_verified": false
    },
    {
@@ -2694,16 +2694,16 @@
     "nonprofit_verified": false
    },
    {
-    "vendor": "TOWN OF BARNSTABLE",
+    "vendor": "TOWN OF CLINTON",
     "total": 25000.0,
-    "payments": 2,
+    "payments": 7,
     "form_hint": "unclear from name",
     "nonprofit_verified": false
    },
    {
-    "vendor": "TOWN OF CLINTON",
+    "vendor": "CITY OF QUINCY",
     "total": 25000.0,
-    "payments": 7,
+    "payments": 1,
     "form_hint": "unclear from name",
     "nonprofit_verified": false
    },
@@ -2722,9 +2722,9 @@
     "nonprofit_verified": false
    },
    {
-    "vendor": "CITY OF QUINCY",
+    "vendor": "TOWN OF BARNSTABLE",
     "total": 25000.0,
-    "payments": 1,
+    "payments": 2,
     "form_hint": "unclear from name",
     "nonprofit_verified": false
    },
@@ -2806,13 +2806,6 @@
     "nonprofit_verified": false
    },
    {
-    "vendor": "BERKSHIRE COUNTY HEAD START",
-    "total": 19231.0,
-    "payments": 1,
-    "form_hint": "unclear from name",
-    "nonprofit_verified": false
-   },
-   {
     "vendor": "TRIUMPH INC",
     "total": 19231.0,
     "payments": 1,
@@ -2821,6 +2814,13 @@
    },
    {
     "vendor": "COMMUNITY ACTION PROGRAMS",
+    "total": 19231.0,
+    "payments": 1,
+    "form_hint": "unclear from name",
+    "nonprofit_verified": false
+   },
+   {
+    "vendor": "BERKSHIRE COUNTY HEAD START",
     "total": 19231.0,
     "payments": 1,
     "form_hint": "unclear from name",
@@ -2855,6 +2855,20 @@
     "nonprofit_verified": false
    },
    {
+    "vendor": "TOWN OF NATICK",
+    "total": 18000.0,
+    "payments": 5,
+    "form_hint": "unclear from name",
+    "nonprofit_verified": false
+   },
+   {
+    "vendor": "CITY OF GLOUCESTER",
+    "total": 18000.0,
+    "payments": 1,
+    "form_hint": "unclear from name",
+    "nonprofit_verified": false
+   },
+   {
     "vendor": "TOWN OF WEYMOUTH",
     "total": 18000.0,
     "payments": 2,
@@ -2869,23 +2883,9 @@
     "nonprofit_verified": false
    },
    {
-    "vendor": "CITY OF GLOUCESTER",
-    "total": 18000.0,
-    "payments": 1,
-    "form_hint": "unclear from name",
-    "nonprofit_verified": false
-   },
-   {
     "vendor": "CITY OF SOMERVILLE",
     "total": 18000.0,
     "payments": 1,
-    "form_hint": "unclear from name",
-    "nonprofit_verified": false
-   },
-   {
-    "vendor": "TOWN OF NATICK",
-    "total": 18000.0,
-    "payments": 5,
     "form_hint": "unclear from name",
     "nonprofit_verified": false
    },
@@ -3051,9 +3051,9 @@
     "nonprofit_verified": false
    },
    {
-    "vendor": "CITY OF BEVERLY",
+    "vendor": "BERKSHIRE HILLS REGIONAL SCHOOL DISTRICT",
     "total": 12500.0,
-    "payments": 3,
+    "payments": 2,
     "form_hint": "unclear from name",
     "nonprofit_verified": false
    },
@@ -3065,16 +3065,16 @@
     "nonprofit_verified": false
    },
    {
-    "vendor": "TOWN OF WINTHROP",
+    "vendor": "CITY OF BEVERLY",
     "total": 12500.0,
-    "payments": 1,
+    "payments": 3,
     "form_hint": "unclear from name",
     "nonprofit_verified": false
    },
    {
-    "vendor": "TOWN OF PLYMOUTH",
+    "vendor": "TOWN OF WINTHROP",
     "total": 12500.0,
-    "payments": 2,
+    "payments": 1,
     "form_hint": "unclear from name",
     "nonprofit_verified": false
    }
@@ -3137,5 +3137,53 @@
     "nonprofit_verified": false
    }
   ]
+ },
+ "mira": {
+  "vendor_match": "MASSACHUSETTS IMMIGRANT",
+  "total": 11853077.96,
+  "accounts": 21,
+  "top": [
+   {
+    "code": "40030124",
+    "name": "Immigration Legal Assistance Fund",
+    "total": 4963799.72,
+    "payments": 17
+   },
+   {
+    "code": "15991213",
+    "name": "Family Shelter And Services Reserve",
+    "total": 1581172.12,
+    "payments": 12
+   },
+   {
+    "code": "15990122",
+    "name": "Immigrants And Refugees Housing Reserve",
+    "total": 1296000.0,
+    "payments": 2
+   },
+   {
+    "code": "40030122",
+    "name": "Low-Income Citizenship Program",
+    "total": 1115079.71,
+    "payments": 552
+   },
+   {
+    "code": "40030091",
+    "name": "Office Of Refugees And Immigrants Trust Fund",
+    "total": 665358.26,
+    "payments": 20
+   },
+   {
+    "code": "40030820",
+    "name": "Americorps Ma New American Integration Program Expend Trust",
+    "total": 564286.0,
+    "payments": 32
+   }
+  ],
+  "other": {
+   "total": 1667382.15,
+   "accounts": 15
+  },
+  "basis": "every payment CTHRU's Comptroller checkbook (pegc-naaa) records to this vendor, fiscal 2010 to date, grouped by the appropriation it was paid from"
  }
 }
