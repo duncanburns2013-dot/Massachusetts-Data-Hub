@@ -50,6 +50,7 @@ the published figures alone, per the convention the other updaters here use.
 import datetime
 import json
 import os
+import re
 import sys
 import urllib.error
 import urllib.parse
@@ -293,6 +294,94 @@ def stamp_mira(bd):
     with open(page, "w", encoding="utf-8") as fh:
         fh.write(html)
     return None
+
+
+def stamp_shelter_page(doc, mira_t1_total):
+    """Write every data-field on shelter-immigrant-spending.html.
+
+    The page looked data-driven -- 50 anchors, and it fetches the feed at
+    runtime for the recipient table -- but nothing ever wrote the anchors.
+    They were typed once when the page was built, and adding account
+    4003-0124 to tier 1 on 2026-10-21 made nine of them disagree with the
+    feed they sit next to: the account count still said 15, FY2027 spending
+    still said $93.7M against the feed's $95.2M.
+
+    An anchor that no script writes is a hand-typed figure wearing the
+    costume of a live one, which is worse than an obviously static page.
+    """
+    page = os.path.join(ROOT, "shelter-immigrant-spending.html")
+    if not os.path.exists(page):
+        return "shelter-immigrant-spending.html missing"
+
+    def money(v):
+        # The page uses billions once the figure passes a thousand million.
+        return (f"${v / 1e9:.3f}B" if abs(v) >= 1e9 else f"${v / 1e6:.1f}M")
+
+    t1 = doc["tier1"]["by_fiscal_year"]
+    t2 = doc["tier2"]["by_fiscal_year"]
+    newest = str(doc["newest_fiscal_year"])
+    peak = max(t1, key=lambda y: t1[y]["actual"])
+
+    def pct(v):
+        return f"{round(v['actual'] / v['enacted'] * 100)}%" if v["enacted"] else "n/a"
+
+    fields = {
+        "cur-actual": money(t1[newest]["actual"]),
+        "cur-enacted": money(t1[newest]["enacted"]),
+        "cur-pct": pct(t1[newest]),
+        "peak-actual": money(t1[peak]["actual"]),
+        "peak-fy": peak,
+        "peak-enacted": money(t1[peak]["enacted"]),
+        "acct-count": str(len(doc["tier1"]["accounts"])),
+        "newest-payment": str(doc.get("newest_payment_date") or "")[:10],
+        "cthru-created": str(doc.get("cthru_row_created") or "")[:10],
+        "mira-tier1-payments": f"${mira_t1_total:,.0f}",
+    }
+    for fy, v in t1.items():
+        fields[f"fy{fy}-enacted"] = money(v["enacted"])
+        fields[f"fy{fy}-actual"] = money(v["actual"])
+        fields[f"fy{fy}-pct"] = pct(v)
+    for fy, v in t2.items():
+        fields[f"t2-fy{fy}-enacted"] = money(v["enacted"])
+        fields[f"t2-fy{fy}-actual"] = money(v["actual"])
+    if "2024" in t1:
+        fields["fy2024-enacted-inline"] = money(t1["2024"]["enacted"])
+        fields["fy2024-actual-inline"] = money(t1["2024"]["actual"])
+
+    with open(page, encoding="utf-8") as fh:
+        html = fh.read()
+    written, missing = 0, []
+    for tag, val in fields.items():
+        pat = r'(data-field="' + re.escape(tag) + r'">)[^<]*(<)'
+        html, n = re.subn(pat, lambda m: m.group(1) + val + m.group(2), html)
+        if n:
+            written += n
+        else:
+            missing.append(tag)
+    with open(page, "w", encoding="utf-8") as fh:
+        fh.write(html)
+    if missing:
+        return (f"wrote {written}; these anchors are not on the page: "
+                + ", ".join(missing))
+    print(f"  stamped {written} fields on shelter-immigrant-spending.html")
+    return None
+
+
+def mira_tier1_payments():
+    """What MIRA was paid under the tier-1 appropriations, FY2022 onward.
+
+    Carried in prose on the shelter page as $4,327,707. Adding 4003-0124 to
+    tier 1 more than doubled it, to $9,291,507, and the prose went on saying
+    the old number -- a figure in a sentence is a figure nobody updates.
+    """
+    qs = urllib.parse.urlencode({
+        "$select": "sum(amount) as total",
+        "$where": (f"vendor like '%{MIRA_VENDOR}%' "
+                   f"AND appropriation_code in({quoted(set(TIER1))}) "
+                   f"AND budget_fiscal_year>={FIRST_FY}"),
+    })
+    rows = get(f"{SPEND}?{qs}")
+    return num(rows[0].get("total")) if rows else 0.0
 
 
 def check_account_coverage():
@@ -793,7 +882,13 @@ def main():
             json.dump(doc, fh, indent=1)
             fh.write("\n")
 
-    for what, err in (("immigration-dashboard.html MIRA breakdown",
+    mira_t1 = mira_tier1_payments()
+    print(f"  MIRA under tier-1 appropriations since FY{FIRST_FY}: "
+          f"${mira_t1:,.0f}")
+
+    for what, err in (("shelter-immigrant-spending.html fields",
+                       stamp_shelter_page(doc, mira_t1)),
+                      ("immigration-dashboard.html MIRA breakdown",
                        stamp_mira(bd)),
                       ("immigration-dashboard.html SHIFT array",
                        stamp_chart(series, newest)),
