@@ -1523,12 +1523,13 @@ FY2024 was appropriated <span data-field="fy2024-enacted-inline">$627.9M</span> 
 <div class="card-title">The two numbers nobody publishes</div>
 
 <label style="display:block;margin:10px 0 4px;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">How many households</label>
-<input type="range" id="hh" min="1000" max="400000" step="1000" value="9236" oninput="est()" style="width:100%">
-<div style="display:flex;justify-content:space-between;font-size:.74rem;color:var(--muted)"><span>1,000</span><strong id="hhv" style="color:var(--navy);font-size:.95rem"></strong><span>400,000</span></div>
+<!-- step 1, not 1000: the record-based presets are exact counts (9,236 families, 7,367 at the peak) and a 1,000 step silently rounded them to 9,000 and 7,000, so the button and the readout disagreed. -->
+<input type="range" id="hh" min="1000" max="100000" step="1" value="9236" oninput="est()" style="width:100%">
+<div style="display:flex;justify-content:space-between;font-size:.74rem;color:var(--muted)"><span>1,000</span><strong id="hhv" style="color:var(--navy);font-size:.95rem"></strong><span id="hhmax">100,000</span></div>
 <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
 <button class="tab-btn" style="padding:5px 10px;border:1px solid var(--border);border-radius:6px" onclick="setHH(9236)" title="1,536 families in emergency shelter on 1 Oct 2026 (EA report SD.4288) plus 7,700+ households on HomeBASE">9,236 &mdash; shelter + HomeBASE</button>
 <button class="tab-btn" style="padding:5px 10px;border:1px solid var(--border);border-radius:6px" onclick="setHH(7367)" title="families in shelters, hotels or motels on 25 Jul 2024, the caseload peak (EA report SD.3359)">7,367 &mdash; EA peak, Jul 2024</button>
-<button class="tab-btn" style="padding:5px 10px;border:1px solid var(--border);border-radius:6px" onclick="setHH(150000)">400k people</button>
+<button class="tab-btn" style="padding:5px 10px;border:1px solid var(--border);border-radius:6px" onclick="setPeople(400000)" title="400,000 people, converted to households by the composition selected on the left">400k people</button>
 </div>
 
 <label style="display:block;margin:16px 0 4px;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Share the household earns itself</label>
@@ -3323,6 +3324,35 @@ function big(v){
   if(Math.abs(v)>=1e6) return '$'+(v/1e6).toFixed(0)+'M';
   return money(v);
 }
+// How many people a composition contains, read from its own label. The
+// estimator multiplies a HOUSEHOLD budget, so a population figure has to be
+// divided by household size before it can be used -- and the slider must not
+// offer a household count that implies more people than the population it is
+// standing in for. It used to top out at 400,000 households, which at two
+// adults and two children is 1.6 million people and produced $42.3B, two
+// thirds of the entire state budget. The cap is now the population, converted.
+var POP=400000;
+function peoplePer(i){
+  var c=(LW&&LW.columns&&LW.columns[i])||'';
+  var ad=/2 adults/.test(c)?2:1;
+  var m=c.match(/(\d)\s+child/);
+  return ad + (m?+m[1]:0);
+}
+function syncCap(){
+  var i=+document.getElementById('comp').value;
+  var per=peoplePer(i);
+  var cap=Math.max(1000, Math.round(POP/per));
+  var hh=document.getElementById('hh');
+  hh.max=cap;
+  if(+hh.value>cap) hh.value=cap;
+  var lbl=document.getElementById('hhmax');
+  if(lbl) lbl.textContent=cap.toLocaleString('en-US');
+  return per;
+}
+function setPeople(n){
+  var per=peoplePer(+document.getElementById('comp').value);
+  setHH(Math.max(1000, Math.round(n/per)));
+}
 function setHH(n){document.getElementById('hh').value=n;est()}
 
 /* ---- household compositions beyond what MIT publishes -------------------
@@ -3420,7 +3450,11 @@ function est(){
            :((LW.note&&LW.note[i])?'<tr><td colspan="2" class="lw-note">'+LW.note[i]+'</td></tr>':'');
   document.getElementById('bud').innerHTML=rows+warn;
 
-  document.getElementById('hhv').textContent=hh.toLocaleString('en-US')+' households';
+  var per=syncCap();
+  hh=+document.getElementById('hh').value;
+  document.getElementById('hhv').textContent=
+    hh.toLocaleString('en-US')+' households · '
+    +(hh*per).toLocaleString('en-US')+' people';
   document.getElementById('earnv').textContent=Math.round(earn*100)+'%';
   document.getElementById('taxback').textContent=money(tax);
 
@@ -3440,7 +3474,11 @@ function est(){
 }
 
 // the ported markup calls these from inline onclick attributes
-window.setHH=setHH; window.filt=filt; window.est=est;
+// Inline onclick attributes resolve against window, and this script is
+// wrapped in an IIFE, so anything the markup calls has to be published
+// here. setPeople was added without this line and the '400k people'
+// button threw a silent ReferenceError -- the slider simply did not move.
+window.setHH=setHH; window.filt=filt; window.est=est; window.setPeople=setPeople;
 })();
 </script>
 </body>
