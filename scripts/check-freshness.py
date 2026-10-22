@@ -213,6 +213,57 @@ def last_changed(rel: str):
     return datetime.date.fromisoformat(out) if out else None
 
 
+def check_register_rechecks() -> int:
+    """Age the MASTER_DATA.md rows a human has to re-read by hand.
+
+    Some figures have no API behind them -- a broker's quarterly vacancy
+    report, a subscription index, a PDF laid before the legislature. They were
+    all carrying "hand verified <month>", which is a mark that never expires
+    and therefore never prompts anyone. They now carry a due date instead, and
+    this is what makes the date mean something.
+
+    The whole point is that a forgotten row fails the build rather than
+    sitting on the site looking checked.
+    """
+    reg = REPO / "MASTER_DATA.md"
+    if not reg.exists():
+        return 0
+    lines = reg.read_text(encoding="utf-8").split("\n")
+    today = datetime.date.today()
+    due, soon = [], []
+    for line in lines:
+        if not line.startswith("|") or "⏳" not in line:
+            continue
+        cells = [c.strip() for c in line.strip("|").split("|")]
+        if len(cells) != 4:
+            continue
+        m = re.search(r"re-read by (\d{4}-\d{2}-\d{2})\s*—\s*(.*)", cells[3])
+        if not m:
+            continue
+        when = datetime.date.fromisoformat(m.group(1))
+        what = m.group(2).strip()
+        if when < today:
+            due.append((cells[0], when, what, (today - when).days))
+        elif (when - today).days <= 30:
+            soon.append((cells[0], when, what))
+    if soon:
+        print(f"\n{len(soon)} register row(s) due for a re-read within 30 days:")
+        for label, when, what in soon:
+            print(f"  {label}  by {when}  — {what}")
+    if not due:
+        return 0
+    print(f"\n{len(due)} register row(s) OVERDUE for a re-read:",
+          file=sys.stderr)
+    for label, when, what, days in due:
+        print(f"  {label}: due {when}, {days}d ago — re-read {what}",
+              file=sys.stderr)
+    print("\nThese have no API behind them. Re-read the source, update the row "
+          "in MASTER_DATA.md and set a new due date -- or, if a feed now "
+          "exists, wire it to a script and give the row a written-by mark "
+          "instead.", file=sys.stderr)
+    return len(due)
+
+
 def main() -> int:
     rows, stale = [], []
 
@@ -256,9 +307,13 @@ def main() -> int:
     for name, age, lim, status in rows:
         print(f"{name:<{w}}  {age:>10}  {lim:>5}d  {status}")
 
-    if not stale:
+    overdue = check_register_rechecks()
+
+    if not stale and not overdue:
         print(f"\nAll {len(rows)} checked sources are current.")
         return 0
+    if not stale:
+        return 1
 
     print(f"\n{len(stale)} STALE:", file=sys.stderr)
     for rel, detail, max_age, why in stale:

@@ -1,0 +1,34 @@
+{
+ "fetched_at": "2026-10-22T00:19:20Z",
+ "source": "US Department of the Treasury, Status Report of U.S. Government Gold Reserve, via the Fiscal Data API",
+ "source_url": "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/accounting/od/gold_reserve",
+ "measure": "fine troy ounces held, by facility and location",
+ "report_date": "2026-09-30",
+ "earliest_report_date": "2012-01-31",
+ "total_fine_troy_oz": 261498926.241,
+ "depositories": {
+  "Fort Knox": 147341858.382,
+  "West Point": 54067331.379,
+  "Denver": 43853707.279
+ },
+ "by_location": {
+  "Denver, CO": 43853707.279,
+  "Fort Knox, KY": 147341858.382,
+  "West Point, NY": 54067331.379,
+  "All Locations- Coins, blanks, miscellaneous": 2783218.656,
+  "Federal Reserve Banks - NY Vault": 13450439.79,
+  "Federal Reserve Banks - Display": 2370.755
+ },
+ "change_since_earliest": {
+  "oz": 26.925,
+  "pct": 0.0,
+  "flat": true
+ },
+ "meta": {
+  "currency": {
+   "checked": "2026-10-21",
+   "newest_available": "2026-09-30",
+   "cadence": "Treasury issues the status report monthly"
+  }
+ }
+}

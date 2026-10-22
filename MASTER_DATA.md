@@ -40,14 +40,14 @@ FIRST, then update the relevant dashboard.
 
 | Fiscal Year | SWB Encounters | Source | Verified |
 |-------------|---------------|--------|----------|
-| FY2017 | 415,517 | CBP | ✅ Feb 2026 |
-| FY2018 | 521,090 | CBP | ✅ Feb 2026 |
-| FY2019 | 977,509 | CBP | ✅ Feb 2026 |
-| FY2020 | 458,088 | CBP | ✅ Feb 2026 |
-| FY2021 | 1,734,686 | CBP | ✅ Feb 2026 |
-| FY2022 | 2,378,944 | CBP | ✅ Feb 2026 |
-| FY2023 | 2,475,669 | CBP | ✅ Feb 2026 |
-| FY2024 | 2,136,800 | CBP | ✅ Feb 2026 |
+| FY2017 | 415,517 | CBP | 🔒 closed federal fiscal year. These are OHSS total encounters (Border Patrol plus ports of entry); OHSS stopped publishing the ports-of-entry component after FY2024, so this series is complete and cannot be extended or revised. The Border Patrol-only series that does continue is written by update-cbp-encounters.py. |
+| FY2018 | 521,090 | CBP | 🔒 closed federal fiscal year. These are OHSS total encounters (Border Patrol plus ports of entry); OHSS stopped publishing the ports-of-entry component after FY2024, so this series is complete and cannot be extended or revised. The Border Patrol-only series that does continue is written by update-cbp-encounters.py. |
+| FY2019 | 977,509 | CBP | 🔒 closed federal fiscal year. These are OHSS total encounters (Border Patrol plus ports of entry); OHSS stopped publishing the ports-of-entry component after FY2024, so this series is complete and cannot be extended or revised. The Border Patrol-only series that does continue is written by update-cbp-encounters.py. |
+| FY2020 | 458,088 | CBP | 🔒 closed federal fiscal year. These are OHSS total encounters (Border Patrol plus ports of entry); OHSS stopped publishing the ports-of-entry component after FY2024, so this series is complete and cannot be extended or revised. The Border Patrol-only series that does continue is written by update-cbp-encounters.py. |
+| FY2021 | 1,734,686 | CBP | 🔒 closed federal fiscal year. These are OHSS total encounters (Border Patrol plus ports of entry); OHSS stopped publishing the ports-of-entry component after FY2024, so this series is complete and cannot be extended or revised. The Border Patrol-only series that does continue is written by update-cbp-encounters.py. |
+| FY2022 | 2,378,944 | CBP | 🔒 closed federal fiscal year. These are OHSS total encounters (Border Patrol plus ports of entry); OHSS stopped publishing the ports-of-entry component after FY2024, so this series is complete and cannot be extended or revised. The Border Patrol-only series that does continue is written by update-cbp-encounters.py. |
+| FY2023 | 2,475,669 | CBP | 🔒 closed federal fiscal year. These are OHSS total encounters (Border Patrol plus ports of entry); OHSS stopped publishing the ports-of-entry component after FY2024, so this series is complete and cannot be extended or revised. The Border Patrol-only series that does continue is written by update-cbp-encounters.py. |
+| FY2024 | 2,136,800 | CBP | 🔒 closed federal fiscal year. These are OHSS total encounters (Border Patrol plus ports of entry); OHSS stopped publishing the ports-of-entry component after FY2024, so this series is complete and cannot be extended or revised. The Border Patrol-only series that does continue is written by update-cbp-encounters.py. |
 | FY2025 (full year) | 237,538 | CBP (USBP only) | 🔄 Jul 2026 |
 | FY2026 (thru May 2026) | 61,726 | CBP (USBP only) | 🔄 Jul 2026 |
 
@@ -100,21 +100,21 @@ vintage step.
 
 | Metric | Figure | Source | Verified |
 |--------|--------|--------|----------|
-| Entered (FY2021-24) | ~8M | CBP + Census | ✅ Feb 2026 |
-| Interior removals (Biden admin) | ~600K (~150K/yr) | ICE ERO | ✅ Feb 2026 |
-| Net remaining | ~7.4M | Calculated | ✅ Feb 2026 |
+| Entered (FY2021-24) | ~8M | CBP + Census | ⏳ re-read by 2027-01-31 — CBP plus Census, re-derive |
+| Interior removals (Biden admin) | ~600K (~150K/yr) | ICE ERO | ⏳ re-read by 2027-01-31 — ICE ERO annual report |
+| Net remaining | ~7.4M | Calculated | ⏳ re-read by 2027-01-31 — derived from the two rows above |
 
 ### National — Fiscal Impact
 
 | Metric | Figure | Source | Verified |
 |--------|--------|--------|----------|
-| Cato/NASEM cumulative surplus (1994-2023) | $14.5T | Cato White Paper 2025 | ✅ Feb 2026 |
-| College grad share of surplus | $11.7T (81%) | Cato/NASEM | ✅ Feb 2026 |
-| Non-college grad share | $2.8T (19%) | Cato/NASEM | ✅ Feb 2026 |
-| Noncitizen share of surplus | $6.3T | Cato/NASEM | ✅ Feb 2026 |
-| CBO state/local net cost (2023) | $9.2B | CBO June 2025 | ✅ Feb 2026 |
-| Undocumented tax contributions (national) | $96.7B | ITEP 2024 | ✅ Feb 2026 |
-| Incarceration rate vs natives | 44% less likely | Cato/NASEM | ✅ Feb 2026 |
+| Cato/NASEM cumulative surplus (1994-2023) | $14.5T | Cato White Paper 2025 | 🔒 a published study's finding. Cato White Paper 2025, fixed text. |
+| College grad share of surplus | $11.7T (81%) | Cato/NASEM | 🔒 same study, fixed text. |
+| Non-college grad share | $2.8T (19%) | Cato/NASEM | 🔒 same study, fixed text. |
+| Noncitizen share of surplus | $6.3T | Cato/NASEM | 🔒 same study, fixed text. |
+| CBO state/local net cost (2023) | $9.2B | CBO June 2025 | 🔒 CBO June 2025 report, a published document. |
+| Undocumented tax contributions (national) | $96.7B | ITEP 2024 | 🔒 ITEP 2024 report, a published document. |
+| Incarceration rate vs natives | 44% less likely | Cato/NASEM | 🔒 same study, fixed text. |
 
 - **Key finding:** Legal immigrants net positive at all levels; undocumented net negative at state/local
 - **Cato caveat:** Paper does NOT separate legal from illegal; counts US-born children as "US-born"
@@ -123,9 +123,9 @@ vintage step.
 
 | Category | Annual Cost | Source | Verified |
 |----------|------------|--------|----------|
-| Total annual immigration cost | ~$2.35B | Multiple state sources | ✅ Feb 2026 |
-| Illegal-only cost estimate | $800M–$1.5B | CIS/FAIR/state data | ✅ Feb 2026 |
-| Undocumented tax contributions (MA) | ~$1.4B total ($446M state/local) | ITEP | ✅ Feb 2026 |
+| Total annual immigration cost | ~$2.35B | Multiple state sources | ⏳ re-read by 2027-01-31 — a compilation of several state sources; re-derive from each |
+| Illegal-only cost estimate | $800M–$1.5B | CIS/FAIR/state data | ⏳ re-read by 2027-01-31 — an estimate range from advocacy sources on both sides; re-derive |
+| Undocumented tax contributions (MA) | ~$1.4B total ($446M state/local) | ITEP | 🔒 ITEP, a published document. |
 | Immigrant-vendor payments file (28 vendors, 8,883 payments) | $228.6M total; **$46.8M (20.5%)** identifiable immigrant/refugee or shelter programs | Computed from `data/payments.json` (tiers 0+1) | ✅ Sep 2026 |
 
 ### Massachusetts — Shelter Crisis
@@ -156,11 +156,11 @@ vintage step.
 | FY2026 **projected** — budget documents, NOT a CTHRU actual | EA 7004-0101 $276,421,903 · HomeBASE $91,386,678. **Do not publish either as spending.** CTHRU actuals for FY2026 are EA $259.54M and HomeBASE $57.29M; see the rows above, which a script writes. The HomeBASE projection exceeds its $57,322,001 appropriation by $34,064,677, and that difference was once published as a transfer into the account. CTHRU's `transfer_in` for 7004-0108 in FY2026 is $2,575. | budget.digital.mass.gov FY27 line-item data | ✅ Sep 2026 |
 | FY2027 GAA | EA 7004-0101 $259,900,648 · HomeBASE 7004-0108 $82,322,001 · 7004-0110 $5,000,000 | budget.digital.mass.gov FY27 line-item data | ✅ Sep 2026 |
 | EA caseload, 1 Oct 2026 | 1,536 families in shelter + 47 in clinical safety sites | Biweekly EA report to House and Senate Ways and Means, 5 Oct 2026 (SD.4288), malegislature.gov/Bills/194/SD4288.pdf | ✅ Oct 2026 |
-| EA caseload, 25 Jul 2024 | 7,367 families in shelters, hotels or motels (Appendix A total) + 340 in overflow | Biweekly EA report, 29 Jul 2024 (SD.3359), malegislature.gov/Bills/193/SD3359.pdf | ✅ Oct 2026 |
+| EA caseload, 25 Jul 2024 | 7,367 families in shelters, hotels or motels (Appendix A total) + 340 in overflow | Biweekly EA report, 29 Jul 2024 (SD.3359), malegislature.gov/Bills/193/SD3359.pdf | 🔒 a dated snapshot from the biweekly EA report SD.3359. The report for that date will not be reissued. |
 | Caseload change, Jul 2024 to Oct 2026 | -79% (7,367 to 1,536, derived) | SD.3359, SD.4288 | ✅ Oct 2026 |
-| Cost per family per week, current | $1,241 (average shelter provider rates, FY27 contracts) | EA report SD.4288 | ✅ Oct 2026 |
-| Cost per family per week | $3,496 | State Auditor | ✅ Feb 2026 |
-| $100K fee per shelter family | Proposed | Legislature | ✅ Feb 2026 |
+| Cost per family per week, current | $1,241 (average shelter provider rates, FY27 contracts) | EA report SD.4288 | ⏳ re-read by 2026-12-31 — the next biweekly EA report |
+| Cost per family per week | $3,496 | State Auditor | ⏳ re-read by 2027-02-28 — the State Auditor's next shelter review |
+| $100K fee per shelter family | Proposed | Legislature | 🔒 a filed legislative proposal, not a measurement. |
 
 - **HomeBASE spending is reported.** The 8 Sep 2026 EA report carries FY26 "exits" spending ($153.7M), a category that includes HomeBASE; CTHRU carries 7004-0108.
 - **No official migrant share of EA families is published** (checked Sep 2026). Do not apply one.
@@ -170,8 +170,8 @@ vintage step.
 
 | Year | H-1B Workers (MA) | Source | Verified |
 |------|--------------------|--------|----------|
-| Peak | 21,834 | USCIS | ✅ Feb 2026 |
-| Current | ~7,550 | USCIS | ✅ Feb 2026 |
+| Peak | 21,834 | USCIS | ⏳ re-read by 2027-01-31 — USCIS parole and humanitarian data |
+| Current | ~7,550 | USCIS | ⏳ re-read by 2027-01-31 — USCIS parole and humanitarian data |
 
 ### Massachusetts — Concentration Cities
 
@@ -220,8 +220,8 @@ The 16,921 is outflow 102,076 against inflow 85,155 (returns, 2022-23; data/irs-
 | Population change, 2020-2025 | +120,972 people (2024-25: +15,524; July 2025 population 7,154,084) | US Census Bureau, Population Estimates (NST-EST2025 components of change) | 🔄 Oct 2026 |
 | Net AGI loss, latest year (2022-23) | $4.18B | IRS SOI | 🔄 Aug 2026 |
 | Average AGI per return, leaving vs arriving (2022-23) | $116,360 leaving (11,877,573K / 102,076) vs $90,442 arriving (7,701,622K / 85,155) | IRS SOI State-to-State Migration Data, data/irs-soi-migration-latest.json | 🔄 Oct 2026 |
-| 2024 US growth from immigration | 84% | Census | ✅ Jan 2026 |
-| MA NIM "nosedive" (2025 proj) | Historic decline | Census Vintage 2025 | ✅ Feb 2026 |
+| 2024 US growth from immigration | 84% | Census | ⏳ re-read by 2026-12-31 — Census Vintage 2026, due December |
+| MA NIM "nosedive" (2025 proj) | Historic decline | Census Vintage 2025 | ⏳ re-read by 2026-12-31 — Census Vintage 2026, due December |
 
 ---
 
@@ -278,7 +278,7 @@ Boston $1,352,812. Quote it with its as-of date or not at all.
 
 | Metric | Value | Source | Verified |
 |--------|-------|--------|----------|
-| Median household income | $88,326 | Census QuickFacts ACS 2020-2024 | ✅ Feb 2026 |
+| Median household income | $88,326 | Census QuickFacts ACS 2020-2024 | ⏳ re-read by 2026-12-31 — Census ACS 5-year, next release |
 | MA median household income | $103,960 | ACS 2024 (5-yr), `data/census-latest.json` | 🔄 Jul 2026 |
 | Condo median (Haverhill) | $390,000 | MLS | ✅ Feb 2026 |
 | SF median (Haverhill) | $600,000 | MLS | ✅ Feb 2026 |
@@ -301,21 +301,21 @@ Values below are that file as of **2026-10-21**. (Feed is PrimeMLS, not Paragon.
 
 | Metric | Value | Source | Verified |
 |--------|-------|--------|----------|
-| Office vacancy (C&W) | 19.0% | Cushman & Wakefield Q2 2026 | ✅ Aug 2026 |
-| Office vacancy (Colliers) | 23.7% | Colliers Q2 2026 | ✅ Aug 2026 |
-| Office vacancy (CBRE) | 18.7% | CBRE Q2 2026 | ✅ Aug 2026 |
-| National office vacancy | 20.1% | Cushman & Wakefield Q2 2026 | ✅ Aug 2026 |
-| CMBS office delinquency | 11.57% | Trepp, June 2026 | ✅ Aug 2026 |
-| CMBS all-property delinquency | 7.35% | Trepp, June 2026 | ✅ Aug 2026 |
-| Pre-COVID vacancy | ~7.5% | Multiple sources | ✅ Feb 2026 |
+| Office vacancy (C&W) | 19.0% | Cushman & Wakefield Q2 2026 | ⏳ re-read by 2027-01-31 — Cushman & Wakefield Q4 2026 |
+| Office vacancy (Colliers) | 23.7% | Colliers Q2 2026 | ⏳ re-read by 2027-01-31 — Colliers Q4 2026 |
+| Office vacancy (CBRE) | 18.7% | CBRE Q2 2026 | ⏳ re-read by 2027-01-31 — CBRE Q4 2026 |
+| National office vacancy | 20.1% | Cushman & Wakefield Q2 2026 | ⏳ re-read by 2027-01-31 — Cushman & Wakefield Q4 2026 |
+| CMBS office delinquency | 11.57% | Trepp, June 2026 | ⏳ re-read by 2026-12-31 — Trepp monthly delinquency report |
+| CMBS all-property delinquency | 7.35% | Trepp, June 2026 | ⏳ re-read by 2026-12-31 — Trepp monthly delinquency report |
+| Pre-COVID vacancy | ~7.5% | Multiple sources | ⏳ re-read by 2027-06-30 — a baseline drawn from several sources; re-read when any of them restates it |
 
 > **Vacancy definitions differ by brokerage — these are not competing estimates of one
 > number.** C&W 19.0%, CBRE 18.7% and Colliers 23.7% all describe Greater Boston Q2 2026
 > on different footprints (submarket set, building class, sublease treatment). Quote the
 > brokerage with the figure, and don't mix them in a single time series.
-| Major sale discounts (2025) | 31–62% losses | Boston Globe / CommercialEdge | ✅ Feb 2026 |
-| Boston property tax dependence | ~73% of $4.8B budget | Boston.gov | ✅ Feb 2026 |
-| National avg office value decline | ~37% | Green Street | ✅ Feb 2026 |
+| Major sale discounts (2025) | 31–62% losses | Boston Globe / CommercialEdge | ⏳ re-read by 2027-03-31 — press coverage of individual sales; re-read against the land records |
+| Boston property tax dependence | ~73% of $4.8B budget | Boston.gov | ⏳ re-read by 2027-01-31 — Boston's FY2027 adopted budget |
+| National avg office value decline | ~37% | Green Street | ⏳ re-read by 2027-01-31 — Green Street CPPI |
 
 ---
 
@@ -345,19 +345,19 @@ Values below are that file as of **2026-10-20** (reference month September 2026)
 |--------|-------|--------|----------|
 | Job openings rate (peak) | ~5.5% | BLS JOLTS | ✅ Feb 2026 |
 | Job openings rate (2025) | ~4.2% | BLS JOLTS | ✅ Feb 2026 |
-| MA premium over national rate | Nearly gone | BLS JOLTS | ✅ Feb 2026 |
+| MA premium over national rate | Nearly gone | BLS JOLTS | ⏳ re-read by 2026-12-31 — BLS JOLTS state tables |
 
 ### National — Labor Market (2025)
 
 | Metric | Value | Source | Verified |
 |--------|-------|--------|----------|
-| NFP downward revision (Apr 2024–Mar 2025) | -911,000 jobs | BLS benchmark | ✅ Feb 2026 |
+| NFP downward revision (Apr 2024–Mar 2025) | -911,000 jobs | BLS benchmark | 🔒 the BLS annual benchmark revision for a closed period. Final. |
 | Healthcare jobs added (2025) | +713,000 | BLS CES | ✅ Feb 2026 |
 | Business/professional services lost | -97,000 | BLS CES | ✅ Feb 2026 |
 | Manufacturing lost | -68,000 | BLS CES | ✅ Feb 2026 |
 | Federal government jobs lost since peak | -277,000 (-9.2%) | BLS CES | ✅ Feb 2026 |
-| Perceived job-finding probability | 43.1% (record low) | NY Fed SCE Dec 2025 | ✅ Feb 2026 |
-| Private sector hiring plans | Lowest since 2009 | Challenger/BLS | ✅ Feb 2026 |
+| Perceived job-finding probability | 43.1% (record low) | NY Fed SCE Dec 2025 | ⏳ re-read by 2026-12-31 — NY Fed Survey of Consumer Expectations, monthly |
+| Private sector hiring plans | Lowest since 2009 | Challenger/BLS | ⏳ re-read by 2026-12-31 — Challenger Gray monthly report |
 
 - **Key finding:** "Hiring recession" — low-hire/low-fire environment, worst since 2009 by multiple measures
 - **Healthcare masks weakness:** 713K healthcare jobs > total net gains, meaning all other sectors flat/negative
@@ -368,19 +368,19 @@ Machine-readable copy lives in [`data/bls-release-schedule.json`](data/bls-relea
 
 | Reference Month | Released | Source | Verified |
 |-----------------|----------|--------|----------|
-| November 2025 | Dec 16, 2025 | BLS schedule | ✅ Aug 2026 |
-| December 2025 | Jan 09, 2026 | BLS schedule | ✅ Aug 2026 |
-| January 2026 | Feb 11, 2026 | BLS schedule | ✅ Aug 2026 |
-| February 2026 | Mar 06, 2026 | BLS schedule | ✅ Aug 2026 |
-| March 2026 | Apr 03, 2026 | BLS schedule | ✅ Aug 2026 |
-| April 2026 | May 08, 2026 | BLS schedule | ✅ Aug 2026 |
-| May 2026 | Jun 05, 2026 | BLS schedule | ✅ Aug 2026 |
-| June 2026 | Jul 02, 2026 | BLS schedule | ✅ Aug 2026 |
-| July 2026 | Aug 07, 2026 | BLS schedule | ✅ Aug 2026 |
-| August 2026 | Sep 04, 2026 | BLS schedule | ✅ Aug 2026 |
-| September 2026 | Oct 02, 2026 | BLS schedule | ✅ Aug 2026 |
-| October 2026 | Nov 06, 2026 | BLS schedule | ✅ Aug 2026 |
-| November 2026 | Dec 04, 2026 | BLS schedule | ✅ Aug 2026 |
+| November 2025 | Dec 16, 2025 | BLS Employment Situation schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| December 2025 | Jan 09, 2026 | BLS Employment Situation schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| January 2026 | Feb 11, 2026 | BLS Employment Situation schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| February 2026 | Mar 06, 2026 | BLS Employment Situation schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| March 2026 | Apr 03, 2026 | BLS Employment Situation schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| April 2026 | May 08, 2026 | BLS Employment Situation schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| May 2026 | Jun 05, 2026 | BLS Employment Situation schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| June 2026 | Jul 02, 2026 | BLS Employment Situation schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| July 2026 | Aug 07, 2026 | BLS Employment Situation schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| August 2026 | Sep 04, 2026 | BLS Employment Situation schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| September 2026 | Oct 02, 2026 | BLS Employment Situation schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| October 2026 | Nov 06, 2026 | BLS Employment Situation schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| November 2026 | Dec 04, 2026 | BLS Employment Situation schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
 
 - **Not a first-Friday rule.** April 2026 went out on the *second* Friday (May 8) and June 2026 on a *Thursday* (Jul 2, moved for July 4). These dates cannot be computed — they must be read from the published schedule.
 - **Source URL:** https://www.bls.gov/schedule/news_release/empsit.htm
@@ -391,19 +391,19 @@ The MA vintage. Lands ~3 weeks after the national release, which is why the MA b
 
 | Reference Month | Released | Source | Verified |
 |-----------------|----------|--------|----------|
-| November 2025 | Jan 07, 2026 | BLS schedule | ✅ Aug 2026 |
-| December 2025 | Jan 27, 2026 | BLS schedule | ✅ Aug 2026 |
-| January 2026 | Apr 08, 2026 | BLS schedule | ✅ Aug 2026 |
-| February 2026 | Apr 22, 2026 | BLS schedule | ✅ Aug 2026 |
-| March 2026 | May 06, 2026 | BLS schedule | ✅ Aug 2026 |
-| April 2026 | May 22, 2026 | BLS schedule | ✅ Aug 2026 |
-| May 2026 | Jun 23, 2026 | BLS schedule | ✅ Aug 2026 |
-| June 2026 | Jul 21, 2026 | BLS schedule | ✅ Aug 2026 |
-| July 2026 | Aug 21, 2026 | BLS schedule | ✅ Aug 2026 |
-| August 2026 | Sep 18, 2026 | BLS schedule | ✅ Aug 2026 |
-| September 2026 | Oct 20, 2026 | BLS schedule | ✅ Aug 2026 |
-| October 2026 | Nov 20, 2026 | BLS schedule | ✅ Aug 2026 |
-| November 2026 | Dec 18, 2026 | BLS schedule | ✅ Aug 2026 |
+| November 2025 | Jan 07, 2026 | BLS State Employment and Unemployment schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| December 2025 | Jan 27, 2026 | BLS State Employment and Unemployment schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| January 2026 | Apr 08, 2026 | BLS State Employment and Unemployment schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| February 2026 | Apr 22, 2026 | BLS State Employment and Unemployment schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| March 2026 | May 06, 2026 | BLS State Employment and Unemployment schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| April 2026 | May 22, 2026 | BLS State Employment and Unemployment schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| May 2026 | Jun 23, 2026 | BLS State Employment and Unemployment schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| June 2026 | Jul 21, 2026 | BLS State Employment and Unemployment schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| July 2026 | Aug 21, 2026 | BLS State Employment and Unemployment schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| August 2026 | Sep 18, 2026 | BLS State Employment and Unemployment schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| September 2026 | Oct 20, 2026 | BLS State Employment and Unemployment schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| October 2026 | Nov 20, 2026 | BLS State Employment and Unemployment schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
+| November 2026 | Dec 18, 2026 | BLS State Employment and Unemployment schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
 
 - **Even less regular than the national schedule.** The January 2026 reference month did not appear until **April 8, 2026**.
 - **Source URL:** https://www.bls.gov/schedule/news_release/laus.htm
@@ -449,13 +449,13 @@ the figures below or on the page — change the source or the updater.
 
 | Field | Value | Source | Verified |
 |-------|-------|--------|----------|
-| Communities subject to § 3A | 177 | EOHLC (MGL c. 161A definition) | ✅ Sep 2026 |
-| 2020 housing units across them | 1,941,671 | EOHLC capacity table | ✅ Sep 2026 |
-| Minimum multi-family unit capacity | 297,190 | EOHLC capacity table | ✅ Sep 2026 |
-| Minimum gross density | 15 units/acre | MGL c. 40A § 3A | ✅ Sep 2026 |
-| Distance from a station | 0.5 miles | MGL c. 40A § 3A | ✅ Sep 2026 |
-| Affordability required | none | MGL c. 40A § 3A | ✅ Sep 2026 |
-| Boston | exempt from the Zoning Act | EOHLC | ✅ Sep 2026 |
+| Communities subject to § 3A | 177 | EOHLC capacity table | 🔄 written by `update-mbta-3a.py` |
+| 2020 housing units across them | 1,941,671 | EOHLC capacity table | 🔄 written by `update-mbta-3a.py` |
+| Minimum multi-family unit capacity | 297,190 | EOHLC capacity table | 🔄 written by `update-mbta-3a.py` |
+| Minimum gross density | 15 units/acre | MGL c. 40A § 3A | 🔒 set by MGL c. 40A s 3A. Statute. |
+| Distance from a station | 0.5 miles | MGL c. 40A § 3A | 🔒 set by MGL c. 40A s 3A. Statute. |
+| Affordability required | none | MGL c. 40A § 3A | 🔒 set by MGL c. 40A s 3A. Statute. |
+| Boston | exempt from the Zoning Act | EOHLC | 🔒 Boston is exempt from the Zoning Act by statute. |
 
 Category shares of 2020 stock: rapid transit 25%, commuter rail 15%, adjacent
 community 10%, adjacent small town 5%. Counts: 12 / 72 / 58 / 35.
@@ -472,14 +472,14 @@ community 10%, adjacent small town 5%. Counts: 12 / 72 / 58 / 35.
 
 | Field | Value | Source | Verified |
 |-------|-------|--------|----------|
-| Compliant | 157 | EOHLC Compliance Status Sheet (8-31-26) | ✅ Sep 2026 |
-| Interim compliance | 9 | same | ✅ Sep 2026 |
-| Noncompliant | 9 | same | ✅ Sep 2026 |
-| Conditional compliance | 2 | same | ✅ Sep 2026 |
-| Developments tracked in 3A districts | 104 | EOHLC 3A Development Tracker (9-11-26) | ✅ Sep 2026 |
-| Total units in those developments | 10,065 | same | ✅ Sep 2026 |
-| Deed-restricted units | 1,822 | same | ✅ Sep 2026 |
-| Communities with any tracked activity | 43 | same | ✅ Sep 2026 |
+| Compliant | 158 | EOHLC Compliance Status Sheet (2026-10-20) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
+| Interim compliance | 9 | EOHLC Compliance Status Sheet (2026-10-20) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
+| Noncompliant | 8 | EOHLC Compliance Status Sheet (2026-10-20) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
+| Conditional compliance | 2 | EOHLC Compliance Status Sheet (2026-10-20) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
+| Developments tracked in 3A districts | 104 | EOHLC Compliance Status Sheet (2026-10-20) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
+| Total units in those developments | 10,065 | EOHLC Compliance Status Sheet (2026-10-20) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
+| Deed-restricted units | 1,822 | EOHLC Compliance Status Sheet (2026-10-20) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
+| Communities with any tracked activity | 43 | EOHLC Compliance Status Sheet (2026-10-20) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
 
 - **Tracked is not built.** The tracker mixes completed, permitted and proposed
   developments, and EOHLC says it is compiled from third-party information and
@@ -563,8 +563,8 @@ the 2025 US average is not the MEPS-IC figure. ✅ Oct 2026.
 
 | Metric | Value | Source | Verified |
 |--------|-------|--------|----------|
-| Personal health care spending per capita, 2020 | MA $13,319, 3rd of 50 states (NY $14,007, AK $13,642; DC $14,381); US $10,191 | CMS Health Expenditures by State of Residence, US_PER_CAPITA20.CSV (newest state edition, 1991-2020) | ✅ Oct 2026 |
-| Employer family premium, 2025 | MA $29,619, 4th of 50; US $26,281 | AHRQ MEPS-IC 2025 via KFF | ✅ Oct 2026 |
+| Personal health care spending per capita, 2020 | MA $13,319, 3rd of 50 states (NY $14,007, AK $13,642; DC $14,381); US $10,191 | CMS Health Expenditures by State of Residence, US_PER_CAPITA20.CSV (newest state edition, 1991-2020) | ⏳ re-read by 2027-06-30 — CMS Health Expenditures by State of Residence |
+| Employer family premium, 2025 | MA $29,619, 4th of 50; US $26,281 | AHRQ MEPS-IC 2025 via KFF | ⏳ re-read by 2027-06-30 — AHRQ MEPS-IC, annual |
 
 ### Family premium series (healthcare dashboard trend, contribution and cost-vs-income charts)
 
@@ -651,7 +651,7 @@ card put the US premium at 24.2% of income against its own figures' 30.4%, and m
 | Expected fraud (national model) | ~$50M | USDA-FNS Trafficking Studies | ✅ Feb 2026 |
 | Detected fraud (MA), BSI Q1 FY2025 | $2,549,325 all programs, of which SNAP $1,528,615 | BSI Q1 FY2025 report, malegislature.gov/Bills/194/SD2676.pdf | ✅ Sep 2026 |
 | Detection rate (SNAP, one quarter) | ~3.1% ($1,528,615 ÷ ~$50M) | Calculated | ✅ Sep 2026 |
-| Leading fraud type | Identity fraud (31%) | LexisNexis True Cost of Fraud | ✅ Feb 2026 |
+| Leading fraud type | Identity fraud (31%) | LexisNexis True Cost of Fraud | 🔒 a published LexisNexis study finding, fixed text. |
 
 - This row previously read $0.69M, which matches no line of the Q1 FY2025 report. It equals the SNAP figure ($690K) in the FY2025 Q4 program breakdown (inference). The detection rate compares one quarter with a model figure, so treat it as a floor.
 
@@ -661,12 +661,12 @@ Administrative findings, not convictions. BSI cannot collect settlements; the be
 
 | Period | Fraud identified | Source | Verified |
 |--------|------------------|--------|----------|
-| FY2022 | $13,519,349.55 | BSI FY2022 Annual Report (Wayback of mass.gov) | ✅ Sep 2026 |
-| FY2023 | $12,322,688.13 | BSI FY2023 Annual Report | ✅ Sep 2026 |
-| FY2024 | $10,265,265 | BSI FY2024 Annual Report | ✅ Sep 2026 |
-| FY2025 | $11,952,288 ($11.95M), 4,179 investigations | OSA release, 30 Jan 2026 | ✅ Sep 2026 |
-| FY2026 first half (Q1 + Q2, Jul–Dec 2025) | $4,486,102; civil recoveries $392,713 | malegislature.gov/Bills/194/SD3769.pdf | ✅ Sep 2026 |
-| FY2025 Q1 | $2,549,325 (SNAP $1,528,615) | malegislature.gov/Bills/194/SD2676.pdf | ✅ Sep 2026 |
+| FY2022 | $13,519,349.55 | BSI FY2022 Annual Report (Wayback of mass.gov) | 🔒 a published BSI annual report for a closed fiscal year. |
+| FY2023 | $12,322,688.13 | BSI FY2023 Annual Report | 🔒 a published BSI annual report for a closed fiscal year. |
+| FY2024 | $10,265,265 | BSI FY2024 Annual Report | 🔒 a published BSI annual report for a closed fiscal year. |
+| FY2025 | $11,952,288 ($11.95M), 4,179 investigations | OSA release, 30 Jan 2026 | 🔒 the State Auditor's release of 30 Jan 2026, a published document for a closed fiscal year. |
+| FY2026 first half (Q1 + Q2, Jul–Dec 2025) | $4,486,102; civil recoveries $392,713 | malegislature.gov/Bills/194/SD3769.pdf | 🔒 a filed report, SD.3769. Not reissued. |
+| FY2025 Q1 | $2,549,325 (SNAP $1,528,615) | malegislature.gov/Bills/194/SD2676.pdf | 🔒 a filed quarterly report, SD.2676. Not reissued. |
 | Annual range FY22–FY25 (tax-budget card) | $10.3–13.5M | Derived from the rows above | ✅ Sep 2026 |
 | Detection rate (tax-budget card) | 0.26% = FY25 $11.95M ÷ $4,550M benefit base in the page's own table | Calculated | ✅ Sep 2026 |
 | Program breakdown on tax-budget-dashboard | MassHealth $3.8M, SNAP $690K, PCA $146K, Childcare $135K, TAFDC $23K, EAEDC $9K — **FY2025 Q4 quarterly (Apr–Jun 2025), not annual**; the table's Detected column sums to $4.66M | BSI FY2025 Q4 report | Period label ✅ Sep 2026; PCA $145,638 and EEC $134,526 confirmed (verbatim repost); other values not re-read |
@@ -681,21 +681,21 @@ FY2026 full year not yet published (checked 30 Sep 2026).
 
 | Metric | Value | Source | Verified |
 |--------|-------|--------|----------|
-| Total holdings | 261.5M fine troy oz | Treasury.gov | ✅ Feb 2026 |
-| Holdings change (2012-2025) | Flat / zero change | Treasury.gov | ✅ Feb 2026 |
-| Fort Knox | 147.3M oz | Treasury.gov | ✅ Feb 2026 |
-| West Point | 54.1M oz | Treasury.gov | ✅ Feb 2026 |
-| Denver | 43.9M oz | Treasury.gov | ✅ Feb 2026 |
+| Total holdings | 261.5M fine troy oz | Treasury Status Report of U.S. Government Gold Reserve, 2026-09-30, via the Fiscal Data API | 🔄 written by `update-gold-reserve.py` |
+| Holdings change since the earliest report | Flat — +27 oz (+0.000%) since 2012-01-31 | Treasury Status Report of U.S. Government Gold Reserve, 2026-09-30, via the Fiscal Data API | 🔄 written by `update-gold-reserve.py` |
+| Fort Knox | 147.3M oz | Treasury Status Report of U.S. Government Gold Reserve, 2026-09-30, via the Fiscal Data API | 🔄 written by `update-gold-reserve.py` |
+| West Point | 54.1M oz | Treasury Status Report of U.S. Government Gold Reserve, 2026-09-30, via the Fiscal Data API | 🔄 written by `update-gold-reserve.py` |
+| Denver | 43.9M oz | Treasury Status Report of U.S. Government Gold Reserve, 2026-09-30, via the Fiscal Data API | 🔄 written by `update-gold-reserve.py` |
 
 ### Global Central Bank Buying
 
 | Year | Annual Purchases (tonnes) | Source | Verified |
 |------|--------------------------|--------|----------|
-| 2010-2021 avg | ~473t | World Gold Council | ✅ Feb 2026 |
-| 2022 | 1,082t (record) | World Gold Council | ✅ Feb 2026 |
-| 2023 | 1,037t | World Gold Council | ✅ Feb 2026 |
-| 2024 | 1,045t | World Gold Council | ✅ Feb 2026 |
-| H1 2025 | 415t (~830t pace) | World Gold Council | ✅ Feb 2026 |
+| 2010-2021 avg | ~473t | World Gold Council | ⏳ re-read by 2027-02-28 — World Gold Council annual demand trends |
+| 2022 | 1,082t (record) | World Gold Council | ⏳ re-read by 2027-02-28 — World Gold Council annual demand trends |
+| 2023 | 1,037t | World Gold Council | ⏳ re-read by 2027-02-28 — World Gold Council annual demand trends |
+| 2024 | 1,045t | World Gold Council | ⏳ re-read by 2027-02-28 — World Gold Council annual demand trends |
+| H1 2025 | 415t (~830t pace) | World Gold Council | ⏳ re-read by 2027-02-28 — World Gold Council annual demand trends |
 
 - **Unreported purchases (2022):** 741 tonnes (likely China, Russia)
 - **Gold price (2026):** Hit $4,889/oz
@@ -819,15 +819,15 @@ the dollar, and the press release's "$63.42 billion".
 
 | Fiscal year | Enacted, headline scope ($B) | Source | Verified |
 |---|---:|---|---|
-| FY2018 | 40.197 | `gaabudgets` FY21 workbook; statewide summary TOTAL $40,196,899K (budget.digital.mass.gov/bb/gaa/fy2018) | ✅ Oct 2026 |
-| FY2019 | 41.883 | `gaabudgets` FY21 workbook; statewide summary TOTAL $41,883,308K (bb/gaa/fy2019) | ✅ Oct 2026 |
-| FY2020 | 43.590 | `gaabudgets` FY21 workbook | ✅ Oct 2026 |
-| FY2021 | 46.459 | `gaabudgets` FY24 workbook | ✅ Oct 2026 |
-| FY2022 | 48.085 | `gaabudgets` FY25 workbook | ✅ Oct 2026 |
-| FY2023 | 52.444 | `gaabudgets` FY26 workbook | ✅ Oct 2026 |
-| FY2024 | 56.063 | `gaabudgets` FY27 workbook | ✅ Oct 2026 |
-| FY2025 | 57.718 | `gaabudgets` FY27 workbook | ✅ Oct 2026 |
-| FY2026 | 60.974 | `gaabudgets` FY27 workbook (after overrides; the FY26 workbook read 60.904 at signing) | ✅ Oct 2026 |
+| FY2018 | 40.197 | `gaabudgets` FY21 workbook; statewide summary TOTAL $40,196,899K (budget.digital.mass.gov/bb/gaa/fy2018) | 🔒 an enacted General Appropriation Act total. The year is closed and the enacted figure is final. |
+| FY2019 | 41.883 | `gaabudgets` FY21 workbook; statewide summary TOTAL $41,883,308K (bb/gaa/fy2019) | 🔒 an enacted General Appropriation Act total. The year is closed and the enacted figure is final. |
+| FY2020 | 43.590 | `gaabudgets` FY21 workbook | 🔒 an enacted General Appropriation Act total. The year is closed and the enacted figure is final. |
+| FY2021 | 46.459 | `gaabudgets` FY24 workbook | 🔒 an enacted General Appropriation Act total. The year is closed and the enacted figure is final. |
+| FY2022 | 48.085 | `gaabudgets` FY25 workbook | 🔒 an enacted General Appropriation Act total. The year is closed and the enacted figure is final. |
+| FY2023 | 52.444 | `gaabudgets` FY26 workbook | 🔒 an enacted General Appropriation Act total. The year is closed and the enacted figure is final. |
+| FY2024 | 56.063 | `gaabudgets` FY27 workbook | 🔒 an enacted General Appropriation Act total. The year is closed and the enacted figure is final. |
+| FY2025 | 57.718 | `gaabudgets` FY27 workbook | 🔒 an enacted General Appropriation Act total. The year is closed and the enacted figure is final. |
+| FY2026 | 60.974 | `gaabudgets` FY27 workbook (after overrides; the FY26 workbook read 60.904 at signing) | 🔒 an enacted General Appropriation Act total. The year is closed and the enacted figure is final. |
 | FY2027 | 63.416 | `gaabudgets` FY27 workbook | ✅ Oct 2026 |
 | Growth, FY2018 to FY2026 | +51.7% (derived) | above | ✅ Oct 2026 |
 | Growth, FY2018 to FY2027 | +57.8% (derived) | above | ✅ Oct 2026 |
@@ -843,16 +843,16 @@ scopes and was off by up to $1.6B in both directions; it had put FY2018-to-FY202
 
 | Figure | Value | Source | Verified |
 |---|---|---|---|
-| FY2027 GAA, headline scope | **$63.416B** (+4.01% over FY26) | H.5555, signed 9 Jul 2026 | ✅ Aug 2026 |
-| **Governor's vetoes** | **$0 — none.** Signed the conference report untouched | Globe / CommonWealth Beacon, 9 Jul 2026 | ✅ Aug 2026 |
-| Votes | Senate 39–1, House 142–6 | State House News | ✅ Aug 2026 |
-| Chapter 70 | **$7,658,399,506** (+$793.5M, +11.6%) — *final year of the SOA ramp* | `sect3.xlsx` | ✅ Aug 2026 |
-| — municipal / regional split | $6,695,466,289 / $962,933,217 | same | ✅ Aug 2026 |
-| Unrestricted General Government Aid | **$1,363,109,516** (+$40M, +3.0%) | same | ✅ Aug 2026 |
-| SpEd Circuit Breaker | $654.6M (+35.0%); $806.6M incl. Fair Share supp. | `gaabudgets.xlsx` | ✅ Aug 2026 |
+| FY2027 GAA, headline scope | **$63.416B** (+4.01% over FY26) | H.5555, signed 9 Jul 2026 | 🔒 H.5555, signed 9 July 2026. A signed act. |
+| **Governor's vetoes** | **$0 — none.** Signed the conference report untouched | Globe / CommonWealth Beacon, 9 Jul 2026 | 🔒 a matter of record on a signed act: none were cast. |
+| Votes | Senate 39–1, House 142–6 | State House News | 🔒 recorded roll calls. A vote is not re-taken. |
+| Chapter 70 | **$7,658,399,506** (+$793.5M, +11.6%) — *final year of the SOA ramp* | `sect3.xlsx` | 🔒 an enacted line in a signed act. |
+| — municipal / regional split | $6,695,466,289 / $962,933,217 | same | 🔒 an enacted split in a signed act. |
+| Unrestricted General Government Aid | **$1,363,109,516** (+$40M, +3.0%) | same | 🔒 an enacted line in a signed act. |
+| SpEd Circuit Breaker | $654.6M (+35.0%); $806.6M incl. Fair Share supp. | `gaabudgets.xlsx` | 🔒 an enacted line in a signed act. |
 | Fair Share surtax deployed | ~$2.7B (~64% education / ~36% transportation) | MTF | ✅ Aug 2026 |
-| Emergency Assistance family shelter | $259.9M (−6.0%; was $325.3M in FY24) | `gaabudgets.xlsx` | ✅ Aug 2026 |
-| State Retiree Benefits Trust (OPEB) deposit | **$400M**, down from $550M in FY24 (−27%) | line 1595-6152 | ✅ Aug 2026 |
+| Emergency Assistance family shelter | $259.9M (−6.0%; was $325.3M in FY24) | `gaabudgets.xlsx` | 🔒 the FY2027 enacted line. Actual spending against it is written by update-immigrant-spending.py and is a different measure. |
+| State Retiree Benefits Trust (OPEB) deposit | **$400M**, down from $550M in FY24 (−27%) | line 1595-6152 | 🔒 an enacted line (1595-6152) in a signed act. |
 | Line items in `tax-budget-dashboard.html` | 860, **all 860 verified against the official GAA** | `gaa1.xlsx` diff | ✅ Aug 2026 |
 
 ### ⚠️ Enacted ≠ spent — the supplemental gap

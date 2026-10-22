@@ -406,6 +406,45 @@ def main():
         fh.write("\n")
     print(f"Data -> {DATA_FILE}")
 
+    # MASTER_DATA.md carried these eleven rows by hand, and on 2026-10-21 it
+    # was an edition behind this feed: 157 compliant and 9 noncompliant against
+    # EOHLC's 158 and 8. The dashboard was right, because a script writes it.
+    # method.html is built from the register, so the hub published both numbers
+    # at once. The register row is now written here, from the same values the
+    # page gets.
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                    "scripts"))
+    try:
+        import register
+    except ImportError:
+        print("  note: scripts/register.py not importable; register not written")
+        return
+    st = out["by_compliance_status"]
+    tr = out["tracker"]
+    src = (f"EOHLC Compliance Status Sheet ({sta_date or 'edition unknown'}) "
+           f"and 3A Development Tracker ({dev_date or 'edition unknown'})")
+    reg_rows = {
+        "Communities subject to § 3A": (f"{len(towns)}", "EOHLC capacity table"),
+        "2020 housing units across them": (f"{out['housing_units_2020']:,}",
+                                           "EOHLC capacity table"),
+        "Minimum multi-family unit capacity": (f"{required:,}",
+                                               "EOHLC capacity table"),
+        "Compliant": (f"{st.get('Compliant', 0)}", src),
+        "Interim compliance": (f"{st.get('Interim Compliance', 0)}", src),
+        "Noncompliant": (f"{st.get('Noncompliant', 0)}", src),
+        "Conditional compliance": (f"{st.get('Conditional Compliance', 0)}", src),
+        "Developments tracked in 3A districts": (f"{tr['developments']}", src),
+        "Total units in those developments": (f"{tr['total_units']:,}", src),
+        "Deed-restricted units": (f"{tr['deed_restricted']:,}", src),
+        "Communities with any tracked activity":
+            (f"{tr['communities_with_activity']}", src),
+    }
+    written, missing = register.write_rows(reg_rows, "update-mbta-3a.py")
+    print(f"  MASTER_DATA.md: wrote {len(written)} rows")
+    if missing:
+        print("  WARNING: these labels are not in the register: "
+              + ", ".join(missing))
+
 
 if __name__ == "__main__":
     main()
