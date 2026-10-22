@@ -58,7 +58,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .section-toggle button:hover{color:var(--text);border-color:var(--border2);background:var(--surface2)}
 .section-toggle button.active{color:#fff;background:var(--accent);border-color:var(--accent);
   box-shadow:0 3px 12px rgba(220,38,38,0.3)}
-nav{display:flex;gap:0;background:#fff;border-bottom:2px solid var(--border);overflow-x:auto;
+/* flex-wrap, not overflow-x: Money Trail went to nine tabs in the merge and
+   needs 1,593px to lay them out. Below that the old nowrap scrolled the
+   last tabs off the right edge, where nobody finds them -- 'State
+   comparison' and 'Method' were simply invisible on a 1,440px screen.
+   Wrapping puts them on a second row instead. */
+nav{display:flex;flex-wrap:wrap;gap:0;background:#fff;border-bottom:2px solid var(--border);
   position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
 nav button{flex:1;min-width:110px;padding:.8rem .5rem;background:none;border:none;
   color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.7rem;font-weight:700;
@@ -874,11 +879,52 @@ tr:hover td{background:var(--surface)}
    page defined an off-brand palette instead of the hub
    tokens, which is why it never looked like the rest of
    the site. These rules resolve against hub-theme.css. */
-.mt{margin:0;padding:0;box-sizing:border-box}.mt{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}.mt .container{max-width:1200px;margin:0 auto;padding:0 24px}.mt .hero{background:var(--navy);color:#fff;padding:48px 24px 72px;text-align:center;position:relative;overflow:hidden}.mt .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,0.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(139,26,26,0.1) 0%,transparent 50%)}.mt .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);padding:6px 18px;border-radius:50px;font-size:.72rem;font-weight:500;margin-bottom:18px;position:relative}.mt .hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.6rem,4.5vw,2.5rem);font-weight:400;margin-bottom:8px;position:relative;letter-spacing:-0.01em}.mt .hero-sub{font-size:.85rem;opacity:.65;max-width:600px;margin:0 auto;position:relative}.mt .summary-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:-40px auto 32px;max-width:1200px;padding:0 24px;position:relative;z-index:2}.mt .sc{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.06);border-top:4px solid var(--navy)}.mt .sc.red{border-top-color:var(--red)}.mt .sc.green{border-top-color:var(--green)}.mt .sc.amber{border-top-color:var(--amber)}.mt .sc.purple{border-top-color:var(--purple)}.mt .sc-label{font-size:0.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px}.mt .sc-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.5rem;font-weight:400}.mt .sc-val.red{color:var(--red)}.mt .sc-val.blue{color:var(--blue)}.mt .sc-val.green{color:var(--green)}.mt .sc-val.amber{color:var(--amber)}.mt .sc-ctx{font-size:0.6875rem;color:var(--muted);margin-top:4px}.mt .tabs-wrap{max-width:1200px;margin:0 auto 24px;padding:0 24px}.mt .tabs{display:flex;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.04);padding:0}.mt .tab-btn{flex-shrink:0;padding:13px 18px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',system-ui,sans-serif;font-size:.72rem;font-weight:600;border-radius:0;cursor:pointer;transition:all .25s;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid transparent}.mt .tab-btn:hover{color:var(--text);background:rgba(0,0,0,.02)}.mt .tab-btn.active{background:transparent;color:var(--navy);box-shadow:none;border-bottom-color:var(--gold)}.mt .tab-panel{display:none}.mt .tab-panel.active{display:block;animation:fadeUp .35s ease}
+.mt{margin:0;padding:0;box-sizing:border-box}.mt{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}.mt .container{max-width:1200px;margin:0 auto;padding:0 24px}.mt .hero{background:var(--navy);color:#fff;padding:48px 24px 72px;text-align:center;position:relative;overflow:hidden}.mt .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,0.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(139,26,26,0.1) 0%,transparent 50%)}.mt .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);padding:6px 18px;border-radius:50px;font-size:.72rem;font-weight:500;margin-bottom:18px;position:relative}.mt .hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.6rem,4.5vw,2.5rem);font-weight:400;margin-bottom:8px;position:relative;letter-spacing:-0.01em}.mt .hero-sub{font-size:.85rem;opacity:.65;max-width:600px;margin:0 auto;position:relative}.mt .summary-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:26px auto 32px;max-width:1200px;padding:0 24px;position:relative;z-index:2}.mt .sc{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.06);border-top:4px solid var(--navy)}.mt .sc.red{border-top-color:var(--red)}.mt .sc.green{border-top-color:var(--green)}.mt .sc.amber{border-top-color:var(--amber)}.mt .sc.purple{border-top-color:var(--purple)}.mt .sc-label{font-size:0.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px}.mt .sc-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.5rem;font-weight:400}.mt .sc-val.red{color:var(--red)}.mt .sc-val.blue{color:var(--blue)}.mt .sc-val.green{color:var(--green)}.mt .sc-val.amber{color:var(--amber)}.mt .sc-ctx{font-size:0.6875rem;color:var(--muted);margin-top:4px}.mt .tabs-wrap{max-width:1200px;margin:0 auto 24px;padding:0 24px}.mt .tabs{display:flex;gap:0;background:#fff;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,.04);padding:0}.mt .tab-btn{flex-shrink:0;padding:13px 18px;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',system-ui,sans-serif;font-size:.72rem;font-weight:600;border-radius:0;cursor:pointer;transition:all .25s;white-space:nowrap;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid transparent}.mt .tab-btn:hover{color:var(--text);background:rgba(0,0,0,.02)}.mt .tab-btn.active{background:transparent;color:var(--navy);box-shadow:none;border-bottom-color:var(--gold)}.mt .tab-panel{display:none}.mt .tab-panel.active{display:block;animation:fadeUp .35s ease}
 @.mt keyframes fadeUp{.mt from{opacity:0;transform:translateY(6px)}.mt to{opacity:1;transform:translateY(0)}}.mt .mt-sec{max-width:1200px;margin:0 auto 32px;padding:0 24px}.mt .sec-title{font-family:'DM Serif Display',Georgia,serif;font-size:1.3rem;font-weight:400;margin-bottom:4px;color:var(--navy)}.mt .sec-desc{font-size:.82rem;color:var(--muted);margin-bottom:20px}.mt .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:14px;margin-bottom:22px}.mt .grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:22px}.mt .card{background:var(--card);border-radius:12px;padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.03);border:1px solid var(--border)}.mt .card-title{font-size:.82rem;font-weight:700;margin-bottom:4px;color:var(--navy)}.mt .card-sub{font-size:0.6875rem;color:var(--muted);margin-bottom:14px}.mt .card-canvas{position:relative;height:280px}.mt .hl{background:var(--red-bg);border-left:4px solid var(--red);border-radius:0 12px 12px 0;padding:16px 20px;margin-bottom:18px}.mt .hl .hl-label{font-size:0.6875rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.08em}.mt .hl .hl-val{font-size:1.1rem;font-weight:700;color:var(--red);margin-top:2px}.mt .hl .hl-ctx{font-size:.72rem;color:var(--muted);margin-top:2px}.mt .hl-green{background:var(--green-bg);border-left:4px solid var(--green);border-radius:0 12px 12px 0;padding:16px 20px;margin-bottom:18px}.mt .hl-green .hl-label{font-size:0.6875rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.08em}.mt .hl-green .hl-val{font-size:1.1rem;font-weight:700;color:var(--green);margin-top:2px}.mt .hl-green .hl-ctx{font-size:.72rem;color:var(--muted);margin-top:2px}.mt .info{background:var(--blue-bg);border:1px solid rgba(26,68,128,.12);border-radius:12px;padding:16px 20px;margin-bottom:22px;display:flex;gap:12px;align-items:flex-start;border-left:4px solid var(--blue)}.mt .info.warn{background:var(--amber-bg);border-color:rgba(184,134,11,.15);border-left-color:var(--amber)}.mt .info.danger{background:var(--red-bg);border-color:rgba(192,57,43,.12);border-left-color:var(--red)}.mt .info-icon{font-size:1.2rem;flex-shrink:0}.mt .info-text{font-size:.78rem;color:var(--text);line-height:1.6}.mt .table-wrap{background:var(--card);border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.03);border:1px solid var(--border);overflow-x:auto;margin-bottom:22px}.mt table{width:100%;border-collapse:collapse;font-size:.78rem}.mt thead th{background:rgba(15,41,66,.04);padding:10px 14px;text-align:left;font-weight:700;color:var(--navy);border-bottom:2px solid var(--navy);white-space:nowrap;font-size:0.6875rem;text-transform:uppercase;letter-spacing:.08em}.mt tbody td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text)}.mt tbody tr:hover{background:rgba(15,41,66,.02)}.mt .td-red{color:var(--red);font-weight:700}.mt .td-green{color:var(--green);font-weight:600}.mt .td-amber{color:var(--amber);font-weight:600}.mt .dc-label{font-size:0.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px}.mt .dc-val{font-family:'DM Serif Display',Georgia,serif;font-size:1.5rem;font-weight:400;margin-bottom:8px}.mt .dc-val.red{color:var(--red)}.mt .dc-val.blue{color:var(--blue)}.mt .dc-val.green{color:var(--green)}.mt .dc-val.amber{color:var(--amber)}.mt .dc-meta{display:flex;flex-wrap:wrap;gap:14px}.mt .dc-ml{font-size:0.6875rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}.mt .dc-mv{font-size:.8rem;font-weight:600;color:var(--text)}.mt .footer{text-align:center;padding:32px 24px;color:var(--muted);font-size:.72rem;border-top:1px solid var(--border);margin-top:40px;background:#fff}.mt .footer strong{color:var(--text)}.mt .footer a{color:var(--navy);text-decoration:none;font-weight:600;border-bottom:1px solid var(--gold)}.mt .footer a:hover{color:var(--gold)}
 @.mt media(max-width:768px){.mt .summary-row{grid-template-columns:repeat(2,1fr)}.mt .grid-2, .mt .grid-3{grid-template-columns:1fr}.mt .tabs{gap:2px}.mt .tab-btn{padding:10px 12px;font-size:0.6875rem}}
 @.mt media(max-width:480px){.mt .summary-row{grid-template-columns:1fr}}.mt .rec-table{width:100%;border-collapse:collapse;font-size:.8rem}.mt .rec-table th{text-align:left;padding:8px 10px;border-bottom:2px solid var(--border);font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}.mt .rec-table td{padding:7px 10px;border-bottom:1px solid var(--border)}.mt .rec-table td.num{text-align:right;font-variant-numeric:tabular-nums}.mt .rec-table tbody tr:hover{background:rgba(0,0,0,.015)}.mt .caveat{background:var(--amber-bg);border-left:3px solid var(--amber);padding:14px 16px;border-radius:0 8px 8px 0;font-size:.82rem;margin:16px 0}.mt .caveat strong{color:var(--amber)}.mt .gap{background:var(--red-bg);border-left:3px solid var(--red);padding:14px 16px;border-radius:0 8px 8px 0;font-size:.82rem;margin:12px 0}.mt .gap strong{color:var(--red)}.mt .srch{width:100%;max-width:340px;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:.82rem;margin-bottom:14px}
 
+
+/* The -40px top margin these cards shipped with was for the shelter
+   page, where they hung off the bottom of a hero band. Here the
+   element above is the section stats bar, whose two-line notes wrap,
+   so the negative margin pulled the cards 34px over that text. */
+
+/* Expandable recipient rows. The caret turns, the detail table sits in a
+   tinted well so it reads as belonging to the row above it. */
+.mt .rec-row{cursor:pointer}
+.mt .rec-row:hover{background:rgba(20,85,143,.045)}
+.mt .rec-row:focus-visible{outline:2px solid var(--bay);outline-offset:-2px}
+.mt .rec-row .exp{display:inline-block;width:.8em;color:var(--bay);font-weight:700;
+  transition:transform .15s ease}
+.mt .rec-row.open .exp{transform:rotate(90deg)}
+.mt .rec-row.open{background:rgba(20,85,143,.06)}
+.mt .rec-detail>td{padding:0;background:rgba(20,85,143,.035);
+  border-bottom:1px solid var(--border)}
+.mt .rec-dt{padding:14px 18px 16px}
+.mt table.rec-sub{width:100%;border-collapse:collapse;font-size:.8rem}
+.mt table.rec-sub th{text-align:left;font-size:.68rem;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);padding:4px 10px 8px;border-bottom:1px solid var(--border)}
+.mt table.rec-sub td{padding:8px 10px;border-bottom:1px solid rgba(205,211,209,.5);
+  vertical-align:top}
+.mt table.rec-sub .num{text-align:right;font-variant-numeric:tabular-nums}
+.mt .muted-s{color:var(--muted);font-size:.74rem}
+.mt .rec-note{margin:10px 0 0;font-size:.74rem;color:var(--muted)}
+.mt .rec-note.warn{color:var(--cran);font-weight:600}
+
+/* A derived composition says so where the figures are, not in a footnote. */
+.mt .lw-derived{font-size:.72rem;line-height:1.5;color:var(--cran);
+  background:rgba(104,10,29,.05);padding:9px 11px;border-top:1px solid var(--border)}
+.mt .lw-note{font-size:.72rem;line-height:1.5;color:var(--muted);background:rgba(20,85,143,.04);padding:9px 11px;border-top:1px solid var(--border)}
+
+/* Below ~1100px the nav wraps to a second row, and at that point the longest
+   labels -- ACLU DONATIONS, STATE COMPARISON -- no longer fit the 110px
+   minimum at uppercase with letter-spacing. nowrap clipped them; letting the
+   label break inside its own button keeps every tab readable instead of
+   trimming the ones at the end. */
+@media (max-width:1100px){
+  nav button{white-space:normal;line-height:1.25;min-width:96px}
+}
 </style>
 </head>
 <body>
@@ -3127,14 +3173,96 @@ function money(v){return '$'+Math.round(v).toLocaleString('en-US')}
 function draw(list){
   var b=document.getElementById('recs');
   if(!list.length){b.innerHTML='<tr><td colspan="4" style="color:var(--muted)">No match.</td></tr>';return}
-  b.innerHTML=list.map(function(r){
+  b.innerHTML=list.map(function(r,ix){
     var i=r.irs||{}, st;
     if(i.is_501c3) st='<span style="color:var(--green);font-weight:600">501(c)(3)</span> <span style="color:var(--muted)">EIN '+i.ein+'</span>';
     else if(r.nonprofit_verified) st='<span style="color:var(--blue)">exempt, subsection '+i.subsection+'</span>';
     else if(i.match==='ambiguous') st='<span style="color:var(--amber)">name matches several EINs</span>';
     else st='<span style="color:var(--muted)">not in the MA exempt file</span>';
-    return '<tr><td>'+r.vendor+'</td><td class="num">'+money(r.total)+'</td><td class="num">'+r.payments+'</td><td style="font-size:.74rem">'+st+'</td></tr>'
+    return '<tr class="rec-row" data-ix="'+ix+'" tabindex="0" role="button" aria-expanded="false" title="Show the appropriations behind this total">'
+      +'<td><span class="exp">›</span> '+r.vendor+'</td>'
+      +'<td class="num">'+money(r.total)+'</td>'
+      +'<td class="num">'+r.payments+'</td>'
+      +'<td style="font-size:.74rem">'+st+'</td></tr>'
+      +'<tr class="rec-detail" data-for="'+ix+'" hidden><td colspan="4"></td></tr>';
   }).join('');
+  CUR=list;
+}
+
+// What a row expands into: the same payments the total is made of, grouped by
+// the appropriation they came from and the fiscal year. Fetched from CTHRU on
+// demand rather than shipped in the feed -- 392 organisations' breakdowns
+// would be a large file to send to every reader for the two rows they open.
+//
+// Filtered to the SAME basis as the total above it (tier-1 accounts, FY2022
+// onward), because a detail table that does not sum to the figure it expands
+// raises the question it exists to answer. The sum is checked, and said.
+var CUR=[], T1=[], DETAIL={};
+function detailRows(vendor){
+  var codes=T1.map(function(c){return "'"+c+"'"}).join(',');
+  var u='https://cthru.data.socrata.com/resource/pegc-naaa.json'
+    +'?$select=appropriation_code,appropriation_name,budget_fiscal_year,'
+    +'sum(amount) as total,count(*) as n'
+    +'&$where='+encodeURIComponent("vendor='"+vendor.replace(/'/g,"''")
+      +"' AND appropriation_code in("+codes+") AND budget_fiscal_year>=2022")
+    +'&$group=appropriation_code,appropriation_name,budget_fiscal_year'
+    +'&$order=total DESC&$limit=500';
+  return fetch(u).then(function(r){ if(!r.ok) throw new Error('CTHRU '+r.status); return r.json(); });
+}
+function cleanName(n){ return (n||'').replace(/^\(\d+\)\s*/,'').trim(); }
+function renderDetail(cell, rows, stated){
+  if(!rows.length){ cell.innerHTML='<div class="rec-dt">No itemised payments returned for this organisation on this basis.</div>'; return; }
+  var sum=rows.reduce(function(a,r){return a+parseFloat(r.total||0)},0);
+  var byAcct={};
+  rows.forEach(function(r){
+    var k=r.appropriation_code;
+    byAcct[k]=byAcct[k]||{name:cleanName(r.appropriation_name),code:k,total:0,n:0,years:{}};
+    byAcct[k].total+=parseFloat(r.total||0); byAcct[k].n+=parseInt(r.n||0,10);
+    byAcct[k].years[r.budget_fiscal_year]=(byAcct[k].years[r.budget_fiscal_year]||0)+parseFloat(r.total||0);
+  });
+  var list=Object.keys(byAcct).map(function(k){return byAcct[k]}).sort(function(a,b){return b.total-a.total});
+  var h='<div class="rec-dt"><table class="rec-sub"><thead><tr><th>Appropriation</th><th class="num">Total</th><th class="num">Payments</th><th>By fiscal year</th></tr></thead><tbody>';
+  list.forEach(function(a){
+    var yrs=Object.keys(a.years).sort().map(function(y){return 'FY'+y+' '+money(a.years[y])}).join(' · ');
+    h+='<tr><td><strong>'+a.name+'</strong><br><span class="muted-s">'+a.code+'</span></td>'
+      +'<td class="num">'+money(a.total)+'</td><td class="num">'+a.n+'</td>'
+      +'<td class="muted-s">'+yrs+'</td></tr>';
+  });
+  h+='</tbody></table>';
+  var diff=Math.abs(sum-stated);
+  h+= diff<1
+    ? '<p class="rec-note">These '+list.length+' appropriations sum to '+money(sum)+', the total above.</p>'
+    : '<p class="rec-note warn">These rows sum to '+money(sum)+' against '+money(stated)+' above — a difference of '+money(diff)+'. CTHRU can restate payments after they post.</p>';
+  h+='<p class="rec-note">Live from CTHRU’s Comptroller checkbook (pegc-naaa), tier-1 appropriations, FY2022 onward — the same basis as the total.</p></div>';
+  cell.innerHTML=h;
+}
+document.addEventListener('click', function(e){
+  var row=e.target.closest ? e.target.closest('.rec-row') : null;
+  if(!row || !document.getElementById('recs').contains(row)) return;
+  toggleRow(row);
+});
+document.addEventListener('keydown', function(e){
+  if(e.key!=='Enter' && e.key!==' ') return;
+  var row=e.target.closest ? e.target.closest('.rec-row') : null;
+  if(!row) return;
+  e.preventDefault(); toggleRow(row);
+});
+function toggleRow(row){
+  var ix=row.getAttribute('data-ix');
+  var det=document.querySelector('.rec-detail[data-for="'+ix+'"]');
+  if(!det) return;
+  var open=!det.hidden;
+  det.hidden=open; row.setAttribute('aria-expanded', String(!open));
+  row.classList.toggle('open', !open);
+  if(open) return;
+  var rec=CUR[ix]; var cell=det.firstElementChild;
+  if(DETAIL[rec.vendor]){ renderDetail(cell, DETAIL[rec.vendor], rec.total); return; }
+  cell.innerHTML='<div class="rec-dt muted-s">Loading the appropriations behind this total…</div>';
+  detailRows(rec.vendor).then(function(rows){
+    DETAIL[rec.vendor]=rows; renderDetail(cell, rows, rec.total);
+  }).catch(function(err){
+    cell.innerHTML='<div class="rec-dt" style="color:var(--red)">Could not reach CTHRU — '+err.message+'</div>';
+  });
 }
 function filt(){
   var q=document.getElementById('q').value.trim().toUpperCase();
@@ -3142,6 +3270,7 @@ function filt(){
 }
 fetch('data/immigrant-spending-latest.json').then(function(r){return r.json()}).then(function(d){
   REC=d.recipients.organisations||[];PAY=d.recipients.agency_payroll||[];
+  T1=Object.keys(d.tier1.accounts||{});
   draw(REC);
   var tot=REC.reduce(function(a,r){return a+r.total},0);
   document.getElementById('rec-note').textContent=
@@ -3195,6 +3324,87 @@ function big(v){
   return money(v);
 }
 function setHH(n){document.getElementById('hh').value=n;est()}
+
+/* ---- household compositions beyond what MIT publishes -------------------
+   Two additions, and they are not the same kind of thing.
+
+   NEITHER ADULT WORKING is not an extrapolation. MIT's "1 working" columns
+   already carry child care of $0, because an adult is at home. A household
+   where neither adult works needs exactly the same food, housing, medical,
+   transport and the rest, so the COST column is identical; what differs is
+   earned income, and that is the separate slider below. These entries exist
+   so a reader does not have to know that "1 working at 0% self-support" is
+   the same household -- they can just pick it.
+
+   A FOURTH CHILD is an extrapolation, and it is marked as one everywhere it
+   appears. MIT publishes up to three children. The per-child increments are
+   not linear -- housing moves in bedroom steps, $0 for the second child then
+   $6,437 for the third -- so a fourth child is estimated from the mean of
+   the three observed increments and cannot be as good as the figures above
+   it. The option says "derived", and selecting it prints a warning under the
+   budget table. Nothing here overwrites MIT's own numbers.                */
+(function extendLW(){
+  // LW is a closure local (the whole ported script is wrapped), so this
+  // cannot test window.LW -- that is undefined here by design.
+  if(typeof LW==='undefined' || !LW.columns) return;
+  var ITEMS=Object.keys(LW.items);
+  function copyCol(from, label){
+    LW.columns.push(label);
+    ITEMS.forEach(function(it){ LW.items[it].push(LW.items[it][from]); });
+    LW.gross.push(LW.gross[from]); LW.tax.push(LW.tax[from]);
+    (LW.derived=LW.derived||{})[LW.columns.length-1]=null;   // sourced, not derived
+    (LW.note=LW.note||{})[LW.columns.length-1]=
+      'Same costs as MIT’s one-earner column, deliberately: the Living Wage '
+      +'Calculator already puts child care at $0 when an adult is home, and a '
+      +'household needs the same food, housing and medical care whether anyone '
+      +'is earning. What changes is income, which is the self-support slider below.';
+  }
+  // 2 adults, neither working: same costs as MIT's 1-working column.
+  [[4,'2 adults (neither working)'],
+   [5,'2 adults (neither working), 1 child'],
+   [6,'2 adults (neither working), 2 children'],
+   [7,'2 adults (neither working), 3 children']].forEach(function(p){
+     copyCol(p[0], p[1]);
+  });
+
+  // A fourth child, derived. cols = the 0,1,2,3-child columns of one family type.
+  function fourth(cols, label){
+    var i0=cols[0],i1=cols[1],i2=cols[2],i3=cols[3];
+    LW.columns.push(label);
+    ITEMS.forEach(function(it){
+      var v=LW.items[it];
+      var step=((v[i1]-v[i0])+(v[i2]-v[i1])+(v[i3]-v[i2]))/3;
+      v.push(Math.round(v[i3]+step));
+    });
+    function ext(arr){
+      var step=((arr[i1]-arr[i0])+(arr[i2]-arr[i1])+(arr[i3]-arr[i2]))/3;
+      arr.push(Math.round(arr[i3]+step));
+    }
+    ext(LW.gross); ext(LW.tax);
+    (LW.derived=LW.derived||{})[LW.columns.length-1]=
+      'Derived, not published by MIT. The Living Wage Calculator stops at three '
+      +'children, so this is the three-child household plus the mean of the three '
+      +'observed per-child increments. Those increments are uneven — housing '
+      +'moves in bedroom steps — so treat this column as the roughest figure '
+      +'on the page.';
+  }
+  fourth([0,1,2,3],  '1 adult, 4 children (derived)');
+  fourth([4,5,6,7],  '2 adults (1 working), 4 children (derived)');
+  fourth([8,9,10,11],'2 adults (both working), 4 children (derived)');
+  // neither-working 4-child reuses the 1-working derived column just added
+  var src=LW.columns.indexOf('2 adults (1 working), 4 children (derived)');
+  copyCol(src, '2 adults (neither working), 4 children (derived)');
+  LW.derived[LW.columns.length-1]=LW.derived[src];
+
+  var sel=document.getElementById('comp');
+  if(sel){
+    sel.innerHTML=LW.columns.map(function(c,ix){
+      return '<option value="'+ix+'">'+c+'</option>';
+    }).join('');
+    sel.value='6';   // 2 adults (1 working), 2 children -- the published default
+  }
+})();
+
 function est(){
   var i=+document.getElementById('comp').value;
   var hh=+document.getElementById('hh').value;
@@ -3206,7 +3416,9 @@ function est(){
     rows+='<tr><td style="text-transform:capitalize">'+k+'</td><td class="num">'+money(LW.items[k][i])+'</td></tr>';
   }
   rows+='<tr><td style="font-weight:700">Required before tax</td><td class="num" style="font-weight:700">'+money(gross)+'</td></tr>';
-  document.getElementById('bud').innerHTML=rows;
+  var warn=(LW.derived&&LW.derived[i])?'<tr><td colspan="2" class="lw-derived">'+LW.derived[i]+'</td></tr>'
+           :((LW.note&&LW.note[i])?'<tr><td colspan="2" class="lw-note">'+LW.note[i]+'</td></tr>':'');
+  document.getElementById('bud').innerHTML=rows+warn;
 
   document.getElementById('hhv').textContent=hh.toLocaleString('en-US')+' households';
   document.getElementById('earnv').textContent=Math.round(earn*100)+'%';
