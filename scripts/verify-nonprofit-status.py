@@ -2,7 +2,7 @@
 """Check CTHRU payment recipients against the IRS Exempt Organizations file.
 
 WHAT IT ANSWERS
-shelter-immigrant-spending.html lists 392 organisations paid under immigrant,
+immigration-dashboard.html lists 392 organisations paid under immigrant,
 refugee and family-shelter appropriations, and until now every row carried
 nonprofit_verified: false, because CTHRU gives a vendor name and an amount and
 says nothing about tax status. This resolves that against the IRS's own file.
@@ -243,7 +243,7 @@ def main():
     # The page's own summary figures. Hand-typing them is how a number goes
     # false the next time this runs -- the lesson from the 45 unowned hero
     # figures fixed on 2026-10-20.
-    page = os.path.join(ROOT, "shelter-immigrant-spending.html")
+    page = os.path.join(ROOT, "immigration-dashboard.html")
     if os.path.exists(page):
         with open(page, encoding="utf-8") as fh:
             html = fh.read()

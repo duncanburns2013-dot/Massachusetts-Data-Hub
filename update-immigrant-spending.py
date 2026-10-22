@@ -297,7 +297,7 @@ def stamp_mira(bd):
 
 
 def stamp_shelter_page(doc, mira_t1_total):
-    """Write every data-field on shelter-immigrant-spending.html.
+    """Write every data-field on immigration-dashboard.html.
 
     The page looked data-driven -- 50 anchors, and it fetches the feed at
     runtime for the recipient table -- but nothing ever wrote the anchors.
@@ -309,9 +309,9 @@ def stamp_shelter_page(doc, mira_t1_total):
     An anchor that no script writes is a hand-typed figure wearing the
     costume of a live one, which is worse than an obviously static page.
     """
-    page = os.path.join(ROOT, "shelter-immigrant-spending.html")
+    page = os.path.join(ROOT, "immigration-dashboard.html")
     if not os.path.exists(page):
-        return "shelter-immigrant-spending.html missing"
+        return "immigration-dashboard.html missing"
 
     def money(v):
         # The page uses billions once the figure passes a thousand million.
@@ -363,7 +363,7 @@ def stamp_shelter_page(doc, mira_t1_total):
     if missing:
         return (f"wrote {written}; these anchors are not on the page: "
                 + ", ".join(missing))
-    print(f"  stamped {written} fields on shelter-immigrant-spending.html")
+    print(f"  stamped {written} fields on immigration-dashboard.html")
     return None
 
 
@@ -886,7 +886,7 @@ def main():
     print(f"  MIRA under tier-1 appropriations since FY{FIRST_FY}: "
           f"${mira_t1:,.0f}")
 
-    for what, err in (("shelter-immigrant-spending.html fields",
+    for what, err in (("immigration-dashboard.html fields",
                        stamp_shelter_page(doc, mira_t1)),
                       ("immigration-dashboard.html MIRA breakdown",
                        stamp_mira(bd)),
