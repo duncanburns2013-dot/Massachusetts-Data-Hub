@@ -38,6 +38,7 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(ROOT, "immigration-dashboard.html")
+FEED = os.path.join(ROOT, "data", "cost-of-living-latest.json")
 
 NEITHER = [
     "2 adults (neither working)",
@@ -85,15 +86,38 @@ def main():
 
     bad = []
 
-    m = re.search(r"var LW=(\{.*?\});", html, re.S)
-    if not m:
-        return fail(["the MIT living-wage dataset (var LW=) is not on the page"])
-    lw = json.loads(m.group(1))
-    cols = lw["columns"]
+    # The budget comes from the feed now, not a second copy pasted into the
+    # page. If it is ever pasted back, say so: two hand-kept copies of one
+    # source is the arrangement that produced every other error fixed here.
+    if re.search(r"var LW=\s*\{", html):
+        bad.append("the living-wage budget has been pasted back into the page "
+                   "as a literal. It belongs in data/cost-of-living-latest.json, "
+                   "which affordability-dashboard.html also reads")
+    if "buildLW" not in html or "cost-of-living-latest.json" not in html:
+        bad.append("the page no longer builds its budget from "
+                   "data/cost-of-living-latest.json")
+    if not os.path.exists(FEED):
+        return fail(["data/cost-of-living-latest.json is missing -- the "
+                     "estimator has no budget to render"])
+    with open(FEED, encoding="utf-8") as fh:
+        cl = json.load(fh).get("living_wage") or {}
+    b = cl.get("budget") or {}
+    if not b:
+        return fail(["cost-of-living-latest.json has no living_wage.budget"])
+    cols = cl.get("columns") or []
     if len(cols) != 12:
-        bad.append(f"the sourced MIT block should hold 12 columns, found "
-                   f"{len(cols)} -- the derived ones belong in extendLW at "
-                   f"runtime, never written into the sourced data")
+        bad.append(f"the feed should hold MIT's 12 columns, found {len(cols)}")
+    lw = {
+        "columns": cols,
+        "items": {k: v for k, v in b.items()
+                  if k not in ("required annual income before taxes",
+                               "annual taxes",
+                               "required annual income after taxes")},
+        "gross": b.get("required annual income before taxes") or [],
+        "tax": b.get("annual taxes") or [],
+    }
+    if not lw["gross"]:
+        bad.append("the feed has no 'required annual income before taxes'")
 
     for label in NEITHER + DERIVED:
         if label not in html:

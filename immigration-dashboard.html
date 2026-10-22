@@ -3269,6 +3269,26 @@ function filt(){
   var q=document.getElementById('q').value.trim().toUpperCase();
   draw(q?REC.filter(function(r){return r.vendor.toUpperCase().indexOf(q)>-1}):REC);
 }
+// The living-wage budget comes from the same file affordability-dashboard.html
+// reads, so the two pages cannot drift apart.
+fetch('data/cost-of-living-latest.json').then(function(r){
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return r.json();
+}).then(function(cl){
+  if(!cl.living_wage||!cl.living_wage.budget) throw new Error('no living_wage block');
+  LW=buildLW(cl.living_wage);
+  if(cl.meta&&cl.meta.generated) LW.generated=cl.meta.generated.slice(0,10);
+  extendLW();
+  est();
+  var v=document.getElementById('lw-vintage');
+  if(v&&LW.generated) v.textContent=LW.generated;
+}).catch(function(e){
+  var bud=document.getElementById('bud');
+  if(bud) bud.innerHTML='<tr><td colspan="2" style="color:var(--red)">'
+    +'Could not load the MIT living-wage budget from '
+    +'data/cost-of-living-latest.json — '+e.message+'</td></tr>';
+});
+
 fetch('data/immigrant-spending-latest.json').then(function(r){return r.json()}).then(function(d){
   REC=d.recipients.organisations||[];PAY=d.recipients.agency_payroll||[];
   T1=Object.keys(d.tier1.accounts||{});
@@ -3316,7 +3336,24 @@ fetch('data/immigrant-spending-latest.json').then(function(r){return r.json()}).
   document.getElementById('recs').innerHTML='<tr><td colspan="4" style="color:var(--red)">Could not load data/immigrant-spending-latest.json &mdash; '+e+'</td></tr>';
 });
 
-var LW={"columns": ["1 adult", "1 adult, 1 child", "1 adult, 2 children", "1 adult, 3 children", "2 adults (1 working)", "2 adults (1 working), 1 child", "2 adults (1 working), 2 children", "2 adults (1 working), 3 children", "2 adults (both working)", "2 adults (both working), 1 child", "2 adults (both working), 2 children", "2 adults (both working), 3 children"], "items": {"food": [4944.0, 7253.0, 10867.0, 14463.0, 9064.0, 11249.0, 14469.0, 17654.0, 9064.0, 11249.0, 14469.0, 17654.0], "child care": [0.0, 23448.0, 41712.0, 51443.0, 0.0, 0.0, 0.0, 0.0, 0.0, 23448.0, 41712.0, 51443.0], "medical": [4097.0, 10465.0, 10655.0, 10861.0, 7365.0, 11654.0, 12039.0, 12471.0, 7365.0, 11654.0, 12039.0, 12471.0], "housing": [23305.0, 30181.0, 30181.0, 36618.0, 24651.0, 30181.0, 30181.0, 36618.0, 24651.0, 30181.0, 30181.0, 36618.0], "transportation": [8178.0, 9464.0, 11921.0, 13717.0, 9464.0, 11921.0, 13717.0, 15357.0, 9464.0, 11921.0, 13717.0, 15357.0], "civic": [3456.0, 5834.0, 7694.0, 8762.0, 5834.0, 7694.0, 8762.0, 9810.0, 5834.0, 7694.0, 8762.0, 9810.0], "internet & mobile": [2004.0, 2004.0, 2004.0, 2004.0, 2579.0, 2579.0, 2579.0, 2579.0, 2579.0, 2579.0, 2579.0, 2579.0], "other": [4715.0, 8573.0, 9371.0, 10204.0, 8573.0, 9598.0, 10204.0, 11424.0, 8573.0, 9598.0, 10204.0, 11424.0]}, "gross": [63610.0, 121175.0, 159222.0, 192104.0, 81792.0, 99961.0, 105800.0, 121371.0, 81660.0, 131488.0, 164780.0, 197514.0], "tax": [12913.0, 23953.0, 34819.0, 44033.0, 14262.0, 15086.0, 13849.0, 15460.0, 14130.0, 23164.0, 31117.0, 40161.0], "vintage": "MIT Living Wage Calculator, Massachusetts", "generated": "2026-10-20"};
+// The MIT living-wage budget is NOT pasted here any more. It lives in
+// data/cost-of-living-latest.json, which update-cost-of-living.py scrapes from
+// livingwage.mit.edu and which affordability-dashboard.html already reads.
+// Until 2026-10-22 this page carried its own copy of the same 100-odd figures;
+// they agreed to the cent, by luck rather than structure, and two hand-kept
+// copies of one source is the arrangement that produced every other error
+// fixed in this repository this week. Built from the feed instead, below.
+var LW=null;
+function buildLW(cl){
+  var b=cl.budget, out={columns:cl.columns.slice(), items:{}, gross:null, tax:null};
+  Object.keys(b).forEach(function(k){
+    if(k==='required annual income before taxes'){ out.gross=b[k].slice(); }
+    else if(k==='annual taxes'){ out.tax=b[k].slice(); }
+    else if(k!=='required annual income after taxes'){ out.items[k]=b[k].slice(); }
+  });
+  out.vintage='MIT Living Wage Calculator, Massachusetts';
+  return out;
+}
 var VISIBLE=null;
 function money(v){return '$'+Math.round(v).toLocaleString('en-US')}
 function big(v){
@@ -3373,10 +3410,10 @@ function setHH(n){document.getElementById('hh').value=n;est()}
    the three observed increments and cannot be as good as the figures above
    it. The option says "derived", and selecting it prints a warning under the
    budget table. Nothing here overwrites MIT's own numbers.                */
-(function extendLW(){
+function extendLW(){
   // LW is a closure local (the whole ported script is wrapped), so this
   // cannot test window.LW -- that is undefined here by design.
-  if(typeof LW==='undefined' || !LW.columns) return;
+  if(!LW || !LW.columns) return;
   var ITEMS=Object.keys(LW.items);
   function copyCol(from, label){
     LW.columns.push(label);
@@ -3433,9 +3470,10 @@ function setHH(n){document.getElementById('hh').value=n;est()}
     }).join('');
     sel.value='6';   // 2 adults (1 working), 2 children -- the published default
   }
-})();
+}
 
 function est(){
+  if(!LW) return;            // the feed has not landed yet
   var i=+document.getElementById('comp').value;
   var hh=+document.getElementById('hh').value;
   var earn=+document.getElementById('earn').value/100;
