@@ -31,6 +31,21 @@ import register  # noqa: E402
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
+# DESE publishes enrollment each October, so these are a year behind -- SY2026
+# is out. More seriously, the stated K-12 figure could not be reproduced from
+# DESE's own dataset on 2026-10-21. Summing total_cnt for org_type 'State' in
+# t8td-gens gives SY2019 955,942 -> SY2025 919,899, which is -3.8%; excluding
+# pre-K gives -4.0%. The register says -3.5%. Neither basis reproduces it, so
+# the basis is unknown and nothing here substitutes a replacement -- picking
+# one of two numbers that both disagree with the published one would be a
+# guess wearing a source. Against SY2026 the shift is -5.4% (all students) or
+# -5.6% (excluding pre-K).
+DESE_NOTE = ("DESE enrollment, SY2026 now published. NOTE: the stated figure "
+             "could not be reproduced from DESE t8td-gens on 2026-10-21 -- "
+             "that dataset gives -3.8% statewide SY2019 to SY2025 (-4.0% "
+             "excluding pre-K) against the -3.5% published here. Re-derive on "
+             "a stated basis before republishing.")
+
 # --------------------------------------------------------------- FROZEN
 # Each tuple is (section, {label: reason}). Section scoping is required:
 # "FY2022" is a row in three different sections.
@@ -58,6 +73,11 @@ FROZEN = [
             "ITEP 2024 report, a published document.",
         "Undocumented tax contributions (MA)":
             "ITEP, a published document.",
+        "FY2026 **projected** — budget documents, NOT a CTHRU actual":
+            ("the FY27 budget documents' FY2026 projected column. A published "
+             "document for a year that has since closed. Kept, clearly "
+             "labelled, because mistaking this projection for a CTHRU actual "
+             "is exactly what produced the wrong HomeBASE figure."),
         "EA caseload, 25 Jul 2024":
             "a dated snapshot from the biweekly EA report SD.3359. The report "
             "for that date will not be reissued.",
@@ -177,6 +197,98 @@ RECHECK = [
     ("Housing & Real Estate", {
         "Median household income": ("2026-12-31",
                                     "Census ACS 5-year, next release"),
+        "Condo median (Haverhill)": ("2026-12-31", "MLS PIN, quarterly pull"),
+        "SF median (Haverhill)": ("2026-12-31", "MLS PIN, quarterly pull"),
+        "Income needed for condo": ("2026-12-31",
+                                    "derived from the condo median above and "
+                                    "the stated rate assumptions; re-derive "
+                                    "when either moves"),
+        "Income needed for SF": ("2026-12-31",
+                                 "derived from the SF median above and the "
+                                 "stated rate assumptions; re-derive when "
+                                 "either moves"),
+    }),
+    # DESE publishes enrollment every October and SY2026 is already out, so
+    # these are a year behind. They are also the one group in this pass whose
+    # stated figure could NOT be reproduced from the source it cites -- see
+    # the note below. Short due date, because both need a human decision
+    # about the basis, not a guess from here.
+    ("Education", {
+        "K-12 overall": ("2026-11-30", DESE_NOTE),
+        "Local public schools": ("2026-11-30", DESE_NOTE),
+        "Private schools": ("2026-11-30", DESE_NOTE),
+        "Vocational/technical": ("2026-11-30", DESE_NOTE),
+        "Charter schools": ("2026-11-30", DESE_NOTE),
+        "Homeschooling": ("2026-11-30", DESE_NOTE),
+    }),
+    ("Employment & Labor", {
+        "Job openings rate (peak)": ("2026-12-31", "BLS JOLTS via FRED"),
+        "Job openings rate (2025)": ("2026-12-31", "BLS JOLTS via FRED"),
+        "Healthcare jobs added (2025)": ("2026-12-31", "BLS CES via FRED"),
+        "Business/professional services lost": ("2026-12-31", "BLS CES via FRED"),
+        "Manufacturing lost": ("2026-12-31", "BLS CES via FRED"),
+        "Federal government jobs lost since peak": ("2026-12-31",
+                                                    "BLS CES via FRED"),
+    }),
+    ("Cost of Living", {
+        "MA SNAP persons participating": ("2026-12-31",
+                                          "USDA-FNS SNAP data tables"),
+        "MA SNAP persons, a year earlier": ("2026-12-31",
+                                            "USDA-FNS SNAP data tables"),
+        "Change over the year": ("2026-12-31",
+                                 "derived from the two SNAP rows above"),
+        "MA poverty rate": ("2027-09-30", "Census ACS 1-year, table S1701"),
+        "MA residents receiving SNAP": ("2026-12-31",
+                                        "USDA-FNS over Census population"),
+        "Expected fraud (national model)": ("2027-06-30",
+                                            "USDA-FNS trafficking studies"),
+        "Detected fraud (MA), BSI Q1 FY2025": ("2027-01-31",
+                                               "the next BSI quarterly"),
+        "Detection rate (SNAP, one quarter)": ("2027-01-31",
+                                               "derived from the two rows above"),
+        "Annual range FY22–FY25 (tax-budget card)":
+            ("2027-01-31", "derived from the BSI annual rows above"),
+        "Detection rate (tax-budget card)": ("2027-01-31",
+                                             "derived from BSI FY25 over the "
+                                             "benefit base"),
+        "Program breakdown on tax-budget-dashboard": ("2027-01-31",
+                                                      "the next BSI annual"),
+    }),
+    ("Immigration", {
+        "2020": ("2026-12-31", "Census Vintage 2026, due December"),
+        "2021": ("2026-12-31", "Census Vintage 2026, due December"),
+        "2022": ("2026-12-31", "Census Vintage 2026, due December"),
+        "2023": ("2026-12-31", "Census Vintage 2026, due December"),
+        "2024": ("2026-12-31", "Census Vintage 2026, due December"),
+        "2025": ("2026-12-31", "Census Vintage 2026, due December"),
+        "EA caseload, 1 Oct 2026": ("2026-12-31",
+                                    "the newest biweekly EA report"),
+        "Caseload change, Jul 2024 to Oct 2026": ("2026-12-31",
+                                                  "derived from the two "
+                                                  "caseload rows"),
+        "EOHLC all-in FY2026 (shelter $286.8M + exits incl. HomeBASE $153.7M)":
+            ("2027-01-31", "the next EOHLC all-in report"),
+        "FY2027 GAA": ("2027-07-31",
+                       "the FY2028 budget documents, when the FY2027 column "
+                       "becomes final"),
+        "Immigrant-vendor payments file (28 vendors, 8,883 payments)":
+            ("2027-01-31",
+             "superseded in substance by shelter-immigrant-spending.html, "
+             "which classifies by appropriation; this row describes the older "
+             "vendor-name file and should be retired or restated"),
+    }),
+    ("State Budget", {
+        "FY2027": ("2027-07-31",
+                   "the enacted FY2027 total can still move on a supplemental; "
+                   "final after the year closes"),
+        "Growth, FY2018 to FY2026": ("2027-07-31",
+                                     "derived from the GAA rows above"),
+        "Growth, FY2018 to FY2027": ("2027-07-31",
+                                     "derived from the GAA rows above"),
+        "Fair Share surtax deployed": ("2027-01-31",
+                                       "Mass Taxpayers Foundation analysis"),
+        "Line items in `tax-budget-dashboard.html`":
+            ("2027-07-31", "re-diff the dashboard against gaa1.xlsx for FY2028"),
     }),
 ]
 

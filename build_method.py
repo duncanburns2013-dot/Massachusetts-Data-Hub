@@ -31,7 +31,13 @@ NL = chr(10)
 SRC, OUT = 'MASTER_DATA.md', 'method.html'
 SKIP_SECTIONS = ('How to Use This File', 'Update Log', 'Gold & Treasury')
 
-TICK, LIVE = '✅', '\U0001f504'          # the two status marks used in the file
+TICK, LIVE = '✅', '\U0001f504'
+# Added 2026-10-21. Every row used to be TICK or LIVE, and TICK was doing two
+# incompatible jobs: "a human confirmed this and will again" and "a human
+# confirmed this once and nobody ever will". Splitting them is the point of
+# the register pass -- a frozen row says why it cannot change, and a re-read
+# row carries the date it is due.
+FROZEN, RECHECK = '\U0001f512', '⏳'
 EMOJI = re.compile('[\U0001F000-\U0001FAFF☀-➿️⬀-⯿]+')
 
 def strip_emoji(t):
@@ -46,6 +52,11 @@ def inline(t):
     t = re.sub(r'`([^`]+)`', r'<code>\1</code>', t)
     t = t.replace(TICK, '<span class="mk mk-v" title="hand verified">verified</span>')
     t = t.replace(LIVE, '<span class="mk mk-l" title="refreshed by a feed">live</span>')
+    t = t.replace(FROZEN, '<span class="mk mk-f" title="cannot change; the '
+                          'reason follows">fixed</span>')
+    t = t.replace(RECHECK, '<span class="mk mk-r" title="no API behind it; a '
+                           'human re-reads it by the date that follows">'
+                           're-read</span>')
     return t
 
 def slug(t):
@@ -130,6 +141,8 @@ CSS = """/* == method:css start == */
   border:1px solid;white-space:nowrap}
 .mk-v{color:#2C6B45;border-color:rgba(56,133,87,.42);background:rgba(56,133,87,.10)}
 .mk-l{color:#0F4577;border-color:rgba(20,85,143,.40);background:rgba(20,85,143,.09)}
+.mk-f{color:#5B5750;border-color:rgba(91,87,80,.38);background:rgba(91,87,80,.08)}
+.mk-r{color:#8A5A1B;border-color:rgba(138,90,27,.40);background:rgba(138,90,27,.09)}
 .mk-jump{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:22px 0 0;padding:0;list-style:none}
 .mk-jump a{display:inline-block;text-decoration:none;font-family:var(--font-mono);font-size:11px;
   font-weight:600;letter-spacing:.06em;padding:6px 11px;border-radius:7px;color:var(--bay-blue);
@@ -212,6 +225,8 @@ def build():
     <div class="mk-key">
       <span><span class="mk mk-v">verified</span> checked by hand against the source</span>
       <span><span class="mk mk-l">live</span> refreshed by a feed; the JSON is authoritative</span>
+      <span><span class="mk mk-f">fixed</span> cannot change &mdash; a recorded vote, a statute, a closed year</span>
+      <span><span class="mk mk-r">re-read</span> no API; a human re-reads it by the date shown</span>
     </div>
     <ul class="mk-jump">%(jump)s</ul>
     <div class="mk-body">
@@ -236,8 +251,9 @@ def build():
     # Count the class, not the class-plus-closing-bracket: the emitted spans
     # carry a title= between the class and the '>', so 'mk-v">' matched only
     # the legend and this reported "verified 1" on a page with 400+ ticks.
-    print('status chips: verified %d, live %d'
-          % (page.count('mk mk-v'), page.count('mk mk-l')))
+    print('status chips: verified %d, live %d, fixed %d, re-read %d'
+          % (page.count('mk mk-v'), page.count('mk mk-l'),
+             page.count('mk mk-f'), page.count('mk mk-r')))
 
 
 build()

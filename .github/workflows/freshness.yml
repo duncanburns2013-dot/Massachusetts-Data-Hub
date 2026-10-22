@@ -99,7 +99,25 @@ jobs:
         if: always()
         run: python scripts/check-cross-page.py
 
-      # Sixth question, and the only one that looks outside this repository:
+      # Sixth question: does every register row say HOW it is held up?
+      #
+      # MASTER_DATA.md had 247 rows resting on a bare "hand verified <month>"
+      # tick. That mark is identical on a row a script could own, on a row
+      # nobody will ever check again, and on a row that needed re-reading last
+      # quarter -- it reads as assurance and carries none. The wrong HomeBASE
+      # figure wore one for six weeks while three gates stayed green.
+      #
+      # Every row now says which: written by a script, frozen with the reason
+      # it cannot change, or re-read by a date that check-freshness.py ages.
+      # This fails if a bare tick comes back, because the marks only stay
+      # honest if adding a dishonest one is noisy.
+      #
+      # always(), for the same reason as above.
+      - name: Check every register row says how it is held up
+        if: always()
+        run: python scripts/check-register-marks.py
+
+      # Seventh question, and the only one that looks outside this repository:
       # is the job that writes the feed still running at all?
       #
       # The Peoples Audit has nine scheduled workflows and no health check of any

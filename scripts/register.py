@@ -35,11 +35,22 @@ FROZEN = "\U0001f512"     # padlock
 RECHECK = "⏳"        # hourglass
 
 
-def _cells(line):
+def _cells(line, width=4):
+    """Cells of a table row, or None.
+
+    width=4 is the common shape (metric | value | source | mark) and is what
+    write_rows edits. Pass width=None for ANY shape: the register also has
+    3-, 5- and 6-column tables -- median prices carry a change column, the
+    rate-increase tables carry a carrier column -- and the status mark is
+    always the LAST cell. Counting only 4-column rows is how an audit of
+    "166 hand-verified rows" missed a further 100 of them.
+    """
     if not line.startswith("|"):
         return None
     c = [x.strip() for x in line.strip("|").split("|")]
-    return c if len(c) == 4 else None
+    if width is None:
+        return c if 2 <= len(c) <= 8 else None
+    return c if len(c) == width else None
 
 
 def _log_start(lines):
@@ -197,11 +208,61 @@ def recheck_rows(due, section=None, dry_run=False):
     return done, [k for k in due if k not in seen]
 
 
+def all_marked_rows():
+    """Every row of any shape, with its last cell -- where the mark lives."""
+    with open(REGISTER, encoding="utf-8") as fh:
+        lines = fh.read().split("\n")
+    secmap = _section_of(lines)
+    out = []
+    for i, l in enumerate(lines[: _log_start(lines)]):
+        c = _cells(l, width=None)
+        if not c or len(c) < 3:
+            continue
+        if c[0] in ("Metric", "") or set("".join(c)) <= set("- :"):
+            continue
+        out.append({"i": i, "label": c[0], "cells": c, "mark": c[-1],
+                    "section": secmap[i], "width": len(c)})
+    return out
+
+
+def mark_rows(decide, section=None, dry_run=False):
+    """Set the LAST cell of matching rows, whatever the table's width.
+
+    decide(row) -> replacement mark string, or None to leave the row alone.
+    row is a dict from all_marked_rows().
+
+    freeze_rows/recheck_rows above take an explicit {label: reason} map and
+    only touch 4-column tables. This is for the register's other shapes --
+    the tax tables carry a URL column, the rate tables have three columns --
+    where the rows are numerous and follow a rule rather than needing to be
+    named one at a time.
+    """
+    with open(REGISTER, encoding="utf-8") as fh:
+        lines = fh.read().split("\n")
+    secmap = _section_of(lines)
+    done = []
+    for r in all_marked_rows():
+        i = r["i"]
+        if section and section.lower() not in secmap.get(i, "").lower():
+            continue
+        new = decide(r)
+        if not new:
+            continue
+        cells = list(r["cells"])
+        cells[-1] = new
+        lines[i] = "| " + " | ".join(cells) + " |"
+        done.append(r["label"])
+    if not dry_run and done:
+        with open(REGISTER, "w", encoding="utf-8") as fh:
+            fh.write("\n".join(lines))
+    return done
+
+
 def counts():
-    """How the register is held up, by mark."""
+    """How the register is held up, by mark. Every table shape, not just 4."""
     out = {"script": 0, "frozen": 0, "recheck": 0, "hand": 0, "other": 0}
-    for r in read_rows():
-        v = r["verified"]
+    for r in all_marked_rows():
+        v = r["mark"]
         if SCRIPT in v:
             out["script"] += 1
         elif FROZEN in v:

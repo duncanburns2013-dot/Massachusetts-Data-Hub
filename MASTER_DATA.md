@@ -67,12 +67,12 @@ FIRST, then update the relevant dashboard.
 
 | Year | NIM (persons) | Source | Verified |
 |------|--------------|--------|----------|
-| 2020 | 19,892 | Census Vintage 2025 | ✅ Oct 2026 |
-| 2021 | 376,026 | Census Vintage 2025 | ✅ Oct 2026 |
-| 2022 | 1,672,112 | Census Vintage 2025 | ✅ Oct 2026 |
-| 2023 | 2,264,137 | Census Vintage 2025 | ✅ Oct 2026 |
-| 2024 | 2,734,468 | Census Vintage 2025 | ✅ Oct 2026 |
-| 2025 | 1,262,202 | Census Vintage 2025 | ✅ Oct 2026 |
+| 2020 | 19,892 | Census Vintage 2025 | ⏳ re-read by 2026-12-31 — Census Vintage 2026, due December |
+| 2021 | 376,026 | Census Vintage 2025 | ⏳ re-read by 2026-12-31 — Census Vintage 2026, due December |
+| 2022 | 1,672,112 | Census Vintage 2025 | ⏳ re-read by 2026-12-31 — Census Vintage 2026, due December |
+| 2023 | 2,264,137 | Census Vintage 2025 | ⏳ re-read by 2026-12-31 — Census Vintage 2026, due December |
+| 2024 | 2,734,468 | Census Vintage 2025 | ⏳ re-read by 2026-12-31 — Census Vintage 2026, due December |
+| 2025 | 1,262,202 | Census Vintage 2025 | ⏳ re-read by 2026-12-31 — Census Vintage 2026, due December |
 
 Read from `NST-EST2025-ALLDATA.csv`, United States row, `INTERNATIONALMIG2020`
 through `INTERNATIONALMIG2025`, retrieved 2026-10-04 — the same file and URL
@@ -126,7 +126,7 @@ vintage step.
 | Total annual immigration cost | ~$2.35B | Multiple state sources | ⏳ re-read by 2027-01-31 — a compilation of several state sources; re-derive from each |
 | Illegal-only cost estimate | $800M–$1.5B | CIS/FAIR/state data | ⏳ re-read by 2027-01-31 — an estimate range from advocacy sources on both sides; re-derive |
 | Undocumented tax contributions (MA) | ~$1.4B total ($446M state/local) | ITEP | 🔒 ITEP, a published document. |
-| Immigrant-vendor payments file (28 vendors, 8,883 payments) | $228.6M total; **$46.8M (20.5%)** identifiable immigrant/refugee or shelter programs | Computed from `data/payments.json` (tiers 0+1) | ✅ Sep 2026 |
+| Immigrant-vendor payments file (28 vendors, 8,883 payments) | $228.6M total; **$46.8M (20.5%)** identifiable immigrant/refugee or shelter programs | Computed from `data/payments.json` (tiers 0+1) | ⏳ re-read by 2027-01-31 — superseded in substance by shelter-immigrant-spending.html, which classifies by appropriation; this row describes the older vendor-name file and should be retired or restated |
 
 ### Massachusetts — Shelter Crisis
 
@@ -152,12 +152,12 @@ vintage step.
 | EA line 7004-0101, actual | FY22 $202.56M · FY23 $274.38M · FY24 $643.25M · FY25 $326.07M · FY26 $259.54M · FY27 YTD $49.44M | CTHRU kv7m-35wn | 🔄 written by `update-immigrant-spending.py` |
 | HomeBASE 7004-0108, actual | FY22 $25.97M · FY23 $49.41M · FY24 $37.22M · FY25 $57.32M · FY26 $57.29M · FY27 YTD $43.47M — CTHRU transfer_in into 7004-0108 is $2,575 in FY2026, not a material top-up | CTHRU kv7m-35wn | 🔄 written by `update-immigrant-spending.py` |
 | HomeBASE growth, FY22 → FY26 | +121% (derived, $25.97M → $57.29M) | CTHRU kv7m-35wn | 🔄 written by `update-immigrant-spending.py` |
-| EOHLC all-in FY2026 (shelter $286.8M + exits incl. HomeBASE $153.7M) | $440.5M, incl. $83.0M from trust fund 7004-4778 not in CTHRU | A&F/EOHLC biweekly EA report, 8 Sep 2026 (SD.4220) | ✅ Sep 2026 |
-| FY2026 **projected** — budget documents, NOT a CTHRU actual | EA 7004-0101 $276,421,903 · HomeBASE $91,386,678. **Do not publish either as spending.** CTHRU actuals for FY2026 are EA $259.54M and HomeBASE $57.29M; see the rows above, which a script writes. The HomeBASE projection exceeds its $57,322,001 appropriation by $34,064,677, and that difference was once published as a transfer into the account. CTHRU's `transfer_in` for 7004-0108 in FY2026 is $2,575. | budget.digital.mass.gov FY27 line-item data | ✅ Sep 2026 |
-| FY2027 GAA | EA 7004-0101 $259,900,648 · HomeBASE 7004-0108 $82,322,001 · 7004-0110 $5,000,000 | budget.digital.mass.gov FY27 line-item data | ✅ Sep 2026 |
-| EA caseload, 1 Oct 2026 | 1,536 families in shelter + 47 in clinical safety sites | Biweekly EA report to House and Senate Ways and Means, 5 Oct 2026 (SD.4288), malegislature.gov/Bills/194/SD4288.pdf | ✅ Oct 2026 |
+| EOHLC all-in FY2026 (shelter $286.8M + exits incl. HomeBASE $153.7M) | $440.5M, incl. $83.0M from trust fund 7004-4778 not in CTHRU | A&F/EOHLC biweekly EA report, 8 Sep 2026 (SD.4220) | ⏳ re-read by 2027-01-31 — the next EOHLC all-in report |
+| FY2026 **projected** — budget documents, NOT a CTHRU actual | EA 7004-0101 $276,421,903 · HomeBASE $91,386,678. **Do not publish either as spending.** CTHRU actuals for FY2026 are EA $259.54M and HomeBASE $57.29M; see the rows above, which a script writes. The HomeBASE projection exceeds its $57,322,001 appropriation by $34,064,677, and that difference was once published as a transfer into the account. CTHRU's `transfer_in` for 7004-0108 in FY2026 is $2,575. | budget.digital.mass.gov FY27 line-item data | 🔒 the FY27 budget documents' FY2026 projected column. A published document for a year that has since closed. Kept, clearly labelled, because mistaking this projection for a CTHRU actual is exactly what produced the wrong HomeBASE figure. |
+| FY2027 GAA | EA 7004-0101 $259,900,648 · HomeBASE 7004-0108 $82,322,001 · 7004-0110 $5,000,000 | budget.digital.mass.gov FY27 line-item data | ⏳ re-read by 2027-07-31 — the FY2028 budget documents, when the FY2027 column becomes final |
+| EA caseload, 1 Oct 2026 | 1,536 families in shelter + 47 in clinical safety sites | Biweekly EA report to House and Senate Ways and Means, 5 Oct 2026 (SD.4288), malegislature.gov/Bills/194/SD4288.pdf | ⏳ re-read by 2026-12-31 — the newest biweekly EA report |
 | EA caseload, 25 Jul 2024 | 7,367 families in shelters, hotels or motels (Appendix A total) + 340 in overflow | Biweekly EA report, 29 Jul 2024 (SD.3359), malegislature.gov/Bills/193/SD3359.pdf | 🔒 a dated snapshot from the biweekly EA report SD.3359. The report for that date will not be reissued. |
-| Caseload change, Jul 2024 to Oct 2026 | -79% (7,367 to 1,536, derived) | SD.3359, SD.4288 | ✅ Oct 2026 |
+| Caseload change, Jul 2024 to Oct 2026 | -79% (7,367 to 1,536, derived) | SD.3359, SD.4288 | ⏳ re-read by 2026-12-31 — derived from the two caseload rows |
 | Cost per family per week, current | $1,241 (average shelter provider rates, FY27 contracts) | EA report SD.4288 | ⏳ re-read by 2026-12-31 — the next biweekly EA report |
 | Cost per family per week | $3,496 | State Auditor | ⏳ re-read by 2027-02-28 — the State Auditor's next shelter review |
 | $100K fee per shelter family | Proposed | Legislature | 🔒 a filed legislative proposal, not a measurement. |
@@ -231,9 +231,9 @@ The 16,921 is outflow 102,076 against inflow 85,155 (returns, 2022-23; data/irs-
 
 | Region | Median Price | YoY Change | Source | Verified |
 |--------|-------------|------------|--------|----------|
-| Massachusetts | $638,000 | +3.7% | Warren Group | ✅ Jan 2026 |
-| Greater Boston | $800,000 | +4.2% | Warren Group | ✅ Jan 2026 |
-| Essex County | $699,000 | +5.1% | Warren Group | ✅ Jan 2026 |
+| Massachusetts | $638,000 | +3.7% | Warren Group | ⏳ re-read by 2027-06-30 — the publisher's next release |
+| Greater Boston | $800,000 | +4.2% | Warren Group | ⏳ re-read by 2027-06-30 — the publisher's next release |
+| Essex County | $699,000 | +5.1% | Warren Group | ⏳ re-read by 2027-06-30 — the publisher's next release |
 
 - **Source URL:** https://www.thewarrengroup.com/
 
@@ -280,10 +280,10 @@ Boston $1,352,812. Quote it with its as-of date or not at all.
 |--------|-------|--------|----------|
 | Median household income | $88,326 | Census QuickFacts ACS 2020-2024 | ⏳ re-read by 2026-12-31 — Census ACS 5-year, next release |
 | MA median household income | $103,960 | ACS 2024 (5-yr), `data/census-latest.json` | 🔄 Jul 2026 |
-| Condo median (Haverhill) | $390,000 | MLS | ✅ Feb 2026 |
-| SF median (Haverhill) | $600,000 | MLS | ✅ Feb 2026 |
-| Income needed for condo | ~$86K | Calc: 6.5%, 20% down, 28% DTI | ✅ Feb 2026 |
-| Income needed for SF | ~$124K | Calc: 6.5%, 20% down, 28% DTI | ✅ Feb 2026 |
+| Condo median (Haverhill) | $390,000 | MLS | ⏳ re-read by 2026-12-31 — MLS PIN, quarterly pull |
+| SF median (Haverhill) | $600,000 | MLS | ⏳ re-read by 2026-12-31 — MLS PIN, quarterly pull |
+| Income needed for condo | ~$86K | Calc: 6.5%, 20% down, 28% DTI | ⏳ re-read by 2026-12-31 — derived from the condo median above and the stated rate assumptions; re-derive when either moves |
+| Income needed for SF | ~$124K | Calc: 6.5%, 20% down, 28% DTI | ⏳ re-read by 2026-12-31 — derived from the SF median above and the stated rate assumptions; re-derive when either moves |
 
 ### New Hampshire — Market Data (PrimeMLS)
 
@@ -343,8 +343,8 @@ Values below are that file as of **2026-10-20** (reference month September 2026)
 
 | Metric | Value | Source | Verified |
 |--------|-------|--------|----------|
-| Job openings rate (peak) | ~5.5% | BLS JOLTS | ✅ Feb 2026 |
-| Job openings rate (2025) | ~4.2% | BLS JOLTS | ✅ Feb 2026 |
+| Job openings rate (peak) | ~5.5% | BLS JOLTS | ⏳ re-read by 2026-12-31 — BLS JOLTS via FRED |
+| Job openings rate (2025) | ~4.2% | BLS JOLTS | ⏳ re-read by 2026-12-31 — BLS JOLTS via FRED |
 | MA premium over national rate | Nearly gone | BLS JOLTS | ⏳ re-read by 2026-12-31 — BLS JOLTS state tables |
 
 ### National — Labor Market (2025)
@@ -352,10 +352,10 @@ Values below are that file as of **2026-10-20** (reference month September 2026)
 | Metric | Value | Source | Verified |
 |--------|-------|--------|----------|
 | NFP downward revision (Apr 2024–Mar 2025) | -911,000 jobs | BLS benchmark | 🔒 the BLS annual benchmark revision for a closed period. Final. |
-| Healthcare jobs added (2025) | +713,000 | BLS CES | ✅ Feb 2026 |
-| Business/professional services lost | -97,000 | BLS CES | ✅ Feb 2026 |
-| Manufacturing lost | -68,000 | BLS CES | ✅ Feb 2026 |
-| Federal government jobs lost since peak | -277,000 (-9.2%) | BLS CES | ✅ Feb 2026 |
+| Healthcare jobs added (2025) | +713,000 | BLS CES | ⏳ re-read by 2026-12-31 — BLS CES via FRED |
+| Business/professional services lost | -97,000 | BLS CES | ⏳ re-read by 2026-12-31 — BLS CES via FRED |
+| Manufacturing lost | -68,000 | BLS CES | ⏳ re-read by 2026-12-31 — BLS CES via FRED |
+| Federal government jobs lost since peak | -277,000 (-9.2%) | BLS CES | ⏳ re-read by 2026-12-31 — BLS CES via FRED |
 | Perceived job-finding probability | 43.1% (record low) | NY Fed SCE Dec 2025 | ⏳ re-read by 2026-12-31 — NY Fed Survey of Consumer Expectations, monthly |
 | Private sector hiring plans | Lowest since 2009 | Challenger/BLS | ⏳ re-read by 2026-12-31 — Challenger Gray monthly report |
 
@@ -418,12 +418,12 @@ The MA vintage. Lands ~3 weeks after the national release, which is why the MA b
 
 | Sector | Change | Source | Verified |
 |--------|--------|--------|----------|
-| K-12 overall | -3.5% | DESE | ✅ Feb 2026 |
-| Local public schools | -6.4% | DESE | ✅ Feb 2026 |
-| Private schools | -1% | DESE | ✅ Feb 2026 |
-| Vocational/technical | +18% | DESE | ✅ Feb 2026 |
-| Charter schools | +11% | DESE | ✅ Feb 2026 |
-| Homeschooling | +56% | DESE | ✅ Feb 2026 |
+| K-12 overall | -3.5% | DESE | ⏳ re-read by 2026-11-30 — DESE enrollment, SY2026 now published. NOTE: the stated figure could not be reproduced from DESE t8td-gens on 2026-10-21 -- that dataset gives -3.8% statewide SY2019 to SY2025 (-4.0% excluding pre-K) against the -3.5% published here. Re-derive on a stated basis before republishing. |
+| Local public schools | -6.4% | DESE | ⏳ re-read by 2026-11-30 — DESE enrollment, SY2026 now published. NOTE: the stated figure could not be reproduced from DESE t8td-gens on 2026-10-21 -- that dataset gives -3.8% statewide SY2019 to SY2025 (-4.0% excluding pre-K) against the -3.5% published here. Re-derive on a stated basis before republishing. |
+| Private schools | -1% | DESE | ⏳ re-read by 2026-11-30 — DESE enrollment, SY2026 now published. NOTE: the stated figure could not be reproduced from DESE t8td-gens on 2026-10-21 -- that dataset gives -3.8% statewide SY2019 to SY2025 (-4.0% excluding pre-K) against the -3.5% published here. Re-derive on a stated basis before republishing. |
+| Vocational/technical | +18% | DESE | ⏳ re-read by 2026-11-30 — DESE enrollment, SY2026 now published. NOTE: the stated figure could not be reproduced from DESE t8td-gens on 2026-10-21 -- that dataset gives -3.8% statewide SY2019 to SY2025 (-4.0% excluding pre-K) against the -3.5% published here. Re-derive on a stated basis before republishing. |
+| Charter schools | +11% | DESE | ⏳ re-read by 2026-11-30 — DESE enrollment, SY2026 now published. NOTE: the stated figure could not be reproduced from DESE t8td-gens on 2026-10-21 -- that dataset gives -3.8% statewide SY2019 to SY2025 (-4.0% excluding pre-K) against the -3.5% published here. Re-derive on a stated basis before republishing. |
+| Homeschooling | +56% | DESE | ⏳ re-read by 2026-11-30 — DESE enrollment, SY2026 now published. NOTE: the stated figure could not be reproduced from DESE t8td-gens on 2026-10-21 -- that dataset gives -3.8% statewide SY2019 to SY2025 (-4.0% excluding pre-K) against the -3.5% published here. Re-derive on a stated basis before republishing. |
 
 ### Gateway Cities vs. Wealthy Towns (DESE FY2024 / MCAS 2025)
 
@@ -536,13 +536,13 @@ against OCPF since. Donation patterns establish association, not agreement.
 
 | Carrier | Approved Increase | Verified |
 |---------|------------------|----------|
-| Harvard Pilgrim | 12.2% | ✅ Feb 2026 |
-| Blue Cross Blue Shield | 11.9% | ✅ Feb 2026 |
-| Tufts Health | 11.1% | ✅ Feb 2026 |
-| Health New England | 9.4% | ✅ Feb 2026 |
-| UnitedHealthcare | 9.3% | ✅ Feb 2026 |
-| MGB Health Plan | 7.2% | ✅ Feb 2026 |
-| Fallon Health | 7.1% | ✅ Feb 2026 |
+| Harvard Pilgrim | 12.2% | 🔒 an approved 2026 plan-year rate increase. Once the Division of Insurance approves the plan year's rates they are set for it; the 2027 filings are a new row, not a revision of this one. |
+| Blue Cross Blue Shield | 11.9% | 🔒 an approved 2026 plan-year rate increase. Once the Division of Insurance approves the plan year's rates they are set for it; the 2027 filings are a new row, not a revision of this one. |
+| Tufts Health | 11.1% | 🔒 an approved 2026 plan-year rate increase. Once the Division of Insurance approves the plan year's rates they are set for it; the 2027 filings are a new row, not a revision of this one. |
+| Health New England | 9.4% | 🔒 an approved 2026 plan-year rate increase. Once the Division of Insurance approves the plan year's rates they are set for it; the 2027 filings are a new row, not a revision of this one. |
+| UnitedHealthcare | 9.3% | 🔒 an approved 2026 plan-year rate increase. Once the Division of Insurance approves the plan year's rates they are set for it; the 2027 filings are a new row, not a revision of this one. |
+| MGB Health Plan | 7.2% | 🔒 an approved 2026 plan-year rate increase. Once the Division of Insurance approves the plan year's rates they are set for it; the 2027 filings are a new row, not a revision of this one. |
+| Fallon Health | 7.1% | 🔒 an approved 2026 plan-year rate increase. Once the Division of Insurance approves the plan year's rates they are set for it; the 2027 filings are a new row, not a revision of this one. |
 
 - **Average increase:** 9.9% (3x inflation rate of ~3%)
 - **State benchmark:** 3.6%
@@ -604,11 +604,11 @@ card put the US premium at 24.2% of income against its own figures' 30.4%, and m
 
 | Metric | Value | Source | Verified |
 |--------|-------|--------|----------|
-| MA SNAP persons participating | 889,327 (June 2026, initial) | USDA-FNS SNAP Data Tables, `snap-persons-9.xlsx`, data as of 11 Sep 2026 | ✅ Oct 2026 |
-| MA SNAP persons, a year earlier | 1,079,234 (June 2025) | same file | ✅ Oct 2026 |
-| Change over the year | −17.6% (about −190,000 people) | same file | ✅ Oct 2026 |
-| MA poverty rate | 9.7% | Census ACS 1-year 2024, table S1701 (API, retrieved 4 Oct 2026) | ✅ Oct 2026 |
-| MA residents receiving SNAP | 15.6% of the state population | USDA-FNS FY2024 persons over 2024 population (derived) | ✅ Oct 2026, relabelled |
+| MA SNAP persons participating | 889,327 (June 2026, initial) | USDA-FNS SNAP Data Tables, `snap-persons-9.xlsx`, data as of 11 Sep 2026 | ⏳ re-read by 2026-12-31 — USDA-FNS SNAP data tables |
+| MA SNAP persons, a year earlier | 1,079,234 (June 2025) | same file | ⏳ re-read by 2026-12-31 — USDA-FNS SNAP data tables |
+| Change over the year | −17.6% (about −190,000 people) | same file | ⏳ re-read by 2026-12-31 — derived from the two SNAP rows above |
+| MA poverty rate | 9.7% | Census ACS 1-year 2024, table S1701 (API, retrieved 4 Oct 2026) | ⏳ re-read by 2027-09-30 — Census ACS 1-year, table S1701 |
+| MA residents receiving SNAP | 15.6% of the state population | USDA-FNS FY2024 persons over 2024 population (derived) | ⏳ re-read by 2026-12-31 — USDA-FNS over Census population |
 
 - **The headcount fell hard.** MA SNAP enrolment is down 17.6% year over year on
   USDA's own monthly series. The figure this table carried until 4 Oct 2026 was
@@ -648,9 +648,9 @@ card put the US premium at 24.2% of income against its own figures' 30.4%, and m
 
 | Metric | Value | Source | Verified |
 |--------|-------|--------|----------|
-| Expected fraud (national model) | ~$50M | USDA-FNS Trafficking Studies | ✅ Feb 2026 |
-| Detected fraud (MA), BSI Q1 FY2025 | $2,549,325 all programs, of which SNAP $1,528,615 | BSI Q1 FY2025 report, malegislature.gov/Bills/194/SD2676.pdf | ✅ Sep 2026 |
-| Detection rate (SNAP, one quarter) | ~3.1% ($1,528,615 ÷ ~$50M) | Calculated | ✅ Sep 2026 |
+| Expected fraud (national model) | ~$50M | USDA-FNS Trafficking Studies | ⏳ re-read by 2027-06-30 — USDA-FNS trafficking studies |
+| Detected fraud (MA), BSI Q1 FY2025 | $2,549,325 all programs, of which SNAP $1,528,615 | BSI Q1 FY2025 report, malegislature.gov/Bills/194/SD2676.pdf | ⏳ re-read by 2027-01-31 — the next BSI quarterly |
+| Detection rate (SNAP, one quarter) | ~3.1% ($1,528,615 ÷ ~$50M) | Calculated | ⏳ re-read by 2027-01-31 — derived from the two rows above |
 | Leading fraud type | Identity fraud (31%) | LexisNexis True Cost of Fraud | 🔒 a published LexisNexis study finding, fixed text. |
 
 - This row previously read $0.69M, which matches no line of the Q1 FY2025 report. It equals the SNAP figure ($690K) in the FY2025 Q4 program breakdown (inference). The detection rate compares one quarter with a model figure, so treat it as a floor.
@@ -667,9 +667,9 @@ Administrative findings, not convictions. BSI cannot collect settlements; the be
 | FY2025 | $11,952,288 ($11.95M), 4,179 investigations | OSA release, 30 Jan 2026 | 🔒 the State Auditor's release of 30 Jan 2026, a published document for a closed fiscal year. |
 | FY2026 first half (Q1 + Q2, Jul–Dec 2025) | $4,486,102; civil recoveries $392,713 | malegislature.gov/Bills/194/SD3769.pdf | 🔒 a filed report, SD.3769. Not reissued. |
 | FY2025 Q1 | $2,549,325 (SNAP $1,528,615) | malegislature.gov/Bills/194/SD2676.pdf | 🔒 a filed quarterly report, SD.2676. Not reissued. |
-| Annual range FY22–FY25 (tax-budget card) | $10.3–13.5M | Derived from the rows above | ✅ Sep 2026 |
-| Detection rate (tax-budget card) | 0.26% = FY25 $11.95M ÷ $4,550M benefit base in the page's own table | Calculated | ✅ Sep 2026 |
-| Program breakdown on tax-budget-dashboard | MassHealth $3.8M, SNAP $690K, PCA $146K, Childcare $135K, TAFDC $23K, EAEDC $9K — **FY2025 Q4 quarterly (Apr–Jun 2025), not annual**; the table's Detected column sums to $4.66M | BSI FY2025 Q4 report | Period label ✅ Sep 2026; PCA $145,638 and EEC $134,526 confirmed (verbatim repost); other values not re-read |
+| Annual range FY22–FY25 (tax-budget card) | $10.3–13.5M | Derived from the rows above | ⏳ re-read by 2027-01-31 — derived from the BSI annual rows above |
+| Detection rate (tax-budget card) | 0.26% = FY25 $11.95M ÷ $4,550M benefit base in the page's own table | Calculated | ⏳ re-read by 2027-01-31 — derived from BSI FY25 over the benefit base |
+| Program breakdown on tax-budget-dashboard | MassHealth $3.8M, SNAP $690K, PCA $146K, Childcare $135K, TAFDC $23K, EAEDC $9K — **FY2025 Q4 quarterly (Apr–Jun 2025), not annual**; the table's Detected column sums to $4.66M | BSI FY2025 Q4 report | ⏳ re-read by 2027-01-31 — the next BSI annual |
 
 FY2026 full year not yet published (checked 30 Sep 2026).
 
@@ -712,41 +712,41 @@ its own `data-checked` stamp, which the freshness watchdog ages.
 
 | Figure | Value | Source | URL | Verified |
 |---|---|---|---|---|
-| Federal standard deduction TY2026 | $16,100 single / $32,200 MFJ | IRS Rev. Proc. 2025-32 | irs.gov/pub/irs-drop/rp-25-32.pdf | ✅ Aug 2026 |
-| Social Security wage base 2026 | $184,500 | SSA contribution & benefit base | ssa.gov/oact/cola/cbb.html | ✅ Aug 2026 |
-| MA income tax rate | 5.0% flat | M.G.L. c. 62 §4 | malegislature.gov | ✅ Aug 2026 |
-| MA 4% surtax threshold TY2026 | $1,107,750 | M.G.L. c. 62 §§4(d), 5A; DOR | mass.gov/info-details/massachusetts-4-surtax-on-taxable-income | ✅ Aug 2026 |
-| MA interest, dividends & long-term gains | 5% | M.G.L. c. 62 §4(a),(c) | mass.gov/info-details/massachusetts-income-tax-rates | ✅ Aug 2026 |
-| MA short-term capital gains | 8.5% (cut from 12%, St. 2023 c. 50) | M.G.L. c. 62 §4(c) | same | ✅ Aug 2026 |
-| MA motor fuel excise | **26.5¢/gal** (24¢ + 2.5¢ UST) | M.G.L. c. 64A §1; c. 21J §3 | mass.gov/info-details/motor-fuel-excise-tax | ✅ Aug 2026 |
-| MA avg single-family tax bill FY2026 | $8,113 | DLS *City & Town*, Feb 2026 | mass.gov/info-details/fy2026-statewide-average-single-family-tax-bill | ✅ Aug 2026 |
-| MA avg single-family assessed value FY2026 | $742,986 → 1.092% effective | DLS *City & Town*, Feb 2026 | same | ✅ Aug 2026 |
-| MA corporate & business excise FY2025 | $4.662B | DOR FY2025 close, Aug 2025 | mass.gov/news/fiscal-year-2025-revenue-collections-totaled-43708-billion | ✅ Aug 2026 |
-| MA households | 2,829,804 | Census ACS 2024 1-yr, B11001 | censusreporter.org/profiles/04000US25-massachusetts/ | ✅ Aug 2026 |
-| MA aggregate household income | $408.376B | Census ACS 2024 1-yr, B19025 | same | ✅ Aug 2026 |
-| **MA mean household income** | **$144,312** (B19025 ÷ B11001) | Derived — the allocation divisor | same | ✅ Aug 2026 |
-| MA population | 7,044,056 | Census ACS 2024 5-yr, B01003 | same | ✅ Aug 2026 |
-| MA share of national household income | 2.6918% (derived) | ACS B19025 ÷ national B19025 | same | ✅ Aug 2026 |
-| MA share of national population | 2.1032% (derived) | ACS B01003 | same | ✅ Aug 2026 |
-| US households | 132,737,144 | Census ACS 2024 1-yr, B11001 | censusreporter.org/tables/B11001/ | ✅ Aug 2026 |
-| US aggregate household income | $15.171T | Census ACS 2024 1-yr, B19025 | censusreporter.org/tables/B19025/ | ✅ Aug 2026 |
-| Federal deficit FY2025 | $1.8T (5.8–5.9% of GDP) | CBO Monthly Budget Review, Oct 2025 | cbo.gov/publication/61307 | ✅ Aug 2026 |
-| **Federal corporate income tax receipts FY2025** | **$452,089,303,420** (net) | U.S. Treasury, Final Monthly Treasury Statement Sept 2025, Table 4 | api.fiscaldata.treasury.gov — mts_table_4 | ✅ Aug 2026 |
-| Federal corporate receipts FY2024 | $529,866,802,638 — FY25 is −14.7% | same | same | ✅ Aug 2026 |
-| MA unfunded pension + OPEB (stock) | $55.8B total · $42.1B pension-only · $19,719/household | Commonwealth ACFR FY2024; PERAC | See pension-dashboard.html | ✅ Aug 2026 |
-| MA annual pension appropriation FY2026 | $4.9B — ~8% of the state budget, **already in Layer 1** | Commonwealth budget FY2026 | same | ✅ Aug 2026 |
-| **MA residential electricity, all-in** | **30.49¢/kWh** (Jul 2026) | EIA Electric Power Monthly Table 5.6.A via API v2 | api.eia.gov/v2/electricity/retail-sales/data/ | ✅ Aug 2026 |
-| **NH residential electricity, all-in** | **27.01¢/kWh** (Jun 2026) | same | same | ✅ Aug 2026 |
-| US / New England residential electricity | 18.31¢ (Jul 2026) / 28.14¢ (May 2026 — the newest New England figure in this repo. The MA and US cells are stamped from the EIA fetch by update-energy-dashboard.py; this one is not fetched, so it stays put until a newer New England figure is actually published here) | same | same | ✅ Aug 2026 |
-| **MA annual overpayment vs US average** | **$877/household** (Jul 2026) | Derived: (MA rate − US rate) × 7,200 kWh/yr | same | ✅ Oct 2026 |
-| FL residential electricity — the dashboard’s low-rate comparison | 15.03¢/kWh (Jul 2026) | EIA Electric Power Monthly Table 5.6.A via API v2 | api.eia.gov/v2/electricity/retail-sales/data/ | ✅ Oct 2026 |
-| **MA electric policy charges** | **3.663¢/kWh** — EE 2.292 + NMRS 0.625 + SMART 0.583 + EV 0.104 + RE 0.050 + PSPF 0.008 + ESMP 0.001 (was 3.789 for 1 Jul - 31 Aug 2026) | Eversource MA filed rates, Rate R1, Greater Boston, eff. 1 Sep 2026 | eversource.com/docs/default-source/rates-tariffs/ema-greater-boston-rates.pdf | ✅ Oct 2026 |
-| **Eversource R-1 bill at 600 kWh/month** | $225.75: supply 46.0%, distribution 26.1%, transmission 12.4%, **policy line items 9.7%**, customer charge 4.4%, decoupling and transition 1.2% (derived; policy items inside distribution and supply not counted) | Same rate summary; Basic Service fixed 17.323¢ from 1 Aug 2026 (NSTAR summary M.D.P.U. No. 1-26-E) | eversource.com/docs/default-source/rates-tariffs/ma-electric-supply-rate-archive/july-2026-summary-rate-table.pdf | ✅ Oct 2026 |
-| **MA gas policy charges** | **59.08¢/therm** — EE 41.70 + GSEP 17.38 | Eversource MA Summary of Gas Rates | eversource.com/docs/default-source/rates-tariffs/summary-rates-gas.pdf | ✅ Aug 2026 |
-| MA gas commodity cost | 38.42¢/therm (eff. 1 May 2026) — **less than the policy riders above** | Eversource MA Cost of Gas | eversource.com/…/ma-cost-of-gas | ✅ Aug 2026 |
-| MA electric distribution / transmission | 9.443¢ / 4.673¢ per kWh — excluded as infrastructure | same tariff | same | ✅ Aug 2026 |
-| MA pension-only unfunded (stock) | $42.1B · $14,877/household | Commonwealth ACFR FY2024; PERAC | See pension-dashboard.html | ✅ Aug 2026 |
-| MA state/local accrual in the burden model | **$0 — excluded by design**, see note below | Scope decision | — | ✅ Aug 2026 |
+| Federal standard deduction TY2026 | $16,100 single / $32,200 MFJ | IRS Rev. Proc. 2025-32 | irs.gov/pub/irs-drop/rp-25-32.pdf | ⏳ re-read by 2026-12-31 — the IRS revenue procedure for the next tax year, issued each autumn |
+| Social Security wage base 2026 | $184,500 | SSA contribution & benefit base | ssa.gov/oact/cola/cbb.html | ⏳ re-read by 2026-12-31 — the SSA contribution and benefit base, announced each October |
+| MA income tax rate | 5.0% flat | M.G.L. c. 62 §4 | malegislature.gov | 🔒 statutory rate or citation; changes only when the law does |
+| MA 4% surtax threshold TY2026 | $1,107,750 | M.G.L. c. 62 §§4(d), 5A; DOR | mass.gov/info-details/massachusetts-4-surtax-on-taxable-income | 🔒 statutory rate or citation; changes only when the law does |
+| MA interest, dividends & long-term gains | 5% | M.G.L. c. 62 §4(a),(c) | mass.gov/info-details/massachusetts-income-tax-rates | 🔒 statutory rate or citation; changes only when the law does |
+| MA short-term capital gains | 8.5% (cut from 12%, St. 2023 c. 50) | M.G.L. c. 62 §4(c) | same | 🔒 statutory rate or citation; changes only when the law does |
+| MA motor fuel excise | **26.5¢/gal** (24¢ + 2.5¢ UST) | M.G.L. c. 64A §1; c. 21J §3 | mass.gov/info-details/motor-fuel-excise-tax | 🔒 statutory rate or citation; changes only when the law does |
+| MA avg single-family tax bill FY2026 | $8,113 | DLS *City & Town*, Feb 2026 | mass.gov/info-details/fy2026-statewide-average-single-family-tax-bill | ⏳ re-read by 2027-03-31 — DLS City & Town, which publishes the average bill each February |
+| MA avg single-family assessed value FY2026 | $742,986 → 1.092% effective | DLS *City & Town*, Feb 2026 | same | ⏳ re-read by 2027-03-31 — DLS City & Town, which publishes the average bill each February |
+| MA corporate & business excise FY2025 | $4.662B | DOR FY2025 close, Aug 2025 | mass.gov/news/fiscal-year-2025-revenue-collections-totaled-43708-billion | ⏳ re-read by 2027-09-30 — the DOR fiscal-year revenue close, published each August |
+| MA households | 2,829,804 | Census ACS 2024 1-yr, B11001 | censusreporter.org/profiles/04000US25-massachusetts/ | ⏳ re-read by 2027-06-30 — the publisher's next release |
+| MA aggregate household income | $408.376B | Census ACS 2024 1-yr, B19025 | same | ⏳ re-read by 2027-06-30 — the publisher's next release |
+| **MA mean household income** | **$144,312** (B19025 ÷ B11001) | Derived — the allocation divisor | same | ⏳ re-read by 2027-06-30 — the publisher's next release |
+| MA population | 7,044,056 | Census ACS 2024 5-yr, B01003 | same | ⏳ re-read by 2027-06-30 — the publisher's next release |
+| MA share of national household income | 2.6918% (derived) | ACS B19025 ÷ national B19025 | same | ⏳ re-read by 2027-06-30 — the publisher's next release |
+| MA share of national population | 2.1032% (derived) | ACS B01003 | same | ⏳ re-read by 2027-06-30 — the publisher's next release |
+| US households | 132,737,144 | Census ACS 2024 1-yr, B11001 | censusreporter.org/tables/B11001/ | ⏳ re-read by 2027-06-30 — the publisher's next release |
+| US aggregate household income | $15.171T | Census ACS 2024 1-yr, B19025 | censusreporter.org/tables/B19025/ | ⏳ re-read by 2027-06-30 — the publisher's next release |
+| Federal deficit FY2025 | $1.8T (5.8–5.9% of GDP) | CBO Monthly Budget Review, Oct 2025 | cbo.gov/publication/61307 | ⏳ re-read by 2026-12-31 — the CBO Monthly Budget Review |
+| **Federal corporate income tax receipts FY2025** | **$452,089,303,420** (net) | U.S. Treasury, Final Monthly Treasury Statement Sept 2025, Table 4 | api.fiscaldata.treasury.gov — mts_table_4 | ⏳ re-read by 2026-12-31 — the Final Monthly Treasury Statement for the fiscal year |
+| Federal corporate receipts FY2024 | $529,866,802,638 — FY25 is −14.7% | same | same | 🔒 a closed federal fiscal year's final Treasury figure. |
+| MA unfunded pension + OPEB (stock) | $55.8B total · $42.1B pension-only · $19,719/household | Commonwealth ACFR FY2024; PERAC | See pension-dashboard.html | ⏳ re-read by 2027-03-31 — the annual comprehensive financial report |
+| MA annual pension appropriation FY2026 | $4.9B — ~8% of the state budget, **already in Layer 1** | Commonwealth budget FY2026 | same | 🔒 an enacted appropriation for a closed fiscal year. |
+| **MA residential electricity, all-in** | **30.49¢/kWh** (Jul 2026) | EIA Electric Power Monthly Table 5.6.A via API v2 | api.eia.gov/v2/electricity/retail-sales/data/ | ⏳ re-read by 2026-12-31 — EIA Electric Power Monthly Table 5.6.A. NOTE: update-energy-dashboard.py already fetches this series -- these rows should be wired to it rather than re-read by hand |
+| **NH residential electricity, all-in** | **27.01¢/kWh** (Jun 2026) | same | same | ⏳ re-read by 2026-12-31 — EIA Electric Power Monthly Table 5.6.A |
+| US / New England residential electricity | 18.31¢ (Jul 2026) / 28.14¢ (May 2026 — the newest New England figure in this repo. The MA and US cells are stamped from the EIA fetch by update-energy-dashboard.py; this one is not fetched, so it stays put until a newer New England figure is actually published here) | same | same | ⏳ re-read by 2026-12-31 — EIA Electric Power Monthly Table 5.6.A. NOTE: update-energy-dashboard.py already fetches this series -- these rows should be wired to it rather than re-read by hand |
+| **MA annual overpayment vs US average** | **$877/household** (Jul 2026) | Derived: (MA rate − US rate) × 7,200 kWh/yr | same | ⏳ re-read by 2026-12-31 — derived from the MA and US EIA rates above; re-derive when either moves |
+| FL residential electricity — the dashboard’s low-rate comparison | 15.03¢/kWh (Jul 2026) | EIA Electric Power Monthly Table 5.6.A via API v2 | api.eia.gov/v2/electricity/retail-sales/data/ | ⏳ re-read by 2026-12-31 — EIA Electric Power Monthly Table 5.6.A. NOTE: update-energy-dashboard.py already fetches this series -- these rows should be wired to it rather than re-read by hand |
+| **MA electric policy charges** | **3.663¢/kWh** — EE 2.292 + NMRS 0.625 + SMART 0.583 + EV 0.104 + RE 0.050 + PSPF 0.008 + ESMP 0.001 (was 3.789 for 1 Jul - 31 Aug 2026) | Eversource MA filed rates, Rate R1, Greater Boston, eff. 1 Sep 2026 | eversource.com/docs/default-source/rates-tariffs/ema-greater-boston-rates.pdf | ⏳ re-read by 2027-01-31 — the filed tariff, when the next rate change takes effect |
+| **Eversource R-1 bill at 600 kWh/month** | $225.75: supply 46.0%, distribution 26.1%, transmission 12.4%, **policy line items 9.7%**, customer charge 4.4%, decoupling and transition 1.2% (derived; policy items inside distribution and supply not counted) | Same rate summary; Basic Service fixed 17.323¢ from 1 Aug 2026 (NSTAR summary M.D.P.U. No. 1-26-E) | eversource.com/docs/default-source/rates-tariffs/ma-electric-supply-rate-archive/july-2026-summary-rate-table.pdf | ⏳ re-read by 2027-01-31 — the filed tariff, when the next rate change takes effect |
+| **MA gas policy charges** | **59.08¢/therm** — EE 41.70 + GSEP 17.38 | Eversource MA Summary of Gas Rates | eversource.com/docs/default-source/rates-tariffs/summary-rates-gas.pdf | ⏳ re-read by 2027-01-31 — the filed tariff, when the next rate change takes effect |
+| MA gas commodity cost | 38.42¢/therm (eff. 1 May 2026) — **less than the policy riders above** | Eversource MA Cost of Gas | eversource.com/…/ma-cost-of-gas | ⏳ re-read by 2027-01-31 — the filed tariff, when the next rate change takes effect |
+| MA electric distribution / transmission | 9.443¢ / 4.673¢ per kWh — excluded as infrastructure | same tariff | same | ⏳ re-read by 2027-01-31 — the filed tariff, when the next rate change takes effect |
+| MA pension-only unfunded (stock) | $42.1B · $14,877/household | Commonwealth ACFR FY2024; PERAC | See pension-dashboard.html | ⏳ re-read by 2027-03-31 — the annual comprehensive financial report |
+| MA state/local accrual in the burden model | **$0 — excluded by design**, see note below | Scope decision | — | 🔒 a scope decision this project made and records, not a measurement. It changes only if the model's boundary changes. |
 
 ### ⚠️ The two MA median-income figures — do not merge them
 
@@ -828,9 +828,9 @@ the dollar, and the press release's "$63.42 billion".
 | FY2024 | 56.063 | `gaabudgets` FY27 workbook | 🔒 an enacted General Appropriation Act total. The year is closed and the enacted figure is final. |
 | FY2025 | 57.718 | `gaabudgets` FY27 workbook | 🔒 an enacted General Appropriation Act total. The year is closed and the enacted figure is final. |
 | FY2026 | 60.974 | `gaabudgets` FY27 workbook (after overrides; the FY26 workbook read 60.904 at signing) | 🔒 an enacted General Appropriation Act total. The year is closed and the enacted figure is final. |
-| FY2027 | 63.416 | `gaabudgets` FY27 workbook | ✅ Oct 2026 |
-| Growth, FY2018 to FY2026 | +51.7% (derived) | above | ✅ Oct 2026 |
-| Growth, FY2018 to FY2027 | +57.8% (derived) | above | ✅ Oct 2026 |
+| FY2027 | 63.416 | `gaabudgets` FY27 workbook | ⏳ re-read by 2027-07-31 — the enacted FY2027 total can still move on a supplemental; final after the year closes |
+| Growth, FY2018 to FY2026 | +51.7% (derived) | above | ⏳ re-read by 2027-07-31 — derived from the GAA rows above |
+| Growth, FY2018 to FY2027 | +57.8% (derived) | above | ⏳ re-read by 2027-07-31 — derived from the GAA rows above |
 
 Each year is taken from the newest workbook that carries it (budget.digital.mass.gov,
 summary/fyNN/downloads), because a later workbook restates the year after overrides. Every
@@ -850,10 +850,10 @@ scopes and was off by up to $1.6B in both directions; it had put FY2018-to-FY202
 | — municipal / regional split | $6,695,466,289 / $962,933,217 | same | 🔒 an enacted split in a signed act. |
 | Unrestricted General Government Aid | **$1,363,109,516** (+$40M, +3.0%) | same | 🔒 an enacted line in a signed act. |
 | SpEd Circuit Breaker | $654.6M (+35.0%); $806.6M incl. Fair Share supp. | `gaabudgets.xlsx` | 🔒 an enacted line in a signed act. |
-| Fair Share surtax deployed | ~$2.7B (~64% education / ~36% transportation) | MTF | ✅ Aug 2026 |
+| Fair Share surtax deployed | ~$2.7B (~64% education / ~36% transportation) | MTF | ⏳ re-read by 2027-01-31 — Mass Taxpayers Foundation analysis |
 | Emergency Assistance family shelter | $259.9M (−6.0%; was $325.3M in FY24) | `gaabudgets.xlsx` | 🔒 the FY2027 enacted line. Actual spending against it is written by update-immigrant-spending.py and is a different measure. |
 | State Retiree Benefits Trust (OPEB) deposit | **$400M**, down from $550M in FY24 (−27%) | line 1595-6152 | 🔒 an enacted line (1595-6152) in a signed act. |
-| Line items in `tax-budget-dashboard.html` | 860, **all 860 verified against the official GAA** | `gaa1.xlsx` diff | ✅ Aug 2026 |
+| Line items in `tax-budget-dashboard.html` | 860, **all 860 verified against the official GAA** | `gaa1.xlsx` diff | ⏳ re-read by 2027-07-31 — re-diff the dashboard against gaa1.xlsx for FY2028 |
 
 ### ⚠️ Enacted ≠ spent — the supplemental gap
 
@@ -899,40 +899,40 @@ are effectively UGGA-only. Use `sect3.xlsx` when districts matter.
 
 | Figure | Value | Source | URL | Verified |
 |---|---|---|---|---|
-| NH individual income tax | **0%** — I&D repealed 1 Jan 2025 | NH DRA; HB 2 (2023) ch. 79 §§86-88 | revenue.nh.gov/news-and-media/repeal-nh-interest-and-dividends-tax-now-effect | ✅ Aug 2026 |
-| NH I&D rate history | 5% → 4% (2023) → 3% (2024) → 0% (2025) | NH DRA | revenue.nh.gov/taxes-glance/interest-dividends-tax | ✅ Aug 2026 |
-| NH capital gains tax | **None — never levied** (not a 2025 change) | NH DRA | revenue.nh.gov/taxes-glance | ✅ Aug 2026 |
-| NH general sales tax | None | NH DRA | revenue.nh.gov | ✅ Aug 2026 |
-| NH Meals & Rooms tax | 8.5% | RSA 78-A | revenue.nh.gov/taxes-glance/meals-rentals-tax | ✅ Aug 2026 |
-| NH Business Profits Tax | 7.5% | RSA 77-A | revenue.nh.gov/taxes-glance/business-taxes | ✅ Aug 2026 |
-| NH Business Enterprise Tax | 0.55% on compensation + interest + dividends paid | RSA 77-E | same | ✅ Aug 2026 |
-| NH Real Estate Transfer Tax | $0.75 per $100, **each side** | RSA 78-B | revenue.nh.gov | ✅ Aug 2026 |
-| NH households | 570,689 | Census ACS 2024 1-yr, B11001 | censusreporter.org/profiles/04000US33-new-hampshire/ | ✅ Aug 2026 |
-| NH aggregate household income | $73.393B | Census ACS 2024 1-yr, B19025 | same | ✅ Aug 2026 |
-| **NH mean household income** | **$128,604** (B19025 ÷ B11001) | Derived — allocation divisor | same | ✅ Aug 2026 |
-| NH median household income 2024 | $99,782 | Census ACS 2024 1-yr, B19013 | same | ✅ Aug 2026 |
-| NH population | 1,394,868 | Census ACS 2024 5-yr, B01003 | same | ✅ Aug 2026 |
-| NH share of national household income | **0.4838%** (derived) | ACS B19025 ÷ national B19025 | same | ✅ Aug 2026 |
-| NH share of national population | 0.4165% (derived) | ACS B01003 | same | ✅ Aug 2026 |
-| **NH average municipal property rate 2025** | **$15.83 per $1,000 → 1.583%** (was $20.96 in 2019) | NH Fiscal Policy Institute | nhfpi.org/resource/property-taxes-in-new-hampshire-how-they-work-and-how-they-compare/ | ✅ Aug 2026 |
-| NH per-capita property tax FY2022 | $3,388 — **2nd highest state**, behind NJ $3,617 | NHFPI | same | ✅ Aug 2026 |
-| NH property tax reliance | 60% (NHFPI) vs 63–64% (InDepthNH) — **carry both** | NHFPI / InDepthNH | same | ✅ Aug 2026 |
-| **NHRS unfunded liability** | **$5.58B**, 68.6% funded (30 Jun 2024) · $9,778/household | NHRS ACFR + GASB 67/74, FY2025 release | nhrs.org/docs/default-source/gasb/ | ✅ Aug 2026 |
-| NH municipal rate range | $2.62 – $36.54 per $1,000 | InDepthNH, Apr 2026 | indepthnh.org | ✅ Aug 2026 |
-| NH property tax share of state+local revenue | 63–64% | InDepthNH / NHFPI, Apr 2026 | same | ✅ Aug 2026 |
-| **NH business taxes FY2025 (BPT+BET)** | **$1,102.6M** — Gen $670.5M + Ed $432.1M | NH DAS Monthly Revenue Focus, June FY2025 accrual | das.nh.gov/accounting/FY%2025/FY2025_Monthly_Revenue_June_Preliminary_Accrual.pdf | ✅ Aug 2026 |
-| NH business taxes FY2024 | $1,217.9M (FY25 is −9.5%, and −12.4% vs the $1,259.0M plan) | same | same | ✅ Aug 2026 |
+| NH individual income tax | **0%** — I&D repealed 1 Jan 2025 | NH DRA; HB 2 (2023) ch. 79 §§86-88 | revenue.nh.gov/news-and-media/repeal-nh-interest-and-dividends-tax-now-effect | 🔒 statutory rate or citation; changes only when the law does |
+| NH I&D rate history | 5% → 4% (2023) → 3% (2024) → 0% (2025) | NH DRA | revenue.nh.gov/taxes-glance/interest-dividends-tax | 🔒 statutory rate or citation; changes only when the law does |
+| NH capital gains tax | **None — never levied** (not a 2025 change) | NH DRA | revenue.nh.gov/taxes-glance | 🔒 statutory rate or citation; changes only when the law does |
+| NH general sales tax | None | NH DRA | revenue.nh.gov | 🔒 statutory rate or citation; changes only when the law does |
+| NH Meals & Rooms tax | 8.5% | RSA 78-A | revenue.nh.gov/taxes-glance/meals-rentals-tax | 🔒 statutory rate or citation; changes only when the law does |
+| NH Business Profits Tax | 7.5% | RSA 77-A | revenue.nh.gov/taxes-glance/business-taxes | 🔒 statutory rate or citation; changes only when the law does |
+| NH Business Enterprise Tax | 0.55% on compensation + interest + dividends paid | RSA 77-E | same | 🔒 statutory rate or citation; changes only when the law does |
+| NH Real Estate Transfer Tax | $0.75 per $100, **each side** | RSA 78-B | revenue.nh.gov | 🔒 statutory rate or citation; changes only when the law does |
+| NH households | 570,689 | Census ACS 2024 1-yr, B11001 | censusreporter.org/profiles/04000US33-new-hampshire/ | ⏳ re-read by 2027-06-30 — the publisher's next release |
+| NH aggregate household income | $73.393B | Census ACS 2024 1-yr, B19025 | same | ⏳ re-read by 2027-06-30 — the publisher's next release |
+| **NH mean household income** | **$128,604** (B19025 ÷ B11001) | Derived — allocation divisor | same | ⏳ re-read by 2027-06-30 — the publisher's next release |
+| NH median household income 2024 | $99,782 | Census ACS 2024 1-yr, B19013 | same | ⏳ re-read by 2027-06-30 — the publisher's next release |
+| NH population | 1,394,868 | Census ACS 2024 5-yr, B01003 | same | ⏳ re-read by 2027-06-30 — the publisher's next release |
+| NH share of national household income | **0.4838%** (derived) | ACS B19025 ÷ national B19025 | same | ⏳ re-read by 2027-06-30 — the publisher's next release |
+| NH share of national population | 0.4165% (derived) | ACS B01003 | same | ⏳ re-read by 2027-06-30 — the publisher's next release |
+| **NH average municipal property rate 2025** | **$15.83 per $1,000 → 1.583%** (was $20.96 in 2019) | NH Fiscal Policy Institute | nhfpi.org/resource/property-taxes-in-new-hampshire-how-they-work-and-how-they-compare/ | ⏳ re-read by 2027-06-30 — the NHFPI/InDepthNH analysis it rests on |
+| NH per-capita property tax FY2022 | $3,388 — **2nd highest state**, behind NJ $3,617 | NHFPI | same | ⏳ re-read by 2027-06-30 — the NHFPI/InDepthNH analysis it rests on |
+| NH property tax reliance | 60% (NHFPI) vs 63–64% (InDepthNH) — **carry both** | NHFPI / InDepthNH | same | ⏳ re-read by 2027-06-30 — the NHFPI/InDepthNH analysis it rests on |
+| **NHRS unfunded liability** | **$5.58B**, 68.6% funded (30 Jun 2024) · $9,778/household | NHRS ACFR + GASB 67/74, FY2025 release | nhrs.org/docs/default-source/gasb/ | ⏳ re-read by 2027-03-31 — the annual comprehensive financial report |
+| NH municipal rate range | $2.62 – $36.54 per $1,000 | InDepthNH, Apr 2026 | indepthnh.org | ⏳ re-read by 2027-06-30 — the NHFPI/InDepthNH analysis it rests on |
+| NH property tax share of state+local revenue | 63–64% | InDepthNH / NHFPI, Apr 2026 | same | ⏳ re-read by 2027-06-30 — the NHFPI/InDepthNH analysis it rests on |
+| **NH business taxes FY2025 (BPT+BET)** | **$1,102.6M** — Gen $670.5M + Ed $432.1M | NH DAS Monthly Revenue Focus, June FY2025 accrual | das.nh.gov/accounting/FY%2025/FY2025_Monthly_Revenue_June_Preliminary_Accrual.pdf | ⏳ re-read by 2026-12-31 — the NH DAS monthly revenue focus |
+| NH business taxes FY2024 | $1,217.9M (FY25 is −9.5%, and −12.4% vs the $1,259.0M plan) | same | same | 🔒 a closed New Hampshire fiscal year's final revenue figure. |
 | NH BPT / BET split | 75% / 25% — **assumed** | DAS publishes them combined; split needs NH DRA | revenue.nh.gov/taxes-glance/business-taxes | ⚠️ Split unverified |
-| NH Interest & Dividends revenue FY2025 | $90.8M, down 50.7% from FY2024's $184.3M | NH DAS, June FY2025 accrual | same | ✅ Aug 2026 |
-| NH General + Education Fund revenue FY2025 | $3,122.7M, 1.3% below plan | NH DAS, June FY2025 accrual | same | ✅ Aug 2026 |
-| NH road toll (gas) | **23.75¢** = 22.2¢ toll + ~1.55¢ oil discharge surcharge | RSA 260:32 (base $0.18, +4.2¢ per 2014 SB 367); RSA 146-A | gc.nh.gov/rsa/html/XXI/260/260-32.htm | ✅ Aug 2026 |
-| NH BET share of business taxes | 25.7% (5-yr TY2019–23 avg); TY2023 BET = $253M | NHFPI | nhfpi.org/resource/business-enterprise-tax-rate-decreases-have-lowered-revenue-with-limited-economic-benefit/ | ✅ Aug 2026 |
-| NH BET rate history | 0.75% → 0.72% (2016) → 0.675% (2018) → 0.6% (2019) → 0.55% (2022–) | NHFPI | same | ✅ Aug 2026 |
-| **NH electric policy charges** | **0.618¢/kWh** — System Benefits Charge, the only mandated rider | Eversource NH filed tariff, Rate R | eversource.com/…/electric-delivery-rates/nh | ✅ Aug 2026 |
-| **NH gas policy charges** | **16.30¢/therm** — Liberty EnergyNorth LDAC (a *ceiling*, bundles mechanisms MA excludes) | NHPUC DG 24-098; see also DE 25-071 | new-hampshire.libertyutilities.com | ✅ Aug 2026 |
-| NH electric distribution / transmission | 6.727¢ / 4.445¢ per kWh — excluded as infrastructure | Eversource NH Rate R | same | ✅ Aug 2026 |
-| NH stranded cost recovery | **−0.148¢/kWh — a credit, not a charge** | Eversource NH Rate R | same | ✅ Aug 2026 |
-| NH state/local accrual in the burden model | **$0 — excluded by design**, same rule as MA | Scope decision | — | ✅ Aug 2026 |
+| NH Interest & Dividends revenue FY2025 | $90.8M, down 50.7% from FY2024's $184.3M | NH DAS, June FY2025 accrual | same | ⏳ re-read by 2026-12-31 — the NH DAS monthly revenue focus |
+| NH General + Education Fund revenue FY2025 | $3,122.7M, 1.3% below plan | NH DAS, June FY2025 accrual | same | ⏳ re-read by 2026-12-31 — the NH DAS monthly revenue focus |
+| NH road toll (gas) | **23.75¢** = 22.2¢ toll + ~1.55¢ oil discharge surcharge | RSA 260:32 (base $0.18, +4.2¢ per 2014 SB 367); RSA 146-A | gc.nh.gov/rsa/html/XXI/260/260-32.htm | 🔒 statutory rate or citation; changes only when the law does |
+| NH BET share of business taxes | 25.7% (5-yr TY2019–23 avg); TY2023 BET = $253M | NHFPI | nhfpi.org/resource/business-enterprise-tax-rate-decreases-have-lowered-revenue-with-limited-economic-benefit/ | ⏳ re-read by 2027-06-30 — the NHFPI/InDepthNH analysis it rests on |
+| NH BET rate history | 0.75% → 0.72% (2016) → 0.675% (2018) → 0.6% (2019) → 0.55% (2022–) | NHFPI | same | ⏳ re-read by 2027-06-30 — the NHFPI/InDepthNH analysis it rests on |
+| **NH electric policy charges** | **0.618¢/kWh** — System Benefits Charge, the only mandated rider | Eversource NH filed tariff, Rate R | eversource.com/…/electric-delivery-rates/nh | ⏳ re-read by 2027-01-31 — the filed tariff, when the next rate change takes effect |
+| **NH gas policy charges** | **16.30¢/therm** — Liberty EnergyNorth LDAC (a *ceiling*, bundles mechanisms MA excludes) | NHPUC DG 24-098; see also DE 25-071 | new-hampshire.libertyutilities.com | ⏳ re-read by 2027-01-31 — the filed tariff, when the next rate change takes effect |
+| NH electric distribution / transmission | 6.727¢ / 4.445¢ per kWh — excluded as infrastructure | Eversource NH Rate R | same | ⏳ re-read by 2027-01-31 — the filed tariff, when the next rate change takes effect |
+| NH stranded cost recovery | **−0.148¢/kWh — a credit, not a charge** | Eversource NH Rate R | same | ⏳ re-read by 2027-01-31 — the filed tariff, when the next rate change takes effect |
+| NH state/local accrual in the burden model | **$0 — excluded by design**, same rule as MA | Scope decision | — | 🔒 a scope decision this project made and records, not a measurement. It changes only if the model's boundary changes. |
 
 ### 🚫 Why pension debt is excluded from the burden calculators
 
@@ -1243,13 +1243,13 @@ Figures on `corporate-ledger.html` and `corporate-ledger-method.html`. The page 
 
 | Figure | Source | Updated |
 |--------|--------|---------|
-| Penalty amounts, dates and agencies | The issuing agency's own release or order, linked on each row: Massachusetts Attorney General, U.S. Attorneys and the Justice Department, SEC, EPA ECHO, Department of Labor and others. Criminal rows from the Corporate Prosecution Registry are checked against Justice Department releases and corrected where they differ | Releases through 2026-09-03; pages re-read 2026-10-12 ✅ |
-| Which companies are included | At least $1 million in penalties since July 2009 and conduct in Massachusetts or a headquarters here at the time; each headquarters is sourced in the research project's company list | 2026-10-12 ✅ |
+| Penalty amounts, dates and agencies | The issuing agency's own release or order, linked on each row: Massachusetts Attorney General, U.S. Attorneys and the Justice Department, SEC, EPA ECHO, Department of Labor and others. Criminal rows from the Corporate Prosecution Registry are checked against Justice Department releases and corrected where they differ | 🔒 a methodology statement describing a rule, not a quantity. |
+| Which companies are included | At least $1 million in penalties since July 2009 and conduct in Massachusetts or a headquarters here at the time; each headquarters is sourced in the research project's company list | 🔒 a methodology statement describing a rule, not a quantity. |
 | State payments to each company | CTHRU (the Comptroller's spending records), plus the MBTA, Massport and the School Building Authority from their own payment records. Net payments by fiscal year, FY2010 to date; only vendor names confirmed as the company count | 2026-10-12 |
 | Employee donations | OCPF state bulk files and FEC individual-contribution files, matched by the donor's reported employer. Only confirmed matches count; memo entries, pass-throughs, refunds and in-kind gifts are left out. Street and ZIP are not shown | 2026-10-10 |
 | Lobbying | Secretary of the Commonwealth lobbyist disclosures: firm fees from 2010, in-house costs for 2025 and 2026 only | 2026-10-11 |
 | Officials' disclosed ties | Statements of Financial Interest, filings for 2019 to 2025. A tie carries no amount and is not a payment | 2026-10-10 |
-| Amounts not counted | The register on the page's Amounts not counted tab: each headline figure that was not cash paid, with the document it comes from | 2026-10-12 ✅ |
+| Amounts not counted | The register on the page's Amounts not counted tab: each headline figure that was not cash paid, with the document it comes from | 🔒 a methodology statement describing a rule, not a quantity. |
 
 ---
 ## 📌 Headline figures no workflow owns
