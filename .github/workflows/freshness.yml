@@ -117,7 +117,30 @@ jobs:
         if: always()
         run: python scripts/check-register-marks.py
 
-      # Seventh question, and the only one that looks outside this repository:
+      # Seventh question: are the estimator's own additions still there?
+      #
+      # The Full estimate tab offers 20 household compositions. Twelve are
+      # MIT's. The other eight were added by hand and nothing else depends on
+      # them, which makes them exactly the kind of thing a later edit removes
+      # without anyone noticing -- four "neither working" columns, and four
+      # four-child columns that are EXTRAPOLATIONS and must keep saying so.
+      # MIT stops at three children; an unlabelled derived figure on this hub
+      # is the failure this repository spent a week removing.
+      #
+      # It also pins the population cap. The slider is labelled in households
+      # and the headline figure is in people; it could once be dragged to
+      # 400,000 households, which at two adults and two children is 1.6
+      # million people and answered $42.3B -- two thirds of the state budget.
+      #
+      # The derived values are recomputed from MIT's columns rather than
+      # string-matched, so a change to the derivation fails too.
+      #
+      # always(), for the same reason as above.
+      - name: Check the estimator's compositions and labels survive
+        if: always()
+        run: python scripts/check-estimator.py
+
+      # Eighth question, and the only one that looks outside this repository:
       # is the job that writes the feed still running at all?
       #
       # The Peoples Audit has nine scheduled workflows and no health check of any
