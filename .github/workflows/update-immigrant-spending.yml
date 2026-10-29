@@ -50,13 +50,18 @@ jobs:
         # partial failure must not discard an earlier good write.
         if: ${{ !cancelled() }}
         run: |
-          if git diff --quiet -- 'data/immigrant-spending-latest.json' 'shelter-immigrant-spending.html'; then
+          if git diff --quiet -- 'data/immigrant-spending-latest.json' immigration-dashboard.html MASTER_DATA.md; then
             echo "No change - CTHRU has not moved since the last run."
             exit 0
           fi
+          # The paths changed on 2026-10-22: the Money Trail content moved into
+          # immigration-dashboard.html and shelter-immigrant-spending.html became
+          # a redirect stub, so this step was staging a file the updater no longer
+          # writes -- every CTHRU refresh was being dropped. MASTER_DATA.md is
+          # staged for the same reason the energy workflow now stages it.
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add 'data/immigrant-spending-latest.json' 'shelter-immigrant-spending.html'
+          git add 'data/immigrant-spending-latest.json' immigration-dashboard.html MASTER_DATA.md
           git commit -m "Auto-update: shelter and immigrant spending (CTHRU)"
           for attempt in 1 2 3 4 5; do
             if git push; then

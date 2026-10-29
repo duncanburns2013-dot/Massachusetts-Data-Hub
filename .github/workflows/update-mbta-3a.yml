@@ -52,7 +52,7 @@ jobs:
       - name: Check for changes
         id: changes
         run: |
-          git diff --quiet mbta-3a-dashboard.html data/mbta-3a-latest.json \
+          git diff --quiet mbta-3a-dashboard.html data/mbta-3a-latest.json MASTER_DATA.md \
             && echo "changed=false" >> $GITHUB_OUTPUT \
             || echo "changed=true"  >> $GITHUB_OUTPUT
 
@@ -61,7 +61,11 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add mbta-3a-dashboard.html data/mbta-3a-latest.json
+          # MASTER_DATA.md: the updater writes the 11 compliance rows into it
+          # (added 2026-10-21). Without it staged, the register keeps whatever
+          # EOHLC edition it had -- which is how it came to say 157 compliant
+          # against the dashboard's 158.
+          git add mbta-3a-dashboard.html data/mbta-3a-latest.json MASTER_DATA.md
           git commit -m "Auto-update: MBTA Communities s 3A figures $(date +'%B %Y')"
           for attempt in 1 2 3 4 5; do
             if git push; then

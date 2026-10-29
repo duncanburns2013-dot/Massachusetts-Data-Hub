@@ -108,13 +108,19 @@ jobs:
           # staged at all. burden-constants.json sat a full EIA release behind
           # the dashboard because nothing wrote it AND this step would have
           # dropped the write if anything had. (Found 2026-09-09.)
-          if git diff --quiet -- '*.html' 'data/*.json'; then
+          if git diff --quiet -- '*.html' 'data/*.json' MASTER_DATA.md; then
             echo "No data changes - nothing to commit."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add '*.html' 'data/*.json'
+                    # MASTER_DATA.md is staged because the updaters above write it and
+          # this step used to drop that write: the glob matched '*.html' and
+          # 'data/*.json' and the register is neither. On 2026-10-27 the EIA
+          # pull advanced the dashboard to Aug 2026 while MASTER_DATA stayed on
+          # Jul, and Data Freshness went red for two days. Same shape as the
+          # burden-constants.json bug this step's own comment describes.
+          git add '*.html' 'data/*.json' MASTER_DATA.md
           git commit -m "data: auto-update EIA + BLS data"
           for attempt in 1 2 3 4 5; do
             if git push; then
