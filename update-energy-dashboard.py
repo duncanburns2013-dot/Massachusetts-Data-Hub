@@ -545,6 +545,14 @@ md_subs = [
     ("FL comparison rate",
      r'(\| FL residential electricity — the dashboard’s low-rate comparison \| )[\d.]+(¢/kWh \()[A-Za-z]{3} \d{4}(\))',
      rf'\g<1>{cents(rate["FL"])}\g<2>{mon_abbr}\g<3>'),
+    # Added 2026-10-29. The premium was computed and stamped onto the page but
+    # existed in no register row, so check-stats-documented counted it as a
+    # headline figure accountable to nothing -- correctly. It is derived from
+    # the two rows above it, so it moves whenever they do and cannot be left
+    # to a human to notice.
+    ("MA premium over US",
+     r'(\| \*\*MA premium over the US average\*\* \| \*\*\+)\d+(%\*\* \()[A-Za-z]{3} \d{4}(\))',
+     rf'\g<1>{prem}\g<2>{mon_abbr}\g<3>'),
     ("state-comparison chart row",
      r'(Residential Electricity Rates — MA vs\. Selected States \(¢/kWh\) \| EIA Electric Power Monthly Table 5\.6\.A, )[A-Za-z]{3} \d{4}( \| 🔄 )[A-Za-z]{3} \d{4}',
      rf'\g<1>{mon_abbr}\g<2>{mon_abbr}'),
