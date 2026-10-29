@@ -1294,6 +1294,7 @@ so TY2022 being the newest is the source's cadence, not neglect.
 | Metric | Value | Period | Source |
 |--------|-------|--------|--------|
 | RGGI carbon-auction cost to MA ratepayers, cumulative | $1.62B | since 2008, through Auction 73 (Sept 2026) | RGGI Inc. auction results (MA proceeds by auction) |
+| Mass Save cost per MMBtu saved (lifetime, all fuels), table 2019-2025 | $22.42 | 2025 (2025 Annual Report, June 1, 2026) | EEAC statewide data tables, evaluated, Statewide Electric + Gas; CPI-U for 2025 dollars |
 
 Cumulative, so it grows with every quarterly auction — the one figure in this
 table that goes stale on a known schedule rather than annually.
