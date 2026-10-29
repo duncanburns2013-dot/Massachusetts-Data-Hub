@@ -1018,7 +1018,7 @@ Figures on `energy-dashboard.html`. Refreshed by `update-energy-dashboard.py` an
 | Annual Impact Per Household | EIA Jun 2026, bill text analysis | Jun 2026 |
 | Where the "Savings" Actually Come From | Bill sections analyzed against verified Eversource rate breakdown | — |
 | State Comparison — Monthly Bill at 600 kWh | EIA Jun 2026 rates × 600 kWh/month | 🔄 Jun 2026 |
-| The $14.3B Claim — Credibility Breakdown | S.3143 fact sheet (June 24, 2026); @DuncanBurnsMA analysis | June 2026 |
+| The $14.9B Claim — Credibility Breakdown | S.3143 fact sheet (June 24, 2026); @DuncanBurnsMA analysis | June 2026 |
 | Savings Claims by Category — $M Over 10 Years | S.3143 Senate fact sheet | — |
 | Annual Per-Household Reality Check | EIA | 🔄 |
 | What S.3143 Doesn't Touch — The Structural Cost Drivers | EIA; RGGI Inc.; DPU rate orders; ISO-NE. These policy-driven costs persist regardless of S.3143 passage | — |

@@ -243,6 +243,8 @@ table_rows = "\n".join([
 
 # Overview bar chart order: MA, CT, NY, RI, US Avg, TX, FL
 bar_data = ",".join(str(rate[s]) for s in ["MA", "CT", "NY", "RI", "US", "TX", "FL"])
+# Same states at 600 kWh/month, whole dollars, for the State Comparison bill chart (c4c)
+bill_data = ",".join(str(round(rate[s] * 6)) for s in ["MA", "CT", "NY", "RI", "US", "TX", "FL"])
 
 elec_ma_js = ",".join(str(v) for v in elec_ma)
 elec_us_js = ",".join(str(v) for v in elec_us)
@@ -383,6 +385,10 @@ subs = [
      r"(chartRatesOverview',\{type:'bar',data:\{labels:\['MA','CT','NY','RI','US Avg','TX','FL'\],datasets:\[\{data:\[)[\d.,]+(\])",
      rf'\g<1>{bar_data}\g<2>', F),
 
+    ("state-comparison bill chart (c4c)",
+     r"(safeChart\('c4c',\{type:'bar',data:\{labels:\['MA','CT','NY','RI','US Avg','TX','FL'\],datasets:\[\{data:\[)[\d.,]+(\])",
+     rf'\g<1>{bill_data}\g<2>', F),
+
     ("ELEC_MA annual series",
      r'(const ELEC_MA = \[)[^\]]+(\])',
      rf'\g<1>{elec_ma_js}\g<2>', F),
@@ -470,8 +476,9 @@ allowed_per_yr = {
     "150",   # realistic H.5151 relief (Mass Save 80 + ACP 40 + net metering 30)
     "200",   # Boston BCCE supply-only savings, per city program data
     "377",   # untouched policy charges, Cut-vs-Kept tab
-    "493",   # S.3143's own claim: $14.3B / 2.9M households / 10 yrs
-    "537",   # Equivalence timeline, anchored to 2010 -- a fact about a past year
+    "528",   # S.3143 claim per household: $14.9B (15 itemized items) / 2.83M households (ACS 2024) / 10 yrs
+    "353",   # Equivalence timeline, anchored to 2010 (electricity + gas gap) -- a fact about a past year
+    "265",   # Boston BCCE savings at current supply rates: (0.17323 - 0.13644) x 7,200 kWh; Eversource Basic Service window Aug 1 2026 - Jan 31 2027, recheck after
 }
 
 # Values that must never reappear anywhere live, in any context. These are the

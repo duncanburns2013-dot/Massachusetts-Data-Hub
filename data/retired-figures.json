@@ -206,6 +206,185 @@
    "allow": [
     "data/retired-figures.json"
    ]
+  },
+  {
+   "id": "energy-rps-2030-35pct",
+   "subject": "Massachusetts RPS Class I requirement in 2030",
+   "wrong": [
+    "35%+ by 2030",
+    "35%+ renewable",
+    "35%+ mandate",
+    "35% renewable by 2030"
+   ],
+   "right": "40% Class I in 2030 (30% in 2026) per M.G.L. c.25A s.11F step schedule",
+   "context": "(?i)RPS|renewable portfolio",
+   "context_window": 900,
+   "why": "35% was the pre-2021 schedule; the statute's +2%/yr to 2024 and +3%/yr to 2029 steps reach 40% in 2030.",
+   "retired_on": "2026-10-29",
+   "allow": [
+    "data/retired-figures.json"
+   ]
+  },
+  {
+   "id": "energy-83c-remuneration-275",
+   "subject": "Section 83C utility remuneration on offshore wind contracts",
+   "wrong": [
+    "2.75% profit",
+    "2.75% margin",
+    "2.75% utility profit",
+    "up to 2.75% remuneration"
+   ],
+   "right": "2.25% of annual contract payments since St. 2022 c.179 s.61; up to 2.75% only on pre-2022 contracts",
+   "context": "(?i)83C|wind|remuneration",
+   "context_window": 900,
+   "why": "St. 2022 c.179 cut the remuneration to 2.25%; the page still stated the 2016 rate as current.",
+   "retired_on": "2026-10-29",
+   "allow": [
+    "data/retired-figures.json"
+   ]
+  },
+  {
+   "id": "energy-storage-2035",
+   "subject": "St. 2024 c.239 storage procurement deadline",
+   "wrong": [
+    "5,000 MW by 2035"
+   ],
+   "right": "about 5,000 MW of contracts by July 31, 2030 (s.83E)",
+   "context": "(?i)storage",
+   "context_window": 900,
+   "why": "The statute's deadline is July 31, 2030.",
+   "retired_on": "2026-10-29",
+   "allow": [
+    "data/retired-figures.json"
+   ]
+  },
+  {
+   "id": "energy-c239-house-vote",
+   "subject": "House vote on the 2024 climate law (S.2967, St. 2024 c.239)",
+   "wrong": [
+    "125&#x2013;17",
+    "125-17",
+    "Senate Roll Call #399"
+   ],
+   "right": "House 128-17 (Yea and Nay No. 201, Nov 14, 2024); Senate 38-2 (Roll Call #250, Oct 24, 2024)",
+   "context": "(?i)House|Senate|2024",
+   "context_window": 900,
+   "why": "Roll-call PDFs show 128 yeas and Senate Roll Call #250.",
+   "retired_on": "2026-10-29",
+   "allow": [
+    "data/retired-figures.json"
+   ]
+  },
+  {
+   "id": "energy-osw-mw-2016-2021",
+   "subject": "Offshore wind MW in St. 2016 c.188 and St. 2021 c.8",
+   "wrong": [
+    "5,600 MW offshore wind;",
+    "5,600 MW additional wind"
+   ],
+   "right": "2016: about 1,600 MW; 2021: +2,400 MW (5,600 MW total incl. 2018's 1,600)",
+   "context": "(?i)offshore|wind",
+   "context_window": 900,
+   "why": "Both rows overstated the MW each law added.",
+   "retired_on": "2026-10-29",
+   "allow": [
+    "data/retired-figures.json"
+   ]
+  },
+  {
+   "id": "energy-hub-rggi-spend-doughnut",
+   "subject": "RGGI proceeds spending doughnut",
+   "wrong": [
+    "data:[45,25,15,15]",
+    "Direct Bill Relief</div><div class=\"value blue\">~15%"
+   ],
+   "right": "2024 report: efficiency 46, direct bill 23, electrification 16, clean energy 6, GHG 4, admin 4; MA direct bill 0%",
+   "context": "(?i)RGGI|chartRGGISpend",
+   "context_window": 900,
+   "why": "The 4-slice split matched no RGGI report; MA puts none of its proceeds into direct bill assistance.",
+   "retired_on": "2026-10-29",
+   "allow": [
+    "data/retired-figures.json"
+   ]
+  },
+  {
+   "id": "energy-nantucket-settlement-date",
+   "subject": "Date of the GE Vernova settlement with Nantucket",
+   "wrong": [
+    "Oct 2024:</strong> GE Vernova"
+   ],
+   "right": "July 2025 (Town of Nantucket release, July 11, 2025)",
+   "context": "(?i)Vernova|Nantucket",
+   "context_window": 900,
+   "why": "Settlement was announced July 11, 2025.",
+   "retired_on": "2026-10-29",
+   "allow": [
+    "data/retired-figures.json"
+   ]
+  },
+  {
+   "id": "energy-s3143-total",
+   "subject": "S.3143 claimed savings total and tiers",
+   "wrong": [
+    "$14.3B",
+    "$9.4B",
+    "data:[2110,2465,9725]",
+    "$493/yr"
+   ],
+   "right": "15 itemized claims total $14.9B-$15.2B; tiers $2.2B / $4.4B-$4.7B / $8.3B; $528/yr per household",
+   "context": "(?i)S\\.3143|Senate|savings",
+   "context_window": 900,
+   "why": "The $14.3B summed 13 of 15 fact-sheet items, and card, pie and table disagreed.",
+   "retired_on": "2026-10-29",
+   "allow": [
+    "data/retired-figures.json"
+   ]
+  },
+  {
+   "id": "energy-bill-length-vs-healey",
+   "subject": "House bill length compared with the Governor's bill",
+   "wrong": [
+    "138% LARGER",
+    "Healey's Sections"
+   ],
+   "right": "H.5151: 107 pages; Governor's H.4144: 123 pages, 62 sections",
+   "context": "(?i)pages|Healey",
+   "context_window": 900,
+   "why": "The comparison mixed pages with sections and had the direction backwards.",
+   "retired_on": "2026-10-29",
+   "allow": [
+    "data/retired-figures.json"
+   ]
+  },
+  {
+   "id": "energy-boston-federal-rescinded",
+   "subject": "Boston federal climate funding rescinded",
+   "wrong": [
+    "$105M+"
+   ],
+   "right": "16% of $148M (about $24M) rescinded, 22% pending (2030 CAP)",
+   "context": "(?i)federal|rescind",
+   "context_window": 900,
+   "why": "No city document supports $105M.",
+   "retired_on": "2026-10-29",
+   "allow": [
+    "data/retired-figures.json"
+   ]
+  },
+  {
+   "id": "energy-berdo-building-count",
+   "subject": "Buildings covered by BERDO",
+   "wrong": [
+    "~3,500"
+   ],
+   "right": "over 5,000 buildings (2030 CAP)",
+   "context": "(?i)BERDO|buildings",
+   "context_window": 900,
+   "why": "The plan says over 5,000.",
+   "retired_on": "2026-10-29",
+   "allow": [
+    "data/retired-figures.json"
+   ]
   }
  ]
 }
