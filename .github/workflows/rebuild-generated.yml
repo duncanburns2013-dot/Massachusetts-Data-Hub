@@ -34,7 +34,11 @@ on:
     # method.html was a release behind, and freshness failed on the gap before
     # this job closed it. It went red for two days that way when the EIA pull
     # advanced to Aug 2026.
-    - cron: "40 12 * * *"
+    # 12:20, not 12:40: GitHub starts scheduled runs late under load, and the
+    # freshness runs on this repo have started 4-10 minutes after their 13:00
+    # slot. 40 minutes of headroom means this still finishes first even when
+    # both slip.
+    - cron: "20 12 * * *"
   workflow_dispatch:
 
 permissions:
