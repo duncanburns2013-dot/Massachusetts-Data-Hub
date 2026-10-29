@@ -83,6 +83,41 @@ def digits(text):
     return d or None
 
 
+def register_numbers():
+    """Digits documented in MASTER_DATA.md itself, above the update log."""
+    p = REPO / "MASTER_DATA.md"
+    if not p.exists():
+        return set()
+    text = p.read_text(encoding="utf-8")
+    cut = text.find("Update Log")
+    if cut > 0:
+        text = text[:cut]
+    out = {digits(x) for x in re.findall(r"[\d][\d,]*\.?\d*", text)}
+    out.discard(None)
+    return out
+
+
+def stale_basis(items):
+    """Of these findings, the ones the REGISTER documents but method.html lacks.
+
+    This check compares published figures against method.html, which
+    build_method.py generates from MASTER_DATA.md. When a data job moves the
+    register and the rebuild has not run yet, those figures are real,
+    documented, and still reported unaccountable -- sending whoever reads the
+    failure hunting for a row that already exists. That is what 2026-10-28
+    was: the EIA pull advanced the register while rebuild-generated.yml was
+    scheduled AFTER this check.
+
+    Timestamps cannot answer this. Committing a rollback of method.html makes
+    it the newer file while its contents are older, which is exactly how the
+    first version of this guard was fooled. So it asks a content question --
+    is the figure in the register but missing from method.html? -- which is
+    true only when the rebuild is behind, whatever the commit order says.
+    """
+    reg = register_numbers()
+    return [i for i in items if digits(i["value"]) in reg]
+
+
 def method_numbers():
     p = REPO / "method.html"
     if not p.exists():
@@ -238,6 +273,17 @@ def main():
 
     if new:
         print()
+        behind = stale_basis(new)
+        if behind:
+            print("STOP -- %d of these are already in MASTER_DATA.md but not yet in"
+                  % len(behind))
+            print("method.html, so the rebuild is behind the register and this list")
+            print("is misleading. Run build_method.py, and check that")
+            print("rebuild-generated.yml is still scheduled BEFORE freshness.yml.")
+            for i in behind:
+                print("   in the register, missing from method.html:  %s  (%s)"
+                      % (i["value"], i["page"]))
+            print()
         print("NEW undocumented statistics -- each needs either an updater that writes")
         print("it (an id or data-field anchor) or a row in MASTER_DATA.md:")
         for i in new:

@@ -24,7 +24,17 @@ name: Rebuild Generated Pages
 
 on:
   schedule:
-    - cron: "40 13 * * *"   # 09:40 ET, after the data jobs and the freshness check
+    # 08:40 ET. Must run AFTER the daily data jobs (the latest is
+    # update-immigrant-spending at 11:15 UTC) and BEFORE the freshness check at
+    # 13:00 UTC. That order is a dependency, not a preference:
+    # check-stats-documented compares every published figure against
+    # method.html, which build_method.py generates from MASTER_DATA.md below.
+    # Running after freshness -- which this did until 2026-10-29 -- meant that
+    # on any day a data job moved the register, the register was current,
+    # method.html was a release behind, and freshness failed on the gap before
+    # this job closed it. It went red for two days that way when the EIA pull
+    # advanced to Aug 2026.
+    - cron: "40 12 * * *"
   workflow_dispatch:
 
 permissions:
