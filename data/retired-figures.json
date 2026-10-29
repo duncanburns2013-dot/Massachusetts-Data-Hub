@@ -189,6 +189,23 @@
    "allow": [
     "data/retired-figures.json"
    ]
+  },
+  {
+   "id": "mass-save-growth-2008-2025",
+   "subject": "Mass Save spending growth, 2008 to 2025",
+   "wrong": [
+    "$200M/yr (2008)",
+    "$1.5B/yr (2025)",
+    "$16B total"
+   ],
+   "right": "$154M in 2008 (PA 2010-2012 plans, 2008 baseline: electric $124.3M + gas $29.5M); $1.21B spent in 2025 (EEAC 2025 Annual Report, evaluated, statewide); $1.5B/yr is the 2025-2027 plan budget ($4.49B); $13.2B program spending 2008-2025",
+   "context": "(?i)Mass Save|efficiency",
+   "context_window": 900,
+   "why": "The 2008 base was overstated by about 30%, the 2025 figure was the plan budget presented as spending, and the $16B total matched no sum of filed spending through 2025.",
+   "retired_on": "2026-10-29",
+   "allow": [
+    "data/retired-figures.json"
+   ]
   }
  ]
 }
