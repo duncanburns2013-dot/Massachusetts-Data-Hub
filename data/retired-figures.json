@@ -385,6 +385,24 @@
    "allow": [
     "data/retired-figures.json"
    ]
+  },
+  {
+   "id": "energy-lobbying-totals",
+   "subject": "Energy lobbying totals on the Follow the Money tab",
+   "wrong": [
+    "$439K lobbying",
+    "$529K",
+    "$4.74M",
+    "49% foreign-owned"
+   ],
+   "right": "SOS client disclosures 2020-2025: Vistra $649K; table total $4.86M (48% foreign-owned); Eversource + National Grid $4.0M 2020-2025, $515K in 2025; H1 2022 was about $335K, not $439K",
+   "context": "(?i)lobby|Vistra|foreign",
+   "context_window": 900,
+   "why": "Checked against the Secretary of State client registrations and the Jan-Jun 2022 disclosure reports.",
+   "retired_on": "2026-10-29",
+   "allow": [
+    "data/retired-figures.json"
+   ]
   }
  ]
 }
