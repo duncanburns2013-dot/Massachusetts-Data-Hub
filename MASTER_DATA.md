@@ -1293,7 +1293,7 @@ so TY2022 being the newest is the source's cadence, not neglect.
 
 | Metric | Value | Period | Source |
 |--------|-------|--------|--------|
-| RGGI carbon-auction cost to MA ratepayers, cumulative | $1.36B | since 2008 | RGGI Inc. auction results |
+| RGGI carbon-auction cost to MA ratepayers, cumulative | $1.62B | since 2008, through Auction 73 (Sept 2026) | RGGI Inc. auction results (MA proceeds by auction) |
 
 Cumulative, so it grows with every quarterly auction — the one figure in this
 table that goes stale on a known schedule rather than annually.

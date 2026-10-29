@@ -247,7 +247,7 @@ footer a:hover{color:var(--gold)}
 <div class="hero-stat"><div class="val bad">30.48&#x00A2;</div><div class="lbl">Per kWh (EIA Aug 2026)</div></div>
 <div class="hero-stat"><div class="val bad">+68%</div><div class="lbl">Above National Avg</div></div>
 <div class="hero-stat"><div data-frozen="a recorded roll call on H.5175; a vote does not get re-taken" class="val bad">128-27</div><div class="lbl">H.5175 House Vote</div></div>
-<div class="hero-stat"><div class="val bad">$1.36B</div><div class="lbl">RGGI Carbon Tax Total</div></div>
+<div class="hero-stat"><div class="val bad">$1.62B</div><div class="lbl">RGGI Carbon Tax Total</div></div>
 <div class="hero-stat"><div class="val bad"><span id="equivHeroStat">&#x2014;</span></div><div class="lbl">Gas/Gal Equivalence</div></div>
 <div class="hero-stat"><div data-frozen="a specific assessed legal-fee total, not a running figure" class="val bad">$534K</div><div class="lbl">To Hide Non-Compliance</div></div>
 </div>
@@ -271,7 +271,7 @@ footer a:hover{color:var(--gold)}
 <div class="alert"><h4>&#x26A0;&#xFE0F; Among the Most Expensive Electricity in the Continental U.S.</h4><div class="alert-grid">
 <div class="alert-item">MA residential rate: <strong>30.48&#x00A2;/kWh</strong> &#x2014; national average: 18.16&#x00A2; (EIA Aug 2026)</div>
 <div class="alert-item">Where that ranks: <strong><span id="alertRank">&#x2014;</span></strong></div>
-<div class="alert-item">Your bill includes hidden costs: <strong>$1.36B RGGI carbon tax, RPS compliance, offshore wind contracts</strong></div>
+<div class="alert-item">Your bill includes hidden costs: <strong>$1.62B RGGI carbon tax, RPS compliance, offshore wind contracts</strong></div>
 <div class="alert-item">H.5175 passed House 128-27 on Feb 26, 2026 &#x2014; <strong>107 pages, 48hr vote, zero public hearings</strong></div>
 <div class="alert-item">Vineyard Wind blade failure (July 2024) &#x2014; debris across <strong>Nantucket beaches</strong>, $10.5M settlement</div>
 <div class="alert-item">Gov. Healey boasted about <strong>blocking two gas pipelines</strong>, then claimed she never stopped them</div>
@@ -290,7 +290,7 @@ footer a:hover{color:var(--gold)}
 <div class="chart-card"><h3>Residential Electricity Rates &#x2014; MA vs. Selected States (&#x00A2;/kWh)</h3><div class="chart-area"><canvas id="chartRatesOverview"></canvas></div><div class="source">Source: EIA Electric Power Monthly Table 5.6.A, August 2026</div></div>
 <div class="chart-card"><h3>MA Rate Premium Over National Average &#x2014; Historical</h3><div class="chart-area"><canvas id="chartRateHistory"></canvas></div><div class="source">Source: EIA, annual residential average rates <span id="yrRangeHist">&#x2014;</span></div></div>
 </div>
-<div class="info-box"><h4>&#x1F4CB; Why Is Massachusetts Electricity So Expensive?</h4><p>Massachusetts electricity costs are driven by a combination of policy decisions: the Renewable Portfolio Standard (RPS) mandating 35%+ renewable sources by 2030, RGGI &#x2014; a cap-and-trade carbon tax that has extracted $1.36 billion from MA ratepayers since 2008, legally guaranteed full cost recovery for offshore wind contracts meaning ratepayers absorb all costs, blocking natural gas pipeline capacity (constraining supply), and building electrification mandates that increase demand while constraining supply. Each adds layers of cost that appear as line items on your bill.</p></div>
+<div class="info-box"><h4>&#x1F4CB; Why Is Massachusetts Electricity So Expensive?</h4><p>Massachusetts electricity costs are driven by a combination of policy decisions: the Renewable Portfolio Standard (RPS) mandating 35%+ renewable sources by 2030, RGGI &#x2014; a cap-and-trade carbon tax that has extracted $1.62 billion from MA ratepayers since 2008, legally guaranteed full cost recovery for offshore wind contracts meaning ratepayers absorb all costs, blocking natural gas pipeline capacity (constraining supply), and building electrification mandates that increase demand while constraining supply. Each adds layers of cost that appear as line items on your bill.</p></div>
 </div>
 
 <!-- ===== RATES ===== -->
@@ -302,7 +302,7 @@ footer a:hover{color:var(--gold)}
 <div class="alert-item"><strong>Transmission (<span id="bbTransC">4.673</span>&#x00A2;/kWh):</strong> <span id="bbTrans">12.4%</span></div>
 <div class="alert-item"><strong>Policy line items (<span id="bbPolC">3.663</span>&#x00A2;/kWh):</strong> <span id="bbPol">9.7%</span>. Mass Save energy efficiency <span id="bbEeC">2.292</span>, net metering recovery <span id="bbNmrsC">0.625</span>, SMART solar <span id="bbSmartC">0.583</span>, EV program <span id="bbEvC">0.104</span>, Renewable Energy Charge (statutory, funds MassCEC) <span id="bbReC">0.050</span>, provisional system planning <span id="bbPspfC">0.008</span>, grid modernization plan <span id="bbEsmpC">0.001</span>. A floor: the policy items inside distribution and supply are not counted</div>
 <div class="alert-item"><strong>Customer charge ($10/month) and other delivery:</strong> <span id="bbRest">5.7%</span>. The transition charge from deregulation is now a small credit (&minus;<span id="bbTransitionC">0.077</span>&#x00A2;)</div>
-<div class="alert-item"><strong>RGGI costs:</strong> $1.36B in carbon auction costs since 2008 &#x2014; passed to ratepayers</div>
+<div class="alert-item"><strong>RGGI costs:</strong> $1.62B in carbon auction costs since 2008 &#x2014; passed to ratepayers</div>
 </div></div>
 <div class="chart-grid">
 <div class="chart-card"><h3>One Residential Bill, Line by Line (Eversource R-1, 600 kWh/month)</h3><div class="chart-area"><canvas id="chartBillBreak"></canvas></div><div class="source">Source: Eversource (NSTAR Electric) filed rates, Rate R-1, Greater Boston: delivery rates effective 1 Sep 2026; Basic Service fixed price <span id="bbSupplyC2">17.323</span>&#x00A2;/kWh from 1 Aug 2026 (M.D.P.U. No. 1-26-E). One utility, not a statewide average. Bill at 600 kWh: <span id="bbTotal">$225.75</span>/month.</div></div>
@@ -428,7 +428,7 @@ footer a:hover{color:var(--gold)}
 <div class="alert amber"><h4>&#x1F4CB; What S.3143 Does NOT Address &#x2014; The Structural Cost Drivers Remain</h4><div class="alert-grid">
 <div class="alert-item"><strong>Pipeline blockade legacy:</strong> Rejecting Access Northeast constrained natural gas supply &#x2014; the primary driver of winter price spikes. S.3143 is silent on this.</div>
 <div class="alert-item"><strong>DPU-approved rate hikes already in effect:</strong> Eversource +25&#x2013;30%, National Grid +11&#x2013;13% (late 2024). No provision claws these back or offsets them.</div>
-<div class="alert-item"><strong>RGGI carbon tax:</strong> $1.36B extracted from MA ratepayers since 2008; $200M/yr ongoing and growing. S.3143 does not touch RGGI.</div>
+<div class="alert-item"><strong>RGGI carbon tax:</strong> $1.62B extracted from MA ratepayers since 2008; $262M in 2026 alone through September, already a record. S.3143 does not touch RGGI.</div>
 <div class="alert-item"><strong>RPS compliance costs:</strong> Bill rolls back targets for 3 years but extends the mandate framework. The long-term cost architecture stays fully intact.</div>
 <div class="alert-item"><strong>Mass Save cost explosion:</strong> The 5% admin cap and removal of mandatory performance incentives are genuine reforms &#x2014; but the $350M in already-approved mid-term budget increases are not clawed back.</div>
 <div class="alert-item"><strong>Offshore wind collapse:</strong> S.3143 acknowledges the federal attack on offshore wind and responds by reducing targets. That is managing decline, not solving the supply gap.</div>
@@ -532,7 +532,7 @@ footer a:hover{color:var(--gold)}
 <h2 class="section-title">The Mandate Stack &#x2014; Policy Decisions Driving Your Bill</h2>
 <div class="alert"><h4>&#x26A0;&#xFE0F; Every Mandate Adds Cost</h4><div class="alert-grid">
 <div class="alert-item"><strong>RPS:</strong> 35% renewable by 2030, increasing annually</div>
-<div class="alert-item"><strong>RGGI:</strong> $1.36 billion extracted since 2008 &#x2014; $200M/year and rising</div>
+<div class="alert-item"><strong>RGGI:</strong> $1.62 billion extracted since 2008 &#x2014; $262M in 2026 through September, a record</div>
 <div class="alert-item"><strong>Net-Zero 2050:</strong> Economy-wide carbon neutrality</div>
 <div class="alert-item"><strong>Building Electrification:</strong> New construction mandates increase demand</div>
 <div class="alert-item"><strong>Pipeline Opposition:</strong> Healey boasted about blocking pipelines</div>
@@ -561,7 +561,7 @@ footer a:hover{color:var(--gold)}
 <tr><td class="highlight">RPS compliance (inside supply)</td><td class="highlight">Not broken out</td><td><strong>M.G.L. c. 25A, &#x00A7;11F</strong></td><td>RPS mandate — distribution companies must procure qualifying renewable energy and recover costs from customers</td></tr>
 <tr><td class="highlight">Energy Efficiency / Mass Save</td><td class="highlight"><span id="bbEe">6.1%</span></td><td><strong>M.G.L. c. 25, &#x00A7;21</strong></td><td>Requires distribution companies to fund energy efficiency programs — costs recovered through customer charges</td></tr>
 <tr><td class="highlight">Clean Energy / Offshore Wind</td><td class="highlight">Inside distribution, not broken out</td><td><strong>Ch. 169, Acts of 2008, &#x00A7;83C<br>(as amended St. 2016, c. 188, &#x00A7;12)</strong></td><td>Statute: utilities &ldquo;entitled to cost recovery of payments made under a long-term contract&rdquo;. In effect, full cost recovery: all PPA costs pass through to ratepayers; utilities receive up to 2.75% remuneration</td></tr>
-<tr><td>RGGI Carbon Pass-Through</td><td>Inside supply, not broken out</td><td><strong>M.G.L. c. 21N, &#x00A7;&#x00A7;1&#x2013;9</strong></td><td>Cap-and-trade carbon auction costs — $200M/yr extracted, passed to ratepayers through supply charges</td></tr>
+<tr><td>RGGI Carbon Pass-Through</td><td>Inside supply, not broken out</td><td><strong>M.G.L. c. 21N, &#x00A7;&#x00A7;1&#x2013;9</strong></td><td>Cap-and-trade carbon auction costs — $262M in 2026 through September, passed to ratepayers through supply charges</td></tr>
 <tr><td>Transmission Charge</td><td><span id="bbTrans2">12.4%</span></td><td><strong>M.G.L. c. 164, &#x00A7;1</strong></td><td>ISO-NE grid fees and capacity market costs — constrained by blocked pipeline infrastructure</td></tr>
 <tr><td>Distribution Charge</td><td><span id="bbDist2">26.1%</span></td><td><strong>M.G.L. c. 164, &#x00A7;1A</strong></td><td>DPU-regulated delivery charge — includes GSEP pipe replacement costs (untouched by H.5175)</td></tr>
 <tr><td>Supply Charge</td><td><span id="bbSupply2">46.0%</span></td><td>Market rate</td><td>Actual generation cost — elevated by pipeline constraints (ISO-NE confirms gas dependency drives winter spikes)</td></tr>
@@ -590,7 +590,7 @@ footer a:hover{color:var(--gold)}
 <div class="data-card"><h3>Massachusetts Energy Mandates &amp; Their Cost Impact</h3>
 <table class="data-table"><thead><tr><th>Mandate</th><th>Requirement</th><th>Cost Mechanism</th><th>Who Pays</th></tr></thead><tbody>
 <tr><td class="highlight">Renewable Portfolio Standard</td><td>35%+ by 2030</td><td>RPS compliance charges (M.G.L. c. 25A, &#x00A7;11F)</td><td class="highlight">Ratepayers</td></tr>
-<tr><td class="highlight">RGGI Carbon Tax</td><td>$1.36B total ($200M/yr)</td><td>Auction costs passed through (M.G.L. c. 21N)</td><td class="highlight">Ratepayers</td></tr>
+<tr><td class="highlight">RGGI Carbon Tax</td><td>$1.62B total ($262M in 2026 to date)</td><td>Auction costs passed through (M.G.L. c. 21N)</td><td class="highlight">Ratepayers</td></tr>
 <tr><td>Clean Energy Standard</td><td>80% by 2050</td><td>Additional procurement (St. 2021, c. 8)</td><td class="highlight">Ratepayers</td></tr>
 <tr><td>Offshore Wind</td><td>10 GW by 2040</td><td>Full cost recovery PPAs (&#x00A7;83C)</td><td class="highlight">Ratepayers</td></tr>
 <tr><td>Solar Mandate</td><td>10 GW by 2040</td><td>Tariff-funded procurement (H.5175)</td><td class="highlight">Ratepayers</td></tr>
@@ -600,13 +600,13 @@ footer a:hover{color:var(--gold)}
 </tbody></table><div class="source">Source: MA DOER; DPU filings; Climate Act (2021); Clean Energy and Climate Plan; H.5175 bill text</div></div>
 
 <div class="stat-row">
-<div class="stat-card"><div class="label">RGGI Total (2008&#x2013;2025)</div><div class="value red">$1.36B</div><div class="sub">Carbon tax from MA ratepayers</div></div>
+<div class="stat-card"><div class="label">RGGI Total (2008&#x2013;Sept 2026)</div><div class="value red">$1.62B</div><div class="sub">Carbon tax from MA ratepayers</div></div>
 <div class="stat-card"><div class="label">2025 Alone</div><div data-frozen="2025 alone; that calendar year is closed, so the figure for it cannot move" class="value red">$200.4M</div><div class="sub">Up from $28M in 2008</div></div>
 <div class="stat-card"><div class="label">Recent 5-Year Avg</div><div data-frozen="average over the closed 2021-2025 window" class="value amber">$149.6M</div><div class="sub">2021&#x2013;2025 average per year</div></div>
 <div class="stat-card"><div class="label">Direct Bill Relief</div><div class="value blue">~15%</div><div class="sub">Of RGGI proceeds returned</div></div>
 </div>
 <div class="chart-grid">
-<div class="chart-card"><h3>RGGI Carbon Tax &#x2014; MA Auction Proceeds by Year ($M)</h3><div class="chart-area"><canvas id="chartRGGI"></canvas></div><div class="source">Source: RGGI Inc. Total: $1.36 billion.</div></div>
+<div class="chart-card"><h3>RGGI Carbon Tax &#x2014; MA Auction Proceeds by Year ($M)</h3><div class="chart-area"><canvas id="chartRGGI"></canvas></div><div class="source">Source: RGGI Inc., Massachusetts proceeds by auction, Auctions 1&#x2013;73. *2026 = March, June and September auctions; December still to come. Total: $1.62 billion.</div></div>
 <div class="chart-card"><h3>How RGGI Proceeds Are Spent (All RGGI States)</h3><div class="chart-area"><canvas id="chartRGGISpend"></canvas></div><div class="source">Source: RGGI Proceeds Report 2023</div></div>
 </div>
 <div class="info-box"><h4>&#x1F4CB; The Double-System Problem</h4><p>Renewable energy is intermittent. Massachusetts ratepayers pay for the renewable generators AND for conventional backup plants that must stand ready. This "capacity cost" adds billions annually. You're paying for two parallel power systems.</p></div>
@@ -640,7 +640,7 @@ footer a:hover{color:var(--gold)}
 <tr><td>Barr Foundation</td><td>Private Foundation</td><td>Amos &amp; Barbara Hostetter</td><td>$30M+/yr in climate grants</td></tr>
 <tr><td>Energy Foundation</td><td>Pass-through</td><td>Hewlett, Packard, Bloomberg</td><td>State-level clean energy policy</td></tr>
 </tbody></table><div class="source">Source: ProPublica Nonprofit Explorer (Form 990); OCPF; Boston Globe (Dec 2025)</div></div>
-<div class="info-box"><h4>&#x1F4CB; The Loop</h4><p>Private foundations fund advocacy groups. Those groups lobby Beacon Hill for mandates. Legislators pass laws that guarantee full cost recovery on developers&rsquo; contracts. Foreign developers get guaranteed contracts. RGGI extracts $200M/year from ratepayers. Utilities pass all costs through. Everyone in the loop gets paid except you.</p></div>
+<div class="info-box"><h4>&#x1F4CB; The Loop</h4><p>Private foundations fund advocacy groups. Those groups lobby Beacon Hill for mandates. Legislators pass laws that guarantee full cost recovery on developers&rsquo; contracts. Foreign developers get guaranteed contracts. RGGI took $262M from Massachusetts ratepayers in the first nine months of 2026. Utilities pass all costs through. Everyone in the loop gets paid except you.</p></div>
 </div>
 
 <!-- ===== TRANSPARENCY ===== -->
@@ -813,7 +813,7 @@ footer a:hover{color:var(--gold)}
 <tr><td class="highlight">Green Communities Act &#x2014; Section 83C</td><td><strong>Ch. 169, Acts of 2008, &#x00A7;83C</strong></td><td>Offshore wind procurement mandate; utilities &ldquo;entitled to cost recovery of payments made under a long-term contract&rdquo;</td><td class="highlight">Ratepayers absorb 100% of wind contract costs + 2.75% utility profit</td><td class="highlight">Both support expanded wind mandates</td></tr>
 <tr><td>Utility Remuneration (amended)</td><td><strong>Ch. 179, Acts of 2022</strong></td><td>Reduced utility cut from 2.75% to 2.25% on wind contracts</td><td>Marginal reduction &#x2014; core cost recovery untouched</td><td>Baker signed Aug 2022</td></tr>
 <tr><td class="highlight">Renewable Portfolio Standard</td><td><strong>M.G.L. Ch. 25A, &#x00A7;11F</strong></td><td>35%+ renewable by 2030, increasing annually</td><td class="highlight">RPS compliance costs built into the supply price (not broken out on the bill)</td><td class="highlight">Both support increases</td></tr>
-<tr><td class="highlight">RGGI Participation</td><td><strong>Ch. 21N, &#x00A7;&#x00A7;1&#x2013;9</strong></td><td>Cap-and-trade carbon auction &#x2014; $1.36B extracted since 2008</td><td class="highlight">$200M/yr and rising &#x2014; passed to ratepayers</td><td class="highlight">Both support</td></tr>
+<tr><td class="highlight">RGGI Participation</td><td><strong>Ch. 21N, &#x00A7;&#x00A7;1&#x2013;9</strong></td><td>Cap-and-trade carbon auction &#x2014; $1.62B extracted since 2008</td><td class="highlight">$262M in 2026 through Sept, a record &#x2014; passed to ratepayers</td><td class="highlight">Both support</td></tr>
 <tr><td>2024 Climate Law (&ldquo;...Protecting Ratepayers&rdquo;)</td><td><strong>St. 2024, c. 239, &#x00A7;83E</strong></td><td>5,000 MW storage mandate with guaranteed cost pass-through</td><td class="highlight">Full cost recovery &#x2014; ratepayers pay for all storage contracts</td><td>Healey signed Nov 2024</td></tr>
 <tr><td>H.5175 &#x2192; H.5175</td><td><strong>194th Session, 2026</strong></td><td>10 GW wind + 10 GW solar mandates, 30-yr contract authority</td><td class="highlight">New procurement costs, ratepayer-funded</td><td>Wu praised; Healey proposed</td></tr>
 <tr><td>Municipal Aggregation</td><td><strong>M.G.L. c. 164, &#x00A7; 134</strong></td><td>Authorizes BCCE &#x2014; supply-only rate competition</td><td>Real but limited: ~$200/yr, supply only</td><td>Wu's signature program</td></tr>
@@ -851,7 +851,7 @@ footer a:hover{color:var(--gold)}
 <div class="quote-block red">"Very similar to the Commonwealth and the nation, I think that we are going to be challenged to hit our goal."<cite>John Walkey, Waterfront Climate Justice Advocate &#x2014; Boston Globe, April 27, 2026</cite></div>
 <div class="quote-block">"We have done most of the easy things already. And at this point, to make a real difference, it is about coming up with the new ideas."<cite>Mayor Michelle Wu &#x2014; Climate Action Plan launch, April 27, 2026</cite></div>
 
-<div class="info-box amber"><h4>&#x26A0;&#xFE0F; Translation: The "Easy Things" Were Spending Your Money</h4><p>The "easy things" Wu references include: mandating building emissions standards (BERDO) that landlords pass to tenants, enrolling 65% of ratepayers in BCCE (supply-only savings), divesting city pension funds from fossil fuels, and implementing net-zero zoning for new construction. None of these addressed the structural cost drivers: <strong>Ch. 21N</strong> (Global Warming Solutions Act) mandating economy-wide carbon neutrality, <strong>&#x00A7;83C</strong> guaranteeing foreign wind developers full cost recovery, <strong>Ch. 25A, &#x00A7;11F</strong> (RPS) forcing 35%+ renewable procurement, or <strong>RGGI (Ch. 21N, &#x00A7;&#x00A7;1&#x2013;9)</strong> extracting $200M/yr in carbon auction costs. The "new ideas" &#x2014; thermal energy networks, congestion pricing, gas system decommissioning &#x2014; will add costs, not reduce them.</p></div>
+<div class="info-box amber"><h4>&#x26A0;&#xFE0F; Translation: The "Easy Things" Were Spending Your Money</h4><p>The "easy things" Wu references include: mandating building emissions standards (BERDO) that landlords pass to tenants, enrolling 65% of ratepayers in BCCE (supply-only savings), divesting city pension funds from fossil fuels, and implementing net-zero zoning for new construction. None of these addressed the structural cost drivers: <strong>Ch. 21N</strong> (Global Warming Solutions Act) mandating economy-wide carbon neutrality, <strong>&#x00A7;83C</strong> guaranteeing foreign wind developers full cost recovery, <strong>Ch. 25A, &#x00A7;11F</strong> (RPS) forcing 35%+ renewable procurement, or <strong>RGGI (Ch. 21N, &#x00A7;&#x00A7;1&#x2013;9)</strong> extracting $262M in carbon auction costs in 2026 through September. The "new ideas" &#x2014; thermal energy networks, congestion pricing, gas system decommissioning &#x2014; will add costs, not reduce them.</p></div>
 
 <div class="chart-grid">
 <div class="chart-card"><h3>Boston's Emissions by Sector (2023 Inventory)</h3><div class="chart-area"><canvas id="chartBostonEmissions"></canvas></div><div class="source">Source: Boston GHG Inventory 2023; 2030 Climate Action Plan, p.33</div></div>
@@ -1279,7 +1279,7 @@ function initCharts(tab){
     safeChart('c2',{type:'bar',data:{labels:['Mass Save Cut','ACP Rebates','Net Metering','Net Zero Mandate','Offshore Wind (new)','Solar (new)','RGGI','RPS Compliance'],datasets:[{label:'$ / yr per household',data:[80,40,30,-130,-90,-60,-200,-97],backgroundColor:(ctx)=>ctx.parsed.y>0?C.green:C.red,borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:false}}}});
   }
   if(tab==='mandates'){
-    safeChart('chartRGGI',{type:'bar',data:{labels:['2008','2010','2012','2014','2016','2018','2020','2022','2024','2025'],datasets:[{data:[28,52,74,89,91,101,118,170,203,200],backgroundColor:C.red,borderRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'M'}}}}});
+    safeChart('chartRGGI',{type:'bar',data:{labels:['2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026*'],datasets:[{data:[28.2,50.9,44.1,27.2,28.5,74.0,63.6,74.3,45.7,34.4,41.9,46.3,55.5,97.5,126.1,128.5,195.5,200.4,261.6],backgroundColor:C.red,borderRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'M'}}}}});
     safeChart('chartRGGISpend',{type:'doughnut',data:{labels:['Clean Energy Programs','GHG Reduction','Direct Bill Relief','Admin/Other'],datasets:[{data:[45,25,15,15],backgroundColor:[C.navy,C.blue,C.green,C.muted],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:10}}}}});
   }
   if(tab==='money'){ /* no charts to init */ }

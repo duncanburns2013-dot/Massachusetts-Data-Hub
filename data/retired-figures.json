@@ -172,6 +172,23 @@
     "scripts/update-homepage-stats.py"
    ],
    "allow_note": "The script's own docstring names the stale date it was written to replace."
+  },
+  {
+   "id": "rggi-ma-cumulative-2025",
+   "subject": "Massachusetts cumulative RGGI auction proceeds and the by-year chart",
+   "wrong": [
+    "$1.36B",
+    "$1.36 billion",
+    "28,52,74,89,91,101,118,170,203,200"
+   ],
+   "right": "$1.62B through Auction 73 (Sept 9, 2026), from RGGI Inc. MA_Proceeds_by_Auction.xlsx; by-year values summed from the same file",
+   "context": "(?i)RGGI|carbon|chartRGGI",
+   "context_window": 900,
+   "why": "$1.36B was correct only through December 2025 and stayed on the page after three 2026 auctions added $262M. The by-year chart's middle years were not RGGI's numbers at all (2012 shown as $74M, actual $28.5M; 2020 as $118M, actual $55.5M).",
+   "retired_on": "2026-10-29",
+   "allow": [
+    "data/retired-figures.json"
+   ]
   }
  ]
 }
