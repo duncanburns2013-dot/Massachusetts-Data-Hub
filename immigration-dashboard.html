@@ -1417,7 +1417,7 @@ tr:hover td{background:var(--surface)}
 </div>
 <!-- ported from shelter-immigrant-spending.html -->
 <div class="tab mt" id="i-cost">
-<div class="summary-row"><div class="sc red"><div class="sc-label">FY2027 spent so far</div><div class="sc-val red"><span data-field="cur-actual">$95.2M</span></div><div class="sc-ctx">of <span data-field="cur-enacted">$367.8M</span> enacted &middot; <span data-field="cur-pct">26%</span></div></div><div class="sc amber"><div class="sc-label">Peak year, actual</div><div class="sc-val amber"><span data-field="peak-actual">$1.049B</span></div><div class="sc-ctx">FY<span data-field="peak-fy">2025</span> against <span data-field="peak-enacted">$995.9M</span> enacted</div></div><div class="sc blue"><div class="sc-label">Appropriations tracked</div><div class="sc-val blue"><span data-field="acct-count">16</span></div><div class="sc-ctx">named by the Commonwealth for this purpose</div></div><div class="sc green"><div class="sc-label">Payments posted through</div><div class="sc-val green"><span data-field="newest-payment">2026-09-17</span></div><div class="sc-ctx">CTHRU updated <span data-field="cthru-created">2026-10-21</span></div></div></div>
+<div class="summary-row"><div class="sc red"><div class="sc-label">FY2027 spent so far</div><div class="sc-val red"><span data-field="cur-actual">$111.7M</span></div><div class="sc-ctx">of <span data-field="cur-enacted">$367.8M</span> enacted &middot; <span data-field="cur-pct">30%</span></div></div><div class="sc amber"><div class="sc-label">Peak year, actual</div><div class="sc-val amber"><span data-field="peak-actual">$1.049B</span></div><div class="sc-ctx">FY<span data-field="peak-fy">2025</span> against <span data-field="peak-enacted">$995.9M</span> enacted</div></div><div class="sc blue"><div class="sc-label">Appropriations tracked</div><div class="sc-val blue"><span data-field="acct-count">16</span></div><div class="sc-ctx">named by the Commonwealth for this purpose</div></div><div class="sc green"><div class="sc-label">Payments posted through</div><div class="sc-val green"><span data-field="newest-payment">2026-09-17</span></div><div class="sc-ctx">CTHRU updated <span data-field="cthru-created">2026-10-29</span></div></div></div>
 
 <div class="mt-sec">
 <h2 class="sec-title">Enacted against actual, by fiscal year</h2>
@@ -1431,7 +1431,7 @@ tr:hover td{background:var(--surface)}
 <tr><td>FY2024</td><td><span data-field="fy2024-enacted">$627.9M</span></td><td class="td-red"><span data-field="fy2024-actual">$850.0M</span></td><td><span data-field="fy2024-pct">135%</span></td></tr>
 <tr><td>FY2025</td><td><span data-field="fy2025-enacted">$995.9M</span></td><td class="td-red"><span data-field="fy2025-actual">$1.049B</span></td><td><span data-field="fy2025-pct">105%</span></td></tr>
 <tr><td>FY2026</td><td><span data-field="fy2026-enacted">$352.3M</span></td><td class="td-red"><span data-field="fy2026-actual">$368.2M</span></td><td><span data-field="fy2026-pct">104%</span></td></tr>
-<tr><td>FY2027 <span class="hl">in progress</span></td><td><span data-field="fy2027-enacted">$367.8M</span></td><td class=""><span data-field="fy2027-actual">$95.2M</span></td><td><span data-field="fy2027-pct">26%</span></td></tr>
+<tr><td>FY2027 <span class="hl">in progress</span></td><td><span data-field="fy2027-enacted">$367.8M</span></td><td class=""><span data-field="fy2027-actual">$111.7M</span></td><td><span data-field="fy2027-pct">30%</span></td></tr>
 </tbody></table></div>
 <p class="card-sub" style="margin-top:12px">FY2027 is the year in progress, so its actual figure rises as the Comptroller posts payments. The percentage is spend against enacted, not a forecast.</p>
 </div>
@@ -1453,7 +1453,7 @@ FY2024 was appropriated <span data-field="fy2024-enacted-inline">$627.9M</span> 
 <tr><td>FY2024</td><td><span data-field="t2-fy2024-enacted">$376.9M</span></td><td><span data-field="t2-fy2024-actual">$377.3M</span></td></tr>
 <tr><td>FY2025</td><td><span data-field="t2-fy2025-enacted">$459.6M</span></td><td><span data-field="t2-fy2025-actual">$465.1M</span></td></tr>
 <tr><td>FY2026</td><td><span data-field="t2-fy2026-enacted">$460.8M</span></td><td><span data-field="t2-fy2026-actual">$470.1M</span></td></tr>
-<tr><td>FY2027</td><td><span data-field="t2-fy2027-enacted">$487.3M</span></td><td><span data-field="t2-fy2027-actual">$152.5M</span></td></tr>
+<tr><td>FY2027</td><td><span data-field="t2-fy2027-enacted">$487.3M</span></td><td><span data-field="t2-fy2027-actual">$173.7M</span></td></tr>
 </tbody></table></div>
 <p class="card-sub" style="margin-top:12px">Published separately on purpose. Blending these into the headline would repeat the error this page was built to avoid &mdash; see Method.</p>
 </div>
@@ -2685,7 +2685,7 @@ initChart('n-overview');
       { fy: 'FY24', shelter: 643.25, home: 37.22, xfer: 13.91, kind: 'actual' },
       { fy: 'FY25', shelter: 326.07, home: 57.32, xfer: 1.16, kind: 'actual' },
       { fy: 'FY26', shelter: 259.54, home: 57.29, xfer: 0.00, kind: 'actual' },
-      { fy: 'FY27', shelter: 259.90, home: 82.32, xfer: 0.00, kind: 'enacted', ytdShelter: 49.44, ytdHome: 43.47 }
+      { fy: 'FY27', shelter: 259.90, home: 82.32, xfer: 0.00, kind: 'enacted', ytdShelter: 54.48, ytdHome: 54.91 }
     ];
     /* END owned:update-immigrant-spending.py SHIFT */
     SHIFT.forEach(function (d) { d.note = SHIFT_NOTES[d.fy] || ''; });

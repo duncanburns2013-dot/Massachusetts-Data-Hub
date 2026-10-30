@@ -145,12 +145,12 @@ vintage step.
 | Shelter system, FY2024 actual | $803.74M | CTHRU kv7m-35wn | 🔄 written by `update-immigrant-spending.py` |
 | Shelter system, FY2025 actual | $1,042.45M | CTHRU kv7m-35wn | 🔄 written by `update-immigrant-spending.py` |
 | Shelter system, FY2026 actual | $360.92M | CTHRU kv7m-35wn | 🔄 written by `update-immigrant-spending.py` |
-| Shelter system, FY2027 to date | $93.40M | CTHRU kv7m-35wn | 🔄 written by `update-immigrant-spending.py` |
+| Shelter system, FY2027 to date | $109.73M | CTHRU kv7m-35wn | 🔄 written by `update-immigrant-spending.py` |
 | Shelter system, FY24 + FY25 | $1.85B ($1,846.18M, derived) | CTHRU kv7m-35wn | 🔄 written by `update-immigrant-spending.py` |
 | Shelter system, FY22–FY25 | $2.42B ($2,418.26M, derived) | CTHRU kv7m-35wn | 🔄 written by `update-immigrant-spending.py` |
 | Shelter system, FY22–FY26 | $2.78B ($2,779.18M, derived) | CTHRU kv7m-35wn | 🔄 written by `update-immigrant-spending.py` |
-| EA line 7004-0101, actual | FY22 $202.56M · FY23 $274.38M · FY24 $643.25M · FY25 $326.07M · FY26 $259.54M · FY27 YTD $49.44M | CTHRU kv7m-35wn | 🔄 written by `update-immigrant-spending.py` |
-| HomeBASE 7004-0108, actual | FY22 $25.97M · FY23 $49.41M · FY24 $37.22M · FY25 $57.32M · FY26 $57.29M · FY27 YTD $43.47M — CTHRU transfer_in into 7004-0108 is $2,575 in FY2026, not a material top-up | CTHRU kv7m-35wn | 🔄 written by `update-immigrant-spending.py` |
+| EA line 7004-0101, actual | FY22 $202.56M · FY23 $274.38M · FY24 $643.25M · FY25 $326.07M · FY26 $259.54M · FY27 YTD $54.48M | CTHRU kv7m-35wn | 🔄 written by `update-immigrant-spending.py` |
+| HomeBASE 7004-0108, actual | FY22 $25.97M · FY23 $49.41M · FY24 $37.22M · FY25 $57.32M · FY26 $57.29M · FY27 YTD $54.91M — CTHRU transfer_in into 7004-0108 is $2,575 in FY2026, not a material top-up | CTHRU kv7m-35wn | 🔄 written by `update-immigrant-spending.py` |
 | HomeBASE growth, FY22 → FY26 | +121% (derived, $25.97M → $57.29M) | CTHRU kv7m-35wn | 🔄 written by `update-immigrant-spending.py` |
 | EOHLC all-in FY2026 (shelter $286.8M + exits incl. HomeBASE $153.7M) | $440.5M, incl. $83.0M from trust fund 7004-4778 not in CTHRU | A&F/EOHLC biweekly EA report, 8 Sep 2026 (SD.4220) | ⏳ re-read by 2027-01-31 — the next EOHLC all-in report |
 | FY2026 **projected** — budget documents, NOT a CTHRU actual | EA 7004-0101 $276,421,903 · HomeBASE $91,386,678. **Do not publish either as spending.** CTHRU actuals for FY2026 are EA $259.54M and HomeBASE $57.29M; see the rows above, which a script writes. The HomeBASE projection exceeds its $57,322,001 appropriation by $34,064,677, and that difference was once published as a transfer into the account. CTHRU's `transfer_in` for 7004-0108 in FY2026 is $2,575. | budget.digital.mass.gov FY27 line-item data | 🔒 the FY27 budget documents' FY2026 projected column. A published document for a year that has since closed. Kept, clearly labelled, because mistaking this projection for a CTHRU actual is exactly what produced the wrong HomeBASE figure. |
