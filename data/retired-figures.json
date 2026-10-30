@@ -403,6 +403,26 @@
    "allow": [
     "data/retired-figures.json"
    ]
+  },
+  {
+   "id": "energy-estimate-charts",
+   "subject": "H.5175 relief and policy-charge estimate charts (c1b, c2, c4a/c4b, cS3143gaps, chartMandateStack)",
+   "wrong": [
+    "~$150/yr",
+    "$377/yr",
+    "~$173/mo",
+    "Pipeline Gap Premium",
+    "New Wind Cost",
+    "Net-Zero Infra."
+   ],
+   "right": "Derived in-page: H.5175 relief ~$117/yr (Mass Save $89, ACP $22, net metering $6); policy costs on a 600 kWh R-1 bill $414/yr (tariff, DOER 2023 compliance report, RGGI/EIA 2025); S.3143 gaps RGGI $200.4M, RPS $806M, Mass Save growth $170M",
+   "context": "(?i)relief|policy|H\\.5175|S\\.3143|mandate",
+   "context_window": 900,
+   "why": "The old bars had no recorded method; several mixed units (RGGI $200M statewide plotted as $200 per household) or had no source at all.",
+   "retired_on": "2026-10-29",
+   "allow": [
+    "data/retired-figures.json"
+   ]
   }
  ]
 }

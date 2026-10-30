@@ -282,7 +282,7 @@ footer a:hover{color:var(--gold)}
 <div class="stat-card"><div class="label">MA Residential Rate</div><div class="value red">30.48&#x00A2;</div><div class="sub">Per kWh (EIA Aug 2026)</div></div>
 <div class="stat-card"><div class="label">National Average</div><div class="value green">18.16&#x00A2;</div><div class="sub">Per kWh</div></div>
 <div class="stat-card"><div class="label">Annual Overpayment</div><div class="value red">$887</div><div class="sub">Per household vs US avg</div></div>
-<div class="stat-card"><div class="label">H.5175 Relief</div><div class="value amber">~$150</div><div class="sub">Per year &#x2014; <span id="reliefGapPct">&#x2014;</span> of gap</div></div>
+<div class="stat-card"><div class="label">H.5175 Relief</div><div class="value amber">~<span id="reliefHH1">&#x2014;</span></div><div class="sub">Per year &#x2014; <span id="reliefGapPct">&#x2014;</span> of gap</div></div>
 <div class="stat-card"><div class="label">FL Rate</div><div class="value green">14.99&#x00A2;</div><div class="sub">Per kWh &#x2014; half of MA</div></div>
 <div class="stat-card" data-owned-by="update-energy-dashboard.py"><div class="label">2025 Annual Avg Premium</div><div class="value red">+76%</div><div class="sub">30.41&#x00A2; MA vs 17.23&#x00A2; US &#x2014; full-year EIA</div></div>
 </div>
@@ -347,25 +347,22 @@ footer a:hover{color:var(--gold)}
 <div class="alert"><h4>&#x26A0;&#xFE0F; Passed House 128-27 on Feb 26, 2026 &#x2014; H.5151 as amended, reprinted as H.5175</h4><div class="alert-grid">
 <div class="alert-item"><strong>107 pages</strong> reported by Ways &amp; Means, dated Tuesday Feb 24. CommonWealth Beacon reported members had 45 minutes to vote.</div>
 <div class="alert-item"><strong>126 amendments</strong> filed by 5pm Wednesday. Floor vote Thursday past 10pm.</div>
-<div class="alert-item">Claims <strong>$9B in savings</strong> over 10 years. Reality: ~$150/yr per household (<span id="alertGapPct">&#x2014;</span> of gap).</div>
+<div class="alert-item">Claims <strong>$9B in savings</strong> over 10 years. Reality: about <span id="reliefHH2">&#x2014;</span>/yr per household (<span id="alertGapPct">&#x2014;</span> of gap).</div>
 <div class="alert-item"><strong>The $1B+ Mass Save cut was due for filing by July 1, 2026</strong> &#x2014; the bill is still not law, so zero relief this winter.</div>
 <div class="alert-item">Sets procurement targets of <strong>at least 10 GW offshore wind and about 10 GW solar by 2040</strong>, with contracts of up to 30 years.</div>
 <div class="alert-item">Lobbying cost recovery ban <strong>stripped</strong>. GSEP pipe spending <strong>untouched</strong>.</div>
 </div></div>
 <div class="chart-grid">
 <div class="chart-card"><h3>Annual Impact Per Household</h3><div class="chart-area"><canvas id="c1a"></canvas></div><div class="source">Source: EIA Aug 2026, bill text analysis.</div></div>
-<div class="chart-card"><h3>Where the "Savings" Actually Come From</h3><div class="chart-area"><canvas id="c1b"></canvas></div><div class="source">Source: Bill sections analyzed against verified Eversource rate breakdown.</div></div>
+<div class="chart-card"><h3>Where the "Savings" Actually Come From &#x2014; $/yr Per Household</h3><div class="chart-area"><canvas id="c1b"></canvas></div><div class="source">Method. Mass Save: H.5175 &#x00A7;69 orders at least $1B cut from the 2025&#x2013;27 plans; residential and income-eligible programs are 75.2% of the $4,486M plan (EEAC 2025 Annual Report data tables), spread over 2.83M households (ACS 2024) and 3 plan years, electric and gas bills combined. ACP: &#x00A7;8 returns 70% of alternative compliance payments; 2023 ACPs were $189.2M on 43.3M MWh of load (DOER 2023 Annual Compliance Report), applied to 7,200 kWh a year. The House version pays only in years the fund beats its forecast; shown here as if paid every year. Net metering: $380M over 10 years is the Healey administration&#x2019;s 2025 estimate for the same credit change (policy brief); no House estimate found. Same per-kWh spread. The bill&#x2019;s added costs (10 GW wind, 10 GW solar) are not priced here: no contracts exist yet.</div></div>
 </div>
 <div class="stat-row">
 <div class="stat-card"><div class="label">Annual MA Overpayment</div><div class="value red">$887</div><div class="sub">30.48&#x00A2; vs 18.16&#x00A2; &#x00D7; 600 kWh/mo</div></div>
 <div class="stat-card"><div class="label">Their Claim / HH / Year</div><div data-frozen="restates the House's own H.5175 claim, $9B over 2.83M households (ACS 2024) over 10 yrs; the arithmetic is on the card" class="value blue">$318</div><div class="sub">House claim: $9B &#x00F7; 2.83M households &#x00F7; 10 yrs</div></div>
-<div class="stat-card"><div class="label">Realistic Relief</div><div class="value green">~$150</div><div class="sub">Mass Save + ACP + net metering</div></div>
-<div class="stat-card"><div class="label">Gap Closed</div><div class="value red"><span id="gapClosedPct">&#x2014;</span></div><div class="sub">$150 of $887. <span id="gapClosedRank">&#x2014;</span></div></div>
+<div class="stat-card"><div class="label">Realistic Relief</div><div class="value green">~<span id="reliefHH3">&#x2014;</span></div><div class="sub">Mass Save + ACP + net metering, per year</div></div>
+<div class="stat-card"><div class="label">Gap Closed</div><div class="value red"><span id="gapClosedPct">&#x2014;</span></div><div class="sub"><span id="reliefHH4">&#x2014;</span> of $887. <span id="gapClosedRank">&#x2014;</span></div></div>
 </div>
-<div class="donut-grid">
-<div class="chart-card" style="text-align:center"><h3>Current Bill &#x2014; $185/mo</h3><div class="chart-area"><canvas id="c4a"></canvas></div></div>
-<div class="chart-card" style="text-align:center"><h3>After H.5175 &#x2014; ~$173/mo</h3><div class="chart-area"><canvas id="c4b"></canvas></div></div>
-</div>
+<div class="info-box"><p>An Eversource R-1 bill at 600 kWh is <strong><span id="r1TotalMo">&#x2014;</span>/mo</strong> on the filed tariff (breakdown on the Rates tab). H.5175&#x2019;s three relief items come to about <strong><span id="reliefMo">&#x2014;</span>/mo</strong> per household, split across electric and gas bills.</p></div>
 <div class="chart-card"><h3>State Comparison &#x2014; Monthly Bill at 600 kWh</h3><div class="chart-area"><canvas id="c4c"></canvas></div><div class="source">Source: EIA Aug 2026 rates &#x00D7; 600 kWh/month</div></div>
 <div class="nc"><div class="nc-title">NEW COSTS H.5175 ADDS TO FUTURE BILLS:</div>
 <div class="nc-i">10 GW offshore wind &#x2014; long-term contracts recovered through ratepayer tariffs</div>
@@ -392,7 +389,7 @@ footer a:hover{color:var(--gold)}
 <div class="stat-card"><div class="label">Total Claimed Savings</div><div data-frozen="sum of the 15 itemized claims in the Senate fact sheet of June 24, 2026; a bill's own claim does not move" class="value red">$14.9B</div><div class="sub">Over 10 years &#x2014; 15 itemized claims ($14.9B&#x2013;$15.2B); Senate says &ldquo;more than $14B&rdquo;</div></div>
 <div class="stat-card"><div class="label">Verified / Documented</div><div data-frozen="the author's credibility-tier split of S.3143, labelled as analysis, not a published figure" class="value green">$2.2B</div><div class="sub">Competitive supplier + GSEP reform + geothermal</div></div>
 <div class="stat-card"><div class="label">Speculative / Accounting</div><div data-frozen="the author's credibility-tier split of S.3143, labelled as analysis, not a published figure" class="value amber">$8.3B</div><div class="sub">Securitization, investigations, mandate trims</div></div>
-<div class="stat-card"><div class="label">Gap Closed vs US Avg</div><div class="value red">~<span id="s3143GapPct">&#x2014;</span></div><div class="sub">Realistic ~$150/yr of <span id="s3143Overpay">&#x2014;</span>/yr overpayment</div></div>
+<div class="stat-card"><div class="label">Gap Closed vs US Avg</div><div class="value red">~<span id="s3143GapPct">&#x2014;</span></div><div class="sub">Realistic ~<span id="reliefHH5">&#x2014;</span>/yr of <span id="s3143Overpay">&#x2014;</span>/yr overpayment</div></div>
 <div class="stat-card"><div class="label">MA Rate Right Now</div><div class="value red"><span id="s3143CardRate">&#x2014;</span></div><div class="sub">EIA <span id="s3143CardPeriod">&#x2014;</span> &#x2014; <span id="s3143CardRank">&#x2014;</span></div></div>
 <div class="stat-card"><div class="label">Passed Senate</div><div data-frozen="a recorded Senate roll call (#205, July 1, 2026); a vote does not get re-taken" class="value amber">32&#x2013;8</div><div class="sub">Jul 1, 2026 &#x2014; as amended, reprinted as S.3166; in conference since Jul 16</div></div>
 </div>
@@ -403,8 +400,8 @@ footer a:hover{color:var(--gold)}
 </div>
 
 <div class="chart-grid">
-<div class="chart-card"><h3>Annual Per-Household Reality Check</h3><div class="chart-area"><canvas id="cS3143hh"></canvas></div><div class="source">Source: EIA <span id="s3143SrcPeriod">&#x2014;</span>; S.3143 $14.9B &divide; 2.83M households (ACS 2024) &divide; 10 yrs = $528/yr claimed if every dollar went to households; realistic per analysis = ~$150/yr. Even accepting the full claim, MA remains <span id="s3143SrcRank">&#x2014;</span>.</div></div>
-<div class="chart-card"><h3>What S.3143 Doesn't Touch &#x2014; The Structural Cost Drivers</h3><div class="chart-area"><canvas id="cS3143gaps"></canvas></div><div class="source">Source: EIA; RGGI Inc.; DPU rate orders; ISO-NE. These policy-driven costs persist regardless of S.3143 passage.</div></div>
+<div class="chart-card"><h3>Annual Per-Household Reality Check</h3><div class="chart-area"><canvas id="cS3143hh"></canvas></div><div class="source">Source: EIA <span id="s3143SrcPeriod">&#x2014;</span>; S.3143 $14.9B &divide; 2.83M households (ACS 2024) &divide; 10 yrs = $528/yr claimed if every dollar went to households; realistic relief = ~<span id="reliefHH6">&#x2014;</span>/yr (H.5175 items; method under the H.5175 savings chart). Even accepting the full claim, MA remains <span id="s3143SrcRank">&#x2014;</span>.</div></div>
+<div class="chart-card"><h3>What S.3143 Leaves in Place &#x2014; $M per Year</h3><div class="chart-area"><canvas id="cS3143gaps"></canvas></div><div class="source">RGGI: Massachusetts auction proceeds, 2025 (RGGI Inc.). RPS &amp; clean peak: DOER&#x2019;s low estimate of 2023 compliance cost, $806M (high $1,086M), 2023 Annual Compliance Report, Table 13; S.3143 slows RPS growth but keeps the standard. Mass Save: 2027 plan budget ($1,585M) minus 2025 ($1,415M), EEAC 2025 Annual Report data tables; not clawed back.</div></div>
 </div>
 
 <div class="data-card"><h3>S.3143 Savings Claims &#x2014; Line-by-Line Audit</h3>
@@ -447,7 +444,7 @@ footer a:hover{color:var(--gold)}
 <div id="cutkept" class="tab-content">
 <h2 class="section-title">What They Cut vs. What They Kept</h2>
 <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">They trimmed branches while fertilizing the root.</p>
-<div class="chart-card"><h3>Cuts vs. Untouched Policy Charges &#x2014; $/yr Per Household</h3><div class="chart-area"><canvas id="c2"></canvas></div></div>
+<div class="chart-card"><h3>Cuts vs. Policy Charges Still on the Bill &#x2014; $/yr Per Household</h3><div class="chart-area"><canvas id="c2"></canvas></div><div class="source">Green: H.5175 relief (method under the H.5175 savings chart). Red: policy costs on a 600 kWh Eversource R-1 bill. Efficiency, net metering and SMART charges are the filed tariff rates; RPS &amp; clean peak is DOER&#x2019;s low estimate, 1.86&#x00A2;/kWh (2023 Annual Compliance Report; high 2.51&#x00A2;); RGGI is Massachusetts&#x2019; 2025 auction proceeds ($200.4M) over 51.6M MWh of retail sales (EIA 2025). RPS and RGGI sit inside the supply price. The Mass Save cut comes partly out of the efficiency charge, partly out of gas bills.</div></div>
 <div class="vs-grid">
 <div class="vs-col cut"><h3>&#x2702;&#xFE0F; What They Cut</h3>
 <div class="vs-item ci"><strong>Mass Save &#x2014; $1B cut</strong>$4.5B &#x2192; ~$3.5B (DPU-approved budget, 2025-2027 cycle)</div>
@@ -455,10 +452,10 @@ footer a:hover{color:var(--gold)}
 <div class="vs-item ci"><strong>ACP Rebates &#x2014; 70% returned</strong>TEMPORARY &#x2014; 3 years, then conditional triggers</div>
 <div class="vs-item ci"><strong>Supplier Rules &#x2014; TIGHTENED</strong>$5M bonds, no supplier sales to low-income customers, fines up to $100K per violation</div>
 <div class="vs-item ci"><strong>Utility Audits &#x2014; NEW</strong>DPU may order management audits no more than once every 5 yrs, plus targeted audits, paid for by the utility, not ratepayers.</div>
-<div class="vs-total ct"><div class="tn" style="color:var(--green)">~$150/yr</div><div class="tl">Realistic Savings</div></div>
+<div class="vs-total ct"><div class="tn" style="color:var(--green)">~<span id="reliefHH7">&#x2014;</span>/yr</div><div class="tl">Realistic Savings</div></div>
 </div>
 <div class="vs-col kept"><h3>&#x1F512; Kept + Added</h3>
-<div class="vs-item ki"><strong>&#x1F512; Net Zero by 2050</strong>Driving $377/yr in policy charges &#x2014; UNTOUCHED</div>
+<div class="vs-item ki"><strong>&#x1F512; Net Zero by 2050</strong>The Global Warming Solutions Act mandate stays in force &#x2014; UNTOUCHED</div>
 <div class="vs-item ki"><strong>&#x1F512; 50% Emissions Cut by 2030</strong>Legally binding sublimit &#x2014; UNTOUCHED</div>
 <div class="vs-item ki"><strong>&#x1F4C8; 10 GW Offshore Wind by 2040</strong>EXPANDED &#x2014; only 800 MW contracted in a decade</div>
 <div class="vs-item ki"><strong>&#x1F195; 10 GW Solar by 2040</strong>NEW mandate &#x2014; costs "shared collectively"</div>
@@ -468,7 +465,7 @@ footer a:hover{color:var(--gold)}
 <div class="vs-item ki"><strong>&#x1F4B8; Inclusive Utility Investment</strong>Participants repay upgrades on their own bills; the utility's program costs go into base rates paid by all customers</div>
 <div class="vs-item ki"><strong>&#x274C; Lobbying Ban &#x2014; STRIPPED</strong>Healey proposed banning utility lobbying cost recovery. House killed it.</div>
 <div class="vs-item ki"><strong>&#x274C; GSEP Pipe Spending &#x2014; UNTOUCHED</strong>Gas utility pipe replacement costs soaring.</div>
-<div class="vs-total kt"><div class="tn" style="color:var(--red)">$377/yr</div><div class="tl">Policy Charges &#x2014; Untouched + Growing</div></div>
+<div class="vs-total kt"><div class="tn" style="color:var(--red)"><span id="policyHH1">&#x2014;</span>/yr</div><div class="tl">Policy Costs on a 600 kWh Bill Today</div></div>
 </div>
 </div>
 <div class="section-title" style="margin-top:24px">The Speed Run &#x2014; 107 Pages in 48 Hours</div>
@@ -868,7 +865,7 @@ footer a:hover{color:var(--gold)}
 
 <div class="chart-grid">
 <div class="chart-card"><h3>Boston's Emissions by Sector (2023 Inventory)</h3><div class="chart-area"><canvas id="chartBostonEmissions"></canvas></div><div class="source">Source: City of Boston, 2023 community GHG inventory (boston.gov, Boston's Carbon Emissions)</div></div>
-<div class="chart-card"><h3>What $200/yr in BCCE Savings Looks Like Against the Full Mandate Stack</h3><div class="chart-area"><canvas id="chartMandateStack"></canvas></div><div class="source">Source: EIA rates; DPU filings; RGGI Inc.; Eversource/NGrid rate schedules; BCCE program data</div></div>
+<div class="chart-card"><h3>What $200/yr in BCCE Savings Looks Like Against the Policy Costs on the Bill</h3><div class="chart-area"><canvas id="chartMandateStack"></canvas></div><div class="source">Per household at 600 kWh/mo. Efficiency, net metering and SMART: Eversource R-1 filed tariff. RPS &amp; clean peak: DOER low estimate, 1.86&#x00A2;/kWh (2023 Annual Compliance Report). RGGI: 2025 MA auction proceeds over EIA 2025 retail sales. BCCE: City of Boston program data.</div></div>
 </div>
 
 <div class="data-card"><h3>The Gaslighting Chain &#x2014; State + City, Same Party, Same Playbook</h3>
@@ -1076,10 +1073,31 @@ const EIA_PERIOD=(()=>{
 })();
 
 const OVERPAY=Math.round((MA_RATE-US_RATE)/100*KWH_YR);
-// Realistic H.5175 relief, from the bill-text analysis plotted in c1b
-// (Mass Save cut $80 + ACP rebates $40 + net metering $30). Named once here so
-// every "gap closed" percentage derives from the same number.
-const RELIEF_HH=150;
+// Realistic H.5175 relief per household per year, plotted in c1b. Named once here
+// so every "gap closed" percentage derives from the same number. Checked 2026-10-29.
+//  Mass Save: H.5175 s.69 orders a cut of at least $1B to the 2025-27 plans.
+//    Residential + income-eligible budgets are 75.2% of the $4,486M plan (EEAC 2025
+//    Annual Report data tables: 2,195.5 + 1,176.5 of 4,486.1). Over 2.83M households
+//    (ACS 2024, as the $318 claim card) and 3 plan years. Electric + gas combined.
+//  ACP: s.8 returns 70% of alternative compliance payments. CY2023 ACPs $189,237,741
+//    on 43,284,674 MWh of load (DOER 2023 Annual Compliance Report, Table 2).
+//  Net metering: $380M over 10 yrs is the Healey administration's 2025 policy-brief
+//    estimate for the same credit change; no House figure exists. Same per-kWh spread.
+// The old 80 / 40 / 30 split had no recorded method.
+const HOUSEHOLDS=2.83e6, RPS_LOAD_MWH=43284674;
+const RELIEF={massSave:1e9*0.752/HOUSEHOLDS/3,
+  acp:0.7*189237741/RPS_LOAD_MWH*KWH_YR/1000,
+  netMeter:380e6/10/RPS_LOAD_MWH*KWH_YR/1000};
+const RELIEF_HH=Math.round(RELIEF.massSave+RELIEF.acp+RELIEF.netMeter);
+// Policy costs still on a 600 kWh R-1 bill, $/yr. Efficiency, net metering (NMRS) and
+// SMART are filed tariff rates (R1_BILL). RPS/APS/CPS is DOER's own low estimate of
+// 2023 compliance cost, 1.86 c/kWh (high 2.51), Annual Compliance Report Table 13.
+// RGGI is MA's 2025 auction proceeds, $200.4M (chartRGGI), over 51,640,517 MWh of
+// MA retail sales (EIA 2025). RPS and RGGI sit inside the supply price.
+const POLICY={rps:1.86*KWH_YR/100, ee:R1_BILL.policy.ee*KWH_YR/100,
+  nmrs:R1_BILL.policy.nmrs*KWH_YR/100, smart:R1_BILL.policy.smart*KWH_YR/100,
+  rggi:200.4e6/51640517*KWH_YR/1000};
+const POLICY_HH=Math.round(Object.values(POLICY).reduce((a,v)=>a+v,0));
 const BCCE_SAVINGS=200; // Boston BCCE supply-only savings, per city program data
 const GAP_PCT=Math.round(RELIEF_HH/OVERPAY*100);
 
@@ -1090,6 +1108,10 @@ const rateTxt=v=>isNaN(v)?'':v.toFixed(2)+'¢';
 const pctTxt=v=>isNaN(v)?'':v+'%';
 const capFirst=s=>s?s.charAt(0).toUpperCase()+s.slice(1):'';
 const yrRange=YEARS[0]+'–'+YEARS[YEARS.length-1];
+for(let i=1;i<=7;i++) setTxt('reliefHH'+i,'$'+RELIEF_HH);
+setTxt('policyHH1','$'+POLICY_HH);
+setTxt('reliefMo','$'+(RELIEF_HH/12).toFixed(2));
+setTxt('r1TotalMo','$'+r1Bill().total.toFixed(2));
 
 setTxt('heroRate',rateTxt(MA_RATE)&&rateTxt(MA_RATE)+'/kWh');
 setTxt('heroRank',rankPhrase(false));
@@ -1281,15 +1303,11 @@ function initCharts(tab){
     // Bar 1 reads OVERPAY rather than a literal: this chart plotted a frozen $922
     // while its own caption and the card beside it said $765.
     safeChart('c1a',{type:'bar',data:{labels:['Annual Overpayment','Their Claim','Realistic Relief'],datasets:[{data:[OVERPAY,318,RELIEF_HH],backgroundColor:[C.red,C.blue,C.green],borderRadius:5}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/yr'}}}}});
-    safeChart('c1b',{type:'bar',data:{labels:['Mass Save Cut','ACP Rebates','Net Metering','New Wind Cost','New Solar Cost','Procurement Fund'],datasets:[{label:'Savings',data:[80,40,30,0,0,0],backgroundColor:C.green,borderRadius:4},{label:'Added Cost',data:[0,0,0,-120,-80,-60],backgroundColor:C.red,borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:true,labels:{font:{size:9}}}}}});
-    const billBase={labels:['Supply','Distribution','Renewable','Energy Eff.','Transition','RGGI'],vals:[74,55.5,18.5,12.95,14.8,9.25]};
-    safeChart('c4a',{type:'doughnut',data:{labels:billBase.labels,datasets:[{data:billBase.vals,backgroundColor:[C.blue,C.navy,C.red,C.amber,'#46527A','#3E4A4D'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:8}}}}});
-    const billAfter={labels:['Supply','Distribution','Renewable (↓)','Energy Eff. (↓)','Transition','RGGI'],vals:[65,55.5,16,11,14.8,9.25]};
-    safeChart('c4b',{type:'doughnut',data:{labels:billAfter.labels,datasets:[{data:billAfter.vals,backgroundColor:[C.blue,C.navy,C.red,C.amber,'#46527A','#3E4A4D'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:8}}}}});
+    safeChart('c1b',{type:'bar',data:{labels:['Mass Save cut','ACP rebate','Net metering'],datasets:[{data:[RELIEF.massSave,RELIEF.acp,RELIEF.netMeter].map(Math.round),backgroundColor:C.green,borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/yr per household'}}}}});
     safeChart('c4c',{type:'bar',data:{labels:['MA','CT','NY','RI','US Avg','TX','FL'],datasets:[{data:[183,147,172,169,109,95,90],backgroundColor:(ctx)=>{const v=ctx.parsed.y;return v>150?C.red:v<110?C.green:C.amber;},borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/mo @ 600 kWh'}}}}});
   }
   if(tab==='cutkept'){
-    safeChart('c2',{type:'bar',data:{labels:['Mass Save Cut','ACP Rebates','Net Metering','Net Zero Mandate','Offshore Wind (new)','Solar (new)','RGGI','RPS Compliance'],datasets:[{label:'$ / yr per household',data:[80,40,30,-130,-90,-60,-200,-97],backgroundColor:(ctx)=>ctx.parsed.y>0?C.green:C.red,borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:false}}}});
+    safeChart('c2',{type:'bar',data:{labels:['Mass Save cut','ACP rebate','Net metering cut','RPS & clean peak','Efficiency charge','Net metering surcharge','SMART solar','RGGI'],datasets:[{label:'$ / yr per household',data:[RELIEF.massSave,RELIEF.acp,RELIEF.netMeter,-POLICY.rps,-POLICY.ee,-POLICY.nmrs,-POLICY.smart,-POLICY.rggi].map(Math.round),backgroundColor:(ctx)=>ctx.parsed.y>0?C.green:C.red,borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.parsed.y>0?'Cut: $':'Still charged: $')+Math.abs(c.parsed.y)+'/yr'}}}}});
   }
   if(tab==='mandates'){
     safeChart('chartRGGI',{type:'bar',data:{labels:['2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026*'],datasets:[{data:[28.2,50.9,44.1,27.2,28.5,74.0,63.6,74.3,45.7,34.4,41.9,46.3,55.5,97.5,126.1,128.5,195.5,200.4,261.6],backgroundColor:C.red,borderRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'M'}}}}});
@@ -1300,7 +1318,7 @@ function initCharts(tab){
     safeChart('cS3143pie',{type:'doughnut',data:{labels:['Verified / Documented ($2.2B)','Plausible / Partial ($4.4B-$4.7B)','Speculative / Accounting ($8.3B)'],datasets:[{data:[2240,4391,8313],backgroundColor:[C.green,C.amber,C.red],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:10}},tooltip:{callbacks:{label:c=>'$'+c.parsed.toLocaleString()+'M over 10 yrs'}}}}});
     safeChart('cS3143cats',{type:'bar',data:{labels:['Securitization','Distrib. Planning','Basic Service Probe','GSEP Gas Reform','Seasonal Procure.','Reconciling Chgs','Competitive Suppliers','RNG','DOER Procure.','Third-Party Grid','Geothermal','Net Metering','RPS Rollback','On-Bill Financing','SMART RECs'],datasets:[{label:'$M claimed',data:[7100,1700,1000,1460,780,750,650,230,420,130,130,75,213,540,26],backgroundColor:[C.red,C.amber,C.red,C.green,C.amber,C.amber,C.green,C.amber,C.amber,C.amber,C.green,C.amber,C.red,C.amber,C.amber],borderRadius:3}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.x.toLocaleString()+'M'}}},scales:{x:{ticks:{font:{size:8},color:C.muted,callback:v=>'$'+v.toLocaleString()+'M'},grid:{color:'rgba(0,0,0,0.04)'}},y:{ticks:{font:{size:8},color:C.muted},grid:{display:false}}}}});
     safeChart('cS3143hh',{type:'bar',data:{labels:['Current Overpayment vs US','Senate Claim Per HH/yr','Realistic Relief','Gap Still Remaining'],datasets:[{data:[OVERPAY,528,RELIEF_HH,OVERPAY-RELIEF_HH],backgroundColor:[C.red,C.blue,C.green,C.red],borderRadius:5}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/yr per household'}}}}});
-    safeChart('cS3143gaps',{type:'bar',data:{labels:['RGGI Carbon Tax','Eversource Hike (approved)','NGrid Hike (approved)','RPS Compliance','Pipeline Gap Premium','Mass Save Growth'],datasets:[{data:[200,350,130,280,400,95],backgroundColor:C.red,borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'~$'+c.parsed.y+'M/yr — untouched by S.3143'}}}}});
+    safeChart('cS3143gaps',{type:'bar',data:{labels:['RGGI (2025)','RPS & clean peak (2023)','Mass Save growth 2025→27'],datasets:[{data:[200.4,806.3,170.1],backgroundColor:C.red,borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'M/yr'}}}}});
   }
   if(tab==='transparency'){ /* no charts to init */ }
   if(tab==='gasvsutil'){
@@ -1333,7 +1351,7 @@ function initCharts(tab){
     // "$765/yr mandate premium" caption on this tab had moved on.
     safeChart('chartBCCEvMandate',{type:'bar',data:{labels:['BCCE Supply Savings','Mandate Premium Untouched'],datasets:[{data:[BCCE_SAVINGS,OVERPAY],backgroundColor:[C.green,C.red],borderRadius:4}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.parsed.y+'/yr'}}}}});
     safeChart('chartBostonEmissions',{type:'doughnut',data:{labels:['Commercial, industrial & large residential','Small residential','Transportation','Other (fugitive gas, waste)'],datasets:[{data:[50,17,31,2],backgroundColor:[C.red,C.amber,C.blue,C.muted],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:9},boxWidth:10}}}}});
-    safeChart('chartMandateStack',{type:'bar',data:{labels:['RGGI ($200M/yr)','RPS Compliance','Offshore Wind','Net-Zero Infra.','BCCE Savings'],datasets:[{data:[200,97,85,75,-200],backgroundColor:(ctx)=>ctx.parsed.y>0?C.red:C.green,borderRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.parsed.y>0?'Cost: ':'Savings: ')+'$'+Math.abs(c.parsed.y)+'/yr HH'}}}}});
+    safeChart('chartMandateStack',{type:'bar',data:{labels:['RPS & clean peak','Efficiency charge','Net metering surcharge','SMART solar','RGGI','BCCE savings'],datasets:[{data:[POLICY.rps,POLICY.ee,POLICY.nmrs,POLICY.smart,POLICY.rggi,-BCCE_SAVINGS].map(Math.round),backgroundColor:(ctx)=>ctx.parsed.y>0?C.red:C.green,borderRadius:3}]},options:{...tinyOpts(),plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.parsed.y>0?'Cost: ':'Savings: ')+'$'+Math.abs(c.parsed.y)+'/yr HH'}}}}});
   }
 }
 

@@ -319,7 +319,7 @@ subs = [
     # in-page from this table's own rows -- see the "Derived figures" block in
     # the HTML. Only the dollar figure is written from here.
     ("H.5151 gap-closed card",
-     r'(\$150 of \$)[\d,]+(\. <span id="gapClosedRank">)',
+     r'(<span id="reliefHH4">&#x2014;</span> of \$)[\d,]+(\. <span id="gapClosedRank">)',
      rf'\g<1>{dollars(overpay)}\g<2>', F),
 
     ("H.5151 state-comparison source",
@@ -468,14 +468,15 @@ live = re.sub(r'^\s*//.*$', "", live, flags=re.M)    # whole-line JS comments
 # Rates this run wrote: the monthly state/US figures, plus the two closed-year
 # annual averages on the annual-average card.
 allowed_cents = {cents(v) for v in rate.values()} | {cents(ann_ma), cents(ann_us)}
+# DOER's own low/high estimate of 2023 RPS/APS/CPS compliance cost (2023 Annual
+# Compliance Report, Table 13). A fixed vintage, not an EIA rate; recheck when the 2024 report posts.
+allowed_cents |= {"1.86", "2.51"}
 
 # Per-year dollar figures that are analysis constants rather than EIA output.
 # Each is documented where it appears on the page.
 allowed_per_yr = {
     dollars(overpay),  # MA overpayment vs the US average -- written by this run
-    "150",   # realistic H.5151 relief (Mass Save 80 + ACP 40 + net metering 30)
     "200",   # Boston BCCE supply-only savings, per city program data
-    "377",   # untouched policy charges, Cut-vs-Kept tab
     "528",   # S.3143 claim per household: $14.9B (15 itemized items) / 2.83M households (ACS 2024) / 10 yrs
     "353",   # Equivalence timeline, anchored to 2010 (electricity + gas gap) -- a fact about a past year
     "265",   # Boston BCCE savings at current supply rates: (0.17323 - 0.13644) x 7,200 kWh; Eversource Basic Service window Aug 1 2026 - Jan 31 2027, recheck after
