@@ -423,6 +423,32 @@
    "allow": [
     "data/retired-figures.json"
    ]
+  },
+  {
+   "id": "energy-remaining-unsourced",
+   "subject": "Remaining unsourced energy-page claims (Oct 29 pass 2)",
+   "wrong": [
+    "$12/month starting 2027",
+    "$350M in already-approved",
+    "only 800 MW contracted",
+    "$14.3 Billion",
+    "Enacted 2008 &#x2014; Voice vote",
+    "$59,150",
+    "$256K",
+    "$4.86M",
+    "48% foreign-owned",
+    "$30M+/yr in climate grants",
+    "90<span style=\"font-size:0.9rem\"> DAYS",
+    "boasted about blocking"
+   ],
+   "right": "Relief 10-yr average (Mass Save one-time ~$264 in 2027); EEAC plan $1,415M->$1,585M; Vineyard Wind 1 806 MW; S.3143 $14.9B; GCA House 154-0 / Senate 36-0, GWSA House 155-0; Crawford $62,200 to 111 (OCPF 2021-2025); lobbying table $4.61M, 50% foreign-owned; Barr climate $34.2M (2025); H.4144 285 days in committee",
+   "context": "(?i)energy|Mass Save|relief|lobby|Barr|vote|wind|pipeline|S\\.3143|Healey",
+   "context_window": 900,
+   "why": "Each checked against the primary record (House Journal 2008, DOER, EEAC, SOS, OCPF, Barr grants database, malegislature.gov bill history); the old values had no source or were wrong.",
+   "retired_on": "2026-10-29",
+   "allow": [
+    "data/retired-figures.json"
+   ]
   }
  ]
 }
