@@ -1,11 +1,11 @@
 {
- "fetched_at": "2026-10-30T11:16:54Z",
+ "fetched_at": "2026-10-31T11:16:07Z",
  "source": "Massachusetts CTHRU -- Budget vs Actual (kv7m-35wn) for appropriation totals; Comptroller Spending (pegc-naaa) for payments by vendor",
  "source_url": "https://cthru.data.socrata.com/",
  "measure": "state appropriations and actual expenses on accounts the Commonwealth names for immigrant, refugee or family-shelter purposes; recipients classified by appropriation, never by vendor name",
  "newest_fiscal_year": 2027,
  "newest_payment_date": "2026-09-17T00:00:00.000",
- "cthru_row_created": "2026-10-29T07:42:34.000",
+ "cthru_row_created": "2026-10-30T08:43:39.000",
  "account_selection": {
   "search_terms": [
    "IMMIGRA",
@@ -221,7 +221,7 @@
    "2027": {
     "shelter_system": {
      "enacted": 357222649.0,
-     "actual": 109732892.54,
+     "actual": 109731088.1,
      "transfer_in": 57258383.7
     },
     "ea_line": {
@@ -231,7 +231,7 @@
     },
     "homebase": {
      "enacted": 82322001.0,
-     "actual": 54908285.52,
+     "actual": 54906481.08,
      "transfer_in": 2828.0
     },
     "complete": false
@@ -286,7 +286,7 @@
    },
    "2027": {
     "enacted": 367832672.0,
-    "actual": 111696592.38,
+    "actual": 111694787.94,
     "accounts_with_activity": 16
    }
   }
