@@ -95,6 +95,15 @@ jobs:
 
       - name: Check for changes
         id: changes
+        # Runs even when a step above failed. Same reasoning as update-all.yml,
+        # which learned this twice (2026-09-20 lost a census pass, 2026-10-20
+        # threw away an energy write) and which update-mls never inherited:
+        # every script here writes a complete artifact or writes nothing, so a
+        # transient fetch failure in ONE optional feed must not discard the
+        # others. 2026-11-01 (run 41283647553) is this workflow's turn -- FRED
+        # 500'd and took a clean MLS refresh and a 71s price-distribution pull
+        # down with it. The job still reports failure, so nothing is hidden.
+        if: ${{ !cancelled() }}
         run: |
           # git status, not git diff: the first backfill CREATES data/mls-history.json, and
           # git diff only reports tracked files — a brand-new cache would read as "no
@@ -106,7 +115,7 @@ jobs:
           fi
 
       - name: Commit updates
-        if: steps.changes.outputs.changed == 'true'
+        if: ${{ !cancelled() && steps.changes.outputs.changed == 'true' }}
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -151,5 +160,5 @@ jobs:
           exit 1
 
       - name: No new data
-        if: steps.changes.outputs.changed == 'false'
+        if: ${{ !cancelled() && steps.changes.outputs.changed == 'false' }}
         run: echo "MLS figures unchanged - no commit needed."
