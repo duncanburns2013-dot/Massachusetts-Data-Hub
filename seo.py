@@ -38,6 +38,11 @@ FORMER = ['https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/']
 NOINDEX = {
     'template.html':                 'a development template, not content',
     'tax-burden-nh-comparison.html': 'a redirect stub kept so an old shared URL does not 404',
+    'shelter-immigrant-spending.html':
+        'a redirect stub since the 2026-10-22 merge into immigration-dashboard.html; '
+        'left out of this set at the time, so the next seo.py run rewrote its '
+        'canonical to point at itself and listed it in the sitemap, which is the '
+        'opposite of what a redirect stub is for',
     '404.html':                      'served for URLs that do not exist; it is not one itself',
 }
 
@@ -174,6 +179,7 @@ stamp = [p for p in pages if p in only] if only else pages
 added_desc = added_canon = fixed_og = added_noindex = moved = 0
 added_icons = added_card = added_ld = 0
 fixed_social = 0
+escaped_meta = 0
 
 # The front page's own og:description, which is the text every page built on the
 # shared shell went out carrying. It is the sentinel for "this page never had
@@ -206,7 +212,23 @@ for p in stamp:
             moved += 1
 
     # --- canonical: replace any existing one rather than stacking a second
+    #
+    # A redirect stub is the exception. shelter-immigrant-spending.html carried
+    # a canonical pointing at immigration-dashboard.html, the page it was merged
+    # into - which is the whole point of a retired URL, and is what consolidates
+    # an old shared link onto the page that answers it. Stripping every
+    # canonical and re-stamping only non-NOINDEX pages threw that away and left
+    # the stub with none at all. A canonical that already points somewhere other
+    # than the page's own URL was put there deliberately; keep it.
+    keep_canon = None
+    mc = re.search(r'<link rel="canonical" href="([^"]+)"[^>]*>', s)
+    if mc and p in NOINDEX and mc.group(1) != url:
+        keep_canon = mc.group(0)
     s = re.sub(r'[ \t]*<link[^>]+rel="canonical"[^>]*>\n?', '', s)
+    if keep_canon:
+        m = re.search(r'(<meta[^>]+name="viewport"[^>]*>\n)', s)
+        if m:
+            s = s[:m.end()] + keep_canon + '\n' + s[m.end():]
     if p not in NOINDEX:
         tag = '<link rel="canonical" href="%s">\n' % url
         m = re.search(r'(<meta[^>]+name="viewport"[^>]*>\n)', s)
@@ -265,6 +287,31 @@ for p in stamp:
                 for prop, attr in (('og:title', 'property'), ('twitter:title', 'name')):
                     s = re.sub(r'<meta %s="%s" content="[^"]*">' % (attr, prop),
                                '<meta %s="%s" content="%s">' % (attr, prop, want_t), s)
+
+    # --- a bare & in a social tag, escaped
+    # The block above escapes a title, but only for a page that INHERITED the
+    # shell's - the one case it was written to repair. A page whose og:title was
+    # written by hand never passes that test, so six of them went out carrying a
+    # raw ampersand: "Massachusetts Tax Burden & State Budget". An HTML5 parser
+    # recovers from "& S" because it is not a valid entity, which is why every
+    # validator passed it; a stricter reader need not, and the repair is cheap
+    # enough that there is no reason to find out which readers do.
+    #
+    # unescape-then-escape is idempotent: "A &amp; B" and "A & B" both land on
+    # "A &amp; B", so this can run on every page on every pass.
+    for prop, attr in (('og:title', 'property'), ('og:description', 'property'),
+                       ('og:site_name', 'property'), ('twitter:title', 'name'),
+                       ('twitter:description', 'name')):
+        pat = r'(<meta %s="%s" content=")([^"]*)(">)' % (attr, prop)
+
+        def _esc(m):
+            global escaped_meta
+            fixed = html.escape(html.unescape(m.group(2)), quote=True)
+            if fixed != m.group(2):
+                escaped_meta += 1
+            return m.group(1) + fixed + m.group(3)
+
+        s = re.sub(pat, _esc, s)
 
     # --- the icon set, stamped once and replaced rather than stacked
     s = re.sub(r'[ \t]*<link[^>]+rel="(?:icon|shortcut icon|apple-touch-icon)"[^>]*>\n?', '', s)
@@ -374,6 +421,7 @@ print('canonicals stamped : %d' % added_canon)
 print('descriptions added : %d' % added_desc)
 print('social copy fixed  : %d (og/twitter title+description inherited from a shell)' % fixed_social)
 print('og:url normalised  : %d changed' % fixed_og)
+print('social tags escaped: %d (a bare & in an og/twitter title or description)' % escaped_meta)
 print('noindex added      : %d (%s)' % (added_noindex, ', '.join(NOINDEX)))
 print('sitemap.xml        : %d urls' % len(listed))
 print('robots.txt         : written')
