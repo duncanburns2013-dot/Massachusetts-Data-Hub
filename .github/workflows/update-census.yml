@@ -104,7 +104,14 @@ jobs:
             || echo "changed=true"  >> $GITHUB_OUTPUT
 
       - name: Commit updated dashboards
-        if: steps.changes.outputs.changed == 'true'
+        # !cancelled() because 'Check for changes' above already has it, and
+        # without the same here that guard did nothing: Actions implicitly ANDs
+        # success() into any if: that lacks a status function, so on a failure
+        # the check ran, computed changed=true, and this step was skipped anyway.
+        # Three independent sources feed this job (Census, BEA+MIT, DESE) and
+        # each script writes its output only at the end of main(), so one source
+        # failing leaves the others' complete files on disk. Commit them.
+        if: ${{ !cancelled() && steps.changes.outputs.changed == 'true' }}
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -136,5 +143,5 @@ jobs:
           exit 1
 
       - name: No new data
-        if: steps.changes.outputs.changed == 'false'
+        if: ${{ !cancelled() && steps.changes.outputs.changed == 'false' }}
         run: echo "Census data unchanged - no commit needed."

@@ -83,6 +83,13 @@ jobs:
 
       - name: Check for changes
         id: changes
+        # Four independent sources feed this job (BLS, NY Fed, U-1..U-6, bake).
+        # NY Fed and U-6 already self-handle their 'source unavailable' path via
+        # exit 75; this covers the rest, so a failure in one does not discard the
+        # writes the others already made. Every script here writes once at the
+        # end (fetch-bls-data.js, bake-static-fallback.mjs:131), so what lands on
+        # disk is always a complete artifact, never a torn page.
+        if: ${{ !cancelled() }}
         run: |
           git diff --quiet employment-dashboard.html data/employment-latest.json \
               data/national-payroll-vintages.json data/u6-latest.json \
@@ -90,7 +97,7 @@ jobs:
             || echo "changed=true"  >> $GITHUB_OUTPUT
 
       - name: Commit and push updates
-        if: steps.changes.outputs.changed == 'true' || github.event.inputs.force_update == 'true'
+        if: ${{ !cancelled() && (steps.changes.outputs.changed == 'true' || github.event.inputs.force_update == 'true') }}
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
