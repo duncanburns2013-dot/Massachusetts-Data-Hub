@@ -32,7 +32,7 @@ const SERIES = {
   cpi:     { id: 'CPIAUCSL',    start: '1975-01-01', label: 'CPI-U All Items (monthly, SA)' },
 };
 
-function getJson(url, maxRetries = 4) {
+function getJson(url, maxRetries = 6) {
   return new Promise((resolve, reject) => {
     const attempt = (n) => {
       const req = https.get(url, { headers: { 'User-Agent': 'MA-Data-Hub/HousingHistory/1.0' } }, (res) => {
@@ -43,12 +43,21 @@ function getJson(url, maxRetries = 4) {
             if ((res.statusCode === 429 || res.statusCode >= 500) && n < maxRetries) {
               return setTimeout(() => attempt(n + 1), 1500 * (n + 1));
             }
-            return reject(new Error(`HTTP ${res.statusCode}: ${body.slice(0, 200)}`));
+            const err = new Error(`HTTP ${res.statusCode}: ${body.slice(0, 200)}`);
+            // A 429/5xx that survived every retry means FRED is down, not that
+            // anything here is wrong. Flag it so the caller can skip cleanly
+            // instead of taking the whole workflow with it.
+            if (res.statusCode === 429 || res.statusCode >= 500) err.upstreamUnavailable = true;
+            return reject(err);
           }
           try { resolve(JSON.parse(body)); } catch (e) { reject(e); }
         });
       });
-      req.on('error', (e) => n < maxRetries ? setTimeout(() => attempt(n + 1), 1500 * (n + 1)) : reject(e));
+      req.on('error', (e) => {
+        if (n < maxRetries) return setTimeout(() => attempt(n + 1), 1500 * (n + 1));
+        e.upstreamUnavailable = true;   // DNS/TLS/socket failure — FRED unreachable
+        reject(e);
+      });
     };
     attempt(0);
   });
@@ -127,6 +136,17 @@ function decimate(series, every) {
     if (e instanceof InvalidKeyError) {
       console.warn('[housing-history] FRED rejected api_key — skipping refresh, panel keeps prior values');
       console.warn('  (rotate FRED_API_KEY repo secret at github.com/<owner>/<repo>/settings/secrets/actions)');
+      process.exit(0);
+    }
+    if (e.upstreamUnavailable) {
+      // Same contract as the two paths above, for the failure that actually
+      // happened: 2026-11-01 (run 41283647553) FRED 500'd through every retry,
+      // this threw, and the job died AFTER a clean MLS refresh and a clean
+      // price-distribution pull — 71s of good data thrown away for an optional
+      // panel. The main payload must not depend on FRED being up.
+      // Surfaced as a ::warning:: so a multi-day FRED outage is visible on the
+      // run rather than silently freezing the panel at stale values.
+      console.warn(`::warning::[housing-history] FRED unreachable (${e.message}) — skipping refresh, panel keeps prior values`);
       process.exit(0);
     }
     throw e;
