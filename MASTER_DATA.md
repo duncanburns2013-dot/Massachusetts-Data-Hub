@@ -472,14 +472,14 @@ community 10%, adjacent small town 5%. Counts: 12 / 72 / 58 / 35.
 
 | Field | Value | Source | Verified |
 |-------|-------|--------|----------|
-| Compliant | 158 | EOHLC Compliance Status Sheet (2026-10-20) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
-| Interim compliance | 9 | EOHLC Compliance Status Sheet (2026-10-20) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
-| Noncompliant | 8 | EOHLC Compliance Status Sheet (2026-10-20) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
-| Conditional compliance | 2 | EOHLC Compliance Status Sheet (2026-10-20) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
-| Developments tracked in 3A districts | 104 | EOHLC Compliance Status Sheet (2026-10-20) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
-| Total units in those developments | 10,065 | EOHLC Compliance Status Sheet (2026-10-20) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
-| Deed-restricted units | 1,822 | EOHLC Compliance Status Sheet (2026-10-20) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
-| Communities with any tracked activity | 43 | EOHLC Compliance Status Sheet (2026-10-20) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
+| Compliant | 159 | EOHLC Compliance Status Sheet (2026-10-26) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
+| Interim compliance | 8 | EOHLC Compliance Status Sheet (2026-10-26) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
+| Noncompliant | 8 | EOHLC Compliance Status Sheet (2026-10-26) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
+| Conditional compliance | 2 | EOHLC Compliance Status Sheet (2026-10-26) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
+| Developments tracked in 3A districts | 104 | EOHLC Compliance Status Sheet (2026-10-26) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
+| Total units in those developments | 10,065 | EOHLC Compliance Status Sheet (2026-10-26) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
+| Deed-restricted units | 1,822 | EOHLC Compliance Status Sheet (2026-10-26) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
+| Communities with any tracked activity | 43 | EOHLC Compliance Status Sheet (2026-10-26) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
 
 - **Tracked is not built.** The tracker mixes completed, permitted and proposed
   developments, and EOHLC says it is compiled from third-party information and
