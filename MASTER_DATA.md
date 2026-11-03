@@ -288,13 +288,13 @@ Boston $1,335,572. Quote it with its as-of date or not at all.
 ### New Hampshire — Market Data (PrimeMLS)
 
 🔄 Source of truth: `data/nh-figures.json`, refreshed daily by `update-nh-figures.py`.
-Values below are that file as of **2026-11-02**. (Feed is PrimeMLS, not Paragon.)
+Values below are that file as of **2026-11-03**. (Feed is PrimeMLS, not Paragon.)
 
 | Region | Median Price | Avg Sale | Avg DOM | SP/LP |
 |--------|-------------|----------|---------|-------|
-| NH Statewide | $446,820 | $534,942 | 29 days | 100.33% |
+| NH Statewide | $446,827 | $534,945 | 29 days | 100.33% |
 
-- **Active inventory:** 2,929 listings · median list $590,000 · avg list $834,278
+- **Active inventory:** 2,898 listings · median list $595,000 · avg list $836,179
 - Also tracked per-market: Portsmouth, Salem, Derry, Windham
 
 ### Boston — Commercial Real Estate (CMBS)
