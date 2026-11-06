@@ -81,6 +81,17 @@ jobs:
         run: python scripts/update-homepage-stats.py
 
       - name: Restore each generated page's own identity
+        # Guarded like the commit step below, and for the same reason. This is
+        # not another builder, it is the repair: build_method.py leaves
+        # method.html wearing about.html's identity -- og:url, og:image and
+        # twitter:image all pointing at about.html, no canonical, and an
+        # AboutPage JSON-LD block naming about.html. Confirmed by hand on
+        # 2026-11-06. seo.py is what puts each page's own identity back.
+        #
+        # Without this, any failure above skips THIS step while the commit step
+        # still runs, publishing all three pages pointing at each other. An
+        # unguarded repair behind a guarded commit is the worst of both.
+        if: ${{ !cancelled() }}
         run: python seo.py method.html about.html videos.html
 
       - name: Commit if changed
