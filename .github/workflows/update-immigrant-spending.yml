@@ -45,10 +45,18 @@ jobs:
         run: python scripts/verify-nonprofit-status.py
 
       - name: Commit if changed
-        # Runs even when the step above failed: the updater exits 75 on a CTHRU
-        # outage and writes nothing, so there is nothing to lose, and a later
-        # partial failure must not discard an earlier good write.
-        if: ${{ !cancelled() }}
+        # No !cancelled() guard here, deliberately. It used to carry one, on
+        # the reasoning that the updater exits 75 and writes nothing on a
+        # CTHRU outage so there was nothing to lose. That was not true: on
+        # 2026-11-05 the updater wrote the file and THEN hit the outage, the
+        # IRS fetch and verify steps were skipped, and this step committed
+        # the result anyway, deleting the mira and recipients.irs_check
+        # blocks from the live file. The guard is only safe where every
+        # step writes all-or-nothing, and this pipeline does not.
+        #
+        # Plain implicit success() is the correct rule here: publish only a
+        # complete build. A partial one leaves yesterday's intact file up,
+        # which is what the exit-75 contract promises anyway.
         run: |
           if git diff --quiet -- 'data/immigrant-spending-latest.json' immigration-dashboard.html MASTER_DATA.md; then
             echo "No change - CTHRU has not moved since the last run."

@@ -866,25 +866,33 @@ def main():
         },
     }
 
-    os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    with open(OUT, "w", encoding="utf-8") as fh:
-        json.dump(doc, fh, indent=1)
-        fh.write("\n")
-    print(f"\nWrote {OUT}")
-
+    # Every remaining CTHRU call happens BEFORE the write, so the exit-75
+    # contract at the top of this file stays true: a neutral skip has to
+    # leave the published file exactly as it was.
+    #
+    # It did not, on 2026-11-05 (run 42086644542). The file was written
+    # here, then mira_breakdown() timed out and blocked() exited 75
+    # announcing "Nothing written". The commit step runs under
+    # !cancelled(), so it committed that half-built file while the two IRS
+    # steps after it were skipped: the whole mira block and the whole
+    # recipients.irs_check block were dropped from the live file, 1,192
+    # values, by a run calling itself a no-op. Fetch first, write once.
     bd = mira_breakdown()
     if bd:
         print(f"\n  MIRA: ${bd['total']:,.0f} across {bd['accounts']} "
               f"appropriations; top {len(bd['top'])} = "
               f"${sum(a['total'] for a in bd['top']):,.0f}")
         doc["mira"] = bd
-        with open(OUT, "w", encoding="utf-8") as fh:
-            json.dump(doc, fh, indent=1)
-            fh.write("\n")
 
     mira_t1 = mira_tier1_payments()
     print(f"  MIRA under tier-1 appropriations since FY{FIRST_FY}: "
           f"${mira_t1:,.0f}")
+
+    os.makedirs(os.path.dirname(OUT), exist_ok=True)
+    with open(OUT, "w", encoding="utf-8") as fh:
+        json.dump(doc, fh, indent=1)
+        fh.write("\n")
+    print(f"\nWrote {OUT}")
 
     for what, err in (("immigration-dashboard.html fields",
                        stamp_shelter_page(doc, mira_t1)),
