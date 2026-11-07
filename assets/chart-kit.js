@@ -126,12 +126,29 @@
         return arr.map(function (v) { return v == null ? null : +(v / base * 100).toFixed(1); });
     }
 
+    /* Tooltip for an indexed chart.
+     *
+     * An index is only honest if the reader can get back to the real number,
+     * so every indexed series shows "112  ($934,000)" rather than a bare 112.
+     * rawSeries and fmts are positional, matching the series order.
+     */
+    function indexedTooltip(rawSeries, fmts) {
+        return function (v, opts) {
+            if (v == null) return '—';
+            var n = rawSeries[opts.seriesIndex][opts.dataPointIndex];
+            if (n == null) return v.toFixed(0);
+            var f = fmts[opts.seriesIndex];
+            return v.toFixed(0) + '  (' + (f ? f(n) : n) + ')';
+        };
+    }
+
     global.HubCharts = {
         HUB: HUB,
         CATEGORICAL: CATEGORICAL,
         ENTITY: ENTITY,
         baseOpts: baseOpts,
         indexTo100: indexTo100,
+        indexedTooltip: indexedTooltip,
         fmt: {
             money: fmtMoney, moneyFull: fmtMoneyFull, sqft: fmtSqft,
             dom: fmtDom, pct: fmtPct, units: fmtUnits, k: fmtK

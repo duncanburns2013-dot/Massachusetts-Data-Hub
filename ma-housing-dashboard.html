@@ -244,6 +244,7 @@
         .chart-box { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
         .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
         .chart-title { font-size: 0.95rem; font-weight: 600; color: var(--ink); }
+        .chart-note{font-size:0.72rem;font-weight:500;color:#5A6467;letter-spacing:0.01em;margin-left:2px}
         .chart-legend { display: flex; gap: 14px; flex-wrap: wrap; }
         .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.75rem; color: var(--ink-light); }
         .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
@@ -605,7 +606,7 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !imp
             <div class="card blue-border"><div class="card-label">12-Mo Volume</div><div class="card-val blue" id="nbpt-units-val">—</div><div class="card-grid"><div class="card-metric"><div class="card-metric-label yr-prev">—</div><div class="card-metric-val" id="nbpt-units-prev">—</div></div><div class="card-metric"><div class="card-metric-label">YoY Change</div><div class="card-metric-val" id="nbpt-units-yoy">—</div></div></div></div>
         </div>
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Newburyport — Price &amp; $/SqFt (2022–2026)</h3></div><div class="chart-area" id="nbpt-chart"></div></div>
-        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Newburyport — Volume &amp; Months Supply</h3></div><div class="chart-area" id="nbpt-vol-chart"></div></div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Newburyport &mdash; Sales Volume</h3><span class="chart-note">Months supply now: <strong id="nbpt-supply-now">&mdash;</strong> &middot; current period only</span></div><div class="chart-area" id="nbpt-vol-chart"></div></div>
     </div></section>
     
     <section class="section" id="propertytype"><div class="container"><div class="section-header"><h2 class="section-title">By Property Type</h2><p class="section-desc">Single Family vs. Condominium vs. Multi-Family — MLS PIN, trailing 12 months ending <span class="data-window">—</span>. 5-year view across MA, Boston, Essex County, Newburyport.</p></div><div class="cards">
@@ -810,27 +811,19 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !imp
         } } }
     }).render();
     
+    // Was a dual axis. Price and price-per-foot are both prices, so indexing them
+    const macombochartRaw = [d.ma.price.slice(-5), d.ma.sqft.slice(-5)];
     new ApexCharts(document.querySelector('#ma-combo-chart'), {
         ...baseOpts,
         chart: { ...baseOpts.chart, type: 'line', height: 360 },
         series: [
-            { name: 'Avg Sale Price', type: 'area', data: d.ma.price.slice(-5) },
-            { name: '$/SqFt', type: 'line', data: d.ma.sqft.slice(-5) }
+            { name: 'Avg Sale Price', data: K.indexTo100(d.ma.price.slice(-5)) },
+            { name: '$/SqFt', data: K.indexTo100(d.ma.sqft.slice(-5)) }
         ],
         colors: [C.ma, C.gold],
-        stroke: { width: [3, 4], curve: 'smooth' },
-        fill: { type: ['gradient','solid'], gradient: { shade:'light', type:'vertical', shadeIntensity:0.4, opacityFrom:0.55, opacityTo:0.05, stops:[0,95] } },
-        markers: { size: [0, 5], hover: { size: 9 }, strokeColors: '#fff', strokeWidth: 2 },
         xaxis: { categories: ['2022','2023','2024','2025','2026'], axisBorder: { show: false }, axisTicks: { show: false } },
-        yaxis: [
-            { seriesName: 'Avg Sale Price', labels: { formatter: fmtMoney, style: { colors: C.ma } }, title: { text: 'Avg Sale Price', style: { fontWeight: 600 } } },
-            { seriesName: '$/SqFt', opposite: true, labels: { formatter: fmtSqft, style: { colors: C.gold } }, title: { text: '$/SqFt', style: { fontWeight: 600 } } }
-        ],
-        tooltip: { ...baseOpts.tooltip, y: [{ formatter: fmtMoneyFull }, { formatter: fmtSqft }] },
-        annotations: { xaxis: [
-            { x: '2022', strokeDashArray: 4, borderColor: C.gold, label: { borderColor: C.gold, style: { color: '#fff', background: C.gold, fontSize: '11px', fontWeight: 600 }, text: 'Rate hikes' } },
-            { x: '2020', strokeDashArray: 4, borderColor: C.boston, label: { borderColor: C.boston, style: { color: '#fff', background: C.boston, fontSize: '11px', fontWeight: 600 }, text: 'COVID' } }
-        ] }
+        yaxis: { labels: { formatter: v => Math.round(v) }, title: { text: '2022 = 100', style: { fontWeight: 600 } } },
+        tooltip: { ...baseOpts.tooltip, y: { formatter: K.indexedTooltip(macombochartRaw, [fmtMoneyFull, fmtSqft]) } }
     }).render();
     
     new ApexCharts(document.querySelector('#boston-price-chart'), {
@@ -857,20 +850,19 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !imp
         tooltip: { ...baseOpts.tooltip, y: { formatter: fmtSqft } }
     }).render();
     
+    // Was a dual axis: a unit count against a day count on two scales.
+    const bostondomvolchartRaw = [d.boston.units.slice(-5), d.boston.dom.slice(-5)];
     new ApexCharts(document.querySelector('#boston-domvol-chart'), {
-        ...baseOpts, chart: { ...baseOpts.chart, type: 'line', height: 340 },
-        series: [{ name: 'Volume', type: 'column', data: d.boston.units.slice(-5) }, { name: 'DOM', type: 'line', data: d.boston.dom.slice(-5) }],
-        colors: [C.boston, C.amber],
-        stroke: { width: [0, 4], curve: 'smooth' },
-        fill: { type: ['gradient','solid'], gradient: { shade:'light', type:'vertical', shadeIntensity:0.4, opacityFrom:0.95, opacityTo:0.55, stops:[0,100] } },
-        plotOptions: { bar: { borderRadius: 4, columnWidth: '60%' } },
-        markers: { size: [0, 5], hover: { size: 10 }, strokeColors: '#fff', strokeWidth: 2 },
-        xaxis: { categories: ['2022','2023','2024','2025','2026'], axisBorder: { show: false }, axisTicks: { show: false } },
-        yaxis: [
-            { seriesName: 'Volume', labels: { formatter: fmtNum, style: { colors: C.boston } }, title: { text: 'Units (12mo)', style: { fontWeight: 600 } } },
-            { seriesName: 'DOM', opposite: true, labels: { formatter: fmtDom, style: { colors: C.amber } }, title: { text: 'Days on Market', style: { fontWeight: 600 } } }
+        ...baseOpts,
+        chart: { ...baseOpts.chart, type: 'line', height: 340 },
+        series: [
+            { name: 'Volume', data: K.indexTo100(d.boston.units.slice(-5)) },
+            { name: 'Days on Market', data: K.indexTo100(d.boston.dom.slice(-5)) }
         ],
-        tooltip: { ...baseOpts.tooltip, y: [{ formatter: fmtNum }, { formatter: fmtDom }] }
+        colors: [C.boston, C.amber],
+        xaxis: { categories: ['2022','2023','2024','2025','2026'], axisBorder: { show: false }, axisTicks: { show: false } },
+        yaxis: { labels: { formatter: v => Math.round(v) }, title: { text: '2022 = 100', style: { fontWeight: 600 } } },
+        tooltip: { ...baseOpts.tooltip, y: { formatter: K.indexedTooltip(bostondomvolchartRaw, [fmtNum, fmtDom]) } }
     }).render();
     
     new ApexCharts(document.querySelector('#essex-price-chart'), {
@@ -897,20 +889,19 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !imp
         tooltip: { ...baseOpts.tooltip, y: { formatter: fmtSqft } }
     }).render();
     
+    // Was a dual axis: a unit count against a day count on two scales.
+    const essexdomvolchartRaw = [d.essex.units.slice(-5), d.essex.dom.slice(-5)];
     new ApexCharts(document.querySelector('#essex-domvol-chart'), {
-        ...baseOpts, chart: { ...baseOpts.chart, type: 'line', height: 340 },
-        series: [{ name: 'Volume', type: 'column', data: d.essex.units.slice(-5) }, { name: 'DOM', type: 'line', data: d.essex.dom.slice(-5) }],
-        colors: [C.essex, C.amber],
-        stroke: { width: [0, 4], curve: 'smooth' },
-        fill: { type: ['gradient','solid'], gradient: { shade:'light', type:'vertical', shadeIntensity:0.4, opacityFrom:0.95, opacityTo:0.55, stops:[0,100] } },
-        plotOptions: { bar: { borderRadius: 4, columnWidth: '60%' } },
-        markers: { size: [0, 5], hover: { size: 10 }, strokeColors: '#fff', strokeWidth: 2 },
-        xaxis: { categories: ['2022','2023','2024','2025','2026'], axisBorder: { show: false }, axisTicks: { show: false } },
-        yaxis: [
-            { seriesName: 'Volume', labels: { formatter: fmtNum, style: { colors: C.essex } }, title: { text: 'Units (12mo)', style: { fontWeight: 600 } } },
-            { seriesName: 'DOM', opposite: true, labels: { formatter: fmtDom, style: { colors: C.amber } }, title: { text: 'Days on Market', style: { fontWeight: 600 } } }
+        ...baseOpts,
+        chart: { ...baseOpts.chart, type: 'line', height: 340 },
+        series: [
+            { name: 'Volume', data: K.indexTo100(d.essex.units.slice(-5)) },
+            { name: 'Days on Market', data: K.indexTo100(d.essex.dom.slice(-5)) }
         ],
-        tooltip: { ...baseOpts.tooltip, y: [{ formatter: fmtNum }, { formatter: fmtDom }] }
+        colors: [C.essex, C.amber],
+        xaxis: { categories: ['2022','2023','2024','2025','2026'], axisBorder: { show: false }, axisTicks: { show: false } },
+        yaxis: { labels: { formatter: v => Math.round(v) }, title: { text: '2022 = 100', style: { fontWeight: 600 } } },
+        tooltip: { ...baseOpts.tooltip, y: { formatter: K.indexedTooltip(essexdomvolchartRaw, [fmtNum, fmtDom]) } }
     }).render();
     
     // Greater Newburyport — town breakdown
@@ -984,35 +975,39 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !imp
         tooltip: { ...baseOpts.tooltip, y: { formatter: fmtMoneyFull } }
     }).render();
     
+    // Was a dual axis. Indexed together, the gap between the two lines is the
+    const nbptchartRaw = [d.nbpt.price.slice(-5), d.nbpt.sqft.slice(-5)];
     new ApexCharts(document.querySelector('#nbpt-chart'), {
-        ...baseOpts, chart: { ...baseOpts.chart, type: 'line', height: 360 },
-        series: [{ name: 'Sale Price', type: 'column', data: d.nbpt.price.slice(-5) }, { name: '$/SqFt', type: 'line', data: d.nbpt.sqft.slice(-5) }],
-        colors: [C.amber, C.boston],
-        stroke: { width: [0, 4], curve: 'smooth' },
-        fill: { type: ['gradient','solid'], gradient: { shade:'light', type:'vertical', shadeIntensity:0.4, opacityFrom:1, opacityTo:0.7, stops:[0,100] } },
-        plotOptions: { bar: { borderRadius: 4, columnWidth: '60%' } },
-        markers: { size: [0, 5], hover: { size: 10 }, strokeColors: '#fff', strokeWidth: 2 },
-        xaxis: { categories: ['2022','2023','2024','2025','2026'], axisBorder: { show: false }, axisTicks: { show: false } },
-        yaxis: [
-            { seriesName: 'Sale Price', labels: { formatter: fmtMoney, style: { colors: C.amber } }, title: { text: 'Sale Price', style: { fontWeight: 600 } } },
-            { seriesName: '$/SqFt', opposite: true, labels: { formatter: fmtSqft, style: { colors: C.boston } }, title: { text: '$/SqFt', style: { fontWeight: 600 } } }
+        ...baseOpts,
+        chart: { ...baseOpts.chart, type: 'line', height: 360 },
+        series: [
+            { name: 'Sale Price', data: K.indexTo100(d.nbpt.price.slice(-5)) },
+            { name: '$/SqFt', data: K.indexTo100(d.nbpt.sqft.slice(-5)) }
         ],
-        tooltip: { ...baseOpts.tooltip, y: [{ formatter: fmtMoneyFull }, { formatter: fmtSqft }] }
+        colors: [C.amber, C.boston],
+        xaxis: { categories: ['2022','2023','2024','2025','2026'], axisBorder: { show: false }, axisTicks: { show: false } },
+        yaxis: { labels: { formatter: v => Math.round(v) }, title: { text: '2022 = 100', style: { fontWeight: 600 } } },
+        tooltip: { ...baseOpts.tooltip, y: { formatter: K.indexedTooltip(nbptchartRaw, [fmtMoneyFull, fmtSqft]) } }
     }).render();
     
+    // Was a dual axis, and the second axis carried a series that does not exist:
+    // MLS records a listing's status now, not its status on a past date, so
+    // months supply is published for the current period only. The old chart drew
+    // a 'line' from a single point and gave it half the chart's furniture.
+    // Volume stands alone here; the supply figure is stated beside the title,
+    // which is what one number deserves.
+    const nbptSupply = d.nbpt.supply[d.nbpt.supply.length - 1];
+    const nbptSupplyEl = document.querySelector('#nbpt-supply-now');
+    if (nbptSupplyEl) nbptSupplyEl.textContent = nbptSupply == null ? '—' : nbptSupply.toFixed(2) + ' months';
     new ApexCharts(document.querySelector('#nbpt-vol-chart'), {
-        ...baseOpts, chart: { ...baseOpts.chart, type: 'line', height: 340 },
-        series: [{ name: 'Volume (12mo)', type: 'area', data: d.nbpt.units.slice(-5) }, { name: 'Months Supply', type: 'line', data: d.nbpt.supply.slice(-5) }],
-        colors: [C.amber, C.purple],
-        stroke: { width: [3, 4], curve: 'smooth' },
-        fill: { type: ['gradient','solid'], gradient: { shade:'light', type:'vertical', shadeIntensity:0.4, opacityFrom:0.55, opacityTo:0.05, stops:[0,100] } },
-        markers: { size: [0, 5], hover: { size: 10 }, strokeColors: '#fff', strokeWidth: 2 },
+        ...baseOpts, chart: { ...baseOpts.chart, type: 'area', height: 340 },
+        series: [{ name: 'Volume (12mo)', data: d.nbpt.units.slice(-5) }],
+        colors: [C.nbpt],
+        fill: { type: 'gradient', gradient: { shade:'light', type:'vertical', shadeIntensity:0.4, opacityFrom:0.55, opacityTo:0.05, stops:[0,100] } },
         xaxis: { categories: ['2022','2023','2024','2025','2026'], axisBorder: { show: false }, axisTicks: { show: false } },
-        yaxis: [
-            { seriesName: 'Volume (12mo)', labels: { formatter: fmtNum, style: { colors: C.amber } }, title: { text: 'Units', style: { fontWeight: 600 } } },
-            { seriesName: 'Months Supply', opposite: true, labels: { formatter: v => v == null ? '—' : v.toFixed(1) + ' mo', style: { colors: C.purple } }, title: { text: 'Months Supply', style: { fontWeight: 600 } } }
-        ],
-        tooltip: { ...baseOpts.tooltip, y: [{ formatter: fmtNum }, { formatter: v => v == null ? '—' : v.toFixed(2) + ' mo' }] }
+        yaxis: { labels: { formatter: fmtNum }, title: { text: 'Units (12mo)', style: { fontWeight: 600 } } },
+        legend: { show: false },
+        tooltip: { ...baseOpts.tooltip, y: { formatter: fmtNum } }
     }).render();
     
     // ── Affordability ─────────────────────────────────────────────────────────
@@ -1246,16 +1241,16 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !imp
                 parseFloat(((d.essex.dom[12]/d.essex.dom[11]-1)*100).toFixed(1)),
                 parseFloat(((d.nbpt.dom[12]/d.nbpt.dom[11]-1)*100).toFixed(1))
             ]
-        },{
-            name: 'Supply YoY %',
-            data: [
-                parseFloat(((d.ma.supply[12]/d.ma.supply[11]-1)*100).toFixed(1)),
-                parseFloat(((d.boston.supply[12]/d.boston.supply[11]-1)*100).toFixed(1)),
-                parseFloat(((d.essex.supply[12]/d.essex.supply[11]-1)*100).toFixed(1)),
-                parseFloat(((d.nbpt.supply[12]/d.nbpt.supply[11]-1)*100).toFixed(1))
-            ]
         }],
-        colors: [C.ma, C.amber, C.teal],
+        // 'Supply YoY %' was removed on 2026-11-07. It divided supply[12] by
+        // supply[11], and supply[11] is null for every market: MLS records a
+        // listing's status now, not on a past date, so months supply exists for
+        // the current period ONLY. JavaScript coerces that null to 0, so the
+        // series was value/0 = Infinity for all four markets. That is what put
+        // "NaN" into the SVG path and left the legend entry with no bars under
+        // it. A year-over-year change cannot be computed from one period, so the
+        // honest fix is not to show one.
+        colors: [C.ma, C.gold],
         plotOptions: { bar: { horizontal: false, columnWidth: '55%', borderRadius: 4 } },
         xaxis: { categories: ['Massachusetts','Boston','Essex County','Newburyport'], axisBorder:{show:false}, axisTicks:{show:false} },
         yaxis: { labels: { formatter: v => (v > 0 ? '+' : '') + v.toFixed(1) + '%' } },
