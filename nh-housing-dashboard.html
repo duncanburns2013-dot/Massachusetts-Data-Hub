@@ -67,7 +67,7 @@
 <meta charset="utf-8">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap">
 <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.49.1/dist/apexcharts.min.js" integrity="sha384-LoktLSu+KN7O05Gi2Epno0XhcstpeXAu40T7IP2JC5OZ2qKi/oE9znxViQS3yYn5" crossorigin="anonymous"></script>
-<script src="assets/chart-kit.js"></script>
+<script src="assets/chart-kit.js?v=2"></script>
 <style>
 #nhr{--bg:#E9EBEA;--navy:#14558F;--gold:#C98A1E;--peach:#EFC66B;   /* peach is the NAVY step: 4.75:1. --gold is the light-surface accent. */--ink:#0B1113;--muted:#5A6467;--border:#CDD3D1;--card:#fff;
   --red:#c23b22;--green:#2d8a56;--blue:#2d6bc4;--amber:#c08c20;--purple:#5A6467;
@@ -99,8 +99,11 @@
    laid out at zero width: ApexCharts writes <svg width="0"> and draws no
    series, and nothing recovers it afterwards. Taking the panel out of flow
    instead keeps it measurable, so every chart is built against a real box. */
-#nhr .section{padding:36px 20px;position:absolute;left:0;right:0;visibility:hidden;pointer-events:none}
-#nhr .section.active{position:relative;visibility:visible;pointer-events:auto;animation:fade 0.4s ease}
+/* Clipped to one viewport and pinned to the top: an out-of-flow section still
+   counts toward document scroll height, so the hidden ones were hanging dead
+   space below the footer. Clipping is paint-only; widths still lay out. */
+#nhr .section{padding:36px 20px;position:absolute;top:0;left:0;right:0;max-height:100vh;overflow:hidden;visibility:hidden;pointer-events:none}
+#nhr .section.active{top:auto;max-height:none;overflow:visible;position:relative;visibility:visible;pointer-events:auto;animation:fade 0.4s ease}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 #nhr .section-title{font-family:'DM Serif Display',Georgia,serif;font-size:1.4rem;color:var(--navy);margin-bottom:3px}
 #nhr .section-desc{color:var(--muted);font-size:0.88rem;margin-bottom:22px}
@@ -188,9 +191,9 @@ const K=window.HubCharts;
 const NAVY=K.HUB.bayBlue, GOLD=K.HUB.harborGold, CRANBERRY=K.HUB.cranberry, GREEN=K.HUB.berkshireGreen;
 // Colour follows the entity, so a market keeps its hue across every chart here.
 const MCOLOR={statewide:K.HUB.bayBlue, portsmouth:K.HUB.cranberry, salem:K.HUB.harborGold,
-              derry:K.HUB.berkshireGreen, windham:K.HUB.muted};
+              derry:K.HUB.berkshireGreen, windham:K.HUB.plum};
 const COLORS={ 'NH Statewide':K.HUB.bayBlue,'Portsmouth':K.HUB.cranberry,'Salem':K.HUB.harborGold,
-               'Derry':K.HUB.berkshireGreen,'Windham':K.HUB.muted };
+               'Derry':K.HUB.berkshireGreen,'Windham':K.HUB.plum };
 const MARKETS=[
   {key:'NH Statewide',id:'statewide',label:'NH Statewide'},
   {key:'Portsmouth',id:'portsmouth',label:'Portsmouth'},
@@ -221,13 +224,20 @@ function barChart(el,cats,data,colors,fmt,extra){
     ...(extra||{})
   }).render();
 }
+// One caller passes a single market, another passes all five. A gradient fill
+// under one series reads as weight; under five it stacks into one pink wash
+// and the stroke becomes the only channel left carrying identity. So the fill
+// is a property of series COUNT, not a property of this function.
 function areaChart(el,cats,series){
+  const filled = series.length === 1;
   new ApexCharts(el,{...baseOpts,
-    chart:{...baseOpts.chart,type:'area',height:320},
+    chart:{...baseOpts.chart,type:filled?'area':'line',height:320},
     series:series,
     colors:series.map(s=>s.color||NAVY),
     stroke:{curve:'smooth',width:3},
-    fill:{type:'gradient',gradient:{shade:'light',type:'vertical',shadeIntensity:0.4,opacityFrom:0.5,opacityTo:0.02,stops:[0,95]}},
+    fill:filled
+      ?{type:'gradient',gradient:{shade:'light',type:'vertical',shadeIntensity:0.4,opacityFrom:0.5,opacityTo:0.02,stops:[0,95]}}
+      :{type:'solid',opacity:1},
     markers:{size:0,hover:{size:6}},
     xaxis:{categories:cats,axisBorder:{show:false},axisTicks:{show:false}},
     yaxis:{labels:{formatter:money}},
@@ -330,7 +340,7 @@ function affordSection(data){
     </div>
     <!-- The table alone made the reader do the comparison in their head. The
          chart puts every market against the one line that matters. -->
-    <div class="chart-box"><div class="chart-title">Income needed to buy the median home</div><span class="chart-note">Bars above the line are out of reach on the NH median household income</span><div class="chart-area" id="aff-chart"></div></div>
+    <div class="chart-box"><div class="chart-title">Income needed to buy the median home</div><span class="chart-note">Dashed line is the NH median household income, $111,800. Every bar clears it.</span><div class="chart-area" id="aff-chart"></div></div>
     <div class="afford-box"><table><thead><tr><th>Market</th><th>Median</th><th>Down (20%)</th><th>Income needed</th><th>vs NH median income</th></tr></thead><tbody>${rows}</tbody></table></div>
     <div class="section-desc" style="font-size:0.75rem">NH median household income ≈ $111,800. High property taxes (~2.09%) offset the no-income-tax advantage for owners.</div>`;
   return sec;
@@ -344,8 +354,12 @@ function renderAffordChart(data){
   barChart(el, ts.map(t=>t.m.label), ts.map(t=>Math.round(inc(t.md.median_sale))),
     ts.map(t=>COLORS[t.m.key]), money,
     { annotations:{yaxis:[{y:NHMI,borderColor:K.HUB.ink,strokeDashArray:4,borderWidth:1,
-        label:{text:'NH median income '+money(NHMI),position:'right',offsetX:-6,offsetY:-6,
-               style:{fontSize:'10px',color:'#fff',background:K.HUB.ink}}}]} });
+        // No box label on this line. Every bar on the chart clears the median,
+        // which is the finding, so there is nowhere along the line for a
+        // caption to sit that is not on top of a bar -- it was over Windham
+        // on the right and over NH Statewide on the left. The figure is
+        // stated in the chart note above instead, where nothing can cover it.
+        label:{text:''}}]} });
 }
 
 function nav(id,label,active){const b=$(`<button class="nav-btn${active?' active':''}" data-t="${id}">${label}</button>`);return b;}

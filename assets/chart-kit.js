@@ -38,13 +38,20 @@
     'use strict';
 
     // Fixed categorical order. Assign by position, never cycle, never reorder.
-    var CATEGORICAL = ['#14558F', '#B01A36', '#C98A1E', '#2E8B57'];
+    // Fifth slot added for New Hampshire, which has five markets. Windham had
+    // been painted HUB.muted -- the neutral TEXT token -- so the second-dearest
+    // market on the page read as grey "other" beside four saturated hues.
+    // Validated 2026-11-07 with the dataviz script in this order:
+    //   worst adjacent pair green<->gold dE 8.3 protan / 19.9 normal; plum
+    //   clears both neighbours by a wider margin (tritan 16.4).
+    var CATEGORICAL = ['#14558F', '#B01A36', '#C98A1E', '#2E8B57', '#7A4E8F'];
 
     var HUB = {
         bayBlue:        '#14558F',   // slot 1
         cranberry:      '#B01A36',   // slot 2  (chart weight; brand #680A1D is text only)
         harborGold:     '#C98A1E',   // slot 3  (see obligation 1 above)
         berkshireGreen: '#2E8B57',   // slot 4
+        plum:           '#7A4E8F',   // slot 5
         ink:            '#0f2942',
         muted:          '#5A6467',
         grid:           '#CDD3D1',
@@ -81,7 +88,7 @@
         portsmouth:  HUB.cranberry,
         salem:       HUB.harborGold,
         derry:       HUB.berkshireGreen,
-        windham:     HUB.muted
+        windham:     HUB.plum
     };
 
     var baseOpts = {

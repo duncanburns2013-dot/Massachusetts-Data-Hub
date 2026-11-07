@@ -29,7 +29,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.49.1/dist/apexcharts.min.js" integrity="sha384-LoktLSu+KN7O05Gi2Epno0XhcstpeXAu40T7IP2JC5OZ2qKi/oE9znxViQS3yYn5" crossorigin="anonymous"></script>
-    <script src="assets/chart-kit.js"></script>
+    <script src="assets/chart-kit.js?v=2"></script>
     <style>
         :root {
             --bg: #f4f2ee;
@@ -212,8 +212,15 @@
            Tiers; those three worked only because they are built while visible.
            Taking the panels out of flow instead keeps them measurable, so every
            chart is built against a real box. */
-        .section { padding: 44px 0; position: absolute; left: 0; right: 0; visibility: hidden; pointer-events: none; }
-        .section.active { position: relative; visibility: visible; pointer-events: auto; animation: fadeIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+        /* top / max-height / overflow: an out-of-flow panel still counts toward
+           the DOCUMENT scroll height. Taking the sections out of flow fixed the
+           blank charts but left every hidden section's full height hanging below
+           the footer -- this page scrolled 5,815px for 3,490px of content.
+           Pinned to the top and clipped to one viewport they add nothing.
+           Clipping is a paint operation, so children still lay out at full
+           width and the charts still measure correctly. */
+        .section { padding: 44px 0; position: absolute; top: 0; left: 0; right: 0; max-height: 100vh; overflow: hidden; visibility: hidden; pointer-events: none; }
+        .section.active { top: auto; max-height: none; overflow: visible; position: relative; visibility: visible; pointer-events: auto; animation: fadeIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .section-header { margin-bottom: 28px; }
         .section-title { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 4px; color: var(--ink); }
@@ -641,7 +648,7 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #C98A1E !imp
         <button class="pt-tog" data-pt="mf" style="padding:8px 16px;border:1px solid #ddd8d0;background:#fff;color:#0f2942;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;letter-spacing:0.05em;text-transform:uppercase;">Multi-Family</button>
     </div>
     <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Average Sale Price — Last 5 Years</h3></div><div class="chart-area" id="pt-price-chart"></div></div>
-    <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Units Sold (12-Month Rolling)</h3></div><div class="chart-area" id="pt-vol-chart"></div></div>
+    <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Units Sold &mdash; Indexed to First Year</h3><span class="chart-note">Each market starts at 100, so the lines compare rate of change, not size. Hover for the unit count.</span></div><div class="chart-area" id="pt-vol-chart"></div></div>
     <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Days on Market</h3></div><div class="chart-area" id="pt-dom-chart"></div></div>
     <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Property-Type Breakdown — Trailing 12 Months</h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Market</th><th>Property Type</th><th>Avg Price</th><th>$/SqFt</th><th>DOM</th><th>12-Mo Units</th><th>Months Supply</th></tr></thead><tbody id="pt-table"></tbody></table></div></div>
     </div></section>
@@ -769,7 +776,7 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #C98A1E !imp
     const K = window.HubCharts;
     const C = { ma:K.ENTITY.ma, boston:K.ENTITY.boston, essex:K.ENTITY.essex, nbpt:K.ENTITY.nbpt,
                 gold:K.HUB.harborGold, navy:K.HUB.bayBlue, red:K.HUB.cranberry, amber:K.HUB.harborGold,
-                purple:K.HUB.muted, teal:K.HUB.berkshireGreen, orange:K.HUB.harborGold };
+                purple:K.HUB.plum, teal:K.HUB.berkshireGreen, orange:K.HUB.harborGold };
     
     const baseOpts = K.baseOpts;
     
@@ -783,7 +790,12 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #C98A1E !imp
     
     new ApexCharts(document.querySelector('#price-chart'), {
         ...baseOpts,
-        chart: { ...baseOpts.chart, type: 'area', height: 340 },
+        // Was type 'area' with a 0.55-opacity gradient under EACH of four
+        // series. Four translucent fills stack: Boston's red washed over the
+        // Massachusetts and Essex bands below it and every fill read pink, so
+        // the only honest channel left was the stroke. A fill reads cleanly
+        // under one series; with four it is mud. Lines only.
+        chart: { ...baseOpts.chart, type: 'line', height: 340 },
         series: [
             { name: 'Massachusetts', data: d.ma.price.slice(-5) },
             { name: 'Boston', data: d.boston.price.slice(-5) },
@@ -792,7 +804,6 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #C98A1E !imp
         ],
         colors: [C.ma, C.boston, C.essex, C.nbpt],
         stroke: { curve: 'smooth', width: 3 },
-        fill: { type: 'gradient', gradient: { shade:'light', type:'vertical', shadeIntensity:0.4, opacityFrom:0.55, opacityTo:0.02, stops:[0,95] } },
         markers: { size: 0, strokeWidth: 2, strokeColors: '#fff', hover: { size: 8, sizeOffset: 3 } },
         xaxis: { categories: ['2022','2023','2024','2025','2026'], axisBorder: { show: false }, axisTicks: { show: false }, labels: { rotate: 0 } },
         yaxis: { labels: { formatter: fmtMoney } },
@@ -1081,8 +1092,12 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #C98A1E !imp
         dataLabels: { enabled: true, formatter: v => '$' + Math.round(v/1000) + 'K', offsetY: -22, style: { fontSize: '11px', fontWeight: 700, colors: ['#14558F'] } },
         xaxis: { categories: ['Massachusetts','Boston','Essex County','Newburyport'], axisBorder: { show: false }, axisTicks: { show: false } },
         yaxis: { labels: { formatter: v => '$' + Math.round(v/1000) + 'K' } },
-        tooltip: { ...baseOpts.tooltip, y: { formatter: v => '$' + Math.round(v).toLocaleString() } },
-        annotations: { yaxis: [{ y: median, borderColor: C.gold, strokeDashArray: 4, label: { borderColor: C.gold, style: { color: '#fff', background: C.gold, fontWeight: 600 }, text: 'MA Median $' + Math.round(median/1000) + 'K' } }] }
+        tooltip: { ...baseOpts.tooltip, y: { formatter: v => '$' + Math.round(v).toLocaleString() } }
+        // The MA median was carried TWICE here: as the four blue bars, and
+        // again as a gold dashed annotation at the same height. The annotation
+        // label defaulted to position 'right', so it landed on top of the
+        // Newburyport pair. One encoding is enough and the bars are the one
+        // the reader can compare against; the line is gone.
     }).render();
     
     const gapMultiples = incomeNeeded.map(v => v/median);
@@ -1097,10 +1112,14 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #C98A1E !imp
         } },
         fill: { type: 'gradient', gradient: { shade:'light', type:'horizontal', shadeIntensity:0.4, opacityFrom:1, opacityTo:0.7, stops:[0,100] } },
         dataLabels: { enabled: true, formatter: v => v.toFixed(2) + '× median', offsetX: 50, style: { colors: ['#14558F'], fontWeight: 700, fontSize: '13px' } },
-        xaxis: { categories: ['Massachusetts','Boston','Essex County','Newburyport'], labels: { formatter: v => v.toFixed(1) + '×' }, axisBorder: { show: false }, axisTicks: { show: false }, max: Math.max(...gapMultiples)*1.25 },
+        xaxis: { categories: ['Massachusetts','Boston','Essex County','Newburyport'], labels: { formatter: v => ((Math.abs(v) < 0.05 ? 0 : v)).toFixed(1) + '×' }   /* floating point put a '-0.0×' at the origin */, axisBorder: { show: false }, axisTicks: { show: false }, max: Math.max(...gapMultiples)*1.25 },
         yaxis: { labels: { style: { fontWeight: 600 } } },
         legend: { show: false },
-        annotations: { xaxis: [{ x: 1, strokeDashArray: 4, borderColor: C.gold, label: { borderColor: C.gold, style: { color: '#fff', background: C.gold, fontWeight: 600, fontSize: '11px' }, text: '1× = at median income' } }] },
+        // The label defaulted to a VERTICAL band caption, which ran down the
+        // 1.0x gridline straight through the Massachusetts bar and hid its
+        // value. Laid flat above the plot it annotates the line instead of
+        // covering the data.
+        annotations: { xaxis: [{ x: 1, strokeDashArray: 4, borderColor: C.gold, label: { borderColor: C.gold, orientation: 'horizontal', position: 'top', offsetY: -4, style: { color: '#fff', background: C.gold, fontWeight: 600, fontSize: '11px' }, text: '1× = at median income' } }] },
         tooltip: { ...baseOpts.tooltip, y: { formatter: v => v.toFixed(2) + '× MA median (~$' + Math.round(v*median/1000) + 'K income)' } }
     }).render();
     
@@ -1169,10 +1188,10 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #C98A1E !imp
         const colors = geos.map(g => ptColors[g]);
         
         ptCharts.price = new ApexCharts(document.querySelector('#pt-price-chart'), {
-            ...baseOpts, chart: { ...baseOpts.chart, type: 'area', height: 340 },
+            // Four stacked translucent fills, same mud as #price-chart. Lines only.
+            ...baseOpts, chart: { ...baseOpts.chart, type: 'line', height: 340 },
             series: mkSeries('price'), colors,
             stroke: { curve: 'smooth', width: 3 },
-            fill: { type: 'gradient', gradient: { shade:'light', type:'vertical', shadeIntensity:0.4, opacityFrom:0.5, opacityTo:0.04, stops:[0,95] } },
             markers: { size: 0, hover: { size: 8 } },
             xaxis: { categories: years5.map(String), axisBorder: { show: false }, axisTicks: { show: false } },
             yaxis: { labels: { formatter: fmtMoney } },
@@ -1180,15 +1199,25 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #C98A1E !imp
         });
         ptCharts.price.render();
         
+        // Was BARS on a LOGARITHMIC axis, with no note that it was one. A bar
+        // encodes magnitude by length from zero; on a log axis a bar twice as
+        // tall is not twice the value, so the one thing a bar is for stops
+        // being true. It was there because the four markets span 125 to 39,000
+        // units and a linear axis flattens Newburyport to nothing. Indexing to
+        // the first year answers the question the chart is actually asking --
+        // who is losing volume fastest -- on one honest linear axis, and it is
+        // the same device the Volume vs Days charts on this page already use.
+        const volRaw = mkSeries('units').map(s => s.data);
         ptCharts.vol = new ApexCharts(document.querySelector('#pt-vol-chart'), {
-            ...baseOpts, chart: { ...baseOpts.chart, type: 'bar', height: 340 },
-            series: mkSeries('units'), colors,
-            plotOptions: { bar: { borderRadius: 6, columnWidth: '65%' } },
-            fill: { type: 'gradient', gradient: { shade:'light', type:'vertical', shadeIntensity:0.4, opacityFrom:1, opacityTo:0.65, stops:[0,100] } },
-            stroke: { width: 0 },
+            ...baseOpts, chart: { ...baseOpts.chart, type: 'line', height: 340 },
+            series: mkSeries('units').map(s => ({ name: s.name, data: K.indexTo100(s.data) })),
+            colors,
+            stroke: { curve: 'smooth', width: 3 },
+            markers: { size: 5, hover: { size: 8 }, strokeColors: '#fff', strokeWidth: 2 },
             xaxis: { categories: years5.map(String), axisBorder: { show: false }, axisTicks: { show: false } },
-            yaxis: { logarithmic: true, labels: { formatter: v => v >= 1000 ? Math.round(v/1000) + 'K' : Math.round(v) } },
-            tooltip: { ...baseOpts.tooltip, y: { formatter: fmtNum } }
+            yaxis: { labels: { formatter: v => Math.round(v) },
+                     title: { text: years5[0] + ' = 100', style: { fontSize: '11px', color: K.HUB.muted, fontWeight: 400 } } },
+            tooltip: { ...baseOpts.tooltip, y: { formatter: K.indexedTooltip(volRaw, colors.map(() => fmtNum)) } }
         });
         ptCharts.vol.render();
         
@@ -1631,8 +1660,13 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #C98A1E !imp
         // ── Hero ──────────────────────────────────────────────────────────────
         setTxt('hs-ma-val', fmtK(tail('ma', 'price')));
         setTxt('hs-nbpt-val', fmtK(tail('nbpt', 'price')));
-        setTxt('hs-ma-dom', String(Math.round(tail('ma', 'dom'))));
-        setTxt('hs-ma-dom-prev', String(Math.round(prev('ma', 'dom'))));
+        // Shown to one decimal because the YoY % right beside them is computed
+        // from the unrounded values. Rounded to whole days the pair read
+        // "36 -> 38 - +7.6% YoY", which is 5.6% by the numbers on screen and
+        // makes a correct figure look wrong. 35.6 -> 38.3 is +7.6%.
+        const dom1 = v => v == null ? '—' : v.toFixed(1);
+        setTxt('hs-ma-dom', dom1(tail('ma', 'dom')));
+        setTxt('hs-ma-dom-prev', dom1(prev('ma', 'dom')));
         // .chg-down had no CSS rule — the stylesheet defines .chg-up / .chg-dn, so the
         // hero's YoY notes had been rendering uncoloured.
         const heroPct = (id, v) => {
@@ -1705,8 +1739,10 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #C98A1E !imp
             setTxt(g + '-units-val', fmtNum(tail(g, 'units')));
             setTxt(g + '-units-prev', fmtNum(prev(g, 'units')));
             setPct(g + '-units-yoy', pct(tail(g, 'units'), prev(g, 'units')));
-            setTxt(g + '-dom-val', Math.round(tail(g, 'dom')) + (g === 'nbpt' ? ' d' : ''));
-            setTxt(g + '-dom-prev', Math.round(prev(g, 'dom')) + ' days');
+            // One decimal, same reason as the hero: the YoY beside these comes
+            // from the unrounded series. Essex read "32 days -> 34, +7.9%".
+            setTxt(g + '-dom-val', tail(g, 'dom').toFixed(1) + (g === 'nbpt' ? ' d' : ''));
+            setTxt(g + '-dom-prev', prev(g, 'dom').toFixed(1) + ' days');
             setPct(g + '-dom-yoy', pct(tail(g, 'dom'), prev(g, 'dom')));
         }
 

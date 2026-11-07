@@ -26,7 +26,7 @@
 <title>Haverhill MA Housing Market Report</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.49.1/dist/apexcharts.min.js" integrity="sha384-LoktLSu+KN7O05Gi2Epno0XhcstpeXAu40T7IP2JC5OZ2qKi/oE9znxViQS3yYn5" crossorigin="anonymous"></script>
-<script src="assets/chart-kit.js"></script>
+<script src="assets/chart-kit.js?v=2"></script>
 <style>
 :root{--navy:#14558F;--navy-l:#2a4a7a;--navy-d:#0f1b33;--ice:#c9ebfc;--ice-l:#e3f4fe;--ice-d:#9fd4f4;--neon-red:#B01A36;--neon-green:#2E8B57;--neon-purple:#5A6467;--neon-blue:#14558F;--neon-yellow:#C98A1E;--neon-yellow:#C98A1E;--neon-orange:#C98A1E;--bg:#f5f2ec;--card:#ffffff;--card-b:rgba(30,51,94,0.03);--ink:#14558F;--mid:#5a6374;--muted:#8e95a2;--border:#ddd8d0}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -61,8 +61,19 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);line-
 .tog:hover{color:#14558F;background:rgba(30,51,94,0.04)}
 .tog.active{background:#14558F;color:#fff;border-color:#14558F}
 
-.panel{display:none;padding:32px 0}
-.panel.active{display:block;animation:fadeUp .35s cubic-bezier(.22,1,.36,1)}
+/* Was display:none. A chart built inside a display:none panel lays out at
+   zero width -- ApexCharts writes <svg width="0"> and draws no series -- and
+   on a cold load 11 of this page's 15 charts were born that way. They only
+   came back because the tab handler fires a resize event, so every chart on
+   the page depended on that one line surviving. Taken out of flow instead:
+   the panel keeps its real width, so the charts measure correctly at build
+   time and the resize is a belt, not the braces. Same fix as the MA and NH
+   dashboards. */
+/* Clipped to one viewport and pinned to the top: an out-of-flow panel still
+   counts toward document scroll height, so the hidden ones were hanging dead
+   space below the footer. Clipping is paint-only; widths still lay out. */
+.panel{position:absolute;top:0;left:0;right:0;max-height:100vh;overflow:hidden;visibility:hidden;pointer-events:none;padding:32px 0}
+.panel.active{top:auto;max-height:none;overflow:visible;position:relative;visibility:visible;pointer-events:auto;animation:fadeUp .35s cubic-bezier(.22,1,.36,1)}
 
 /* ---- The Band panel -------------------------------------------------------
    Series colors are NOT the page's --neon-* set. Those were picked to look
