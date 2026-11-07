@@ -792,8 +792,8 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !imp
         chart: { ...baseOpts.chart, type: 'line', height: 340 },
         series: [
             { name: 'Massachusetts', type: 'column', data: d.ma.units.slice(-5) },
-            { name: 'Essex County (×10)', type: 'line', data: d.essex.units.map(v => v == null ? null : v*10) },
-            { name: 'Newburyport (×400)', type: 'line', data: d.nbpt.units.map(v => v == null ? null : v*400) }
+            { name: 'Essex County (×10)', type: 'line', data: d.essex.units.slice(-5).map(v => v == null ? null : v*10) },
+            { name: 'Newburyport (×400)', type: 'line', data: d.nbpt.units.slice(-5).map(v => v == null ? null : v*400) }
         ],
         colors: [C.ma, C.essex, C.nbpt],
         stroke: { width: [0, 4, 4], curve: 'smooth' },
