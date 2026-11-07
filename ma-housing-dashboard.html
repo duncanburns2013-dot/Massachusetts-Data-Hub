@@ -42,8 +42,8 @@
             --accent: #c8a44e;
             --accent-bright: #e4be5a;
             --accent-dim: #a08338;
-            --signal-red: #A81733;
-            --signal-green: #2A6B44;
+            --signal-red: #B01A36;
+            --signal-green: #2E8B57;
             --signal-blue: #2d6bc4;
             --signal-amber: #c08c20;
             --card-bg: #ffffff;
@@ -323,8 +323,8 @@ body{font-family:'DM Sans',system-ui,sans-serif !important;background:#E9EBEA !i
 .hero-stat{background:rgba(255,255,255,0.06) !important;border:1px solid rgba(255,255,255,0.08) !important;border-radius:10px !important;padding:18px 10px !important;text-align:center !important}
 .hero-stat:first-child,.hero-stat:last-child{border:1px solid rgba(255,255,255,0.08) !important}
 .hs-label{font-size:0.6875rem !important;opacity:0.55 !important;text-transform:uppercase !important;letter-spacing:0.08em !important;color:#fff !important}
-.hs-val{font-family:'DM Serif Display',Georgia,serif !important;font-size:clamp(1.2rem,3vw,1.7rem) !important;font-weight:400 !important;color:#B07C20 !important}
-.hs-val.gold{color:#B07C20 !important}
+.hs-val{font-family:'DM Serif Display',Georgia,serif !important;font-size:clamp(1.2rem,3vw,1.7rem) !important;font-weight:400 !important;color:#EFC66B !important}
+.hs-val.gold{color:#EFC66B !important}   /* 4.75:1 on the navy hero; the chart gold is 2.62:1 */
 /* was opacity .4 over rgba(255,255,255,.3): white landed at 12% on the
    #14558F hero, 1.33:1. The signal colours are darker than the background
    they sit on here, so the hero gets light variants of its own. */
@@ -337,7 +337,7 @@ nav{background:#fff !important;border-bottom:1px solid #CDD3D1 !important;positi
 @media (min-width: 1240px) { .nav-inner { justify-content: center !important; } }
 .nav-btn{font-family:'DM Sans',system-ui,sans-serif !important;padding:15px 14px !important;font-size:0.78rem !important;font-weight:600 !important;border:none !important;background:none !important;color:#5A6467 !important;border-bottom:2px solid transparent !important;border-radius:0 !important;text-transform:uppercase !important;letter-spacing:0.05em !important;transition:all 0.25s !important;flex-shrink:0 !important}
 .nav-btn:hover{color:#0B1113 !important;background:rgba(0,0,0,0.02) !important}
-.nav-btn.active{color:#14558F !important;background:none !important;border-bottom-color:#B07C20 !important}
+.nav-btn.active{color:#14558F !important;background:none !important;border-bottom-color:#C98A1E !important}
 .section-title{font-family:'DM Serif Display',Georgia,serif !important;font-size:1.35rem !important;font-weight:400 !important;color:#14558F !important}
 .card{border-radius:14px !important;border:1px solid #CDD3D1 !important;box-shadow:0 1px 3px rgba(0,0,0,0.03) !important}
 .card-label{font-size:0.6875rem !important;font-weight:600 !important;text-transform:uppercase !important;letter-spacing:0.1em !important;color:#5A6467 !important}
@@ -352,7 +352,7 @@ nav{background:#fff !important;border-bottom:1px solid #CDD3D1 !important;positi
 .town{border-radius:14px !important;border:1px solid #CDD3D1 !important}
 .town-name{color:#14558F !important}
 footer,.footer{background:#fff !important;border-top:1px solid #CDD3D1 !important;color:#5A6467 !important}
-footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !important}
+footer a,.footer a{color:#14558F !important;border-bottom:1px solid #C98A1E !important}
 @media(max-width:768px){.hero{padding:36px 16px 30px !important}.hero-stats{grid-template-columns:repeat(3,1fr) !important}}
 @media(max-width:480px){.hero-stats{grid-template-columns:repeat(2,1fr) !important}}
 
@@ -364,7 +364,7 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !imp
     .apexcharts-xaxis-label, .apexcharts-yaxis-label { font-family: 'DM Sans', sans-serif !important; font-size: 0.72rem !important; fill: #5A6467 !important; }
     .apexcharts-datalabel { font-family: 'DM Sans', sans-serif !important; font-weight: 700 !important; }
     .chart-box { position: relative; overflow: hidden; }
-    .chart-box::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:linear-gradient(180deg, #B07C20 0%, #14558F 100%); border-radius: 14px 0 0 14px; opacity:0.7; }
+    .chart-box::before { content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:linear-gradient(180deg, #C98A1E 0%, #14558F 100%); border-radius: 14px 0 0 14px; opacity:0.7; }
     @media(max-width:768px){.chart-area{height:300px}}
     .data-table th, .data-table td { padding: 8px 10px !important; font-size: 0.78rem !important; }
     .data-table { font-size: 0.78rem; }
@@ -379,7 +379,7 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !imp
     .afford-stat-label { font-size:0.6875rem; text-transform:uppercase; letter-spacing:0.1em; color:#5A6467; font-weight:600; margin-bottom:6px; }
     .afford-stat-val { font-family:'DM Serif Display',Georgia,serif; font-size:1.65rem; color:#14558F; line-height:1.1; }
     .afford-stat-sub { font-size:0.78rem; color:#5A6467; margin-top:4px; }
-    .afford-stat .gap-up { color:#A81733; } .afford-stat .gap-dn { color:#2A6B44; }
+    .afford-stat .gap-up { color:#B01A36; } .afford-stat .gap-dn { color:#2E8B57; }
     </style>
 <!-- shared theme: redefines the tokens above; see assets/hub-theme.css -->
 <link rel="stylesheet" href="https://use.typekit.net/irk1bar.css">
@@ -932,7 +932,7 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !imp
     const gnPrev = k => { const a = townTrends[k]; return a[a.length-2]; };
     const gnPrices = gnTowns.map(t => gnLast(t.key));
     const gnNames = gnTowns.map(t => t.name);
-    const gnColors = ["#B07C20", "#6b5ce7", "#14558F", "#2A6B44", "#d46a2e", "#14b8a6"];
+    const gnColors = ["#C98A1E", "#6b5ce7", "#14558F", "#2E8B57", "#d46a2e", "#14b8a6"];
     new ApexCharts(document.querySelector('#gnbpt-chart'), {
         ...baseOpts, chart: { ...baseOpts.chart, type: 'bar', height: 340 },
         series: [{ name: 'Avg Sale Price', data: gnPrices }],
@@ -952,7 +952,7 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !imp
     new ApexCharts(document.querySelector('#gnbpt-yoy-chart'), {
         ...baseOpts, chart: { ...baseOpts.chart, type: 'bar', height: 340 },
         series: [{ name: 'YoY %', data: gnYoy }],
-        plotOptions: { bar: { horizontal: true, borderRadius: 6, borderRadiusApplication: 'end', barHeight: '60%', colors: { ranges: [{ from: -100, to: 0, color: '#2A6B44' }, { from: 0, to: 100, color: '#A81733' }] }, dataLabels: { position: 'top' } } },
+        plotOptions: { bar: { horizontal: true, borderRadius: 6, borderRadiusApplication: 'end', barHeight: '60%', colors: { ranges: [{ from: -100, to: 0, color: '#2E8B57' }, { from: 0, to: 100, color: '#B01A36' }] }, dataLabels: { position: 'top' } } },
         fill: { type: 'gradient', gradient: { shade:'light', type:'horizontal', opacityFrom: 1, opacityTo: 0.75, stops:[0,100] } },
         dataLabels: { enabled: true, formatter: v => (v>0?'+':'') + v.toFixed(0) + '%', offsetX: 28, style: { colors: ['#14558F'], fontWeight: 700, fontSize: '12px' } },
         legend: { show: false },
@@ -1060,7 +1060,7 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !imp
         plotOptions: { bar: {
             horizontal: true, borderRadius: 8, barHeight: '60%', distributed: true,
             colors: { backgroundBarColors: ['#f3efe8'], backgroundBarOpacity: 1, backgroundBarRadius: 8,
-                ranges: [{ from: 0, to: 1.2, color: '#2A6B44' }, { from: 1.2, to: 2, color: '#B07C20' }, { from: 2, to: 10, color: '#A81733' }] }
+                ranges: [{ from: 0, to: 1.2, color: '#2E8B57' }, { from: 1.2, to: 2, color: '#C98A1E' }, { from: 2, to: 10, color: '#B01A36' }] }
         } },
         fill: { type: 'gradient', gradient: { shade:'light', type:'horizontal', shadeIntensity:0.4, opacityFrom:1, opacityTo:0.7, stops:[0,100] } },
         dataLabels: { enabled: true, formatter: v => v.toFixed(2) + '× median', offsetX: 50, style: { colors: ['#14558F'], fontWeight: 700, fontSize: '13px' } },
@@ -1123,7 +1123,7 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !imp
         for (const m of PT_METRICS) sf[m] = d[g][m].slice(-years5.length);
         pt[g] = { sf: sf, co: dpt[g].co, mf: dpt[g].mf };
     }
-    const ptColors = { ma: '#14558F', boston: '#A81733', essex: '#2A6B44', nbpt: '#B07C20' };
+    const ptColors = { ma: '#14558F', boston: '#B01A36', essex: '#2E8B57', nbpt: '#C98A1E' };
     const ptLabels = { ma: 'Massachusetts', boston: 'Boston', essex: 'Essex County', nbpt: 'Newburyport' };
     let currentPT = 'sf';
     let ptCharts = {};
@@ -1266,7 +1266,10 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !imp
     const pdBuckets = priceDist.meta.buckets;
     const pdYears   = priceDist.meta.year_labels;
     // Gradient: cool (cheap) → warm (expensive). 8 stops.
-    const pdColors = ['#14558F','#3a85b8','#5da06f','#92a04a','#B07C20','#d68b3a','#A81733','#7d1d12'];
+    // Price buckets are ORDERED, so this is a magnitude scale, not eight identities.
+    // It used to run blue-green-olive-gold-orange-red-brown, a rainbow: nothing in
+    // that sequence tells a reader which bucket is dearer. One hue, light to dark.
+    const pdColors = ['#BBD3EA','#9BBEDF','#7BA8D3','#5B92C7','#3C7CBB','#2A68A4','#1E5285','#14558F'];
     let pdGeo = 'ma';
     let pdCharts = {};
 

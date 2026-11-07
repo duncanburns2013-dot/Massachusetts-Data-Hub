@@ -48,7 +48,24 @@
         ink:            '#0f2942',
         muted:          '#5A6467',
         grid:           '#CDD3D1',
-        surface:        '#fcfcfb'
+        surface:        '#fcfcfb',
+
+        /* ON A NAVY HERO, USE THESE INSTEAD.
+         *
+         * The four slots above were validated against the LIGHT chart surface.
+         * Reusing them as display text on the navy hero fails badly, and always
+         * did: harborGold on #14558F is 2.62:1 and the #B07C20 it replaced was
+         * 2.11:1 -- both under even the 3:1 large-text bar, which is why the
+         * hero stat figures were hard to read.
+         *
+         * These are the same hues stepped up until they pass on navy. Measured
+         * ratios are written beside each one; re-measure if you change them.
+         */
+        onNavy: {
+            gold:  '#EFC66B',   // 4.75:1 on #14558F
+            green: '#8FE3B4',   // 5.07:1
+            red:   '#FFC2CC'    // 5.08:1
+        }
     };
 
     // Entities keep their colour wherever they appear, on every page, so a

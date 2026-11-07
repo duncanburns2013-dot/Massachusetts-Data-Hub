@@ -69,8 +69,8 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.49.1/dist/apexcharts.min.js" integrity="sha384-LoktLSu+KN7O05Gi2Epno0XhcstpeXAu40T7IP2JC5OZ2qKi/oE9znxViQS3yYn5" crossorigin="anonymous"></script>
 <script src="assets/chart-kit.js"></script>
 <style>
-#nhr{--bg:#E9EBEA;--navy:#14558F;--gold:#B07C20;--peach:#B07C20;--ink:#0B1113;--muted:#5A6467;--border:#CDD3D1;--card:#fff;
-  --red:#c23b22;--green:#2d8a56;--blue:#2d6bc4;--amber:#c08c20;--purple:#46527A;
+#nhr{--bg:#E9EBEA;--navy:#14558F;--gold:#C98A1E;--peach:#EFC66B;   /* peach is the NAVY step: 4.75:1. --gold is the light-surface accent. */--ink:#0B1113;--muted:#5A6467;--border:#CDD3D1;--card:#fff;
+  --red:#c23b22;--green:#2d8a56;--blue:#2d6bc4;--amber:#c08c20;--purple:#5A6467;
   font-family:'DM Sans',system-ui,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;max-width:1200px;margin:0 auto}
 #nhr *{margin:0;padding:0;box-sizing:border-box}
 #nhr .serif{font-family:'DM Serif Display',Georgia,serif;font-weight:400}
@@ -80,7 +80,7 @@
 #nhr .hero-inner{position:relative;z-index:2;max-width:1000px;margin:0 auto}
 #nhr .hero-badge{font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.5);font-weight:600;margin-bottom:14px}
 #nhr .hero h1{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(1.7rem,4.5vw,2.7rem);line-height:1.15;margin-bottom:12px}
-#nhr .hero h1 em{font-style:normal;color:var(--gold)}
+#nhr .hero h1 em{font-style:normal;color:var(--peach)}
 #nhr .hero-sub{font-size:0.9rem;opacity:0.6;max-width:640px;margin:0 auto 28px}
 #nhr .hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:900px;margin:0 auto}
 #nhr .hero-stat{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:16px 10px}
@@ -162,7 +162,7 @@
 const DATA_URL = window.NH_DATA_URL || "data/nh-figures.json";
 // Palette and base options come from assets/chart-kit.js so this page, the MA
 // dashboard and the Haverhill report stay one instrument. The old GOLD
-// #B07C20 failed the dataviz contrast/CVD checks alongside the green.
+// #C98A1E failed the dataviz contrast/CVD checks alongside the green.
 const K=window.HubCharts;
 const NAVY=K.HUB.bayBlue, GOLD=K.HUB.harborGold, CRANBERRY=K.HUB.cranberry, GREEN=K.HUB.berkshireGreen;
 // Colour follows the entity, so a market keeps its hue across every chart here.
