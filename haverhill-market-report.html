@@ -72,8 +72,13 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);line-
 /* Clipped to one viewport and pinned to the top: an out-of-flow panel still
    counts toward document scroll height, so the hidden ones were hanging dead
    space below the footer. Clipping is paint-only; widths still lay out. */
-.panel{position:absolute;top:0;left:0;right:0;max-height:100vh;overflow:hidden;visibility:hidden;pointer-events:none;padding:32px 0}
-.panel.active{top:auto;max-height:none;overflow:visible;position:relative;visibility:visible;pointer-events:auto;animation:fadeUp .35s cubic-bezier(.22,1,.36,1)}
+/* Hidden panels at height:0, in flow: the box keeps its real WIDTH so charts
+   measure correctly, and contributes no height so the document cannot grow.
+   Vertical padding moves to .active -- under border-box a height:0 box with
+   vertical padding still renders a strip that padding cannot shrink below.
+   The panels have no horizontal padding, so none is needed while hidden. Credit: DeepSeek Harness, on a blind brief. */
+.panel{height:0;overflow:hidden;visibility:hidden;pointer-events:none;padding:0}
+.panel.active{height:auto;overflow:visible;visibility:visible;pointer-events:auto;padding:32px 0;animation:fadeUp .35s cubic-bezier(.22,1,.36,1)}
 
 /* ---- The Band panel -------------------------------------------------------
    Series colors are NOT the page's --neon-* set. Those were picked to look

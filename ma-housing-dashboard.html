@@ -219,8 +219,23 @@
            Pinned to the top and clipped to one viewport they add nothing.
            Clipping is a paint operation, so children still lay out at full
            width and the charts still measure correctly. */
-        .section { padding: 44px 0; position: absolute; top: 0; left: 0; right: 0; max-height: 100vh; overflow: hidden; visibility: hidden; pointer-events: none; }
-        .section.active { top: auto; max-height: none; overflow: visible; position: relative; visibility: visible; pointer-events: auto; animation: fadeIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+        /* Hidden panels sit at height:0, IN FLOW, rather than out of flow.
+           A chart built inside a display:none panel measures 0 wide and
+           ApexCharts never emits its series paths at all; taking the panels
+           out of flow fixed that but made every hidden panel's full height
+           hang below the footer, which then needed a second patch to clip.
+           height:0 solves both at once: the box keeps its real WIDTH, so the
+           charts measure correctly, and it contributes no height, so the
+           document cannot grow. No positioning context, no 100vh guess.
+           Credit: DeepSeek Harness found this on a blind brief.
+
+           padding moves to .active. Under the global box-sizing:border-box a
+           height:0 box with padding:44px 0 still renders an 88px strip --
+           padding cannot shrink below itself -- which would leave dead bands
+           between panels. Measured at exactly 64px on the 32px Haverhill
+           padding before this was corrected. */
+        .section { padding: 0; height: 0; overflow: hidden; visibility: hidden; pointer-events: none; }
+        .section.active { padding: 44px 0; height: auto; overflow: visible; visibility: visible; pointer-events: auto; animation: fadeIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .section-header { margin-bottom: 28px; }
         .section-title { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 4px; color: var(--ink); }

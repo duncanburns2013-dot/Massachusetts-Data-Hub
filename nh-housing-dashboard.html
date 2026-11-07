@@ -102,8 +102,15 @@
 /* Clipped to one viewport and pinned to the top: an out-of-flow section still
    counts toward document scroll height, so the hidden ones were hanging dead
    space below the footer. Clipping is paint-only; widths still lay out. */
-#nhr .section{padding:36px 20px;position:absolute;top:0;left:0;right:0;max-height:100vh;overflow:hidden;visibility:hidden;pointer-events:none}
-#nhr .section.active{top:auto;max-height:none;overflow:visible;position:relative;visibility:visible;pointer-events:auto;animation:fade 0.4s ease}
+/* Hidden panels at height:0, in flow: the box keeps its real WIDTH so charts
+   measure correctly, and contributes no height so the document cannot grow.
+   Vertical padding moves to .active -- under border-box a height:0 box with
+   vertical padding still renders a strip that padding cannot shrink below.
+   The 20px HORIZONTAL padding stays on both states: it sets the content width
+   the charts are built against, and dropping it while hidden would build every
+   chart 40px too wide. Credit: DeepSeek Harness, on a blind brief. */
+#nhr .section{padding:0 20px;height:0;overflow:hidden;visibility:hidden;pointer-events:none}
+#nhr .section.active{padding:36px 20px;height:auto;overflow:visible;visibility:visible;pointer-events:auto;animation:fade 0.4s ease}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 #nhr .section-title{font-family:'DM Serif Display',Georgia,serif;font-size:1.4rem;color:var(--navy);margin-bottom:3px}
 #nhr .section-desc{color:var(--muted);font-size:0.88rem;margin-bottom:22px}
