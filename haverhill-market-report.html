@@ -61,22 +61,27 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);line-
 .tog:hover{color:#14558F;background:rgba(30,51,94,0.04)}
 .tog.active{background:#14558F;color:#fff;border-color:#14558F}
 
-/* Was display:none. A chart built inside a display:none panel lays out at
-   zero width -- ApexCharts writes <svg width="0"> and draws no series -- and
-   on a cold load 11 of this page's 15 charts were born that way. They only
-   came back because the tab handler fires a resize event, so every chart on
-   the page depended on that one line surviving. Taken out of flow instead:
-   the panel keeps its real width, so the charts measure correctly at build
-   time and the resize is a belt, not the braces. Same fix as the MA and NH
-   dashboards. */
-/* Clipped to one viewport and pinned to the top: an out-of-flow panel still
-   counts toward document scroll height, so the hidden ones were hanging dead
-   space below the footer. Clipping is paint-only; widths still lay out. */
-/* Hidden panels at height:0, in flow: the box keeps its real WIDTH so charts
-   measure correctly, and contributes no height so the document cannot grow.
-   Vertical padding moves to .active -- under border-box a height:0 box with
-   vertical padding still renders a strip that padding cannot shrink below.
-   The panels have no horizontal padding, so none is needed while hidden. Credit: DeepSeek Harness, on a blind brief. */
+/* Hidden panels sit at height:0, IN FLOW. Three things depend on that and it
+   took three passes to get right, so the reasoning is worth keeping:
+
+   1. WIDTH must stay real. This was display:none, and a chart built inside a
+      display:none panel measures 0 wide -- ApexCharts writes <svg width="0">
+      and never emits the series paths at all. On a cold load 11 of this
+      page's 15 charts were born that way; they only came back because the tab
+      handler fires a resize event, so every chart depended on that one line.
+   2. HEIGHT must not count. The first fix took the panels out of flow, which
+      cured the width but left each hidden panel's full height hanging below
+      the footer, because an absolutely positioned box still counts toward
+      document scroll height. height:0 cures both at once and needs no
+      positioning context.
+   3. PADDING must move to .active. Under the global box-sizing:border-box a
+      height:0 box with padding:32px 0 still renders a 64px strip -- padding
+      cannot shrink below itself. Measured at exactly 64px per panel.
+
+   Same rule on the MA and NH dashboards. NH additionally keeps its 20px
+   HORIZONTAL padding on both states, because there it sets the width the
+   charts are built against. Credit: DeepSeek Harness found 1 and 3 on a
+   blind brief, after my own two passes had only got 1 and 2. */
 .panel{height:0;overflow:hidden;visibility:hidden;pointer-events:none;padding:0}
 .panel.active{height:auto;overflow:visible;visibility:visible;pointer-events:auto;padding:32px 0;animation:fadeUp .35s cubic-bezier(.22,1,.36,1)}
 
@@ -630,12 +635,13 @@ hBar('c-all-dom',   [{name:'MA', data:ma.dom, color:RD},
 
 
 // NAV
-// A chart built inside a hidden panel is laid out at zero width and does not
-// redraw itself when the panel is shown: axes appear, marks do not. Chart.js
-// handled that on its own, ApexCharts does not, so switching to Condominium,
-// Multi-Family, Compare All or Affordability showed empty plots after the
-// conversion. ApexCharts listens for window resize, so tell it the layout
-// changed once the panel is visible.
+// The resize dispatch below is now a BELT, not the braces. It was load-bearing
+// when the panels were display:none: a chart built in a zero-width panel never
+// drew its marks, and this event was the only thing that brought them back.
+// The panels are height:0 in flow now (see the .panel rule), so every chart is
+// built at the correct width and nothing depends on this line. Kept because a
+// resize on tab switch is cheap and correct regardless, and because ApexCharts
+// re-measuring after a layout change is the behaviour we want anyway.
 document.querySelectorAll('.tog').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.tog').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});b.classList.add('active');document.getElementById('p-'+b.getAttribute('data-t')).classList.add('active');window.dispatchEvent(new Event('resize'));});});
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -1273,8 +1279,10 @@ var BAND = /*@band@*/{"town":"Haverhill","headline":"Haverhill is the second-che
   });
   window.addEventListener('scroll', hideTip, { passive: true });
 
-  // The panel is display:none at load, so its SVGs would measure zero-wide.
-  // Draw once now for the table and tiles, and redraw when the tab is opened.
+  // These are hand-rolled SVGs with a viewBox, so unlike the ApexCharts panels
+  // they were never affected by the hidden-panel measurement bug -- a viewBox
+  // scales to whatever box it lands in. Drawn once at load; the redraw on tab
+  // open is belt-and-braces and can go if this ever needs simplifying.
   drawAll();
   var bandBtn = document.querySelector('.tog[data-t="band"]');
   if (bandBtn) bandBtn.addEventListener('click', function () { setTimeout(drawAll, 30); });
