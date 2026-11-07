@@ -127,6 +127,11 @@ body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--ink);line-
 .card.w2{grid-column:span 2}
 .cl{font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.09em;color:var(--muted);font-weight:600;margin-bottom:3px}
 .cv{font-size:1.3rem;font-weight:800;margin-bottom:7px}
+/* All four figures in this row are the same KIND of number, so colour here
+   was decoration: cranberry on "MA Median Income" read as an alarm about a
+   figure that is neither good nor bad. They share one ink; the GAP cells
+   below carry red and green, where the sign actually means something. */
+.comp-iv{color:#14558F}
 .cv.blue{color:var(--neon-blue)}.cv.green{color:var(--neon-green)}.cv.red{color:var(--neon-red)}.cv.amber{color:#C98A1E}.cv.purple{color:var(--neon-purple)}.cv.orange{color:var(--neon-orange)}
 .cg{display:grid;grid-template-columns:1fr 1fr;gap:5px}
 .cm{background:#f5f2ec;padding:5px 7px;border-radius:5px}
@@ -422,10 +427,10 @@ td{border-bottom:1px solid #CDD3D1 !important}
 <div class="sec-t">Affordability Analysis</div>
 <p class="sec-d">30yr @ 6.5%, 20% down, 28% DTI</p>
 <div class="afford"><div class="comp-t">Haverhill — The Affordability Advantage</div><div class="comp-g">
-<div class="comp-i"><div class="comp-il">Local Median Income</div><div class="comp-iv" style="color:#14558F" id="af-local">—</div><div class="comp-in" id="af-local-src">—</div></div>
-<div class="comp-i"><div class="comp-il">MA Median Income</div><div class="comp-iv" style="color:var(--neon-red)" id="af-ma-median">—</div><div class="comp-in" id="af-ma-median-src">—</div></div>
-<div class="comp-i"><div class="comp-il">SF Income Needed</div><div class="comp-iv" style="color:#C98A1E" id="af-sf-income">—</div><div class="comp-in">For a <span id="af-sf-price">—</span> home</div></div>
-<div class="comp-i"><div class="comp-il">Condo Income</div><div class="comp-iv" style="color:var(--neon-green)" id="af-co-income">—</div><div class="comp-in">For a <span id="af-co-price">—</span> condo</div></div>
+<div class="comp-i"><div class="comp-il">Local Median Income</div><div class="comp-iv" id="af-local">—</div><div class="comp-in" id="af-local-src">—</div></div>
+<div class="comp-i"><div class="comp-il">MA Median Income</div><div class="comp-iv" id="af-ma-median">—</div><div class="comp-in" id="af-ma-median-src">—</div></div>
+<div class="comp-i"><div class="comp-il">SF Income Needed</div><div class="comp-iv" id="af-sf-income">—</div><div class="comp-in">For a <span id="af-sf-price">—</span> home</div></div>
+<div class="comp-i"><div class="comp-il">Condo Income</div><div class="comp-iv" id="af-co-income">—</div><div class="comp-in">For a <span id="af-co-price">—</span> condo</div></div>
 </div></div>
 <div class="cards">
 <div class="card w2 bl"><div class="cl">Single Family — <span id="af-c-sf-price">—</span></div><div class="cv blue"><span id="af-c-sf-income">—</span> income needed</div><div class="cg"><div class="cm"><div class="cm-l">Down Payment</div><div class="cm-v" id="af-c-sf-down">—</div></div><div class="cm"><div class="cm-l">Monthly</div><div class="cm-v" id="af-c-sf-monthly">—</div></div><div class="cm"><div class="cm-l">Gap (Local)</div><div class="cm-v" id="af-c-sf-gap-local">—</div></div><div class="cm"><div class="cm-l">Gap (MA)</div><div class="cm-v" id="af-c-sf-gap-ma">—</div></div></div></div>
@@ -872,10 +877,10 @@ var MEDIAN_SRC = 'ACS 2024 (5-yr)';
     tooltip: Object.assign({}, K.baseOpts.tooltip, {y:{formatter:kF}}),
     annotations: {yaxis: [
       {y: LOCAL_MEDIAN, borderColor: AM, strokeDashArray: 5, borderWidth: 2,
-       label: {text: 'Local median ' + money(LOCAL_MEDIAN), position:'left', offsetX: 110,
+       label: {text: 'Local median ' + money(LOCAL_MEDIAN), position:'right', offsetX:-6, offsetY:14,
                style:{fontSize:'10px', color:'#fff', background: AM}}},
       {y: MA_MEDIAN, borderColor: K.HUB.muted, strokeDashArray: 3, borderWidth: 2,
-       label: {text: 'MA median ' + money(MA_MEDIAN), position:'left', offsetX: 100,
+       label: {text: 'MA median ' + money(MA_MEDIAN), position:'right', offsetX:-6, offsetY:-6,
                style:{fontSize:'10px', color:'#fff', background: K.HUB.muted}}}
     ]}
   })).render();
