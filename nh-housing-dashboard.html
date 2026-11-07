@@ -124,7 +124,24 @@
 #nhr th,#nhr td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--border)}
 #nhr th{font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--navy);font-weight:700;border-bottom:2px solid var(--navy)}
 #nhr td:first-child{font-weight:600;color:var(--navy)}
-#nhr .afford-box{background:linear-gradient(135deg,#fefce8,#fef9c3);border:1px solid #fde047;border-radius:14px;padding:22px;margin-bottom:20px}
+/* Was a yellow gradient with a #fde047 border: off-theme, and it read as a
+   warning callout rather than the section's own content. Same vocabulary as the
+   MA page now, so the two affordability tabs are one layout. */
+#nhr .aff-lede{background:#fff;border:1px solid var(--border);border-left:4px solid var(--navy);border-radius:14px;padding:22px 24px;margin-bottom:18px}
+#nhr .aff-lede h3{font-family:'DM Serif Display',Georgia,serif;font-size:1.2rem;color:var(--navy);margin:0 0 4px;font-weight:400}
+#nhr .aff-sub{font-size:0.8rem;color:var(--muted);margin-bottom:16px}
+#nhr .aff-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px}
+#nhr .aff-k{font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);font-weight:600;margin-bottom:5px}
+#nhr .aff-v{font-family:'DM Serif Display',Georgia,serif;font-size:1.45rem;line-height:1.1;color:var(--navy)}
+#nhr .aff-v.short{color:#B01A36}
+#nhr .aff-n{font-size:0.72rem;color:var(--muted);margin-top:3px}
+#nhr .afford-box{background:#fff;border:1px solid var(--border);border-radius:14px;padding:4px 18px 14px;margin-bottom:18px}
+#nhr .afford-box table{width:100%;border-collapse:collapse;font-size:0.84rem}
+#nhr .afford-box th{text-align:right;font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);font-weight:600;padding:12px 10px;border-bottom:1px solid var(--border)}
+#nhr .afford-box th:first-child,#nhr .afford-box td:first-child{text-align:left}
+#nhr .afford-box td{text-align:right;padding:11px 10px;border-bottom:1px solid #EDEFEE;font-variant-numeric:tabular-nums}
+#nhr .afford-box tr:last-child td{border-bottom:none}
+#nhr .afford-box tbody tr:hover{background:#F7F9F8}
 /* FOOTER */
 #nhr .footer{background:#fff;border-top:1px solid var(--border);padding:24px;text-align:center;color:var(--muted);border-radius:0 0 14px 14px}
 #nhr .footer strong{color:var(--navy)}
@@ -278,6 +295,7 @@ function renderOverviewCharts(data){
     { yaxis:{min:Math.floor(Math.min(...splp)-1),max:Math.ceil(Math.max(...splp)+1),labels:{formatter:v=>v.toFixed(0)+'%'}},
       annotations:{yaxis:[{y:100,borderColor:K.HUB.ink,strokeDashArray:4,borderWidth:1,
         label:{text:'asking price',position:'left',offsetX:64,style:{fontSize:'10px',color:'#fff',background:K.HUB.ink}}}]} });
+  renderAffordChart(data);
   barChart(document.getElementById('ov-active'),towns.map(t=>t.m.label),towns.map(t=>t.md.active_count),towns.map(t=>COLORS[t.m.key]),v=>num(v)+' listings');
 }
 
@@ -290,12 +308,40 @@ function affordSection(data){
     return `<tr><td>${m.label}</td><td>${money(md.median_sale)}</td><td>${money(md.median_sale*0.2)}</td><td>${moneyFull(need)}</td>
       <td style="color:${gap>=0?K.HUB.berkshireGreen:K.HUB.cranberry};font-weight:600">${gap>=0?'✓ within reach':'−'+money(Math.abs(gap))+' short'}</td></tr>`;
   }).join('');
+  const worst=MARKETS.map(m=>({m,md:data.markets[m.key]})).filter(x=>x.md)
+                     .map(x=>({label:x.m.label,need:inc(x.md.median_sale),price:x.md.median_sale}))
+                     .sort((a,b)=>b.need-a.need)[0];
   sec.innerHTML=`
     <div class="section-title">Affordability</div>
     <div class="section-desc">Income required at 30yr @ 6.75%, 20% down, 30% DTI, ${(tax*100).toFixed(2)}% NH property tax</div>
-    <div class="afford-box"><table><thead><tr><th>Market</th><th>Median</th><th>Down (20%)</th><th>Income Needed</th><th>vs NH Median Income ($111.8K)</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="aff-lede">
+      <h3>What a median home asks of a median income</h3>
+      <div class="aff-sub">${worst.label}, the market demanding most, at standard lending terms</div>
+      <div class="aff-row">
+        <div><div class="aff-k">Median price</div><div class="aff-v">${money(worst.price)}</div></div>
+        <div><div class="aff-k">Down payment</div><div class="aff-v">${money(worst.price*0.2)}</div><div class="aff-n">20%</div></div>
+        <div><div class="aff-k">Income needed</div><div class="aff-v short">${money(worst.need)}</div><div class="aff-n">at 30% DTI</div></div>
+        <div><div class="aff-k">NH median income</div><div class="aff-v">${money(NHMI)}</div><div class="aff-n">shortfall ${money(worst.need-NHMI)}</div></div>
+      </div>
+    </div>
+    <!-- The table alone made the reader do the comparison in their head. The
+         chart puts every market against the one line that matters. -->
+    <div class="chart-box"><div class="chart-title">Income needed to buy the median home</div><span class="chart-note">Bars above the line are out of reach on the NH median household income</span><div class="chart-area" id="aff-chart"></div></div>
+    <div class="afford-box"><table><thead><tr><th>Market</th><th>Median</th><th>Down (20%)</th><th>Income needed</th><th>vs NH median income</th></tr></thead><tbody>${rows}</tbody></table></div>
     <div class="section-desc" style="font-size:0.75rem">NH median household income ≈ $111,800. High property taxes (~2.09%) offset the no-income-tax advantage for owners.</div>`;
   return sec;
+}
+
+function renderAffordChart(data){
+  const el=document.getElementById('aff-chart'); if(!el) return;
+  const NHMI=111800,r=0.0675/12,n=360,tax=0.0209,ins=2400;
+  const inc=(p)=>{const l=p*0.8;const pi=l*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1);const tot=pi+p*tax/12+ins/12;return tot*12/0.30;};
+  const ts=MARKETS.map(m=>({m,md:data.markets[m.key]})).filter(x=>x.md);
+  barChart(el, ts.map(t=>t.m.label), ts.map(t=>Math.round(inc(t.md.median_sale))),
+    ts.map(t=>COLORS[t.m.key]), money,
+    { annotations:{yaxis:[{y:NHMI,borderColor:K.HUB.ink,strokeDashArray:4,borderWidth:1,
+        label:{text:'NH median income '+money(NHMI),position:'right',offsetX:-6,offsetY:-6,
+               style:{fontSize:'10px',color:'#fff',background:K.HUB.ink}}}]} });
 }
 
 function nav(id,label,active){const b=$(`<button class="nav-btn${active?' active':''}" data-t="${id}">${label}</button>`);return b;}

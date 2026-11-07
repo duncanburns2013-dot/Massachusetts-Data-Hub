@@ -281,7 +281,18 @@
         .summary-val.yellow { color: var(--signal-amber); }
         .summary-note { font-size: 0.7rem; color: var(--ink-muted); margin-top: 2px; }
         
-        .afford-box { background: linear-gradient(135deg, #FAF5E6 0%, #F6EED6 100%); border: 1px solid #D9B441; border-radius: 14px; padding: 28px; margin-bottom: 28px; }
+        /* The affordability panel used to sit in a yellow gradient box with a
+       #D9B441 border and a #92400e heading: three colours in neither the Hub
+       palette nor the validated chart set, reading like a warning callout
+       rather than the section's headline. It is a plain lede now. */
+    .aff-lede { background:#fff; border:1px solid #CDD3D1; border-left:4px solid #14558F; border-radius:14px; padding:24px 26px; margin-bottom:22px; }
+    .aff-lede h3 { font-family:'DM Serif Display',Georgia,serif; font-size:1.25rem; color:#14558F; margin:0 0 4px; font-weight:400; }
+    .aff-lede .aff-sub { font-size:0.82rem; color:#5A6467; margin-bottom:18px; }
+    .aff-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:18px; }
+    .aff-cell .aff-k { font-size:0.6875rem; text-transform:uppercase; letter-spacing:0.1em; color:#5A6467; font-weight:600; margin-bottom:5px; }
+    .aff-cell .aff-v { font-family:'DM Serif Display',Georgia,serif; font-size:1.5rem; line-height:1.1; color:#14558F; }
+    .aff-cell .aff-n { font-size:0.72rem; color:#5A6467; margin-top:3px; }
+    .aff-cell .aff-v.short { color:#B01A36; }
         
         .footer { background: var(--ink); color: #fff; padding: 32px 24px; text-align: center; position: relative; overflow: hidden; }
         .footer::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
@@ -677,7 +688,20 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #C98A1E !imp
 
     <section class="section" id="affordability"><div class="container">
         <div class="section-header"><h2 class="section-title">Affordability Analysis</h2><p class="section-desc">Income requirements at standard lending criteria — 30-yr fixed @ 6.5%, 20% down, 28% DTI</p></div>
-        <div class="afford-box"><h3 class="summary-title" style="color:#92400e;">Newburyport — Income Requirements</h3><div class="summary-grid"><div class="summary-item"><div class="summary-label">Home Price</div><div class="summary-val blue" id="af-nbpt-price">—</div></div><div class="summary-item"><div class="summary-label">Down (20%)</div><div class="summary-val yellow" id="af-nbpt-down">—</div></div><div class="summary-item"><div class="summary-label">Monthly @6.5%</div><div class="summary-val green" id="af-nbpt-monthly">—</div></div><div class="summary-item"><div class="summary-label">Income Needed</div><div class="summary-val red" id="af-nbpt-income">—</div><div class="summary-note">28% DTI</div></div></div></div><div class="summary-item"><div class="summary-label">Down (20%)</div><div class="summary-val yellow">$221K</div></div><div class="summary-item"><div class="summary-label">Monthly @6.5%</div><div class="summary-val green">$5,583</div></div><div class="summary-item"><div class="summary-label">Income Needed</div><div class="summary-val red">$239K</div><div class="summary-note">28% DTI</div></div></div></div>
+        <!-- Was a yellow box whose grid had THREE orphaned .summary-item blocks
+             sitting outside it, carrying hand-typed $221K / $5,583 / $239K. They
+             rendered as a broken single column and no script owned them. The four
+             figures below are the ones the updater writes. -->
+        <div class="aff-lede">
+          <h3>What a median home asks of a median income</h3>
+          <div class="aff-sub">Newburyport, the priciest market on this page, at standard lending terms</div>
+          <div class="aff-row">
+            <div class="aff-cell"><div class="aff-k">Home price</div><div class="aff-v" id="af-nbpt-price">&mdash;</div></div>
+            <div class="aff-cell"><div class="aff-k">Down payment</div><div class="aff-v" id="af-nbpt-down">&mdash;</div><div class="aff-n">20%</div></div>
+            <div class="aff-cell"><div class="aff-k">Monthly</div><div class="aff-v" id="af-nbpt-monthly">&mdash;</div><div class="aff-n">principal &amp; interest</div></div>
+            <div class="aff-cell"><div class="aff-k">Income needed</div><div class="aff-v short" id="af-nbpt-income">&mdash;</div><div class="aff-n">at 28% DTI</div></div>
+          </div>
+        </div>
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Income Required vs. MA Median</h3></div><div class="chart-area" id="income-chart"></div></div>
         <div class="afford-compare">
             <div class="afford-stat"><div class="afford-stat-label">MA Median Income</div><div class="afford-stat-val" id="af-median">—</div><div class="afford-stat-sub" id="af-median-src">—</div></div>
@@ -688,12 +712,10 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #C98A1E !imp
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Affordability Gap (income needed ÷ MA median)</h3></div><div class="chart-area" id="gap-chart"></div></div>
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Monthly Mortgage Payment by Market</h3></div><div class="chart-area" id="monthly-chart"></div></div>
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Comparison Table</h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Market</th><th>Price</th><th>Down</th><th>Monthly</th><th>Income</th><th>Median</th><th>Gap</th></tr></thead><tbody id="af-table"></tbody></table><p style="margin-top:12px;font-size:0.75rem;color:var(--text-muted);"><span id="af-terms">—</span>. MA Median: <span id="af-median-note">—</span></p></div></div>
-        <div class="cards">
-            <div class="card red-border"><div class="card-label">Income Gap</div><div class="card-val red" id="af-card-gap">—</div><p style="color:var(--text-mid);font-size:0.8rem;margin-top:6px;">Above median income required.</p></div>
-            <div class="card yellow-border"><div class="card-label">Down Payment</div><div class="card-val yellow" id="af-card-down">—</div><p style="color:var(--text-mid);font-size:0.8rem;margin-top:6px;"><span id="af-card-down-sub">—</span>× median annual income.</p></div>
-            <div class="card blue-border"><div class="card-label">Newburyport Premium</div><div class="card-val blue" id="af-card-prem">—</div><p style="color:var(--text-mid);font-size:0.8rem;margin-top:6px;">Above state average.</p></div>
-            <div class="card green-border"><div class="card-label">MA Inventory</div><div class="card-val green" id="af-card-inv">—</div><p style="color:var(--text-mid);font-size:0.8rem;margin-top:6px;">Balanced market = 4–6 months.</p></div>
-        </div>
+        <!-- A second row of four cards used to sit here repeating the gaps the
+             four .afford-stat tiles above already carry. One row of figures per
+             section; the table underneath is where the detail belongs. -->
+
     </div></section>
     
     <footer class="footer"><p class="footer-text"><strong>Data:</strong> MLS PIN • Census ACS • Bankrate</p><p class="footer-text" style="font-size:0.75rem;color:var(--text-muted);max-width:760px;margin:10px auto 0;line-height:1.5;"><span id="hist-prov">—</span> The 2026 column of every series is the live MLS PIN trailing-12-month window, refreshed daily. Months supply is current-period only: MLS records a listing's status now, not its status on a past date, so prior years are shown empty rather than estimated. The <a href="haverhill-market-report.html" style="color:inherit;">Haverhill report</a> draws its Massachusetts and Essex County benchmarks from this same series — one source, so the two pages cannot disagree.</p><p class="footer-date">Updated July 16, 2026 • Year-over-Year Analysis (2025→2026)</p></footer>
@@ -742,7 +764,9 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #C98A1E !imp
     
     const baseOpts = K.baseOpts;
     
-    function fmtMoney(v) { return v == null ? '—' : '$' + Math.round(v/1000) + 'K'; }
+    // Above a million, K stops reading: the Newburyport price rendered as
+    // "$1308K" in the affordability lede. Switch to M at the million mark.
+    function fmtMoney(v) { return v == null ? '—' : (v >= 1000000 ? '$' + (v/1000000).toFixed(2).replace(/0$/,'') + 'M' : '$' + Math.round(v/1000) + 'K'); }
     function fmtMoneyFull(v) { return v == null ? '—' : '$' + Math.round(v).toLocaleString(); }
     function fmtSqft(v) { return v == null ? '—' : '$' + Math.round(v); }
     function fmtDom(v) { return v == null ? '—' : Math.round(v) + 'd'; }
