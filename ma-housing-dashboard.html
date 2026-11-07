@@ -203,8 +203,17 @@
         .nav-btn.active { background: var(--ink); color: #fff; }
         
         /* ── SECTIONS ── */
-        .section { padding: 44px 0; display: none; }
-        .section.active { display: block; animation: fadeIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+        /* Inactive sections are NOT display:none, deliberately.
+           A chart built inside a display:none panel is laid out at zero width:
+           ApexCharts writes <svg width="0"> and draws no series, and nothing
+           recovers it afterwards -- not a resize event, not destroy()+render(),
+           not a fresh instance. 15 of the 25 charts on this page were blank for
+           that reason, on every tab except Overview, Property Type and Price
+           Tiers; those three worked only because they are built while visible.
+           Taking the panels out of flow instead keeps them measurable, so every
+           chart is built against a real box. */
+        .section { padding: 44px 0; position: absolute; left: 0; right: 0; visibility: hidden; pointer-events: none; }
+        .section.active { position: relative; visibility: visible; pointer-events: auto; animation: fadeIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .section-header { margin-bottom: 28px; }
         .section-title { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 4px; color: var(--ink); }
