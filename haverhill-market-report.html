@@ -307,7 +307,7 @@ td{border-bottom:1px solid #CDD3D1 !important}
 <div class="cb"><div class="ch"><div class="ct">$/SqFt Comparison</div></div><div class="ca"><div id="c-sf-sqft"></div></div></div>
 <div class="cb"><div class="ch"><div class="ct">Days on Market</div></div><div class="ca"><div id="c-sf-dom"></div></div></div>
 <div class="cb"><div class="ch"><div class="ct">12-Month Sales Volume</div></div><div class="ca"><div id="c-sf-vol"></div></div></div>
-<div class="cb"><div class="ch"><div class="ct">Inventory & Months Supply</div></div><div class="ca"><div id="c-sf-inv"></div></div><p style="font-size:0.72rem;color:#8e95a2;margin:8px 4px 0;line-height:1.45;">Current period only. Active inventory is a point-in-time count — MLS records a listing's status now, not its status on a date in 2018 — so there is no query that returns a past year's inventory or the months supply derived from it. Prior years are shown empty rather than estimated.</p></div>
+<div class="cb"><div class="ch"><div class="ct">Inventory & Months Supply</div></div><div id="c-sf-inv"></div><p style="font-size:0.72rem;color:#8e95a2;margin:8px 4px 0;line-height:1.45;">Current period only. Active inventory is a point-in-time count — MLS records a listing's status now, not its status on a date in 2018 — so there is no query that returns a past year's inventory or the months supply derived from it. Prior years are shown empty rather than estimated.</p></div>
 <div class="cb"><div class="ch"><div class="ct">Single Family — Full Data</div></div><div class="tw"><table>
 <thead id="t-sf-head"></thead>
 <tbody id="t-sf-body"></tbody></table></div></div>
@@ -580,9 +580,7 @@ hBar('c-sf-vol',    [{name:'Sales', data:sf.sold, color:BL}], fmtCnt);
     '<div class="inv-pair"><span class="inv-val">' + (invNow == null ? '\u2014' : fmtCnt(invNow)) + '</span>' +
     '<span class="inv-lab">active listings</span></div>' +
     '<div class="inv-pair"><span class="inv-val">' + (supNow == null ? '\u2014' : supNow.toFixed(2)) + '</span>' +
-    '<span class="inv-lab">months of supply</span></div>' +
-    '<div class="inv-note">Current period only. MLS stores a listing' + '\u2019' + 's status as it is now, ' +
-    'not as it was, so there is no history to plot.</div>';
+    '<span class="inv-lab">months of supply</span></div>';
   box.parentElement.replaceChild(el, box);
 })();
 
@@ -616,7 +614,13 @@ hBar('c-all-dom',   [{name:'MA', data:ma.dom, color:RD},
 
 
 // NAV
-document.querySelectorAll('.tog').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.tog').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});b.classList.add('active');document.getElementById('p-'+b.getAttribute('data-t')).classList.add('active');});});
+// A chart built inside a hidden panel is laid out at zero width and does not
+// redraw itself when the panel is shown: axes appear, marks do not. Chart.js
+// handled that on its own, ApexCharts does not, so switching to Condominium,
+// Multi-Family, Compare All or Affordability showed empty plots after the
+// conversion. ApexCharts listens for window resize, so tell it the layout
+// changed once the panel is visible.
+document.querySelectorAll('.tog').forEach(function(b){b.addEventListener('click',function(){document.querySelectorAll('.tog').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});b.classList.add('active');document.getElementById('p-'+b.getAttribute('data-t')).classList.add('active');window.dispatchEvent(new Event('resize'));});});
 
 // ══════════════════════════════════════════════════════════════════════════════
 // PROSE DERIVATION
@@ -753,8 +757,13 @@ var MEDIAN_SRC = 'ACS 2024 (5-yr)';
       { label: '$/SqFt', a: sf.sqft, fmt: dollars },
       { label: 'DOM', a: sf.dom, fmt: dom },
       { label: '12mo Sold', a: sf.sold, fmt: num },
-      { label: 'Inventory', a: sf.inv, fmt: num },
-      { label: 'Mo Supply', a: sf.supply, fmt: sup },
+      // Inventory and Mo Supply are NOT missing from the years below: they do
+      // not exist for them. MLS records a listing's status as it is now, not as
+      // it was on a date in 2018, so there is no query that returns a past
+      // year's active count or the months supply derived from it. Both held one
+      // value in thirteen and rendered as twenty-four em-dashes, which reads as
+      // broken data rather than absent data. They are stated in the Inventory &
+      // Months Supply card above, where a point-in-time figure belongs.
       { label: 'SP/LP %', a: sf.splp, fmt: function (v) { return v == null ? '—' : v.toFixed(1); } }
     ],
     co: [
