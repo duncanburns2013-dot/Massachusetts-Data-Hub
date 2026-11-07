@@ -203,37 +203,25 @@
         .nav-btn.active { background: var(--ink); color: #fff; }
         
         /* ── SECTIONS ── */
-        /* Inactive sections are NOT display:none, deliberately.
-           A chart built inside a display:none panel is laid out at zero width:
-           ApexCharts writes <svg width="0"> and draws no series, and nothing
-           recovers it afterwards -- not a resize event, not destroy()+render(),
-           not a fresh instance. 15 of the 25 charts on this page were blank for
-           that reason, on every tab except Overview, Property Type and Price
-           Tiers; those three worked only because they are built while visible.
-           Taking the panels out of flow instead keeps them measurable, so every
-           chart is built against a real box. */
-        /* top / max-height / overflow: an out-of-flow panel still counts toward
-           the DOCUMENT scroll height. Taking the sections out of flow fixed the
-           blank charts but left every hidden section's full height hanging below
-           the footer -- this page scrolled 5,815px for 3,490px of content.
-           Pinned to the top and clipped to one viewport they add nothing.
-           Clipping is a paint operation, so children still lay out at full
-           width and the charts still measure correctly. */
-        /* Hidden panels sit at height:0, IN FLOW, rather than out of flow.
-           A chart built inside a display:none panel measures 0 wide and
-           ApexCharts never emits its series paths at all; taking the panels
-           out of flow fixed that but made every hidden panel's full height
-           hang below the footer, which then needed a second patch to clip.
-           height:0 solves both at once: the box keeps its real WIDTH, so the
-           charts measure correctly, and it contributes no height, so the
-           document cannot grow. No positioning context, no 100vh guess.
-           Credit: DeepSeek Harness found this on a blind brief.
-
-           padding moves to .active. Under the global box-sizing:border-box a
-           height:0 box with padding:44px 0 still renders an 88px strip --
-           padding cannot shrink below itself -- which would leave dead bands
-           between panels. Measured at exactly 64px on the 32px Haverhill
-           padding before this was corrected. */
+        /* Hidden sections sit at height:0, IN FLOW. Three things depend on that
+           and it took three passes to get all three, so the reasoning stays:
+           
+           1. WIDTH must stay real. This was display:none, and a chart built inside a
+              display:none box measures 0 wide -- ApexCharts writes <svg width="0"> and
+              never emits the series paths at all. Nothing recovers it afterwards: not a
+              resize event, not destroy() plus render(), not a fresh instance.
+           2. HEIGHT must not count. The first fix took the sections out of flow, which
+              cured the width but left each hidden section's full height hanging below
+              the footer, because an absolutely positioned box still counts toward
+              document scroll height -- this page scrolled 5,815px for 3,490px of
+              content. height:0 cures both at once and needs no positioning context.
+           3. PADDING must move to .active. Under the global box-sizing:border-box a
+              height:0 box with vertical padding still renders a strip, because padding
+              cannot shrink below itself. Measured at exactly 64px per panel on
+              Haverhill's 32px before this was corrected.
+           
+           Same rule on all three real-estate pages. Credit: DeepSeek Harness found 1
+           and 3 on a blind brief, after my own two passes had only got 1 and 2. */
         .section { padding: 0; height: 0; overflow: hidden; visibility: hidden; pointer-events: none; }
         .section.active { padding: 44px 0; height: auto; overflow: visible; visibility: visible; pointer-events: auto; animation: fadeIn 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
