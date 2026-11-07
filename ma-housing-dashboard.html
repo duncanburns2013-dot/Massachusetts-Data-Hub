@@ -29,6 +29,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.49.1/dist/apexcharts.min.js" integrity="sha384-LoktLSu+KN7O05Gi2Epno0XhcstpeXAu40T7IP2JC5OZ2qKi/oE9znxViQS3yYn5" crossorigin="anonymous"></script>
+    <script src="assets/chart-kit.js"></script>
     <style>
         :root {
             --bg: #f4f2ee;
@@ -549,7 +550,7 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !imp
         <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Days on Market</h3></div><div class="chart-area" id="dom-chart"></div></div>
         <div class="chart-box" style="margin-top:14px"><div class="chart-header"><h3 class="chart-title">Year-over-Year Price Change by Market (2025→2026)</h3></div><div class="chart-area" id="yoy-bar-chart"></div></div>
 
-        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Sales Volume — 12-Month Rolling</h3></div><div class="chart-area" id="volume-chart"></div></div>
+        <div class="chart-box"><div class="chart-header"><h3 class="chart-title">Sales Volume — Indexed to 2022 = 100</h3></div><div class="chart-area" id="volume-chart"></div></div>
     </div></section>
     
     <!-- (All remaining sections, scripts, and closing tags are 100% unchanged) -->
@@ -730,21 +731,15 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !imp
         nbpt:  { price:[587791.01,596385.88,598947.94,664974.21,676765.23,755965.48,821451.90,941914.36,1077706.52,1113346.18,1234211.96,1325882.79,1308343.99], sqft:[281.65,294.53,298.95,319.30,330.62,339.43,378.64,455.01,495.06,534.06,574.16,581.39,592.49], dom:[69.40,71.20,77.00,64.00,45.90,49.60,44.00,27.00,26.80,27.20,32.50,33.90,33.80], units:[178,192,200,180,204,240,208,185,156,125,131,141,125], supply:[null,null,null,null,null,null,null,null,null,null,null,null,4.13] }
     };
     
-    const C = { ma:'#14558F', boston:'#A81733', essex:'#2A6B44', nbpt:'#B07C20', gold:'#B07C20', navy:'#14558F', red:'#A81733', amber:'#B07C20', purple:'#6b5ce7', teal:'#14b8a6', orange:'#d46a2e' };
+    // Palette lives in assets/chart-kit.js, validated by the dataviz checker.
+    // The old set failed two checks: the green read grey (chroma 0.092) and
+    // green vs red was deltaE 3.8 for deuteranopes - the same colour to them.
+    const K = window.HubCharts;
+    const C = { ma:K.ENTITY.ma, boston:K.ENTITY.boston, essex:K.ENTITY.essex, nbpt:K.ENTITY.nbpt,
+                gold:K.HUB.harborGold, navy:K.HUB.bayBlue, red:K.HUB.cranberry, amber:K.HUB.harborGold,
+                purple:K.HUB.muted, teal:K.HUB.berkshireGreen, orange:K.HUB.harborGold };
     
-    const baseOpts = {
-        chart: {
-            fontFamily: "'DM Sans', sans-serif",
-            toolbar: { show: false },
-            zoom: { enabled: false },
-            animations: { enabled: true, easing: 'easeOutCubic', speed: 900, animateGradually: { enabled: true, delay: 80 }, dynamicAnimation: { enabled: true, speed: 400 } },
-            dropShadow: { enabled: true, top: 4, left: 0, blur: 8, color: '#14558F', opacity: 0.08 }
-        },
-        grid: { borderColor: '#CDD3D1', strokeDashArray: 3, xaxis: { lines: { show: false } }, padding: { left: 8, right: 8 } },
-        legend: { position: 'top', horizontalAlign: 'right', fontSize: '12px', fontWeight: 600, markers: { width: 10, height: 10, radius: 4 }, itemMargin: { horizontal: 10, vertical: 4 } },
-        tooltip: { theme: 'light', shared: true, intersect: false, style: { fontSize: '12px' }, x: { show: true } },
-        dataLabels: { enabled: false }
-    };
+    const baseOpts = K.baseOpts;
     
     function fmtMoney(v) { return v == null ? '—' : '$' + Math.round(v/1000) + 'K'; }
     function fmtMoneyFull(v) { return v == null ? '—' : '$' + Math.round(v).toLocaleString(); }
@@ -787,27 +782,31 @@ footer a,.footer a{color:#14558F !important;border-bottom:1px solid #B07C20 !imp
         tooltip: { ...baseOpts.tooltip, y: { formatter: fmtDom } }
     }).render();
     
+    // Indexed to 2022 = 100. Essex is about a tenth of the statewide count and
+    // Newburyport a four-hundredth; the old chart multiplied them by 10 and 400
+    // to force them onto one axis, which is a dual-axis chart in disguise and
+    // made the reader undo arithmetic to recover a real number.
+    const maU = d.ma.units.slice(-5), esU = d.essex.units.slice(-5), nbU = d.nbpt.units.slice(-5);
     new ApexCharts(document.querySelector('#volume-chart'), {
         ...baseOpts,
         chart: { ...baseOpts.chart, type: 'line', height: 340 },
         series: [
-            { name: 'Massachusetts', type: 'column', data: d.ma.units.slice(-5) },
-            { name: 'Essex County (×10)', type: 'line', data: d.essex.units.slice(-5).map(v => v == null ? null : v*10) },
-            { name: 'Newburyport (×400)', type: 'line', data: d.nbpt.units.slice(-5).map(v => v == null ? null : v*400) }
+            { name: 'Massachusetts', data: K.indexTo100(maU) },
+            { name: 'Essex County', data: K.indexTo100(esU) },
+            { name: 'Newburyport', data: K.indexTo100(nbU) }
         ],
         colors: [C.ma, C.essex, C.nbpt],
-        stroke: { width: [0, 4, 4], curve: 'smooth' },
-        fill: { type: ['gradient','solid','solid'], gradient: { shade:'light', type:'vertical', shadeIntensity:0.4, opacityFrom:0.95, opacityTo:0.65, stops:[0,100] } },
-        plotOptions: { bar: { borderRadius: 4, columnWidth: '60%' } },
-        markers: { size: [0, 5, 5], hover: { size: 9 } },
+        stroke: { width: 2, curve: 'smooth' },
+        fill: { type: 'solid' },
+        markers: { size: 4, hover: { size: 9 } },
         xaxis: { categories: ['2022','2023','2024','2025','2026'], axisBorder: { show: false }, axisTicks: { show: false } },
-        yaxis: { labels: { formatter: v => v >= 1000 ? Math.round(v/1000) + 'K' : Math.round(v) } },
-        tooltip: { ...baseOpts.tooltip, y: { formatter: function(v, {seriesIndex}) {
+        yaxis: { labels: { formatter: v => Math.round(v) }, title: { text: '2022 = 100', style: { fontWeight: 600 } } },
+        tooltip: { ...baseOpts.tooltip, y: { formatter: function(v, {seriesIndex, dataPointIndex}) {
             if (v == null) return '—';
-            if (seriesIndex===0) return Math.round(v).toLocaleString();
-            if (seriesIndex===1) return Math.round(v/10).toLocaleString();
-            if (seriesIndex===2) return Math.round(v/400).toLocaleString();
-            return v;
+            // Show the index and the count it stands for: nobody should have to
+            // trust an index they cannot check against a real number.
+            const n = [maU, esU, nbU][seriesIndex][dataPointIndex];
+            return v.toFixed(0) + '  (' + Math.round(n).toLocaleString() + ' sales)';
         } } }
     }).render();
     
