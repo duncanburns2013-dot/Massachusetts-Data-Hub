@@ -327,7 +327,13 @@ function affordSection(data){
                      .sort((a,b)=>b.need-a.need)[0];
   sec.innerHTML=`
     <div class="section-title">Affordability</div>
-    <div class="section-desc">Income required at 30yr @ 6.75%, 20% down, 30% DTI, ${(tax*100).toFixed(2)}% NH property tax</div>
+    <div class="section-desc">Income required at 30yr @ 6.75%, 20% down, 30% DTI, with ${(tax*100).toFixed(2)}% NH property tax and ${moneyFull(ins)}/yr insurance inside the payment</div>
+    <!-- Each housing page models its OWN state's terms, by decision. So the
+         "income needed" below is not the same quantity as the one on the MA
+         page, which is principal and interest at 6.5% and 28% DTI with no
+         tax or insurance. Both pages say so rather than leaving a reader to
+         assume the two numbers are built the same way. -->
+    <div class="section-desc" style="font-size:0.75rem">New Hampshire terms. The Massachusetts page uses MA terms &mdash; 6.5%, 28% DTI, principal and interest only &mdash; so income-needed figures are not directly comparable between the two pages.</div>
     <div class="aff-lede">
       <h3>What a median home asks of a median income</h3>
       <div class="aff-sub">${worst.label}, the market demanding most, at standard lending terms</div>
