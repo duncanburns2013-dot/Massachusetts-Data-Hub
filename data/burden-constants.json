@@ -310,17 +310,18 @@
         "verified": "2026-08-08"
       },
       "avgSingleFamilyBill": {
-        "value": 8113,
-        "source": "MA DLS, City & Town, February 2026 (FY2026 statewide average single-family tax bill)",
-        "url": "https://www.mass.gov/info-details/fy2026-statewide-average-single-family-tax-bill",
-        "verified": "2026-08-08"
+        "value": 8104,
+        "note": "FY2026, all 351 cities and towns. Supersedes the $8,113 DLS City & Town published in February 2026, which covered the 346 communities reporting by 2 Feb 2026. FY2027 is partial (37 of 351 on 2026-11-08) and is not a statewide figure yet.",
+        "source": "MA DOR Division of Local Services, Municipal Databank, Average Single-Family Tax Bill (State Totals), FY2026",
+        "url": "https://dls-gw.dor.state.ma.us/reports/rdPage.aspx?rdReport=AverageSingleTaxBill.SingleFamTaxBill_wRange",
+        "verified": "2026-11-08"
       },
       "avgSingleFamilyValue": {
-        "value": 742986,
-        "note": "FY2026 statewide average assessed single-family value. Effective rate = 8113 / 742986 = 1.092%. ASSESSED, not market.",
-        "source": "MA DLS, City & Town, February 2026",
-        "url": "https://www.mass.gov/info-details/fy2026-statewide-average-single-family-tax-bill",
-        "verified": "2026-08-08"
+        "value": 742001,
+        "note": "FY2026 statewide average assessed single-family value, all 351 communities. Effective rate = 8104 / 742001 = 1.092%. ASSESSED, not market.",
+        "source": "MA DOR Division of Local Services, Municipal Databank, Average Single-Family Tax Bill (State Totals), FY2026",
+        "url": "https://dls-gw.dor.state.ma.us/reports/rdPage.aspx?rdReport=AverageSingleTaxBill.SingleFamTaxBill_wRange",
+        "verified": "2026-11-08"
       },
       "acs": {
         "release": "ACS 2025 1-year",
@@ -549,7 +550,7 @@
       },
       "effectivePropertyRatePct": {
         "value": 1.583,
-        "note": "CORRECTED from an unsourced 1.71%. $15.83 per $1,000 is the 2025 average NOMINAL total rate across NH municipalities, down from $20.96 in 2019 -- and it fell only because assessed values rose, not because bills did. Being nominal, it applies to ASSESSED value, the same basis as the MA figure (1.092% = $8,113 / $742,986 assessed), so the cross-border comparison is like-for-like. It is NOT an effective rate on market value: NH DRA runs an equalization process precisely because assessment timing varies by town, so applying this to a market price overstates the bill wherever assessments lag. Municipal rates range $2.62 to $36.54 per $1,000, so the statewide average hides enormous variation.",
+        "note": "CORRECTED from an unsourced 1.71%. $15.83 per $1,000 is the 2025 average NOMINAL total rate across NH municipalities, down from $20.96 in 2019 -- and it fell only because assessed values rose, not because bills did. Being nominal, it applies to ASSESSED value, the same basis as the MA figure (1.092% = $8,104 / $742,001 assessed), so the cross-border comparison is like-for-like. It is NOT an effective rate on market value: NH DRA runs an equalization process precisely because assessment timing varies by town, so applying this to a market price overstates the bill wherever assessments lag. Municipal rates range $2.62 to $36.54 per $1,000, so the statewide average hides enormous variation.",
         "source": "NH Fiscal Policy Institute, Property Taxes in New Hampshire (2025 average municipal rate)",
         "url": "https://nhfpi.org/resource/property-taxes-in-new-hampshire-how-they-work-and-how-they-compare/",
         "verified": "2026-08-08"
