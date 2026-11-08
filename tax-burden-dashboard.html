@@ -540,7 +540,7 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
           <tr><td>Electric policy charges</td><td>3.663&cent; per kWh<br><span class="src">SOURCED FROM THE FILED TARIFF — Eversource MA Rate R1 (Residential Non-Heating), Greater Boston, delivery rates effective 1 Sep 2026 (2026 Summary of Eastern Massachusetts Electric Rates for Greater Boston Service Area). THIS IS ONE UTILITY, NOT A STATEWIDE AVERAGE. INCLUSION RULE: a charge counts as policy if it exists because of a legislative or regulatory mandate rather than the physical cost of generating and delivering electricity. Counted (c/kWh): Energy Efficiency 2.292 (Greater Boston/Cambridge/South Shore; Cape Cod & MV is 3.738), Net Metering Recovery Surcharge 0.625, Distributed Solar / SMART 0.583, Electric Vehicle Program Factor 0.104, Renewable Energy 0.050, Provisional System Planning Factor 0.008 (new 1 Sep 2026; D.P.U. 20-75-B, ratepayers front grid upgrades for distributed generation), Electric Sector Modernization Plan 0.001. Sum 3.663. Was 3.789 for 1 Jul - 31 Aug 2026 (EV factor 0.238, no PSPF). EXCLUDED as infrastructure or mechanism: Distribution 9.837, Transmission 4.673, Revenue Decoupling 0.539, Transition Energy -0.077, Customer Charge $10/mo. THIS IS A FLOOR, NOT THE FULL FIGURE: the tariff's own footnote says the Distribution Energy Charge already contains the Long Term Renewable Contract Adjustment (i.e. 83C/83D offshore wind), Solar Program Cost Adjustment, Solar Expansion Cost Recovery Factor, Residential Assistance Adjustment Factor and Grid Modernization — none broken out. RPS/CES/APS compliance sits inside supply, also not broken out. So the dashboard's claim that Layer 4 is 'the most verifiable hidden layer' is only partly true: the riders are verifiable, the embedded portion is not.</span></td><td><a href="https://www.eversource.com/docs/default-source/rates-tariffs/ema-greater-boston-rates.pdf">Eversource Massachusetts filed electric delivery rates, Rate R1, Greater Boston, eff. 1 Sep 2026</a></td><td class="verify done">Verified &middot; 2026-10-16</td></tr>
           <tr><td>Gas policy charges</td><td>59.08&cent; per therm<br><span class="src">SOURCED FROM THE FILED TARIFF — Eversource MA Summary of Gas Rates, residential. Counted: Energy Efficiency Charge $0.4170/therm + Gas System Enhancement Program (GSEP) $0.1738/therm = $0.5908 = 59.08c. THE PLACEHOLDER WAS 18c — this is more than three times higher, and it is the single largest correction in the model. At 750 therms it moves the MA gas line from $135 to $443/yr. Excluded for consistency with the electric side, where the equivalent is not isolable: Residential Assistance Charge $0.0833/therm (including it would give 67.41c). For scale, supply (cost of gas) was $0.3842/therm effective 1 May 2026, so these mandated riders exceed the commodity itself.</span></td><td><a href="https://www.eversource.com/docs/default-source/rates-tariffs/summary-rates-gas.pdf">Eversource Massachusetts Summary of Gas Rates (filed tariff)</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
           <tr><td>Unfunded liability (stock)</td><td>$55.8B<br><span class="src">VERIFIED CONTEXT, not used directly in the model. Total unfunded pension + OPEB: MTRS $25.5B, SERS $14.1B, OPEB $13.7B, Boston Teachers $2.6B, MBTA $1.8B. Pension-only is $42.1B. Per household that is $19,719 total / $14,877 pension-only. NOTE the asymmetry when comparing with NH: this figure INCLUDES $13.7B of OPEB (retiree health), while the NH figure below is NHRS pension only. Compare pension-to-pension or the cross-border read is wrong.</span></td><td><a href="https://www.mass.gov/orgs/public-employee-retirement-administration-commission">Commonwealth ACFR FY2024; PERAC valuations; see pension-dashboard.html</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
-          <tr><td>Households</td><td>2,829,804</td><td><a href="https://api.census.gov/data/2024/acs/acs1?get=NAME,B11001_001E&for=state:25">Census ACS 2024 1-year, Table B11001 (Census API, direct)</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
+          <tr><td>Households</td><td>2,827,794</td><td><a href="https://api.census.gov/data/2025/acs/acs1?get=NAME,B11001_001E&for=state:25">Census ACS 2025 1-year, Table B11001 (Census API, direct)</a></td><td class="verify done">Verified &middot; 2026-11-08</td></tr>
           <tr class="grp"><td colspan="4">New Hampshire</td></tr>
           <tr><td>Income tax rate</td><td>none<br><span class="src">No wage income tax, ever. The Interest & Dividends tax (the only NH personal income tax) was repealed effective 2025-01-01. Rate history: 5% -> 4% (2023) -> 3% (2024) -> 0% (2025).</span></td><td><a href="https://www.revenue.nh.gov/news-and-media/repeal-nh-interest-and-dividends-tax-now-effect">NH DRA; HB 2 (2023) ch. 79 ss.86-88</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
           <tr><td>Interest &amp; dividends</td><td>none<br><span class="src">Zero since 2025-01-01. This is the layer the I&D repeal actually moved. NH has NEVER taxed capital gains, so gains are a long-standing gap, not a new one.</span></td><td><a href="https://www.revenue.nh.gov/news-and-media/repeal-nh-interest-and-dividends-tax-now-effect">NH DRA, repeal of Interest & Dividends tax</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
@@ -559,7 +559,7 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
           <tr><td>Electric policy charges</td><td>0.618&cent; per kWh<br><span class="src">SOURCED FROM THE FILED TARIFF — Eversource NH Rate R (Manchester), the SAME UTILITY as the Massachusetts figure, which makes this genuinely like-for-like rather than two different companies' accounting. Counted: System Benefits Charge 0.618 c/kWh, NH's energy efficiency and low-income program rider. EXCLUDED under the same rule as MA: Distribution 6.727, Transmission 4.445, Regulatory Reconciliation Adjustment 0.296, Pole Plant Adjustment -0.029, Customer Charge $19.81/mo, and Stranded Cost Recovery -0.148 (stranded cost excluded on both sides; note NH's is a CREDIT, not a charge). New Hampshire's tariff has no counterpart to Massachusetts's net metering, SMART, EV or sector-modernisation riders — that absence is the finding, not an omission.</span></td><td><a href="https://www.eversource.com/content/residential/account-billing/manage-bill/about-your-bill/rates-tariffs/electric-delivery-rates/nh">Eversource New Hampshire filed electric delivery tariff, Rate R</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
           <tr><td>Gas policy charges</td><td>16.3&cent; per therm<br><span class="src">SOURCED — Liberty Utilities (EnergyNorth Natural Gas), residential Local Distribution Adjustment Charge, $0.1630/therm for the 2025-26 period. Eversource does not serve gas in New Hampshire, so unlike the electric comparison this is a different company from the MA side. TREAT AS A CEILING: the LDAC is the vehicle for the energy-efficiency programme but it also bundles the Regulatory Reconciliation Adjustment and Lost Revenue Factor, which are mechanisms I exclude on the Massachusetts side. Decomposing it needs NHPUC order DE 25-071. The two errors run the same way — MA's 59.08c is a FLOOR (embedded policy not broken out) and this is a CEILING — so the stated MA-NH gas gap of 42.78c/therm is the conservative version of the finding, not the flattering one.</span></td><td><a href="https://new-hampshire.libertyutilities.com/keene/residential/rates-and-tariffs/index.html">Liberty Utilities EnergyNorth, NHPUC LDAC filing DG 24-098 (2025-26); see also DE 25-071</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
           <tr><td>Unfunded liability (stock)</td><td>$5.58B<br><span class="src">VERIFIED CONTEXT. NHRS Unfunded Actuarial Accrued Liability as of 30 June 2024, at a 68.6% funded ratio. Per household that is $9,778 against Massachusetts's $14,877 pension-only — so MA carries roughly 1.5x the per-household pension hole. CAVEAT: this is NHRS PENSION ONLY. New Hampshire's retiree health (OPEB) unfunded liability is not included here, while the MA figure has a separate $13.7B OPEB line. Until NH OPEB is sourced, compare against MA's pension-only $42.1B, never its $55.8B total.</span></td><td><a href="https://www.nhrs.org/docs/default-source/gasb/2025-nhrs-combined-acfr-and-gasb67-74-(final)abfe78ba-fd19-426b-a7a7-d693dedd1c1d.pdf">NHRS ACFR and GASB 67/74 schedules, FY2025 release (valuation date 30 June 2024)</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
-          <tr><td>Households</td><td>570,689</td><td><a href="https://api.census.gov/data/2024/acs/acs1?get=NAME,B11001_001E&for=state:33">Census ACS 2024 1-year, Table B11001 (Census API, direct)</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
+          <tr><td>Households</td><td>574,089</td><td><a href="https://api.census.gov/data/2025/acs/acs1?get=NAME,B11001_001E&for=state:33">Census ACS 2025 1-year, Table B11001 (Census API, direct)</a></td><td class="verify done">Verified &middot; 2026-11-08</td></tr>
           <tr class="grp"><td colspan="4">Federal &amp; national</td></tr>
           <tr><td>Social Security, employee share</td><td>6.2%</td><td><a href="https://www.law.cornell.edu/uscode/text/26/3101">IRC 3101(a) / 3111(a)</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
           <tr><td>Medicare, employee share</td><td>1.45%</td><td><a href="https://www.law.cornell.edu/uscode/text/26/3101">IRC 3101(b) / 3111(b)</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
@@ -567,8 +567,8 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
           <tr><td>Federal motor fuel excise</td><td>18.4&cent; per gallon</td><td><a href="https://www.irs.gov/pub/irs-pdf/p510.pdf">IRC 4081 federal motor fuel excise, gasoline</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
           <tr><td>Federal deficit</td><td>$1.8T<br><span class="src">FY2025 actual, ~5.8-5.9% of GDP. Rounded to $1.8T as published.</span></td><td><a href="https://www.cbo.gov/publication/61307">CBO Monthly Budget Review, October 2025</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
           <tr><td>Federal corporate receipts</td><td>$452.1B<br><span class="src">FY2025 net Corporation Income Taxes, $452,089,303,419.78, from the Final Monthly Treasury Statement for September 2025 (fiscal year close). Down from FY2024's $529,866,802,637.57, a fall of $77.8B or 14.7% — CBO attributed part of the drop to timing effects from IRS disaster-related deadline postponements that had inflated early FY2024. This replaces a rounded $500B placeholder that overstated the figure by $48B (10.6%) and inflated Layer 3 in both dashboards.</span></td><td><a href="https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/mts/mts_table_4?filter=record_fiscal_year:eq:2025,record_calendar_month:eq:09">U.S. Treasury, Final Monthly Treasury Statement Sept 2025, Table 4, via the Fiscal Data API</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
-          <tr><td>US households</td><td>132,737,146</td><td><a href="https://api.census.gov/data/2024/acs/acs1?get=NAME,B11001_001E&for=us:1">Census ACS 2024 1-year, Table B11001 (Census API, direct)</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
-          <tr><td>US aggregate household income</td><td>$15.17T</td><td><a href="https://api.census.gov/data/2024/acs/acs1?get=NAME,B19025_001E&for=us:1">Census ACS 2024 1-year, Table B19025 (Census API, direct)</a></td><td class="verify done">Verified &middot; 2026-08-08</td></tr>
+          <tr><td>US households</td><td>134,063,422</td><td><a href="https://api.census.gov/data/2025/acs/acs1?get=NAME,B11001_001E&for=us:1">Census ACS 2025 1-year, Table B11001 (Census API, direct)</a></td><td class="verify done">Verified &middot; 2026-11-08</td></tr>
+          <tr><td>US aggregate household income</td><td>$15.92T</td><td><a href="https://api.census.gov/data/2025/acs/acs1?get=NAME,B19025_001E&for=us:1">Census ACS 2025 1-year, Table B19025 (Census API, direct)</a></td><td class="verify done">Verified &middot; 2026-11-08</td></tr>
           <!-- BURDEN-LEDGER:END -->
         </tbody>
       </table>
@@ -657,7 +657,7 @@ footer{margin-top:52px;padding-top:24px;border-top:1px solid var(--rule);font-si
 
 /* BURDEN-CONSTANTS:BEGIN — generated by update-burden-constants.py, do not hand-edit */
 // Source of truth: data/burden-constants.json   ·   regenerate: python update-burden-constants.py
-// Last generated 2026-08-08. meanHhIncome and incShare are DERIVED — see gate 2 and 3 in the script.
+// Last generated 2026-11-08. meanHhIncome and incShare are DERIVED — see gate 2 and 3 in the script.
 const K = {
   stdDed:{single:16100, mfj:32200},
   brackets:{
@@ -669,15 +669,15 @@ const K = {
   fedGasCents:18.4,
   fedDeficit:1800000000000,
   fedCorpReceipts:452089303420,
-  nationalAggHhIncome:15171367871400,
-  nationalHouseholds:132737146,
-  nationalMeanHhIncome:114296,
+  nationalAggHhIncome:15918618037400,
+  nationalHouseholds:134063422,
+  nationalMeanHhIncome:118739,
 
   // Point-in-time stamp. Drift only -- unverified figures are excluded, because
   // dating a placeholder would imply a currency it does not have.
-  vintage:{"annual": {"count": 26, "newest": "2026-08-08", "oldest": "2026-08-08"}, "market": {"count": 11, "newest": "2026-11-03", "oldest": "2026-08-08"}, "statutory": {"count": 34, "newest": "2026-08-08", "oldest": "2026-08-08"}},
+  vintage:{"annual": {"count": 26, "newest": "2026-11-08", "oldest": "2026-08-08"}, "market": {"count": 11, "newest": "2026-11-03", "oldest": "2026-08-08"}, "statutory": {"count": 34, "newest": "2026-08-08", "oldest": "2026-08-08"}},
   unverifiedCount:0,
-  generated:"2026-08-08",
+  generated:"2026-11-08",
 
   MA:{
       name:"Massachusetts",
@@ -692,10 +692,10 @@ const K = {
       corpMin:456,
       pfmlRate:0.0042,
       pfmlHeads:25,
-      households:2829804, aggHhIncome:408376085400,
-      meanHhIncome:144312,   // DERIVED aggregate/households
-      incShare:0.026917552,   // DERIVED state aggregate / national aggregate
-      popShare:0.020981889,
+      households:2827794, aggHhIncome:423306398500,
+      meanHhIncome:149695,   // DERIVED aggregate/households
+      incShare:0.026591906,   // DERIVED state aggregate / national aggregate
+      popShare:0.020931542,
       elecCents:3.663, gasPolicyCents:59.08,
       retailElecCents:30.48,   // EIA all-in price, bounds the policy component
       unfunded:0,   // deliberately 0 — disclosed as a stock, not billed
@@ -716,10 +716,10 @@ const K = {
       bptRate:0.075,
       betRate:0.0055,
       pfmlRate:0,
-      households:570689, aggHhIncome:73392725500,
-      meanHhIncome:128604,   // DERIVED aggregate/households
-      incShare:0.004837581,   // DERIVED state aggregate / national aggregate
-      popShare:0.004142859,
+      households:574089, aggHhIncome:79499348500,
+      meanHhIncome:138479,   // DERIVED aggregate/households
+      incShare:0.004994111,   // DERIVED state aggregate / national aggregate
+      popShare:0.004141032,
       elecCents:0.618, gasPolicyCents:16.3,
       retailElecCents:27.64,   // EIA all-in price, bounds the policy component
       unfunded:0,   // deliberately 0 — disclosed as a stock, not billed

@@ -235,7 +235,7 @@ footer a:hover{color:var(--gold)}
   </div>
   <div class="info-box">
     <h4>📋 MA Tax Structure at a Glance</h4>
-    <p>Massachusetts levies a 5% flat income tax, plus a 4% surtax on income over ~$1.08M (9% total). Sales tax is 6.25% with no local add-ons. Property taxes average $8,113/year for a single-family home (FY2026 statewide average, on an average assessed value of $742,986 &mdash; an effective rate of 1.092%). The state also imposes an estate tax (threshold: $1M), a real estate transfer tax, and one of the nation's most burdensome unemployment insurance tax systems. MA is an outlier in imposing a separate payroll tax for non-UI purposes.</p>
+    <p>Massachusetts levies a 5% flat income tax, plus a 4% surtax on income over $1,107,750 in tax year 2026, a threshold indexed to inflation (9% total). Sales tax is 6.25% with no local add-ons. Property taxes average $8,113/year for a single-family home (FY2026 statewide average, on an average assessed value of $742,986 &mdash; an effective rate of 1.092%). The state also imposes an estate tax (threshold: $1M), a real estate transfer tax, and one of the nation's most burdensome unemployment insurance tax systems. MA is an outlier in imposing a separate payroll tax for non-UI purposes.</p>
   </div>
 </div>
 
@@ -304,7 +304,7 @@ footer a:hover{color:var(--gold)}
   <h2 class="section-title">Income Tax & "Millionaires Surtax"</h2>
   <div class="stat-row">
     <div class="stat-card"><div class="label">Base Rate</div><div class="value blue">5%</div><div class="sub">Flat on all income</div></div>
-    <div class="stat-card"><div class="label">Surtax Rate</div><div class="value red">+4%</div><div class="sub">On income > $1.08M</div></div>
+    <div class="stat-card"><div class="label">Surtax Rate</div><div class="value red">+4%</div><div class="sub">On income > $1.11M (TY2026)</div></div>
     <div class="stat-card"><div class="label">Top Combined Rate</div><div class="value red">9%</div><div class="sub">Short-term cap gains: 12.5%</div></div>
     <div class="stat-card"><div class="label">FY2024 Surtax Revenue</div><div class="value amber">$2.4B</div><div class="sub">Beat $1.5B estimate by 60%</div></div>
     <div class="stat-card"><div class="label">FY2025 Surtax Revenue</div><div class="value red">~$3.0B</div><div class="sub">Double original projections</div></div>
@@ -314,7 +314,7 @@ footer a:hover{color:var(--gold)}
     <div class="alert-grid">
       <div class="alert-item">Passed by just <strong>51% of voters</strong> in November 2022</div>
       <div class="alert-item">Dismantled MA's formerly competitive <strong>flat income tax</strong></div>
-      <div class="alert-item">Threshold rises with inflation: $1M → $1.053M → <strong>$1.083M</strong></div>
+      <div class="alert-item">Threshold rises with inflation: $1M → $1.053M → $1.083M → <strong>$1.108M</strong> (TY2023 to TY2026)</div>
       <div class="alert-item">~27,000 taxpayers affected — a <strong>volatile revenue source</strong></div>
       <div class="alert-item">FY2026 budget shifts <strong>$496M in Chapter 70</strong> to surtax funds — critics say "supplanting not supplementing"</div>
       <div class="alert-item">Spending growth (20%) has <strong>outpaced revenue growth (6%)</strong> since surtax passage</div>
@@ -1203,7 +1203,7 @@ footer a:hover{color:var(--gold)}
       <div style="font-family:'DM Serif Display',Georgia,serif;font-size:1.2rem;color:var(--navy);margin-bottom:10px">Top 1%<br><span style="font-size:0.85rem;font-style:italic">Over $891K</span></div>
       <ul style="font-size:0.82rem;color:var(--text);line-height:1.8;list-style:none;padding:0">
         <li style="padding:4px 0;border-bottom:1px solid var(--border)">💰 Average <strong id="cnCardStateTax">—</strong> in MA state income taxes per year — per person</li>
-        <li style="padding:4px 0;border-bottom:1px solid var(--border)">➕ New surtax adds <strong>4% on every dollar over $1.08M</strong></li>
+        <li style="padding:4px 0;border-bottom:1px solid var(--border)">➕ New surtax adds <strong>4% on every dollar over $1.11M</strong> (TY2026; indexed)</li>
         <li style="padding:4px 0;border-bottom:1px solid var(--border)">✈️ Unlike other groups, they <strong>can leave — and the data shows they are</strong></li>
         <li style="padding:4px 0;border-bottom:1px solid var(--border)">📊 <span id="cnCardStateRate">—</span> effective MA rate, vs 5% for filers under the surtax threshold (the 27.3% in the table below is <strong>federal</strong>)</li>
         <li style="padding:4px 0">🔄 Their departure <strong>transfers the burden downward</strong> to the groups above</li>
@@ -1574,7 +1574,7 @@ const INCOME_GROWTH_FY18_26 = (INC_FY2026 / INC_FY2018 - 1) * 100;  // +48.9%
 // 5% flat, plus the 4% surtax on income above the threshold. This is the basis the
 // $367M / $735M revenue-at-risk figures were computed on, so deriving them from it
 // keeps the card, the prose and the cascade diagram on one set of arithmetic.
-const MA_SURTAX_FLOOR = 1083000;   // 2023 threshold (~$1.08M), indexed annually
+const MA_SURTAX_FLOOR = 1107750;   // TY2026 threshold (MA DOR; data/burden-constants.json states.MA.surtaxThreshold), indexed annually
 const maTax = agi => 0.05 * agi + 0.04 * Math.max(0, agi - MA_SURTAX_FLOOR);
 
 // IRS SOI In-State AGI Shares, tax year 2022 — top-1% band and all-filer average.

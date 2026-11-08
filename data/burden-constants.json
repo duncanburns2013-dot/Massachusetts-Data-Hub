@@ -2,7 +2,7 @@
   "_meta": {
     "purpose": "Single source of truth for every constant shared by tax-burden-dashboard.html and tax-burden-nh-comparison.html. Edit here, run update-burden-constants.py, never hand-edit the K object in either HTML file.",
     "maintainer": "Duncan Burns",
-    "updated": "2026-08-08",
+    "updated": "2026-11-08",
     "rules": [
       "Every figure needs value + source + url + verified. A figure with verified:false BLOCKS publication.",
       "meanHouseholdIncome and incomeShare are DERIVED from aggregateHouseholdIncome / households. Do not hardcode them.",
@@ -209,26 +209,26 @@
     }
   },
   "national_acs": {
-    "_note": "Denominator for every derived share. Must be the same release as the state figures below or the derivation silently breaks. Pulled direct from the Census API (requires CENSUS_API_KEY, kept in .env which is gitignored) with: https://api.census.gov/data/2024/acs/acs1?get=NAME,B11001_001E,B19025_001E,B01003_001E,B19013_001E&for=us:1 -- swap for=state:25,33 for the state rows.",
-    "release": "ACS 2024 1-year",
+    "_note": "Denominator for every derived share. Must be the same release as the state figures below or the derivation silently breaks. Pulled direct from the Census API (requires CENSUS_API_KEY, kept in .env which is gitignored) with: https://api.census.gov/data/2025/acs/acs1?get=NAME,B11001_001E,B19025_001E,B01003_001E,B19013_001E&for=us:1 -- swap for=state:25,33 for the state rows.",
+    "release": "ACS 2025 1-year",
     "households": {
-      "value": 132737146,
-      "source": "Census ACS 2024 1-year, Table B11001 (Census API, direct)",
-      "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B11001_001E&for=us:1",
-      "verified": "2026-08-08"
+      "value": 134063422,
+      "source": "Census ACS 2025 1-year, Table B11001 (Census API, direct)",
+      "url": "https://api.census.gov/data/2025/acs/acs1?get=NAME,B11001_001E&for=us:1",
+      "verified": "2026-11-08"
     },
     "aggregateHouseholdIncome": {
-      "value": 15171367871400,
-      "source": "Census ACS 2024 1-year, Table B19025 (Census API, direct)",
-      "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B19025_001E&for=us:1",
-      "verified": "2026-08-08"
+      "value": 15918618037400,
+      "source": "Census ACS 2025 1-year, Table B19025 (Census API, direct)",
+      "url": "https://api.census.gov/data/2025/acs/acs1?get=NAME,B19025_001E&for=us:1",
+      "verified": "2026-11-08"
     },
     "population": {
-      "value": 340110990,
-      "note": "Now ACS 2024 1-year (B01003), matching the income tables. Previously carried the 5-year figure, which meant the population share was computed across mixed vintages.",
-      "source": "Census ACS 2024 1-year, Table B01003 (Census API, direct)",
-      "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B01003_001E&for=us:1",
-      "verified": "2026-08-08"
+      "value": 341784859,
+      "note": "Now ACS 2025 1-year (B01003), matching the income tables. Previously carried the 5-year figure, which meant the population share was computed across mixed vintages.",
+      "source": "Census ACS 2025 1-year, Table B01003 (Census API, direct)",
+      "url": "https://api.census.gov/data/2025/acs/acs1?get=NAME,B01003_001E&for=us:1",
+      "verified": "2026-11-08"
     }
   },
   "states": {
@@ -323,31 +323,31 @@
         "verified": "2026-08-08"
       },
       "acs": {
-        "release": "ACS 2024 1-year",
+        "release": "ACS 2025 1-year",
         "households": {
-          "value": 2829804,
-          "source": "Census ACS 2024 1-year, Table B11001 (Census API, direct)",
-          "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B11001_001E&for=state:25",
-          "verified": "2026-08-08"
+          "value": 2827794,
+          "source": "Census ACS 2025 1-year, Table B11001 (Census API, direct)",
+          "url": "https://api.census.gov/data/2025/acs/acs1?get=NAME,B11001_001E&for=state:25",
+          "verified": "2026-11-08"
         },
         "aggregateHouseholdIncome": {
-          "value": 408376085400,
-          "source": "Census ACS 2024 1-year, Table B19025 (Census API, direct)",
-          "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B19025_001E&for=state:25",
-          "verified": "2026-08-08"
+          "value": 423306398500,
+          "source": "Census ACS 2025 1-year, Table B19025 (Census API, direct)",
+          "url": "https://api.census.gov/data/2025/acs/acs1?get=NAME,B19025_001E&for=state:25",
+          "verified": "2026-11-08"
         },
         "population": {
-          "value": 7136171,
-          "source": "Census ACS 2024 1-year, Table B01003 (Census API, direct)",
-          "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B01003_001E&for=state:25",
-          "verified": "2026-08-08"
+          "value": 7154084,
+          "source": "Census ACS 2025 1-year, Table B01003 (Census API, direct)",
+          "url": "https://api.census.gov/data/2025/acs/acs1?get=NAME,B01003_001E&for=state:25",
+          "verified": "2026-11-08"
         },
         "medianHouseholdIncome_ACS": {
-          "value": 104828,
-          "note": "CONTEXT ONLY, never an allocation divisor. ACS 1-year. The CPS vintage reports $113,900 for the same concept, a ~$9k disagreement. tax-budget-dashboard.html currently labels $113,900 as 'Census 2024 ACS', which is wrong: $113,900 is CPS via FRED MEHOINUSMAA646N.",
-          "source": "Census ACS 2024 1-year, Table B19013",
-          "url": "https://censusreporter.org/profiles/04000US25-massachusetts/",
-          "verified": "2026-08-08"
+          "value": 106539,
+          "note": "CONTEXT ONLY, never an allocation divisor. ACS 1-year. The CPS vintage reports $113,900 for the same concept, a ~$7k disagreement (ACS 2025 vs the CPS figure carried here). tax-budget-dashboard.html currently labels $113,900 as 'Census 2024 ACS', which is wrong: $113,900 is CPS via FRED MEHOINUSMAA646N.",
+          "source": "Census ACS 2025 1-year, Table B19013 (Census API, direct)",
+          "url": "https://api.census.gov/data/2025/acs/acs1?get=NAME,B19013_001E&for=state:25",
+          "verified": "2026-11-08"
         },
         "medianHouseholdIncome_CPS": {
           "value": 113900,
@@ -562,31 +562,31 @@
         "verified": "2026-08-08"
       },
       "acs": {
-        "release": "ACS 2024 1-year",
+        "release": "ACS 2025 1-year",
         "households": {
-          "value": 570689,
-          "source": "Census ACS 2024 1-year, Table B11001 (Census API, direct)",
-          "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B11001_001E&for=state:33",
-          "verified": "2026-08-08"
+          "value": 574089,
+          "source": "Census ACS 2025 1-year, Table B11001 (Census API, direct)",
+          "url": "https://api.census.gov/data/2025/acs/acs1?get=NAME,B11001_001E&for=state:33",
+          "verified": "2026-11-08"
         },
         "aggregateHouseholdIncome": {
-          "value": 73392725500,
-          "source": "Census ACS 2024 1-year, Table B19025 (Census API, direct)",
-          "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B19025_001E&for=state:33",
-          "verified": "2026-08-08"
+          "value": 79499348500,
+          "source": "Census ACS 2025 1-year, Table B19025 (Census API, direct)",
+          "url": "https://api.census.gov/data/2025/acs/acs1?get=NAME,B19025_001E&for=state:33",
+          "verified": "2026-11-08"
         },
         "population": {
-          "value": 1409032,
-          "source": "Census ACS 2024 1-year, Table B01003 (Census API, direct)",
-          "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B01003_001E&for=state:33",
-          "verified": "2026-08-08"
+          "value": 1415342,
+          "source": "Census ACS 2025 1-year, Table B01003 (Census API, direct)",
+          "url": "https://api.census.gov/data/2025/acs/acs1?get=NAME,B01003_001E&for=state:33",
+          "verified": "2026-11-08"
         },
         "medianHouseholdIncome_ACS": {
-          "value": 99782,
+          "value": 106759,
           "note": "CONTEXT ONLY.",
-          "source": "Census ACS 2024 1-year, Table B19013 (Census API, direct)",
-          "url": "https://api.census.gov/data/2024/acs/acs1?get=NAME,B19013_001E&for=state:33",
-          "verified": "2026-08-08"
+          "source": "Census ACS 2025 1-year, Table B19013 (Census API, direct)",
+          "url": "https://api.census.gov/data/2025/acs/acs1?get=NAME,B19013_001E&for=state:33",
+          "verified": "2026-11-08"
         }
       },
       "utility": {
