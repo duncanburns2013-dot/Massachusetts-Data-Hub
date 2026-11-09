@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-11-08T17:01:38Z",
+ "fetched_at": "2026-11-09T21:25:40Z",
  "source": "Massachusetts CTHRU -- Budget vs Actual (kv7m-35wn) for appropriation totals; Comptroller Spending (pegc-naaa) for payments by vendor",
  "source_url": "https://cthru.data.socrata.com/",
  "measure": "state appropriations and actual expenses on accounts the Commonwealth names for immigrant, refugee or family-shelter purposes; recipients classified by appropriation, never by vendor name",
@@ -221,17 +221,17 @@
    "2027": {
     "shelter_system": {
      "enacted": 357222649.0,
-     "actual": 110417136.21,
+     "actual": 110555628.36,
      "transfer_in": 57258383.7
     },
     "ea_line": {
      "enacted": 259900648.0,
-     "actual": 55009685.5,
+     "actual": 55149248.83,
      "transfer_in": 47180555.7
     },
     "homebase": {
      "enacted": 82322001.0,
-     "actual": 55033327.69,
+     "actual": 55032256.51,
      "transfer_in": 2828.0
     },
     "complete": false
@@ -286,7 +286,7 @@
    },
    "2027": {
     "enacted": 367832672.0,
-    "actual": 112425586.14,
+    "actual": 112964901.38,
     "accounts_with_activity": 16
    }
   }
@@ -325,7 +325,7 @@
    },
    "2027": {
     "enacted": 487341728.0,
-    "actual": 189718167.37,
+    "actual": 189743137.76,
     "accounts_with_activity": 2
    }
   }
@@ -458,7 +458,7 @@
       {
        "ein": "043545413",
        "name": "UNIVERSITY OF MASSACHUSETTS",
-       "city": "BARNSTABLE",
+       "city": "E HARWICH",
        "subsection": "03"
       }
      ]
@@ -605,7 +605,7 @@
      "match": "exact",
      "ein": "042679824",
      "irs_name": "JSI RESEARCH & TRAINING INSTITUTE INC",
-     "city": "BOSTON",
+     "city": "NORWOOD",
      "subsection": "03",
      "ntee": "",
      "is_501c3": true
@@ -3988,7 +3988,7 @@
      "match": "exact",
      "ein": "042465684",
      "irs_name": "COMMUNITIES UNITED INC",
-     "city": "LEXINGTON",
+     "city": "WOBURN",
      "subsection": "03",
      "ntee": "P300",
      "is_501c3": true
@@ -4122,7 +4122,7 @@
      "match": "exact",
      "ein": "237425849",
      "irs_name": "NEIGHBORHEALTH CORPORATION",
-     "city": "EAST BOSTON",
+     "city": "BOSTON",
      "subsection": "03",
      "ntee": "E320",
      "is_501c3": true
@@ -4978,7 +4978,7 @@
   "irs_check": {
    "source": "IRS Exempt Organizations Business Master File, Massachusetts",
    "source_url": "https://www.irs.gov/pub/irs-soi/eo_ma.csv",
-   "bmf_rows": 44202,
+   "bmf_rows": 44371,
    "method": "exact normalised name match only; punctuation stripped, leading THE and legal-form suffixes dropped; no fuzzy or partial matching",
    "matched_exact": 90,
    "matched_prefix_unique": 12,
