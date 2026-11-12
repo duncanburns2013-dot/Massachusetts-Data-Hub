@@ -84,7 +84,7 @@ jobs:
           # crash step below reports.
           for f in affordability-dashboard.html data/burden-constants.json \
                    data/cost-of-living-latest.json data/sources.json data/refresh-receipt.json; do
-            [ -e "$f" ] && git add -- "$f"
+            if [ -e "$f" ]; then git add -- "$f"; fi
           done
           if git diff --staged --quiet; then
             echo "Nothing to commit."
