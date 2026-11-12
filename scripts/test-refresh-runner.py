@@ -143,7 +143,8 @@ try:
     os.environ["CENSUS_API_KEY"] = "test-key"
     TODAY = "2026-11-12"
     acs_move = Move("census_acs1_ma_income", "2024", "2025", True, "https://api.census.gov/data/2025/acs/acs1")
-    TARGETS = ["affordability-dashboard.html", "data/burden-constants.json"]
+    TARGETS = ["affordability-dashboard.html", "data/burden-constants.json", "data/cost-of-living-latest.json"]
+    assert load_sources(REPO / "data" / "sources.json")[0].targets == TARGETS, "register must list all three holders"
     assert len(runner.STATES) == 51 and runner.STATES["District of Columbia"] == "DC"
 
     def blob_income(text):
@@ -157,8 +158,9 @@ try:
         root = Path(tempfile.mkdtemp())
         (root / "data").mkdir()
         shutil.copy(REPO / "data" / "sources.json", root / "data" / "sources.json")
-        for rel, eol in (("affordability-dashboard.html", html_eol), ("data/burden-constants.json", json_eol)):
+        for rel, eol in zip(TARGETS, (html_eol, json_eol, json_eol)):
             t = (REPO / rel).read_bytes().decode("utf-8").replace("\r\n", "\n").replace("\n", eol)
+            (root / rel).parent.mkdir(exist_ok=True)
             (root / rel).write_bytes(t.encode("utf-8"))
         return root
 
@@ -236,7 +238,7 @@ try:
         before = snap(root)
         apply(acs_move, fetch=stub_census_full(), root=root, today=TODAY)
         after = snap(root)
-        for rel, eol in zip(TARGETS, (html_eol, json_eol)):
+        for rel, eol in zip(TARGETS, (html_eol, json_eol, json_eol)):
             assert after[rel] != before[rel]
             bad = (after[rel].count(b"\n") - after[rel].count(b"\r\n")) if eol == "\r\n" else after[rel].count(b"\r")
             assert bad == 0, f"{rel}: line endings changed"
@@ -248,6 +250,10 @@ try:
         # JSON: at most 4 lines (value, source, url, verified)
         la, lb = before[TARGETS[1]].split(json_eol.encode()), after[TARGETS[1]].split(json_eol.encode())
         assert len(la) == len(lb) and sum(x != y for x, y in zip(la, lb)) <= 4
+        lc, ld = before[TARGETS[2]].split(json_eol.encode()), after[TARGETS[2]].split(json_eol.encode())
+        i0 = next(i for i, x in enumerate(lc) if x.startswith(b' "income"'))
+        assert len(lc) == len(ld) and lc[:i0] == ld[:i0], "cost-of-living feed: diff leaked outside income"
+        assert not after[TARGETS[2]].endswith(b"\n"), "cost-of-living feed gained a trailing newline"
 
     # 3. Review Focus 2: a short or partial response aborts the WHOLE write
     root = stale_root()
@@ -305,16 +311,43 @@ try:
     a = apply(dataclasses.replace(acs_move, held="2025"), fetch=stub_census_full(), root=root, today=TODAY)
     assert a.files_written == [TARGETS[1]] and a.divergences == [], a
     # ... and a target that still disagrees after the write is REPORTED, not hidden
-    root = stale_root()
     real_write = runner._write_text
-    def lying_write(path, text):
-        real_write(path, text.replace("106539", "104828") if path.name == "burden-constants.json" else text)
-    runner._write_text = lying_write
-    try:
-        a = apply(acs_move, fetch=stub_census_full(), root=root, today=TODAY)
-    finally:
-        runner._write_text = real_write
-    assert a.divergences == [TARGETS[1]], a.divergences
+    for bad in TARGETS[1:]:
+        root = stale_root()
+        def lying_write(path, text, bad=bad):
+            real_write(path, text.replace("106539", "104828") if path.name == Path(bad).name else text)
+        runner._write_text = lying_write
+        try:
+            a = apply(acs_move, fetch=stub_census_full(), root=root, today=TODAY)
+        finally:
+            runner._write_text = real_write
+        assert a.divergences == [bad], (bad, a.divergences)
+
+    # 5b. the cost-of-living feed is the file update-cost-of-living.py rebuilds the HTML from.
+    # Left stale, the next scheduled run would revert the page. It must be detected AND corrected.
+    root = make_root()
+    donor = stale_root()
+    (root / TARGETS[2]).write_bytes((donor / TARGETS[2]).read_bytes())  # html + burden current, feed stale
+    assert json.loads((root / TARGETS[2]).read_text(encoding="utf-8"))["income"]["vintage"] == 2024
+    # (a) detected: a dry run writes nothing but reports the disagreeing target
+    pre = snap(root)
+    a = apply(dataclasses.replace(acs_move, held="2025"), fetch=stub_census_full(), root=root, today=TODAY, dry=True)
+    assert a.divergences == [TARGETS[2]] and a.files_written == [] and snap(root) == pre, a
+    # (b) corrected: only the stale feed is written, and all three now agree
+    a = apply(dataclasses.replace(acs_move, held="2025"), fetch=stub_census_full(), root=root, today=TODAY)
+    assert a.files_written == [TARGETS[2]] and a.divergences == [], a
+    assert snap(root)[TARGETS[0]] == pre[TARGETS[0]] and snap(root)[TARGETS[1]] == pre[TARGETS[1]]
+    feed = json.loads((root / TARGETS[2]).read_text(encoding="utf-8"))["income"]
+    assert (feed["household"], feed["family"], feed["vintage"]) == (106539.0, 138434.0, 2025)
+    assert feed == blob_income((root / TARGETS[0]).read_text(encoding="utf-8")) or \
+        {k: v for k, v in feed.items() if k != "household_by_state_retrieved"} == \
+        {k: v for k, v in blob_income((root / TARGETS[0]).read_text(encoding="utf-8")).items()
+         if k != "household_by_state_retrieved"}, "feed and page income blocks differ"
+    # (c) the rest of the feed (RPP, metros, living wage) is untouched, key order kept
+    live = json.loads((REPO / TARGETS[2]).read_text(encoding="utf-8"))
+    got = json.loads((root / TARGETS[2]).read_text(encoding="utf-8"))
+    assert {k: v for k, v in got.items() if k != "income"} == {k: v for k, v in live.items() if k != "income"}
+    assert list(got["income"]) == list(live["income"]) and list(got) == list(live)
 
     # 6. a write that fails midway restores the files already written
     root = stale_root()

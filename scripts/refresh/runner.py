@@ -192,10 +192,11 @@ def _html_read(text):
             "ma_in_map": inc["household_by_state"]["MA"]}
 
 
-def _html_edit(text, f, year, today):
-    a, end, old = _html_income(text)
+def _new_income(old, f, year, today):
+    """The `.income` object both the HTML blob and cost-of-living-latest.json carry: same shape,
+    same key order. Returns `old` itself when it already holds f (so dates are not restamped)."""
     if "household_by_state" not in old:
-        raise ValueError("affordability-dashboard.html: income has no household_by_state to refresh")
+        raise ValueError("income object has no household_by_state to refresh")
     new = {
         "household": f["household"], "family": f["family"], "vintage": year,
         "source": f"Census ACS 1-Year {year} (B19113 family, B19013 household)",
@@ -206,8 +207,16 @@ def _html_edit(text, f, year, today):
         "household_by_state_retrieved": old.get("household_by_state_retrieved"),
     }
     if new == old:
-        return text
+        return old
     new["household_by_state_retrieved"] = today
+    return new
+
+
+def _html_edit(text, f, year, today):
+    a, end, old = _html_income(text)
+    new = _new_income(old, f, year, today)
+    if new is old:
+        return text
     return text[:a] + json.dumps(new, separators=(",", ":")) + text[end:]
 
 
@@ -218,8 +227,31 @@ def _eol(text):
     return "\r\n" if crlf else "\n"
 
 
-def _json_dump(data, eol):
-    return (json.dumps(data, indent=2, ensure_ascii=False) + "\n").replace("\n", eol)
+def _json_dump(data, eol, indent=2, ascii_=False, nl="\n"):
+    return (json.dumps(data, indent=indent, ensure_ascii=ascii_) + nl).replace("\n", eol)
+
+
+def _col_load(text):
+    """data/cost-of-living-latest.json: indent=1, ASCII, no trailing newline (update-cost-of-living.py)."""
+    data, eol = json.loads(text), _eol(text)
+    if _json_dump(data, eol, 1, True, "") != text:
+        raise ValueError("cost-of-living-latest.json: re-serialising it would change formatting")
+    return data, eol
+
+
+def _col_read(text):
+    inc = json.loads(text)["income"]
+    return {"household": inc["household"], "family": inc["family"], "vintage": inc["vintage"],
+            "ma_in_map": inc["household_by_state"]["MA"]}
+
+
+def _col_edit(text, f, year, today):
+    data, eol = _col_load(text)
+    new = _new_income(data["income"], f, year, today)
+    if new is data["income"]:
+        return text
+    data["income"] = new
+    return _json_dump(data, eol, 1, True, "")
 
 
 def _burden_node(data):
@@ -249,7 +281,8 @@ def _burden_edit(text, f, year, today):
 
 
 _KINDS = {"affordability-dashboard.html": (_html_read, _html_edit),
-          "data/burden-constants.json": (_burden_read, _burden_edit)}
+          "data/burden-constants.json": (_burden_read, _burden_edit),
+          "data/cost-of-living-latest.json": (_col_read, _col_edit)}
 
 
 def _write_text(path, text):
