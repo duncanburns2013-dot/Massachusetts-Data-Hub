@@ -19,6 +19,15 @@ from urllib.request import urlopen, Request
 from urllib.error import URLError
 from urllib.parse import urlencode
 
+# This lives in scripts/, so the repo root has to go on the path before the
+# shared .env loader can be imported. Note that BLS_API_KEY and FRED_API_KEY,
+# which this file wants, are repo Actions secrets but are NOT in .env today --
+# so this fixes the lookup, not their absence. Adding them to .env makes a
+# local run work; without them CI is still the only place this is whole.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import envfile  # noqa: E402  -- fills missing keys from .env
+envfile.load()
+
 DASHBOARD_FILE = "tax-budget-dashboard.html"
 BASE_YEAR  = 2021
 BASE_MONTH = 1

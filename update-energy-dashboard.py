@@ -46,6 +46,9 @@ import time
 from urllib.request import urlopen, Request
 from urllib.error import HTTPError, URLError
 
+import envfile  # noqa: E402  -- fills missing keys from .env
+envfile.load()
+
 API_KEY = os.environ.get("EIA_API_KEY", "").strip()
 if not API_KEY:
     sys.exit("ERROR: set the EIA_API_KEY environment variable.")

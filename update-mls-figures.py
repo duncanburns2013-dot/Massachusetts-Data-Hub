@@ -61,6 +61,9 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
+import envfile  # noqa: E402  -- fills missing keys from .env
+envfile.load()
+
 _ap = argparse.ArgumentParser(description="Refresh MLS PIN figures in the MA dashboards.")
 _ap.add_argument(
     "--backfill-history",

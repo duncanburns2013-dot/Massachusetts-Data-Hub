@@ -57,31 +57,9 @@ from urllib.request import urlopen, Request
 from datetime import datetime
 
 
-def _load_dotenv():
-    """Fill missing keys from the repo's .env. Same shape as primemls.py.
+import envfile  # noqa: E402  -- fills missing keys from .env
 
-    This script read os.environ only, so every local run skipped all eight
-    electricity figures and the page date stamp with "EIA_API_KEY not set",
-    while CI — where update-all.yml injects the secret — ran them fine. The
-    key was in .env the whole time; nothing loaded it. setdefault, not
-    assignment, because in CI the injected secret is the authority and a
-    stale .env must never win.
-    """
-    p = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
-    if not os.path.exists(p):
-        return
-    # utf-8-sig, not utf-8: PowerShell's Set-Content -Encoding utf8 writes a
-    # BOM, and read as plain utf-8 the first key becomes "﻿EIA_API_KEY",
-    # which fails as a missing key on a file that looks perfect in an editor.
-    with open(p, encoding="utf-8-sig") as f:
-        for line in f:
-            line = line.strip()
-            if line and not line.startswith("#") and "=" in line:
-                k, v = line.split("=", 1)
-                os.environ.setdefault(k.strip(), v.strip())
-
-
-_load_dotenv()
+envfile.load()
 EIA_KEY = os.environ.get("EIA_API_KEY", "").strip()
 HTML_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tax-budget-dashboard.html")
 
@@ -155,6 +133,17 @@ def bls_cpi(series_ids, start_yr, end_yr):
         if data.get("status") != "REQUEST_SUCCEEDED":
             fail(f"BLS: {data.get('status')} {'; '.join(data.get('message', []))}")
             return {}
+        # REQUEST_SUCCEEDED does not mean it gave you what you asked for. A
+        # series ID that does not exist comes back successful, with an empty
+        # Results list and the reason in `message` -- "Series does not exist
+        # for Series CUSR0100SA0" -- which nothing here read. Two of the four
+        # IDs were wrong for the life of this function and the only trace was
+        # a None in one printed line. Surface it.
+        for note in data.get("message", []):
+            if "does not exist" in note or "No Data Available" in note:
+                fail(f"BLS: {note}")
+            else:
+                print(f"  note: BLS says {note}")
         # BLS returns "-" (and occasionally "") for a month it never published --
         # October 2025 is one, lost to the shutdown. float("-") raises, which took the
         # whole run down and, because the chart writes happen earlier, discarded work
@@ -178,15 +167,28 @@ def bls_cpi(series_ids, start_yr, end_yr):
 
 
 def yoy(data):
-    """Year-over-year % for the latest month present. Returns (pct, 'Mon YYYY')."""
-    if not data or len(data) < 13:
+    """Year-over-year % for the NEWEST month that can actually be computed.
+
+    Returns (pct, 'Mon YYYY'), and the label is why the caller must print it:
+    this is not always the newest month published.
+
+    It used to try the latest month and give up if that one month had no
+    year-ago twin, which is precisely the case that arose. October 2025 was
+    never published -- the release was lost to the shutdown -- so from the
+    moment October 2026 landed, every series returned None, the Live Cost
+    Tracker was silently not written, and the run still exited 0. The rows
+    sat on May 2026 for five months while the script reported success.
+
+    Stepping back one month recovers it: September 2026 against September
+    2025 is a real year, and a true year-over-year comparison at that.
+    """
+    if not data:
         return None, None
-    s = sorted(data, key=lambda x: (x[0], x[1]), reverse=True)
-    latest = s[0]
-    for d in s:
-        if d[0] == latest[0] - 1 and d[1] == latest[1]:
-            pct = round((latest[2] - d[2]) / d[2] * 100, 1)
-            return pct, f"{MONTHS[int(latest[1].replace('M',''))]} {latest[0]}"
+    for y, per, val in sorted(data, key=lambda x: (x[0], x[1]), reverse=True):
+        prior = next((v for yy, pp, v in data if yy == y - 1 and pp == per), None)
+        if prior:
+            return (round((val - prior) / prior * 100, 1),
+                    f"{MONTHS[int(per.replace('M', ''))]} {y}")
     return None, None
 
 
@@ -567,12 +569,26 @@ def main():
     # ── BLS CPI: the Live Cost Tracker rows only ──
     print("\nFetching BLS CPI...")
     now = datetime.now()
-    cpi = bls_cpi(["CUSR0000SA0", "CUSR0100SA0", "CUSR0000SAH1", "CUSR0100SAH1"],
+    # The two Northeast series used to be asked for as CUSR0100SA0 and
+    # CUSR0100SAH1. BLS does not have them. Its own reply says so in a field
+    # nothing here was reading: "Series does not exist for Series
+    # CUSR0100SA0". CUSR is the seasonally adjusted prefix and BLS publishes
+    # regional CPI unadjusted only, so the Boston/NE column of the Live Cost
+    # Tracker could never have been written by this script.
+    #
+    # CUUR is the same series, not seasonally adjusted, which is the right
+    # basis for a year-over-year figure anyway -- comparing a month with the
+    # same month a year earlier takes the seasonality out by construction, and
+    # it is how BLS publishes its own headline 12-month change. Checked both
+    # ways at this reading rather than argued: US All Items is 3.7% on either
+    # basis and Shelter 3.2% on either, identical at the precision shown. The
+    # US series stay on CUSR because they work and the answer is the same.
+    cpi = bls_cpi(["CUSR0000SA0", "CUUR0100SA0", "CUSR0000SAH1", "CUUR0100SAH1"],
                   now.year - 1, now.year)
     us_cpi, us_lbl = yoy(cpi.get("CUSR0000SA0", []))
-    ne_cpi, ne_lbl = yoy(cpi.get("CUSR0100SA0", []))
+    ne_cpi, ne_lbl = yoy(cpi.get("CUUR0100SA0", []))
     us_sh, _ = yoy(cpi.get("CUSR0000SAH1", []))
-    ne_sh, _ = yoy(cpi.get("CUSR0100SAH1", []))
+    ne_sh, _ = yoy(cpi.get("CUUR0100SAH1", []))
     print(f"  US CPI:{us_cpi}% NE CPI:{ne_cpi}% US Shelter:{us_sh}% NE Shelter:{ne_sh}%")
 
     def tracker_row(html, label, ne_val, us_val, ne_month, what):
@@ -583,6 +599,11 @@ def main():
         in. Sign and CSS class follow the recomputed value.
         """
         if ne_val is None or us_val is None:
+            # Loudly. A row that cannot be written is a row going stale, and
+            # this returned False in silence while main() exited 0 -- which is
+            # how both rows held May 2026 figures into November without one
+            # run ever reporting a problem.
+            fail(f"{what}: no YoY available (NE={ne_val}, US={us_val}) -- NOT updated")
             return html, False
         gap = round(ne_val - us_val, 1)
         cls = "highlight" if gap >= 0 else "good"

@@ -51,6 +51,9 @@ import urllib.request
 from collections import defaultdict
 from pathlib import Path
 
+import envfile  # noqa: E402  -- fills missing keys from .env
+envfile.load()
+
 HERE = Path(__file__).resolve().parent
 PAGE = HERE / "haverhill-market-report.html"
 CACHE = HERE / "data" / "_raw_band"

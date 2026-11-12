@@ -17,6 +17,9 @@ import json, os, re, sys
 from urllib.request import urlopen, Request
 from datetime import datetime
 
+import envfile  # noqa: E402  -- fills missing keys from .env
+envfile.load()
+
 API_KEY = os.environ.get("CENSUS_API_KEY", "").strip()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 

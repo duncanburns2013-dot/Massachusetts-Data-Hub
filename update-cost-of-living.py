@@ -24,6 +24,9 @@ import csv, html as _html, io, json, os, re, sys, time, urllib.error, urllib.par
 html_unescape = _html.unescape
 from datetime import datetime, timezone
 
+import envfile  # noqa: E402  -- fills missing keys from .env
+envfile.load()
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 HTML = os.path.join(HERE, "affordability-dashboard.html")
 OUT = os.path.join(HERE, "data", "cost-of-living-latest.json")
