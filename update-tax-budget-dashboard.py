@@ -47,12 +47,41 @@ Scope
 
 Env:
   EIA_API_KEY  (free — www.eia.gov/opendata/register.php). Without it the EIA half is
-               skipped loudly; the BLS half needs no key.
+               skipped loudly; the BLS half needs no key. Read from the real
+               environment first and from the repo's gitignored .env second, so
+               CI (which injects the Actions secret) and a local run (where
+               nothing exports anything) both find it.
 """
 import json, os, re, sys, time
 from urllib.request import urlopen, Request
 from datetime import datetime
 
+
+def _load_dotenv():
+    """Fill missing keys from the repo's .env. Same shape as primemls.py.
+
+    This script read os.environ only, so every local run skipped all eight
+    electricity figures and the page date stamp with "EIA_API_KEY not set",
+    while CI — where update-all.yml injects the secret — ran them fine. The
+    key was in .env the whole time; nothing loaded it. setdefault, not
+    assignment, because in CI the injected secret is the authority and a
+    stale .env must never win.
+    """
+    p = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
+    if not os.path.exists(p):
+        return
+    # utf-8-sig, not utf-8: PowerShell's Set-Content -Encoding utf8 writes a
+    # BOM, and read as plain utf-8 the first key becomes "﻿EIA_API_KEY",
+    # which fails as a missing key on a file that looks perfect in an editor.
+    with open(p, encoding="utf-8-sig") as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith("#") and "=" in line:
+                k, v = line.split("=", 1)
+                os.environ.setdefault(k.strip(), v.strip())
+
+
+_load_dotenv()
 EIA_KEY = os.environ.get("EIA_API_KEY", "").strip()
 HTML_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tax-budget-dashboard.html")
 
