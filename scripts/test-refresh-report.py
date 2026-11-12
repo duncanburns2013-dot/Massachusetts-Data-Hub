@@ -67,7 +67,12 @@ try:
     got = json.loads(p.read_text(encoding="utf-8"))
     assert got == {"last_run": "2026-11-12", "unresolved": ["census_acs1_ma_income"],
                    "broken_claims": ["ma_auto_above_national"], "deferred": ["bea_rpp_state"],
-                   "overdue_human_fetch": ["doi_merged_market_rates"], "divergent": []}, got
+                   "overdue_human_fetch": ["doi_merged_market_rates"], "divergent": [],
+                   "applied": [{"source_id": "census_acs1_ma_income", "from": 2024, "to": 2025}]}, got
+    # ids and periods only: no value, no error text, no exception, anywhere in the receipt
+    blob = p.read_text(encoding="utf-8")
+    for leak in ("106539", "138434", "boom", "Traceback", "key="):
+        assert leak not in blob, leak
     # a target that still disagrees after the write reaches the receipt, so the gate can see it
     diverged = Applied("census_acs1_ma_income", {"household": 99000.0, "family": 120000.0, "vintage": 2024, "source": "old"}, {"household": 106539.0, "family": 138434.0, "vintage": 2025, "source": "new"}, ["affordability-dashboard.html"],
                        ["data/burden-constants.json"])

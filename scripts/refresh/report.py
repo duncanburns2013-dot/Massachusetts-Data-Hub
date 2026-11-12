@@ -46,6 +46,12 @@ def write_receipt(path: Path, run: RunRecord) -> None:
         # on purpose, so a red clears the moment `due` moves instead of waiting for the next run.
         # Do not wire this field into the gate.
         "overdue_human_fetch": [k.source_id for k in run.overdue],
+        # Ids and periods only -- never a value, never error text, never an exception.
+        # This exists so the local digest task can say WHAT changed without reading the
+        # Actions log, which is the only other place the formatted message goes.
+        "applied": [{"source_id": a.source_id,
+                     "from": (a.old or {}).get("vintage"),
+                     "to": (a.new or {}).get("vintage")} for a in run.applied],
         # A target that still disagrees after the write is the ONE condition the reconciler
         # exists to detect. It used to be computed and then dropped everywhere except the
         # message, so the gate could not see it. Gate-failing.
