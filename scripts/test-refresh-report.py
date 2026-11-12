@@ -45,6 +45,11 @@ try:
               RunRecord(overdue=[Skipped("doi", "2026-01-01", "2027")]),
               RunRecord(probe_failures=[Failure("bea_rpp_state", "unreachable")])):
         assert format_message(r) is not None, r
+    # the message names the page and sentence, not just the id; long text is truncated
+    cl = [Claim(id="c1", page="p.html", text="MA auto costs more " + "x" * 300, figures=[])]
+    m = format_message(RunRecord(verdicts=[Verdict("c1", "broken"), Verdict("c2", "suspect")], claims=cl))
+    assert "p.html: MA auto costs more" in m and "[c1]" in m and "c1: broken" not in m and "..." in m, m
+    assert "x" * 200 not in m and "c2" in m  # unknown id falls back to the id
     # a source with no due date is reported as such, not silently fine
     assert "no due date" in format_message(RunRecord(overdue=[Skipped("doi", None, "2027")]))
     # a leaked key is scrubbed from the message

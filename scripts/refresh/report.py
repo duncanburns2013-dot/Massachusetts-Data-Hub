@@ -28,6 +28,7 @@ class RunRecord:
     overdue: list = field(default_factory=list)        # Skipped: human_fetch source past (or without) its due date
     probe_failures: list = field(default_factory=list)  # Failure: apply:false source we could not probe. Reported only.
     run_date: str = ""                                 # ISO date; "" means today
+    claims: list = field(default_factory=list)         # claims.Claim registry, so a verdict can name its sentence
 
 
 def _date(run: RunRecord) -> str:
@@ -42,12 +43,26 @@ def write_receipt(path: Path, run: RunRecord) -> None:
         "unresolved": [u.source_id for u in run.unresolved],
         "broken_claims": [v.claim_id for v in run.verdicts if v.status == "broken"],
         "deferred": [m.source_id for m in run.deferred],
+        # For the message and the audit trail ONLY. The gate recomputes overdue from data/sources.json
+        # on purpose, so a red clears the moment `due` moves instead of waiting for the next run.
+        # Do not wire this field into the gate.
         "overdue_human_fetch": [k.source_id for k in run.overdue],
         "probe_failures": [f.source_id for f in run.probe_failures],
     }
     tmp = path.with_name(path.name + ".tmp")
     tmp.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     os.replace(tmp, path)
+
+
+def _claim_line(run: RunRecord, claim_id: str) -> str:
+    """Page and sentence, so the reader does not have to go looking; the id stays for grep."""
+    c = next((c for c in run.claims if c.id == claim_id), None)
+    if c is None:
+        return claim_id
+    text = " ".join(c.text.split())
+    if len(text) > 160:
+        text = text[:157].rstrip() + "..."
+    return f"{c.page}: {text} [{claim_id}]"
 
 
 def _n(x) -> str:
@@ -70,7 +85,7 @@ def format_message(run: RunRecord) -> str | None:
             out.extend(f"  {ln}" for ln in lines)
 
     section("BROKEN CLAIMS (a sentence on the site is now false; the gate fails)",
-            [f"{v.claim_id}: broken" for v in broken])
+            [_claim_line(run, v.claim_id) for v in broken])
     section("UNRESOLVED (publisher moved or could not be checked, nothing written; the gate fails)",
             [f"{u.source_id}: {u.error}" for u in run.unresolved])
     lines = []
@@ -82,7 +97,7 @@ def format_message(run: RunRecord) -> str | None:
         if a.divergences:
             lines.append(f"  DIVERGED, still disagree after the write: {', '.join(a.divergences)}")
     section("APPLIED", lines)
-    section("RE-READ (a figure moved under this sentence)", [f"{v.claim_id}" for v in suspect])
+    section("RE-READ (a figure moved under this sentence)", [_claim_line(run, v.claim_id) for v in suspect])
     section("DEFERRED (moved; not applied this pass, the gate does not fail)",
             [f"{m.source_id}: {m.held} -> {m.newest}" + ("" if m.is_final else " (stage one, not final)")
              for m in run.deferred])

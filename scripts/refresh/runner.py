@@ -403,7 +403,7 @@ def run(sources: list[Source], claims, *, fetch=urlopen_text, apply_fn=apply, to
     today = today or datetime.date.today().isoformat()
     by_id = {s.id: s for s in sources}
     result = survey(sources, fetch=fetch)
-    rec = RunRecord(run_date=today)
+    rec = RunRecord(run_date=today, claims=claims)
     for m in result.moves:
         if not by_id[m.source_id].apply:
             rec.deferred.append(m)  # moved, plan says not this pass: report it, do not fail the gate
