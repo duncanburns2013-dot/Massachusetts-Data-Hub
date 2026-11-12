@@ -1,0 +1,34 @@
+{
+ "meta": {
+  "verified": "2026-11-08",
+  "source": "MA DOR Division of Local Services, Municipal Databank, 'Tax Levies by Class' report (data current as of 11/08/2026)",
+  "url": "https://dls-gw.dor.state.ma.us/reports/rdPage.aspx?rdReport=PropertyTaxInformation.taxlevies.leviesbyclass",
+  "method": "All 352 entries, fiscal years 2014-2027, read from the report in the browser (mass.gov and the DLS gateway refuse scripted requests, so this file is refreshed by hand, not by CI). Statewide total = sum of the 'Total Levy' column over the 351 cities and towns (DOR codes 001-351). Devens (code 840) is a regional enterprise zone, not a municipality, and is excluded; it would add $18.3M (0.08%) in FY2026.",
+  "check": "Every year FY2014-FY2026 has a Total Levy for all 351 municipalities, and the per-class columns (residential, open space, commercial, industrial, personal property) sum to the total within $30 in every year.",
+  "currency": {
+   "checked": "2026-11-08",
+   "newest_complete": "FY2026",
+   "why_not_newer": "FY2027 tax rates are set town by town through the winter; on 2026-11-08 only 37 of 351 municipalities had an FY2027 levy in the Databank, so FY2027 is not a statewide total yet. Refresh once all 351 report (normally by late spring)."
+  }
+ },
+ "unit": "dollars",
+ "statewide_total_levy": {
+  "FY2014": 13974969173,
+  "FY2015": 14554077347,
+  "FY2016": 15179235672,
+  "FY2017": 15831403543,
+  "FY2018": 16540459910,
+  "FY2019": 17322397299,
+  "FY2020": 18132234159,
+  "FY2021": 18930971307,
+  "FY2022": 19763694556,
+  "FY2023": 20674747016,
+  "FY2024": 21753354247,
+  "FY2025": 22865372896,
+  "FY2026": 24027501925
+ },
+ "fy2027_partial": {
+  "municipalities_reporting": 37,
+  "of": 351
+ }
+}

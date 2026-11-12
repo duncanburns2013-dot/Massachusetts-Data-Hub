@@ -345,17 +345,18 @@
         },
         "medianHouseholdIncome_ACS": {
           "value": 106539,
-          "note": "CONTEXT ONLY, never an allocation divisor. ACS 1-year. The CPS vintage reports $113,900 for the same concept, a ~$7k disagreement (ACS 2025 vs the CPS figure carried here). tax-budget-dashboard.html currently labels $113,900 as 'Census 2024 ACS', which is wrong: $113,900 is CPS via FRED MEHOINUSMAA646N.",
+          "note": "CONTEXT ONLY, never an allocation divisor. ACS 1-year. CPS ASEC 2025 reports $118,500 for the same concept (medianHouseholdIncome_CPS below), a ~$12k disagreement between two surveys. tax-budget-dashboard.html uses ACS for its cross-state income chart (all states, one release, from data/cost-of-living-latest.json) and CPS in its cost-burden table, each labelled.",
           "source": "Census ACS 2025 1-year, Table B19013 (Census API, direct)",
           "url": "https://api.census.gov/data/2025/acs/acs1?get=NAME,B19013_001E&for=state:25",
           "verified": "2026-11-08"
         },
         "medianHouseholdIncome_CPS": {
-          "value": 113900,
-          "note": "CONTEXT ONLY. CPS ASEC vintage. Carry both; cite which one any given chart uses.",
+          "value": 118500,
+          "period": "2025",
+          "note": "CONTEXT ONLY. CPS ASEC vintage, current dollars. Carry both; cite which one any given chart uses. This read 113,900 until 2026-11-08, which matched no year of the series (FRED: 2024 = 112,300, 2025 = 118,500).",
           "source": "Census CPS ASEC via FRED MEHOINUSMAA646N",
-          "url": "https://fred.stlouisfed.org/series/MEHOINUSMAA646N",
-          "verified": "2026-08-08"
+          "url": "https://fred.stlouisfed.org/data/MEHOINUSMAA646N",
+          "verified": "2026-11-08"
         }
       },
       "utility": {

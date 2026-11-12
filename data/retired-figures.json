@@ -449,6 +449,62 @@
    "allow": [
     "data/retired-figures.json"
    ]
+  },
+  {
+   "id": "ma-median-income-cps-113900",
+   "subject": "MA median household income carried as 113,900",
+   "wrong": [
+    "113,900",
+    "data: [113900",
+    "\"value\": 113900"
+   ],
+   "right": "CPS ASEC 2025 $118,500 (FRED MEHOINUSMAA646N); ACS 2025 1-year B19013 $106,539 (Census API). 113,900 matches no year of the CPS series (2024 = 112,300).",
+   "context": "(?i)median|household|income|CPS|ACS",
+   "context_window": 900,
+   "why": "Read off FRED and the Census API 2026-11-08. The figure sat in chartIncomeReal and in burden-constants.json medianHouseholdIncome_CPS.",
+   "retired_on": "2026-11-08",
+   "allow": [
+    "data/retired-figures.json",
+    "MASTER_DATA.md",
+    "method.html",
+    "data/burden-constants.json"
+   ]
+  },
+  {
+   "id": "ma-rpp-history-typed",
+   "subject": "Hand-typed MA RPP series 2008-2023 on the tax-budget dashboard",
+   "wrong": [
+    "109.7,109.4,109.7,109.3",
+    "109.7, 109.4, 109.7"
+   ],
+   "right": "BEA SARPP MA all items 2008-2024 from data/cost-of-living-latest.json (2008 106.0 ... 2023 107.7, 2024 105.8), written by update-tax-budget-dashboard.py",
+   "context": "(?i)RPP|price parit",
+   "context_window": 900,
+   "why": "Off by 2-4 points for 2008-2019 and stopped a year short; the feed carries the current BEA vintage.",
+   "retired_on": "2026-11-08",
+   "allow": [
+    "data/retired-figures.json",
+    "MASTER_DATA.md",
+    "method.html"
+   ]
+  },
+  {
+   "id": "statewide-levy-series-typed",
+   "subject": "Hand-typed statewide property levy series and growth",
+   "wrong": [
+    "14.9,15.5,16.2,17.0",
+    "a 64% increase"
+   ],
+   "right": "DLS Municipal Databank, Tax Levies by Class, 351 municipalities: FY2015 $14.55B, FY2016 $15.18B ... FY2026 $24.03B, +65% (data/property-levy-latest.json)",
+   "context": "(?i)levy",
+   "context_window": 900,
+   "why": "FY2016-FY2023 ran $0.3-0.5B low against the Databank; growth FY2015-FY2026 is 65%.",
+   "retired_on": "2026-11-08",
+   "allow": [
+    "data/retired-figures.json",
+    "MASTER_DATA.md",
+    "method.html"
+   ]
   }
  ]
 }

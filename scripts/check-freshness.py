@@ -80,6 +80,12 @@ DATA = [
     # likely to rot unnoticed. 400 days so a skipped year cannot hide, given
     # disclosure closes each registration year the following January 15.
     ("data/ma-lobbying-firms-latest.json", 400, "annual; manual browser scrape, no workflow can fetch it"),
+    # Statewide property levy, summed from the DLS Municipal Databank. The DLS
+    # gateway refuses scripted requests, so this is a by-hand browser read with no
+    # workflow behind it. Each fiscal year is complete once all 351 towns set
+    # rates (late spring); 240 days from a November read lands in early July, so
+    # a missed FY refresh cannot pass a second summer.
+    ("data/property-levy-latest.json", 240, "annual DLS levy; manual browser read, no workflow can fetch it"),
     # 75 days was calibrated on a commit cadence that no longer exists. Until
     # 2026-07-16 this file carried a fetched_at timestamp rewritten on every run,
     # so the monthly job committed every month whether or not ACS had moved --

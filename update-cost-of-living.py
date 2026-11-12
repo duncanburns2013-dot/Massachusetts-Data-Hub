@@ -300,7 +300,14 @@ def income_benchmark():
     if not key:
         print("  · CENSUS_API_KEY not set — skipping median family income")
         return out
-    for yr in (out["vintage"] or 2024, 2023):
+    # Newest release first. This loop used to start from census-latest.json's
+    # acs_vintage, which is the ACS *5-year* vintage, and only ever tried that year
+    # and 2023 -- so when ACS 2025 1-year came out in September 2026 it was never
+    # asked for and the feed sat on $104,828 (2024) while burden-constants.json
+    # had moved to $106,539 (2025). The 1-year release for year Y lands in
+    # September of Y+1; a 404 for a year not yet out raises at once and falls through.
+    this_year = datetime.now(timezone.utc).year
+    for yr in range(this_year - 1, this_year - 4, -1):
         try:
             url = ("https://api.census.gov/data/%d/acs/acs1?get=NAME,B19113_001E,B19013_001E"
                    "&for=state:25&key=%s" % (yr, key))
@@ -311,8 +318,36 @@ def income_benchmark():
             out["source"] = f"Census ACS 1-Year {yr} (B19113 family, B19013 household)"
             break
         except Exception as e:
-            print(f"  ! Census ACS {yr} failed ({e})")
+            print(f"  · Census ACS {yr} 1-year not available ({e})")
+    if out.get("source", "").startswith("Census ACS 1-Year"):
+        out.update(household_by_state(out["vintage"], key))
     return out
+
+
+def household_by_state(yr, key):
+    """Median household income (B19013) for every state and the US, same release as MA.
+
+    tax-budget-dashboard.html's income-vs-purchasing-power chart compares states,
+    and its bars were hand-typed from a CPS vintage that matched no published
+    year. Pinned to the vintage the MA figure came from, so every bar shares one
+    release. Returns {} on failure: the consumer refuses to write a partial chart.
+    """
+    base = "https://api.census.gov/data/%d/acs/acs1?get=NAME,B19013_001E" % yr
+    try:
+        st_rows = json.loads(get(base + "&for=state:*&key=" + key))
+        us_rows = json.loads(get(base + "&for=us:1&key=" + key))
+        by_state = {STATES[r[0]]: float(r[1]) for r in st_rows[1:] if r[0] in STATES}
+        if len(by_state) != len(STATES):
+            raise ValueError(f"{len(by_state)} of {len(STATES)} states")
+        return {
+            "household_by_state": by_state,
+            "household_us": float(us_rows[1][1]),
+            "household_by_state_url": base + "&for=state:*",
+            "household_by_state_retrieved": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+        }
+    except Exception as e:
+        print(f"  ! Census ACS {yr} B19013 by state failed ({e})")
+        return {}
 
 
 def main():
@@ -353,6 +388,14 @@ def main():
                 payload[key] = prev[key]
                 payload.setdefault("meta", {}).setdefault("carried_forward", []).append(key)
                 print(f"  WARNING: {key} came back empty - carried the previous values forward")
+        # income is carried whole or not at all: the MA figure and the by-state
+        # block must come from one ACS release, so a run without a Census key (or
+        # with Census down) keeps the last complete block rather than a half.
+        if (not payload["income"].get("household_by_state")
+                and prev.get("income", {}).get("household_by_state")):
+            payload["income"] = prev["income"]
+            payload.setdefault("meta", {}).setdefault("carried_forward", []).append("income")
+            print("  WARNING: income by state unavailable - carried the previous ACS block forward")
 
     # meta.generated is rewritten on every run, so the file ALWAYS differed and the
     # monthly job ALWAYS committed -- whether or not BEA had published anything. The

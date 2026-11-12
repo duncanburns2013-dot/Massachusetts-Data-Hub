@@ -755,11 +755,12 @@ its own `data-checked` stamp, which the freshness watchdog ages.
 |---|---|---|---|
 | Census **CPS ASEC** via FRED `MEHOINUSMAA646N` | **$118,500** | Median household income **2025** | Context / presets |
 | Census **CPS ASEC**, same series | $112,300 | Median household income 2024 | superseded |
-| Census **ACS 1-year** B19013 | **$104,828** | Median household income 2024 | Context / presets |
+| Census **ACS 1-year** B19013 | **$106,539** | Median household income **2025** | Context / presets; `chartIncomeReal` (all states, `data/cost-of-living-latest.json` → `income.household_by_state`) |
+| Census **ACS 1-year**, same table | $104,828 | Median household income 2024 | superseded |
 | Census **ACS 5-year** B19013 | $103,960 | Median household income 2024 | `data/census-latest.json`, checked by check-consistency |
 | Census **ACS 1-year** B19025 ÷ B11001 | **$144,312** | *Mean* household income | **Allocation divisor** |
 
-CPS and ACS disagree by roughly $14K on the same concept. Carry both and cite which one
+CPS and ACS disagree by roughly $12K on the same concept (2025: $118,500 vs $106,539). Carry both and cite which one
 any given chart uses — this is exactly the kind of thing a hostile reader finds first.
 
 **Updated 2026-10-18.** CPS ASEC 2025 is published, so the dashboard moved to $118,500
@@ -779,11 +780,15 @@ carried an unlabelled "$7,732/year" property tax figure; the hero stat, the pros
 stat card now read **$8,113 (FY2026)**. The FY2025 county table keeps its own FY2025
 source line — it was already labelled correctly and its county figures are FY2025.
 
-The `chartIncomeReal` cross-state bar series still uses 113,900 for MA, now a year
-and a revision out of date while the table beside it reads 118,500. Left alone
-deliberately: the other seven states' vintage is undocumented, and swapping MA to ACS
-without knowing theirs would trade a labelling error for a comparability error. **Open
-item:** establish the vintage of the other states, then make all eight consistent.
+**~~Open item~~ — CLOSED 2026-11-08.** `chartIncomeReal` used 113,900 for MA beside
+seven other states of undocumented vintage. It is now ACS 2025 1-year B19013 for all
+eight, one Census API call, written into `data/cost-of-living-latest.json`
+(`income.household_by_state`) by `update-cost-of-living.py` and onto the chart by
+`update-tax-budget-dashboard.py`; the real bars divide by BEA RPP 2024 from the same
+feed. The cost-burden table stays on CPS, labelled, per the rule above. On ACS 2025,
+New Hampshire ($106,759) edges Massachusetts ($106,539) nominally and, after RPP,
+leads $102,490 to $100,739. `burden-constants.json` `medianHouseholdIncome_CPS` read
+113,900 (no year of the series) and now reads 118,500 (2025).
 
 **Never use a median as an allocation divisor.** Per-household shares must sum back to
 the statewide pool, which only works with the mean. The reconciliation panel on the
@@ -1276,7 +1281,7 @@ section for that feed, and lose its row here.
 |--------|-------|--------|--------|
 | Income tax competitiveness rank | #42 (9th worst) | 2026 index | Tax Foundation State Tax Competitiveness Index — their index, cited as theirs |
 | Debt service, annual | $2.24B | FY2026 | mass.gov GAA export, appropriation line 0699-0015 |
-| Total statewide property levy | $24.0B | FY2026 | MA DLS, FY2026 Tax Levies Report |
+| Total statewide property levy | $24.03B ($24,027,501,925) | FY2026 | MA DLS Municipal Databank, Tax Levies by Class, summed over the 351 municipalities (Devens excluded); series FY2014–FY2026 in `data/property-levy-latest.json`, read by hand 2026-11-08 (the gateway refuses scripts) and written onto the page by `update-tax-budget-dashboard.py`. FY2027 incomplete (37 of 351 on 2026-11-08) |
 | Estimated SNAP fraud, actual | $135–225M | FY2023–FY2025 | MA State Auditor BSI reports + USDA-FNS national trafficking rates — an estimate, and a range |
 | Net AGI outflow | −$8.2B | CY2020–22 | IRS SOI state-to-state migration ($4.3B + $3.9B) |
 | Top 1% share of federal income tax paid by MA filers | 38.2% | TY2022 | IRS SOI In-State AGI Shares |
@@ -1379,6 +1384,7 @@ redeploys every three hours, and after every one of these runs.
 | Date | What Changed | Updated By |
 |------|-------------|------------|
 | 2026-11-08 | **FY2026 average single-family tax bill moved to the complete figure.** $8,113 on $742,986 was the DLS *City & Town* figure of February 2026, built from the 346 communities reporting by 2 Feb. The DLS Municipal Databank now has all 351: **$8,104 on $742,001**, same 1.092% effective rate. Changed in `data/burden-constants.json` (and the NH comparison note), the tax-burden calculator defaults, its statewide town row, and the tax-budget hero stat, prose and stat card. FY2027 is partial (37 of 351) and stays out. | Claude + Duncan |
+| 2026-11-08 | **Tax-budget dashboard: five hand-typed charts moved onto feeds.** MA RPP history (was 2008–2023, off 2–4 pts for 2008–19 and 2023 read 105.8 vs 107.7) → BEA SARPP 2008–2024 from `cost-of-living-latest.json`; state RPP and $100-buys bars → same vintage (CA 112.6→110.7, NY 105.8→107.9, FL 101.3→103.4); `chartIncomeReal` → ACS 2025 B19013 all states (was CPS 113,900 for MA, other states undocumented); statewide levy → DLS Databank FY2015–FY2026 (FY2016–FY2023 had been $0.3–0.5B low; growth 64%→65%). `update-cost-of-living.py` could never reach ACS 2025 1-year (it seeded from the 5-year vintage) — fixed. `burden-constants.json` CPS median 113,900 → 118,500. | Claude + Duncan |
 | 2026-09-30 | **Contradiction fixes, immigration + tax-budget dashboards.** Shelter spending replaced with one CTHRU series (kv7m-35wn) under two stated definitions, shelter system and EA line; two-year and cumulative totals re-derived ($1.85B, $2.42B, $2.78B). HomeBASE $101M → CTHRU $57.3M (FY25) / $91.4M (FY26); HomeBASE-reporting-lapsed claim corrected (SD.4220 carries exits incl. HomeBASE). Caseload 4,800 → 1,533 + 55 (3 Sep 2026). $1.88B estimate relabelled: all shelter families plus modelled CIS costs. BSI program chart relabelled FY25 Q4; BSI trend and cards → annual totals FY22–FY25; Detected column total → $4.66M. SNAP BSI row $0.69M → Q1 FY25 $2,549,325. FY25 gap $6.2B → $5.736B, labelled supplemental spending. Vendor card $142.2M → $46.8M computed from `data/payments.json`. Sources: CTHRU kv7m-35wn, EA report SD.4220, BSI reports SD.2676 / SD.3769 and the FY22–FY25 annual totals, budget.digital.mass.gov FY27 data; retrieved 2026-09-30. | Claude |
 | 2026-08-11 | **FY2027 enacted-budget review against the official mass.gov GAA exports.** Diffed all 860 `LINE_ITEMS` in `tax-budget-dashboard.html` against `gaa1.xlsx`: **zero amount mismatches** — the H.5555 conference data the dashboard was built on *is* the enacted law, because Healey signed with no vetoes. Fixed one account-code typo (`8910-0702` → `8910-8702`). Relabelled the tab, headings, sources and the `FY27_H5555` constant (now `FY27_GAA = 63.416`) from "conference report" to enacted GAA, and replaced the stale "heads to Gov. Healey's desk" line. Added the **scope reconciliation table** above — the headline total excludes Intragovernmental Service Spending — plus FY2027 key figures, the enacted-vs-actual supplemental gap (new `h5Outturn` chart), and the local-aid CSV footer-row gotcha. Added the OPEB finding to `pension-dashboard.html`: the SRBT deposit (line 1595-6152) is down 27% since FY24 while the budget creates a pension COLA reserve. Cleared both long-standing defects — CPS/ACS mislabel and the unlabelled $7,732 property tax figure (now $8,113, FY2026). | Claude + Duncan |
 | 2026-02-05 | Initial creation — all data compiled from prior chats | Claude + Duncan |

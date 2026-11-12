@@ -31,7 +31,13 @@ approach is unfamiliar.
 
 Scope
 -----
-  EIA  → the Electricity stat card, the Live Cost Tracker's electricity row, the MA
+  Feeds (no network) → data/cost-of-living-latest.json: the RPP data-fields, the
+         RPP_MA / RPP_MA_RENT constants, and the chartRPPTime, chartRPP,
+         chartPurchasing and chartIncomeReal arrays (ACS 1-year median household
+         income, every state from one release). data/property-levy-latest.json
+         (refreshed by hand from the DLS Databank, which blocks scripts): chartLevy
+         and the levy stat card and Prop 2½ prose.
+  EIA  →the Electricity stat card, the Live Cost Tracker's electricity row, the MA
          Cost Burden electricity row, and the chartElectricity bar array.
          The whole array is refreshed from one EIA call so every bar shares a vintage;
          if any state is missing the array is left alone rather than mixing months.
@@ -242,6 +248,185 @@ def rpp_fields(html):
     return html
 
 
+# ── Charts written from data/*.json ─────────────────────────────────────────
+#
+# chartRPPTime, chartRPP, chartPurchasing, chartIncomeReal and chartLevy were all
+# hand-typed arrays. Found 2026-11-08: the MA RPP history was off by 2-4 points for
+# 2008-2019 and stopped a year short; the state RPP bars and the $100-buys bars
+# were an older vintage than the MA figure beside them; the income bars were a CPS
+# figure that matched no published year; and the levy series ran $0.3-0.5B low
+# for FY2016-FY2023. Each is now rewritten from the feed that owns it, anchored on
+# its dataset label, inside its own safeChart(...) block.
+
+CHART_ABBR = {
+    "Massachusetts": "MA", "New Jersey": "NJ", "California": "CA", "New York": "NY",
+    "New Hampshire": "NH", "NH": "NH", "Florida": "FL", "North Carolina": "NC",
+    "Texas": "TX", "Tennessee": "TN",
+}
+
+
+def chart_block(html, cid):
+    """(start, end) of the safeChart('cid', ...) call, up to the next chart or break."""
+    m = re.search(r"safeChart\('" + re.escape(cid) + r"'", html)
+    if not m:
+        return None
+    nxt = re.search(r"safeChart\(|\bbreak;", html[m.end():])
+    return m.start(), m.end() + (nxt.start() if nxt else len(html) - m.end())
+
+
+def chart_labels(html, cid):
+    span = chart_block(html, cid)
+    if not span:
+        fail(f"{cid}: chart not found -- NOT updated")
+        return None
+    lm = re.search(r"labels:\s*\[([^\]]*)\]", html[span[0]:span[1]])
+    if not lm:
+        fail(f"{cid}: labels array not found -- NOT updated")
+        return None
+    return [x.strip().strip("'\"") for x in lm.group(1).split(",")]
+
+
+def set_chart_array(html, cid, pattern, values, what):
+    """Rewrite one array inside one chart's block. pattern has groups (prefix)(suffix)."""
+    span = chart_block(html, cid)
+    if not span:
+        fail(f"{what}: chart {cid} not found -- NOT updated")
+        return html
+    block = html[span[0]:span[1]]
+    block, _ = sub_once(block, pattern, lambda m: m.group(1) + values + m.group(2), what)
+    return html[:span[0]] + block + html[span[1]:]
+
+
+def state_values(html, cid, table, what, us=None):
+    """Map a chart's state labels onto a {ST: value} table; None if any is missing."""
+    labels = chart_labels(html, cid)
+    if labels is None:
+        return None
+    out = []
+    for lab in labels:
+        if lab == "US Average" and us is not None:
+            out.append(us)
+        elif CHART_ABBR.get(lab) in table:
+            out.append(float(table[CHART_ABBR[lab]]))
+        else:
+            fail(f"{what}: no value for chart label '{lab}' -- array left untouched")
+            return None
+    return out
+
+
+def feed_charts(html):
+    """RPP and median-income charts, from data/cost-of-living-latest.json."""
+    f = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                     "data", "cost-of-living-latest.json")
+    try:
+        with open(f, encoding="utf-8") as fh:
+            d = json.load(fh)
+        rpp = {st: v["all"] for st, v in d["rpp"].items()}
+        years, hist = d["years"], d["ma_history"]["all"]
+        rpp_year = str(d["meta"]["rpp_year"])
+        inc = d["income"]
+    except (OSError, KeyError, TypeError, ValueError) as e:
+        fail(f"cost-of-living feed unreadable ({e}) -- RPP/income charts NOT updated")
+        return html
+    print("\nCharts from data/cost-of-living-latest.json")
+
+    # The CPI tab's RPP callouts compute from two JS constants. Same feed, same
+    # vintage as the cards, so the two tabs cannot quote different indices.
+    html, _ = sub_once(html, r"(var RPP_MA=)[\d.]+(;)",
+                       lambda m: f"{m.group(1)}{rpp['MA']}{m.group(2)}", "RPP_MA constant")
+    html, _ = sub_once(html, r"(var RPP_MA_RENT=)[\d.]+(;)",
+                       lambda m: f"{m.group(1)}{d['rpp']['MA']['housing']}{m.group(2)}",
+                       "RPP_MA_RENT constant")
+
+    # MA RPP over time. The series must end on the same year the cards quote.
+    if len(years) != len(hist) or str(years[-1]) != rpp_year:
+        fail(f"chartRPPTime: years/history mismatch ({len(years)}/{len(hist)}, "
+             f"last {years[-1]} vs rpp_year {rpp_year}) -- NOT updated")
+    else:
+        html = set_chart_array(html, "chartRPPTime", r"(labels:\s*\[)[^\]]*(\])",
+                               ",".join(f"'{y}'" for y in years), "chartRPPTime labels")
+        html = set_chart_array(html, "chartRPPTime",
+                               r"(label: 'MA RPP \(All Items\)', data: \[)[^\]]*(\])",
+                               ",".join(f"{v:.1f}" for v in hist), "chartRPPTime MA series")
+        html = set_chart_array(html, "chartRPPTime",
+                               r"(label: 'US Average \(100\)', data: \[)[^\]]*(\])",
+                               ",".join("100" for _ in years), "chartRPPTime US baseline")
+        html, _ = set_field_all(html, "rpp-span", f"{years[0]}–{years[-1]}", "RPP history span")
+
+    # State RPP bars and what $100 buys, one vintage for every bar.
+    vals = state_values(html, "chartRPP", rpp, "chartRPP", us=100.0)
+    if vals:
+        html = set_chart_array(html, "chartRPP",
+                               r"(label: 'Regional Price Parity \(US=100\)', data: \[)[^\]]*(\])",
+                               ",".join(f"{v:.1f}" for v in vals), "chartRPP array")
+    vals = state_values(html, "chartPurchasing", rpp, "chartPurchasing", us=100.0)
+    if vals:
+        html = set_chart_array(html, "chartPurchasing",
+                               r"(label: 'Real Value of \$100', data: \[)[^\]]*(\])",
+                               ",".join(f"{10000 / v:.2f}" for v in vals), "chartPurchasing array")
+
+    # Median household income, nominal and RPP-adjusted. ACS 1-year B19013, every
+    # state from one release; the CPS figure in the cost-burden table is a
+    # different survey and is labelled as such there.
+    by_state = inc.get("household_by_state") or {}
+    if not by_state or not str(inc.get("source", "")).startswith("Census ACS 1-Year"):
+        fail("income.household_by_state missing from the feed -- chartIncomeReal NOT updated")
+    else:
+        nom = state_values(html, "chartIncomeReal", by_state, "chartIncomeReal")
+        labels = chart_labels(html, "chartIncomeReal")
+        if nom and labels:
+            real = [n * 100 / rpp[CHART_ABBR[l]] for n, l in zip(nom, labels)]
+            html = set_chart_array(html, "chartIncomeReal",
+                                   r"(label: 'Nominal Median HH Income', data: \[)[^\]]*(\])",
+                                   ",".join(f"{v:.0f}" for v in nom), "chartIncomeReal nominal")
+            html = set_chart_array(html, "chartIncomeReal",
+                                   r"(label: 'RPP-Adjusted \(Real\)', data: \[)[^\]]*(\])",
+                                   ",".join(f"{v:.0f}" for v in real), "chartIncomeReal real")
+            html, _ = set_field_all(html, "acs-hh-year", str(inc["vintage"]), "ACS income vintage")
+    return html
+
+
+def levy_fields(html):
+    """Statewide property-tax levy, from data/property-levy-latest.json.
+
+    That file is refreshed by hand from the DLS Municipal Databank, which refuses
+    scripted requests. This writes the chart, the stat card and the Prop 2½ prose
+    from it, so a refresh of the file is the only edit a new fiscal year needs.
+    """
+    f = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                     "data", "property-levy-latest.json")
+    try:
+        with open(f, encoding="utf-8") as fh:
+            d = json.load(fh)
+        series = d["statewide_total_levy"]
+        verified = d["meta"]["verified"]
+    except (OSError, KeyError, TypeError, ValueError) as e:
+        fail(f"levy feed unreadable ({e}) -- levy chart and figures NOT updated")
+        return html
+    # Chart from FY2015 on, the year the Prop 2½ paragraph measures from.
+    fys = sorted(k for k in series if int(k[2:]) >= 2015)
+    vals = [series[k] / 1e9 for k in fys]
+    if any(b <= a for a, b in zip(vals, vals[1:])) or not 5 < vals[-1] < 60:
+        fail(f"levy series fails sanity check {vals} -- NOT updated")
+        return html
+    print(f"\nStatewide levy ({fys[0]}-{fys[-1]}): ${vals[0]:.2f}B -> ${vals[-1]:.2f}B")
+    html = set_chart_array(html, "chartLevy", r"(labels:\s*\[)[^\]]*(\])",
+                           ",".join(f"'FY{k[4:]}'" for k in fys), "chartLevy labels")
+    html = set_chart_array(html, "chartLevy", r"(label: 'Total Levy \(\$B\)', data: \[)[^\]]*(\])",
+                           ",".join(f"{v:.2f}" for v in vals), "chartLevy array")
+    y, mo, dd = verified.split("-")
+    for tag, val, what in (
+            ("levy-latest",   f"${vals[-1]:.1f}B",                      "levy, latest FY"),
+            ("levy-fy",       fys[-1],                                  "levy, latest FY label"),
+            ("levy-yoy",      f"${vals[-1] - vals[-2]:.1f}B",            "levy, change on the year"),
+            ("levy-first",    f"${vals[0]:.1f}B",                       "levy, first FY"),
+            ("levy-first-fy", fys[0],                                   "levy, first FY label"),
+            ("levy-growth",   f"{round((vals[-1] / vals[0] - 1) * 100)}%", "levy growth"),
+            ("levy-verified", f"{int(dd)} {MONTHS[int(mo)]} {y}",       "levy read date")):
+        html, _ = set_field_all(html, tag, val, what)
+    return html
+
+
 def cents_row(html, label, ma, us, prem, period, what):
     """A table row: <strong>LABEL</strong></td><td..>XX.XX¢/kWh</td><td>YY.YY¢/kWh</td><td..>~ZZ%</td>..(EIA, Mon YYYY)"""
     pat = (r"(<strong>" + re.escape(label) + r"</strong></td><td[^>]*>)[\d.]+(¢/kWh</td><td[^>]*>)"
@@ -266,6 +451,8 @@ def main():
 
     # ── BEA Regional Price Parity, from the cost-of-living feed ──
     html = rpp_fields(html)
+    html = feed_charts(html)
+    html = levy_fields(html)
 
     # ── EIA electricity ──
     print("Fetching EIA (all chart states)...")
