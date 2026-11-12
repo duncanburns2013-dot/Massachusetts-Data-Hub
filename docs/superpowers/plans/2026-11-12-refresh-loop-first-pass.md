@@ -190,7 +190,8 @@ git commit -m "refresh: probes for Census ACS, BEA RPP and DOI rates"
 
 **Interfaces:**
 - Consumes: `load_sources`, `probe`.
-- Produces: `survey(sources: list[Source], *, fetch) -> list[Move]`. `Move` has `source_id: str`, `held: str`, `newest: str`, `is_final: bool`, `evidence_url: str`.
+- Produces: `survey(sources: list[Source], *, fetch) -> SurveyResult`. `SurveyResult` is a plain dataclass with `moves: list[Move]`, `failures: list[...]`, `skipped: list[Skipped]`, and **deliberately no** `__len__`, `__bool__`, `__iter__` or `__getitem__` — so `if not result` is always false and every consumer must name `.moves` or `.failures` on purpose. It started as a `list` subclass carrying failures as an attribute; `list(moves)`, `moves[:]`, `sorted(moves)` and comprehensions all silently dropped them, and `if not moves:` read as all-clear when every publisher had failed. That is the shape of the incident this project exists to prevent, so the type now forbids it.
+- `Move` has `source_id: str`, `held: str`, `newest: str`, `is_final: bool`, `evidence_url: str`. `Skipped` has `source_id: str`, `due: str | None`, `held_period: str` — a `human_fetch` source is never probed, and Task 6 ages it by `due`.
 - `main(argv)` supports `--dry-run`, which surveys and prints and writes nothing.
 
 - [ ] **Step 1: Write the failing test**
@@ -295,7 +296,7 @@ git commit -m "refresh: fetch, write and reconcile ACS figures"
 
 ```python
 # the worked example from the spec: this claim was live and inverted
-c = Claim(id="ma_auto_cheaper", relation="ma_auto_expenditure < us_auto_expenditure", ...)
+c = Claim(id="ma_auto_expenditure_above_note", relation="ma_auto_expenditure < us_auto_expenditure", ...)
 v = evaluate([c], {"ma_auto_expenditure": 1326.46, "us_auto_expenditure": 1281.61})[0]
 assert v.status == "broken"      # MA is ABOVE; the claim as written is false
 v = evaluate([c], {"ma_auto_expenditure": 1200.0, "us_auto_expenditure": 1281.61})[0]
