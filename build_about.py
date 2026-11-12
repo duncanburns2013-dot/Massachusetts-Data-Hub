@@ -231,7 +231,15 @@ CSS = """
 
 s = io.open('about.html', encoding='utf-8-sig').read().replace(chr(13) + NL, NL)
 
-m = re.search(r'(<div class="doc-in">)(.*?)(\n  </div>\n</main>)', s, re.S)
+# Anchored on the doc-in div's OWN closing tag, not on what happens to follow
+# it. The previous pattern required `\n  </div>\n</main>`, i.e. that doc-in was
+# the last thing in <main>. On 2026-11-12 the FAQ work (6d0c341) inserted a
+# <section> between the two and this assert fired on the scheduled run, with
+# nothing wrong on either side -- the builder was simply reading a neighbour it
+# had no business depending on. If a nested `\n  </div>` is ever added inside
+# doc-in this gets ambiguous again; explicit <!-- doc-in:start/end --> markers,
+# as the FAQ block already uses, are the sturdier fix when that day comes.
+m = re.search(r'(<div class="doc-in">)(.*?)(\n  </div>)', s, re.S)
 assert m, 'doc-in block not found'
 s = s[:m.start(2)] + BODY + s[m.end(2):]
 
