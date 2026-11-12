@@ -81,6 +81,7 @@ DESC = {
 # ---------------------------------------------------------------- structured data
 # Pages that are a body of figures get Dataset. The two names that a plain title
 # split would mangle are overridden; the rest come from the page's own <title>.
+METHOD_PAGES = {'method.html', 'corporate-ledger-method.html'}
 NOT_A_DATASET = {'index.html', 'about.html', 'videos.html', 'method.html', 'corporate-ledger-method.html'}
 DATASET_NAME = {
     'instrument.html':          'Massachusetts municipal tax and affordability, all 351 municipalities',
@@ -151,6 +152,18 @@ def schema_for(p, s, url):
         node = {'@type': 'AboutPage', '@id': url, 'url': url, 'name': title,
                 'description': desc, 'inLanguage': 'en-US',
                 'isPartOf': {'@id': BASE + '#website'}, 'mainEntity': PERSON}
+    elif p in METHOD_PAGES:
+        # Not a Dataset - these document where the figures came from. They were
+        # returning None, so the page that proves provenance carried no schema
+        # at all, which is the wrong one to leave invisible.
+        node = {'@type': 'WebPage', '@id': url, 'url': url, 'name': title,
+                'description': desc, 'inLanguage': 'en-US',
+                'isPartOf': {'@id': BASE + '#website'},
+                'about': {'@id': BASE + '#website'},
+                'author': {'@id': PERSON['@id']}, 'publisher': ORG}
+        when = last_commit(p)
+        if when:
+            node['dateModified'] = when
     elif p in NOT_A_DATASET:
         return None
     else:
@@ -165,6 +178,15 @@ def schema_for(p, s, url):
         when = last_commit(p)
         if when:
             node['dateModified'] = when
+        # A Dataset that names no distribution tells a machine nothing is
+        # downloadable, which was false here: the JSON behind these pages is
+        # already public and serving application/json. Derived from the page's
+        # own references rather than a hand-kept map, so it cannot drift.
+        files = sorted(set(re.findall(r'data/[a-z0-9-]+\.json', s)))
+        if files:
+            node['distribution'] = [
+                {'@type': 'DataDownload', 'encodingFormat': 'application/json',
+                 'contentUrl': BASE + f} for f in files]
     node['@context'] = 'https://schema.org'
     ordered = {'@context': node.pop('@context')}
     ordered.update(node)
@@ -400,12 +422,17 @@ if os.path.exists('instrument.html') and os.path.exists('index.html'):
 # ---------------------------------------------------------------- sitemap
 listed = [p for p in pages if p not in NOINDEX]
 def loc(p): return BASE + ('' if p == 'index.html' else p)
-prio = lambda p: '1.0' if p == 'index.html' else ('0.9' if p in ('about.html','videos.html','instrument.html') else '0.8')
+# lastmod, not priority. Google ignores priority outright and uses lastmod to
+# schedule recrawls - on a site with daily feeds that is the only signal here
+# worth sending, and it was the one missing.
 sm = ['<?xml version="1.0" encoding="UTF-8"?>',
       '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
 for p in listed:
-    sm += ['  <url>', '    <loc>%s</loc>' % loc(p),
-           '    <priority>%s</priority>' % prio(p), '  </url>']
+    sm += ['  <url>', '    <loc>%s</loc>' % loc(p)]
+    when = last_commit(p)
+    if when:
+        sm += ['    <lastmod>%s</lastmod>' % when]
+    sm += ['  </url>']
 sm.append('</urlset>')
 io.open('sitemap.xml', 'w', encoding='utf-8', newline='\n').write('\n'.join(sm) + '\n')
 
