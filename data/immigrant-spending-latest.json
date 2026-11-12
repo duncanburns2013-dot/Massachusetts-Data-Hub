@@ -1,11 +1,11 @@
 {
- "fetched_at": "2026-11-11T18:39:13Z",
+ "fetched_at": "2026-11-12T18:52:40Z",
  "source": "Massachusetts CTHRU -- Budget vs Actual (kv7m-35wn) for appropriation totals; Comptroller Spending (pegc-naaa) for payments by vendor",
  "source_url": "https://cthru.data.socrata.com/",
  "measure": "state appropriations and actual expenses on accounts the Commonwealth names for immigrant, refugee or family-shelter purposes; recipients classified by appropriation, never by vendor name",
  "newest_fiscal_year": 2027,
  "newest_payment_date": "2026-09-17T00:00:00.000",
- "cthru_row_created": "2026-11-06T10:30:36.000",
+ "cthru_row_created": "2026-11-11T10:06:38.000",
  "account_selection": {
   "search_terms": [
    "IMMIGRA",
@@ -4993,8 +4993,8 @@
  },
  "mira": {
   "vendor_match": "MASSACHUSETTS IMMIGRANT",
-  "total": 11853077.96,
-  "accounts": 21,
+  "total": 12246915.77,
+  "accounts": 22,
   "top": [
    {
     "code": "40030124",
@@ -5034,8 +5034,8 @@
    }
   ],
   "other": {
-   "total": 1667382.15,
-   "accounts": 15
+   "total": 2061219.96,
+   "accounts": 16
   },
   "basis": "every payment CTHRU's Comptroller checkbook (pegc-naaa) records to this vendor, fiscal 2010 to date, grouped by the appropriation it was paid from"
  }
