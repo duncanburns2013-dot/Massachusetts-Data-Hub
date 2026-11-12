@@ -203,6 +203,30 @@ STAMPS = [
     ("pension-dashboard.html",
      r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 400,
      "PERAC/ACFR/PPD publish annually; hand-maintained, no updater"),
+    # Three pages were aged by NOTHING until 2026-11-12: no stamp this script
+    # read, and no feed in DATA above. They were green because they were
+    # invisible, which is the same failure this file was written to stop.
+    ("affordability-dashboard.html",
+     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 400,
+     "BEA RPP + BEA per-capita income via FRED + ACS 1-year + MIT Living Wage; "
+     "all annual, hand-maintained, no updater. STAMP IS PROVISIONAL: set to the "
+     "1 Aug 2026 sweep date because no evidence of a later check exists. Its ACS "
+     "1-Year 2024 looks a release behind (1-year 2025 lands each September), so "
+     "the first real reconciliation should check that before bumping the stamp"),
+    ("mbta-3a-dashboard.html",
+     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 120,
+     "EOHLC reissues the 3A compliance and capacity tables every few weeks, and "
+     "data/mbta-3a-latest.json is aged at 60d above -- but that feed ages the FILE, "
+     "and this page does not read it, so the page can freeze while the feed stays "
+     "green. 120d is two feed cycles"),
+    # Reads the town-band blob's own generated date rather than a hand stamp,
+    # because update-town-band.py rewrites this page and would not touch a stamp.
+    ("haverhill-market-report.html",
+     r'"generated":"([^"]+)"', "%Y-%m-%d", 240,
+     "town-band blob written by update-town-band.py. Only one commit of that "
+     "data exists so there is no observed cadence yet; tighten 240d once there is. "
+     "The page's other input, data/mls-history.json, is deliberately unchecked "
+     "below -- this does not override that"),
 ]
 
 # Deliberately NOT checked, so the list is a decision rather than an oversight:
