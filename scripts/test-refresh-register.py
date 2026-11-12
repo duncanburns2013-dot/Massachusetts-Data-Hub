@@ -20,6 +20,14 @@ try:
     assert acs.apply is True
     assert by_id["bea_rpp_state"].apply is False
     assert doi.apply is False
+    # Several sources are human_fetch and name a probe that is not implemented yet. That is safe
+    # ONLY because survey() never probes a human_fetch source, so assert exactly that invariant:
+    # every automated source's probe must exist, and flipping human_fetch off without writing the
+    # probe fails here rather than as an unknown-probe ProbeError in a live run.
+    from scripts.refresh.probes import _PROBES
+    for s in srcs:
+        if not s.human_fetch:
+            assert s.probe in _PROBES, f"{s.id}: probe {s.probe!r} is not implemented"
     # a human-fetched source must carry a due date, or it ages by nothing
     for s in srcs:
         if s.human_fetch:

@@ -37,5 +37,70 @@
     "human_fetch": true,
     "due": "2027-07-31",
     "apply": false
+  },
+  {
+    "id": "naic_auto_insurance_database",
+    "publisher": "NAIC Auto Insurance Database Report",
+    "probe": "naic_auto",
+    "held_period": "2024",
+    "held_retrieved": "2026-11-12",
+    "targets": ["healthcare-dashboard.html"],
+    "multi_stage": false,
+    "final_tell": null,
+    "human_fetch": true,
+    "due": "2027-11-30",
+    "apply": false
+  },
+  {
+    "id": "doi_annual_report",
+    "publisher": "MA DOI Annual Report",
+    "probe": "doi_annual_report",
+    "held_period": "2025",
+    "held_retrieved": "2026-11-12",
+    "targets": ["healthcare-dashboard.html"],
+    "multi_stage": false,
+    "final_tell": null,
+    "human_fetch": true,
+    "due": "2027-06-30",
+    "apply": false
+  },
+  {
+    "id": "doi_home_insurance_report",
+    "publisher": "MA DOI Annual Home Insurance Report",
+    "probe": "doi_home_insurance",
+    "held_period": "2024",
+    "held_retrieved": "2026-11-12",
+    "targets": ["healthcare-dashboard.html"],
+    "multi_stage": false,
+    "final_tell": null,
+    "human_fetch": true,
+    "due": "2027-03-31",
+    "apply": false
+  },
+  {
+    "id": "meps_ic_family_premium",
+    "publisher": "AHRQ MEPS-IC",
+    "probe": "meps_ic",
+    "held_period": "2025",
+    "held_retrieved": "2026-11-12",
+    "targets": ["healthcare-dashboard.html"],
+    "multi_stage": false,
+    "final_tell": null,
+    "human_fetch": true,
+    "due": "2027-08-31",
+    "apply": false
+  },
+  {
+    "id": "cms_state_health_expenditures",
+    "publisher": "CMS State Health Expenditure Accounts",
+    "probe": "cms_she",
+    "held_period": "2020",
+    "held_retrieved": "2026-11-12",
+    "targets": ["healthcare-dashboard.html"],
+    "multi_stage": false,
+    "final_tell": null,
+    "human_fetch": true,
+    "due": "2027-06-30",
+    "apply": false
   }
 ]
