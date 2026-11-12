@@ -7,6 +7,7 @@ that is not published yet is a normal negative (the walk continues).
 import datetime
 import html
 import json
+import os
 import re
 import urllib.error
 import urllib.request
@@ -43,32 +44,50 @@ def urlopen_text(url: str) -> str:
         raise
 
 
-def _get(fetch, url):
-    """fetch(url) with every failure but NotFound converted to ProbeError."""
+def _get(fetch, url, key=None):
+    """fetch(url) with every failure but NotFound converted to ProbeError.
+
+    `key`, when given, is appended to the REQUEST only. Every message built here names the
+    key-free `url`, and the keyed text is scrubbed out of anything the fetcher said: an
+    exception's text and chain are what reach the public Actions log.
+    """
+    req = url if key is None else f"{url}&key={key}"
+    clean = (lambda t: str(t).replace(key, "***")) if key else str
     try:
-        return fetch(url)
+        return fetch(req)
     except NotFound:
-        raise
+        miss = True
     except Exception as e:  # unreachable, 403/5xx, timeout, bad decode: all unanswerable
-        raise ProbeError(f"{url}: {type(e).__name__}: {e}") from e
+        miss, why = False, f"{type(e).__name__}: {clean(e)}"
+    # raised OUTSIDE the except block so no keyed exception rides along on __context__
+    if miss:
+        raise NotFound(url)
+    raise ProbeError(f"{url}: {why}")
 
 
-def _walk(fetch, years, url_for):
-    """First year whose page exists, newest first. Returns (year, url, body)."""
+def _walk(fetch, years, url_for, key=None):
+    """First year whose page exists, newest first. Returns (year, url, body); url is key-free."""
     for yr in years:
         url = url_for(yr)
         try:
-            return yr, url, _get(fetch, url)
+            return yr, url, _get(fetch, url, key)
         except NotFound:
             continue
     raise ProbeError(f"nothing published in {years[0]}..{years[-1]}: cannot tell what is newest")
 
 
 def _census_acs1(source, fetch):
+    # Same source as runner.apply (os.environ, set from the repo secret in CI). The refresh-burden-acs.py
+    # .env fallback is for one-off local runs and crashes when .env is absent; a probe must raise ProbeError.
+    key = os.environ.get("CENSUS_API_KEY")
+    if not key:
+        # Keyless, Census answers HTTP 200 with an HTML "Missing Key" page: never send one and read it.
+        raise ProbeError("CENSUS_API_KEY is not set: the Census API refuses keyless requests")
     this = datetime.date.today().year
     yr, url, body = _walk(
         fetch, range(this, this - WALK, -1),
-        lambda y: f"https://api.census.gov/data/{y}/acs/acs1?get=NAME,B19113_001E,B19013_001E&for=state:25")
+        lambda y: f"https://api.census.gov/data/{y}/acs/acs1?get=NAME,B19113_001E,B19013_001E&for=state:25",
+        key)
     try:
         head, row = json.loads(body)[:2]
         name, income = row[head.index("NAME")], row[head.index("B19013_001E")]

@@ -57,6 +57,8 @@ def raises_conn(url):
     raise OSError("unreachable")
 
 
+import os
+os.environ["CENSUS_API_KEY"] = "test-key"
 try:
     acs_held_2024 = dataclasses.replace(acs, held_period="2024")
     acs_held_2025 = dataclasses.replace(acs, held_period="2025")

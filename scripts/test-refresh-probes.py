@@ -51,6 +51,8 @@ def raises(src, fetch):
     return False
 
 
+import os
+os.environ["CENSUS_API_KEY"] = "test-key"
 try:
     # newest edition found; walk continues past a 404
     p = probe(acs, fetch=stub_census({2025: OK, 2026: NOT_FOUND}))
@@ -134,6 +136,44 @@ try:
     wrong = json.dumps([["NAME", "B19113_001E", "B19013_001E", "state"], ["Alabama", "1", "2", "01"]])
     assert raises(acs, stub_census({2025: wrong, 2026: NOT_FOUND})), "wrong-NAME Census row accepted"
     assert raises(acs, stub_census({2025: json.dumps([["NAME"], ["Massachusetts"]]), 2026: NOT_FOUND}))
+    # Census key: sent on the request, never in evidence_url or any exception text
+    KEY = "k3y-SECRET-9f2"
+    os.environ["CENSUS_API_KEY"] = KEY
+    reqs = []
+    def spy(url):
+        reqs.append(url)
+        return stub_census({2025: OK, 2026: NOT_FOUND})(url)
+    p = probe(acs, fetch=spy)
+    assert reqs and all(u.endswith("&key=" + KEY) for u in reqs), reqs
+    assert KEY not in p.evidence_url and KEY not in repr(p), p
+    def leaky(url): raise OSError("connect failed for " + url)
+    def leaky404(url): raise NotFound(url)
+    import urllib.error
+    def leaky500(url): raise urllib.error.HTTPError(url, 500, "boom " + url, None, None)
+    for f in (leaky, leaky500, stub_census({2025: "<html>Missing Key " + KEY + "</html>", 2026: NOT_FOUND}), leaky404):
+        try:
+            probe(acs, fetch=f)
+            assert False, "no ProbeError"
+        except ProbeError as e:
+            chain, x = [], e
+            while x is not None:
+                chain.append(f"{x!r} {x}")
+                x = x.__cause__ or x.__context__
+            assert KEY not in " ".join(chain), chain
+    # a 200 that is not the data is an error, not a negative (what keyless Census returns)
+    html200 = "<html><title>Missing Key</title></html>"
+    assert raises(acs, stub_census({2025: html200, 2026: html200}))
+    assert raises(acs, stub_census({2026: html200, 2025: OK})), "newest vintage's non-JSON 200 was skipped"
+    # keyless: ProbeError up front, no request made
+    del os.environ["CENSUS_API_KEY"]
+    reqs.clear()
+    try:
+        probe(acs, fetch=spy)
+        assert False, "keyless probe did not raise"
+    except ProbeError as e:
+        assert "CENSUS_API_KEY" in str(e)
+    assert reqs == [], reqs
+    os.environ["CENSUS_API_KEY"] = KEY
 except AssertionError as e:
     print("FAIL", e)
     sys.exit(1)
