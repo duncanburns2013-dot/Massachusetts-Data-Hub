@@ -96,6 +96,44 @@ try:
     # unknown probe name raises
     import dataclasses
     assert raises(dataclasses.replace(acs, probe="nope"), stub_bea(""))
+    # Important 1: reworded heading / th-only rows are parse failures, not "stage one"
+    assert raises(doi, stub_doi(0)), "Final table with no carrier rows read as a result"
+    nofinal = "<h2>Rates</h2><table><tr><td>A</td><td>1%</td></tr></table>"
+    assert raises(doi, stub_bea(nofinal)), "no Final-headed table read as a result"
+    thonly = "<h2>Final Merged Market Rates</h2><table><tr><th>A</th><th>1%</th></tr></table>"
+    assert raises(doi, stub_bea(thonly))
+
+    # Important 2: the real urlopen_text maps 404 -> NotFound and nothing else
+    import urllib.request, urllib.error, io
+    from scripts.refresh import probes as P
+    real = urllib.request.urlopen
+    def http(code):
+        def fake(req, timeout=None): raise urllib.error.HTTPError(req.full_url, code, "x", None, io.BytesIO(b""))
+        return fake
+    try:
+        for code, want in ((404, NotFound), (403, urllib.error.HTTPError), (500, urllib.error.HTTPError)):
+            urllib.request.urlopen = http(code)
+            try:
+                P.urlopen_text("https://example.invalid/x")
+                assert False, f"{code} did not raise"
+            except NotFound:
+                assert want is NotFound, f"{code} mapped to NotFound"
+            except urllib.error.HTTPError:
+                assert want is not NotFound, f"{code} not mapped to NotFound"
+            # end to end through probe(): only 404 is survivable
+            if code != 404:
+                assert raises(acs, P.urlopen_text) and raises(doi, P.urlopen_text), f"{code} not ProbeError"
+    finally:
+        urllib.request.urlopen = real
+
+    # Important 3: remaining branches
+    def bea404(url): raise NotFound(url)
+    assert raises(bea, bea404), "BEA 404 reported a result"
+    def e403(url): raise urllib.error.HTTPError(url, 403, "forbidden", None, None)
+    assert raises(doi, e403), "DOI 403 reported a result"
+    wrong = json.dumps([["NAME", "B19113_001E", "B19013_001E", "state"], ["Alabama", "1", "2", "01"]])
+    assert raises(acs, stub_census({2025: wrong, 2026: NOT_FOUND})), "wrong-NAME Census row accepted"
+    assert raises(acs, stub_census({2025: json.dumps([["NAME"], ["Massachusetts"]]), 2026: NOT_FOUND}))
 except AssertionError as e:
     print("FAIL", e)
     sys.exit(1)

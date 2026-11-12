@@ -71,9 +71,11 @@ def _census_acs1(source, fetch):
         lambda y: f"https://api.census.gov/data/{y}/acs/acs1?get=NAME,B19113_001E,B19013_001E&for=state:25")
     try:
         head, row = json.loads(body)[:2]
-        assert row[head.index("NAME")] == "Massachusetts" and row[head.index("B19013_001E")]
+        name, income = row[head.index("NAME")], row[head.index("B19013_001E")]
     except Exception as e:
         raise ProbeError(f"{url}: unreadable Census response ({e!r})") from e
+    if name != "Massachusetts" or not income:
+        raise ProbeError(f"{url}: Census response is not Massachusetts income ({name!r}, {income!r})")
     return Probe(str(yr), True, url)
 
 
@@ -101,14 +103,16 @@ def _text(s):
     return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", s))).strip()
 
 
-def _final_table_carriers(page):
-    """Carrier rows in the table headed 'Final Merged Market Rates'; None if no tables.
+def _final_table_carriers(page, url):
+    """Carrier rows in the table headed 'Final Merged Market Rates'.
 
     Reads the table and its own heading/caption only, never the prose around it.
+    Raises ProbeError if there is no such table or it yields no carrier rows:
+    a reworded heading must not look like a pre-final page.
     """
     parts = re.split(r"(?i)<table\b", page)
     if len(parts) < 2:
-        return None
+        raise ProbeError(f"{url}: no tables on page, cannot count carriers")
     for before, tbl in zip(parts, parts[1:]):
         tbl = re.split(r"(?i)</table>", tbl)[0]
         heads = re.findall(r"(?is)<h[1-6]\b.*?</h[1-6]>", before)
@@ -121,17 +125,17 @@ def _final_table_carriers(page):
             first = _text(cells[0]) if cells else ""
             if first and not re.match(r"(?i)(grand\s+)?(total|average|overall|all\s+carriers)", first):
                 n += 1
+        if n == 0:
+            raise ProbeError(f"{url}: Final table found but no carrier rows parsed")
         return n
-    return 0
+    raise ProbeError(f"{url}: no table headed 'Final Merged Market Rates'")
 
 
 def _doi_rates(source, fetch):
     nxt = datetime.date.today().year + 1
     yr, url, page = _walk(fetch, range(nxt, nxt - WALK, -1),
                           lambda y: f"https://www.mass.gov/info-details/{y}-health-insurance-rates")
-    n = _final_table_carriers(page)
-    if n is None:
-        raise ProbeError(f"{url}: no tables on page, cannot count carriers")
+    n = _final_table_carriers(page, url)
     # register final_tell: eight carriers in the Final table; fewer is stage one
     return Probe(str(yr), n >= 8, url)
 

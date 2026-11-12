@@ -34,8 +34,8 @@
     "targets": ["healthcare-dashboard.html"],
     "multi_stage": true,
     "final_tell": "eight carriers in the Final Merged Market Rates table; fewer means the stage-one announcement",
-    "human_fetch": false,
-    "due": null,
+    "human_fetch": true,
+    "due": "2027-07-31",
     "apply": false
   }
 ]
