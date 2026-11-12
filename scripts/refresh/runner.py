@@ -10,9 +10,17 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from scripts.refresh.probes import ProbeError, probe, urlopen_text
+from scripts.refresh.claims import evaluate, load_claims
 from scripts.refresh.register import Source, load_sources
+from scripts.refresh.report import RunRecord, format_message, write_receipt
 
 REGISTER = Path(__file__).resolve().parents[2] / "data" / "sources.json"
+CLAIMS = Path(__file__).resolve().parents[2] / "data" / "claims.json"
+RECEIPT = Path(__file__).resolve().parents[2] / "data" / "refresh-receipt.json"
+
+# Figure ids a claim may name that are not sources (their numbers live inline in a page for now).
+# `known` for evaluate() is exactly: source ids | this. Anything else a claim names is a typo and raises.
+NON_SOURCE_FIGURES = frozenset({"ma_auto_expenditure", "us_auto_expenditure"})
 
 
 @dataclass
@@ -388,15 +396,54 @@ def pull_and_recheck(applied: Applied, move: Move, *, fetch=urlopen_text, root: 
     return _divergent(root, src.targets, applied.new)
 
 
+def run(sources: list[Source], claims, *, fetch=urlopen_text, apply_fn=apply, today: str | None = None) -> RunRecord:
+    """One complete run: survey, apply what we may, judge the claims. Writes nothing itself
+    (apply_fn does, for apply:true sources). Only plain strings are kept from any failure:
+    `str(e)` of the scrubbed FetchError, never the exception, never its chain."""
+    today = today or datetime.date.today().isoformat()
+    by_id = {s.id: s for s in sources}
+    result = survey(sources, fetch=fetch)
+    rec = RunRecord(run_date=today)
+    for m in result.moves:
+        if not by_id[m.source_id].apply:
+            rec.deferred.append(m)  # moved, plan says not this pass: report it, do not fail the gate
+            continue
+        try:
+            rec.applied.append(apply_fn(m))
+        except (FetchError, ValueError, OSError) as e:
+            rec.unresolved.append(Failure(m.source_id, f"{type(e).__name__}: {e}"))
+    for f in result.failures:
+        # cannot tell whether it moved: gate-failing for a source we would write, reported for one we would not
+        (rec.unresolved if by_id[f.source_id].apply else rec.probe_failures).append(f)
+    # a human_fetch source is never probed, so its due date is the only thing ageing it
+    rec.overdue = [k for k in result.skipped if k.due is None or k.due < today]
+
+    moved = {m.source_id for m in result.moves}
+    known = {s.id for s in sources} | NON_SOURCE_FIGURES
+    moved_claims = {c.id for c in claims if moved & set(c.figures)}
+    # No figure values are supplied yet (the auto numbers are inline chart arrays), so relation claims
+    # come back "suspect" every run. Keep a suspect only when a figure under it moved this run;
+    # otherwise it would be noise, and noise is what teaches the reader to ignore the flag.
+    rec.verdicts = [v for v in evaluate(claims, {}, moved=moved, known=known)
+                    if v.status == "broken" or (v.status == "suspect" and v.claim_id in moved_claims)]
+    return rec
+
+
 def main(argv=None, *, fetch=urlopen_text) -> int:
     ap = argparse.ArgumentParser(description="Survey publishers for newer editions.")
-    ap.add_argument("--dry-run", action="store_true", help="survey and print; write nothing")
+    ap.add_argument("--dry-run", action="store_true", help="survey and print; write nothing, send no receipt")
     ap.add_argument("--register", type=Path, default=REGISTER)
+    ap.add_argument("--claims", type=Path, default=CLAIMS)
+    ap.add_argument("--receipt", type=Path, default=RECEIPT)
     args = ap.parse_args(argv)
-    if not args.dry_run:
-        print("nothing to write yet: pass --dry-run", file=sys.stderr)
-        return 2
     sources = load_sources(args.register)
+    if not args.dry_run:
+        rec = run(sources, load_claims(args.claims), fetch=fetch)
+        write_receipt(args.receipt, rec)  # last: it records a COMPLETED run, which is what the gate trusts
+        msg = format_message(rec)
+        if msg:
+            print(msg)
+        return 0  # the verdict is the receipt + check-freshness.py, not this exit code
     result = survey(sources, fetch=fetch)
     moved = {m.source_id: m for m in result.moves}
     skipped = {k.source_id for k in result.skipped}

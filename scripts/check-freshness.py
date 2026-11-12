@@ -295,6 +295,74 @@ def check_register_rechecks() -> int:
     return len(due)
 
 
+REFRESH_RECEIPT = REPO / "data" / "refresh-receipt.json"
+REFRESH_SOURCES = REPO / "data" / "sources.json"
+RECEIPT_MAX_AGE = 8  # the loop runs weekly; one missed run plus a day of slack
+RECEIPT_LABEL = "data/refresh-receipt.json (last_run)"
+LOOP = "the refresh loop (scripts/refresh/runner.py, .github/workflows/refresh-loop.yml)"
+
+
+def check_refresh_receipt(receipt=REFRESH_RECEIPT, today=TODAY, sources=REFRESH_SOURCES):
+    """The refresh loop's backstop. Returns (rows, problems); problems are (label, detail).
+
+    THE DEAD-MAN'S SWITCH. The loop reports quiet runs by saying nothing, so silence only means
+    all-clear if the loop ran. If the receipt is missing or older than RECEIPT_MAX_AGE days the
+    loop has stopped, and silence looks identical to health -- the failure this exists to remove.
+
+    Also fails on: `unresolved` (a publisher moved and we could not fetch it) and `broken_claims`
+    (a registered sentence is false). `deferred` (apply:false, e.g. BEA) is reported by the loop
+    and deliberately does NOT fail here. A human_fetch source past its `due` date fails; that is
+    computed from the register now, not from the receipt, so it clears the day `due` is moved.
+    """
+    rows, problems = [], []
+    dead = "DEAD-MAN'S SWITCH: "
+    try:
+        r = json.loads(Path(receipt).read_text(encoding="utf-8"))
+        if not isinstance(r, dict) or not all(isinstance(r.get(k), list) for k in ("unresolved", "broken_claims")):
+            raise ValueError("not the receipt shape")
+        last = datetime.date.fromisoformat(r["last_run"])
+    except FileNotFoundError:
+        rows.append((RECEIPT_LABEL, "missing", RECEIPT_MAX_AGE, "MISSING"))
+        problems.append((RECEIPT_LABEL, dead + "receipt missing, so the loop has never completed a run "
+                                        "(or its receipt was deleted)"))
+        r = None
+    except (OSError, ValueError, TypeError, KeyError) as e:
+        rows.append((RECEIPT_LABEL, "unreadable", RECEIPT_MAX_AGE, "STALE"))
+        problems.append((RECEIPT_LABEL, dead + f"receipt unreadable ({type(e).__name__}: {e}); "
+                                        "cannot tell whether the loop ran"))
+        r = None
+    else:
+        age = (today - last).days
+        bad = age > RECEIPT_MAX_AGE or age < 0
+        rows.append((RECEIPT_LABEL, f"{age}d", RECEIPT_MAX_AGE, "STALE" if bad else "ok"))
+        if age < 0:
+            problems.append((RECEIPT_LABEL, dead + f"last_run {last} is in the future"))
+        elif bad:
+            problems.append((RECEIPT_LABEL, dead + f"last completed run {last}, {age} days ago; "
+                                            "the loop has stopped and silence is not all-clear"))
+        if r["unresolved"]:
+            problems.append((RECEIPT_LABEL, "UNRESOLVED: publisher moved and not fetched: "
+                                            + ", ".join(map(str, r["unresolved"]))))
+        if r["broken_claims"]:
+            problems.append((RECEIPT_LABEL, "BROKEN CLAIMS: a registered sentence is now false: "
+                                            + ", ".join(map(str, r["broken_claims"]))))
+    try:
+        srcs = json.loads(Path(sources).read_text(encoding="utf-8"))
+        for s in srcs:
+            if not s.get("human_fetch"):
+                continue
+            due = s.get("due")
+            if not due:
+                problems.append((s["id"], f"OVERDUE HUMAN FETCH: {s['id']} has no due date, so nothing ages it"))
+            elif datetime.date.fromisoformat(due) < today:
+                problems.append((s["id"], f"OVERDUE HUMAN FETCH: {s['id']} due {due}, "
+                                          f"{(today - datetime.date.fromisoformat(due)).days}d ago; "
+                                          "re-read it and move `due` in data/sources.json"))
+    except (OSError, ValueError, TypeError, KeyError) as e:
+        problems.append(("data/sources.json", f"cannot read the register ({type(e).__name__}: {e})"))
+    return rows, problems
+
+
 def main() -> int:
     rows, stale = [], []
 
@@ -333,6 +401,10 @@ def main() -> int:
         if bad:
             stale.append((rel, f"page says {d}, {age} days ago", max_age, why))
 
+    r_rows, r_problems = check_refresh_receipt()
+    rows.extend(r_rows)
+    stale.extend((label, detail, None, LOOP) for label, detail in r_problems)
+
     w = max(len(r[0]) for r in rows)
     print(f"{'source':<{w}}  {'age':>10}  {'limit':>6}  status")
     for name, age, lim, status in rows:
@@ -348,7 +420,8 @@ def main() -> int:
 
     print(f"\n{len(stale)} STALE:", file=sys.stderr)
     for rel, detail, max_age, why in stale:
-        print(f"  {rel}: {detail} (limit {max_age}d — {why})", file=sys.stderr)
+        limit = f"limit {max_age}d — " if max_age is not None else ""
+        print(f"  {rel}: {detail} ({limit}{why})", file=sys.stderr)
     print("\nA stale source means the site is publishing figures older than it "
           "implies.\n"
           "  a data/*.json file   re-run that feed's workflow.\n"

@@ -131,10 +131,7 @@ try:
             "api.census.gov": raises_conn, "bea.gov": lambda u: bea_page(2024)}))
     assert rc == 1 and "FAILED" in buf.getvalue() and "census_acs1_ma_income" in buf.getvalue()
 
-    # without --dry-run there is nothing to do yet: refuse rather than silently survey
-    with redirect_stdout(io.StringIO()):
-        rc = runner.main([], fetch=boom)
-    assert rc == 2
+    # (without --dry-run main now runs for real and writes the receipt: see test-refresh-report.py)
     # ---------------- Task 4: apply (ACS only; writes published files) ----------------
     import os
     import shutil
