@@ -207,12 +207,13 @@ STAMPS = [
     # read, and no feed in DATA above. They were green because they were
     # invisible, which is the same failure this file was written to stop.
     ("affordability-dashboard.html",
-     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 400,
+     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 35,
      "BEA RPP + BEA per-capita income via FRED + ACS 1-year + MIT Living Wage; "
-     "all annual, hand-maintained, no updater. STAMP IS PROVISIONAL: set to the "
-     "1 Aug 2026 sweep date because no evidence of a later check exists. Its ACS "
-     "1-Year 2024 looks a release behind (1-year 2025 lands each September), so "
-     "the first real reconciliation should check that before bumping the stamp"),
+     "all annual, hand-maintained, no updater. ACS moved to 1-year 2025 and was "
+     "verified against the Census API on 2026-11-12; the page carries a currency "
+     "block saying what else was not. 35d, not 400d, ON PURPOSE: BEA publishes "
+     "2025 RPP on 10 Dec 2026, which puts this page a release behind that day, and "
+     "a 400d limit would hide it until 2028. Widen to 400 once RPP 2025 is in"),
     ("mbta-3a-dashboard.html",
      r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 120,
      "EOHLC reissues the 3A compliance and capacity tables every few weeks, and "
