@@ -1,0 +1,50 @@
+[
+  {
+    "id": "ma_auto_cheaper",
+    "page": "healthcare-dashboard.html",
+    "text": "Why MA auto is cheaper despite high cost of living. The auto section's closing note still says MA auto is cheaper, which contradicts the page's own corrected headline (MA 2024 expenditure $1,504 vs $1,432 US).",
+    "anchor": "Why MA auto is cheaper despite high cost of living",
+    "figures": ["ma_auto_expenditure", "us_auto_expenditure"],
+    "relation": "ma_auto_expenditure < us_auto_expenditure"
+  },
+  {
+    "id": "ma_auto_above_national",
+    "page": "healthcare-dashboard.html",
+    "text": "MA auto costs more than the national average, not less: average expenditure per insured vehicle.",
+    "anchor": "MA auto costs more than the national average, not less",
+    "figures": ["ma_auto_expenditure", "us_auto_expenditure"],
+    "relation": "ma_auto_expenditure > us_auto_expenditure"
+  },
+  {
+    "id": "doi_2027_weighted_average",
+    "page": "healthcare-dashboard.html",
+    "text": "2027 final: 10.8% weighted average approved increase across the eight carriers (DOI decision 22 July 2026).",
+    "anchor": "2027 final: 10.8% weighted average",
+    "figures": ["doi_merged_market_rates"],
+    "relation": null
+  },
+  {
+    "id": "ma_price_level_above_us",
+    "page": "affordability-dashboard.html",
+    "text": "The state's price level is above a national 100 (rendered from BEA RPP: MA 105.8 for 2024).",
+    "anchor": "against a national 100",
+    "figures": ["bea_rpp_state"],
+    "relation": "bea_rpp_state > 100"
+  },
+  {
+    "id": "ma_median_household_income",
+    "page": "affordability-dashboard.html",
+    "text": "The dashed line is the state median household income (Census ACS 1-year).",
+    "anchor": "The dashed line is the state median household income.",
+    "figures": ["census_acs1_ma_income"],
+    "relation": null
+  },
+  {
+    "id": "ma_rpp_above_national",
+    "page": "tax-budget-dashboard.html",
+    "text": "BEA Regional Price Parity: MA is above the national average (105.8, 5.8% above, 2024).",
+    "anchor": "above national average (BEA",
+    "figures": ["bea_rpp_state"],
+    "relation": "bea_rpp_state > 100"
+  }
+]
