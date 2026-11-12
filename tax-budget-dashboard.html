@@ -487,7 +487,7 @@ footer a:hover{color:var(--gold)}
   <!-- ===== LIVE COST TRACKER (auto-updated) ===== -->
   <div class="data-card" style="border-left:4px solid var(--red);margin-bottom:26px">
     <h3>&#x1F4E1; Live Cost Tracker &#x2014; Boston vs. National (BLS CPI) <span style="font-size:0.75rem;font-weight:400;color:var(--green)">&#x2713; Updated <span data-field="page-updated">Aug 2026</span></span></h3>
-    <p style="font-size:0.78rem;color:var(--muted);margin-bottom:16px">Year-over-year inflation by category. Boston figures: May 2026 (BLS release June 10, 2026). National: April 2026 (BLS release May 12, 2026). EIA electricity: March 2026 (published May 21, 2026).</p>
+    <p style="font-size:0.78rem;color:var(--muted);margin-bottom:16px">Year-over-year inflation by category, Boston/NE against the national average, both for <span data-field="cpi-month">Sep 2026</span> and both from the same BLS pull. Electricity carries its own month, on its own chart.</p>
     <table class="data-table">
       <thead><tr><th>Category</th><th>Boston / NE</th><th>US Average</th><th>MA Premium</th><th>Source</th></tr></thead>
       <tbody>
@@ -1972,8 +1972,8 @@ function initCharts(tab) {
         data: {
           labels: ['All Items', 'Shelter', 'Food', 'Energy', 'Medical'],
           datasets: [
-            { label: 'Boston / NE (May 2026)', data: [3.2, 2.2, 2.5, 5.6, 3.2], backgroundColor: '#A81733', borderRadius: 6 },
-            { label: 'US Average', data: [2.7, 3.6, 2.3, 3.2, 3.0], backgroundColor: '#d4d0ca', borderRadius: 6 }
+            { label: 'Boston / NE (Sep 2026)', data: [4.2,4.1,2.3,23.1,1.0], backgroundColor: '#A81733', borderRadius: 6 },
+            { label: 'US Average', data: [3.7,3.2,2.5,20.4,1.5], backgroundColor: '#d4d0ca', borderRadius: 6 }
           ]
         },
         options: {

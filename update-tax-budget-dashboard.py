@@ -66,6 +66,12 @@ HTML_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tax-budget
 MONTHS = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun",
           "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
+# The five bars of chartCPIlive, and the two rows of the Live Cost Tracker,
+# from one list so a category can never appear in one and not the other.
+# Regional CPI is published unadjusted only (CUUR); national keeps CUSR.
+CPI_CATS = [("All Items", "SA0"), ("Shelter", "SAH1"), ("Food", "SAF1"),
+            ("Energy", "SA0E"), ("Medical", "SAM")]
+
 # chartElectricity's bars, in the order the chart draws them. The chart's own labels
 # array is read at runtime and checked against this map, so a reordered chart fails
 # loudly instead of silently mislabelling states.
@@ -190,6 +196,33 @@ def yoy(data):
             return (round((val - prior) / prior * 100, 1),
                     f"{MONTHS[int(per.replace('M', ''))]} {y}")
     return None, None
+
+
+def yoy_at(data, y, per):
+    """Year-over-year % for one named month. None if either end is missing."""
+    cur = next((v for yy, pp, v in data if yy == y and pp == per), None)
+    prior = next((v for yy, pp, v in data if yy == y - 1 and pp == per), None)
+    if cur is None or prior is None:
+        return None
+    return round((cur - prior) / prior * 100, 1)
+
+
+def common_month(serieses):
+    """Newest (year, period) that EVERY series can compute a YoY for.
+
+    A chart of five categories beside each other has to read one month, or the
+    bars are not comparable and the label on it is a lie about at least one of
+    them. Picking each series' own newest month independently would do exactly
+    that the first time one category lags a release.
+    """
+    months = None
+    for data in serieses:
+        have = {(y, p) for y, p, _ in data
+                if any(yy == y - 1 and pp == p for yy, pp, _ in data)}
+        months = have if months is None else (months & have)
+        if not months:
+            return None
+    return max(months) if months else None
 
 
 # ── Anchored substitution ───────────────────────────────────────────────────
@@ -583,12 +616,48 @@ def main():
     # ways at this reading rather than argued: US All Items is 3.7% on either
     # basis and Shelter 3.2% on either, identical at the precision shown. The
     # US series stay on CUSR because they work and the answer is the same.
-    cpi = bls_cpi(["CUSR0000SA0", "CUUR0100SA0", "CUSR0000SAH1", "CUUR0100SAH1"],
-                  now.year - 1, now.year)
+    # Five categories for both regions. The two tracker rows take All Items and
+    # Shelter from this same pull, so the table and chartCPIlive beside it
+    # cannot disagree -- which they did: the chart was hand-typed and stamped
+    # May 2026, and it had Boston energy at 5.6% against an actual 23.1%.
+    ne_ids = ["CUUR0100" + c for _, c in CPI_CATS]
+    us_ids = ["CUSR0000" + c for _, c in CPI_CATS]
+    cpi = bls_cpi(ne_ids + us_ids, now.year - 1, now.year)
     us_cpi, us_lbl = yoy(cpi.get("CUSR0000SA0", []))
     ne_cpi, ne_lbl = yoy(cpi.get("CUUR0100SA0", []))
     us_sh, _ = yoy(cpi.get("CUSR0000SAH1", []))
     ne_sh, _ = yoy(cpi.get("CUUR0100SAH1", []))
+
+    # chartCPIlive: one month across all ten series, or the bars are not
+    # comparable with each other.
+    month = common_month([cpi.get(i, []) for i in ne_ids + us_ids])
+    if not month:
+        fail("chartCPIlive: no month every CPI category can compute -- NOT updated")
+    else:
+        y, per = month
+        lbl = f"{MONTHS[int(per.replace('M', ''))]} {y}"
+        ne_vals = [yoy_at(cpi.get(i, []), y, per) for i in ne_ids]
+        us_vals = [yoy_at(cpi.get(i, []), y, per) for i in us_ids]
+        if None in ne_vals or None in us_vals:
+            fail(f"chartCPIlive: a category is missing at {lbl} -- NOT updated")
+        else:
+            print(f"  chartCPIlive ({lbl}): NE {ne_vals} / US {us_vals}")
+            html = set_chart_array(
+                html, "chartCPIlive", r"(label: 'Boston / NE \([^)]*\)', data: \[)[^\]]*(\])",
+                ",".join(f"{v}" for v in ne_vals), "chartCPIlive Boston/NE series")
+            html = set_chart_array(
+                html, "chartCPIlive", r"(label: 'US Average', data: \[)[^\]]*(\])",
+                ",".join(f"{v}" for v in us_vals), "chartCPIlive US series")
+            html, _ = sub_once(html, r"(label: 'Boston / NE \()[^)]*(\)', data: \[)",
+                               lambda m: f"{m.group(1)}{lbl}{m.group(2)}",
+                               "chartCPIlive month label")
+            # The note under the chart used to hand-state three vintages --
+            # "Boston figures: May 2026 ... National: April 2026 ... EIA
+            # electricity: March 2026" -- none of which moved when the data
+            # did, and all three of which were wrong. One anchor now, and the
+            # electricity month is left to the electricity chart, which
+            # already stamps it in its title and its source line.
+            html, _ = set_field_all(html, "cpi-month", lbl, "CPI month on the category note")
     print(f"  US CPI:{us_cpi}% NE CPI:{ne_cpi}% US Shelter:{us_sh}% NE Shelter:{ne_sh}%")
 
     def tracker_row(html, label, ne_val, us_val, ne_month, what):
