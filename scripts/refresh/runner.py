@@ -25,24 +25,31 @@ class Failure:
     error: str
 
 
-class Survey(list):
-    """The Moves found, plus `.failures` (publishers that could not be asked) and
-    `.skipped` (human_fetch ids, never probed).
+@dataclass
+class Skipped:
+    """A human_fetch source the survey did not probe; Task 6 ages it by `due`."""
+    source_id: str
+    due: str | None
+    held_period: str
 
-    A list subclass so `survey(...) == []` still reads as "no move". That alone is
-    not "all clear": callers must also check `.failures`.
+
+@dataclass
+class SurveyResult:
+    """Deliberately not a container: no len, bool, iter or index.
+
+    A survey with zero moves and a failure is not "all clear", so every consumer
+    must write `.moves`, `.failures` or `.skipped` on purpose.
     """
-    def __init__(self):
-        super().__init__()
-        self.failures: list[Failure] = []
-        self.skipped: list[str] = []
+    moves: list[Move]
+    failures: list[Failure]
+    skipped: list[Skipped]
 
 
-def survey(sources: list[Source], *, fetch=urlopen_text) -> Survey:
-    out = Survey()
+def survey(sources: list[Source], *, fetch=urlopen_text) -> SurveyResult:
+    out = SurveyResult([], [], [])
     for s in sources:
         if s.human_fetch:  # publisher blocks automated clients; ages by `due` alone
-            out.skipped.append(s.id)
+            out.skipped.append(Skipped(s.id, s.due, s.held_period))
             continue
         try:
             p = probe(s, fetch=fetch)
@@ -50,7 +57,7 @@ def survey(sources: list[Source], *, fetch=urlopen_text) -> Survey:
             out.failures.append(Failure(s.id, str(e)))
             continue
         if p.newest_period != s.held_period:
-            out.append(Move(s.id, s.held_period, p.newest_period, p.is_final, p.evidence_url))
+            out.moves.append(Move(s.id, s.held_period, p.newest_period, p.is_final, p.evidence_url))
     return out
 
 
@@ -64,10 +71,11 @@ def main(argv=None, *, fetch=urlopen_text) -> int:
         return 2
     sources = load_sources(args.register)
     result = survey(sources, fetch=fetch)
-    moved = {m.source_id: m for m in result}
+    moved = {m.source_id: m for m in result.moves}
+    skipped = {k.source_id for k in result.skipped}
     failed = {f.source_id: f for f in result.failures}
     for s in sources:
-        if s.id in result.skipped:
+        if s.id in skipped:
             due = f", due {s.due}" if s.due else ""
             print(f"{s.id}: skipped, fetched by hand{due} (holds {s.held_period})")
         elif s.id in failed:

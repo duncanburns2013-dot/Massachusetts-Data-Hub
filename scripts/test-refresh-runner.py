@@ -61,46 +61,61 @@ try:
     acs_held_2025 = dataclasses.replace(acs, held_period="2025")
     doi_held_2026 = dataclasses.replace(doi, held_period="2026", human_fetch=False)
 
-    moves = survey([acs_held_2024], fetch=stub_census({2025: OK}))
+    bea_held_2024 = dataclasses.replace(bea, held_period="2024")
+    r = survey([acs_held_2024], fetch=stub_census({2025: OK}))
+    moves = r.moves
     assert len(moves) == 1 and moves[0].newest == "2025", moves
     assert moves[0] == Move("census_acs1_ma_income", "2024", "2025", True, moves[0].evidence_url)
     assert "/2025/" in moves[0].evidence_url
-    assert moves.failures == []
+    assert r.failures == [] and r.skipped == []
 
     # held == newest is silence, not a move
-    moves = survey([acs_held_2025], fetch=stub_census({2025: OK}))
-    assert moves == [] and moves.failures == [], moves
+    r = survey([acs_held_2025], fetch=stub_census({2025: OK}))
+    assert r.moves == [] and r.failures == [], r
 
     # stage-one move is reported, marked not-final
-    moves = survey([doi_held_2026], fetch=stub_doi(carriers=7))
+    moves = survey([doi_held_2026], fetch=stub_doi(carriers=7)).moves
     assert len(moves) == 1 and moves[0].is_final is False and moves[0].newest == "2027", moves
 
     # decision 1: human_fetch sources are never probed
     def boom(url):
         raise AssertionError(f"probed a human_fetch source: {url}")
     assert doi.human_fetch
-    moves = survey([doi], fetch=boom)
-    assert moves == [] and moves.failures == [], (moves, moves.failures)
+    r = survey([doi], fetch=boom)
+    assert r.moves == [] and r.failures == [], r
+    assert [(k.source_id, k.due, k.held_period) for k in r.skipped] ==         [("doi_merged_market_rates", "2027-07-31", "2027")], r.skipped
+    # the result is not a container: no silent "all clear" via truthiness or iteration
+    for bad in (lambda: len(r), lambda: bool(r) and iter(r), lambda: r[0]):
+        try:
+            bad()
+        except TypeError:
+            pass
+        else:
+            raise AssertionError("SurveyResult behaves like a container")
 
     # decision 2: one ProbeError does not blind the survey; it is recorded
     fetch = router(**{"api.census.gov": raises_conn, "bea.gov": lambda u: bea_page(2026)})
-    moves = survey([acs_held_2024, bea, doi], fetch=fetch)
+    r = survey([acs_held_2024, bea_held_2024, doi], fetch=fetch)
+    moves = r.moves
     assert [m.source_id for m in moves] == ["bea_rpp_state"], moves
     assert moves[0].held == "2024" and moves[0].newest == "2026"
-    assert len(moves.failures) == 1 and moves.failures[0].source_id == "census_acs1_ma_income"
-    assert "unreachable" in moves.failures[0].error
+    assert len(r.failures) == 1 and r.failures[0].source_id == "census_acs1_ma_income"
+    assert "unreachable" in r.failures[0].error
 
     # order: a failure first, a move after, both survive
-    moves = survey([bea, acs_held_2024], fetch=router(**{
+    r = survey([bea_held_2024, acs_held_2024], fetch=router(**{
         "bea.gov": lambda u: bea_page(2024), "api.census.gov": stub_census({2025: OK})}))
-    assert [m.source_id for m in moves] == ["census_acs1_ma_income"] and moves.failures == []
+    assert [m.source_id for m in r.moves] == ["census_acs1_ma_income"] and r.failures == []
 
     # main --dry-run prints a line per source, writes nothing, exit 0 when clean
-    reg = REPO / "data" / "sources.json"
+    import tempfile
+    reg = Path(tempfile.mkdtemp()) / "sources.json"
+    reg.write_text(json.dumps([
+        {**dataclasses.asdict(s)} for s in (acs_held_2025, bea_held_2024, doi)]), encoding="utf-8")
     before = reg.read_bytes()
     buf = io.StringIO()
     with redirect_stdout(buf):
-        rc = runner.main(["--dry-run"], fetch=router(**{
+        rc = runner.main(["--dry-run", "--register", str(reg)], fetch=router(**{
             "api.census.gov": stub_census({2025: OK}), "bea.gov": lambda u: bea_page(2024)}))
     out = buf.getvalue()
     assert rc == 0, (rc, out)
@@ -111,7 +126,7 @@ try:
     # failures show in output and make the exit code nonzero
     buf = io.StringIO()
     with redirect_stdout(buf):
-        rc = runner.main(["--dry-run"], fetch=router(**{
+        rc = runner.main(["--dry-run", "--register", str(reg)], fetch=router(**{
             "api.census.gov": raises_conn, "bea.gov": lambda u: bea_page(2024)}))
     assert rc == 1 and "FAILED" in buf.getvalue() and "census_acs1_ma_income" in buf.getvalue()
 
