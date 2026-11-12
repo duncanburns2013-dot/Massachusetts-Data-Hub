@@ -108,10 +108,14 @@ def _bea_rpp(source, fetch):
     url = "https://www.bea.gov/data/prices-inflation/regional-price-parities-state-and-metro-area"
     text = html.unescape(re.sub(r"<[^>]+>", " ", _get_required(fetch, url)))
     # ponytail: keyed on the page's "highest RPPs in YYYY" sentence; raises if BEA rewords it
-    m = re.search(r"highest\s+RPPs?\s+in\s+(20\d\d)", text, re.I)
-    if not m:
+    years = re.findall(r"highest\s+RPPs?\s+in\s+(20\d\d)", text, re.I)
+    if not years:
         raise ProbeError(f"{url}: no 'highest RPPs in <year>' sentence found")
-    return Probe(m.group(1), True, url)
+    best = max(years)
+    # prose can mention an earlier year first; a result older than what we already hold is a misread
+    if source.held_period.isdigit() and int(best) < int(source.held_period):
+        raise ProbeError(f"{url}: newest 'highest RPPs in' year is {best}, older than the held {source.held_period}")
+    return Probe(best, True, url)
 
 
 def _get_required(fetch, url):

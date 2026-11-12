@@ -200,7 +200,7 @@ try:
     # 0. a no-op apply is a genuine no-op: same bytes, nothing written, nothing divergent
     root = make_root()
     before = snap(root)
-    a = apply(dataclasses.replace(acs_move, held="2025"), fetch=stub_census_full(), root=root, today=TODAY)
+    a = apply(acs_move, fetch=stub_census_full(), root=root, today=TODAY)
     assert isinstance(a, Applied) and a.files_written == [] and a.divergences == [], a
     assert snap(root) == before
     assert a.new["household"] == 106539.0 and a.new["vintage"] == 2025 and a.old == a.new
@@ -342,7 +342,7 @@ try:
     t = (root / TARGETS[1]).read_bytes().decode("utf-8")
     assert t.count('"value": 106539,') == 1
     (root / TARGETS[1]).write_bytes(t.replace('"value": 106539,', '"value": 104828,').encode("utf-8"))
-    a = apply(dataclasses.replace(acs_move, held="2025"), fetch=stub_census_full(), root=root, today=TODAY)
+    a = apply(acs_move, fetch=stub_census_full(), root=root, today=TODAY)
     assert a.files_written == [TARGETS[1]] and a.divergences == [], a
     # ... and a target that still disagrees after the write is REPORTED, not hidden
     real_write = runner._write_text
@@ -365,10 +365,10 @@ try:
     assert json.loads((root / TARGETS[2]).read_text(encoding="utf-8"))["income"]["vintage"] == 2024
     # (a) detected: a dry run writes nothing but reports the disagreeing target
     pre = snap(root)
-    a = apply(dataclasses.replace(acs_move, held="2025"), fetch=stub_census_full(), root=root, today=TODAY, dry=True)
+    a = apply(acs_move, fetch=stub_census_full(), root=root, today=TODAY, dry=True)
     assert a.divergences == [TARGETS[2]] and a.files_written == [] and snap(root) == pre, a
     # (b) corrected: only the stale feed is written, and all three now agree
-    a = apply(dataclasses.replace(acs_move, held="2025"), fetch=stub_census_full(), root=root, today=TODAY)
+    a = apply(acs_move, fetch=stub_census_full(), root=root, today=TODAY)
     assert a.files_written == [TARGETS[2]] and a.divergences == [], a
     assert snap(root)[TARGETS[0]] == pre[TARGETS[0]] and snap(root)[TARGETS[1]] == pre[TARGETS[1]]
     feed = json.loads((root / TARGETS[2]).read_text(encoding="utf-8"))["income"]
@@ -387,7 +387,7 @@ try:
     root = make_root()
     f2 = root / TARGETS[2]
     f2.write_bytes(f2.read_bytes().replace(b"Census ACS 1-Year 2025", b"Census ACS 1-Year 2024"))
-    a = apply(dataclasses.replace(acs_move, held="2025"), fetch=stub_census_full(), root=root, today=TODAY, dry=True)
+    a = apply(acs_move, fetch=stub_census_full(), root=root, today=TODAY, dry=True)
     assert a.divergences == [TARGETS[2]], a.divergences
 
     # 6. a write that fails midway restores the files already written
@@ -413,7 +413,7 @@ try:
     root = make_root()
     gitlog = []
     ok_git = lambda args, cwd: gitlog.append((args, cwd))
-    a = apply(dataclasses.replace(acs_move, held="2025"), fetch=stub_census_full(), root=root, today=TODAY)
+    a = apply(acs_move, fetch=stub_census_full(), root=root, today=TODAY)
     def set_held(p):
         regs = json.loads((root / "data" / "sources.json").read_text(encoding="utf-8"))
         for e in regs:
@@ -446,7 +446,7 @@ try:
     from scripts.refresh.runner import apply_and_recheck
     seen = []
     root = stale_root()
-    a = apply(dataclasses.replace(acs_move, held="2025"), fetch=stub_census_full(), root=root, today=TODAY)
+    a = apply(acs_move, fetch=stub_census_full(), root=root, today=TODAY)
     assert a.files_written
     good = lambda ap, mv: seen.append((ap, mv)) or []
     assert apply_and_recheck(acs_move, apply_fn=lambda m: a, recheck=good, git=ok_git, root=root) is a
@@ -520,6 +520,48 @@ try:
     apply_and_recheck(acs_move, apply_fn=lambda m: quiet, recheck=lambda *x: 1 / 0, git=ok_git, root=root, today="2026-11-13")
     assert regp.read_bytes() == after
 
+    # 10. review F1/F4/F7: refuse backward, equal and provisional moves; record unexpected errors
+    root = stale_root()
+    before = snap(root)
+    def never(url): raise AssertionError("fetched for a move that must be refused")
+    for bad, exc in ((dataclasses.replace(acs_move, held="2027", newest="2025"), FetchError),
+                     (dataclasses.replace(acs_move, held="2025", newest="2025"), FetchError),
+                     (dataclasses.replace(acs_move, held="2024", newest="2026-27"), ValueError),
+                     (dataclasses.replace(acs_move, held="FY25", newest="2026"), ValueError),
+                     (dataclasses.replace(acs_move, is_final=False), ValueError)):
+        try:
+            apply(bad, fetch=never, root=root, today=TODAY)
+            assert False, f"accepted {bad}"
+        except exc as e:
+            assert "2025" in str(e) or "2026" in str(e) or "final" in str(e), e
+        assert snap(root) == before
+    # run(): a stage-one move on an apply:true source is deferred, never handed to apply
+    from scripts.refresh.runner import SurveyResult, Failure as _F
+    real_survey = runner.survey
+    s_acs = dataclasses.replace(acs, held_period="2024", apply=True)
+    stage1 = dataclasses.replace(acs_move, is_final=False)
+    runner.survey = lambda srcs, fetch=None: SurveyResult([stage1], [], [])
+    try:
+        rec = runner.run([s_acs], [], apply_fn=lambda m: 1 / 0, today=TODAY)
+        assert [m.source_id for m in rec.deferred] == [s_acs.id] and not rec.unresolved and not rec.applied
+        # an unexpected exception is recorded (text only, key scrubbed), the run carries on
+        runner.survey = lambda srcs, fetch=None: SurveyResult([acs_move], [], [])
+        os.environ["CENSUS_API_KEY"] = "SECRET123"
+        def surprise(m): raise TypeError("float() argument must be a string, got NoneType SECRET123")
+        rec = runner.run([s_acs], [], apply_fn=surprise, today=TODAY)
+        assert len(rec.unresolved) == 1 and rec.unresolved[0].source_id == s_acs.id
+        assert "TypeError" in rec.unresolved[0].error and "SECRET123" not in rec.unresolved[0].error
+        assert all(type(v) in (str, int, float, bool, type(None)) for v in vars(rec.unresolved[0]).values())
+        # but Ctrl-C and SystemExit are not swallowed
+        def interrupt(m): raise KeyboardInterrupt
+        try:
+            runner.run([s_acs], [], apply_fn=interrupt, today=TODAY)
+            assert False
+        except KeyboardInterrupt:
+            pass
+    finally:
+        runner.survey = real_survey
+        os.environ["CENSUS_API_KEY"] = "test-key"
 except AssertionError as e:
     print("FAIL", e)
     sys.exit(1)

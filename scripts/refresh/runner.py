@@ -337,8 +337,15 @@ def apply(move: Move, *, fetch=urlopen_text, dry=False, root: Path = ROOT, today
     unknown = [t for t in src.targets if t not in _KINDS]
     if unknown:
         raise ValueError(f"{move.source_id}: no writer for target(s) {unknown}")
-    if not move.newest.isdigit():
-        raise ValueError(f"{move.source_id}: newest period {move.newest!r} is not a year")
+    if not (move.newest.isdigit() and move.held.isdigit()):
+        # a period that is not a plain year cannot be ordered, so "newer" cannot be proven: refuse
+        raise ValueError(f"{move.source_id}: periods {move.held!r} -> {move.newest!r} are not both years")
+    if int(move.newest) <= int(move.held):
+        # here, not in survey, so every caller is covered: a wrong held_period must never
+        # make the loop fetch an OLDER edition, publish it, and then report "no move" forever
+        raise FetchError(f"{move.source_id}: refusing a move that is not forward ({move.held} -> {move.newest})")
+    if not move.is_final:
+        raise ValueError(f"{move.source_id}: {move.newest} is not the final edition; provisional figures are never published")
     key = os.environ.get("CENSUS_API_KEY")
     if not key:
         raise FetchError("CENSUS_API_KEY is not set: the Census API refuses keyless requests")
@@ -462,13 +469,19 @@ def run(sources: list[Source], claims, *, fetch=urlopen_text, apply_fn=apply, to
     result = survey(sources, fetch=fetch)
     rec = RunRecord(run_date=today, claims=claims)
     for m in result.moves:
-        if not by_id[m.source_id].apply:
-            rec.deferred.append(m)  # moved, plan says not this pass: report it, do not fail the gate
+        if not by_id[m.source_id].apply or not m.is_final:
+            # moved but not ours to write this pass (plan, or only a stage-one edition): report it, do not fail the gate
+            rec.deferred.append(m)
             continue
         try:
             rec.applied.append(apply_fn(m))
-        except (FetchError, ValueError, OSError, Conflict) as e:
-            rec.unresolved.append(Failure(m.source_id, f"{type(e).__name__}: {e}"))
+        except Exception as e:  # not BaseException: Ctrl-C and SystemExit still escape
+            # Anything unexpected (a null cell reaching float(), a missing key) is recorded, so the run
+            # still writes its receipt. Only text is kept, never the exception or its chain, and the
+            # API key is scrubbed from it as FetchError already does.
+            msg = f"{type(e).__name__}: {e}"
+            key = os.environ.get("CENSUS_API_KEY")
+            rec.unresolved.append(Failure(m.source_id, msg.replace(key, "***") if key else msg))
     for f in result.failures:
         # cannot tell whether it moved: gate-failing for a source we would write, reported for one we would not
         (rec.unresolved if by_id[f.source_id].apply else rec.probe_failures).append(f)

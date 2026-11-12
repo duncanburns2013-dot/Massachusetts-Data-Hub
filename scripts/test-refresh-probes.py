@@ -94,6 +94,10 @@ try:
     p = probe(bea, fetch=stub_bea(page))
     assert p.newest_period == "2024" and p.is_final is True
     assert raises(bea, stub_bea("<p>redesigned page</p>"))
+    # F5: prose may name an earlier year first; take the newest, and refuse one older than held
+    mixed = "<p>In 2022 the highest RPPs in 2022 were X. Later: highest RPPs in 2024 were Y</p>"
+    assert probe(bea, fetch=stub_bea(mixed)).newest_period == "2024"
+    assert raises(bea, stub_bea("<p>the highest RPPs in 2022 were X</p>")), "year older than held accepted"
 
     # unknown probe name raises
     import dataclasses
