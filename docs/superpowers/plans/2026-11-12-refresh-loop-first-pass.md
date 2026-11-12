@@ -296,7 +296,7 @@ git commit -m "refresh: fetch, write and reconcile ACS figures"
 
 ```python
 # the worked example from the spec: this claim was live and inverted
-c = Claim(id="ma_auto_cheaper", relation="ma_auto_expenditure < us_auto_expenditure", ...)
+c = Claim(id="ma_auto_expenditure_above_note", relation="ma_auto_expenditure < us_auto_expenditure", ...)
 v = evaluate([c], {"ma_auto_expenditure": 1326.46, "us_auto_expenditure": 1281.61})[0]
 assert v.status == "broken"      # MA is ABOVE; the claim as written is false
 v = evaluate([c], {"ma_auto_expenditure": 1200.0, "us_auto_expenditure": 1281.61})[0]
