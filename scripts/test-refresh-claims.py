@@ -7,10 +7,6 @@ from scripts.refresh.claims import Claim, UnknownFigure, evaluate, load_claims
 from scripts.refresh.register import load_sources
 
 
-# anchors written against main's text, not present in this worktree
-PENDING_MERGE = {"ma_auto_expenditure_above_note"}
-
-
 def raises(exc, fn):
     try:
         fn()
@@ -94,9 +90,6 @@ try:
         assert (REPO / x.page).exists(), f"{x.id} -> missing page {x.page}"
         assert x.text.strip(), f"{x.id} has no text"
         page = (REPO / x.page).read_text(encoding="utf-8")
-        if x.id in PENDING_MERGE:  # written against main (22d23af); this branch still has the old text
-            print(f"NOTE: anchor for {x.id} not checked locally; confirm after merge")
-            continue
         assert x.anchor in page, f"{x.id}: anchor not found on {x.page}"
     # the page now says expenditure is ABOVE national: holds on 2023 and 2024 pairs
     shipped = {x.id: x for x in claims}["ma_auto_expenditure_above_note"]
