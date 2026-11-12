@@ -1,0 +1,41 @@
+[
+  {
+    "id": "census_acs1_ma_income",
+    "publisher": "Census ACS 1-year",
+    "probe": "census_acs1",
+    "held_period": "2025",
+    "held_retrieved": "2026-11-12",
+    "targets": ["affordability-dashboard.html", "data/burden-constants.json"],
+    "multi_stage": false,
+    "final_tell": null,
+    "human_fetch": false,
+    "due": null,
+    "apply": true
+  },
+  {
+    "id": "bea_rpp_state",
+    "publisher": "BEA Regional Price Parities",
+    "probe": "bea_rpp",
+    "held_period": "2024",
+    "held_retrieved": "2026-11-12",
+    "targets": ["affordability-dashboard.html", "tax-budget-dashboard.html"],
+    "multi_stage": false,
+    "final_tell": null,
+    "human_fetch": false,
+    "due": null,
+    "apply": false
+  },
+  {
+    "id": "doi_merged_market_rates",
+    "publisher": "MA DOI",
+    "probe": "doi_rates",
+    "held_period": "2027",
+    "held_retrieved": "2026-11-12",
+    "targets": ["healthcare-dashboard.html"],
+    "multi_stage": true,
+    "final_tell": "eight carriers in the Final Merged Market Rates table; fewer means the stage-one announcement",
+    "human_fetch": false,
+    "due": null,
+    "apply": false
+  }
+]
