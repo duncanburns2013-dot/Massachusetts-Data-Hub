@@ -76,7 +76,12 @@ def evaluate(claims: list[Claim], figures: dict[str, float],
     needs a value it was not handed (known, no value) is "suspect": we cannot check it, and
     we do not say it holds.
     """
+    if isinstance(moved, (str, bytes)):
+        raise TypeError("moved must be a collection of figure ids, not a bare string")
     exists = set(figures) | set(known or ())
+    stray = sorted(set(moved) - exists)
+    if stray:
+        raise UnknownFigure(f"moved names unregistered figure(s): {', '.join(stray)}")
     out = []
     for c in claims:
         parsed = _parse(c) if c.relation is not None else None

@@ -1,11 +1,11 @@
 [
   {
-    "id": "ma_auto_cheaper",
+    "id": "ma_auto_expenditure_above_note",
     "page": "healthcare-dashboard.html",
-    "text": "Why MA auto is cheaper despite high cost of living. The auto section's closing note still says MA auto is cheaper, which contradicts the page's own corrected headline (MA 2024 expenditure $1,504 vs $1,432 US).",
-    "anchor": "Why MA auto is cheaper despite high cost of living",
+    "text": "Why MA premiums are competitive while MA expenditure is not: average expenditure still runs 5.0% above national (closing note of the auto section; text as on main, commit 22d23af).",
+    "anchor": "while MA expenditure is not",
     "figures": ["ma_auto_expenditure", "us_auto_expenditure"],
-    "relation": "ma_auto_expenditure < us_auto_expenditure"
+    "relation": "ma_auto_expenditure > us_auto_expenditure"
   },
   {
     "id": "ma_auto_above_national",
