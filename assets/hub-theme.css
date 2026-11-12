@@ -148,3 +148,35 @@ html .hero h1,html .sec-t,html .tog{font-family:var(--font-display)!important}
 html .hs-v,html .cv,html .comp-iv{
   font-family:var(--font-mono)!important;font-variant-numeric:tabular-nums;
 }
+
+/* ============================================================================
+   FAQ block — seo.py renders this markup AND the FAQPage JSON-LD from one
+   table, so the schema cannot assert an answer the page does not show. That
+   mattered: Google retired the FAQ rich result on 2026-05-07 and deleted the
+   documentation a month later, so the only audience left is the AI answer
+   engines, and those read the rendered page, not the markup alone.
+
+   Self-contained width, because one anchor (immediately before </main>) has
+   to work on index, about and method alike, and only the latter two sit
+   inside .doc-in.
+   ========================================================================== */
+/* 84.5rem = 1352px, which is what every sibling section measures at a 1400
+   viewport: main is 1400 with 24px gutters. The first attempt used 68rem and
+   sat 264px narrower than the card above it, which read as a mistake rather
+   than a choice. box-sizing:border-box is already set on all three pages, so
+   this padding sits inside the width. */
+.faq{max-width:84.5rem;margin:3rem auto 1rem;padding:0 1.5rem;
+  box-sizing:border-box;text-align:left}
+.faq h2{font-family:var(--font-display);font-size:clamp(1.3rem,2.4vw,1.75rem);
+  color:var(--ink);margin:0 0 1.25rem}
+.faq-q{border:1px solid var(--border);border-radius:.5rem;background:var(--card);
+  margin:0 0 .6rem}
+.faq-q>summary{cursor:pointer;list-style:none;padding:.9rem 1.1rem;
+  font-weight:600;color:var(--ink);display:flex;gap:1rem;
+  justify-content:space-between;align-items:baseline}
+.faq-q>summary::-webkit-details-marker{display:none}
+.faq-q>summary::after{content:"+";color:var(--muted);flex:0 0 auto;
+  font-family:var(--font-mono)}
+.faq-q[open]>summary::after{content:"\2212"}
+.faq-q[open]>summary{border-bottom:1px solid var(--rule)}
+.faq-a{padding:.9rem 1.1rem;color:var(--slate);line-height:1.65}

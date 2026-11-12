@@ -629,26 +629,71 @@ footer::before{
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "AboutPage",
-  "@id": "https://massachusettsdatahub.com/about.html",
-  "url": "https://massachusettsdatahub.com/about.html",
-  "name": "About",
-  "description": "Who builds Massachusetts Data Hub, where every figure comes from, and the schedule each data feed refreshes on.",
-  "inLanguage": "en-US",
-  "isPartOf": {
-    "@id": "https://massachusettsdatahub.com/#website"
-  },
-  "mainEntity": {
-    "@type": "Person",
-    "@id": "https://massachusettsdatahub.com/about.html#duncan-burns",
-    "name": "Duncan Burns",
-    "url": "https://massachusettsdatahub.com/about.html",
-    "image": "https://massachusettsdatahub.com/assets/duncan-burns.jpg",
-    "sameAs": [
-      "https://valleypatriot.com/category/op-eds-editorials/duncan-burns/",
-      "https://github.com/duncanburns2013-dot"
-    ]
-  }
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "@id": "https://massachusettsdatahub.com/about.html",
+      "url": "https://massachusettsdatahub.com/about.html",
+      "name": "About",
+      "description": "Who builds Massachusetts Data Hub, where every figure comes from, and the schedule each data feed refreshes on.",
+      "inLanguage": "en-US",
+      "isPartOf": {
+        "@id": "https://massachusettsdatahub.com/#website"
+      },
+      "mainEntity": {
+        "@type": "Person",
+        "@id": "https://massachusettsdatahub.com/about.html#duncan-burns",
+        "name": "Duncan Burns",
+        "url": "https://massachusettsdatahub.com/about.html",
+        "image": "https://massachusettsdatahub.com/assets/duncan-burns.jpg",
+        "sameAs": [
+          "https://valleypatriot.com/category/op-eds-editorials/duncan-burns/",
+          "https://github.com/duncanburns2013-dot"
+        ]
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://massachusettsdatahub.com/about.html#faq",
+      "isPartOf": {
+        "@id": "https://massachusettsdatahub.com/#website"
+      },
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Who is behind Massachusetts Data Hub?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It is built and maintained by Duncan Burns, a U.S. Air Force veteran and UMass graduate. He is a licensed Massachusetts real estate agent and Notary Public, working as Operations Manager at a Greater Newburyport brokerage, and has written op-eds for The Valley Patriot since 2016, taking its Editor’s Choice Award that year. A North Shore native, he lives in the Merrimack Valley."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is this an official government site?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. It is an independent project. The figures are drawn from official government sources, but the site is not published by, affiliated with or endorsed by the Commonwealth of Massachusetts or any of its agencies."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can I check a figure for myself?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Every figure is listed on the Method page with the source it came from, that source’s own URL, and the date it was last verified or refreshed. The underlying JSON and the full revision history are public in the GitHub repository, so any number can be traced back to the file and the commit that set it."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between the dashboards and the videos?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The dashboards are data. The videos are labelled either parody or explainer, so nothing on them is mistaken for the record."
+          }
+        }
+      ]
+    }
+  ]
 }
 </script>
 </head>
@@ -911,6 +956,19 @@ footer::before{
        target="_blank" rel="noopener">GitHub repository</a>.</p>
 
   </div>
+<!-- faq:start -->
+<section class="faq rv" id="faq" aria-labelledby="faq-h">
+  <h2 id="faq-h">Questions</h2>
+  <details class="faq-q"><summary>Who is behind Massachusetts Data Hub?</summary>
+    <div class="faq-a">It is built and maintained by Duncan Burns, a U.S. Air Force veteran and UMass graduate. He is a licensed Massachusetts real estate agent and Notary Public, working as Operations Manager at a Greater Newburyport brokerage, and has written op-eds for The Valley Patriot since 2016, taking its Editor’s Choice Award that year. A North Shore native, he lives in the Merrimack Valley.</div></details>
+  <details class="faq-q"><summary>Is this an official government site?</summary>
+    <div class="faq-a">No. It is an independent project. The figures are drawn from official government sources, but the site is not published by, affiliated with or endorsed by the Commonwealth of Massachusetts or any of its agencies.</div></details>
+  <details class="faq-q"><summary>How can I check a figure for myself?</summary>
+    <div class="faq-a">Every figure is listed on the Method page with the source it came from, that source’s own URL, and the date it was last verified or refreshed. The underlying JSON and the full revision history are public in the GitHub repository, so any number can be traced back to the file and the commit that set it.</div></details>
+  <details class="faq-q"><summary>What is the difference between the dashboards and the videos?</summary>
+    <div class="faq-a">The dashboards are data. The videos are labelled either parody or explainer, so nothing on them is mistaken for the record.</div></details>
+</section>
+<!-- faq:end -->
 </main>
 <footer>
   <div class="share-bar">

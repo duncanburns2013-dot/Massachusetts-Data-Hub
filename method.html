@@ -830,31 +830,76 @@ footer::before{
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebPage",
-  "@id": "https://massachusettsdatahub.com/method.html",
-  "url": "https://massachusettsdatahub.com/method.html",
-  "name": "Method",
-  "description": "Every figure on Massachusetts Data Hub, with its source, its source URL and the date it was verified.",
-  "inLanguage": "en-US",
-  "isPartOf": {
-    "@id": "https://massachusettsdatahub.com/#website"
-  },
-  "about": {
-    "@id": "https://massachusettsdatahub.com/#website"
-  },
-  "author": {
-    "@id": "https://massachusettsdatahub.com/about.html#duncan-burns"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "@id": "https://massachusettsdatahub.com/#publisher",
-    "name": "Massachusetts Data Hub",
-    "url": "https://massachusettsdatahub.com/",
-    "founder": {
-      "@id": "https://massachusettsdatahub.com/about.html#duncan-burns"
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://massachusettsdatahub.com/method.html",
+      "url": "https://massachusettsdatahub.com/method.html",
+      "name": "Method",
+      "description": "Every figure on Massachusetts Data Hub, with its source, its source URL and the date it was verified.",
+      "inLanguage": "en-US",
+      "isPartOf": {
+        "@id": "https://massachusettsdatahub.com/#website"
+      },
+      "about": {
+        "@id": "https://massachusettsdatahub.com/#website"
+      },
+      "author": {
+        "@id": "https://massachusettsdatahub.com/about.html#duncan-burns"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://massachusettsdatahub.com/#publisher",
+        "name": "Massachusetts Data Hub",
+        "url": "https://massachusettsdatahub.com/",
+        "founder": {
+          "@id": "https://massachusettsdatahub.com/about.html#duncan-burns"
+        }
+      },
+      "dateModified": "2026-11-11"
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://massachusettsdatahub.com/method.html#faq",
+      "isPartOf": {
+        "@id": "https://massachusettsdatahub.com/#website"
+      },
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What do the labels verified, live, fixed and re-read mean?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Verified means checked by hand against the source. Live means refreshed by a feed, where the JSON is authoritative. Fixed means it cannot change: a recorded vote, a statute, a closed year. Re-read means there is no API, so a human re-reads the source by the date shown."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens when two official sources disagree?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Both are shown rather than averaged. Averaging two official figures produces a third number that no source publishes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is anything on the site estimated or modelled?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nothing is modelled, estimated or smoothed unless the dashboard says so in plain language and names the method."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I trace a figure back to its source?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Find it in the section for its subject on this page. Each entry names the figure, its source, that source’s URL where one exists, and the date it was verified or last refreshed, along with the script that maintains it where one does."
+          }
+        }
+      ]
     }
-  },
-  "dateModified": "2026-11-11"
+  ]
 }
 </script>
 </head>
@@ -1150,6 +1195,19 @@ footer::before{
 <ul class="mk-list"><li>https://duncanburns2013-dot.github.io/Immigration/</li><li>https://duncanburns2013-dot.github.io/Housing-Market-Data/housing-market-dashboard.html</li><li>https://duncanburns2013-dot.github.io/Housing-Market-Data/nh-housing-market-dashboard.html</li><li>https://duncanburns2013-dot.github.io/Housing-Market-Data/haverhill-market-report.html</li><li>https://duncanburns2013-dot.github.io/Master-Massachusetts-Affordability-Employment-/dashboard.html</li><li>https://duncanburns2013-dot.github.io/Merrimac-Valley-Education-/</li><li>https://duncanburns2013-dot.github.io/Merrimac-Valley-Education-/boston-dashboard.html</li></ul>
     </div>
   </div>
+<!-- faq:start -->
+<section class="faq" id="faq" aria-labelledby="faq-h">
+  <h2 id="faq-h">Questions</h2>
+  <details class="faq-q"><summary>What do the labels verified, live, fixed and re-read mean?</summary>
+    <div class="faq-a">Verified means checked by hand against the source. Live means refreshed by a feed, where the JSON is authoritative. Fixed means it cannot change: a recorded vote, a statute, a closed year. Re-read means there is no API, so a human re-reads the source by the date shown.</div></details>
+  <details class="faq-q"><summary>What happens when two official sources disagree?</summary>
+    <div class="faq-a">Both are shown rather than averaged. Averaging two official figures produces a third number that no source publishes.</div></details>
+  <details class="faq-q"><summary>Is anything on the site estimated or modelled?</summary>
+    <div class="faq-a">Nothing is modelled, estimated or smoothed unless the dashboard says so in plain language and names the method.</div></details>
+  <details class="faq-q"><summary>How do I trace a figure back to its source?</summary>
+    <div class="faq-a">Find it in the section for its subject on this page. Each entry names the figure, its source, that source’s URL where one exists, and the date it was verified or last refreshed, along with the script that maintains it where one does.</div></details>
+</section>
+<!-- faq:end -->
 </main>
 <footer>
   <div class="share-bar">

@@ -97,6 +97,132 @@ COVERAGE = {
     'education-merrimack-valley.html': ['Merrimack Valley, Massachusetts'],
 }
 
+# ---------------------------------------------------------------- FAQ
+# The visible Q&A and the FAQPage node are rendered from this one table, so the
+# markup cannot claim an answer the page does not show. Schema-only FAQ was
+# always against Google's content guideline, and is now pointless as well:
+# Google retired the FAQ rich result on 2026-05-07 and deleted the
+# documentation in June 2026. What still reads this is the AI answer engines,
+# and they read the rendered page - which is why the block is injected rather
+# than the node written on its own.
+#
+# Three hub pages only. These are what an engine lands on to answer "what is
+# this site", "where do the numbers come from" and "how do I check one"; the
+# dashboards answer their own subject and already carry Dataset.
+#
+# Nothing here states a figure that anything maintains. 351 is safe because it
+# is fixed by statute. The per-feed refresh times are deliberately NOT copied
+# from About - a cadence restated in two places goes quietly wrong the day one
+# of them changes, which is the whole reason prose is a bad place for a
+# maintained value. The answer points at About instead.
+FAQ = {
+ 'index.html': [
+  ('What is Massachusetts Data Hub?',
+   'A public record of what the Commonwealth charges, spends and reports, '
+   'assembled from primary government sources and published so anyone can check '
+   'the arithmetic. It covers tax and budget, housing, energy, education, '
+   'immigration, healthcare, pensions, lobbying and Boston city data, and carries '
+   'all 351 Massachusetts municipalities as a single interactive instrument.'),
+  ('Where do the figures come from?',
+   'From the bodies that produce them. Federally: the Bureau of Labor Statistics, '
+   'the Bureau of Economic Analysis, the Census Bureau, the Energy Information '
+   'Administration, Customs and Border Protection and Immigration and Customs '
+   'Enforcement. In Massachusetts: the Department of Revenue, the Division of '
+   'Local Services, DESE, the Division of Insurance, CHIA, PERAC and OCPF, with '
+   'property figures from MLS and the Warren Group. Where a figure comes from a '
+   'non-government compilation instead, the Method page names it.'),
+  ('How often is the data updated?',
+   'There is no single site-wide update date, because one would only tell you '
+   'when a script last ran. Each feed refreshes on its own clock, matched to when '
+   'its source actually publishes, and the About page lists that schedule feed by '
+   'feed. The site itself redeploys every three hours.'),
+  ('Is it free to use, and can I take the data?',
+   'Yes. Every page is free and needs no account. The full source, the data files '
+   'and every revision are public in the project GitHub repository, and the JSON '
+   'behind each dashboard is served directly, so a script can read it.'),
+  ('Who builds it?',
+   'Duncan Burns, a U.S. Air Force veteran and UMass graduate who has written '
+   'op-eds for The Valley Patriot since 2016. The dashboards exist because a '
+   'column can make an argument but cannot show you the arithmetic.'),
+ ],
+ 'about.html': [
+  ('Who is behind Massachusetts Data Hub?',
+   'It is built and maintained by Duncan Burns, a U.S. Air Force veteran and '
+   'UMass graduate. He is a licensed Massachusetts real estate agent and Notary '
+   'Public, working as Operations Manager at a Greater Newburyport brokerage, '
+   'and has written op-eds for The Valley Patriot since 2016, taking its '
+   'Editor’s Choice Award that year. A North Shore native, he lives in the '
+   'Merrimack Valley.'),
+  ('Is this an official government site?',
+   'No. It is an independent project. The figures are drawn from official '
+   'government sources, but the site is not published by, affiliated with or '
+   'endorsed by the Commonwealth of Massachusetts or any of its agencies.'),
+  ('How can I check a figure for myself?',
+   'Every figure is listed on the Method page with the source it came from, that '
+   'source’s own URL, and the date it was last verified or refreshed. The '
+   'underlying JSON and the full revision history are public in the GitHub '
+   'repository, so any number can be traced back to the file and the commit that '
+   'set it.'),
+  ('What is the difference between the dashboards and the videos?',
+   'The dashboards are data. The videos are labelled either parody or explainer, '
+   'so nothing on them is mistaken for the record.'),
+ ],
+ 'method.html': [
+  ('What do the labels verified, live, fixed and re-read mean?',
+   'Verified means checked by hand against the source. Live means refreshed by a '
+   'feed, where the JSON is authoritative. Fixed means it cannot change: a '
+   'recorded vote, a statute, a closed year. Re-read means there is no API, so a '
+   'human re-reads the source by the date shown.'),
+  ('What happens when two official sources disagree?',
+   'Both are shown rather than averaged. Averaging two official figures produces '
+   'a third number that no source publishes.'),
+  ('Is anything on the site estimated or modelled?',
+   'Nothing is modelled, estimated or smoothed unless the dashboard says so in '
+   'plain language and names the method.'),
+  ('How do I trace a figure back to its source?',
+   'Find it in the section for its subject on this page. Each entry names the '
+   'figure, its source, that source’s URL where one exists, and the date it '
+   'was verified or last refreshed, along with the script that maintains it where '
+   'one does.'),
+ ],
+}
+FAQ_HEADING = 'Questions'
+
+def faq_block(p, s):
+    """The visible Q&A. Fenced, so a re-run replaces it instead of stacking.
+
+    No trailing "every figure, its source and the date it was checked" line:
+    index.html's sources card already ends on that exact sentence and the FAQ
+    landed directly beneath it, printing it twice in a row, and on method.html
+    the same line would have linked the reader to the page they were already
+    reading.
+
+    The rv scroll-reveal class is taken from the page rather than hardcoded.
+    index and about define .rv{opacity:0} AND the IntersectionObserver that
+    adds .vis; method.html inherits the rule from about's shell but not the
+    script, because build_method.py replaces the body the observer lives in.
+    Marking a section rv there hides it outright - that is exactly how all
+    fourteen Method h2 headings shipped invisible. Reading the page for the
+    observer means the animation comes back on its own if Method ever gains
+    one, and cannot hide anything if it does not.
+    """
+    reveal = ' rv' if ("add('vis')" in s or 'add("vis")' in s) else ''
+    rows = ''.join(
+        '  <details class="faq-q"><summary>%s</summary>\n'
+        '    <div class="faq-a">%s</div></details>\n'
+        % (html.escape(q), html.escape(a)) for q, a in FAQ[p])
+    return ('<!-- faq:start -->\n'
+            '<section class="faq%s" id="faq" aria-labelledby="faq-h">\n'
+            '  <h2 id="faq-h">%s</h2>\n%s'
+            '</section>\n<!-- faq:end -->\n' % (reveal, FAQ_HEADING, rows))
+
+def faq_node(p, url):
+    return {'@type': 'FAQPage', '@id': url + '#faq',
+            'isPartOf': {'@id': BASE + '#website'},
+            'mainEntity': [{'@type': 'Question', 'name': q,
+                            'acceptedAnswer': {'@type': 'Answer', 'text': a}}
+                           for q, a in FAQ[p]]}
+
 def last_commit(path):
     """git's own record of when this page last changed - not a date I chose"""
     try:
@@ -200,6 +326,7 @@ if unknown:
 stamp = [p for p in pages if p in only] if only else pages
 added_desc = added_canon = fixed_og = added_noindex = moved = 0
 added_icons = added_card = added_ld = 0
+added_faq = 0
 fixed_social = 0
 escaped_meta = 0
 
@@ -373,10 +500,39 @@ for p in stamp:
                 s = s[:m.end()] + card + s[m.end():]
         added_card += 1
 
+    # --- the visible FAQ, before the schema that describes it
+    #
+    # Fenced and replaced in place, so this is re-runnable and so build_about.py
+    # regenerating about.html - and build_method.py regenerating method.html off
+    # its shell - cannot leave a stale copy behind. seo.py runs last in
+    # rebuild-generated.yml, which is what puts the current one back.
+    s = re.sub(r'\n?<!-- faq:start -->.*?<!-- faq:end -->\n?', '\n', s, flags=re.S)
+    if p in FAQ and p not in NOINDEX:
+        m = re.search(r'([ \t]*</main>)', s)
+        if not m:
+            sys.exit('%s: no </main> to put the FAQ before' % p)
+        s = s[:m.start()] + faq_block(p, s) + s[m.start():]
+        added_faq += 1
+
     # --- structured data, replaced rather than stacked
     s = re.sub(r'\n?<script type="application/ld\+json">.*?</script>', '', s, flags=re.S)
     if p not in NOINDEX:
         node = schema_for(p, s, url)
+        if node and p in FAQ:
+            # A FAQPage whose answers are not on the page is a structured-data
+            # policy breach, and the kind nothing would ever surface: no rich
+            # result to lose, so no error in Search Console either. What keeps
+            # the two honest is structural, not a check - the block above and
+            # the node here are rendered from FAQ[p] in the same pass, under
+            # the same condition, and the injection exits if it cannot place
+            # the block. An assertion here comparing the table against HTML
+            # this run just wrote from that table was tried and deleted: it
+            # could not fail, which is worse than no check, because it reads
+            # like one.
+            inner = dict(node)
+            inner.pop('@context', None)
+            node = {'@context': 'https://schema.org',
+                    '@graph': [inner, faq_node(p, url)]}
         if node:
             tag = ('<script type="application/ld+json">\n%s\n</script>\n'
                    % json.dumps(node, indent=2, ensure_ascii=False))
@@ -441,6 +597,7 @@ io.open('robots.txt', 'w', encoding='utf-8', newline='\n').write(
     'User-agent: *\nAllow: /\n\nSitemap: %ssitemap.xml\n' % BASE)
 
 print('structured data    : %d pages' % added_ld)
+print('FAQ blocks         : %d pages' % added_faq)
 print('icon sets stamped  : %d' % added_icons)
 print('social cards added : %d' % added_card)
 print('pages moved to BASE: %d' % moved)

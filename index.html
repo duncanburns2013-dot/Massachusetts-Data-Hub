@@ -673,32 +673,85 @@ svg.sprite{position:absolute;width:0;height:0;overflow:hidden}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebSite",
-  "@id": "https://massachusettsdatahub.com/#website",
-  "name": "Massachusetts Data Hub",
-  "url": "https://massachusettsdatahub.com/",
-  "description": "Massachusetts tax, spending, housing, energy, education and immigration data, built from primary government sources, with all 351 municipalities in one interactive instrument.",
-  "inLanguage": "en-US",
-  "publisher": {
-    "@type": "Organization",
-    "@id": "https://massachusettsdatahub.com/#publisher",
-    "name": "Massachusetts Data Hub",
-    "url": "https://massachusettsdatahub.com/",
-    "founder": {
-      "@id": "https://massachusettsdatahub.com/about.html#duncan-burns"
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://massachusettsdatahub.com/#website",
+      "name": "Massachusetts Data Hub",
+      "url": "https://massachusettsdatahub.com/",
+      "description": "Massachusetts tax, spending, housing, energy, education and immigration data, built from primary government sources, with all 351 municipalities in one interactive instrument.",
+      "inLanguage": "en-US",
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://massachusettsdatahub.com/#publisher",
+        "name": "Massachusetts Data Hub",
+        "url": "https://massachusettsdatahub.com/",
+        "founder": {
+          "@id": "https://massachusettsdatahub.com/about.html#duncan-burns"
+        }
+      },
+      "creator": {
+        "@type": "Person",
+        "@id": "https://massachusettsdatahub.com/about.html#duncan-burns",
+        "name": "Duncan Burns",
+        "url": "https://massachusettsdatahub.com/about.html",
+        "image": "https://massachusettsdatahub.com/assets/duncan-burns.jpg",
+        "sameAs": [
+          "https://valleypatriot.com/category/op-eds-editorials/duncan-burns/",
+          "https://github.com/duncanburns2013-dot"
+        ]
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://massachusettsdatahub.com/#faq",
+      "isPartOf": {
+        "@id": "https://massachusettsdatahub.com/#website"
+      },
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Massachusetts Data Hub?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A public record of what the Commonwealth charges, spends and reports, assembled from primary government sources and published so anyone can check the arithmetic. It covers tax and budget, housing, energy, education, immigration, healthcare, pensions, lobbying and Boston city data, and carries all 351 Massachusetts municipalities as a single interactive instrument."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Where do the figures come from?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "From the bodies that produce them. Federally: the Bureau of Labor Statistics, the Bureau of Economic Analysis, the Census Bureau, the Energy Information Administration, Customs and Border Protection and Immigration and Customs Enforcement. In Massachusetts: the Department of Revenue, the Division of Local Services, DESE, the Division of Insurance, CHIA, PERAC and OCPF, with property figures from MLS and the Warren Group. Where a figure comes from a non-government compilation instead, the Method page names it."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How often is the data updated?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "There is no single site-wide update date, because one would only tell you when a script last ran. Each feed refreshes on its own clock, matched to when its source actually publishes, and the About page lists that schedule feed by feed. The site itself redeploys every three hours."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is it free to use, and can I take the data?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Every page is free and needs no account. The full source, the data files and every revision are public in the project GitHub repository, and the JSON behind each dashboard is served directly, so a script can read it."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Who builds it?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Duncan Burns, a U.S. Air Force veteran and UMass graduate who has written op-eds for The Valley Patriot since 2016. The dashboards exist because a column can make an argument but cannot show you the arithmetic."
+          }
+        }
+      ]
     }
-  },
-  "creator": {
-    "@type": "Person",
-    "@id": "https://massachusettsdatahub.com/about.html#duncan-burns",
-    "name": "Duncan Burns",
-    "url": "https://massachusettsdatahub.com/about.html",
-    "image": "https://massachusettsdatahub.com/assets/duncan-burns.jpg",
-    "sameAs": [
-      "https://valleypatriot.com/category/op-eds-editorials/duncan-burns/",
-      "https://github.com/duncanburns2013-dot"
-    ]
-  }
+  ]
 }
 </script>
 </head>
@@ -798,6 +851,21 @@ svg.sprite{position:absolute;width:0;height:0;overflow:hidden}
     </div>
   </section>
   <section class="sources rv"><div class="sources-in"><h3>Official data sources<i class="src-n">27</i></h3><span class="sources-ramp" aria-hidden="true"></span><div class="srcchips"><span class="srcchip">BLS (LAUS, CES, OES, CPI)</span><span class="srcchip">BEA (SAINC, SAPCE, RPP)</span><span class="srcchip">Census Bureau (ACS, QuickFacts)</span><span class="srcchip">CBP</span><span class="srcchip">ICE</span><span class="srcchip">CBO</span><span class="srcchip">EIA</span><span class="srcchip">MA DOR</span><span class="srcchip">MA DLS</span><span class="srcchip">DOI</span><span class="srcchip">DESE</span><span class="srcchip">CHIA</span><span class="srcchip">CAR</span><span class="srcchip">KFF</span><span class="srcchip">Warren Group</span><span class="srcchip">MLS PIN</span><span class="srcchip">Paragon MLS</span><span class="srcchip">Tax Foundation</span><span class="srcchip">ITEP</span><span class="srcchip">MIT Living Wage Calculator</span><span class="srcchip">PERAC</span><span class="srcchip">PRIT Fund</span><span class="srcchip">Public Plans Database</span><span class="srcchip">OCPF</span><span class="srcchip">OpenSecrets</span><span class="srcchip">RGGI Inc</span><span class="srcchip">ISO-NE</span></div><p class="sources-note">Every figure, its source and the date it was checked: <a href="method.html">the method</a>.</p></div></section>
+<!-- faq:start -->
+<section class="faq rv" id="faq" aria-labelledby="faq-h">
+  <h2 id="faq-h">Questions</h2>
+  <details class="faq-q"><summary>What is Massachusetts Data Hub?</summary>
+    <div class="faq-a">A public record of what the Commonwealth charges, spends and reports, assembled from primary government sources and published so anyone can check the arithmetic. It covers tax and budget, housing, energy, education, immigration, healthcare, pensions, lobbying and Boston city data, and carries all 351 Massachusetts municipalities as a single interactive instrument.</div></details>
+  <details class="faq-q"><summary>Where do the figures come from?</summary>
+    <div class="faq-a">From the bodies that produce them. Federally: the Bureau of Labor Statistics, the Bureau of Economic Analysis, the Census Bureau, the Energy Information Administration, Customs and Border Protection and Immigration and Customs Enforcement. In Massachusetts: the Department of Revenue, the Division of Local Services, DESE, the Division of Insurance, CHIA, PERAC and OCPF, with property figures from MLS and the Warren Group. Where a figure comes from a non-government compilation instead, the Method page names it.</div></details>
+  <details class="faq-q"><summary>How often is the data updated?</summary>
+    <div class="faq-a">There is no single site-wide update date, because one would only tell you when a script last ran. Each feed refreshes on its own clock, matched to when its source actually publishes, and the About page lists that schedule feed by feed. The site itself redeploys every three hours.</div></details>
+  <details class="faq-q"><summary>Is it free to use, and can I take the data?</summary>
+    <div class="faq-a">Yes. Every page is free and needs no account. The full source, the data files and every revision are public in the project GitHub repository, and the JSON behind each dashboard is served directly, so a script can read it.</div></details>
+  <details class="faq-q"><summary>Who builds it?</summary>
+    <div class="faq-a">Duncan Burns, a U.S. Air Force veteran and UMass graduate who has written op-eds for The Valley Patriot since 2016. The dashboards exist because a column can make an argument but cannot show you the arithmetic.</div></details>
+</section>
+<!-- faq:end -->
 </main>
 <footer>
   <div class="share-bar">
