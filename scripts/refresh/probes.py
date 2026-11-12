@@ -39,9 +39,13 @@ def urlopen_text(url: str) -> str:
         with urllib.request.urlopen(req, timeout=60) as r:
             return r.read().decode("utf-8", "replace")
     except urllib.error.HTTPError as e:
-        if e.code == 404:
-            raise NotFound(url) from e
-        raise
+        if e.code != 404:
+            raise
+    # Only a 404 falls through to here -- the try returns on success, and any other
+    # error re-raised above. Raised OUTSIDE the except block on purpose: `from e` would
+    # leave the HTTPError on __context__, and HTTPError.url carries the KEYED url even
+    # when str() and format_exception() are clean.
+    raise NotFound(url)
 
 
 def _get(fetch, url, key=None):

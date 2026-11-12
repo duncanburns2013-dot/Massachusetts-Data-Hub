@@ -127,16 +127,22 @@ def _num(x, what):
 
 
 def _get_rows(fetch, url, shown, key):
+    # The raise happens OUTSIDE the except block on purpose. `from None` only sets
+    # __suppress_context__, which hides the chain from str() and format_exception() --
+    # but __context__ stays bound to the original exception, and an HTTPError carries
+    # the KEYED url on .url. A final review found the key still readable there while
+    # every string form looked clean. Leaving the block first makes __context__ None,
+    # so the invariant is true rather than merely documented. probes._get does the same.
+    why = None
     try:
         rows = json.loads(fetch(url))
         head, body = rows[0], rows[1:]
         if not isinstance(head, list) or not all(isinstance(r, list) for r in body):
             raise ValueError("not a table")
     except Exception as e:  # unreachable, 404, bad JSON, wrong shape: all untrustworthy
-        # urlopen_text raises NotFound(url) with the KEYED url, and a traceback prints the chained
-        # cause too: scrub the key from the text and cut the chain (`from None`). Task 7 prints
-        # failures into a CI log.
-        raise FetchError(f"{shown}: {type(e).__name__}: {e}".replace(key, "***")) from None
+        why = f"{type(e).__name__}: {e}".replace(key, "***")
+    if why is not None:
+        raise FetchError(f"{shown}: {why}")
     return head, body
 
 
@@ -483,8 +489,13 @@ def run(sources: list[Source], claims, *, fetch=urlopen_text, apply_fn=apply, to
             key = os.environ.get("CENSUS_API_KEY")
             rec.unresolved.append(Failure(m.source_id, msg.replace(key, "***") if key else msg))
     for f in result.failures:
-        # cannot tell whether it moved: gate-failing for a source we would write, reported for one we would not
-        (rec.unresolved if by_id[f.source_id].apply else rec.probe_failures).append(f)
+        # EVERY probe failure is unresolved, including on an apply:false source. It used to be
+        # split by the apply flag, and the apply:false half went to probe_failures -- which the
+        # receipt carried and the gate never read, so a reworded BEA page produced a GREEN run.
+        # The design forbids exactly that: "a probe that errors is a failure, not a pass; treating
+        # an unanswerable probe as 'nothing new' rebuilds failure mode 1 inside the thing designed
+        # to prevent it." We cannot tell whether it moved, so we must not imply it did not.
+        rec.unresolved.append(f)
     # a human_fetch source is never probed, so its due date is the only thing ageing it
     rec.overdue = [k for k in result.skipped if k.due is None or k.due < today]
 

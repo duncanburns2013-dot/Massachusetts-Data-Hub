@@ -43,7 +43,7 @@ try:
               RunRecord(unresolved=[Failure("x", "boom")]),
               RunRecord(deferred=[Move("bea_rpp_state", "2024", "2025", True, "u")]),
               RunRecord(overdue=[Skipped("doi", "2026-01-01", "2027")]),
-              RunRecord(probe_failures=[Failure("bea_rpp_state", "unreachable")])):
+              RunRecord(applied=[Applied("s", {"household": 99000.0, "family": 120000.0, "vintage": 2024, "source": "old"}, {"household": 106539.0, "family": 138434.0, "vintage": 2025, "source": "new"}, ["a.html"], ["b.json"])])):
         assert format_message(r) is not None, r
     # the message names the page and sentence, not just the id; long text is truncated
     cl = [Claim(id="c1", page="p.html", text="MA auto costs more " + "x" * 300, figures=[])]
@@ -63,11 +63,16 @@ try:
         unresolved=[Failure("census_acs1_ma_income", "boom")],
         deferred=[Move("bea_rpp_state", "2024", "2025", True, "u")],
         overdue=[Skipped("doi_merged_market_rates", "2026-01-01", "2027")],
-        probe_failures=[Failure("x", "e")], run_date="2026-11-12"))
+        run_date="2026-11-12"))
     got = json.loads(p.read_text(encoding="utf-8"))
     assert got == {"last_run": "2026-11-12", "unresolved": ["census_acs1_ma_income"],
                    "broken_claims": ["ma_auto_above_national"], "deferred": ["bea_rpp_state"],
-                   "overdue_human_fetch": ["doi_merged_market_rates"], "probe_failures": ["x"]}, got
+                   "overdue_human_fetch": ["doi_merged_market_rates"], "divergent": []}, got
+    # a target that still disagrees after the write reaches the receipt, so the gate can see it
+    diverged = Applied("census_acs1_ma_income", {"household": 99000.0, "family": 120000.0, "vintage": 2024, "source": "old"}, {"household": 106539.0, "family": 138434.0, "vintage": 2025, "source": "new"}, ["affordability-dashboard.html"],
+                       ["data/burden-constants.json"])
+    write_receipt(p, RunRecord(applied=[diverged], run_date="2026-11-12"))
+    assert json.loads(p.read_text(encoding="utf-8"))["divergent"] == ["census_acs1_ma_income"]
     assert not (tmp / "receipt.json.tmp").exists()
     write_receipt(p, RunRecord())  # default run_date is today
     assert json.loads(p.read_text())["last_run"] == datetime.date.today().isoformat()
@@ -168,8 +173,10 @@ try:
     def dead(url):
         raise OSError("unreachable")
     rec = runner.run([acs25, bea25, doi], claims, fetch=dead, apply_fn=ok_apply, today="2026-11-12")
-    assert [u.source_id for u in rec.unresolved] == ["census_acs1_ma_income"]
-    assert [f.source_id for f in rec.probe_failures] == ["bea_rpp_state"]
+    # EVERY probe failure is unresolved, including on an apply:false source like BEA.
+    # It used to split by the apply flag and park the apply:false half in probe_failures,
+    # which the gate never read -- so a reworded BEA page produced a green run.
+    assert sorted(u.source_id for u in rec.unresolved) == ["bea_rpp_state", "census_acs1_ma_income"]
     # claims: `known` is built from the real registries; a typo'd figure id in a claim raises
     try:
         runner.run([acs25, bea25, doi], claims + [Claim(id="typo", figures=["ma_auto_expendature"])],
@@ -200,11 +207,19 @@ try:
         rc = runner.main(["--register", str(regp), "--receipt", str(r)], fetch=fetch)
     assert rc == 0 and "DEFERRED" in buf.getvalue() and json.loads(r.read_text())["deferred"] == ["bea_rpp_state"]
 
-    # 6. no production code serialises an exception chain
-    for f in ("report.py", "runner.py"):
-        src = (REPO / "scripts" / "refresh" / f).read_text(encoding="utf-8")
-        for bad in ("format_exception", "__context__", "__cause__", "exc_info", "print_exc"):
-            assert bad not in src, (f, bad)
+    # 6. no production code serialises an exception chain.
+    # Parsed, not grepped: a comment EXPLAINING why we never touch __context__ is not a
+    # violation, and a source-text grep cannot tell the two apart. It flagged the comment
+    # on the fix that made __context__ None in the first place.
+    import ast
+    BANNED = {"format_exception", "format_exc", "print_exc", "exc_info", "__context__", "__cause__"}
+    for f in ("report.py", "runner.py", "probes.py"):
+        tree = ast.parse((REPO / "scripts" / "refresh" / f).read_text(encoding="utf-8"))
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Attribute):
+                assert node.attr not in BANNED, (f, node.attr, node.lineno)
+            elif isinstance(node, ast.Name):
+                assert node.id not in BANNED, (f, node.id, node.lineno)
 except Exception as e:
     import traceback
     traceback.print_exc()

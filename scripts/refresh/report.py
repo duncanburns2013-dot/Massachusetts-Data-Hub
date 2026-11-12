@@ -26,7 +26,6 @@ class RunRecord:
     unresolved: list = field(default_factory=list)     # Failure: apply:true source we could not resolve. Fails the gate.
     deferred: list = field(default_factory=list)       # Move: apply:false source that moved. Reported, never gating.
     overdue: list = field(default_factory=list)        # Skipped: human_fetch source past (or without) its due date
-    probe_failures: list = field(default_factory=list)  # Failure: apply:false source we could not probe. Reported only.
     run_date: str = ""                                 # ISO date; "" means today
     claims: list = field(default_factory=list)         # claims.Claim registry, so a verdict can name its sentence
 
@@ -47,7 +46,10 @@ def write_receipt(path: Path, run: RunRecord) -> None:
         # on purpose, so a red clears the moment `due` moves instead of waiting for the next run.
         # Do not wire this field into the gate.
         "overdue_human_fetch": [k.source_id for k in run.overdue],
-        "probe_failures": [f.source_id for f in run.probe_failures],
+        # A target that still disagrees after the write is the ONE condition the reconciler
+        # exists to detect. It used to be computed and then dropped everywhere except the
+        # message, so the gate could not see it. Gate-failing.
+        "divergent": sorted({a.source_id for a in run.applied if a.divergences}),
     }
     tmp = path.with_name(path.name + ".tmp")
     tmp.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
@@ -74,7 +76,7 @@ def format_message(run: RunRecord) -> str | None:
     broken = [v for v in run.verdicts if v.status == "broken"]
     suspect = [v for v in run.verdicts if v.status == "suspect"]
     if not (run.applied or broken or suspect or run.unresolved or run.deferred
-            or run.overdue or run.probe_failures):
+            or run.overdue or any(a.divergences for a in run.applied)):
         return None
     out = [f"Data Hub refresh loop, {_date(run)}"]
 
@@ -104,8 +106,6 @@ def format_message(run: RunRecord) -> str | None:
     section("OVERDUE HUMAN FETCH (never probed; the due date is the only thing ageing it; the gate fails)",
             [f"{k.source_id}: " + (f"due {k.due}" if k.due else "no due date set") + f", holds {k.held_period}"
              for k in run.overdue])
-    section("PROBE FAILURES (could not check; reported only)",
-            [f"{f.source_id}: {f.error}" for f in run.probe_failures])
     text = "\n".join(out)
     key = os.environ.get("CENSUS_API_KEY")
     return text.replace(key, "***") if key else text

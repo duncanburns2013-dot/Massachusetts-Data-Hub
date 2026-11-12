@@ -346,6 +346,12 @@ def check_refresh_receipt(receipt=REFRESH_RECEIPT, today=TODAY, sources=REFRESH_
         if r["broken_claims"]:
             problems.append((RECEIPT_LABEL, "BROKEN CLAIMS: a registered sentence is now false: "
                                             + ", ".join(map(str, r["broken_claims"]))))
+        # .get, so a receipt written before this field existed still loads rather than
+        # crashing the gate. A divergence is the one thing the reconciler exists to catch:
+        # the loop wrote a figure and some file that holds it still disagrees.
+        if r.get("divergent"):
+            problems.append((RECEIPT_LABEL, "DIVERGED: files still disagree after the write: "
+                                            + ", ".join(map(str, r["divergent"]))))
     try:
         srcs = json.loads(Path(sources).read_text(encoding="utf-8"))
         for s in srcs:
