@@ -2,7 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="data-checked" content="2026-08-01"><!-- bump when this page is reconciled against its publisher; scripts/check-freshness.py ages it -->
+<meta name="data-checked" content="2026-11-12"><!-- bump when this page is reconciled against its publisher; scripts/check-freshness.py ages it -->
+<!-- meta.currency, checked 2026-11-12:
+     merged-market rates  CY2027 final (DOI decision 22 Jul 2026) + CY2026 final. NEWEST. CY2028 filings due ~May 2027.
+     auto premium/expend.  NAIC 2024 supplement (published 1 Oct 2026). NEWEST. 2025 edition expected autumn 2027.
+     DOI annual report     2025 edition. NEWEST.
+     family premium        AHRQ MEPS-IC 2025. NEWEST; 2026 state tables publish ~Jul 2027.
+     home insurance        DOI Annual Home Insurance Report CY2024. NEWEST; CY2025 edition not yet published.
+     per-capita spending   CMS State Health Expenditures 2020. Oldest series here; it is the newest STATE edition CMS publishes.
+     auto change 2013-2023 DOI 2022-2023 Annual Report. A DOI series, not NAIC; the two are not interchangeable.
+-->
   <!-- Open Graph / Social Cards -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Massachusetts Data Hub">
@@ -176,10 +185,10 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
     <div class="sc-src">Source: AHRQ Medical Expenditure Panel Survey, Insurance Component (MEPS-IC) 2025, private-sector state estimates, as published in KFF State Health Facts</div>
   </div>
   <div class="sc amber">
-    <div class="sc-label">2026 Approved Health Rates</div>
-    <div class="sc-val amber">7.1 – 12.2%</div>
-    <div class="sc-ctx">BCBS &amp; WellSense rejected as excessive</div>
-    <div class="sc-src">Source: MA DOI finalized Jul 2025</div>
+    <div class="sc-label">2027 Approved Health Rates</div>
+    <div class="sc-val amber">6.7 &ndash; 19.2%</div>
+    <div class="sc-ctx">10.8% weighted average &middot; 697,848 members &middot; second straight double-digit year</div>
+    <div class="sc-src">Source: MA DOI CY2027 Final Rate Summary Tables, decision 22 Jul 2026</div>
   </div>
   <div class="sc blue">
     <div class="sc-label">Home Written Premium</div>
@@ -187,11 +196,11 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
     <div class="sc-ctx">+12.7% YoY · 2,124,812 policies</div>
     <div class="sc-src">Source: MA DOI 2024 Annual Home Insurance Report</div>
   </div>
-  <div class="sc green">
-    <div class="sc-label">Avg Full Coverage Auto Premium</div>
-    <div class="sc-val green">$1,326</div>
-    <div class="sc-ctx">MA 2023 · 7.8% BELOW national avg of $1,438</div>
-    <div class="sc-src">Source: NAIC 2023 Auto Insurance Database Average Premium Supplement (Jun 2025)</div>
+  <div class="sc amber">
+    <div class="sc-label">Avg Auto Expenditure</div>
+    <div class="sc-val amber">$1,504</div>
+    <div class="sc-ctx">MA 2024 · 5.0% ABOVE national avg of $1,432 · 15th-costliest of 51</div>
+    <div class="sc-src">Source: NAIC 2024 Auto Insurance Database Average Premium Supplement (Oct 2026)</div>
   </div>
 </div>
 
@@ -199,7 +208,7 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab(event,'overview')">Overview</button>
     <button class="tab-btn" onclick="switchTab(event,'premiums')">Premiums</button>
-    <button class="tab-btn" onclick="switchTab(event,'rates')">2026 Rates</button>
+    <button class="tab-btn" onclick="switchTab(event,'rates')">Rate Decisions</button>
     <button class="tab-btn" onclick="switchTab(event,'spending')">Spending &amp; MassHealth</button>
     <button class="tab-btn" onclick="switchTab(event,'healthaff')">Affordability</button>
     <button class="tab-btn" onclick="switchTab(event,'costincome')">Cost vs Income</button>
@@ -263,37 +272,40 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
   </div>
 </div>
 
-<!-- ========================= 2026 RATES ========================= -->
+<!-- ========================= RATE DECISIONS (2026 + 2027) ========================= -->
 <div class="tab-panel" id="tab-rates">
   <div class="section">
-    <div class="sec-title">2026 Finalized Rate Increases</div>
-    <div class="sec-desc">MA Division of Insurance finalized rates July 2025 — saved consumers $54M vs. proposed rates</div>
+    <div class="sec-title">Merged Market Rate Decisions: 2026 and 2027</div>
+    <div class="sec-desc">Every figure here is DOI&rsquo;s <strong>final</strong> approved rate, not the July announcement. Both years were decided in two stages, and the stage-one press coverage is still what most summaries repeat.</div>
 
-    <div class="hl"><div class="hl-label">⚠️ DOI Finalized: 7.1% – 12.2%</div><div class="hl-val">2 carriers REJECTED — BCBS &amp; WellSense</div><div class="hl-ctx">Original proposals averaged 13.4%. DOI negotiated $54M in savings. Drivers included GLP-1 spending, behavioral health utilization, hospital contracting costs.</div><div class="hl-src">Source: MA DOI finalized rate decisions, July 2025</div></div>
+    <div class="hl"><div class="hl-label">⚠️ 2027 final: 10.8% weighted average</div><div class="hl-val">Approved increases run 6.7% to 19.2% across 697,848 members</div><div class="hl-ctx">Carriers proposed 12.9%; DOI approved 10.8%. Second consecutive double-digit year, against 3.2% a few years ago. Medical and pharmacy claims account for 12.0 points of the increase, offset 1.2 points by thinner benefits and higher cost sharing.</div><div class="hl-src">Source: MA DOI CY2027 Final Rate Summary Tables (decision 22 July 2026)</div></div>
+
+    <div class="info warn"><div class="info-icon">⚠️</div><div class="info-text"><strong>Why the published average moved after the decision.</strong> On 22 July 2026 DOI approved seven carriers averaging 10.4% and rejected Fallon&rsquo;s filing outright, so Fallon had no approved rate and press coverage settled on 10.4%. Fallon&rsquo;s rate was later set at 19.2%, and DOI&rsquo;s eight-carrier table now averages <strong>10.8%</strong>. The same thing happened in 2026: BCBS and WellSense were rejected in July 2025, then settled at 11.9% and 13.6%. A rejection is the middle of the process, not the end of it.<span class="info-src">Sources: MA DOI CY2027 Final Rate Summary Tables; MA DOI 2026 Final Rate Filing Summary</span></div></div>
 
     <div class="grid-2">
-      <div class="card"><div class="card-title">2026 Finalized Rate Increases by Carrier</div><div class="card-sub">DOI approved (red/amber/green) vs. rejected (grey)</div><div class="card-canvas"><canvas id="c-carriers"></canvas></div><div class="card-src">Source: MA DOI rate filing decisions, July 2025</div></div>
-      <div class="card"><div class="card-title">Proposed vs. Approved Rates</div><div class="card-sub">DOI negotiated reductions of 1.0–3.3 percentage points</div><div class="card-canvas"><canvas id="c-proposed-vs-approved"></canvas></div><div class="card-src">Source: MA DOI rate filing decisions, July 2025</div></div>
+      <div class="card"><div class="card-title">Approved Rate Increase by Carrier, 2026 vs 2027</div><div class="card-sub">DOI final approved rates, both years, all eight carriers</div><div class="card-canvas"><canvas id="c-carriers"></canvas></div><div class="card-src">Sources: MA DOI 2026 Final Rate Filing Summary; CY2027 Final Rate Summary Tables</div></div>
+      <div class="card"><div class="card-title">2027 Proposed vs. Approved</div><div class="card-sub">DOI cut every carrier except Harvard Pilgrim; Tufts fell 4.3 points and Fallon 6.5</div><div class="card-canvas"><canvas id="c-proposed-vs-approved"></canvas></div><div class="card-src">Source: MA DOI CY2027 proposed and final rate summary tables</div></div>
     </div>
 
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Carrier</th><th>Proposed</th><th>Approved</th><th>Status</th><th>Members</th></tr></thead>
+        <thead><tr><th>Carrier</th><th>2026 approved</th><th>2027 proposed</th><th>2027 approved</th><th>DOI cut</th><th>2027 members</th></tr></thead>
         <tbody>
-          <tr><td>Harvard Pilgrim</td><td>14.8%</td><td class="td-red">12.2%</td><td class="td-red">Approved (highest)</td><td>~421K combined</td></tr>
-          <tr><td>Tufts Health Plans</td><td>13.2%</td><td class="td-red">11.1%</td><td class="td-red">Approved</td><td>187K+</td></tr>
-          <tr><td>Health New England</td><td>10.4%</td><td class="td-amber">9.4%</td><td class="td-amber">Approved</td><td>—</td></tr>
-          <tr><td>UnitedHealthcare</td><td>12.3%</td><td class="td-amber">~10.5%</td><td class="td-amber">Approved</td><td>—</td></tr>
-          <tr><td>Mass General Brigham</td><td>—</td><td class="td-amber">~9%</td><td class="td-amber">Approved</td><td>—</td></tr>
-          <tr><td>Fallon Community</td><td>9.9%</td><td class="td-green">7.1%</td><td class="td-green">Approved (lowest)</td><td>5.6% of market</td></tr>
-          <tr style="background:#fef2f2"><td>Blue Cross Blue Shield</td><td>12.9%</td><td class="td-red">REJECTED</td><td class="td-red">Excessive</td><td>166K</td></tr>
-          <tr style="background:#fef2f2"><td>WellSense</td><td>16.2%</td><td class="td-red">REJECTED</td><td class="td-red">Excessive</td><td>133K</td></tr>
+          <tr><td>Fallon Community Health Plan</td><td>7.2%</td><td>25.7%</td><td class="td-red">19.2%</td><td class="td-green">−6.5 pts</td><td>29,641</td></tr>
+          <tr><td>Blue Cross Blue Shield (HMO Blue)</td><td>11.9%</td><td>15.3%</td><td class="td-red">13.2%</td><td class="td-green">−2.1 pts</td><td>166,384</td></tr>
+          <tr><td>Mass General Brigham Health Plan</td><td>7.6%</td><td>13.5%</td><td class="td-red">12.2%</td><td class="td-green">−1.3 pts</td><td>78,878</td></tr>
+          <tr><td>Boston Medical Center (WellSense)</td><td>13.6%</td><td>11.9%</td><td class="td-red">11.4%</td><td class="td-green">−0.5 pts</td><td>140,089</td></tr>
+          <tr><td>UnitedHealthcare</td><td>9.4%</td><td>14.2%</td><td class="td-amber">10.9%</td><td class="td-green">−3.3 pts</td><td>19,829</td></tr>
+          <tr><td>Health New England</td><td>9.5%</td><td>11.1%</td><td class="td-amber">10.4%</td><td class="td-green">−0.7 pts</td><td>23,143</td></tr>
+          <tr><td>Tufts Health Public Plans</td><td>11.5%</td><td>11.8%</td><td class="td-green">7.5%</td><td class="td-green">−4.3 pts</td><td>160,566</td></tr>
+          <tr><td>Harvard Pilgrim</td><td>12.6%</td><td>6.7%</td><td class="td-green">6.7%</td><td>none</td><td>79,318</td></tr>
+          <tr style="font-weight:700"><td>Weighted average / total</td><td>11.5%</td><td>12.9%</td><td class="td-red">10.8%</td><td class="td-green">−2.1 pts</td><td>697,848</td></tr>
         </tbody>
       </table>
     </div>
-    <div class="card-src" style="margin-bottom:22px">Source: MA DOI rate filing decisions and public hearing record, July 2025</div>
+    <div class="card-src" style="margin-bottom:22px">Sources: MA DOI 2026 Final Rate Filing Summary; MA DOI CY2027 Final and Proposed Rate Summary Tables. Rows ordered by 2027 approved rate. 2026 enrolment totalled 721,441 across the same eight carriers, so the market shrank by 23,593 renewing members year on year.</div>
 
-    <div class="info danger"><div class="info-icon">🔴</div><div class="info-text"><strong>Key drivers of 2026 rate hikes:</strong> GLP-1 weight-loss drugs (BCBS spent $300M+ on 5 drugs in 2024), rising behavioral health utilization, aging population, expiring ACA enhanced subsidies. BCBS announced it will stop covering GLP-1s for weight loss in 2026, reducing its rate request by ~3%.<span class="info-src">Source: MA DOI rate hearing testimony, July 2025</span></div></div>
+    <div class="info danger"><div class="info-icon">🔴</div><div class="info-text"><strong>What is driving both years.</strong> Claims are nearly the whole story: medical and pharmacy claims contribute 12.0 points of the 10.8% approved for 2027, and 12.0 points of the 11.5% approved for 2026. Pharmacy trend alone runs 12.5% for 2027, against 9.7% medical. Carriers cited GLP-1 weight-loss drugs, behavioral health utilization, an aging population and expiring ACA enhanced subsidies. What holds the headline rate below claims trend is thinner coverage: benefit and cost-sharing changes subtract 1.2 points in 2027 and 0.9 in 2026, so part of the moderation is members buying less insurance rather than care costing less.<span class="info-src">Sources: MA DOI CY2027 Final Rate Summary Tables; MA DOI 2026 Final Rate Filing Summary; DOI rate hearing testimony</span></div></div>
   </div>
 </div>
 
@@ -363,7 +375,7 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
 
     <div class="hl"><div class="hl-label">⚠️ Home insurance is the real outlier</div><div class="hl-val">MA homeowner premium grew 35.9% from 2021 to 2024</div><div class="hl-ctx">That is about twice the growth in MA median household income over the same three years (+16.8%, ACS 5-year) and about 2.5 times Boston CPI (+14.6%, annual averages). The average homeowner premium went from $1,744 to $2,371.</div><div class="hl-src">Sources: MA DOI Annual Home Insurance Report 2024; US Census Bureau ACS; BLS CPI-U Boston-Cambridge-Newton</div></div>
 
-    <div class="hl amber"><div class="hl-label">⚠️ Health premiums outran inflation and income</div><div class="hl-val">Family health premium +28.2% from 2020 to 2024, against Boston CPI +18.3% and MA median household income +23.2%</div><div class="hl-ctx">The average Massachusetts family premium went from $21,965 in 2020 to $28,151 in 2024, then to $29,619 in 2025, up 5.2% in a single year. The Division of Insurance approved 2026 rate increases of 7.1% to 12.2%.</div><div class="hl-src">Sources: AHRQ MEPS-IC Table II.D.1, 2020–2025; US Census Bureau ACS 5-year; BLS CPI-U Boston-Cambridge-Newton annual averages; MA DOI (2026 rates)</div></div>
+    <div class="hl amber"><div class="hl-label">⚠️ Health premiums outran inflation and income</div><div class="hl-val">Family health premium +28.2% from 2020 to 2024, against Boston CPI +18.3% and MA median household income +23.2%</div><div class="hl-ctx">The average Massachusetts family premium went from $21,965 in 2020 to $28,151 in 2024, then to $29,619 in 2025, up 5.2% in a single year. The Division of Insurance approved 11.5% for 2026 and 10.8% for 2027, two consecutive double-digit years.</div><div class="hl-src">Sources: AHRQ MEPS-IC Table II.D.1, 2020–2025; US Census Bureau ACS 5-year; BLS CPI-U Boston-Cambridge-Newton annual averages; MA DOI final rate summaries (2026 and 2027 rates)</div></div>
 
     <div class="hl blue"><div class="hl-label">⚠️ Auto had a single-year shock in 2023</div><div class="hl-val">MA average auto premium jumped $152 in 2023 alone</div><div class="hl-ctx">From 2013 through 2022, annual changes ranged from -$13 to +$40. Then 2023 posted a +$152 jump — the single largest in the decade. Cumulative auto-expenditure growth: 3.1% per year since 2013.</div><div class="hl-src">Source: MA DOI 2022-2023 Annual Report (Private Passenger Automobile Insurance section)</div></div>
 
@@ -386,7 +398,7 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
     </div>
     <div class="card-src" style="margin-bottom:22px">* Home premium percentage covers 2021→2024 (3 years) because DOI reports the $1,744 figure from the 2021 baseline. Boston CPI values are BLS annual averages indexed to 2020=100. Income is the ACS 5-year estimate for each year.</div>
 
-    <div class="info warn"><div class="info-icon">⚠️</div><div class="info-text"><strong>Bottom line:</strong> home insurance is growing at roughly twice the rate of income and inflation — the affordability crisis driven by coastal exposure, reinsurance costs, and climate risk is real and measurable. Employer family health premiums have outrun both inflation and income since 2020, and the approved 2026 rates of 7.1–12.2% extend that run. Auto premiums saw a historic single-year shock in 2023.<span class="info-src">Analysis: MA DOI Home Insurance Report 2024; AHRQ MEPS-IC; Census ACS; BLS CPI-U Boston</span></div></div>
+    <div class="info warn"><div class="info-icon">⚠️</div><div class="info-text"><strong>Bottom line:</strong> home insurance is growing at roughly twice the rate of income and inflation — the affordability crisis driven by coastal exposure, reinsurance costs, and climate risk is real and measurable. Employer family health premiums have outrun both inflation and income since 2020, and the approved rates of 11.5% for 2026 and 10.8% for 2027 extend that run. Auto premiums saw a historic single-year shock in 2023.<span class="info-src">Analysis: MA DOI Home Insurance Report 2024; AHRQ MEPS-IC; Census ACS; BLS CPI-U Boston</span></div></div>
   </div>
 </div>
 
@@ -422,23 +434,25 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
 <div class="tab-panel" id="tab-auto">
   <div class="section">
     <div class="sec-title">Private Passenger Auto</div>
-    <div class="sec-desc">What drivers actually pay — plus market structure. Sources: NAIC Auto Insurance Database (2023); MA DOI 2022-2023 Annual Report; CAR Annual Reports; Agency Checklists market share reports.</div>
+    <div class="sec-desc">What drivers actually pay — plus market structure. Sources: NAIC Auto Insurance Database Average Premium Supplement (2024 edition, published Oct 2026); MA DOI 2025 and 2022-2023 Annual Reports; CAR Annual Reports.</div>
 
-    <div class="hl green"><div class="hl-label">✓ MA auto is cheaper than the national average</div><div class="hl-val">$1,326 in MA vs. $1,438 nationally — MA is 7.8% BELOW the US average</div><div class="hl-ctx">Massachusetts ranks #17 of 51 states for average full-coverage auto premium — in the middle of the pack, well below states like Louisiana, Florida, and Michigan. The managed-competition regime (2008+) and the state's historically dense independent-agent network keep prices competitive.</div><div class="hl-src">Source: NAIC 2023 Auto Insurance Database Average Premium Supplement (published June 2025)</div></div>
+    <div class="hl amber"><div class="hl-label">⚠️ MA auto costs more than the national average, not less</div><div class="hl-val">$1,504 per insured vehicle in MA vs. $1,432 nationally in 2024 — MA is 5.0% ABOVE the US average</div><div class="hl-ctx">Massachusetts is the 15th-costliest of 51 jurisdictions on average expenditure, and has been above the national average in every year from 2020 to 2024. The gap has narrowed, from +11.7% in 2020 to +5.0% in 2024, but it has not closed. Louisiana, Florida and New York remain far more expensive.</div><div class="hl-src">Source: NAIC 2024 Auto Insurance Database Average Premium Supplement (published 1 Oct 2026), average expenditure table</div></div>
+
+    <div class="info"><div class="info-icon">&#8505;</div><div class="info-text"><strong>Expenditure and premium are different measures, and this page previously mixed them.</strong> NAIC publishes both. <em>Average expenditure</em> is what the average insured vehicle actually costs, so it reflects how much coverage drivers buy; on that measure MA is 5.0% above national. <em>Combined average premium</em> adds the liability, collision and comprehensive averages together, which prices a driver who buys all three; on that measure MA is $1,610.84 against $1,612.81, essentially level with the nation and 18th of 51. Comparing MA expenditure against national premium, as an earlier version of this page did, mixes the two and makes Massachusetts look cheaper than it is.<span class="info-src">Source: NAIC 2024 Auto Insurance Database Average Premium Supplement, average expenditure and average premium tables</span></div></div>
 
     <div class="hl amber"><div class="hl-label">⚠️ 2023 saw an unusually large jump</div><div class="hl-val">MA auto premiums rose +$152 per vehicle in 2023 alone</div><div class="hl-ctx">From 2013 through 2022, year-over-year dollar changes ranged from −$13 to +$40. 2023's +$152 was the largest single-year increase in a decade, driven by repair costs, labor, and severity. Multi-year growth averages 3.1% per year since 2013.</div><div class="hl-src">Source: MA DOI 2022-2023 Annual Report (Figure: Average Change in Personal Auto Insurance Premium)</div></div>
 
     <div class="hl"><div class="hl-label">⚠️ July 2025 statutory minimum hike</div><div class="hl-val">Minimum-coverage auto premium jumped roughly 36% on July 1, 2025</div><div class="hl-ctx">A Massachusetts statute raised compulsory liability limits effective July 1, 2025 — the first increase in decades. For drivers carrying minimum coverage only, the average premium rose from approximately $524/year to $711/year. Full-coverage drivers saw a smaller impact.</div><div class="hl-src">Source: MA statutory change effective July 1, 2025; Bankrate analysis of Quadrant Information Services data</div></div>
 
     <div class="grid-3">
-      <div class="card"><div class="dc-label">Avg Full Coverage Premium (MA, 2023)</div><div class="dc-val green">$1,326</div><div class="dc-meta"><div><div class="dc-ml">2022</div><div class="dc-mv">$1,251</div></div><div><div class="dc-ml">YoY Change</div><div class="dc-mv" style="color:var(--amber)">+6.0%</div></div></div><div class="dc-src">Source: NAIC 2023 Auto Insurance Database Avg Premium Supplement</div></div>
-      <div class="card"><div class="dc-label">National Avg (2023)</div><div class="dc-val blue">$1,438</div><div class="dc-meta"><div><div class="dc-ml">US 2022</div><div class="dc-mv">$1,257</div></div><div><div class="dc-ml">YoY Change</div><div class="dc-mv" style="color:var(--red)">+14.4%</div></div></div><div class="dc-src">Source: NAIC 2023 Auto Insurance Database Avg Premium Supplement</div></div>
-      <div class="card"><div class="dc-label">MA State Rank</div><div class="dc-val green">#17 of 51</div><div class="dc-meta"><div><div class="dc-ml">Gap vs. US</div><div class="dc-mv" style="color:var(--green)">−$112 (−7.8%)</div></div><div><div class="dc-ml">Trend</div><div class="dc-mv">Middle of pack</div></div></div><div class="dc-src">Source: NAIC 2023 Auto Insurance Database</div></div>
+      <div class="card"><div class="dc-label">MA Avg Expenditure (2024)</div><div class="dc-val red">$1,503.52</div><div class="dc-meta"><div><div class="dc-ml">2023</div><div class="dc-mv">$1,326.46</div></div><div><div class="dc-ml">YoY Change</div><div class="dc-mv" style="color:var(--red)">+13.3%</div></div></div><div class="dc-src">Source: NAIC 2024 Auto Insurance Database Avg Premium Supplement</div></div>
+      <div class="card"><div class="dc-label">National Avg Expenditure (2024)</div><div class="dc-val blue">$1,431.63</div><div class="dc-meta"><div><div class="dc-ml">US 2023</div><div class="dc-mv">$1,281.61</div></div><div><div class="dc-ml">YoY Change</div><div class="dc-mv" style="color:var(--red)">+11.7%</div></div></div><div class="dc-src">Source: NAIC 2024 Auto Insurance Database Avg Premium Supplement</div></div>
+      <div class="card"><div class="dc-label">MA Rank, Avg Expenditure</div><div class="dc-val red">15th of 51</div><div class="dc-meta"><div><div class="dc-ml">Gap vs. US</div><div class="dc-mv" style="color:var(--red)">+$71.89 (+5.0%)</div></div><div><div class="dc-ml">Above US since</div><div class="dc-mv">2020 (all 5 yrs)</div></div></div><div class="dc-src">Source: NAIC 2024 Auto Insurance Database, computed over all 51 jurisdictions</div></div>
     </div>
 
     <div class="grid-2">
-      <div class="card"><div class="card-title">MA vs. National Average Auto Premium</div><div class="card-sub">Full-coverage expenditure per insured vehicle, 2022–2023</div><div class="card-canvas"><canvas id="c-auto-ma-vs-us"></canvas></div><div class="card-src">Source: NAIC Auto Insurance Database Average Premium Supplements, 2022 &amp; 2023</div></div>
-      <div class="card"><div class="card-title">Annual Change in MA Auto Premium, 2013–2023</div><div class="card-sub">$ change per vehicle vs. prior year — note the 2023 spike</div><div class="card-canvas"><canvas id="c-auto-change"></canvas></div><div class="card-src">Source: MA DOI 2022-2023 Annual Report</div></div>
+      <div class="card"><div class="card-title">MA vs. National Average Auto Expenditure</div><div class="card-sub">Average expenditure per insured vehicle, 2020–2024 — MA above national in all five years</div><div class="card-canvas"><canvas id="c-auto-ma-vs-us"></canvas></div><div class="card-src">Source: NAIC 2024 Auto Insurance Database Average Premium Supplement, average expenditure table</div></div>
+      <div class="card"><div class="card-title">Annual Change in MA Auto Premium, 2013–2023</div><div class="card-sub">$ change per vehicle vs. prior year — a DOI series, not comparable with the NAIC figures above</div><div class="card-canvas"><canvas id="c-auto-change"></canvas></div><div class="card-src">Source: MA DOI 2022-2023 Annual Report. DOI and NAIC measure auto cost differently, so these dollar changes are not the year-on-year differences of the NAIC series.</div></div>
     </div>
 
     <div style="margin:32px 0 18px;padding-top:24px;border-top:1px solid var(--border)">
@@ -447,7 +461,7 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
     </div>
 
     <div class="grid-3">
-      <div class="card"><div class="dc-label">Written Premium (2023)</div><div class="dc-val blue">$6.47B</div><div class="dc-meta"><div><div class="dc-ml">Carriers Writing</div><div class="dc-mv">36+</div></div></div><div class="dc-src">Source: MA DOI 2022-2023 Annual Report</div></div>
+      <div class="card"><div class="dc-label">Written Premium (2023)</div><div class="dc-val blue">$6.47B</div><div class="dc-meta"><div><div class="dc-ml">Carriers Writing</div><div class="dc-mv">36+</div></div></div><div class="dc-src">Source: MA DOI 2022-2023 Annual Report (the newest edition carrying this series)</div></div>
       <div class="card"><div class="dc-label">MAIP Residual Share (FY2025)</div><div class="dc-val amber">~2%</div><div class="dc-meta"><div><div class="dc-ml">FY2022</div><div class="dc-mv">&lt;0.5%</div></div></div><div class="dc-src">Source: CAR 2025 Annual Report</div></div>
       <div class="card"><div class="dc-label">New Entrants Since 2008</div><div class="dc-val green">24</div><div class="dc-meta"><div><div class="dc-ml">Managed Comp.</div><div class="dc-mv">Apr 1, 2008</div></div></div><div class="dc-src">Source: MA DOI 2022-2023 Annual Report</div></div>
     </div>
@@ -535,14 +549,16 @@ tbody tr:hover{background:rgba(15,41,66,.02)}
           <tr><td><strong>MA DOI — Annual Home Insurance Report 2024</strong></td><td><span class="pill green">Live</span></td><td>PDF</td><td>Annual</td><td>$3.6B premium, 8.7% FAIR Plan, carrier market share, wind deductibles, catastrophes</td></tr>
           <tr><td><strong>MA DOI — Statistical Supplement 2024</strong></td><td><span class="pill green">Live</span></td><td>PDF</td><td>Annual</td><td>Zip-code-level home insurance detail</td></tr>
           <tr><td><strong>MA DOI — 2022-2023 Annual Report</strong></td><td><span class="pill green">Live</span></td><td>PDF</td><td>Biennial</td><td>Auto premium, residual market, licensee counts, complaints, Merit Rating Board</td></tr>
-          <tr><td><strong>MA DOI — 2026 rate filing decisions (Jul 2025)</strong></td><td><span class="pill green">Live</span></td><td>Press release + SERFF</td><td>Annual</td><td>2026 approved/rejected health rates</td></tr>
+          <tr><td><strong>MA DOI — CY2027 Final Rate Summary Tables</strong></td><td><span class="pill green">Live</span></td><td>XLSX</td><td>Annual</td><td>2027 approved rates by carrier, trend and driver decomposition; decision 22 Jul 2026</td></tr>
+          <tr><td><strong>MA DOI — 2026 Final Rate Filing Summary</strong></td><td><span class="pill green">Live</span></td><td>PDF</td><td>Annual</td><td>2026 final approved rates by carrier, superseding the Jul 2025 announcement</td></tr>
+          <tr><td><strong>MA DOI — 2025 Annual Report</strong></td><td><span class="pill green">Live</span></td><td>Web</td><td>Annual</td><td>$84B market, $321M revenues, 2,132 licensed insurers, 2,167 complaints closed, 42 new PBM licences</td></tr>
           <tr><td><strong>CHIA — Annual Report 2025 &amp; 2026</strong></td><td><span class="pill green">Live</span></td><td>PDF + XLSX</td><td>Annual</td><td>THCE, spending, affordability by race, benchmark</td></tr>
           <tr><td><strong>CMS State Health Expenditure Accounts</strong></td><td><span class="pill green">Live</span></td><td>CSV</td><td>Annual</td><td>Per-capita MA vs. US spending</td></tr>
           <tr><td><strong>CAR Annual Reports 2022/2024/2025</strong></td><td><span class="pill green">Live</span></td><td>PDF</td><td>Annual</td><td>MAIP residual share, commercial auto, financial results</td></tr>
           <tr><td><strong>Agency Checklists Market Share Reports (1st/2nd Look 2026)</strong></td><td><span class="pill green">Live</span></td><td>Article</td><td>Quarterly</td><td>Per-carrier auto market share (cites CAR data)</td></tr>
           <tr><td><strong>US Census Bureau ACS</strong></td><td><span class="pill green">Live</span></td><td>CSV/API</td><td>Annual</td><td>MA median household income</td></tr>
           <tr><td><strong>BLS CPI-U Boston-Cambridge-Newton</strong></td><td><span class="pill green">Live</span></td><td>CSV</td><td>Monthly</td><td>Inflation benchmark for affordability analysis</td></tr>
-          <tr><td><strong>NAIC Auto Insurance Database Avg Premium Supplement</strong></td><td><span class="pill green">Live</span></td><td>PDF</td><td>Annual</td><td>MA avg auto premium $1,326 (2023); national comparison; state rank</td></tr>
+          <tr><td><strong>NAIC Auto Insurance Database Avg Premium Supplement (2024 ed.)</strong></td><td><span class="pill green">Live</span></td><td>PDF</td><td>Annual</td><td>MA avg expenditure $1,503.52 and combined premium $1,610.84 (2024), 2020–2024 series, all 51 jurisdictions</td></tr>
           <tr><td><strong>DOI PPA Rate Filings XLSX (2008–2026)</strong></td><td><span class="pill green">Live</span></td><td>XLSX</td><td>Rolling</td><td>1,375 rate filings by carrier, year, type</td></tr>
           <tr><td><strong>MA DOI Licensee XLSX (monthly)</strong></td><td><span class="pill amber">Ingester built</span></td><td>XLSX</td><td>Monthly</td><td>Live licensee roster tracking</td></tr>
           <tr><td><strong>CMS Marketplace &amp; Rate Review PUFs</strong></td><td><span class="pill amber">Ingester built</span></td><td>CSV (zip)</td><td>Annual</td><td>ACA plan-level rate data</td></tr>
@@ -617,8 +633,11 @@ function initCharts(tab){
       break;
 
     case 'rates':
-      safeChart('c-carriers',{type:'bar',data:{labels:['Harvard\nPilgrim','Tufts','United\nHealthcare','Health NE','MGB\nHealth','Fallon','BCBS\n(rejected)','WellSense\n(rejected)'],datasets:[{data:[12.2,11.1,10.5,9.4,9.0,7.1,12.9,16.2],backgroundColor:[R+'cc',R+'cc',Y+'cc',Y+'cc',Y+'cc',G+'cc','#999','#999'],borderColor:[R,R,Y,Y,Y,G,'#666','#666'],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){var s=c.dataIndex>=6?'REJECTED':'Approved';return c.raw+'% — '+s}}}},scales:{y:{beginAtZero:true,max:18,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
-      safeChart('c-proposed-vs-approved',{type:'bar',data:{labels:['Harvard Pilgrim','Tufts','UnitedHealthcare','Health NE','Fallon'],datasets:[{label:'Proposed',data:[14.8,13.2,12.3,10.4,9.9],backgroundColor:R+'77',borderColor:R,borderWidth:1.5,borderRadius:6},{label:'Approved',data:[12.2,11.1,10.5,9.4,7.1],backgroundColor:G+'cc',borderColor:G,borderWidth:1.5,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{beginAtZero:true,max:16,ticks:{callback:function(v){return v+'%'}}},x:{grid:{display:false}}}}});
+      // Grouped by carrier, one bar per year. Colour encodes the YEAR (the entity
+      // being compared), never the rank: B/R validated as a categorical pair
+      // (protan dE 15.2, normal dE 26.4) against this page's light surface.
+      safeChart('c-carriers',{type:'bar',data:{labels:['Fallon','BCBS','MGB\nHealth','WellSense','United\nHealthcare','Health NE','Tufts','Harvard\nPilgrim'],datasets:[{label:'2026 approved',data:[7.2,11.9,7.6,13.6,9.4,9.5,11.5,12.6],backgroundColor:B+'cc',borderColor:B,borderWidth:2,borderRadius:4},{label:'2027 approved',data:[19.2,13.2,12.2,11.4,10.9,10.4,7.5,6.7],backgroundColor:R+'cc',borderColor:R,borderWidth:2,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'%'}}}},scales:{y:{beginAtZero:true,max:21,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,.06)'}},x:{grid:{display:false}}}}});
+      safeChart('c-proposed-vs-approved',{type:'bar',data:{labels:['Fallon','BCBS','MGB\nHealth','WellSense','United\nHealthcare','Health NE','Tufts','Harvard\nPilgrim'],datasets:[{label:'2027 proposed',data:[25.7,15.3,13.5,11.9,14.2,11.1,11.8,6.7],backgroundColor:R+'55',borderColor:R,borderWidth:1.5,borderRadius:4},{label:'2027 approved',data:[19.2,13.2,12.2,11.4,10.9,10.4,7.5,6.7],backgroundColor:R+'cc',borderColor:R,borderWidth:1.5,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+'%'}}}},scales:{y:{beginAtZero:true,max:27,ticks:{callback:function(v){return v+'%'}},grid:{color:'rgba(0,0,0,.06)'}},x:{grid:{display:false}}}}});
       break;
 
     case 'spending':
@@ -663,7 +682,10 @@ function initCharts(tab){
       break;
 
     case 'auto':
-      safeChart('c-auto-ma-vs-us',{type:'bar',data:{labels:['MA 2022','US 2022','MA 2023','US 2023'],datasets:[{data:[1251,1257,1326,1438],backgroundColor:[G+'cc',B+'cc',G+'cc',B+'cc'],borderColor:[G,B,G,B],borderWidth:2,borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return '$'+c.raw.toLocaleString()}}}},scales:{y:{beginAtZero:false,min:1100,ticks:{callback:function(v){return '$'+v.toLocaleString()}}},x:{grid:{display:false}}}}});
+      // Like for like: average EXPENDITURE both sides. The previous version put MA
+      // expenditure next to national combined premium, two different NAIC measures,
+      // which inverted the comparison.
+      safeChart('c-auto-ma-vs-us',{type:'line',data:{labels:['2020','2021','2022','2023','2024'],datasets:[{label:'Massachusetts',data:[1169.84,1200.48,1191.02,1326.46,1503.52],borderColor:R,backgroundColor:R,borderWidth:2,pointRadius:4,pointHoverRadius:6,tension:.25},{label:'United States',data:[1047.75,1060.83,1124.61,1281.61,1431.63],borderColor:B,backgroundColor:B,borderWidth:2,pointRadius:4,pointHoverRadius:6,borderDash:[5,3],tension:.25}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:function(c){return c.dataset.label+': $'+c.raw.toLocaleString(undefined,{minimumFractionDigits:2})}}}},scales:{y:{beginAtZero:false,min:1000,ticks:{callback:function(v){return '$'+v.toLocaleString()}},grid:{color:'rgba(0,0,0,.06)'}},x:{grid:{display:false}}}}});
       safeChart('c-auto-share',{type:'bar',data:{labels:['Commerce','Progressive','GEICO','Safety','Plymouth Rock','Arbella','Travelers','Liberty Mutual','USAA','Amica'],datasets:[{data:[18.33,12.17,11.50,9.30,7.88,7.08,6.19,4.98,4.29,3.02],backgroundColor:[R+'cc',B+'cc',B+'cc',G+'cc',G+'cc',G+'cc',B+'cc',B+'cc',B+'cc',G+'cc'],borderColor:[R,B,B,G,G,G,B,B,B,G],borderWidth:2,borderRadius:6}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return c.raw+'% market share'}}}},scales:{x:{ticks:{callback:function(v){return v+'%'}}},y:{grid:{display:false}}}}});
       safeChart('c-auto-leaders',{type:'line',data:{labels:['2020','2021','2022','2023','2024','2025'],datasets:[
         {label:'Commerce (MAPFRE)',data:[22.1,21.5,20.9,19.9,19.0,18.33],borderColor:R,backgroundColor:R+'22',fill:false,tension:.3,pointRadius:4,pointBackgroundColor:R,borderWidth:3},
