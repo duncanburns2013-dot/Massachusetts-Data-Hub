@@ -38,7 +38,7 @@ FIRST, then update the relevant dashboard.
 
 ### National — Border Encounters (CBP)
 
-| Fiscal Year | SWB Encounters | Source | Verified |
+| Fiscal Year | SWB Encounters | Source | How it is held up |
 |-------------|---------------|--------|----------|
 | FY2017 | 415,517 | CBP | 🔒 closed federal fiscal year. These are OHSS total encounters (Border Patrol plus ports of entry); OHSS stopped publishing the ports-of-entry component after FY2024, so this series is complete and cannot be extended or revised. The Border Patrol-only series that does continue is written by update-cbp-encounters.py. |
 | FY2018 | 521,090 | CBP | 🔒 closed federal fiscal year. These are OHSS total encounters (Border Patrol plus ports of entry); OHSS stopped publishing the ports-of-entry component after FY2024, so this series is complete and cannot be extended or revised. The Border Patrol-only series that does continue is written by update-cbp-encounters.py. |
@@ -65,7 +65,7 @@ FIRST, then update the relevant dashboard.
 
 ### National — Net International Migration (Census)
 
-| Year | NIM (persons) | Source | Verified |
+| Year | NIM (persons) | Source | How it is held up |
 |------|--------------|--------|----------|
 | 2020 | 19,892 | Census Vintage 2025 | ⏳ re-read by 2026-12-31 — Census Vintage 2026, due December |
 | 2021 | 376,026 | Census Vintage 2025 | ⏳ re-read by 2026-12-31 — Census Vintage 2026, due December |
@@ -98,7 +98,7 @@ vintage step.
 
 ### National — Deportation Math
 
-| Metric | Figure | Source | Verified |
+| Metric | Figure | Source | How it is held up |
 |--------|--------|--------|----------|
 | Entered (FY2021-24) | ~8M | CBP + Census | ⏳ re-read by 2027-01-31 — CBP plus Census, re-derive |
 | Interior removals (Biden admin) | ~600K (~150K/yr) | ICE ERO | ⏳ re-read by 2027-01-31 — ICE ERO annual report |
@@ -106,7 +106,7 @@ vintage step.
 
 ### National — Fiscal Impact
 
-| Metric | Figure | Source | Verified |
+| Metric | Figure | Source | How it is held up |
 |--------|--------|--------|----------|
 | Cato/NASEM cumulative surplus (1994-2023) | $14.5T | Cato White Paper 2025 | 🔒 a published study's finding. Cato White Paper 2025, fixed text. |
 | College grad share of surplus | $11.7T (81%) | Cato/NASEM | 🔒 same study, fixed text. |
@@ -121,7 +121,7 @@ vintage step.
 
 ### Massachusetts — Immigration Costs
 
-| Category | Annual Cost | Source | Verified |
+| Category | Annual Cost | Source | How it is held up |
 |----------|------------|--------|----------|
 | Total annual immigration cost | ~$2.35B | Multiple state sources | ⏳ re-read by 2027-01-31 — a compilation of several state sources; re-derive from each |
 | Illegal-only cost estimate | $800M–$1.5B | CIS/FAIR/state data | ⏳ re-read by 2027-01-31 — an estimate range from advocacy sources on both sides; re-derive |
@@ -138,7 +138,7 @@ vintage step.
 > Neither includes trust fund 7004-4778, which CTHRU budget-vs-actual does not carry.
 > Query: https://cthru.data.socrata.com/resource/kv7m-35wn.json (rows updated 2026-09-30).
 
-| Metric | Figure | Source | Verified |
+| Metric | Figure | Source | How it is held up |
 |--------|--------|--------|----------|
 | Shelter system, FY2022 actual | $228.53M | CTHRU kv7m-35wn | 🔄 written by `update-immigrant-spending.py` |
 | Shelter system, FY2023 actual | $343.55M | CTHRU kv7m-35wn | 🔄 written by `update-immigrant-spending.py` |
@@ -168,7 +168,7 @@ vintage step.
 
 ### Massachusetts — H-1B Workers
 
-| Year | H-1B Workers (MA) | Source | Verified |
+| Year | H-1B Workers (MA) | Source | How it is held up |
 |------|--------------------|--------|----------|
 | Peak | 21,834 | USCIS | ⏳ re-read by 2027-01-31 — USCIS parole and humanitarian data |
 | Current | ~7,550 | USCIS | ⏳ re-read by 2027-01-31 — USCIS parole and humanitarian data |
@@ -178,7 +178,7 @@ vintage step.
 🔄 Live values: `data/census-latest.json` (ACS 5-year, vintage 2024, refreshed monthly on the 20th).
 The figures below are that file's current contents; the Feb 2026 column showed an older ACS vintage.
 
-| City | Foreign-Born % | Source | Verified |
+| City | Foreign-Born % | Source | How it is held up |
 |------|---------------|--------|----------|
 | Chelsea | 46% | ACS 2024 (5-yr) | 🔄 Jul 2026 |
 | Everett | 46% | ACS 2024 (5-yr) | 🔄 Jul 2026 |
@@ -203,7 +203,7 @@ The figures below are that file's current contents; the Feb 2026 column showed a
 
 ### Massachusetts — Population & Migration
 
-| Metric | Figure | Source | Verified |
+| Metric | Figure | Source | How it is held up |
 |--------|--------|--------|----------|
 | IRS returns lost (cumulative 2011–2023) | 184,719 | IRS SOI | 🔄 Aug 2026 |
 | AGI lost (cumulative 2011–2023) | $24.7B | IRS SOI | 🔄 Aug 2026 |
@@ -211,7 +211,7 @@ The figures below are that file's current contents; the Feb 2026 column showed a
 
 The 16,921 is outflow 102,076 against inflow 85,155 (returns, 2022-23; data/irs-soi-migration-latest.json), and both totals include the foreign category. It is therefore NOT comparable with a domestic-only net migration count, which is a smaller number. Say which one a card means before putting the two near each other.
 
-| Metric | Figure | Source | Verified |
+| Metric | Figure | Source | How it is held up |
 |--------|--------|--------|----------|
 | Net domestic out-migration, 2020-2025 | 182,145 people | US Census Bureau, Population Estimates (NST-EST2025 components of change) | 🔄 Sep 2026 |
 | Net international migration, 2020-2025 | +286,765 people (2024-25: +40,240; 2023-24: +77,957) | US Census Bureau, Population Estimates (NST-EST2025 components of change) | 🔄 Oct 2026 |
@@ -276,7 +276,7 @@ Boston $1,336,665. Quote it with its as-of date or not at all.
 
 ### Haverhill Specific
 
-| Metric | Value | Source | Verified |
+| Metric | Value | Source | How it is held up |
 |--------|-------|--------|----------|
 | Median household income | $88,326 | Census QuickFacts ACS 2020-2024 | ⏳ re-read by 2026-12-31 — Census ACS 5-year, next release |
 | MA median household income | $103,960 | ACS 2024 (5-yr), `data/census-latest.json` | 🔄 Jul 2026 |
@@ -299,7 +299,7 @@ Values below are that file as of **2026-11-12**. (Feed is PrimeMLS, not Paragon.
 
 ### Boston — Commercial Real Estate (CMBS)
 
-| Metric | Value | Source | Verified |
+| Metric | Value | Source | How it is held up |
 |--------|-------|--------|----------|
 | Office vacancy (C&W) | 19.0% | Cushman & Wakefield Q2 2026 | ⏳ re-read by 2027-01-31 — Cushman & Wakefield Q4 2026 |
 | Office vacancy (Colliers) | 23.7% | Colliers Q2 2026 | ⏳ re-read by 2027-01-31 — Colliers Q4 2026 |
@@ -341,7 +341,7 @@ Values below are that file as of **2026-10-20** (reference month September 2026)
 
 ### Massachusetts — JOLTS (historical, pre-discontinuation)
 
-| Metric | Value | Source | Verified |
+| Metric | Value | Source | How it is held up |
 |--------|-------|--------|----------|
 | Job openings rate (peak) | ~5.5% | BLS JOLTS | ⏳ re-read by 2026-12-31 — BLS JOLTS via FRED |
 | Job openings rate (2025) | ~4.2% | BLS JOLTS | ⏳ re-read by 2026-12-31 — BLS JOLTS via FRED |
@@ -349,7 +349,7 @@ Values below are that file as of **2026-10-20** (reference month September 2026)
 
 ### National — Labor Market (2025)
 
-| Metric | Value | Source | Verified |
+| Metric | Value | Source | How it is held up |
 |--------|-------|--------|----------|
 | NFP downward revision (Apr 2024–Mar 2025) | -911,000 jobs | BLS benchmark | 🔒 the BLS annual benchmark revision for a closed period. Final. |
 | Healthcare jobs added (2025) | +713,000 | BLS CES | ⏳ re-read by 2026-12-31 — BLS CES via FRED |
@@ -366,7 +366,7 @@ Values below are that file as of **2026-10-20** (reference month September 2026)
 
 Machine-readable copy lives in [`data/bls-release-schedule.json`](data/bls-release-schedule.json); the employment updater reads it to stamp "Released &lt;date&gt;" on the national block.
 
-| Reference Month | Released | Source | Verified |
+| Reference Month | Released | Source | How it is held up |
 |-----------------|----------|--------|----------|
 | November 2025 | Dec 16, 2025 | BLS Employment Situation schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
 | December 2025 | Jan 09, 2026 | BLS Employment Situation schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
@@ -389,7 +389,7 @@ Machine-readable copy lives in [`data/bls-release-schedule.json`](data/bls-relea
 
 The MA vintage. Lands ~3 weeks after the national release, which is why the MA blocks on the employment dashboard legitimately sit a month behind the national block. Same JSON file, `state_employment` key.
 
-| Reference Month | Released | Source | Verified |
+| Reference Month | Released | Source | How it is held up |
 |-----------------|----------|--------|----------|
 | November 2025 | Jan 07, 2026 | BLS State Employment and Unemployment schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
 | December 2025 | Jan 27, 2026 | BLS State Employment and Unemployment schedule | 🔄 written by `scripts/stamp-bls-schedule.py` |
@@ -416,7 +416,7 @@ The MA vintage. Lands ~3 weeks after the national release, which is why the MA b
 
 ### Statewide Enrollment Shifts (SY2019→SY2026)
 
-| Sector | Change | Source | Verified |
+| Sector | Change | Source | How it is held up |
 |--------|--------|--------|----------|
 | K-12 overall | **-7.0%** (SY2019→SY2026) | MA DESE, `rdxw-mfv3` (School Attending Children) via educationtocareer.data.mass.gov, statewide row `town_code=00000000`, retrieved 2026-11-11 | ⏳ re-read by 2027-06-30 — DESE `rdxw-mfv3` statewide row for SY2027. The dataset's rows were last updated 2026-05-26 with SY2026 already in them, so a new school year lands by late spring; this date adds a month of slack. Re-derive the whole set together, not one row. Verified 2026-11-11: All school-attending children reported by municipalities: 1,007,005 (SY2019) → 936,803 (SY2026). Public-only on the same basis is -7.3%. An earlier fix today put -5.6% here from `t8td-gens`, which counts public enrolment only and so cannot be the "overall" above a list that includes private and homeschool; corrected. |
 | Local public schools | **-8.7%** (SY2019→SY2026) | MA DESE, `rdxw-mfv3` (School Attending Children) via educationtocareer.data.mass.gov, statewide row `town_code=00000000`, retrieved 2026-11-11 | ⏳ re-read by 2027-06-30 — DESE `rdxw-mfv3` statewide row for SY2027. The dataset's rows were last updated 2026-05-26 with SY2026 already in them, so a new school year lands by late spring; this date adds a month of slack. Re-derive the whole set together, not one row. Verified 2026-11-11: 731,030 → 667,737. Published -6.4% was closer to the SY2019→SY2025 figure of -7.9%, and short of that too. |
@@ -447,7 +447,7 @@ the figures below or on the page — change the source or the updater.
 
 ### What the law requires
 
-| Field | Value | Source | Verified |
+| Field | Value | Source | How it is held up |
 |-------|-------|--------|----------|
 | Communities subject to § 3A | 177 | EOHLC capacity table | 🔄 written by `update-mbta-3a.py` |
 | 2020 housing units across them | 1,941,671 | EOHLC capacity table | 🔄 written by `update-mbta-3a.py` |
@@ -470,7 +470,7 @@ community 10%, adjacent small town 5%. Counts: 12 / 72 / 58 / 35.
 
 ### Compliance and what has been built
 
-| Field | Value | Source | Verified |
+| Field | Value | Source | How it is held up |
 |-------|-------|--------|----------|
 | Compliant | 159 | EOHLC Compliance Status Sheet (2026-10-26) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
 | Interim compliance | 8 | EOHLC Compliance Status Sheet (2026-10-26) and 3A Development Tracker (2026-09-11) | 🔄 written by `update-mbta-3a.py` |
@@ -561,7 +561,7 @@ Facts (kff.org/private-insurance/state-indicator/family-coverage). The state fig
 not the KFF Employer Health Benefits Survey, which is national. The $26,993 previously listed as
 the 2025 US average is not the MEPS-IC figure. ✅ Oct 2026.
 
-| Metric | Value | Source | Verified |
+| Metric | Value | Source | How it is held up |
 |--------|-------|--------|----------|
 | Personal health care spending per capita, 2020 | MA $13,319, 3rd of 50 states (NY $14,007, AK $13,642; DC $14,381); US $10,191 | CMS Health Expenditures by State of Residence, US_PER_CAPITA20.CSV (newest state edition, 1991-2020) | ⏳ re-read by 2027-06-30 — CMS Health Expenditures by State of Residence |
 | Employer family premium, 2025 | MA $29,619, 4th of 50; US $26,281 | AHRQ MEPS-IC 2025 via KFF | ⏳ re-read by 2027-06-30 — AHRQ MEPS-IC, annual |
@@ -602,7 +602,7 @@ card put the US premium at 24.2% of income against its own figures' 30.4%, and m
 
 ### SNAP vs. Poverty
 
-| Metric | Value | Source | Verified |
+| Metric | Value | Source | How it is held up |
 |--------|-------|--------|----------|
 | MA SNAP persons participating | 889,327 (June 2026, initial) | USDA-FNS SNAP Data Tables, `snap-persons-9.xlsx`, data as of 11 Sep 2026 | ⏳ re-read by 2026-12-31 — USDA-FNS SNAP data tables |
 | MA SNAP persons, a year earlier | 1,079,234 (June 2025) | same file | ⏳ re-read by 2026-12-31 — USDA-FNS SNAP data tables |
@@ -646,7 +646,7 @@ card put the US premium at 24.2% of income against its own figures' 30.4%, and m
 
 ### SNAP Fraud Detection
 
-| Metric | Value | Source | Verified |
+| Metric | Value | Source | How it is held up |
 |--------|-------|--------|----------|
 | Expected fraud (national model) | ~$50M | USDA-FNS Trafficking Studies | ⏳ re-read by 2027-06-30 — USDA-FNS trafficking studies |
 | Detected fraud (MA), BSI Q1 FY2025 | $2,549,325 all programs, of which SNAP $1,528,615 | BSI Q1 FY2025 report, malegislature.gov/Bills/194/SD2676.pdf | ⏳ re-read by 2027-01-31 — the next BSI quarterly |
@@ -659,7 +659,7 @@ card put the US premium at 24.2% of income against its own figures' 30.4%, and m
 
 Administrative findings, not convictions. BSI cannot collect settlements; the benefit programs do.
 
-| Period | Fraud identified | Source | Verified |
+| Period | Fraud identified | Source | How it is held up |
 |--------|------------------|--------|----------|
 | FY2022 | $13,519,349.55 | BSI FY2022 Annual Report (Wayback of mass.gov) | 🔒 a published BSI annual report for a closed fiscal year. |
 | FY2023 | $12,322,688.13 | BSI FY2023 Annual Report | 🔒 a published BSI annual report for a closed fiscal year. |
@@ -679,7 +679,7 @@ FY2026 full year not yet published (checked 30 Sep 2026).
 
 ### US Treasury Gold Holdings
 
-| Metric | Value | Source | Verified |
+| Metric | Value | Source | How it is held up |
 |--------|-------|--------|----------|
 | Total holdings | 261.5M fine troy oz | Treasury Status Report of U.S. Government Gold Reserve, 2026-09-30, via the Fiscal Data API | 🔄 written by `update-gold-reserve.py` |
 | Holdings change since the earliest report | Flat — +27 oz (+0.000%) since 2012-01-31 | Treasury Status Report of U.S. Government Gold Reserve, 2026-09-30, via the Fiscal Data API | 🔄 written by `update-gold-reserve.py` |
@@ -689,7 +689,7 @@ FY2026 full year not yet published (checked 30 Sep 2026).
 
 ### Global Central Bank Buying
 
-| Year | Annual Purchases (tonnes) | Source | Verified |
+| Year | Annual Purchases (tonnes) | Source | How it is held up |
 |------|--------------------------|--------|----------|
 | 2010-2021 avg | ~473t | World Gold Council | ⏳ re-read by 2027-02-28 — World Gold Council annual demand trends |
 | 2022 | 1,082t (record) | World Gold Council | ⏳ re-read by 2027-02-28 — World Gold Council annual demand trends |
@@ -823,7 +823,7 @@ the dollar, and the press release's "$63.42 billion".
 
 ### Enacted budgets FY2018–FY2027, headline scope (`GAA_SIGNED` + `FY27_GAA`)
 
-| Fiscal year | Enacted, headline scope ($B) | Source | Verified |
+| Fiscal year | Enacted, headline scope ($B) | Source | How it is held up |
 |---|---:|---|---|
 | FY2018 | 40.197 | `gaabudgets` FY21 workbook; statewide summary TOTAL $40,196,899K (budget.digital.mass.gov/bb/gaa/fy2018) | 🔒 an enacted General Appropriation Act total. The year is closed and the enacted figure is final. |
 | FY2019 | 41.883 | `gaabudgets` FY21 workbook; statewide summary TOTAL $41,883,308K (bb/gaa/fy2019) | 🔒 an enacted General Appropriation Act total. The year is closed and the enacted figure is final. |
@@ -847,7 +847,7 @@ scopes and was off by up to $1.6B in both directions; it had put FY2018-to-FY202
 
 ### FY2027 enacted — key figures
 
-| Figure | Value | Source | Verified |
+| Figure | Value | Source | How it is held up |
 |---|---|---|---|
 | FY2027 GAA, headline scope | **$63.416B** (+4.01% over FY26) | H.5555, signed 9 Jul 2026 | 🔒 H.5555, signed 9 July 2026. A signed act. |
 | **Governor's vetoes** | **$0 — none.** Signed the conference report untouched | Globe / CommonWealth Beacon, 9 Jul 2026 | 🔒 a matter of record on a signed act: none were cast. |

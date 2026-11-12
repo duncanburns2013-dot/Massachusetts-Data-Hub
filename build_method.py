@@ -38,6 +38,8 @@ TICK, LIVE = '✅', '\U0001f504'
 # the register pass -- a frozen row says why it cannot change, and a re-read
 # row carries the date it is due.
 FROZEN, RECHECK = '\U0001f512', '⏳'
+RECHECK_BADGE = ('<span class="mk mk-r" title="no API behind it; a '
+                 'human re-reads it by the date that follows">re-read</span>')
 EMOJI = re.compile('[\U0001F000-\U0001FAFF☀-➿️⬀-⯿]+')
 
 def strip_emoji(t):
@@ -54,9 +56,11 @@ def inline(t):
     t = t.replace(LIVE, '<span class="mk mk-l" title="refreshed by a feed">live</span>')
     t = t.replace(FROZEN, '<span class="mk mk-f" title="cannot change; the '
                           'reason follows">fixed</span>')
-    t = t.replace(RECHECK, '<span class="mk mk-r" title="no API behind it; a '
-                           'human re-reads it by the date that follows">'
-                           're-read</span>')
+    # The register writes this mark as "(hourglass) re-read by <date>", and the badge
+    # itself already says "re-read", so a plain replace rendered "re-read re-read by
+    # 2027-06-30" on all 118 of them. Let the badge absorb the words and say it once.
+    t = re.sub(re.escape(RECHECK) + r'\s*re-read by\b', RECHECK_BADGE + ' by', t)
+    t = t.replace(RECHECK, RECHECK_BADGE)
     return t
 
 def slug(t):
@@ -221,7 +225,7 @@ def build():
     <h1>Method</h1>
     <span class="ramp" aria-hidden="true"></span>
     <p class="mk-lede">Every figure on this site, with the source it came from and
-    when it was last checked or refreshed.</p>
+    what keeps it current.</p>
     <div class="mk-key">
       <span><span class="mk mk-v">verified</span> checked by hand against the source</span>
       <span><span class="mk mk-l">live</span> refreshed by a feed; the JSON is authoritative</span>
