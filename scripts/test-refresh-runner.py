@@ -2,6 +2,7 @@
 import dataclasses
 import io
 import json
+import re
 import sys
 from contextlib import redirect_stdout
 from pathlib import Path
@@ -134,6 +135,239 @@ try:
     with redirect_stdout(io.StringIO()):
         rc = runner.main([], fetch=boom)
     assert rc == 2
+    # ---------------- Task 4: apply (ACS only; writes published files) ----------------
+    import os
+    import shutil
+    from scripts.refresh.runner import apply, FetchError, Applied, Conflict, pull_and_recheck
+
+    os.environ["CENSUS_API_KEY"] = "test-key"
+    TODAY = "2026-11-12"
+    acs_move = Move("census_acs1_ma_income", "2024", "2025", True, "https://api.census.gov/data/2025/acs/acs1")
+    TARGETS = ["affordability-dashboard.html", "data/burden-constants.json"]
+    assert len(runner.STATES) == 51 and runner.STATES["District of Columbia"] == "DC"
+
+    def blob_income(text):
+        m = re.search(r'<script id="col-data" type="application/json">(.*?)</script>', text, re.S)
+        return json.loads(m.group(1))["income"]
+
+    REAL_BY_STATE = blob_income((REPO / "affordability-dashboard.html").read_text(encoding="utf-8"))["household_by_state"]
+
+    def make_root(html_eol="\n", json_eol="\r\n"):
+        """Temp repo root holding copies of the real targets, with forced line endings."""
+        root = Path(tempfile.mkdtemp())
+        (root / "data").mkdir()
+        shutil.copy(REPO / "data" / "sources.json", root / "data" / "sources.json")
+        for rel, eol in (("affordability-dashboard.html", html_eol), ("data/burden-constants.json", json_eol)):
+            t = (REPO / rel).read_bytes().decode("utf-8").replace("\r\n", "\n").replace("\n", eol)
+            (root / rel).write_bytes(t.encode("utf-8"))
+        return root
+
+    def snap(root):
+        return {rel: (root / rel).read_bytes() for rel in TARGETS}
+
+    def stub_census_full(ma_hh=106539, ma_fam=138434, us=84780, bump=0, n=None, drop=(), seen=None):
+        vals = {a: v + bump for a, v in REAL_BY_STATE.items()}
+        vals["DC"] = 99000 + bump
+        vals["MA"] = ma_hh
+        rows = [["NAME", "B19013_001E", "state"]]
+        for name, ab in runner.STATES.items():
+            if ab not in drop:
+                rows.append([name, str(int(vals[ab])), "00"])
+        if n is not None:
+            rows = rows[:1] + rows[1:][:n]
+        def fetch(url):
+            if seen is not None:
+                seen.append(url)
+            assert "key=test-key" in url, url
+            if "for=state:25" in url:
+                return json.dumps([["NAME", "B19113_001E", "B19013_001E", "state"],
+                                   ["Massachusetts", str(ma_fam), str(ma_hh), "25"]])
+            if "for=state:*" in url:
+                return json.dumps(rows)
+            if "for=us:1" in url:
+                return json.dumps([["NAME", "B19013_001E", "us"], ["United States", str(us), "1"]])
+            raise AssertionError(f"unexpected fetch {url}")
+        return fetch
+
+    # a stale root: apply a 2024 release first (setup only; the result is asserted in test 1)
+    def stale_root(**kw):
+        root = make_root(**kw)
+        apply(dataclasses.replace(acs_move, held="2023", newest="2024"), root=root, today="2026-01-01",
+              fetch=stub_census_full(ma_hh=104828, ma_fam=134000, us=80000, bump=-2000))
+        return root
+
+    # 0. a no-op apply is a genuine no-op: same bytes, nothing written, nothing divergent
+    root = make_root()
+    before = snap(root)
+    a = apply(dataclasses.replace(acs_move, held="2025"), fetch=stub_census_full(), root=root, today=TODAY)
+    assert isinstance(a, Applied) and a.files_written == [] and a.divergences == [], a
+    assert snap(root) == before
+    assert a.new["household"] == 106539.0 and a.new["vintage"] == 2025 and a.old == a.new
+
+    # 1. brief happy path: stale files move to 2025, both written, vintage consistent
+    root = stale_root()
+    assert blob_income((root / TARGETS[0]).read_text(encoding="utf-8"))["vintage"] == 2024
+    seen = []
+    a = apply(acs_move, fetch=stub_census_full(seen=seen), root=root, today=TODAY)
+    assert a.new["household"] == 106539.0 and a.new["vintage"] == 2025
+    assert set(a.files_written) == set(TARGETS), a.files_written
+    assert a.old["vintage"] == 2024 and a.old["household"] == 104828.0
+    assert a.divergences == []
+    assert all("/data/2025/" in u for u in seen) and len(seen) == 3
+    for rel in TARGETS:
+        assert "test-key" not in (root / rel).read_text(encoding="utf-8"), "API key leaked into a published file"
+    inc = blob_income((root / TARGETS[0]).read_text(encoding="utf-8"))
+    assert inc["household"] == 106539.0 and inc["family"] == 138434.0 and inc["vintage"] == 2025
+    assert inc["household_by_state"] == REAL_BY_STATE and inc["household_us"] == 84780.0
+    assert "DC" not in inc["household_by_state"], "shape changed: the map holds 50 states"
+    assert inc["household_by_state_retrieved"] == TODAY
+    bc = json.loads((root / TARGETS[1]).read_text(encoding="utf-8"))["states"]["MA"]["acs"]["medianHouseholdIncome_ACS"]
+    assert bc["value"] == 106539 and "2025" in bc["source"] and bc["verified"] == TODAY
+    # moving stale -> 2025 reproduces the live files except the date stamps
+    for rel in TARGETS:
+        live = (REPO / rel).read_bytes().decode("utf-8").replace("\r\n", "\n")
+        got = (root / rel).read_bytes().decode("utf-8").replace("\r\n", "\n")
+        a_l, b_l = live.splitlines(), got.splitlines()
+        assert len(a_l) == len(b_l) and sum(x != y for x, y in zip(a_l, b_l)) <= 2, rel
+
+    # 2. line endings survive exactly, and the diff is confined to the figure
+    for html_eol, json_eol in (("\n", "\r\n"), ("\r\n", "\n")):
+        root = stale_root(html_eol=html_eol, json_eol=json_eol)
+        before = snap(root)
+        apply(acs_move, fetch=stub_census_full(), root=root, today=TODAY)
+        after = snap(root)
+        for rel, eol in zip(TARGETS, (html_eol, json_eol)):
+            assert after[rel] != before[rel]
+            bad = (after[rel].count(b"\n") - after[rel].count(b"\r\n")) if eol == "\r\n" else after[rel].count(b"\r")
+            assert bad == 0, f"{rel}: line endings changed"
+            assert after[rel].count(b"\n") == before[rel].count(b"\n"), rel
+        # HTML: only the income object differs; everything around it is byte-identical
+        pre = lambda b: b[:b.index(b'"income":')]
+        post = lambda b: b[b.index(b"</script>", b.index(b'"income":')):]
+        assert pre(after[TARGETS[0]]) == pre(before[TARGETS[0]]) and post(after[TARGETS[0]]) == post(before[TARGETS[0]])
+        # JSON: at most 4 lines (value, source, url, verified)
+        la, lb = before[TARGETS[1]].split(json_eol.encode()), after[TARGETS[1]].split(json_eol.encode())
+        assert len(la) == len(lb) and sum(x != y for x, y in zip(la, lb)) <= 4
+
+    # 3. Review Focus 2: a short or partial response aborts the WHOLE write
+    root = stale_root()
+    before = snap(root)
+    def null_cell(url):
+        t = stub_census_full()(url)
+        return t.replace('"Alabama", "67663"', '"Alabama", null') if "state:*" in url else t
+    def ma_disagree(url):  # the MA call and the map must come from one release
+        t = stub_census_full()(url)
+        return t.replace('"106539"', '"106540"') if "state:25" in url else t
+    def junk(url):
+        return "<html>rate limited</html>"
+    def down(url):
+        raise OSError("unreachable")
+    bad_fetches = {"12 states": stub_census_full(n=12), "no DC": stub_census_full(drop=("DC",)),
+                   "one missing": stub_census_full(drop=("WY",)), "null cell": null_cell,
+                   "MA mismatch": ma_disagree, "not json": junk, "unreachable": down}
+    for label, f in bad_fetches.items():
+        try:
+            apply(acs_move, fetch=f, root=root, today=TODAY)
+            assert False, f"{label}: bad response was written"
+        except FetchError:
+            pass
+        assert snap(root) == before, f"{label}: a failed fetch modified a file"
+    saved = os.environ.pop("CENSUS_API_KEY")
+    try:
+        apply(acs_move, fetch=boom, root=root, today=TODAY)
+        assert False, "keyless apply ran"
+    except FetchError:
+        pass
+    finally:
+        os.environ["CENSUS_API_KEY"] = saved
+    assert snap(root) == before
+    # only ACS is applied in this task
+    try:
+        apply(Move("bea_rpp_state", "2024", "2025", True, "x"), fetch=boom, root=root)
+        assert False, "applied a BEA move"
+    except ValueError:
+        pass
+
+    # 4. dry run fetches and validates but writes nothing
+    a = apply(acs_move, fetch=stub_census_full(), root=root, today=TODAY, dry=True)
+    assert a.files_written == [] and snap(root) == before and a.new["vintage"] == 2025
+    try:
+        apply(acs_move, fetch=stub_census_full(n=12), root=root, today=TODAY, dry=True)
+        assert False
+    except FetchError:
+        pass
+
+    # 5. reconcile: the real bug (two files, two figures) is repaired
+    root = make_root()
+    t = (root / TARGETS[1]).read_bytes().decode("utf-8")
+    assert t.count('"value": 106539,') == 1
+    (root / TARGETS[1]).write_bytes(t.replace('"value": 106539,', '"value": 104828,').encode("utf-8"))
+    a = apply(dataclasses.replace(acs_move, held="2025"), fetch=stub_census_full(), root=root, today=TODAY)
+    assert a.files_written == [TARGETS[1]] and a.divergences == [], a
+    # ... and a target that still disagrees after the write is REPORTED, not hidden
+    root = stale_root()
+    real_write = runner._write_text
+    def lying_write(path, text):
+        real_write(path, text.replace("106539", "104828") if path.name == "burden-constants.json" else text)
+    runner._write_text = lying_write
+    try:
+        a = apply(acs_move, fetch=stub_census_full(), root=root, today=TODAY)
+    finally:
+        runner._write_text = real_write
+    assert a.divergences == [TARGETS[1]], a.divergences
+
+    # 6. a write that fails midway restores the files already written
+    root = stale_root()
+    before = snap(root)
+    calls = []
+    def flaky_write(path, text):
+        calls.append(path.name)
+        if len(calls) == 2:
+            raise OSError("disk full")
+        real_write(path, text)
+    runner._write_text = flaky_write
+    try:
+        apply(acs_move, fetch=stub_census_full(), root=root, today=TODAY)
+        assert False, "write failure swallowed"
+    except OSError:
+        pass
+    finally:
+        runner._write_text = real_write
+    assert snap(root) == before, "a half-finished write was left on disk"
+
+    # 7. Review Focus 3: concurrent sessions. Pull, then re-verify; never real git, never the network
+    root = make_root()
+    gitlog = []
+    ok_git = lambda args, cwd: gitlog.append((args, cwd))
+    a = apply(dataclasses.replace(acs_move, held="2025"), fetch=stub_census_full(), root=root, today=TODAY)
+    def set_held(p):
+        regs = json.loads((root / "data" / "sources.json").read_text(encoding="utf-8"))
+        for e in regs:
+            if e["id"] == "census_acs1_ma_income":
+                e["held_period"] = p
+        (root / "data" / "sources.json").write_text(json.dumps(regs), encoding="utf-8")
+    set_held("2024")
+    assert pull_and_recheck(a, acs_move, fetch=stub_census({2025: OK}), root=root, git=ok_git) == []
+    assert gitlog and gitlog[0][0][:2] == ["pull", "--rebase"], gitlog
+    set_held("2025")  # another session already applied this move and bumped the register
+    try:
+        pull_and_recheck(a, acs_move, fetch=stub_census({2025: OK}), root=root, git=ok_git)
+        assert False, "held value changed underneath but was not caught"
+    except Conflict:
+        pass
+    set_held("2024")  # publisher no longer shows the move
+    try:
+        pull_and_recheck(a, acs_move, fetch=stub_census({2024: OK}), root=root, git=ok_git)
+        assert False
+    except Conflict:
+        pass
+    def bad_git(args, cwd):
+        raise RuntimeError("rebase conflict")
+    try:
+        pull_and_recheck(a, acs_move, fetch=boom, root=root, git=bad_git)
+        assert False
+    except Conflict:
+        pass
 except AssertionError as e:
     print("FAIL", e)
     sys.exit(1)
