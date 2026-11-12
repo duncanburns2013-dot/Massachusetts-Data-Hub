@@ -360,15 +360,15 @@ footer a:hover{color:var(--gold)}
   <div class="stat-row">
     <div class="stat-card"><div class="label">Avg SF Tax Bill</div><div class="value red">$8,104</div><div class="sub">FY2026 statewide</div></div>
     <div class="stat-card"><div class="label">Avg SF Home Value</div><div data-frozen="FY2025 assessed value; that fiscal year is closed" class="value blue">$700,615</div><div class="sub">FY2025 assessed</div></div>
-    <div class="stat-card"><div class="label">Total Property Levy</div><div class="value amber">$24.0B</div><div class="sub">FY2026 — up $1.2B YoY</div></div>
+    <div class="stat-card"><div class="label">Total Property Levy</div><div class="value amber"><span data-field="levy-latest">$24.0B</span></div><div class="sub"><span data-field="levy-fy">FY2026</span> — up <span data-field="levy-yoy">$1.2B</span> YoY</div></div>
     <div class="stat-card"><div class="label">Total Assessed Value</div><div class="value blue">$2.0T</div><div class="sub">FY2026 — passed $2 trillion for the first time that year</div></div>
     <div class="stat-card"><div class="label">National Rank</div><div class="value red">#48</div><div class="sub">3rd worst (Tax Foundation)</div></div>
   </div>
   <div class="chart-grid">
     <div class="chart-card">
-      <h3>Statewide Property Tax Levy Growth (FY2016–FY2026)</h3>
+      <h3>Statewide Property Tax Levy Growth (<span data-field="levy-first-fy">FY2015</span>–<span data-field="levy-fy">FY2026</span>)</h3>
       <div class="chart-area"><canvas id="chartLevy"></canvas></div>
-      <div class="source">Source: MA Division of Local Services (DLS), FY2026 Tax Levies Report</div>
+      <div class="source">Source: MA Division of Local Services, Tax Levies by Class, summed over the 351 municipalities. Read <span data-field="levy-verified">8 Nov 2026</span>; the DLS gateway refuses scripts, so this series is refreshed by hand.</div>
     </div>
     <div class="chart-card">
       <h3>Residential Tax Rates — North Shore Towns (per $1,000)</h3>
@@ -378,7 +378,7 @@ footer a:hover{color:var(--gold)}
   </div>
   <div class="info-box">
     <h4>📋 Proposition 2½</h4>
-    <p>Massachusetts law limits annual property tax levy growth to 2.5% plus new growth, unless voters approve overrides or exclusions. Despite this cap, the total statewide levy grew from $14.6B in FY2015 to $24.0B in FY2026 — a 64% increase. Rising assessed values drive higher bills even when rates stay flat. MA also taxes commercial property more heavily than residential, and levies both an estate tax and a real estate transfer tax.</p>
+    <p>Massachusetts law limits annual property tax levy growth to 2.5% plus new growth, unless voters approve overrides or exclusions. Despite this cap, the total statewide levy grew from <span data-field="levy-first">$14.6B</span> in <span data-field="levy-first-fy">FY2015</span> to <span data-field="levy-latest">$24.0B</span> in <span data-field="levy-fy">FY2026</span> — a <span data-field="levy-growth">65%</span> increase. Rising assessed values drive higher bills even when rates stay flat. MA also taxes commercial property more heavily than residential, and levies both an estate tax and a real estate transfer tax.</p>
   </div>
   <div class="data-card">
     <h3>Average SF Tax Bills by County — FY2025 (Median of Communities)</h3>
@@ -653,12 +653,12 @@ footer a:hover{color:var(--gold)}
     <div class="chart-card">
       <h3>MA Cost of Living Premium Over Time (BEA RPP)</h3>
       <div class="chart-area"><canvas id="chartRPPTime"></canvas></div>
-      <p class="source">Source: FRED / BEA, MARPPALL (2008–2024)</p>
+      <p class="source">Source: FRED / BEA, MARPPALL (<span data-field="rpp-span">2008–2024</span>)</p>
     </div>
     <div class="chart-card">
       <h3>Income vs Actual Purchasing Power — State Comparison</h3>
       <div class="chart-area"><canvas id="chartIncomeReal"></canvas></div>
-      <p class="source">Source: Census ACS 2024 (median HH income) adjusted by BEA RPP (2024)</p>
+      <p class="source">Source: Census ACS <span data-field="acs-hh-year">2025</span> (median HH income) adjusted by BEA RPP (<span data-field="rpp-year">2024</span>)</p>
     </div>
   </div>
 
@@ -1784,8 +1784,8 @@ function initCharts(tab) {
       safeChart('chartLevy', {
         type: 'bar',
         data: {
-          labels: ['FY16','FY17','FY18','FY19','FY20','FY21','FY22','FY23','FY24','FY25','FY26'],
-          datasets: [{ label: 'Total Levy ($B)', data: [14.9,15.5,16.2,17.0,17.8,18.5,19.3,20.4,21.7,22.8,24.0], backgroundColor: 'rgba(220,38,38,0.7)', borderRadius: 4 }]
+          labels: ['FY15','FY16','FY17','FY18','FY19','FY20','FY21','FY22','FY23','FY24','FY25','FY26'],
+          datasets: [{ label: 'Total Levy ($B)', data: [14.55,15.18,15.83,16.54,17.32,18.13,18.93,19.76,20.67,21.75,22.87,24.03], backgroundColor: 'rgba(220,38,38,0.7)', borderRadius: 4 }]
         },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: false, min: 12, title: { display: true, text: 'Billions ($)' } } }, plugins: { legend: { display: false } } }
       });
@@ -2003,7 +2003,7 @@ function initCharts(tab) {
         type: 'bar',
         data: {
           labels: ['Massachusetts','New Jersey','California','New York','New Hampshire','Florida','North Carolina','Texas','US Average'],
-          datasets: [{ label: 'Regional Price Parity (US=100)', data: [105.8,108.9,112.6,105.8,104.3,101.3,94.6,97.4,100.0], backgroundColor: ctx => ctx.raw > 105 ? '#A81733' : ctx.raw > 100 ? '#B07C20' : '#2A6B44', borderRadius: 6 }]
+          datasets: [{ label: 'Regional Price Parity (US=100)', data: [105.8,108.8,110.7,107.9,104.2,103.4,94.3,97.1,100.0], backgroundColor: ctx => ctx.raw > 105 ? '#A81733' : ctx.raw > 100 ? '#B07C20' : '#2A6B44', borderRadius: 6 }]
         },
         options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { min: 85, max: 120, title: { display: true, text: 'Price Level (US = 100)' } } }, plugins: { legend: { display: false } } }
       });
@@ -2011,7 +2011,7 @@ function initCharts(tab) {
         type: 'bar',
         data: {
           labels: ['North Carolina','Texas','Tennessee','Florida','NH','US Average','New York','Massachusetts','New Jersey','California'],
-          datasets: [{ label: 'Real Value of $100', data: [105.71,102.67,104.49,98.72,95.88,100.00,92.42,94.56,91.83,88.81], backgroundColor: ctx => ctx.raw < 95 ? '#A81733' : ctx.raw < 100 ? '#B07C20' : '#2A6B44', borderRadius: 6 }]
+          datasets: [{ label: 'Real Value of $100', data: [106.02,103.03,108.85,96.70,96.00,100.00,92.66,94.56,91.91,90.32], backgroundColor: ctx => ctx.raw < 95 ? '#A81733' : ctx.raw < 100 ? '#B07C20' : '#2A6B44', borderRadius: 6 }]
         },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 82, max: 110, title: { display: true, text: 'Purchasing Power ($)' } } }, plugins: { legend: { display: false } } }
       });
@@ -2034,8 +2034,8 @@ function initCharts(tab) {
       safeChart('chartRPPTime', {
         type: 'line',
         data: {
-          labels: ['2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023'],
-          datasets: [{ label: 'MA RPP (All Items)', data: [109.7,109.4,109.7,109.3,108.5,107.7,107.3,107.5,107.0,106.3,106.5,107.2,109.1,106.7,109.4,105.8], borderColor: '#A81733', backgroundColor: 'rgba(168,23,51,0.06)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#A81733' },{ label: 'US Average (100)', data: [100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100], borderColor: '#5A6467', borderDash: [5,5], pointRadius: 0, fill: false }]
+          labels: ['2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024'],
+          datasets: [{ label: 'MA RPP (All Items)', data: [106.0,105.5,104.8,104.7,104.5,103.3,104.5,105.1,108.2,107.4,107.4,107.2,109.1,106.7,109.4,107.7,105.8], borderColor: '#A81733', backgroundColor: 'rgba(168,23,51,0.06)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#A81733' },{ label: 'US Average (100)', data: [100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100], borderColor: '#5A6467', borderDash: [5,5], pointRadius: 0, fill: false }]
         },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 95, max: 115, title: { display: true, text: 'Price Level (US = 100)' } } }, plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } } }
       });
@@ -2043,7 +2043,7 @@ function initCharts(tab) {
         type: 'bar',
         data: {
           labels: ['Massachusetts','New Jersey','California','New York','New Hampshire','Florida','North Carolina','Texas'],
-          datasets: [{ label: 'Nominal Median HH Income', data: [113900,106800,95500,81400,98700,73200,67500,75000], backgroundColor: '#14558F', borderRadius: 4 },{ label: 'RPP-Adjusted (Real)', data: [107700,98071,84813,75231,94626,72262,71353,77002], backgroundColor: '#A81733', borderRadius: 4 }]
+          datasets: [{ label: 'Nominal Median HH Income', data: [106539,107797,102159,89210,106759,80846,77638,82625], backgroundColor: '#14558F', borderRadius: 4 },{ label: 'RPP-Adjusted (Real)', data: [100739,99074,92268,82662,102490,78177,82308,85130], backgroundColor: '#A81733', borderRadius: 4 }]
         },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: false, min: 50000, title: { display: true, text: 'Median Household Income ($)' } } }, plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } } }
       });
