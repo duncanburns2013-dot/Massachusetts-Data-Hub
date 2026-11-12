@@ -278,6 +278,30 @@ try:
         except FetchError:
             pass
         assert snap(root) == before, f"{label}: a failed fetch modified a file"
+    # the API key must never surface in an error: urlopen_text raises NotFound with the KEYED url
+    import traceback
+    os.environ["CENSUS_API_KEY"] = "SECRET123"
+    def keyed_404(url):
+        raise NotFound(url)
+    def keyed_oserror(url):
+        raise OSError(f"connection reset for {url}")
+    def keyed_late(url):  # the second and third calls fail, after the first succeeded
+        if "state:25" in url:
+            return json.dumps([["NAME", "B19113_001E", "B19013_001E", "state"], ["Massachusetts", "138434", "106539", "25"]])
+        raise NotFound(url)
+    try:
+        for f in (keyed_404, keyed_oserror, keyed_late):
+            for dry in (False, True):
+                try:
+                    apply(acs_move, fetch=f, root=root, today=TODAY, dry=dry)
+                    assert False, "keyed failure not raised"
+                except FetchError as e:
+                    shown = "".join(traceback.format_exception(e))  # text AND chained causes
+                    assert "SECRET123" not in shown, f"API key in error text: {shown}"
+                    assert "api.census.gov" in str(e)
+    finally:
+        os.environ["CENSUS_API_KEY"] = "test-key"
+    assert snap(root) == before
     saved = os.environ.pop("CENSUS_API_KEY")
     try:
         apply(acs_move, fetch=boom, root=root, today=TODAY)
@@ -287,6 +311,17 @@ try:
     finally:
         os.environ["CENSUS_API_KEY"] = saved
     assert snap(root) == before
+    # a register missing a required target names it instead of a bare KeyError
+    regs = json.loads((root / "data" / "sources.json").read_text(encoding="utf-8"))
+    regs[0]["targets"] = regs[0]["targets"][1:]
+    (root / "data" / "sources.json").write_text(json.dumps(regs), encoding="utf-8")
+    try:
+        apply(acs_move, fetch=stub_census_full(), root=root, today=TODAY)
+        assert False
+    except ValueError as e:
+        assert "affordability-dashboard.html" in str(e), e
+    assert snap(root) == before
+    shutil.copy(REPO / "data" / "sources.json", root / "data" / "sources.json")
     # only ACS is applied in this task
     try:
         apply(Move("bea_rpp_state", "2024", "2025", True, "x"), fetch=boom, root=root)
@@ -348,6 +383,13 @@ try:
     got = json.loads((root / TARGETS[2]).read_text(encoding="utf-8"))
     assert {k: v for k, v in got.items() if k != "income"} == {k: v for k, v in live.items() if k != "income"}
     assert list(got["income"]) == list(live["income"]) and list(got) == list(live)
+
+    # 5c. a target whose source string disagrees is reported even when every number matches
+    root = make_root()
+    f2 = root / TARGETS[2]
+    f2.write_bytes(f2.read_bytes().replace(b"Census ACS 1-Year 2025", b"Census ACS 1-Year 2024"))
+    a = apply(dataclasses.replace(acs_move, held="2025"), fetch=stub_census_full(), root=root, today=TODAY, dry=True)
+    assert a.divergences == [TARGETS[2]], a.divergences
 
     # 6. a write that fails midway restores the files already written
     root = stale_root()

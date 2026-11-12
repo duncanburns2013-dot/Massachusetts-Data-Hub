@@ -103,6 +103,10 @@ class Applied:
     divergences: list[str]  # targets that still disagree with `new` after the write; [] is healthy
 
 
+def _source_label(year):
+    return f"Census ACS 1-Year {year} (B19113 family, B19013 household)"
+
+
 def _num(x, what):
     """Positive finite float from a Census cell. Census uses null / negative sentinels for suppressed."""
     try:
@@ -114,14 +118,17 @@ def _num(x, what):
     return v
 
 
-def _get_rows(fetch, url, shown):
+def _get_rows(fetch, url, shown, key):
     try:
         rows = json.loads(fetch(url))
         head, body = rows[0], rows[1:]
         if not isinstance(head, list) or not all(isinstance(r, list) for r in body):
             raise ValueError("not a table")
     except Exception as e:  # unreachable, 404, bad JSON, wrong shape: all untrustworthy
-        raise FetchError(f"{shown}: {type(e).__name__}: {e}") from e
+        # urlopen_text raises NotFound(url) with the KEYED url, and a traceback prints the chained
+        # cause too: scrub the key from the text and cut the chain (`from None`). Task 7 prints
+        # failures into a CI log.
+        raise FetchError(f"{shown}: {type(e).__name__}: {e}".replace(key, "***")) from None
     return head, body
 
 
@@ -131,7 +138,7 @@ def _fetch_acs(year, fetch, key):
     tail = f"&key={key}"
     shown = lambda q: base + q  # the key never reaches an error message or a file
     q = "NAME,B19113_001E,B19013_001E&for=state:25"
-    head, body = _get_rows(fetch, base + q + tail, shown(q))
+    head, body = _get_rows(fetch, base + q + tail, shown(q), key)
     try:
         row = body[0]
         name, fam, hh = (row[head.index(c)] for c in ("NAME", "B19113_001E", "B19013_001E"))
@@ -142,7 +149,7 @@ def _fetch_acs(year, fetch, key):
     out = {"family": _num(fam, "B19113 family"), "household": _num(hh, "B19013 household")}
 
     q = "NAME,B19013_001E&for=state:*"
-    head, body = _get_rows(fetch, base + q + tail, shown(q))
+    head, body = _get_rows(fetch, base + q + tail, shown(q), key)
     try:
         ni, vi = head.index("NAME"), head.index("B19013_001E")
         got = {r[ni]: r[vi] for r in body}
@@ -159,7 +166,7 @@ def _fetch_acs(year, fetch, key):
     out["by_state"] = by_state
 
     q = "NAME,B19013_001E&for=us:1"
-    head, body = _get_rows(fetch, base + q + tail, shown(q))
+    head, body = _get_rows(fetch, base + q + tail, shown(q), key)
     try:
         out["us"] = _num(body[0][head.index("B19013_001E")], "B19013 US")
     except (IndexError, ValueError) as e:
@@ -189,7 +196,7 @@ def _html_income(text):
 def _html_read(text):
     inc = _html_income(text)[2]
     return {"household": inc["household"], "family": inc["family"], "vintage": inc["vintage"],
-            "ma_in_map": inc["household_by_state"]["MA"]}
+            "source": inc["source"], "ma_in_map": inc["household_by_state"]["MA"]}
 
 
 def _new_income(old, f, year, today):
@@ -199,7 +206,7 @@ def _new_income(old, f, year, today):
         raise ValueError("income object has no household_by_state to refresh")
     new = {
         "household": f["household"], "family": f["family"], "vintage": year,
-        "source": f"Census ACS 1-Year {year} (B19113 family, B19013 household)",
+        "source": _source_label(year),
         # same 50 keys the page already holds; DC is fetched to prove the map is whole, not published
         "household_by_state": {ab: f["by_state"][ab] for ab in old["household_by_state"]},
         "household_us": f["us"],
@@ -242,7 +249,7 @@ def _col_load(text):
 def _col_read(text):
     inc = json.loads(text)["income"]
     return {"household": inc["household"], "family": inc["family"], "vintage": inc["vintage"],
-            "ma_in_map": inc["household_by_state"]["MA"]}
+            "source": inc["source"], "ma_in_map": inc["household_by_state"]["MA"]}
 
 
 def _col_edit(text, f, year, today):
@@ -316,6 +323,9 @@ def apply(move: Move, *, fetch=urlopen_text, dry=False, root: Path = ROOT, today
     src = {s.id: s for s in load_sources(root / "data" / "sources.json")}.get(move.source_id)
     if src is None or src.probe != "census_acs1":
         raise ValueError(f"{move.source_id}: apply handles census_acs1 sources only")
+    absent = [t for t in _KINDS if t not in src.targets]
+    if absent:  # all three hold one figure; a register missing one would let it go stale
+        raise ValueError(f"{move.source_id}: register is missing required target(s) {absent}")
     unknown = [t for t in src.targets if t not in _KINDS]
     if unknown:
         raise ValueError(f"{move.source_id}: no writer for target(s) {unknown}")
@@ -333,7 +343,7 @@ def apply(move: Move, *, fetch=urlopen_text, dry=False, root: Path = ROOT, today
     inc = _html_income(olds["affordability-dashboard.html"])[2]
     view = lambda d: {k: d[k] for k in ("household", "family", "vintage", "source")}
     new_view = view({"household": f["household"], "family": f["family"], "vintage": year,
-                     "source": f"Census ACS 1-Year {year} (B19113 family, B19013 household)"})
+                     "source": _source_label(year)})
 
     changed = [t for t in src.targets if news[t] != olds[t]]
     written = []
@@ -343,6 +353,8 @@ def apply(move: Move, *, fetch=urlopen_text, dry=False, root: Path = ROOT, today
                 _write_text(root / t, news[t])
                 written.append(t)
         except Exception:
+            # ponytail: if a restore itself fails, that error replaces the original one and the
+            # file is left half-restored; acceptable for a local disk, add chaining if it ever bites.
             for t in written:
                 _write_text(root / t, olds[t])
             raise
