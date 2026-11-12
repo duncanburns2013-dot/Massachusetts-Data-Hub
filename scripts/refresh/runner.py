@@ -396,23 +396,55 @@ def pull_and_recheck(applied: Applied, move: Move, *, fetch=urlopen_text, root: 
     return _divergent(root, src.targets, applied.new)
 
 
-def apply_and_recheck(m: Move, *, apply_fn=apply, recheck=pull_and_recheck, git=_git, root: Path = ROOT) -> Applied:
-    """What main passes to run(): apply, then pull and re-verify BEFORE anything is committed.
+def _bump_register(root: Path, source_id: str, period: str, today: str) -> bool:
+    """Record in data/sources.json that this source has caught up. Edits only the two values in
+    the source's own block, so the file's layout and line endings survive byte for byte
+    (re-serialising would expand its one-line arrays). Returns whether the file changed."""
+    path = root / "data" / "sources.json"
+    text = _read_text(path)
+    start = text.find(f'"id": "{source_id}"')
+    if start < 0:
+        raise ValueError(f"sources.json: no source {source_id}")
+    end = text.find('"id":', start + 1)
+    block = text[start:len(text) if end < 0 else end]
+    for field, value in (("held_period", period), ("held_retrieved", today)):
+        block, n = re.subn(rf'("{field}":\s*")[^"]*(")', lambda m: m[1] + value + m[2], block, count=1)
+        if n != 1:
+            raise ValueError(f"sources.json: {source_id} has no {field} to update")
+    new = text[:start] + block + text[len(text) if end < 0 else end:]
+    if new == text:
+        return False
+    json.loads(new)  # never leave a register that does not parse
+    _write_text(path, new)
+    return True
+
+
+def apply_and_recheck(m: Move, *, apply_fn=apply, recheck=pull_and_recheck, git=_git, root: Path = ROOT,
+                      today: str | None = None) -> Applied:
+    """What main passes to run(): apply, pull and re-verify BEFORE anything is committed, then
+    record in the register that this source has caught up.
 
     Two sessions work this repo at once, so the tree we just wrote may sit on stale main.
     On any doubt the written files go back to HEAD and Conflict is raised, which run() records
     as unresolved: the gate fails and the receipt says why, rather than a wrong figure being pushed.
+
+    The register write is last, after the recheck (which compares the register's held period
+    against the move, so it must not move first) and in the same commit as the figures, so the
+    register and the pages cannot disagree on main. Without it the same move would be re-applied
+    and re-reported every week. It also runs when apply wrote nothing (pages already current).
     """
     a = apply_fn(m)
-    if not a.files_written:
-        return a  # nothing on disk to protect
+    touched = list(a.files_written)
     try:
-        left = recheck(a, m)
-        if left:
-            raise Conflict(f"{m.source_id}: after pulling, {left} still disagree with the new figure")
+        if a.files_written:
+            left = recheck(a, m)
+            if left:
+                raise Conflict(f"{m.source_id}: after pulling, {left} still disagree with the new figure")
+        touched.append("data/sources.json")
+        _bump_register(root, m.source_id, m.newest, today or datetime.date.today().isoformat())
     except Exception as e:
         try:
-            git(["checkout", "HEAD", "--", *a.files_written], root)
+            git(["checkout", "HEAD", "--", *touched], root)
         except Exception:
             pass  # the original problem is the one to report
         if isinstance(e, Conflict):

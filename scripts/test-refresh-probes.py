@@ -156,10 +156,11 @@ try:
             assert False, "no ProbeError"
         except ProbeError as e:
             chain, x = [], e
-            while x is not None:
-                chain.append(f"{x!r} {x}")
+            while x is not None:  # every attribute, not just str/repr: JSONDecodeError keeps the body on .doc
+                chain.append(f"{x!r} {x} {vars(x)!r} {x.args!r}")
                 x = x.__cause__ or x.__context__
             assert KEY not in " ".join(chain), chain
+            assert e.__cause__ is None and e.__context__ is None, "an exception chain is still attached"
     # a 200 that is not the data is an error, not a negative (what keyless Census returns)
     html200 = "<html><title>Missing Key</title></html>"
     assert raises(acs, stub_census({2025: html200, 2026: html200}))

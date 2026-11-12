@@ -488,6 +488,38 @@ try:
     finally:
         runner.run = real_run
     assert got.get("apply_fn") is apply_and_recheck
+    # 9. the loop records that it caught up, so the next run is quiet
+    CRLF = bytes([13, 10])
+    root = stale_root()
+    regp = root / "data" / "sources.json"
+    base = regp.read_bytes()
+    assert CRLF in base, "fixture lost the register's CRLF"
+    held = lambda p, r: b'"held_period": "' + p + b'",' + CRLF + b'    "held_retrieved": "' + r + b'"'
+    stale = base.replace(held(b"2025", b"2026-11-12"), held(b"2024", b"2026-01-01"), 1)
+    assert stale != base
+    regp.write_bytes(stale)
+    a = apply(acs_move, fetch=stub_census_full(), root=root, today=TODAY)
+    survey_acs = lambda: survey([s for s in runner.load_sources(regp) if s.id == "census_acs1_ma_income"],
+                                fetch=stub_census({2025: OK}))
+    assert [m.newest for m in survey_acs().moves] == ["2025"]
+    # a failed recheck leaves the register untouched
+    try:
+        apply_and_recheck(acs_move, apply_fn=lambda m: a, recheck=moved, git=ok_git, root=root, today="2026-11-13")
+        assert False
+    except Conflict:
+        pass
+    assert regp.read_bytes() == stale
+    apply_and_recheck(acs_move, apply_fn=lambda m: a, recheck=good, git=ok_git, root=root, today="2026-11-13")
+    after = regp.read_bytes()
+    mine = {s.id: s for s in runner.load_sources(regp)}["census_acs1_ma_income"]
+    assert (mine.held_period, mine.held_retrieved) == ("2025", "2026-11-13"), mine
+    assert after == stale.replace(held(b"2024", b"2026-01-01"), held(b"2025", b"2026-11-13"), 1), "register formatting changed"
+    assert survey_acs().moves == [], "settled source still reports a move"
+    # idempotent, and also catches up when the pages were already current (nothing written)
+    regp.write_bytes(stale)
+    apply_and_recheck(acs_move, apply_fn=lambda m: quiet, recheck=lambda *x: 1 / 0, git=ok_git, root=root, today="2026-11-13")
+    assert regp.read_bytes() == after
+
 except AssertionError as e:
     print("FAIL", e)
     sys.exit(1)

@@ -91,8 +91,14 @@ def _census_acs1(source, fetch):
     try:
         head, row = json.loads(body)[:2]
         name, income = row[head.index("NAME")], row[head.index("B19013_001E")]
+        why = None
     except Exception as e:
-        raise ProbeError(f"{url}: unreadable Census response ({e!r})") from e
+        # JSONDecodeError keeps the whole response body on .doc, so it must not survive as
+        # __cause__ or __context__: record the text, raise after the except block.
+        name = income = None
+        why = f"unreadable Census response ({type(e).__name__})"
+    if why:
+        raise ProbeError(f"{url}: {why}")
     if name != "Massachusetts" or not income:
         raise ProbeError(f"{url}: Census response is not Massachusetts income ({name!r}, {income!r})")
     return Probe(str(yr), True, url)
