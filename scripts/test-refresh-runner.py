@@ -440,6 +440,52 @@ try:
         assert False
     except Conflict:
         pass
+    # 8. Task 7: main wires pull_and_recheck between apply and commit
+    from scripts.refresh.runner import apply_and_recheck
+    seen = []
+    root = stale_root()
+    a = apply(dataclasses.replace(acs_move, held="2025"), fetch=stub_census_full(), root=root, today=TODAY)
+    assert a.files_written
+    good = lambda ap, mv: seen.append((ap, mv)) or []
+    assert apply_and_recheck(acs_move, apply_fn=lambda m: a, recheck=good, git=ok_git, root=root) is a
+    assert seen == [(a, acs_move)]
+    # no files written -> nothing to re-verify, no git at all
+    gitlog.clear()
+    quiet = dataclasses.replace(a, files_written=[])
+    apply_and_recheck(acs_move, apply_fn=lambda m: quiet, recheck=lambda *x: 1 / 0, git=ok_git, root=root)
+    assert gitlog == []
+    # held moved underneath: Conflict, and the written files are put back to HEAD
+    def moved(ap, mv):
+        raise Conflict("held period changed")
+    for bad in (moved, lambda ap, mv: ["data/burden-constants.json"], lambda ap, mv: 1 / 0):
+        gitlog.clear()
+        try:
+            apply_and_recheck(acs_move, apply_fn=lambda m: a, recheck=bad, git=ok_git, root=root)
+            assert False, "recheck failure was not turned into Conflict"
+        except Conflict as e:
+            assert e.__cause__ is None  # no chained exception for a traceback to print
+        assert gitlog == [(["checkout", "HEAD", "--", *a.files_written], root)], gitlog
+    # a Conflict is recorded as unresolved (gate fails), not a crash
+    def conflicting(m):
+        raise Conflict("x")
+    acs_src = [s for s in runner.load_sources(root / "data" / "sources.json") if s.id == "census_acs1_ma_income"]
+    acs_src = [dataclasses.replace(acs_src[0], held_period="2024", apply=True)]
+    rec = runner.run(acs_src, [], fetch=stub_census({2025: OK}), apply_fn=conflicting, today=TODAY)
+    assert [f.source_id for f in rec.unresolved] == ["census_acs1_ma_income"], rec
+    # and main really passes it
+    got = {}
+    real_run = runner.run
+    def spy(*a_, **k):
+        got.update(k)
+        raise KeyboardInterrupt
+    runner.run = spy
+    try:
+        runner.main(["--register", str(root / "data" / "sources.json")])
+    except KeyboardInterrupt:
+        pass
+    finally:
+        runner.run = real_run
+    assert got.get("apply_fn") is apply_and_recheck
 except AssertionError as e:
     print("FAIL", e)
     sys.exit(1)

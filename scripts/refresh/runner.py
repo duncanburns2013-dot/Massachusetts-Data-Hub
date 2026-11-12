@@ -396,6 +396,31 @@ def pull_and_recheck(applied: Applied, move: Move, *, fetch=urlopen_text, root: 
     return _divergent(root, src.targets, applied.new)
 
 
+def apply_and_recheck(m: Move, *, apply_fn=apply, recheck=pull_and_recheck, git=_git, root: Path = ROOT) -> Applied:
+    """What main passes to run(): apply, then pull and re-verify BEFORE anything is committed.
+
+    Two sessions work this repo at once, so the tree we just wrote may sit on stale main.
+    On any doubt the written files go back to HEAD and Conflict is raised, which run() records
+    as unresolved: the gate fails and the receipt says why, rather than a wrong figure being pushed.
+    """
+    a = apply_fn(m)
+    if not a.files_written:
+        return a  # nothing on disk to protect
+    try:
+        left = recheck(a, m)
+        if left:
+            raise Conflict(f"{m.source_id}: after pulling, {left} still disagree with the new figure")
+    except Exception as e:
+        try:
+            git(["checkout", "HEAD", "--", *a.files_written], root)
+        except Exception:
+            pass  # the original problem is the one to report
+        if isinstance(e, Conflict):
+            raise
+        raise Conflict(f"{m.source_id}: {type(e).__name__}: {e}") from None
+    return a
+
+
 def run(sources: list[Source], claims, *, fetch=urlopen_text, apply_fn=apply, today: str | None = None) -> RunRecord:
     """One complete run: survey, apply what we may, judge the claims. Writes nothing itself
     (apply_fn does, for apply:true sources). Only plain strings are kept from any failure:
@@ -410,7 +435,7 @@ def run(sources: list[Source], claims, *, fetch=urlopen_text, apply_fn=apply, to
             continue
         try:
             rec.applied.append(apply_fn(m))
-        except (FetchError, ValueError, OSError) as e:
+        except (FetchError, ValueError, OSError, Conflict) as e:
             rec.unresolved.append(Failure(m.source_id, f"{type(e).__name__}: {e}"))
     for f in result.failures:
         # cannot tell whether it moved: gate-failing for a source we would write, reported for one we would not
@@ -438,7 +463,7 @@ def main(argv=None, *, fetch=urlopen_text) -> int:
     args = ap.parse_args(argv)
     sources = load_sources(args.register)
     if not args.dry_run:
-        rec = run(sources, load_claims(args.claims), fetch=fetch)
+        rec = run(sources, load_claims(args.claims), fetch=fetch, apply_fn=apply_and_recheck)
         write_receipt(args.receipt, rec)  # last: it records a COMPLETED run, which is what the gate trusts
         msg = format_message(rec)
         if msg:

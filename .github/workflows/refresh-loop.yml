@@ -1,0 +1,117 @@
+# The refresh loop: asks each publisher whether a newer edition exists, applies the
+# ones the register marks apply:true, judges the claim registry, writes
+# data/refresh-receipt.json, and then lets scripts/check-freshness.py decide whether
+# the job is red.
+#
+# Order is the point. The loop and the commit come FIRST so the receipt that explains
+# a failure is on main before the gate fails on it. The gate runs LAST and is the only
+# thing here that fails the job on a finding: a red job is what emails the owner, and
+# that email is the backstop for the in-app message. runner.main exits 0 on any
+# completed run on purpose, so a finding can never kill the job before the evidence
+# is written.
+#
+# Triggers:
+#   schedule         weekly. A green workflow_dispatch proves nothing about the cron;
+#                    if the cron never fires, the receipt ages past 8 days and the
+#                    gate fails on its own.
+#   push to main     merging this turns the gate red (no receipt yet). That is the
+#                    dead-man's switch working; a push run writes the first receipt
+#                    within minutes instead of at the next weekly slot. Limited to
+#                    the files that define the loop, so unrelated pushes do not each
+#                    cost a Census call. Commits made with GITHUB_TOKEN (this job's
+#                    own, and every other bot's) never re-trigger workflows.
+#   workflow_dispatch  by hand.
+name: Refresh Loop
+
+on:
+  schedule:
+    - cron: "17 11 * * 1"   # Mondays 07:17 ET
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/refresh-loop.yml"
+      - "scripts/refresh/**"
+      - "scripts/check-freshness.py"
+      - "data/sources.json"
+      - "data/claims.json"
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    # Its own group, not push-to-main: a pending run in a shared group is replaced
+    # by a newer one, and update-all can hold that group for two hours.
+    concurrency:
+      group: refresh-loop
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # The gate ages files from `git log`; a depth-1 checkout would pass blind.
+          # The loop's pull --rebase also needs the history.
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      # The Actions log is public. Only what runner.main prints may reach it: stderr
+      # is discarded because an unexpected traceback prints exception CHAINS, and the
+      # original keyed Census exception can sit on __context__ of a scrubbed one.
+      # No set -x, no echo of the key, and nothing here cats the receipt.
+      # A crash is not hidden: rc is passed on and a later step fails the job.
+      - name: Survey, apply, write receipt
+        id: loop
+        env:
+          CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+        run: |
+          set +e
+          python -m scripts.refresh.runner 2>/dev/null
+          echo "rc=$?" >> "$GITHUB_OUTPUT"
+
+      # By now runner has already pulled --rebase and re-verified every figure it
+      # wrote (apply_and_recheck), reverting it if the held value moved underneath.
+      - name: Commit changes
+        id: commit
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -- affordability-dashboard.html data/burden-constants.json \
+                     data/cost-of-living-latest.json data/refresh-receipt.json
+          if git diff --staged --quiet; then
+            echo "Nothing to commit."
+            exit 0
+          fi
+          git commit -m "Refresh loop: $(date -u +'%Y-%m-%d')"
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt"
+              exit 0
+            fi
+            echo "Push attempt $attempt rejected - pulling latest and rebasing"
+            if ! git pull --rebase origin main; then
+              # Unlike the generated-data workflows, a conflict here is NOT "someone
+              # else already published this": the receipt and the figures are ours.
+              # Losing them silently would hide the very run being reported. Fail.
+              git rebase --abort || true
+              echo "::error::Rebase conflict while publishing the refresh receipt."
+              exit 1
+            fi
+          done
+          echo "::error::Push failed after 5 attempts"
+          exit 1
+
+      - name: Fail if the loop itself crashed
+        if: ${{ !cancelled() && steps.loop.outputs.rc != '0' }}
+        run: |
+          echo "::error::The refresh loop crashed (exit ${{ steps.loop.outputs.rc }}). Output suppressed so the API key cannot reach the public log; re-run locally to see the traceback."
+          exit 1
+
+      # Separate step, last, and failing: this is what mails the owner. It runs even if
+      # the commit above failed, so a stale receipt cannot hide behind it.
+      - name: Freshness gate
+        if: ${{ !cancelled() }}
+        run: python scripts/check-freshness.py
