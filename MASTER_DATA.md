@@ -229,7 +229,7 @@ The 16,921 is outflow 102,076 against inflow 85,155 (returns, 2022-23; data/irs-
 
 ### Massachusetts — Median Prices (Warren Group)
 
-| Region | Median Price | YoY Change | Source | Verified |
+| Region | Median Price | YoY Change | Source | How it is held up |
 |--------|-------------|------------|--------|----------|
 | Massachusetts | $638,000 | +3.7% | Warren Group | ⏳ re-read by 2027-06-30 — the publisher's next release |
 | Greater Boston | $800,000 | +4.2% | Warren Group | ⏳ re-read by 2027-06-30 — the publisher's next release |
@@ -534,7 +534,7 @@ against OCPF since. Donation patterns establish association, not agreement.
 
 ### 2026 MA Rate Increases (Division of Insurance)
 
-| Carrier | Approved Increase | Verified |
+| Carrier | Approved Increase | How it is held up |
 |---------|------------------|----------|
 | Harvard Pilgrim | 12.2% | 🔒 an approved 2026 plan-year rate increase. Once the Division of Insurance approves the plan year's rates they are set for it; the 2027 filings are a new row, not a revision of this one. |
 | Blue Cross Blue Shield | 11.9% | 🔒 an approved 2026 plan-year rate increase. Once the Division of Insurance approves the plan year's rates they are set for it; the 2027 filings are a new row, not a revision of this one. |
@@ -710,7 +710,7 @@ that script's TARGETS list holds that page and no other. Change the JSON, not th
 `tax-burden-nh-comparison.html` is NOT generated: it is maintained by hand and carries
 its own `data-checked` stamp, which the freshness watchdog ages.
 
-| Figure | Value | Source | URL | Verified |
+| Figure | Value | Source | URL | How it is held up |
 |---|---|---|---|---|
 | Federal standard deduction TY2026 | $16,100 single / $32,200 MFJ | IRS Rev. Proc. 2025-32 | irs.gov/pub/irs-drop/rp-25-32.pdf | ⏳ re-read by 2026-12-31 — the IRS revenue procedure for the next tax year, issued each autumn |
 | Social Security wage base 2026 | $184,500 | SSA contribution & benefit base | ssa.gov/oact/cola/cbb.html | ⏳ re-read by 2026-12-31 — the SSA contribution and benefit base, announced each October |
@@ -903,7 +903,7 @@ are effectively UGGA-only. Use `sect3.xlsx` when districts matter.
 
 ## 🗽 Tax Burden — New Hampshire
 
-| Figure | Value | Source | URL | Verified |
+| Figure | Value | Source | URL | How it is held up |
 |---|---|---|---|---|
 | NH individual income tax | **0%** — I&D repealed 1 Jan 2025 | NH DRA; HB 2 (2023) ch. 79 §§86-88 | revenue.nh.gov/news-and-media/repeal-nh-interest-and-dividends-tax-now-effect | 🔒 statutory rate or citation; changes only when the law does |
 | NH I&D rate history | 5% → 4% (2023) → 3% (2024) → 0% (2025) | NH DRA | revenue.nh.gov/taxes-glance/interest-dividends-tax | 🔒 statutory rate or citation; changes only when the law does |
