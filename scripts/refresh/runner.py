@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from scripts.refresh.probes import ProbeError, probe, urlopen_text
-from scripts.refresh.claims import evaluate, load_claims
+from scripts.refresh.claims import _is_number, _parse, evaluate, load_claims
 from scripts.refresh.register import Source, load_sources
 from scripts.refresh.report import RunRecord, format_message, write_receipt
 
@@ -18,9 +18,17 @@ REGISTER = Path(__file__).resolve().parents[2] / "data" / "sources.json"
 CLAIMS = Path(__file__).resolve().parents[2] / "data" / "claims.json"
 RECEIPT = Path(__file__).resolve().parents[2] / "data" / "refresh-receipt.json"
 
-# Figure ids a claim may name that are not sources (their numbers live inline in a page for now).
-# `known` for evaluate() is exactly: source ids | this. Anything else a claim names is a typo and raises.
-NON_SOURCE_FIGURES = frozenset({"ma_auto_expenditure", "us_auto_expenditure"})
+# Figures a claim may name that are not themselves register ids, mapped to the source whose
+# edition moves them. This used to be a bare frozenset, which made the two auto claims
+# unreachable: their figures belonged to no source, so they could never enter `moved` and
+# their verdict was always filtered out. The sentence the whole registry exists for was the
+# one sentence nothing watched.
+FIGURE_SOURCE = {
+    "ma_auto_expenditure": "naic_auto_insurance_database",
+    "us_auto_expenditure": "naic_auto_insurance_database",
+}
+# `known` for evaluate() is exactly: source ids | these. Anything else a claim names is a typo and raises.
+NON_SOURCE_FIGURES = frozenset(FIGURE_SOURCE)
 
 
 @dataclass
@@ -72,6 +80,72 @@ def survey(sources: list[Source], *, fetch=urlopen_text) -> SurveyResult:
         if p.newest_period != s.held_period:
             out.moves.append(Move(s.id, s.held_period, p.newest_period, p.is_final, p.evidence_url))
     return out
+
+
+# --- figure values: what the published pages currently say -------------------------------
+#
+# evaluate() was called with an empty dict, so no relation claim could ever resolve both
+# operands and the "broken" branch was unreachable: every relation came back "suspect",
+# which is only reported when a source moved. A false sentence on the site could not go red.
+# These read the figure off the page that publishes it, so the claim is judged against what
+# a reader actually sees rather than against a value kept somewhere else.
+
+_AUTO_PAIR = re.compile(r"\$([\d,]+(?:\.\d+)?) per insured vehicle in MA vs\.? "
+                        r"\$([\d,]+(?:\.\d+)?) nationally")
+
+
+def _rpp_ma(text):
+    m = _COL.search(text)
+    if m is None:
+        raise ValueError("no col-data block on the page")
+    return json.loads(m.group(2))["rpp"]["MA"]["all"]
+
+
+def _auto(text, group):
+    m = _AUTO_PAIR.search(text)
+    if m is None:
+        raise ValueError("the MA-vs-national expenditure sentence is not on the page in the "
+                         "form this reads; if the wording changed, update _AUTO_PAIR")
+    return float(m.group(group).replace(",", ""))
+
+
+# figure id -> (the page that publishes it, how to read it off that page)
+FIGURE_READERS = {
+    "bea_rpp_state": ("affordability-dashboard.html", _rpp_ma),
+    "ma_auto_expenditure": ("healthcare-dashboard.html", lambda t: _auto(t, 1)),
+    "us_auto_expenditure": ("healthcare-dashboard.html", lambda t: _auto(t, 2)),
+}
+
+
+def read_figures(claims, root: Path = None):
+    """Values for the figures a relation actually compares. Returns (figures, unreadable).
+
+    A figure we cannot read is NOT quietly omitted. Omitting it makes evaluate() return
+    "suspect", which is filtered out unless a source moved -- so an unjudgeable published
+    sentence would read as healthy. The caller files each one as unresolved instead.
+    """
+    root = ROOT if root is None else root
+    figures, unreadable = {}, []
+    for fid in sorted(_needed(claims)):
+        if fid not in FIGURE_READERS:
+            continue  # no value this run; evaluate() reports it as suspect, which is honest
+        page, reader = FIGURE_READERS[fid]
+        try:
+            figures[fid] = reader(_read_text(root / page))
+        except Exception as e:
+            unreadable.append((fid, f"{page}: {type(e).__name__}: {e}"))
+    return figures, unreadable
+
+
+def _needed(claims):
+    """The figure ids a relation compares, numeric literals excluded."""
+    need = set()
+    for c in claims:
+        if c.relation is None:
+            continue
+        lhs, _, rhs = _parse(c)
+        need |= {t for t in (lhs, rhs) if not _is_number(t)}
+    return need
 
 
 # --- apply: the first code here that writes published files ---------------------------------
@@ -466,7 +540,8 @@ def apply_and_recheck(m: Move, *, apply_fn=apply, recheck=pull_and_recheck, git=
     return a
 
 
-def run(sources: list[Source], claims, *, fetch=urlopen_text, apply_fn=apply, today: str | None = None) -> RunRecord:
+def run(sources: list[Source], claims, *, fetch=urlopen_text, apply_fn=apply,
+        today: str | None = None, root: Path = ROOT) -> RunRecord:
     """One complete run: survey, apply what we may, judge the claims. Writes nothing itself
     (apply_fn does, for apply:true sources). Only plain strings are kept from any failure:
     `str(e)` of the scrubbed FetchError, never the exception, never its chain."""
@@ -499,13 +574,19 @@ def run(sources: list[Source], claims, *, fetch=urlopen_text, apply_fn=apply, to
     # a human_fetch source is never probed, so its due date is the only thing ageing it
     rec.overdue = [k for k in result.skipped if k.due is None or k.due < today]
 
-    moved = {m.source_id for m in result.moves}
+    moved_sources = {m.source_id for m in result.moves}
+    # a source publishes figures: when its edition moves, those figures moved too
+    moved = moved_sources | {f for f, src in FIGURE_SOURCE.items() if src in moved_sources}
     known = {s.id for s in sources} | NON_SOURCE_FIGURES
     moved_claims = {c.id for c in claims if moved & set(c.figures)}
+    figures, unreadable = read_figures(claims, root)
+    for fid, why in unreadable:
+        # cannot judge a sentence that is published right now: must not be green
+        rec.unresolved.append(Failure(fid, f"figure unreadable, claim not judged: {why}"))
     # No figure values are supplied yet (the auto numbers are inline chart arrays), so relation claims
     # come back "suspect" every run. Keep a suspect only when a figure under it moved this run;
     # otherwise it would be noise, and noise is what teaches the reader to ignore the flag.
-    rec.verdicts = [v for v in evaluate(claims, {}, moved=moved, known=known)
+    rec.verdicts = [v for v in evaluate(claims, figures, moved=moved, known=known)
                     if v.status == "broken" or (v.status == "suspect" and v.claim_id in moved_claims)]
     return rec
 

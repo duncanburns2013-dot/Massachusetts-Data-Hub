@@ -117,6 +117,22 @@ jobs:
         if: always()
         run: python scripts/check-register-marks.py
 
+      # The refresh loop is the thing that is supposed to notice a publisher moving.
+      # Its six test files existed for a day and ran in NO workflow, so a regression in
+      # it would have been silent -- the same shape of failure the loop exists to stop.
+      # They are fast, offline and stdlib-only, so the watchdog is the right place.
+      #
+      # always(), for the same reason as above.
+      - name: Check the refresh loop still behaves
+        if: always()
+        run: |
+          rc=0
+          for t in scripts/test-refresh-*.py; do
+            echo "--- $t"
+            python "$t" || rc=1
+          done
+          exit $rc
+
       # Seventh question: are the estimator's own additions still there?
       #
       # The Full estimate tab offers 20 household compositions. Twelve are
