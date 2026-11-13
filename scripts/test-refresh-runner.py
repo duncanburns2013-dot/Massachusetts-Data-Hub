@@ -489,12 +489,16 @@ try:
         runner.run = real_run
     assert got.get("apply_fn") is apply_and_recheck
     # 9. the loop records that it caught up, so the next run is quiet
-    CRLF = bytes([13, 10])
     root = stale_root()
     regp = root / "data" / "sources.json"
     base = regp.read_bytes()
-    assert CRLF in base, "fixture lost the register's CRLF"
-    held = lambda p, r: b'"held_period": "' + p + b'",' + CRLF + b'    "held_retrieved": "' + r + b'"'
+    # The register is CRLF in a Windows working tree and LF when git checks it out on Linux.
+    # What _bump_register promises is that it preserves whatever is ON DISK, not that the file
+    # is CRLF -- so take the ending from the file. This used to hardcode CRLF, which passed on
+    # one platform and failed on the other; nobody saw it because these tests ran in no workflow.
+    CRLF = bytes([13, 10])
+    EOL = CRLF if CRLF in base else bytes([10])
+    held = lambda p, r: b'"held_period": "' + p + b'",' + EOL + b'    "held_retrieved": "' + r + b'"'
     stale = base.replace(held(b"2025", b"2026-11-12"), held(b"2024", b"2026-01-01"), 1)
     assert stale != base
     regp.write_bytes(stale)
