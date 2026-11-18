@@ -1,10 +1,11 @@
 {
-  "fetched_at": "2026-10-04T12:01:23.303919+00:00",
+  "fetched_at": "2026-11-18T00:21:59.218000+00:00",
   "measure": "USBP Southwest land border encounters (Border Patrol only)",
   "source_row": "Southwest Border Total Apprehensions",
   "sources": {
     "2025": "https://www.cbp.gov/newsroom/stats/nationwide-encounters-fy2025",
-    "2026": "https://www.cbp.gov/newsroom/stats/nationwide-encounters"
+    "2026": "https://www.cbp.gov/newsroom/stats/nationwide-encounters-fy2026",
+    "2027": "https://www.cbp.gov/newsroom/stats/nationwide-encounters"
   },
   "note": "Border Patrol component only. CBP does not publish the OFO port-of-entry component for FY2025+, so no total-encounters figure exists for those years. The total (USBP+OFO) series on the chart comes from OHSS KHSM and ends at FY2024.",
   "fy_totals": {
@@ -21,10 +22,16 @@
       "last_month": "Sep 2025"
     },
     "FY2026": {
-      "total": 89760,
-      "months_reported": 11,
+      "total": 98705,
+      "months_reported": 12,
       "first_month": "Oct 2025",
-      "last_month": "Aug 2026"
+      "last_month": "Sep 2026"
+    },
+    "FY2027": {
+      "total": 8288,
+      "months_reported": 1,
+      "first_month": "Oct 2026",
+      "last_month": "Oct 2026"
     }
   }
 }

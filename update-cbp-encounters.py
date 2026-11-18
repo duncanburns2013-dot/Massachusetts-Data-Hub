@@ -72,7 +72,8 @@ CBP_NATIONWIDE_ROW = "Nationwide Total Apprehensions"
 # that is precisely why they feed the USBP series and not the total series.)
 FY_PAGES = {
     2025: "https://www.cbp.gov/newsroom/stats/nationwide-encounters-fy2025",
-    2026: "https://www.cbp.gov/newsroom/stats/nationwide-encounters",
+    2026: "https://www.cbp.gov/newsroom/stats/nationwide-encounters-fy2026",
+    2027: "https://www.cbp.gov/newsroom/stats/nationwide-encounters",
 }
 
 MONTHS = {m: i for i, m in enumerate(
