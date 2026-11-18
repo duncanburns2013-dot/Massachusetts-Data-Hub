@@ -258,7 +258,7 @@
       "avg_dom": 18,
       "splp_pct": 102.47,
       "active_count": 34,
-      "active_avg_list": 753279,
+      "active_avg_list": 752514,
       "active_median_list": 582500,
       "by_bedroom": {
         "1": {
@@ -380,8 +380,8 @@
       "avg_sale": 828664,
       "avg_dom": 30,
       "splp_pct": 100.96,
-      "active_count": 23,
-      "active_avg_list": 862543,
+      "active_count": 24,
+      "active_avg_list": 891146,
       "active_median_list": 749900,
       "by_bedroom": {
         "1": {
@@ -498,13 +498,13 @@
       ]
     },
     "NH Statewide": {
-      "volume": 96224,
+      "volume": 96226,
       "median_sale": 447453,
-      "avg_sale": 535460,
+      "avg_sale": 535462,
       "avg_dom": 29,
       "splp_pct": 100.31,
-      "active_count": 2773,
-      "active_avg_list": 835980,
+      "active_count": 2765,
+      "active_avg_list": 836967,
       "active_median_list": 595000,
       "by_bedroom": {
         "1": {
@@ -520,8 +520,8 @@
           "n": 50810
         },
         "4": {
-          "avg": 674669,
-          "n": 24029
+          "avg": 674662,
+          "n": 24031
         },
         "5+": {
           "avg": 1012355,
@@ -560,9 +560,9 @@
           "avg": 637769
         },
         "2026": {
-          "n": 11133,
+          "n": 11135,
           "median": 561792,
-          "avg": 670793
+          "avg": 670781
         }
       },
       "distribution": [
@@ -572,7 +572,7 @@
         },
         {
           "band": "$200-300K",
-          "count": 12652
+          "count": 12653
         },
         {
           "band": "$300-400K",
@@ -600,7 +600,7 @@
         },
         {
           "band": "$900K-1M",
-          "count": 2044
+          "count": 2045
         },
         {
           "band": "$1-1.25M",
@@ -621,5 +621,5 @@
       ]
     }
   },
-  "updated": "2026-11-17"
+  "updated": "2026-11-18"
 }
