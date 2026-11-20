@@ -48,8 +48,9 @@ FIRST, then update the relevant dashboard.
 | FY2022 | 2,378,944 | CBP | 🔒 closed federal fiscal year. These are OHSS total encounters (Border Patrol plus ports of entry); OHSS stopped publishing the ports-of-entry component after FY2024, so this series is complete and cannot be extended or revised. The Border Patrol-only series that does continue is written by update-cbp-encounters.py. |
 | FY2023 | 2,475,669 | CBP | 🔒 closed federal fiscal year. These are OHSS total encounters (Border Patrol plus ports of entry); OHSS stopped publishing the ports-of-entry component after FY2024, so this series is complete and cannot be extended or revised. The Border Patrol-only series that does continue is written by update-cbp-encounters.py. |
 | FY2024 | 2,136,800 | CBP | 🔒 closed federal fiscal year. These are OHSS total encounters (Border Patrol plus ports of entry); OHSS stopped publishing the ports-of-entry component after FY2024, so this series is complete and cannot be extended or revised. The Border Patrol-only series that does continue is written by update-cbp-encounters.py. |
-| FY2025 (full year) | 237,538 | CBP (USBP only) | 🔄 Jul 2026 |
-| FY2026 (thru May 2026) | 61,726 | CBP (USBP only) | 🔄 Jul 2026 |
+| FY2025 (full year) | 237,538 | CBP (USBP only) | 🔄 written by `update-cbp-encounters.py`; checked by check-consistency.py |
+| FY2026 (full year) | 98,705 | CBP (USBP only) | 🔄 written by `update-cbp-encounters.py`; checked by check-consistency.py |
+| FY2027 (thru Oct 2026) | 8,288 | CBP (USBP only) | 🔄 partial year, not checked by check-consistency.py: see `data/cbp-encounters-latest.json` |
 
 - **FY2025 pace:** Lowest since 1970
 - **FY2021-24 total:** ~10.8M nationwide encounters

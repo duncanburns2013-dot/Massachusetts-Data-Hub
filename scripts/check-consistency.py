@@ -49,6 +49,22 @@ def checks():
     """(label, expected-string, why) for every figure a feed owns."""
     out = []
 
+    # CBP: every completed fiscal year in the feed. These rows were marked as
+    # script-written in MASTER_DATA.md and no script owned them, so FY2026 sat at
+    # 61,726 ('thru May 2026') while the feed held the full year at 98,705, and
+    # FY2027 had no row at all. Nothing caught it because this list is explicit
+    # and CBP was never added to it. Partial years are skipped: a month-to-date
+    # total legitimately changes every release and would fail this check daily.
+    # FY2024 and earlier are excluded because MASTER_DATA carries a DIFFERENT
+    # measure for those years: OHSS total encounters (Border Patrol plus ports of
+    # entry, FY2024 = 2,136,800), while this feed is Border Patrol only
+    # (FY2024 = 1,530,523). CBP stopped publishing the ports-of-entry component
+    # for FY2025+, which is why the two series only coexist up to FY2024.
+    cbp = load('cbp-encounters-latest.json')['fy_totals']
+    out += [(f'CBP {k} USBP southwest', money(v['total']), 'cbp-encounters-latest.json')
+            for k, v in sorted(cbp.items())
+            if v.get('months_reported') == 12 and k >= 'FY2025']
+
     nh = load('nh-figures.json')
     sw = nh['markets']['NH Statewide']
     out += [
