@@ -547,22 +547,27 @@ def main():
     except Exception:
         nat = None
 
-    span = f"{fmt_month(*first)}–{fmt_month(*last)}"
+    span = fmt_month(*first) if n == 1 else f"{fmt_month(*first)}–{fmt_month(*last)}"
     nat_txt = f" ({nat[0]:,} nationwide)" if nat else ""
     if n >= 12:
         period, tail = f"Full year, {span} =", ""
     else:
         period = f"{span} ="
-        tail = f" over the fiscal year's first {n} month{'s' if n != 1 else ''}"
+        tail = (" in the fiscal year's first month" if n == 1
+                else f" over the fiscal year's first {n} months")
     direction = "risen" if months[-1][2] > months[0][2] else "fallen"
     trend = (f" Within that span the monthly Southwest total has {direction} from "
              f"{months[0][2]:,} in {fmt_month(*first)} to {months[-1][2]:,} in "
              f"{fmt_month(*last)}." if n >= 2 else "")
+    ofo = (csv_per or {}).get(cur_fy, {}).get("ofo")
+    ofo_txt = (f" Adding {ofo:,} port-of-entry (OFO) inadmissibles brings the Southwest "
+               f"total to <strong>{total + ofo:,}</strong> (CBP nationwide encounters export)."
+               if ofo else
+               f" CBP has not published the OFO port-of-entry component for FY{cur_fy}, so no "
+               f"total-encounter figure exists for the year (CBP monthly tables, summed).")
     callout = (f'<div class="callout callout-green"><strong>FY{cur_fy} so far:</strong> '
                f'{period} <strong>{total:,}</strong> Border Patrol apprehensions at the '
-               f'Southwest border{nat_txt}{tail}.{trend} CBP has not published the OFO '
-               f'port-of-entry component for FY{cur_fy}, so no total-encounter figure '
-               f'exists for the year (CBP monthly tables, summed).</div>')
+               f'Southwest border{nat_txt}{tail}.{trend}{ofo_txt}</div>')
     cm = re.search(r'<div class="callout callout-green"><strong>FY\d{4} so far:.*?</div>', html, re.S)
     if cm:
         if cm.group(0) != callout:
