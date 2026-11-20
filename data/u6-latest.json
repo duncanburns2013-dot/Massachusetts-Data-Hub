@@ -92,17 +92,17 @@
       "fred_date": "2026-07-01",
       "u3": 4.4,
       "u6": 7.8,
-      "labor_force": 3886533
+      "labor_force": 3886530
     }
   ],
-  "verified": "2026-10-30",
+  "verified": "2026-11-20",
   "source": "BLS Alternative Measures of Labor Underutilization for States, quarterly 4-quarter moving averages, NSA",
   "source_url": "https://www.bls.gov/lau/stalt.htm",
   "retrieved_via": "FRED keyless CSV (U1UNEM1MA..U6UNEM6MA); BLS serves this table as HTML only and 403s automated requests",
   "national_basis": "mean of the same twelve monthly national NSA rates (U1RATENSA, U2RATENSA, UNRATENSA, U4RATENSA, U5RATENSA, U6RATENSA); October 2025 has no observation, so windows containing it average 11",
   "meta": {
     "currency": {
-      "checked": "2026-10-30",
+      "checked": "2026-11-20",
       "newest_available": "Q3 2026",
       "cadence": "quarterly, about 3 weeks after the quarter's final month"
     }
