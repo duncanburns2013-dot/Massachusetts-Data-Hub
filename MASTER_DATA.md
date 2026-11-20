@@ -59,7 +59,7 @@ FIRST, then update the relevant dashboard.
 > **⚠️ Methodology break at FY2025 — do not compare across it.**
 > FY2017–FY2024 are **total** SWB encounters (Border Patrol + Office of Field Operations
 > ports of entry), from OHSS/KHSM. CBP stopped publishing the OFO port-of-entry component
-> for FY2025+, so FY2025 and FY2026 above are **Border Patrol only** and are therefore not
+> for FY2025+, so FY2025 through FY2027 above are **Border Patrol only** and are therefore not
 > like-for-like with the years above them. The immigration dashboard's total series
 > deliberately ends at FY2024 for this reason.
 > Live figures: `data/cbp-encounters-latest.json` (🔄 refreshed monthly on the 25th).
