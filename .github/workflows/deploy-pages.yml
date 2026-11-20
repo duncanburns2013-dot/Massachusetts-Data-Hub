@@ -50,7 +50,7 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/
+      url: https://massachusettsdatahub.com/
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

@@ -18,7 +18,8 @@ Interactive dashboards and data analysis covering housing, immigration, educatio
 | [Haverhill Report](haverhill-market-report.html) | SF/Condo affordability deep dive | ✅ Live | MLS, Census QuickFacts |
 | [Cost of Living](affordability-dashboard.html) | BEA price parities (state + metro), price-adjusted income, MIT living wage | ✅ Live | BEA, MIT, Census ACS |
 | [Education (State)](education-statewide.html) | Enrollment shifts, spending, MCAS | ✅ Live | DESE, MCAS |
-| [Education (Boston)](education-boston.html) | BPS absenteeism, gaps, demographics | ✅ Live | DESE, BPS |
+| [All Things Boston](all-things-boston.html) | City budget, ACFR, schools, permits | ✅ Live | Boston ACFR, data.boston.gov |
+| [MBTA Communities 3A](mbta-3a-dashboard.html) | §3A compliance, zoned capacity, what got built | ✅ Live | EOHLC, DESE |
 | [Education (MV)](education-merrimack-valley.html) | Haverhill/Methuen/Lawrence — MCAS by grade, gaps, growth, absenteeism, graduation, accountability, spending | ✅ Live | DESE |
 | [Healthcare](healthcare-dashboard.html) | Insurance rates, premiums, MA vs national | ✅ Live | DOI, KFF, CHIA |
 | [Employment](employment-dashboard.html) | JOLTS, NFP revisions, hiring recession | ✅ Live | BLS JOLTS, CES |
@@ -45,11 +46,12 @@ Massachusetts-Data-Hub/
 ├── haverhill-market-report.html        ← Haverhill deep dive
 ├── affordability-dashboard.html        ← What it costs to live in MA (BEA + MIT)
 ├── education-statewide.html            ← MA education statewide
-├── education-boston.html                ← Boston Public Schools
+├── all-things-boston.html              ← Boston budget, ACFR, schools
+├── mbta-3a-dashboard.html              ← MBTA Communities §3A compliance
 ├── education-merrimack-valley.html     ← Haverhill/Methuen/Lawrence
-├── healthcare-dashboard.html           ← Insurance & premiums (planned)
-├── employment-dashboard.html           ← JOLTS & labor market (planned)
-├── commercial-re-dashboard.html        ← Boston office/CMBS (planned)
+├── healthcare-dashboard.html           ← Insurance & premiums
+├── employment-dashboard.html           ← JOLTS & labor market
+├── commercial-re-dashboard.html        ← Boston office/CMBS
 ├── tax-burden-dashboard.html           ← Total burden incidence model
 ├── tax-burden-nh-comparison.html       ← Cross-border burden comparison
 ├── tax-budget-dashboard.html           ← Tax, budget & rankings
@@ -222,7 +224,7 @@ When starting a new Claude chat, say:
 
 This site is hosted via GitHub Pages:
 1. Settings → Pages → Deploy from branch: **main** / **root**
-2. Live at: `https://duncanburns2013-dot.github.io/Massachusetts-Data-Hub/`
+2. Live at: `https://massachusettsdatahub.com/`
 
 ## 📄 Migration from Old Repos
 
@@ -236,4 +238,4 @@ Old repos will remain active until migration is complete.
 
 ---
 
-*Data compiled February 2026 · All data from official government sources*
+*Sources and currency, figure by figure: [MASTER_DATA.md](MASTER_DATA.md). Each page stamps its own data-checked date.*
