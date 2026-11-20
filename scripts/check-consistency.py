@@ -103,6 +103,53 @@ def checks():
         out.append(('gold total fine troy oz',
                     f"{gold['total_fine_troy_oz'] / 1e6:.1f}M", 'gold-reserve-latest.json'))
 
+    # BLS levels. The feed stores these in THOUSANDS (3711, 7523) and the register
+    # writes them out, which is why a raw string comparison missed them: the figures
+    # agreed and the units did not. MA nonfarm matched all along; US job openings was
+    # a month stale and 444k low, and nothing compared the two.
+    e = load('employment-latest.json')
+    out += [
+        ('MA total nonfarm', money(e['ma_total_nonfarm']['latest']['value'] * 1000),
+         'employment-latest.json'),
+        ('US job openings', f"{e['us_job_openings']['latest']['value'] / 1000:.3f}M",
+         'employment-latest.json'),
+    ]
+
+    # Statewide MLS, newest single-family year. mls-history.json is deliberately NOT
+    # aged by check-freshness (only --backfill-history writes it), but whether the
+    # register AGREES with it is a separate question, and that is what this asks.
+    cells = load('mls-history.json')['cells']
+    ma_sf = sorted(k for k in cells if k.startswith('ma|sf|'))
+    if ma_sf:
+        c = cells[ma_sf[-1]]
+        out += [
+            ('MLS statewide avg DOM', f"{c['avg_dom']} days", 'mls-history.json'),
+            ('MLS statewide SP/LP', f"{c['sp_lp_pct']}%", 'mls-history.json'),
+            ('MLS statewide units sold', money(c['count']), 'mls-history.json'),
+            ('MLS statewide median price', f"${money(c['median_price'])}",
+             'mls-history.json'),
+        ]
+
+    # IRS SoI, latest year only. The register's cumulative 2011-2023 sums are NOT here:
+    # this feed carries one year, so those two rows need a multi-year source and stay
+    # unchecked rather than being asserted against a number that cannot support them.
+    # Note on testing these: 16,921 appears twice in the register, in the row and in
+    # the prose below it, so editing one instance still passes. That is this file's
+    # presence-check design, not a gap in this block: the failure mode it exists for
+    # is the feed moving to a new year while the register does not, and it catches
+    # that (verified by moving net_returns in the feed and watching it go STALE).
+    res = load('irs-soi-migration-latest.json')['results']
+    if res:
+        r0 = res[0]
+        out += [
+            ('IRS net outflow returns', money(abs(r0['net_returns'])),
+             'irs-soi-migration-latest.json'),
+            ('IRS avg AGI leaving', f"${money(r0['avg_income_leaving'])}",
+             'irs-soi-migration-latest.json'),
+            ('IRS avg AGI arriving', f"${money(r0['avg_income_arriving'])}",
+             'irs-soi-migration-latest.json'),
+        ]
+
     nh = load('nh-figures.json')
     sw = nh['markets']['NH Statewide']
     out += [

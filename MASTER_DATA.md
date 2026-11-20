@@ -334,7 +334,7 @@ Values below are that file as of **2026-10-20** (reference month September 2026)
 | MA labor force | 3,880,158 | September 2026 | BLS LAUS 🔄 |
 | MA total nonfarm | 3,711,000 | September 2026 | BLS CES 🔄 |
 | US unemployment rate | 4.1% | October 2026 | BLS 🔄 |
-| US job openings | 7.079M | August 2026 | BLS JOLTS 🔄 |
+| US job openings | 7.523M | September 2026 | BLS JOLTS 🔄 written by `update-employment.py`; checked by check-consistency.py |
 
 > **⚠️ BLS discontinued monthly state-level JOLTS in 2026.** National JOLTS is still monthly;
 > state figures are annual now, first annual release July 2026. Any "MA job openings rate"
