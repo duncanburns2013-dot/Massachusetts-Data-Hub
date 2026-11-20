@@ -1,0 +1,68 @@
+# Re-stamp dateModified and sitemap lastmod across the whole site, weekly.
+#
+# WHY THIS EXISTS
+# seo.py derives each page's dateModified from its own last commit, and writes
+# sitemap.xml from the same dates. rebuild-generated.yml runs it in SCOPED form
+# (method/about/videos only) on purpose: the scoped form writes nothing but the
+# pages named, so that job's working tree holds nothing it does not commit and
+# its pull --rebase retry stays safe.
+#
+# The side effect was that nothing re-stamped the other 20 pages. Eleven data
+# workflows rewrite and commit them daily, so by 2026-11-19 energy-dashboard and
+# immigration-dashboard both still declared dateModified 2026-11-11 with commits
+# from the 19th, and sitemap lastmod topped out at 11-12. The site was telling
+# crawlers its newest content was a week old, every single day, and the freshness
+# watchdog could not see it: that ages data FILES, not schema stamps.
+#
+# Weekly, not daily, because lastmod precision finer than a week buys nothing for
+# crawl scheduling and a daily full run would commit a wide diff every morning.
+# Separate from rebuild-generated.yml so a failure here cannot take that with it.
+name: SEO Re-stamp
+
+on:
+  schedule:
+    - cron: "40 12 * * 0"   # Sundays, after the overnight data jobs
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: seo-restamp
+  cancel-in-progress: false
+
+jobs:
+  restamp:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # seo.py reads each page's last commit date, so a depth-1 checkout
+          # would stamp every page with nothing and silently flatten the sitemap.
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Re-stamp every page, the sitemap and robots.txt
+        run: python seo.py
+
+      - name: Commit if anything moved
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet; then
+            echo "no date moved; nothing to commit"
+            exit 0
+          fi
+          git add -A
+          git commit -m "chore: re-stamp dateModified and sitemap lastmod"
+          # another job may have landed while this ran
+          for i in 1 2 3; do
+            git pull --rebase --autostash && git push && exit 0
+            echo "push $i failed, retrying"
+            sleep 5
+          done
+          exit 1
