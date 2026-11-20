@@ -28,6 +28,7 @@ current value rather than parsing the table: the tables are hand-formatted and
 vary, but a figure that is genuinely current will appear somewhere, and one that
 has drifted will not appear at all.
 """
+import datetime
 import json
 import re
 import sys
@@ -64,6 +65,43 @@ def checks():
     out += [(f'CBP {k} USBP southwest', money(v['total']), 'cbp-encounters-latest.json')
             for k, v in sorted(cbp.items())
             if v.get('months_reported') == 12 and k >= 'FY2025']
+
+    # --- feed groups whose MASTER_DATA mark names a real script -------------------
+    # Each of these had rows marked as script-written and sat outside this list, so
+    # nothing compared them to the feed. Written as per-feed loops rather than one
+    # entry per row: a new fiscal year or release month joins the check on its own.
+
+    # BLS release dates. The dashboard once stamped 'Released <today>' from
+    # new Date(), publishing a false provenance line on any non-release day, which
+    # is why these dates are a feed at all.
+    bls = load('bls-release-schedule.json')
+    for series in ('employment_situation', 'state_employment'):
+        for ref, rel in sorted(bls.get(series, {}).items()):
+            d = datetime.date.fromisoformat(rel)
+            out.append((f'BLS {series} {ref}', d.strftime('%b %d, %Y'),
+                        'bls-release-schedule.json'))
+
+    # CTHRU shelter actuals by fiscal year, written as $X.XXM in the register.
+    imm = load('immigrant-spending-latest.json')['series']['by_fiscal_year']
+    for fyr, v in sorted(imm.items()):
+        a = v.get('shelter_system', {}).get('actual')
+        if a:
+            out.append((f'shelter actual FY{fyr}', f'${a / 1e6:,.2f}M',
+                        'immigrant-spending-latest.json'))
+
+    # EOHLC 3A headline counts.
+    m3a = load('mbta-3a-latest.json')
+    out += [(label, money(m3a[k]), 'mbta-3a-latest.json') for label, k in (
+        ('3A communities', 'communities'),
+        ('3A 2020 housing units', 'housing_units_2020'),
+        ('3A required capacity', 'required_capacity'),
+    ) if k in m3a]
+
+    # Treasury gold, written in millions of fine troy ounces to one decimal.
+    gold = load('gold-reserve-latest.json')
+    if gold.get('total_fine_troy_oz'):
+        out.append(('gold total fine troy oz',
+                    f"{gold['total_fine_troy_oz'] / 1e6:.1f}M", 'gold-reserve-latest.json'))
 
     nh = load('nh-figures.json')
     sw = nh['markets']['NH Statewide']
