@@ -130,19 +130,36 @@ def checks():
              'mls-history.json'),
         ]
 
-    # IRS SoI, latest year only. The register's cumulative 2011-2023 sums are NOT here:
-    # this feed carries one year, so those two rows need a multi-year source and stay
-    # unchecked rather than being asserted against a number that cannot support them.
-    # Note on testing these: 16,921 appears twice in the register, in the row and in
-    # the prose below it, so editing one instance still passes. That is this file's
-    # presence-check design, not a gap in this block: the failure mode it exists for
-    # is the feed moving to a new year while the register does not, and it catches
-    # that (verified by moving net_returns in the feed and watching it go STALE).
+    # IRS SoI, latest year only. The register's cumulative 2011-2024 sums are NOT
+    # here: this feed carries one year, so those two rows need a multi-year source
+    # and stay unchecked rather than being asserted against a number that cannot
+    # support them. (They are re-derived by summing the dashboard's own 13 rows
+    # whenever a year is added, which is the closest thing to a check they have.)
+    #
+    # results[0] is the newest year: update-irs-soi-migration.py sorts the list
+    # newest-first for exactly this reason. Ordered the other way, this block would
+    # check the register against the year the register had just moved off.
+    #
+    # Note on testing these: the net figure appears twice in the register, in the
+    # row and in the prose below it, so editing one instance still passes. That is
+    # this file's presence-check design, not a gap in this block: the failure mode
+    # it exists for is the feed moving to a new year while the register does not,
+    # and it catches that (verified by moving net_returns in the feed and watching
+    # it go STALE).
+    #
+    # Outflow and inflow returns are checked because the register's prose restates
+    # them. Without these, the net could be brought up to date while the sentence
+    # under it kept the previous year's components, and the page would contradict
+    # itself and still pass.
     res = load('irs-soi-migration-latest.json')['results']
     if res:
         r0 = res[0]
         out += [
             ('IRS net outflow returns', money(abs(r0['net_returns'])),
+             'irs-soi-migration-latest.json'),
+            ('IRS outflow returns', money(r0['outflow_returns']),
+             'irs-soi-migration-latest.json'),
+            ('IRS inflow returns', money(r0['inflow_returns']),
              'irs-soi-migration-latest.json'),
             ('IRS avg AGI leaving', f"${money(r0['avg_income_leaving'])}",
              'irs-soi-migration-latest.json'),

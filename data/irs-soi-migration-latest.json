@@ -1,22 +1,31 @@
 {
-  "fetched_at": "2026-11-01T14:01:02.537752Z",
+  "fetched_at": "2026-11-21T14:24:37.466888Z",
   "source": "IRS Statistics of Income \u2014 State-to-State Migration Data",
-  "latest_year_verified": "2022-23",
+  "latest_year_verified": "2023-24",
   "verification": "ok",
   "new_year_found": null,
   "new_year_rejected": null,
+  "meta": {
+    "currency": {
+      "checked": "2026-11-21",
+      "newest_available": "2023-24",
+      "cadence": "annual, ~2-year lag; observed releases Mar 2026 (2022-23) and 19 Nov 2026 (2023-24)",
+      "note": "state_to_state totals are MA Total Migration-US and Foreign, so they include moves abroad and are NOT comparable with a domestic-only net migration count",
+      "url_pattern": "https://www.irs.gov/pub/irs-soi/state{in,out}flow{YYZZ}.csv"
+    }
+  },
   "results": [
     {
-      "year": "2022-23",
-      "outflow_returns": 102076,
-      "outflow_agi_k": 11877573,
-      "inflow_returns": 85155,
-      "inflow_agi_k": 7701622,
-      "net_returns": -16921,
-      "net_agi_k": -4175951,
-      "net_agi_billions": -4.18,
-      "avg_income_leaving": 116360,
-      "avg_income_arriving": 90442
+      "year": "2023-24",
+      "outflow_returns": 100573,
+      "outflow_agi_k": 11370483,
+      "inflow_returns": 81815,
+      "inflow_agi_k": 7728054,
+      "net_returns": -18758,
+      "net_agi_k": -3642429,
+      "net_agi_billions": -3.64,
+      "avg_income_leaving": 113057,
+      "avg_income_arriving": 94458
     }
   ]
 }
