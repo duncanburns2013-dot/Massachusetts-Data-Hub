@@ -213,20 +213,34 @@ def _get(params: dict, max_retries: int = 8) -> dict:
     sys.exit(f"Bridge unreachable after {max_retries} retries: {last_err}")
 
 
-def _monthly_windows() -> list[tuple[str, str]]:
-    """Newest-first monthly [start, end) windows covering the last ~365 days.
+def _monthly_windows(today: datetime.date = TODAY) -> list[tuple[str, str]]:
+    """Newest-first monthly [start, end) windows whose union is exactly
+    [today - 365 days, today), the same span as the single-pass query.
     Only needed for scopes too large to page within Bridge's 10k offset cap."""
+    floor = today - datetime.timedelta(days=365)
     windows: list[tuple[str, str]] = []
-    end = TODAY
-    for _ in range(13):
-        start = (end.replace(day=1) - datetime.timedelta(days=1)).replace(day=1)
-        if (TODAY - start).days > 365 + 31:
-            start = TODAY - datetime.timedelta(days=365)
+    end = today
+    while end > floor:
+        start = max((end.replace(day=1) - datetime.timedelta(days=1)).replace(day=1), floor)
         windows.append((start.strftime("%Y-%m-%d"), end.strftime("%Y-%m-%d")))
         end = start
-        if (TODAY - start).days >= 365:
-            break
     return windows
+
+
+def _check_monthly_windows() -> None:
+    """The windows must tile [today-365, today) with no gap, overlap or overrun.
+    An earlier version stopped at the 1st of a month, so on 2026-11-20 the
+    statewide window ran 384 days and overstated Units Sold."""
+    for d in ("2026-11-20", "2026-11-01", "2026-12-31", "2028-03-01", "2027-02-28"):
+        today = datetime.date.fromisoformat(d)
+        w = _monthly_windows(today)[::-1]
+        assert w[0][0] == (today - datetime.timedelta(days=365)).isoformat(), (d, w[0])
+        assert w[-1][1] == today.isoformat(), (d, w[-1])
+        assert all(a[1] == b[0] for a, b in zip(w, w[1:])), (d, w)
+        assert all(s < e for s, e in w), (d, w)
+
+
+_check_monthly_windows()
 
 
 def _paginate_window(win_filter: dict, rows: list[dict], seen_keys: set) -> int:
