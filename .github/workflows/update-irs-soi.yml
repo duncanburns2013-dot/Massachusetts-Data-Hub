@@ -1,8 +1,14 @@
 # .github/workflows/update-irs-soi.yml
 #
-# Checks for new IRS SOI migration data and updates tax-budget-dashboard.html.
-# IRS releases ~18 months after tax year (e.g., 2023-24 data expected ~mid-2026).
-# Runs monthly to check; also triggers on manual dispatch.
+# Checks for new IRS SOI migration data and refreshes
+# data/irs-soi-migration-latest.json. It does NOT edit any dashboard: applying a
+# new migration year takes ~80 changes across tax-budget-dashboard.html,
+# including prose judgements about rank and direction, so the script reports and
+# warns instead. check-consistency.py is what then fails until the register and
+# dashboard are brought up to date.
+#
+# Observed lag is ~2 years, and the release month is not predictable: 2022-23
+# landed March 2026 and 2023-24 landed 19 November 2026. Runs monthly.
 
 name: Update IRS SOI Migration
 
@@ -40,7 +46,7 @@ jobs:
       - name: Check for changes
         id: changes
         run: |
-          git diff --quiet -- '*.html' 'data/*.json' \
+          git diff --quiet -- 'data/*.json' \
             && echo "changed=false" >> $GITHUB_OUTPUT \
             || echo "changed=true"  >> $GITHUB_OUTPUT
 
@@ -49,7 +55,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add tax-budget-dashboard.html data/irs-soi-migration-latest.json
+          git add data/irs-soi-migration-latest.json
           git commit -m "Auto-update: IRS SOI migration data $(date +'%B %Y')"
           for attempt in 1 2 3 4 5; do
             if git push; then
@@ -86,5 +92,7 @@ jobs:
           print(f'Verified: {d[\"latest_year_verified\"]}')
           new = d.get('new_year_found')
           print(f'New year: {new or \"None yet\"}')
+          if new:
+              print(f'**A new year has been released. tax-budget-dashboard.html and MASTER_DATA.md need a manual pass.**')
           " >> $GITHUB_STEP_SUMMARY
           fi

@@ -7,31 +7,47 @@ The IRS publishes at predictable URLs:
   https://www.irs.gov/pub/irs-soi/stateoutflow{YYZZ}.csv
   https://www.irs.gov/pub/irs-soi/stateinflow{YYZZ}.csv
 
-No API key needed â public IRS data.
-Data lags ~18 months (e.g., 2023-24 data released ~mid-2026).
+No API key needed -- public IRS data.
+Data lags ~2 years. Observed, not documented: 2022-23 landed March 2026 and
+2023-24 landed 19 November 2026, so do not trust a documented release month.
 
-Updates:
-  - Verifies current dashboard figures against source
-  - Auto-detects when a NEW migration year drops (2023-24, etc.)
-  - Updates cumulative totals, stat cards, and chart arrays
-  - Saves data/irs-soi-migration-latest.json
+What this does:
+  - Verifies the published latest-year figures against the source CSVs
+  - Auto-detects when a NEW migration year drops, and sanity-gates it
+  - Writes data/irs-soi-migration-latest.json, newest year first
+
+What this deliberately does NOT do: edit tax-budget-dashboard.html. It used
+to, with bare string replacements that also matched the historical table
+rows, so a new year would have overwritten published history and exited 0.
+Applying a new year takes ~80 changes across that page including prose
+judgements about rank and direction ("second worst" -> "fourth worst",
+"deepened" -> "eased") that no replacement can make. When a new year lands
+this prints the figures and warns; check-consistency.py then fails until the
+register and dashboard are brought up to date.
 """
-import csv, io, json, os, re, sys
+import csv, io, json, os, sys
 from urllib.request import urlopen, Request
 from datetime import datetime
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-TAX_BUDGET_HTML = os.path.join(BASE_DIR, "tax-budget-dashboard.html")
 
 MA_FIPS = "25"
 IRS_BASE = "https://www.irs.gov/pub/irs-soi/"
 
-# Dashboard's current values (2022-23 is latest as of Feb 2026)
-CURRENT_LATEST_YEAR = "2022-23"
-CURRENT_CUM_RETURNS = -184719  # 2011-2023
-CURRENT_CUM_AGI_B = -24.7      # billions (AGI in $K in CSV)
-CURRENT_LATEST_RETURNS = -16921
-CURRENT_LATEST_AGI_B = -4.18
+# The published figures this script verifies against. 2023-24 is the newest
+# year the IRS has released (checked 2026-11-21: stateoutflow2425.csv 404s).
+CURRENT_LATEST_YEAR = "2023-24"
+CURRENT_PAIR = (2023, 2024)    # must match CURRENT_LATEST_YEAR
+CURRENT_CUM_RETURNS = -203477  # 2011-2024
+CURRENT_CUM_AGI_B = -28.4      # billions (AGI in $K in CSV)
+CURRENT_LATEST_RETURNS = -18758
+CURRENT_LATEST_AGI_B = -3.64
+
+# Both cumulative constants above were re-derived by summing the 13 rows of
+# the dashboard's own year-by-year table, not carried forward by addition.
+# Carrying them forward is how a wrong total survives: the previous pair
+# (-184,719 / -$24.7B) happened to be right, but nothing in this file checked
+# it. Re-sum the table whenever you bump these.
 
 
 def warn(msg):
@@ -83,8 +99,8 @@ def _pick(row, *names, default=""):
     """
     Read the first present column from a case-normalized row.
 
-    The IRS ships these files with mixed-case headers — `n1` and the FIPS
-    columns are lowercase but AGI is uppercase `AGI` — so a case-sensitive
+    The IRS ships these files with mixed-case headers -- `n1` and the FIPS
+    columns are lowercase but AGI is uppercase `AGI` -- so a case-sensitive
     lookup silently reads returns correctly and AGI as zero. Every column is
     matched lowercased for that reason. Missing/short rows yield None from
     DictReader, so coerce before stripping.
@@ -184,27 +200,29 @@ def main():
     verification = "not_run"
     rejected_new = None
 
-    # ââ Check for NEW data year ââ
-    # Current latest is 2022-23. Check if 2023-24 has dropped.
+    # -- Check for NEW data year --
+    # Probe the two years after the published one. Both are probed because a
+    # long gap between runs can let two releases land.
     new_year = None
-    check_pairs = [(2023, 2024), (2024, 2025)]
+    y1c, y2c = CURRENT_PAIR
+    check_pairs = [(y1c + 1, y2c + 1), (y1c + 2, y2c + 2)]
     for y1, y2 in check_pairs:
         tag = f"{str(y1)[-2:]}{str(y2)[-2:]}"
         url = f"{IRS_BASE}stateoutflow{tag}.csv"
         print(f"Checking for {y1}-{y2} data...")
         if head_check(url):
-            print(f"  ð NEW DATA AVAILABLE: {y1}-{y2}!")
+            print(f"  [NEW] NEW DATA AVAILABLE: {y1}-{y2}!")
             new_year = (y1, y2)
             break
         else:
             print(f"  Not yet.")
 
-    # ââ Fetch latest (and new if available) ââ
+    # -- Fetch latest (and new if available) --
     results = []
 
     # Always verify the current latest year
     print(f"\nVerifying current data ({CURRENT_LATEST_YEAR})...")
-    current = fetch_year(2022, 2023)
+    current = fetch_year(*CURRENT_PAIR)
     if current:
         results.append(current)
 
@@ -216,116 +234,78 @@ def main():
         if new_result:
             results.append(new_result)
 
-    # ââ Update dashboard ââ
-    if not os.path.exists(TAX_BUDGET_HTML):
-        print(f"\n  SKIP: {TAX_BUDGET_HTML} not found.")
-    else:
-        with open(TAX_BUDGET_HTML, "r", encoding="utf-8") as f:
-            html = f.read()
-        orig = html
-
-        # Verify current values
-        if current:
-            ret_diff = abs(current["net_returns"] - CURRENT_LATEST_RETURNS)
-            agi_diff = abs(current["net_agi_billions"] - CURRENT_LATEST_AGI_B)
-            if ret_diff < 200 and agi_diff < 0.15:
-                verification = "ok"
-                print(f"\n  OK - current {CURRENT_LATEST_YEAR} data verified "
-                      f"(returns: {current['net_returns']:+,}, "
-                      f"AGI: ${current['net_agi_billions']:+,.2f}B)")
-            else:
-                verification = "mismatch"
-                print(f"\n  !! Current {CURRENT_LATEST_YEAR} data MISMATCH:")
-                print(f"      Dashboard: {CURRENT_LATEST_RETURNS:+,} returns, ${CURRENT_LATEST_AGI_B:+,.2f}B")
-                print(f"      Fetched:   {current['net_returns']:+,} returns, ${current['net_agi_billions']:+,.2f}B")
-                # Surface it. This check printed into a log nobody reads while an
-                # AGI column-case bug held every AGI figure at zero for months;
-                # a CI annotation is what makes the next such drift visible.
-                warn(
-                    f"IRS SOI {CURRENT_LATEST_YEAR} verification mismatch - "
-                    f"dashboard {CURRENT_LATEST_RETURNS:+,} returns / "
-                    f"${CURRENT_LATEST_AGI_B:+,.2f}B vs fetched "
-                    f"{current['net_returns']:+,} returns / "
-                    f"${current['net_agi_billions']:+,.2f}B"
-                )
-
-        # A new year that comes back with zeroed AGI means the parser failed, not
-        # that Massachusetts lost $0. Never let that overwrite published figures.
-        if new_result and not is_plausible(new_result):
-            warn(
-                f"IRS SOI {new_result['year']} looks unparsed "
-                f"(returns={new_result['net_returns']:+,}, "
-                f"AGI=${new_result['net_agi_billions']:+,.2f}B) - skipping dashboard update."
-            )
-            print(f"\n  !! {new_result['year']} rejected as implausible - "
-                  f"dashboard left unchanged.")
-            rejected_new = new_result
-            new_result = None
-
-        # If new year available, update the dashboard
-        if new_result:
-            nr = new_result
-            new_label = nr["year"]
-            print(f"\n  ð Updating dashboard with {new_label} data...")
-
-            # Update stat cards â latest year labels
-            html = html.replace("2022-23 Net Outflow", f"{new_label} Net Outflow")
-            html = html.replace("2022-23 Net AGI Loss", f"{new_label} Net AGI Loss")
-
-            # Update latest year values
-            html = html.replace(
-                f">{CURRENT_LATEST_RETURNS:,}<",
-                f">{nr['net_returns']:,}<"
-            )
-            html = html.replace(
-                f"-${abs(CURRENT_LATEST_AGI_B)}B",
-                f"-${abs(nr['net_agi_billions']):.2f}B"
-            )
-
-            # Update cumulative totals
-            new_cum_ret = CURRENT_CUM_RETURNS + nr["net_returns"]
-            new_cum_agi = round(CURRENT_CUM_AGI_B + nr["net_agi_billions"], 1)
-            end_year = new_year[1]
-
-            html = html.replace(
-                f">{CURRENT_CUM_RETURNS:,}<",
-                f">{new_cum_ret:,}<"
-            )
-            html = html.replace("-$24.7B", f"-${abs(new_cum_agi):.1f}B")
-            html = html.replace("2011â2023", f"2011â{end_year}")
-            html = html.replace("12-Year Migration", f"{end_year - 2011}-Year Migration")
-
-            # Update avg income table
-            pct_more = round((nr["avg_income_leaving"] / nr["avg_income_arriving"] - 1) * 100) if nr["avg_income_arriving"] > 0 else 0
-            new_row = (
-                f'<tr style="background:rgba(26,68,128,0.05);font-weight:600">'
-                f'<td>{new_label} â</td>'
-                f'<td class="highlight">${nr["avg_income_leaving"]:,}</td>'
-                f'<td>${nr["avg_income_arriving"]:,}</td>'
-                f'<td class="highlight">Leavers earn {pct_more}% more</td>'
-                f'<td style="color:var(--red);font-weight:700">YES â full year</td></tr>'
-            )
-            # Insert before closing </tbody>
-            old_latest_row_marker = "2022-23 â"
-            if old_latest_row_marker in html:
-                # Find the old "latest" row and demote it (remove â and special styling)
-                html = html.replace('2022-23 â', '2022-23')
-                # Find </tbody> in the avg income table and insert new row before it
-                tbody_pattern = r'(YES â started Jan 2023</td></tr>)'
-                html = re.sub(tbody_pattern, r'\1\n        ' + new_row, html, count=1)
-
-            print(f"    Cumulative returns: {CURRENT_CUM_RETURNS:,} â {new_cum_ret:,}")
-            print(f"    Cumulative AGI: -${abs(CURRENT_CUM_AGI_B)}B â -${abs(new_cum_agi):.1f}B")
-            print(f"    Avg leaving: ${nr['avg_income_leaving']:,} | Arriving: ${nr['avg_income_arriving']:,} ({pct_more}% gap)")
-
-        if html != orig:
-            with open(TAX_BUDGET_HTML, "w", encoding="utf-8") as f:
-                f.write(html)
-            print(f"  â {TAX_BUDGET_HTML} updated.")
+    # --- Verify the published figures ---
+    if current:
+        ret_diff = abs(current["net_returns"] - CURRENT_LATEST_RETURNS)
+        agi_diff = abs(current["net_agi_billions"] - CURRENT_LATEST_AGI_B)
+        if ret_diff < 200 and agi_diff < 0.15:
+            verification = "ok"
+            print(f"\n  OK - published {CURRENT_LATEST_YEAR} figures verified "
+                  f"(returns: {current['net_returns']:+,}, "
+                  f"AGI: ${current['net_agi_billions']:+,.2f}B)")
         else:
-            print("  No dashboard changes needed.")
+            verification = "mismatch"
+            print(f"\n  !! Published {CURRENT_LATEST_YEAR} figures MISMATCH:")
+            print(f"      Published: {CURRENT_LATEST_RETURNS:+,} returns, ${CURRENT_LATEST_AGI_B:+,.2f}B")
+            print(f"      Fetched:   {current['net_returns']:+,} returns, ${current['net_agi_billions']:+,.2f}B")
+            # Surface it. This check printed into a log nobody reads while an
+            # AGI column-case bug held every AGI figure at zero for months;
+            # a CI annotation is what makes the next such drift visible.
+            warn(
+                f"IRS SOI {CURRENT_LATEST_YEAR} verification mismatch - "
+                f"published {CURRENT_LATEST_RETURNS:+,} returns / "
+                f"${CURRENT_LATEST_AGI_B:+,.2f}B vs fetched "
+                f"{current['net_returns']:+,} returns / "
+                f"${current['net_agi_billions']:+,.2f}B"
+            )
 
-    # ââ Save JSON ââ
+    # A new year that comes back with zeroed AGI means the parser failed, not
+    # that Massachusetts lost $0. Never let that be reported as a real release.
+    if new_result and not is_plausible(new_result):
+        warn(
+            f"IRS SOI {new_result['year']} looks unparsed "
+            f"(returns={new_result['net_returns']:+,}, "
+            f"AGI=${new_result['net_agi_billions']:+,.2f}B) - not reported as a release."
+        )
+        print(f"\n  !! {new_result['year']} rejected as implausible.")
+        rejected_new = new_result
+        new_result = None
+        if results and results[-1] is rejected_new:
+            results.pop()
+
+    # --- A new year landed: report it loudly, change no HTML ---
+    if new_result:
+        nr = new_result
+        cum_ret = CURRENT_CUM_RETURNS + nr["net_returns"]
+        cum_agi = round(CURRENT_CUM_AGI_B + nr["net_agi_billions"], 1)
+        pct = (round((nr["avg_income_leaving"] / nr["avg_income_arriving"] - 1) * 100)
+               if nr["avg_income_arriving"] > 0 else 0)
+        print(f"\n  NEW YEAR {nr['year']} - the dashboard and register need a pass.")
+        print(f"    net returns       {nr['net_returns']:+,}  (was {CURRENT_LATEST_RETURNS:+,})")
+        print(f"    net AGI           ${nr['net_agi_billions']:+,.2f}B  (was ${CURRENT_LATEST_AGI_B:+,.2f}B)")
+        print(f"    outflow           {nr['outflow_returns']:,} returns, ${nr['outflow_agi_k']:,}K")
+        print(f"    inflow            {nr['inflow_returns']:,} returns, ${nr['inflow_agi_k']:,}K")
+        print(f"    avg leaving       ${nr['avg_income_leaving']:,}")
+        print(f"    avg arriving      ${nr['avg_income_arriving']:,}  ({pct}% premium)")
+        print(f"    cumulative        {cum_ret:,} returns / -${abs(cum_agi):.1f}B"
+              f"  -- RE-SUM the table rather than trusting this addition")
+        print("    Then bump the CURRENT_* constants at the top of this file.")
+        # Loud in CI, because the figures are now stale everywhere they appear
+        # and nothing else will say so until check-consistency.py runs.
+        warn(
+            f"IRS SOI {nr['year']} has been released: net {nr['net_returns']:+,} returns / "
+            f"${nr['net_agi_billions']:+,.2f}B. tax-budget-dashboard.html, MASTER_DATA.md and "
+            f"this script's CURRENT_* constants are now stale and need a manual pass. "
+            f"This job no longer edits HTML - see the module docstring for why."
+        )
+
+    # -- Save JSON --
+    # Newest year first. check-consistency.py reads results[0] as "the latest
+    # year", so ordering this the other way round would have it checking the
+    # register against the year the register had just moved off.
+    results.sort(key=lambda r: r["year"], reverse=True)
+    newest = results[0]["year"] if results else None
+
     out = {
         "fetched_at": datetime.utcnow().isoformat() + "Z",
         "source": "IRS Statistics of Income \u2014 State-to-State Migration Data",
@@ -333,14 +313,26 @@ def main():
         "verification": verification,
         "new_year_found": new_result["year"] if new_result else None,
         "new_year_rejected": rejected_new["year"] if rejected_new else None,
+        "meta": {
+            "currency": {
+                "checked": datetime.utcnow().strftime("%Y-%m-%d"),
+                "newest_available": newest,
+                "cadence": "annual, ~2-year lag; observed releases Mar 2026 "
+                           "(2022-23) and 19 Nov 2026 (2023-24)",
+                "note": "state_to_state totals are MA Total Migration-US and "
+                        "Foreign, so they include moves abroad and are NOT "
+                        "comparable with a domestic-only net migration count",
+                "url_pattern": IRS_BASE + "state{in,out}flow{YYZZ}.csv",
+            }
+        },
         "results": results,
     }
     json_path = os.path.join(BASE_DIR, "data", "irs-soi-migration-latest.json")
     os.makedirs(os.path.dirname(json_path), exist_ok=True)
     with open(json_path, "w") as f:
         json.dump(out, f, indent=2)
-    print(f"\nData â {json_path}")
-    print("â¨ IRS SOI migration update complete.\n")
+    print(f"\nData -> {json_path}")
+    print("* IRS SOI migration update complete.\n")
 
 
 if __name__ == "__main__":
