@@ -330,9 +330,9 @@ Values below are that file as of **2026-10-20** (reference month September 2026)
 | Metric | Value | Period | Source |
 |--------|-------|--------|--------|
 | MA unemployment rate | 4.3% | September 2026 | BLS LAUS 🔄 |
-| MA unemployment level | 166,882 | September 2026 | BLS LAUS 🔄 |
-| MA labor force | 3,880,158 | September 2026 | BLS LAUS 🔄 |
-| MA total nonfarm | 3,711,000 | September 2026 | BLS CES 🔄 |
+| MA unemployment level | 164,934 | September 2026 | BLS LAUS 🔄 |
+| MA labor force | 3,886,370 | September 2026 | BLS LAUS 🔄 |
+| MA total nonfarm | 3,715,000 | September 2026 | BLS CES 🔄 |
 | US unemployment rate | 4.1% | October 2026 | BLS 🔄 |
 | US job openings | 7.523M | September 2026 | BLS JOLTS 🔄 written by `update-employment.py`; checked by check-consistency.py |
 
