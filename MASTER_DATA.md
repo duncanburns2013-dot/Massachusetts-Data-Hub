@@ -340,6 +340,24 @@ Values below are that file as of **2026-10-20** (reference month September 2026)
 > state figures are annual now, first annual release July 2026. Any "MA job openings rate"
 > quoted monthly is a pre-2026 series and cannot be extended.
 
+### Massachusetts — Public Money vs. Private Jobs
+
+Read 2026-11-22. Shown on tax-budget-dashboard.html (budget tab, `PUBLIC_MONEY`). People, except the two BLS rows, which count jobs. Overlaps removed only where an official record gives the overlap.
+
+| Metric | Value | Source | How it is held up |
+|---|---|---|---|
+| Social Security (OASDI) beneficiaries, MA | 1,409,032 (retired workers 1,076,890) | SSA, OASDI Beneficiaries by State and County, Dec 2025, table 2 | 🔒 a closed December 2025 count; next edition Dec 2026 |
+| SSI recipients, MA | 162,498, of which 49,288 also get OASDI | SSA, SSI Recipients by State and County, Dec 2025, table 1 | 🔒 same |
+| Social Security + SSI, unduplicated | 1,522,242 | derived: 1,409,032 + 162,498 − 49,288 | ⏳ re-read by 2027-09-30, when SSA publishes Dec 2026 |
+| Public pension retired members, 104 PERAC systems | 245,580 | PERAC 2025 Annual Report (sum of 105 board profiles; Boston City and Teachers separate) | ⏳ re-read by 2027-09-30, the PERAC 2026 report. Counts retirees wherever they live |
+| Government jobs, MA (federal 42,000; state 137,600; local 297,300) | 476,900 | BLS CES SMS25000009000000001, Oct 2026, SA, preliminary | ⏳ re-read monthly; preliminary until revised |
+| Private-sector jobs, MA | 3,238,100 | BLS CES SMS25000000500000001, Oct 2026, SA, preliminary | ⏳ re-read monthly; preliminary until revised |
+| MassHealth members | 1,866,686 (children 0–20: 673,654) | MassHealth Caseload Snapshot, 31 Jul 2026 (xlsx) | ⏳ re-read monthly, the next snapshot |
+| Medicare–Medicaid dual eligibles, MA | 377,930 (full 287,701; partial 90,229) | CMS Medicare Monthly Enrollment, Jul 2026 | ⏳ re-read monthly |
+| Public money, total | 3,733,478 (53.6% of public + private) | derived; 48.6% without MassHealth children | ⏳ moves with the rows above |
+
+Not removable (no official overlap count): public retirees also on Social Security; SSI recipients on MassHealth (up to 113,210 SSI-only); MassHealth members who also hold a job. SNAP (878,922, DTA Aug 2026) left out because it mostly overlaps MassHealth.
+
 ### Massachusetts — JOLTS (historical, pre-discontinuation)
 
 | Metric | Value | Source | How it is held up |

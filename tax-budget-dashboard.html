@@ -456,6 +456,20 @@ footer a:hover{color:var(--gold)}
        FY2018 line-item data to reproduce it — LINE_ITEMS is FY2027 (enacted GAA) only. To
        rebuild: parse the FY2018 and FY2026 appropriations acts by department from
        mass.gov and derive the growth, as SPEND_GROWTH_FY26 is derived from GAA_SIGNED. -->
+
+  <!-- Public money vs. private jobs. Every figure is in PUBLIC_MONEY below and in MASTER_DATA.md
+       (Employment & Labor). Overlaps are removed only where an official record gives the overlap. -->
+  <h2 class="section-title" style="margin-top:2.5rem">Public Money vs. Private Jobs</h2>
+  <div class="stat-row">
+    <div class="stat-card"><div class="label">Draw Public Money</div><div class="value red" id="pmPublic">—</div><div class="sub">Social Security or SSI, a public pension, a government job, or MassHealth; overlaps removed where records allow</div></div>
+    <div class="stat-card"><div class="label">Private-Sector Jobs</div><div class="value" id="pmPrivate">—</div><div class="sub">BLS, October 2026, seasonally adjusted, preliminary</div></div>
+    <div class="stat-card"><div class="label">Public Share</div><div class="value red" id="pmShare">—</div><div class="sub"><span id="pmShareNoKids">—</span> without the <span id="pmKids">—</span> children on MassHealth</div></div>
+  </div>
+  <div class="chart-card">
+    <h3>Public Money vs. Private Jobs, Massachusetts</h3>
+    <div class="chart-area"><canvas id="chartPublicPrivate"></canvas></div>
+    <div class="source">Sources, all primary: SSA, OASDI and SSI recipients in Massachusetts, December 2025 (1,409,032 + 162,498, less the 49,288 on both); PERAC 2025 Annual Report, retired members of all 104 public retirement systems (245,580); BLS Current Employment Statistics, Massachusetts, October 2026, seasonally adjusted, preliminary (government 476,900; private 3,238,100); MassHealth Caseload Snapshot, July 31, 2026 (1,866,686 members, 673,654 aged 0 to 20) less 377,930 Medicare-Medicaid dual eligibles (CMS Medicare Monthly Enrollment, July 2026), nearly all of whom are already counted under Social Security. Not removable, because no official count exists: public retirees who also draw Social Security, SSI recipients on MassHealth, and MassHealth members who also hold a job. SNAP (878,922 people, DTA, August 2026) is left out because it mostly overlaps MassHealth. Jobs count positions at Massachusetts workplaces, not people.</div>
+  </div>
 </div>
 
 <!-- ===== STATE RANKINGS ===== -->
@@ -1504,6 +1518,17 @@ const GAA_SIGNED = [40.197,41.883,43.590,46.459,48.085,52.444,56.063,57.718,60.9
 // FY2027 tab said $5.736B. The gap is supplemental spending above the enacted budget,
 // not waste.
 const GAA_FY25_ACTUAL = 63.303;
+
+// Public money vs. private jobs (budget tab). People, except government and private, which are
+// BLS job counts. Overlaps removed only where an official record gives them; see MASTER_DATA.md.
+const PUBLIC_MONEY = [
+  { label: 'Social Security + SSI',      n: 1522242, color: '#14558F' }, // SSA Dec 2025: 1,409,032 OASDI + 162,498 SSI - 49,288 on both
+  { label: 'Public pensions',            n: 245580,  color: '#B07C20' }, // PERAC 2025 Annual Report, retired members, 104 systems
+  { label: 'Government jobs',            n: 476900,  color: '#1F6FB2' }, // BLS CES SMS25000009000000001, Oct 2026 SA prelim
+  { label: 'MassHealth, 21+',            n: 815102,  color: '#A81733' }, // MassHealth snapshot Jul 2026 1,866,686 - 377,930 duals (CMS) - children
+  { label: 'MassHealth, children 0-20',  n: 673654,  color: '#A81733', kids: true }, // MassHealth snapshot Jul 2026
+];
+const PRIVATE_JOBS_OCT26 = 3238100; // BLS CES SMS25000000500000001, Oct 2026 SA prelim
 const GAA_FY25_ENACTED_LFL = 57.567;
 const FY27_GAA = 63.416;       // FY2027 enacted GAA, signed 9 Jul 2026, no vetoes.
 // Headline scope = Budgetary Direct Appropriations + Section 2E Consolidated Transfer +
@@ -1877,6 +1902,36 @@ function initCharts(tab) {
         },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, title: { display: true, text: '% Growth' } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `+${ctx.parsed.y.toFixed(1)}% since FY2018` } } } }
       });
+
+      // Public money vs. private jobs. Counts and sources: MASTER_DATA.md, Employment & Labor.
+      // Palette checked with the dataviz validator (bay, amber, lifted bay, red, Berkshire green);
+      // the children segment is the MassHealth red hatched, since they are the same program.
+      {
+        const pubTotal = PUBLIC_MONEY.reduce((s, p) => s + p.n, 0);
+        const all = pubTotal + PRIVATE_JOBS_OCT26;
+        const kids = PUBLIC_MONEY.find(p => p.kids).n;
+        putTxt('pmPublic', (pubTotal / 1e6).toFixed(2) + 'M');
+        putTxt('pmPrivate', (PRIVATE_JOBS_OCT26 / 1e6).toFixed(2) + 'M');
+        putTxt('pmShare', (pubTotal / all * 100).toFixed(1) + '%');
+        putTxt('pmShareNoKids', ((pubTotal - kids) / (all - kids) * 100).toFixed(1) + '%');
+        putTxt('pmKids', kids.toLocaleString('en-US'));
+        const hatch = (() => { const c = document.createElement('canvas'); c.width = c.height = 10; const g = c.getContext('2d');
+          g.fillStyle = '#A81733'; g.fillRect(0, 0, 10, 10); g.strokeStyle = '#d98a99'; g.lineWidth = 3;
+          g.beginPath(); g.moveTo(-2, 12); g.lineTo(12, -2); g.stroke(); return g.createPattern(c, 'repeat'); })();
+        safeChart('chartPublicPrivate', {
+          type: 'bar',
+          data: {
+            labels: ['Public money', 'Private jobs'],
+            datasets: [
+              ...PUBLIC_MONEY.map(p => ({ label: p.label, data: [p.n, 0], backgroundColor: p.kids ? hatch : p.color, stack: 's', borderColor: '#fff', borderWidth: { top: 2 } })),
+              { label: 'Private-sector jobs', data: [0, PRIVATE_JOBS_OCT26], backgroundColor: '#388557', stack: 's', borderRadius: 6 }
+            ]
+          },
+          options: { responsive: true, maintainAspectRatio: false,
+            scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true, ticks: { callback: v => (v / 1e6) + 'M' } } },
+            plugins: { legend: { position: 'bottom' }, tooltip: { filter: i => i.parsed.y > 0, callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString('en-US')}` } } } }
+        });
+      }
       break;
 
     case 'rankings':
