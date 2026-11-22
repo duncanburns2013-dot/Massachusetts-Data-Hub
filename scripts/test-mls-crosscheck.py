@@ -3,7 +3,8 @@ Real history must pass; a deliberately shifted history must still be caught --
 a guard that stops failing on a real off-by-one has been disarmed, not fixed."""
 import json, sys, types, datetime, statistics, argparse
 from pathlib import Path
-REPO = Path(r'C:\Users\dunca\code\Massachusetts-Data-Hub')
+REPO = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO))   # the script under test imports envfile from the repo root
 src = (REPO / 'update-mls-figures.py').read_text(encoding='utf-8')
 cut = src.index('# ---------- DATA COLLECTION ----------')
 head = src[:cut]

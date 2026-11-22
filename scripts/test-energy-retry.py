@@ -1,7 +1,8 @@
 """Does _fetch survive a transient timeout? Stub urlopen to fail twice then succeed."""
 import sys, types, io, json, os
 from pathlib import Path
-REPO = Path(r'C:\Users\dunca\code\Massachusetts-Data-Hub')
+REPO = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO))   # the script under test imports envfile from the repo root
 os.environ['EIA_API_KEY'] = 'stub'
 src = (REPO / 'update-energy-dashboard.py').read_text(encoding='utf-8')
 head = src[:src.index('# --------------------------------------------------------------------------\n# Formatting helpers')]
