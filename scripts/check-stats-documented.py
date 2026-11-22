@@ -151,6 +151,57 @@ def method_numbers():
     return out
 
 
+def method_values():
+    """Every number in method.html as a float, for the abbreviation check.
+
+    digits() compares printed strings, which cannot see an ABBREVIATED figure.
+    The immigration page prints "182K" for a quantity the register carries as
+    182,145; digits() reduces the first to "182" and the second to "182145" and
+    they can never match, so a figure that IS documented reported as
+    unaccountable. Same for "32.06M", "613.2K", "$129.5B".
+
+    That mattered little while a data-field attribute was accepted as proof of
+    ownership, because these figures passed on the attribute instead. Once
+    ownership had to be declared, the gap became visible: of the 23 figures that
+    surfaced, several were documented all along and simply printed short.
+    """
+    p = REPO / "method.html"
+    if not p.exists():
+        return []
+    text = TAG.sub(" ", p.read_text(encoding="utf-8"))
+    out = []
+    for tok in re.findall(r"[\d][\d,]*\.?\d*", text):
+        try:
+            out.append(float(tok.replace(",", "")))
+        except ValueError:
+            pass
+    return out
+
+
+SUFFIX = {"K": 1e3, "M": 1e6, "B": 1e9, "T": 1e12}
+ABBREV = re.compile(r"^[^\d]*([\d,]+(?:\.\d+)?)\s*([KMBT])(?![A-Za-z])")
+
+
+def documented_abbrev(raw, values):
+    """Is an abbreviated figure backed by a number in method.html?
+
+    "182K" is not 182,000 exactly -- it is a rounded print, so it stands for
+    anything in [181,500, 182,500). The window is taken from the precision the
+    page CHOSE to show: "182K" allows 500 either way, "613.2K" only 50, and
+    "32.06M" only 5,000. A figure printed to more decimals therefore gets a
+    tighter test, which is the right way round.
+    """
+    m = ABBREV.match(raw)
+    if not m:
+        return False
+    mant, suf = m.group(1).replace(",", ""), m.group(2)
+    scale = SUFFIX[suf]
+    step = 10 ** -len(mant.split(".")[1]) if "." in mant else 1
+    half = step * scale / 2.0
+    target = float(mant) * scale
+    return any(target - half <= v < target + half for v in values)
+
+
 FROZEN = re.compile(r'data-frozen="([^"]{8,})"')
 # A figure can also be owned by a markup-anchored regex substitution rather than
 # by a data-field. update-energy-dashboard.py works that way throughout -- 31
@@ -195,6 +246,7 @@ def scan(collect_frozen=None):
     reason is on the page, next to the figure, where the next reader finds it.
     """
     documented = method_numbers()
+    mvalues = method_values()
     found = []
     for f in sorted(REPO.glob("*.html")):
         if f.name in SKIP:
@@ -220,8 +272,38 @@ def scan(collect_frozen=None):
             # means in-page JS wrote the character, which is true of a figure
             # read off a feed and equally true of one typed into a const in
             # this file. Only an anchor naming an outside writer is ownership.
-            anchored = ("data-field=" in attrs
-                        or "data-field=" in block or "data-mig=" in block)
+            # OWNERSHIP IS DECLARED, NOT INFERRED.  (changed 2026-11-22)
+            #
+            # This read:
+            #
+            #     anchored = ("data-field=" in attrs
+            #                 or "data-field=" in block or "data-mig=" in block)
+            #
+            # which trusted data-field the way the line above it once trusted a
+            # bare id=. Same mistake, one attribute along. data-field says "this
+            # is a field". It does not say anybody fills it.
+            #
+            # Measured before changing it: 68 headline values across six pages
+            # carry a data-field or data-mig anchor, and the field name of only
+            # 11 appears in ANY script, workflow or data file in the repo. 57
+            # were accounted for by an attribute and nothing else --
+            # education-statewide 32 of 32, mbta-3a 11 of 11, immigration 4 of 4,
+            # pension 2 of 2, and 3 of tax-budget's 4. all-things-boston carries
+            # 25 /*@anchor*/ markers and 8 data-field attributes written by
+            # nothing at all: the house substitution convention with no
+            # substitution behind it.
+            #
+            # So ownership must now be DECLARED. data-owned-by names the script,
+            # on the card, and is the only thing here that counts as an updater
+            # owning a value -- because it is the only one that can be checked
+            # by reading it. The alternative was to grep the scripts for each
+            # field name, which passes on a coincidence: a field called "total"
+            # matches half the repo.
+            #
+            # A figure with no declaration is not thereby condemned. It can be
+            # documented in method.html, or frozen with a reason. What it can no
+            # longer be is silently fine.
+            anchored = False
             frozen = FROZEN.search(whole)
             owned_by = OWNED_BY.search(whole)
             if frozen and collect_frozen is not None:
@@ -238,7 +320,8 @@ def scan(collect_frozen=None):
             parts = [x for x in parts if x and len(x) >= 2]
             ranged = len(parts) > 1 and all(x in documented for x in parts)
 
-            if anchored or frozen or owned_by or d in documented or ranged:
+            if (anchored or frozen or owned_by or d in documented or ranged
+                    or documented_abbrev(raw, mvalues)):
                 continue
             label = re.sub(r"\s+", " ", TAG.sub(" ", block[v.end():])).strip()[:60]
             found.append({"page": f.name, "value": raw[:24], "label": label})
@@ -257,9 +340,26 @@ def main():
     if update:
         BASELINE.write_text(
             json.dumps({"known": sorted({key(i) for i in found}),
-                        "note": "Statistics that are neither script-written nor in "
-                                "method.html. This list should shrink, never grow. "
-                                "Regenerate with --update only when removing entries."},
+                        "note": (
+                            "Statistics that are neither declared script-written "
+                            "(data-owned-by on the card) nor documented in "
+                            "method.html. This list should shrink, never grow. "
+                            "Regenerate with --update only when removing entries, "
+                            "or when the RULE changes and the new backlog is "
+                            "recorded deliberately -- as on 2026-11-22, when it "
+                            "rose from 0 to 17. Until that day a data-field "
+                            "attribute counted as proof that an updater owned a "
+                            "value. It is not: of 68 headline values carrying one, "
+                            "the field name of only 11 appeared in any script, "
+                            "workflow or data file. The 17 here are the figures "
+                            "that were resting on the attribute and nothing else. "
+                            "They are NOT fixed by being listed: each needs a row "
+                            "in MASTER_DATA.md, a data-owned-by naming the script "
+                            "that writes it, or a data-frozen reason. 11 are DESE "
+                            "figures on education-statewide.html, 2 are national "
+                            "payroll levels on employment-dashboard.html, and the "
+                            "rest are single figures on mbta-3a, pension and "
+                            "tax-budget.")},
                        indent=1) + "\n", encoding="utf-8")
         print("baseline re-recorded: %d undocumented statistics" % len(found))
         return 0
@@ -318,8 +418,11 @@ def main():
                 print("   in the register, missing from method.html:  %s  (%s)"
                       % (i["value"], i["page"]))
             print()
-        print("NEW undocumented statistics -- each needs either an updater that writes")
-        print("it (an id or data-field anchor) or a row in MASTER_DATA.md:")
+        print("NEW undocumented statistics. An id or a data-field attribute no")
+        print("longer counts -- it says a field exists, not that anyone fills it.")
+        print("Each needs one of: data-owned-by=\"<script>.py|.js\" on the CARD,")
+        print("naming what writes it; a row in MASTER_DATA.md; or data-frozen with")
+        print("a reason, if it is a point-in-time claim that must not move:")
         for i in new:
             print("   %-30s %-14s %s" % (i["page"], i["value"], i["label"]))
         return 1
