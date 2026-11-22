@@ -944,7 +944,7 @@ outturn ($64.0B) minus the signed headline ($57.8B), two different scopes.
 |---|---|---|---|---|---|
 | **Money actually spent** | $39.879B | $64.196B | **+61.0%** | CTHRU `kv7m-35wn`, `total_expenses` by fiscal year, Transfer/XFR accounts excluded at both ends (read 2026-11-22; feed refreshed 2026-11-20) | ⏳ re-read by 2027-02-28 — CTHRU posts daily but FY2026 is still settling; the Comptroller's SBFR lands Jan–Feb 2027 |
 | Signed budgets (GAA) | $40.197B | $60.974B | +51.7% | `gaabudgets` workbooks, headline scope — see the GAA table above | 🔒 enacted totals for closed years |
-| Taxpayer income | $472.389B | $719.960B | **+52.4%** | BEA Total Personal Income in Massachusetts via FRED `MAOTOT`, quarterly SAAR, averaged Jul–Jun (read 2026-11-22) | ⏳ re-read by 2026-10-31 each year — after BEA's Q2 release, which carries the annual update |
+| Taxpayer income | $472.389B | $719.960B | **+52.4%** | BEA Total Personal Income in Massachusetts via FRED `MAOTOT`, quarterly SAAR, averaged Jul–Jun (read 2026-11-22) | ⏳ re-read by 2027-10-31 — each autumn after BEA's Q2 release, which carries the annual update. Written 2026-11-22 with a date three weeks already past; caught by the lapse check added the same day, which is the whole reason that check now exists |
 | Inflation | 248.131 | 327.645 | +32.0% | BLS CPI-U US city average, SA (`CUSR0000SA0` / FRED `CPIAUCSL`), averaged Jul–Jun | ⏳ re-read annually once the fiscal year closes |
 
 > **The income figure moved 3.5 points in November 2026 and reversed a headline.**
