@@ -6,9 +6,9 @@
   "since": "2020-01-01",
   "markets": {
     "Portsmouth": {
-      "volume": 1097,
+      "volume": 1098,
       "median_sale": 725000,
-      "avg_sale": 954100,
+      "avg_sale": 953846,
       "avg_dom": 30,
       "splp_pct": 99.2,
       "active_count": 38,
@@ -28,8 +28,8 @@
           "n": 530
         },
         "4": {
-          "avg": 1169901,
-          "n": 288
+          "avg": 1168189,
+          "n": 289
         },
         "5+": {
           "avg": 1974418,
@@ -68,9 +68,9 @@
           "avg": 1189070
         },
         "2026": {
-          "n": 126,
-          "median": 877500,
-          "avg": 1175850
+          "n": 127,
+          "median": 875000,
+          "avg": 1171906
         }
       },
       "distribution": [
@@ -96,7 +96,7 @@
         },
         {
           "band": "$600-700K",
-          "count": 168
+          "count": 169
         },
         {
           "band": "$700-800K",
@@ -129,11 +129,11 @@
       ]
     },
     "Salem": {
-      "volume": 1851,
+      "volume": 1852,
       "median_sale": 545000,
-      "avg_sale": 593026,
+      "avg_sale": 592943,
       "avg_dom": 19,
-      "splp_pct": 101.56,
+      "splp_pct": 101.54,
       "active_count": 26,
       "active_avg_list": 749577,
       "active_median_list": 664500,
@@ -151,8 +151,8 @@
           "n": 959
         },
         "4": {
-          "avg": 716400,
-          "n": 543
+          "avg": 715892,
+          "n": 544
         },
         "5+": {
           "avg": 827748,
@@ -191,9 +191,9 @@
           "avg": 667244
         },
         "2026": {
-          "n": 203,
-          "median": 624000,
-          "avg": 693746
+          "n": 204,
+          "median": 622000,
+          "avg": 692502
         }
       },
       "distribution": [
@@ -211,7 +211,7 @@
         },
         {
           "band": "$400-500K",
-          "count": 405
+          "count": 406
         },
         {
           "band": "$500-600K",
@@ -257,9 +257,9 @@
       "avg_sale": 505889,
       "avg_dom": 18,
       "splp_pct": 102.46,
-      "active_count": 31,
-      "active_avg_list": 757467,
-      "active_median_list": 580000,
+      "active_count": 32,
+      "active_avg_list": 750671,
+      "active_median_list": 579500,
       "by_bedroom": {
         "1": {
           "avg": 305882,
@@ -380,8 +380,8 @@
       "avg_sale": 829894,
       "avg_dom": 30,
       "splp_pct": 100.95,
-      "active_count": 25,
-      "active_avg_list": 878296,
+      "active_count": 24,
+      "active_avg_list": 859933,
       "active_median_list": 749900,
       "by_bedroom": {
         "1": {
@@ -498,13 +498,13 @@
       ]
     },
     "NH Statewide": {
-      "volume": 96414,
-      "median_sale": 447695,
-      "avg_sale": 535760,
+      "volume": 96424,
+      "median_sale": 447710,
+      "avg_sale": 535758,
       "avg_dom": 29,
-      "splp_pct": 100.31,
-      "active_count": 2766,
-      "active_avg_list": 838287,
+      "splp_pct": 100.3,
+      "active_count": 2764,
+      "active_avg_list": 836931,
       "active_median_list": 595000,
       "by_bedroom": {
         "1": {
@@ -512,16 +512,16 @@
           "n": 1621
         },
         "2": {
-          "avg": 367126,
-          "n": 14905
+          "avg": 367150,
+          "n": 14908
         },
         "3": {
-          "avg": 485388,
-          "n": 50913
+          "avg": 485391,
+          "n": 50918
         },
         "4": {
-          "avg": 675340,
-          "n": 24083
+          "avg": 675331,
+          "n": 24085
         },
         "5+": {
           "avg": 1012654,
@@ -560,9 +560,9 @@
           "avg": 637769
         },
         "2026": {
-          "n": 11323,
-          "median": 561543,
-          "avg": 671077
+          "n": 11333,
+          "median": 561457,
+          "avg": 670941
         }
       },
       "distribution": [
@@ -576,23 +576,23 @@
         },
         {
           "band": "$300-400K",
-          "count": 19198
+          "count": 19199
         },
         {
           "band": "$400-500K",
-          "count": 18543
+          "count": 18547
         },
         {
           "band": "$500-600K",
-          "count": 12918
+          "count": 12920
         },
         {
           "band": "$600-700K",
-          "count": 9187
+          "count": 9189
         },
         {
           "band": "$700-800K",
-          "count": 5596
+          "count": 5597
         },
         {
           "band": "$800-900K",
@@ -621,5 +621,5 @@
       ]
     }
   },
-  "updated": "2026-11-21"
+  "updated": "2026-11-22"
 }
