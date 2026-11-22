@@ -122,12 +122,20 @@ jobs:
       # it would have been silent -- the same shape of failure the loop exists to stop.
       # They are fast, offline and stdlib-only, so the watchdog is the right place.
       #
+      # Widened from scripts/test-refresh-*.py to scripts/test-*.py on 2026-11-22,
+      # because that glob fixed the problem for six files by matching a NAME SHAPE
+      # rather than "the tests". test-energy-retry.py and test-mls-crosscheck.py sat
+      # outside it and were broken the whole time -- both pinned REPO to an absolute
+      # path on a machine that no longer exists, so they died on import. Nothing ran
+      # them, so nothing said so. A glob that enumerates a prefix will keep doing this
+      # every time a test is added under a different name; test-*.py cannot.
+      #
       # always(), for the same reason as above.
-      - name: Check the refresh loop still behaves
+      - name: Check the tests still pass
         if: always()
         run: |
           rc=0
-          for t in scripts/test-refresh-*.py; do
+          for t in scripts/test-*.py; do
             echo "--- $t"
             python "$t" || rc=1
           done
