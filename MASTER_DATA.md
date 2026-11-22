@@ -897,10 +897,34 @@ excluded from both sides):
 |---|---:|---:|---:|
 | FY24 | 55.870 | 55.958 | +0.2% |
 | FY25 | 57.567 | 63.303 | **+10.0%** |
-| FY26 | 60.956 | 64.859 (proj.) | **+6.4%** |
+| FY26 | 60.956 | 64.859 (**projection, not an actual**) | **+6.4%** |
 | FY27 | 63.400 | — not begun | — |
 
-Plotted as `h5Outturn` on `tax-budget-dashboard.html`.
+Plotted as `h5Outturn` on `tax-budget-dashboard.html`, and from 2026-11-22 as a
+separately-labelled projection series on `chartBudget` and `chartBudgetGap` too
+(`GAA_FY26_PROJECTED` / `GAA_FY26_ENACTED_LFL`).
+
+> **The FY2026 outturn is a projection and must stay labelled as one.** It is the
+> Executive Office for Administration and Finance’s figure, *not* the
+> Comptroller’s — budget.digital.mass.gov FY27 financial statements, note 1:
+> “Figures represent Executive Office for Administration and Finance revenue and
+> spending projections **as of January 28, 2026**.” The FY2026 statement is “based
+> on actual expenditures and projected for the remainder of the fiscal year”, so
+> it was struck with roughly seven months of FY2026 actuals and five projected.
+> ⏳ **Replace with the actual when the Comptroller files the FY2026 Statutory
+> Basis Financial Report — due about Jan–Feb 2027.** Do not set that reminder for
+> the autumn: every SBFR from FY1997 to FY2021 filed in Oct/Nov, but FY2022 filed
+> 23 Dec 2022, FY2023 16 Feb 2024, FY2024 19 Feb 2025 and FY2025 30 Jan 2026.
+> macomptroller.org/sbfr, read 2026-11-22.
+
+> **CTHRU is not a drop-in substitute for this series.** Dataset `kv7m-35wn`
+> (Comptroller, feed refreshed 2026-11-20) gives FY2026 `total_expenses` of
+> **$69.803B** and `supplemental_budget_appropriations` of **$2.046B** over 3,276
+> accounts. But its FY2025 total is $67.715B, and dropping the 21 Transfer/XFR
+> accounts ($5.725B) leaves $61.99B — neither reproduces this table’s own
+> $63.303B, which is a 913-account like-for-like from the GAA workbook exports.
+> Different account universes; quote CTHRU figures on their own terms, never
+> arithmetically combined with the rows above.
 
 **FY25 gap = $5.736B** (63.303 − 57.567), used everywhere on `tax-budget-dashboard.html`
 (constants `GAA_FY25_ACTUAL` / `GAA_FY25_ENACTED_LFL`). Label it **supplemental spending above

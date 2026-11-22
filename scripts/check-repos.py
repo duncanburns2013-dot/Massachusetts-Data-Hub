@@ -9,7 +9,7 @@ question one level up: is the job that writes the feed still running at all?
 The Peoples Audit has nine scheduled workflows and no health check of any kind.
 If fetch-cthru-aggregates or fetch-state-contracts started failing, nothing would
 say so until someone opened the Actions tab. That is the same silent-stop this
-repo已 learned about the hard way, just in a repo that cannot see itself.
+repo has learned about the hard way, just in a repo that cannot see itself.
 
 Two failure modes, both silent:
 

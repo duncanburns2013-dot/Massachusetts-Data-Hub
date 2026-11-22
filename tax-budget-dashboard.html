@@ -268,7 +268,7 @@ footer a:hover{color:var(--gold)}
 </div>
 <h2 class="section-title">&#x1F4B0; The Budget Is Not What Gets Spent</h2>
 <div class="info-box red"><h4>Every enacted budget is a floor, not a ceiling</h4><p>The Commonwealth enacts a budget in July and then raises it all year with supplemental appropriations. <strong>FY2025 was enacted at $57.6B and spent $63.3B &mdash; $5.736B (10.0%) of supplemental spending above the enacted budget</strong> (both like-for-like, on the same accounts; the headline enacted total is $57.7B). That is money appropriated after July, not waste. FY2026 is already tracking $3.9B (+6.4%) above its own enacted budget. FY2024, for contrast, landed almost exactly on target &mdash; the overrun is a pattern, not a law. So the &ldquo;$63.4B&rdquo; headline for FY2027 is the opening figure, not the final one, and the supplementals that close the gap arrive long after the &ldquo;no new taxes&rdquo; coverage has run.</p></div>
-<div class="chart-card" style="margin-bottom:22px"><h3>Enacted Budget vs. Actual Spending ($B)</h3><div class="chart-area"><canvas id="h5Outturn"></canvas></div><div class="source">Source: official mass.gov GAA exports &mdash; <em>gaabudgets.xlsx</em> (enacted) and <em>gaaspend.xlsx</em> (actual / projected). Like-for-like: identical 913-account universe, headline scope, and inter-fund transfer lines (1595-0029 and similar) excluded from both sides so nothing is double-counted. That is why the enacted bars sit below the headline totals quoted elsewhere on this page ($56.063B, $57.718B, $60.974B, $63.416B for FY2024&ndash;FY2027): same budgets, narrower scope. FY2026 is the Comptroller&rsquo;s projection; FY2027 has not begun.</div></div>
+<div class="chart-card" style="margin-bottom:22px"><h3>Enacted Budget vs. Actual Spending ($B)</h3><div class="chart-area"><canvas id="h5Outturn"></canvas></div><div class="source">Source: official mass.gov GAA exports &mdash; <em>gaabudgets.xlsx</em> (enacted) and <em>gaaspend.xlsx</em> (actual / projected). Like-for-like: identical 913-account universe, headline scope, and inter-fund transfer lines (1595-0029 and similar) excluded from both sides so nothing is double-counted. That is why the enacted bars sit below the headline totals quoted elsewhere on this page ($56.063B, $57.718B, $60.974B, $63.416B for FY2024&ndash;FY2027): same budgets, narrower scope. FY2026 is a projection, not an actual: the Executive Office for Administration and Finance&rsquo;s figures &ldquo;as of January 28, 2026&rdquo; (budget.digital.mass.gov FY27 financial statements, note 1), based on actual expenditures through that date and projected for the rest of the year. The Comptroller&rsquo;s audited FY2026 figure arrives with the Statutory Basis Financial Report, due about Jan&ndash;Feb 2027 on the last four years&rsquo; filing dates. FY2027 has not begun.</div></div>
 <h2 class="section-title">&#x1F4C8; Biggest Year-Over-Year Increases &mdash; Enacted FY2026 &rarr; FY2027</h2>
 <div class="info-box amber"><h4>Clean budget-to-budget change</h4><p>This compares the <strong>enacted FY2026 appropriation</strong> to the <strong>enacted FY2027 appropriation</strong>, line by line &mdash; apples to apples, no accounting noise. Sorted by dollar increase; use the dropdown to flip to percent, or search a program. (788 of 860 lines matched to a prior-year appropriation; the rest are new FY27 lines.)</p></div>
 <div class="chart-card" style="margin-bottom:22px"><h3>Top 14 Line Items by Dollar Increase (FY2026 &rarr; FY2027, $ millions)</h3><div class="chart-area tall"><canvas id="h5YoY"></canvas></div><div class="source">Source: FY2026 enacted GAA vs. FY2027 enacted GAA. Hover a bar for the % and the before/after.</div></div>
@@ -429,7 +429,8 @@ footer a:hover{color:var(--gold)}
     <h4>⚠️ Spending Outpaces Income and Inflation</h4>
     <div class="alert-grid">
       <div class="alert-item">State spending: <strong id="bgTrioSpend">—</strong> since FY2018 (signed budgets, through FY2026). Taxpayer income growth: <strong id="bgTrioIncome">—</strong> (BEA). Inflation: <strong id="bgTrioCpi">—</strong> (CPI-U, fiscal-year averages)</div>
-      <div class="alert-item">FY2025: enacted at <span id="bgTrioFy25Sign">—</span>, actual spending hit <strong id="bgTrioFy25Act">—</strong> with supplementals — expect FY2026 to follow same pattern</div>
+      <div class="alert-item">FY2025: enacted at <span id="bgTrioFy25Sign">—</span>, actual spending hit <strong id="bgTrioFy25Act">—</strong> with supplementals. FY2026 is <strong id="bgTrioFy26Proj">—</strong> against <span id="bgTrioFy26Sign">—</span> enacted (<span id="bgTrioFy26Gap">—</span>) — a projection, not an actual; the Comptroller files the FY2026 figure around Jan–Feb 2027</div>
+      <div class="alert-item">FY2026 supplemental appropriations alone came to <strong id="bgTrioFy26Supp">—</strong> (CTHRU, the Comptroller’s own ledger, read 22 Nov 2026) — so the signed budget was never what the year cost</div>
       <div class="alert-item">Spending has outrun income by <strong id="bgGapIncome">—</strong> and inflation by <strong id="bgGapCpi">—</strong> since FY2018 — every figure here from the GAA, BEA and BLS directly</div>
     </div>
   </div>
@@ -437,7 +438,7 @@ footer a:hover{color:var(--gold)}
     <div class="chart-card">
       <h3>State Budget Growth: FY2018 – FY2026</h3>
       <div class="chart-area"><canvas id="chartBudget"></canvas></div>
-      <div class="source">Source: MA General Appropriations Act — the signed budget for each fiscal year, plus FY2025 actual spending including supplementals ($63.303B, like-for-like against $57.567B enacted: gaabudgets.xlsx / gaaspend.xlsx)</div>
+      <div class="source">Source: MA General Appropriations Act — the signed budget for each fiscal year, plus FY2025 actual spending including supplementals ($63.303B, like-for-like against $57.567B enacted: gaabudgets.xlsx / gaaspend.xlsx). The FY2026 point is a <strong>projection</strong>, not an actual: $64.859B against $60.956B enacted on the same like-for-like basis, from the Executive Office for Administration and Finance’s figures as of 28 January 2026. The Comptroller’s audited FY2026 total arrives with the Statutory Basis Financial Report, due about Jan–Feb 2027.</div>
     </div>
     <div class="chart-card">
       <h3>Growth Comparison Since FY2018</h3>
@@ -962,7 +963,7 @@ footer a:hover{color:var(--gold)}
     <div class="chart-card">
       <h3>Budget Growth vs. Base Revenue: The Widening Gap</h3>
       <div class="chart-area"><canvas id="chartBudgetGap"></canvas></div>
-      <div class="source">Source: MA DLS (budget); MA DOR (revenue); FY2025 actual spending $63.303B, like-for-like against $57.567B enacted (gaabudgets.xlsx / gaaspend.xlsx)</div>
+      <div class="source">Source: MA DLS (budget); MA DOR (revenue); FY2025 actual spending $63.303B, like-for-like against $57.567B enacted (gaabudgets.xlsx / gaaspend.xlsx). The FY2026 point is a <strong>projection</strong>, not an actual: $64.859B against $60.956B enacted on the same like-for-like basis, from the Executive Office for Administration and Finance’s figures as of 28 January 2026. The Comptroller’s audited FY2026 total arrives with the Statutory Basis Financial Report, due about Jan–Feb 2027.</div>
     </div>
   </div>
   <div class="data-card">
@@ -1519,6 +1520,22 @@ const GAA_SIGNED = [40.197,41.883,43.590,46.459,48.085,52.444,56.063,57.718,60.9
 // not waste.
 const GAA_FY25_ACTUAL = 63.303;
 
+// FY2026 is a PROJECTION, not an actual, and the charts label it as one. Source:
+// the FY2026 projected column of the FY27 gaaspend.xlsx export, same 913-account
+// like-for-like basis as the FY25 pair above. Those projections are A&F's "as of
+// January 28, 2026" (budget.digital.mass.gov FY27 financial statements, note 1),
+// struck with ~7 months of FY2026 actuals and 5 months projected.
+// Replace both with actuals when the Comptroller files the FY2026 Statutory
+// Basis Financial Report -- due roughly Jan-Feb 2027 on the last four years'
+// filing dates, NOT the Oct/Nov that every year up to FY2021 used.
+const GAA_FY26_PROJECTED = 64.859;
+const GAA_FY26_ENACTED_LFL = 60.956;
+// MA Comptroller CTHRU, dataset kv7m-35wn, read 2026-11-22 (feed refreshed
+// 2026-11-20): supplemental_budget_appropriations summed over FY2026. A wider
+// account universe than the like-for-like pair above, so it is quoted on its
+// own and never arithmetically combined with them.
+const CTHRU_FY26_SUPPLEMENTALS = 2.046;
+
 // Public money vs. private jobs (budget tab). People, except government and private, which are
 // BLS job counts. Overlaps removed only where an official record gives them; see MASTER_DATA.md.
 const PUBLIC_MONEY = [
@@ -1876,12 +1893,16 @@ function initCharts(tab) {
       putTxt('bgGapCpi',    (SPEND_GROWTH_FY26 - CPI_GROWTH_FY18_26).toFixed(1) + ' points');
       putTxt('bgTrioFy25Sign', '$' + GAA_FY25_ENACTED_LFL.toFixed(1) + 'B');
       putTxt('bgTrioFy25Act',  '$' + GAA_FY25_ACTUAL.toFixed(1) + 'B');
+      putTxt('bgTrioFy26Proj', '$' + GAA_FY26_PROJECTED.toFixed(1) + 'B');
+      putTxt('bgTrioFy26Sign', '$' + GAA_FY26_ENACTED_LFL.toFixed(1) + 'B');
+      putTxt('bgTrioFy26Gap',  '+' + ((GAA_FY26_PROJECTED / GAA_FY26_ENACTED_LFL - 1) * 100).toFixed(1) + '%');
+      putTxt('bgTrioFy26Supp', '$' + CTHRU_FY26_SUPPLEMENTALS.toFixed(3) + 'B');
 
       safeChart('chartBudget', {
         type: 'bar',
         data: {
           labels: GAA_LABELS,
-          datasets: [{ label: 'Signed Budget (GAA)', data: GAA_SIGNED, backgroundColor: '#14558F', borderRadius: 4 },{ label: 'Actual Spending (w/ Supplementals)', data: GAA_LABELS.map(fy => fy === 'FY25' ? GAA_FY25_ACTUAL : null), backgroundColor: '#A81733', borderRadius: 4 }]
+          datasets: [{ label: 'Signed Budget (GAA)', data: GAA_SIGNED, backgroundColor: '#14558F', borderRadius: 4, skipNull: true },{ label: 'Actual Spending (w/ Supplementals)', data: GAA_LABELS.map(fy => fy === 'FY25' ? GAA_FY25_ACTUAL : null), backgroundColor: '#A81733', borderRadius: 4, skipNull: true },{ label: 'FY2026 Projected (A&F, Jan 2026)', data: GAA_LABELS.map(fy => fy === 'FY26' ? GAA_FY26_PROJECTED : null), backgroundColor: '#B07C20', borderRadius: 4, skipNull: true }]
         },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: false, min: 35, title: { display: true, text: 'Billions ($)' }, stacked: false } }, plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } } }
       });
@@ -2312,6 +2333,11 @@ function initCharts(tab) {
             data: GAA_LABELS.map(fy => fy === 'FY25' ? GAA_FY25_ACTUAL : null),
             borderColor: '#A81733', backgroundColor: '#A81733',
             pointRadius: 8, pointBackgroundColor: '#A81733', pointStyle: 'star', showLine: false
+          },{
+            label: 'FY2026 Projected ($B, A&F)',
+            data: GAA_LABELS.map(fy => fy === 'FY26' ? GAA_FY26_PROJECTED : null),
+            borderColor: '#B07C20', backgroundColor: '#B07C20',
+            pointRadius: 9, pointBackgroundColor: '#B07C20', pointStyle: 'triangle', showLine: false
           },{
             label: 'Non-Surtax Revenue Trend ($B, est.)',
             data: [39.4,42.7,44.6,43.5,44.0,44.5,44.0,40.7,null],
