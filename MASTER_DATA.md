@@ -325,16 +325,18 @@ Values below are that file as of **2026-11-22**. (Feed is PrimeMLS, not Paragon.
 ### Massachusetts — Current Labor Market
 
 🔄 Source of truth: `data/employment-latest.json`, refreshed monthly from the BLS API.
-Values below are that file as of **2026-10-20** (reference month September 2026).
+Values below are that file as of **2026-11-21** (reference month October 2026).
 
 | Metric | Value | Period | Source |
 |--------|-------|--------|--------|
-| MA unemployment rate | 4.3% | September 2026 | BLS LAUS 🔄 |
-| MA unemployment level | 164,934 | September 2026 | BLS LAUS 🔄 |
-| MA labor force | 3,886,370 | September 2026 | BLS LAUS 🔄 |
-| MA total nonfarm | 3,715,000 | September 2026 | BLS CES 🔄 |
+| MA unemployment rate | 4.2% | October 2026 | BLS LAUS 🔄 |
+| MA unemployment level | 164,934 | October 2026 | BLS LAUS 🔄 |
+| MA labor force | 3,886,370 | October 2026 | BLS LAUS 🔄 |
+| MA total nonfarm | 3,715,000 | October 2026 | BLS CES 🔄 |
 | US unemployment rate | 4.1% | October 2026 | BLS 🔄 |
 | US job openings | 7.523M | September 2026 | BLS JOLTS 🔄 written by `update-employment.py`; checked by check-consistency.py |
+| MA U-6 underutilisation | 7.8% | 4-quarter average ending Q3 2026 | BLS Alternative Measures of Labor Underutilization for States, via FRED series U6UNEM6MA | ⏳ re-read by 2027-02-28 — BLS publishes the state table quarterly, about six weeks after the quarter. The value lives in `data/u6-latest.json`, regenerated daily, but NOTHING writes it into employment-dashboard.html: 63 of that page’s 67 substitution anchors are written by `fetch-bls-data.js` and the four exceptions are all U-6. check-consistency.py now compares the page’s array tail against the feed, so the hand-typed copy can no longer drift silently. |
+| MA U-3 (same series) | 4.4% | 4-quarter average ending Q3 2026 | same FRED/BLS state table, U3UNEM3MA | ⏳ re-read by 2027-02-28 — carried so the U-6 gap (+3.4 pts) printed on the card is checkable against both of its terms, not just the headline one. |
 
 > **⚠️ BLS discontinued monthly state-level JOLTS in 2026.** National JOLTS is still monthly;
 > state figures are annual now, first annual release July 2026. Any "MA job openings rate"

@@ -184,8 +184,8 @@ footer a:hover{color:var(--gold)}
   <p class="sub">Massachusetts job growth, unemployment, and JOLTS analysis — built from official BLS data.</p>
   <div class="hero-stats">
     <div class="hero-stat"><div class="val warn">4.2%</div><div class="lbl">MA Unemployment (October 2026)</div></div>
-    <div class="hero-stat"><div class="val good" id="heroPayVal">+7,500</div><div class="lbl">MA Payroll Change (<span id="heroPayMo">Oct 2026</span>)</div></div>
-    <div class="hero-stat"><div class="val good" id="heroSepVal">+20,300</div><div class="lbl">MA Jobs Since <span id="heroSepMo">Sep 2025</span></div></div>
+    <div class="hero-stat" data-owned-by="fetch-bls-data.js"><div class="val good" id="heroPayVal">+7,500</div><div class="lbl">MA Payroll Change (<span id="heroPayMo">Oct 2026</span>)</div></div>
+    <div class="hero-stat" data-owned-by="fetch-bls-data.js"><div class="val good" id="heroSepVal">+20,300</div><div class="lbl">MA Jobs Since <span id="heroSepMo">Sep 2025</span></div></div>
     <div class="hero-stat"><div class="val warn" data-field="hero-nat-ur">4.1%</div><div class="lbl">National Rate (<span data-field="hero-nat-mo">October 2026</span>)</div></div>
   </div>
 </div>
@@ -290,8 +290,8 @@ footer a:hover{color:var(--gold)}
   <div class="stat-row">
     <div class="stat-card"><div class="label">MA Rate — <span id="urCardLab">Oct 2026</span> (U-3)</div><div class="value amber" id="urCardVal">4.2%</div><div class="sub"><span id="urCardSub">↓ from 4.3%</span> · Pre-COVID (2019): 2.9%</div></div>
     <div class="stat-card"><div class="label">MA Rate — <span id="u6CardLab">Q3 2026</span> (U-6)</div><div class="value red" id="u6CardVal">7.8%</div><div class="sub">True underemployment · <span id="u6CardSub">+3.4 pts above U-3 (same quarter)</span></div></div>
-    <div class="stat-card"><div class="label"><span id="lfCardLab">Oct 2026</span> Labor Force Change</div><div class="value green" id="lfCardVal">+6,216</div><div class="sub" id="lfCardSub">66,223 below the Mar 2025 peak</div></div>
-    <div class="stat-card"><div class="label">Participation (16+) — <span id="lfprCardLab">Oct 2026</span></div><div class="value blue" id="lfprCardVal">65.5%</div><div class="sub" id="lfprCardSub">3.6 pts above US 61.9%</div></div>
+    <div class="stat-card" data-owned-by="fetch-bls-data.js"><div class="label"><span id="lfCardLab">Oct 2026</span> Labor Force Change</div><div class="value green" id="lfCardVal">+6,216</div><div class="sub" id="lfCardSub">66,223 below the Mar 2025 peak</div></div>
+    <div class="stat-card" data-owned-by="fetch-bls-data.js"><div class="label">Participation (16+) — <span id="lfprCardLab">Oct 2026</span></div><div class="value blue" id="lfprCardVal">65.5%</div><div class="sub" id="lfprCardSub">3.6 pts above US 61.9%</div></div>
   </div>
 
   <div class="chart-grid">
@@ -392,13 +392,13 @@ footer a:hover{color:var(--gold)}
   </div>
 
   <div class="stat-row">
-    <div class="stat-card"><div class="label"><span id="jgC1Lab">Oct 2026</span> Payroll</div><div class="value green" id="jgC1Val">+7,500</div><div class="sub">Prelim · prior decline <span id="jgC1Sub">Aug 2026</span></div></div>
+    <div class="stat-card" data-owned-by="fetch-bls-data.js"><div class="label"><span id="jgC1Lab">Oct 2026</span> Payroll</div><div class="value green" id="jgC1Val">+7,500</div><div class="sub">Prelim · prior decline <span id="jgC1Sub">Aug 2026</span></div></div>
     <div class="stat-card"><div class="label"><span id="jgC2Lab">Sep 2026</span> Payroll</div><div class="value green" id="jgC2Val">+0</div><div class="sub">Revised (first reported +8,500)</div></div>
-    <div class="stat-card"><div class="label"><span id="jgC3Lab">Sep 25–Oct 26</span></div><div class="value green" id="jgC3Val">+20,300</div><div class="sub"><span id="jgC3Sub">Net over 13 months</span></div></div>
+    <div class="stat-card" data-owned-by="fetch-bls-data.js"><div class="label"><span id="jgC3Lab">Sep 25–Oct 26</span></div><div class="value green" id="jgC3Val">+20,300</div><div class="sub"><span id="jgC3Sub">Net over 13 months</span></div></div>
     <!-- Was hardcoded "+1,300 · 7 months of expansion in 6". The +1,300 was a
          pre-benchmark-revision vintage of the wrong sign — 2025 was a contraction
          of −17,300, which the page's own month-by-month chart already summed to. -->
-    <div class="stat-card"><div class="label">Full-Year 2025</div><div class="value red" id="jgC4Val">−17,300</div><div class="sub">Dec 2024 → Dec 2025, post-revision</div></div>
+    <div class="stat-card" data-owned-by="fetch-bls-data.js"><div class="label">Full-Year 2025</div><div class="value red" id="jgC4Val">−17,300</div><div class="sub">Dec 2024 → Dec 2025, post-revision</div></div>
   </div>
 
   <div class="chart-grid">
@@ -563,7 +563,7 @@ footer a:hover{color:var(--gold)}
     <div class="stat-card"><div class="label">Men UR (16+)</div><div class="value amber" data-field="gr-men-ur">4.3%</div><div class="sub">women <span data-field="gr-women-ur">4.0%</span></div></div>
     <div class="stat-card"><div class="label">College Grads UR (25+)</div><div class="value green" data-field="gr-col-ur">2.6%</div><div class="sub">lowest of any group</div></div>
     <div class="stat-card"><div class="label">Recent Grads UR (22–27)</div><div class="value red"><span data-field="nyfed-grad-ur">5.2%</span></div><div class="sub">NY Fed · above national</div></div>
-    <div class="stat-card"><div class="label">Prime-Age LFPR</div><div class="value blue" id="plfprVal">89.7 / 77.9</div><div class="sub">men / women · <span id="plfprGap">11.8 pt gap</span></div></div>
+    <div class="stat-card" data-owned-by="fetch-bls-data.js"><div class="label">Prime-Age LFPR</div><div class="value blue" id="plfprVal">89.7 / 77.9</div><div class="sub">men / women · <span id="plfprGap">11.8 pt gap</span></div></div>
   </div>
 
   <div class="chart-grid">

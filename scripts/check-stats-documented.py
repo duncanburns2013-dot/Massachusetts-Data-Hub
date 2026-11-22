@@ -12,8 +12,9 @@ that is the failure that matters most.
 
 THE RULE
 A headline statistic must be one of:
-  * script-written -- the element carries an id or a data-field anchor, so some
-    updater owns the value and it moves when the data moves; or
+  * script-written -- the element carries a data-field/data-mig anchor or its
+    card names an updater in data-owned-by, so something OUTSIDE this file owns
+    the value and it moves when the data moves; or
   * documented    -- the number appears in method.html, so a reader can trace it.
 
 A number that is neither is a claim maintained by memory.
@@ -21,10 +22,32 @@ A number that is neither is a claim maintained by memory.
 WHY NOT A BROWSER
 An earlier version of this check rendered the pages, which was slow and needed
 Chrome in CI. It is unnecessary: the two cases that matter are distinguishable
-statically. Merrimack Valley's hero cards look empty in the HTML because JS
-fills them -- but they carry ids, so the anchor rule passes them. The
-immigration figure was bare text in a div, so the same rule flags it. Reading
-the DOM added cost and no signal.
+statically. Merrimack Valley's hero cards are empty in the HTML because JS
+fills them, so they carry no digits for this check to judge and never reach the
+rule at all. The immigration figure was bare text in a div, so the rule flags
+it. Reading the DOM added cost and no signal.
+
+WHAT A BARE id= PROVES, AND WHAT IT DOES NOT  (changed 2026-11-22)
+Until today a bare id= counted as script-written, on the stated grounds that it
+meant "some updater owns the value and it moves when the data moves." That
+inference was simply false, and it was load-bearing. <strong id="bgTrioIncome">
+is filled by putTxt() from a constant hardcoded forty lines further up the SAME
+file. An id proves a value is COMPUTED, never that it is FRESH -- and a figure
+typed into a const and rendered through an id is exactly the figure this script
+was written to catch, wearing the one mark that made it invisible.
+
+It was not a near miss. Of the 38 headline figures that rested on a bare id,
+every one was unreferenced by any script, workflow or data file in the repo,
+and not one of the four pages carrying them fetches anything at runtime. The
+rule had a 100% false-positive rate on its own population. The income figure
+that reversed a headline on tax-budget-dashboard.html sat four months past its
+own code comment while this check reported it accounted for.
+
+So id= is gone from the test. A value that JS computes in-page is owned when
+something outside the file writes it -- a data-field or data-mig anchor, or a
+data-owned-by naming the script -- or it is documented in method.html, or it is
+declared frozen. Those three say who is responsible. An id says only that a
+line of JavaScript put a character there.
 
 RATCHET, NOT A CLIFF
 143 statistics do not meet the rule today. Failing the build on all of them
@@ -139,7 +162,13 @@ FROZEN = re.compile(r'data-frozen="([^"]{8,})"')
 # Adding a data-field there is not free: those regexes match the value element's
 # own tag, so a new attribute on it breaks the writer. data-owned-by goes on the
 # CARD instead, naming the script, which no substitution matches against.
-OWNED_BY = re.compile(r'data-owned-by="([a-z0-9_.-]+\.py)"')
+# .js and .mjs as well as .py: the pattern accepted only Python, so marking a
+# card data-owned-by="fetch-bls-data.js" was silently ignored and the figure
+# still reported unaccountable. The employment dashboard's updater is Node --
+# 63 of that page's 67 substitution anchors are written by fetch-bls-data.js --
+# so the one dashboard with the most script-owned figures was the one this
+# regex could not describe.
+OWNED_BY = re.compile(r'data-owned-by="([a-z0-9_.-]+\.(?:py|js|mjs))"')
 
 
 def scan(collect_frozen=None):
@@ -147,7 +176,8 @@ def scan(collect_frozen=None):
 
     THREE ways a figure can be accounted for, and the third was missing:
 
-      anchored    carries id= or data-field=, so an updater writes it
+      anchored    carries data-field=/data-mig=, so an OUTSIDE updater writes
+                  it -- a bare id= is not ownership, see the module docstring
       documented  its digits appear in method.html
       FROZEN      carries data-frozen="<why>", declaring it a point-in-time
                   claim that must NOT track the newest release
@@ -186,7 +216,11 @@ def scan(collect_frozen=None):
             d = digits(raw)
             if not d or len(d) < 2:      # single digits are noise, not claims
                 continue
-            anchored = ("id=" in attrs or "data-field=" in attrs
+            # NOT "id=" in attrs -- see WHAT A BARE id= PROVES above. An id
+            # means in-page JS wrote the character, which is true of a figure
+            # read off a feed and equally true of one typed into a const in
+            # this file. Only an anchor naming an outside writer is ownership.
+            anchored = ("data-field=" in attrs
                         or "data-field=" in block or "data-mig=" in block)
             frozen = FROZEN.search(whole)
             owned_by = OWNED_BY.search(whole)

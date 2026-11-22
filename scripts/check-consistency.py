@@ -115,6 +115,34 @@ def checks():
          'employment-latest.json'),
     ]
 
+    # U-6 UNDERUTILISATION: the one employment figure with a live feed that
+    # nothing writes into the page.
+    #
+    # data/u6-latest.json is regenerated daily by update-employment.yml, and
+    # employment-dashboard.html carries the same numbers in hand-typed arrays.
+    # 63 of that page's 67 substitution anchors are written by
+    # fetch-bls-data.js; the four exceptions are all U-6 (@u6-u6, @u6-u3,
+    # @u6-lf, @u6-lab). So a fresh feed sat beside a hand-typed copy of itself
+    # with nothing comparing them -- they happened to agree on 2026-11-22, and
+    # nothing would have said so had they stopped.
+    #
+    # Checked against the ANCHOR TAIL rather than the bare number: ",7.8/*@*/"
+    # can only match the last element of the series the card reads, where
+    # plain "7.8" would match any of a hundred figures on the page. Until the
+    # anchors are wired to the feed, this is what makes the copy enforced
+    # instead of hoped for.
+    u6 = load('u6-latest.json')
+    u6s = u6.get('series') or {}
+    for name in ('U-3', 'U-6'):
+        if isinstance(u6s.get(name), dict) and u6s[name].get('value') is not None:
+            out.append((f'{name} MA, newest quarter (page array tail)',
+                        f",{u6s[name]['value']}/*@*/", 'u6-latest.json'))
+    _q = re.search(r'Q(\d) (\d{2})(\d{2})', (u6s.get('U-6') or {}).get('period', ''))
+    if _q:
+        out.append(('U-6 quarter label (page array tail)',
+                    "'Q%s %s'/*@*/" % (_q.group(1), _q.group(3)), 'u6-latest.json'))
+
+
     # Statewide MLS, newest single-family year. mls-history.json is deliberately NOT
     # aged by check-freshness (only --backfill-history writes it), but whether the
     # register AGREES with it is a separate question, and that is what this asks.
@@ -266,15 +294,90 @@ def main():
     # pay-to-play-dashboard.html itself, so each row is checked against the file
     # that publishes it.
     pages = {'ma-lobbying-firms-latest.json':
-             (REPO / 'pay-to-play-dashboard.html').read_text(encoding='utf-8', errors='replace')}
+             (REPO / 'pay-to-play-dashboard.html').read_text(encoding='utf-8', errors='replace'),
+             'u6-latest.json':
+             (REPO / 'employment-dashboard.html').read_text(encoding='utf-8', errors='replace')}
+
+    # BOUND TO A LINE, NEVER TO THE FILE  (changed 2026-11-22)
+    #
+    # This loop used to read `ok = value in pages.get(src, text)` -- a substring
+    # search over the WHOLE of MASTER_DATA.md. `label` was printed and then
+    # thrown away, so a figure counted as agreeing with its feed whenever its
+    # digits appeared ANYWHERE in the register: any row, any subject, any year.
+    #
+    # That is not a theoretical hole. On 2026-11-22 the register carried
+    #   | MA unemployment rate | 4.3% | September 2026 |
+    # while the feed and BLS both said 4.2% for October. This check printed
+    # "MA unemployment rate   4.2%  ok". The string "4.2%" does occur in
+    # MASTER_DATA.md -- in the Greater Boston row, as a HOME PRICE CHANGE
+    # (+4.2%), and again in a 2025 job-openings rate. A median house price was
+    # standing in as proof that the unemployment rate was current.
+    #
+    # Three further rows held OCTOBER values stamped SEPTEMBER at that same
+    # moment (labor force 3,886,370; level 164,934; nonfarm 3,715,000) and every
+    # one passed. 74 figures reported as matching their source, bound to nothing
+    # but the presence of their own digits somewhere in a 4,000-line file.
+    #
+    # A figure is now bound in one of two ways, tried in order:
+    #
+    #   1. ROW NAME -- a table row whose first cell is, or begins with, the
+    #      label. The strongest binding, and the one to prefer when adding a
+    #      check: give it the register's own row name.
+    #   2. SAME LINE -- a line carrying both the value AND a distinctive word
+    #      from the label. Most feed figures live in tables keyed by year or
+    #      region ("| NH Statewide | $447,710 | ..."), where the label is a
+    #      column heading and no first cell can ever match it. Requiring the
+    #      value and the figure's own name on ONE line still ties the number to
+    #      its subject, which is the property that was missing.
+    #
+    # Neither tier falls back to the whole file. A figure nothing can bind is a
+    # failure, not a pass: it means the value is gone from the register, or the
+    # row was renamed, or the label never named anything.
+    #
+    # PAGE-sourced rows are checked against that one dashboard, as before. Their
+    # labels are built from feed data and are not row names ("Lobbying #1 Smith
+    # Costello & Crawf" is truncated to fit the column), and the haystack is a
+    # single page rather than the register.
+    GENERIC = {'the', 'and', 'for', 'latest', 'actual', 'label', 'total',
+               'year', 'cumulative', 'per'}
+
+    def label_words(lab):
+        """The words of a label that identify its subject, lowercased."""
+        return [w for w in re.findall(r"[A-Za-z0-9#&/_-]{2,}", lab)
+                if w.lower() not in GENERIC]
+
+    rowidx = {}
+    for _line in text.split(chr(10)):
+        if not _line.startswith('|'):
+            continue
+        _cells = [c.strip() for c in _line.strip().strip('|').split('|')]
+        if _cells:
+            rowidx.setdefault(_cells[0].strip('*` '), []).append(_line)
+    reg_lines = text.split(chr(10))
+
+    def bind(lab, val):
+        """(status, how) -- where the register backs this figure, if anywhere."""
+        named = [ln for name, lns in rowidx.items()
+                 if name == lab or name.startswith(lab) for ln in lns]
+        if named:
+            return ('ok' if any(val in ln for ln in named) else 'STALE'), 'row'
+        words = [w.lower() for w in label_words(lab)]
+        if words:
+            for ln in reg_lines:
+                low = ln.lower()
+                if val in ln and any(w in low for w in words):
+                    return 'ok', 'line'
+        return 'STALE', 'none'
 
     stale = []
     for label, value, src in rows:
-        ok = value in pages.get(src, text)
-        if not ok:
+        if src in pages:
+            status, how = ('ok' if value in pages[src] else 'STALE'), 'page'
+        else:
+            status, how = bind(label, value)
+        if status != 'ok':
             stale.append((label, value, src))
-        print(f'{label.ljust(width)}  {value:>14}  '
-              f'{"ok" if ok else "STALE":7s}  {src}')
+        print(f'{label.ljust(width)}  {value:>14}  {status:7s}  {how:5s}  {src}')
 
     if stale:
         print(f'\n{len(stale)} published figure(s) no longer match the feed:\n')
@@ -290,7 +393,8 @@ def main():
             print('Re-sync the figures in that page against the JSON named beside each one.')
         return 1
 
-    print(f'\nAll {len(rows)} feed-backed figures match their source.')
+    print(f'\nAll {len(rows)} feed-backed figures match their source,')
+    print('each bound to a register line that names it, or to the page that publishes it.')
     return 0
 
 
