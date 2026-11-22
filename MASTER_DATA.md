@@ -883,7 +883,7 @@ scopes and was off by up to $1.6B in both directions; it had put FY2018-to-FY202
 | — municipal / regional split | $6,695,466,289 / $962,933,217 | same | 🔒 an enacted split in a signed act. |
 | Unrestricted General Government Aid | **$1,363,109,516** (+$40M, +3.0%) | same | 🔒 an enacted line in a signed act. |
 | SpEd Circuit Breaker | $654.6M (+35.0%); $806.6M incl. Fair Share supp. | `gaabudgets.xlsx` | 🔒 an enacted line in a signed act. |
-| Fair Share surtax deployed | ~$2.7B (~64% education / ~36% transportation) | MTF | ⏳ re-read by 2027-01-31 — Mass Taxpayers Foundation analysis. This is money **deployed**, a different measure from the DOR **collection** rows in the tax table ($2.199B / $2.987B / $3.380B for FY2024–26); MTF is the only published source for the education/transport split, so it is secondary by necessity. |
+| Fair Share surtax deployed | ~$2.7B (~64% education / ~36% transportation) | MTF | ⏳ re-read by 2027-01-31 — Mass Taxpayers Foundation analysis. **Superseded in substance by the CTHRU rows below**, which put FY2026 actual spending at $2.281B and the split at ~74/26 once Student Opportunity Act Expansion is read as education. Kept as a cross-reference because MTF reached its split independently and the disagreement is worth seeing. |
 | Emergency Assistance family shelter | $259.9M (−6.0%; was $325.3M in FY24) | `gaabudgets.xlsx` | 🔒 the FY2027 enacted line. Actual spending against it is written by update-immigrant-spending.py and is a different measure. |
 | State Retiree Benefits Trust (OPEB) deposit | **$400M**, down from $550M in FY24 (−27%) | line 1595-6152 | 🔒 an enacted line (1595-6152) in a signed act. |
 | Line items in `tax-budget-dashboard.html` | 860, **all 860 verified against the official GAA** | `gaa1.xlsx` diff | ⏳ re-read by 2027-07-31 — re-diff the dashboard against gaa1.xlsx for FY2028 |
@@ -971,6 +971,58 @@ outturn ($64.0B) minus the signed headline ($57.8B), two different scopes.
 > **FY2026 CPI is an 11-month mean and always will be.** October 2025 was never
 > published. That is a permanent hole, not a month still to come, so do not "fix" the
 > mean later by looking for it.
+
+### Fair Share surtax — collected against actually spent
+
+All CTHRU (Socrata), read 2026-11-22, feeds refreshed 2026-11-20. Spending
+`kv7m-35wn` (`total_expenses`); revenue `kcy7-ivxi` (`revenue_collected`).
+
+| FY | Collected (DOR) | Into fund 2017 | Spent (funds 2017+2019) | Share spent |
+|---|---:|---:|---:|---:|
+| FY2024 | $2.199B | $2.215B | $0.902B | 41% |
+| FY2025 | $2.987B | $3.016B | $1.218B | 41% |
+| FY2026 | $3.380B | $2.961B | $2.281B | 67% |
+| **FY2024–26** | **$8.566B** | **$8.192B** | **$4.401B** | **51%** |
+
+FY2027 is part-year: $0.841B spent by 2026-11-22 (fund 2017 $0.235B, fund 2019
+$0.606B).
+
+**FY2026 split, CTHRU's own `cabinet_secretariat_name`:** Education $1,193.8M
+(52.3%), MassDOT $582.3M (25.5%), Administration & Finance $504.4M (22.1%), other
+$0.4M. The A&F bucket is almost entirely **Student Opportunity Act Expansion,
+$496.9M**, education money booked to A&F because it runs through a 1596-series
+transfer account. Reclassifying that one line gives **74% education / 26%
+transportation**. Both are published on the page; the reclassification is named
+as a judgement rather than folded in silently.
+
+> **Four funds carry surtax money and the fourth is easy to miss.** 2017
+> Education and Transportation Fund (the main one); 2018 Education and
+> Transportation Reserve Fund — **revenue only, has never appeared in the
+> spending dataset at all**, $518M of transfers plus interest over FY2024–26 and
+> not a dollar out; 2019 Education and Transportation Innovation and Capital
+> Fund; and 2006 Student Opportunity Act Investment Fund, which **predates the
+> surtax** (receipts from FY2022) and is excluded.
+
+> **Count the inflow ONCE, at fund 2017.** Funds 2018 and 2019 also receive
+> OPERATING TRANSFERS — $1.019B/$1.462B/$0.470B into 2019 and
+> $0.180B/$0.255B/$0.083B into 2018 — but those are sweeps of fund 2017's
+> unspent balance, not new surtax. Adding them puts FY2025 receipts at $4.5B
+> against DOR's certified $2.987B. The arithmetic confirms the sweep: 2017 took
+> in $3.016B and spent $1.218B, leaving $1.798B, against $1.717B swept out.
+
+> **What makes 2017 the surtax fund is evidence, not assumption.** Its inflow
+> matches DOR's certification to within ~1% two years running ($2.215B vs
+> $2.199B; $3.016B vs $2.987B). The money arrives as OPERATING TRANSFERS, not tax
+> receipts, because DOR banks the surtax in the General Fund first. FY2026 is the
+> loose year, $2.961B against $3.380B certified.
+
+> **Spending is summed across 2017 and 2019 and needs no netting.** Fund 2017's
+> only account matching "transfer" is MTTF Transfer for RTA Workforce
+> Development, $25M, which is a programme line rather than a fund sweep.
+
+⏳ Re-read by 2027-02-28, with the FY2026 SBFR, and re-run the DOR-vs-fund-2017
+match each year — if that match breaks, the attribution behind every figure in
+this section breaks with it.
 
 ### ⚠️ Local-aid CSV ingestion gotcha
 

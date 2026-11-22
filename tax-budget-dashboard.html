@@ -361,6 +361,42 @@ footer a:hover{color:var(--gold)}
     </div>
   </div>
   <div class="data-card">
+    <h3>Collected vs Actually Spent — the Comptroller’s Ledger</h3>
+    <table class="data-table">
+      <thead>
+        <tr><th>Fiscal year</th><th>Surtax collected (DOR)</th><th>Into the Education &amp; Transportation Fund</th><th>Actually spent</th><th>Share spent</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>FY2024</td><td>$2.199B</td><td>$2.215B</td><td class="highlight">$0.902B</td><td class="highlight">41%</td></tr>
+        <tr><td>FY2025</td><td>$2.987B</td><td>$3.016B</td><td class="highlight">$1.218B</td><td class="highlight">41%</td></tr>
+        <tr><td>FY2026 ★</td><td>$3.380B</td><td>$2.961B</td><td>$2.281B</td><td>67%</td></tr>
+        <tr style="font-weight:700;border-top:2px solid var(--navy)"><td>FY2024–26</td><td>$8.566B</td><td>$8.192B</td><td class="highlight">$4.401B</td><td class="highlight">51%</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: surtax collected — MA DOR fiscal-year certifications (24 Jul 2024, 21 Jul 2025, 20 Jul 2026). Fund inflows and spending — MA Comptroller via CTHRU, Socrata <em>kcy7-ivxi</em> (revenue) and <em>kv7m-35wn</em> (spending), read 22 Nov 2026, feeds refreshed 20 Nov 2026. Spending covers the Education and Transportation Fund (2017) and the Education and Transportation Innovation and Capital Fund (2019). Inflows are counted once, at fund 2017: funds 2018 and 2019 also receive operating transfers, but those are sweeps of fund 2017’s unspent balance rather than new surtax, and adding them would have put FY2025 receipts at $4.5B against DOR’s certified $2.987B. What establishes 2017 as the surtax fund is that its inflow matches DOR to within about 1% in FY2024 and FY2025, not an assumption. FY2027 is part-year and excluded; $0.841B had been spent by 22 Nov 2026.</div>
+  </div>
+  <div class="info-box" style="background:var(--amber-bg);border-color:rgba(184,134,11,0.15);border-left-color:var(--amber)">
+    <h4 style="color:var(--amber)">🏦 About Half the Surtax Has Not Been Spent Yet</h4>
+    <p>Across FY2024–26 the surtax raised <strong>$8.566B</strong> and <strong id="fsSpent">—</strong> of it was actually spent — <strong id="fsShare">—</strong>. The rest sits in the funds. The <strong>Education and Transportation Reserve Fund</strong> took in $518M of transfers plus interest over those three years and has <strong>never recorded a single dollar of spending</strong>: it does not appear in the Comptroller’s spending dataset at all.<br><br>
+    The pace is picking up. FY2024 and FY2025 each spent about 41% of what came in that year; FY2026 spent 67%, and five months into FY2027 another <strong id="fsYtd">—</strong> has gone out, most of it from the Innovation and Capital Fund. An unspent balance is not the same as a misused one — a new fund ramping up will lag, and money carried forward is still committed to the two purposes the Constitution allows. But it does mean the gap between &ldquo;raised&rdquo; and &ldquo;delivered&rdquo; is real and is worth stating before either side of the argument is made.</p>
+  </div>
+  <div class="data-card">
+    <h3>Where FY2026 Surtax Spending Went</h3>
+    <table class="data-table">
+      <thead>
+        <tr><th>Secretariat (the Comptroller&rsquo;s own classification)</th><th>FY2026 actual</th><th>Share</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Executive Office of Education</td><td>$1,193.8M</td><td>52.3%</td></tr>
+        <tr><td>Massachusetts Department of Transportation</td><td>$582.3M</td><td>25.5%</td></tr>
+        <tr><td>Executive Office for Administration &amp; Finance</td><td>$504.4M</td><td>22.1%</td></tr>
+        <tr><td>All other</td><td>$0.4M</td><td>0.0%</td></tr>
+        <tr style="font-weight:700;border-top:2px solid var(--navy)"><td>Total</td><td>$2,281.0M</td><td>100%</td></tr>
+      </tbody>
+    </table>
+    <div class="source">Source: MA Comptroller via CTHRU <em>kv7m-35wn</em>, FY2026 <em>total_expenses</em> for funds 2017 and 2019 grouped by <em>cabinet_secretariat_name</em>; read 22 Nov 2026. <strong>Read the A&amp;F row before using these shares.</strong> It is almost entirely one account — Student Opportunity Act Expansion, $496.9M — which is education money booked to Administration &amp; Finance because it runs through a 1596-series transfer account. Moving that one line to education gives <strong>74% education / 26% transportation</strong>, against the ~64%/36% this page previously carried from a Mass Taxpayers Foundation analysis. That reclassification is a judgement applied to official data, which is why both the raw figures and the one change are shown rather than only the result.</div>
+  </div>
+  <div class="data-card">
     <h3>Effective State & Local Tax Rates by Income Bracket</h3>
     <table class="data-table">
       <tr><th>Income Bracket</th><th>Effective Rate</th><th>Notes</th></tr>
@@ -1607,6 +1643,21 @@ const SPEND_ACTUAL_GROWTH = (SPEND_ACTUAL_FY2026 / SPEND_ACTUAL_FY2018 - 1) * 10
 const FY25_OVERRUN = GAA_FY25_ACTUAL - GAA_FY25_ENACTED_LFL;  // $5.736B supplemental spending above enacted
 const SURTAX_CUM_ACTUAL = SURTAX_FY24_ACTUAL + SURTAX_FY25_ACTUAL + SURTAX_FY26_ACTUAL;  // $8.6B (FY24–FY26, actuals only)
 
+// Surtax money actually SPENT, from the Comptroller's CTHRU ledger (Socrata
+// kv7m-35wn, `total_expenses` by fiscal year and fund; read 2026-11-22, feed
+// refreshed 2026-11-20). Summed over the Education and Transportation Fund (2017)
+// and the Education and Transportation Innovation and Capital Fund (2019). The
+// Education and Transportation Reserve Fund (2018) is excluded from spending
+// because it has never appeared in the spending dataset at all -- it only receives.
+// Counted ONCE on the way in: 2018 and 2019 are fed by sweeps of 2017's unspent
+// balance, so their inflows are not new surtax and are never added to it.
+const SURTAX_SPENT_FY24 = 0.902;
+const SURTAX_SPENT_FY25 = 1.218;
+const SURTAX_SPENT_FY26 = 2.281;   // fund 2017 $2.157B + fund 2019 $0.124B
+const SURTAX_SPENT_CUM = SURTAX_SPENT_FY24 + SURTAX_SPENT_FY25 + SURTAX_SPENT_FY26;  // $4.4B
+const SURTAX_SPENT_SHARE = SURTAX_SPENT_CUM / SURTAX_CUM_ACTUAL * 100;               // ~51%
+const SURTAX_SPENT_FY27_YTD = 0.841;  // fund 2017 $0.235B + fund 2019 $0.606B, part-year
+
 // BEA Total Personal Income in Massachusetts (FRED MAOTOT), quarterly, seasonally
 // adjusted annual rate, $M. Averaged over the Massachusetts fiscal year (Jul–Jun) so
 // income is measured on the same clock as the budget it is compared against — the same
@@ -1859,6 +1910,13 @@ function initCharts(tab) {
       break;
 
     case 'income':
+      // These three live in the Fair Share block on THIS tab. They were first
+      // wired into the migration case, so they rendered as em-dashes until a
+      // reader happened to visit that tab -- the spans exist in the DOM either
+      // way, which is exactly why the mistake was invisible in the markup.
+      putTxt('fsSpent', '$' + SURTAX_SPENT_CUM.toFixed(3) + 'B');
+      putTxt('fsShare', SURTAX_SPENT_SHARE.toFixed(0) + '% of what was collected');
+      putTxt('fsYtd',   '$' + SURTAX_SPENT_FY27_YTD.toFixed(3) + 'B');
       safeChart('chartSurtax', {
         type: 'bar',
         data: {
