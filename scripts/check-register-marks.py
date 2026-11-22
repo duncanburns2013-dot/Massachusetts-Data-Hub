@@ -34,6 +34,7 @@ while the publisher has already issued a newer period.
 """
 import datetime
 import os
+import pathlib
 import re
 import sys
 
@@ -43,6 +44,8 @@ import register  # noqa: E402
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 TICK = "✅"
 DATE_RE = re.compile(r"re-?read by (\d{4})-(\d{2})-(\d{2})")
+SCRIPT_RE = re.compile(r"`([A-Za-z0-9_./-]+\.(?:py|js|mjs|yml))`")
+REPO = pathlib.Path(__file__).resolve().parents[1]
 
 
 def lapsed_rows(rows, today):
@@ -87,6 +90,40 @@ def undated_rows(rows):
 
 
 
+def phantom_scripts(rows):
+    """Script marks that name a file which is not in the repo, added 2026-11-22.
+
+    A row marked with the script glyph says "a job writes this, you do not have
+    to". Naming the job is what makes that checkable, and the name was never
+    checked against the filesystem.
+
+    The US job openings row said:
+
+      | US job openings | 7.523M | September 2026 | BLS JOLTS <script> written
+        by `update-employment.py`; checked by check-consistency.py |
+
+    There is no update-employment.py, and there never was. The figure IS written
+    -- by scripts/fetch-bls-data.js, which update-employment.yml runs as
+    `node fetch-bls-data.js` -- so the row was right about being owned and wrong
+    about by what, which is the version of this that survives a reading.
+
+    Scripts live in two places here, the repo root and scripts/, and a mark may
+    give either a bare name or a path. Both resolve. A workflow file counts too.
+    """
+    out = []
+    for r in rows:
+        if register.SCRIPT not in r["mark"]:
+            continue
+        for name in SCRIPT_RE.findall(r["mark"]):
+            base = name.split("/")[-1]
+            if any((REPO / p / base).exists()
+                   for p in ("", "scripts", ".github/workflows")):
+                continue
+            out.append((name, r))
+    return out
+
+
+
 def main():
     rows = register.all_marked_rows()
     bad = [r for r in rows if TICK in r["mark"]]
@@ -99,11 +136,24 @@ def main():
     today = datetime.date.today()
     late = lapsed_rows(rows, today)
     undated = undated_rows(rows)
+    phantom = phantom_scripts(rows)
 
-    if not bad and not late and not undated:
+    if not bad and not late and not undated and not phantom:
         print("\nNo row rests on a bare tick, every re-read date is in "
               "the future, and every hourglass names one.")
         return 0
+
+    if phantom:
+        print("\nFAIL: %d script mark(s) name a file that is not in the repo."
+              % len(phantom), file=sys.stderr)
+        print(file=sys.stderr)
+        for name, r in phantom:
+            print("  `%s`  --  %s" % (name, r["label"][:54]), file=sys.stderr)
+        print("\nThe row claims a job owns the figure. Name the job that "
+              "actually does, or give the row a re-read date instead. A mark "
+              "naming a script nobody can open is the same bare tick in "
+              "different clothing.", file=sys.stderr)
+        print(file=sys.stderr)
 
     if undated:
         print(f"\nFAIL: {len(undated)} hourglass row(s) name no re-read date.\n",
