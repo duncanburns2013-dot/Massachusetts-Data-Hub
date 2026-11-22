@@ -446,6 +446,41 @@ The MA vintage. Lands ~3 weeks after the national release, which is why the MA b
 | Charter schools | **+13.5%** (SY2019→SY2026) | MA DESE, `rdxw-mfv3` (School Attending Children) via educationtocareer.data.mass.gov, statewide row `town_code=00000000`, retrieved 2026-11-11 | ⏳ re-read by 2027-06-30 — DESE `rdxw-mfv3` statewide row for SY2027. The dataset's rows were last updated 2026-05-26 with SY2026 already in them, so a new school year lands by late spring; this date adds a month of slack. Re-derive the whole set together, not one row. Verified 2026-11-11: 42,097 → 47,780. Published +11% matches the SY2019→SY2025 figure of +11.7%. |
 | Homeschooling | **+66.9%** (SY2019→SY2026) | MA DESE, `rdxw-mfv3` (School Attending Children) via educationtocareer.data.mass.gov, statewide row `town_code=00000000`, retrieved 2026-11-11 | ⏳ re-read by 2027-06-30 — DESE `rdxw-mfv3` statewide row for SY2027. The dataset's rows were last updated 2026-05-26 with SY2026 already in them, so a new school year lands by late spring; this date adds a month of slack. Re-derive the whole set together, not one row. Verified 2026-11-11: 7,624 → 12,721. Published +56% is short of the SY2019→SY2025 figure of +60.1% as well. |
 
+### Headline figures on `education-statewide.html` (MCAS 2026)
+
+Added 2026-11-22. Every one of these was published on the page with no register row,
+so none was documented and none could be aged; they passed only because a `data-field`
+attribute was accepted as proof an updater owned them. Each was re-derived from DESE’s
+own API today rather than taken from the page.
+
+The method for the district and Gateway rows, which the page did not state: subject
+totals use `test_grade = ALL (03-08)`, `stu_grp = All Students`, and BOTH
+`Public School District` and `Charter District` org types, which is what gives 351
+districts. Gateway averages are ENROLMENT-WEIGHTED from `m_plus_e_cnt / stu_cnt`, not a
+mean of district percentages: the unweighted mean gives 25.7% ELA against the page’s
+24.8%, so the distinction is the difference between reproducing the figure and missing it.
+
+| Figure | Value | Source | How it is held up |
+|--------|-------|--------|----------|
+| **Districts below 50% ELA proficiency, 2026** | **246 of 351** (70.1%) | MA DESE via educationtocareer.data.mass.gov, `i9w6-niyt`; counted 2026-11-22, reproduced exactly | ⏳ re-read by 2027-10-31 — DESE releases MCAS each autumn. |
+| **Gateway Cities ELA, 2026** | **24.8%** meeting or exceeding (25,904 of 104,590) | same, 26 Gateway Cities per MGL c.23A s.3A, enrolment-weighted; computed 24.77% on 2026-11-22 | ⏳ re-read by 2027-10-31 — with the MCAS release. |
+| **Rest of state ELA, 2026** | **45.5%** (131,898 of 289,619) | same, the other 325 districts; computed 45.54% | ⏳ re-read by 2027-10-31 — with the MCAS release. |
+| Gateway Cities math, 2026 | 24.2% (25,308 of 104,492) | same; computed 24.22% | ⏳ re-read by 2027-10-31 — with the MCAS release. |
+| Rest of state math, 2026 | 47.2% (136,698 of 289,600) | same; computed 47.20%. The page read 47.1% until 2026-11-22 | ⏳ re-read by 2027-10-31 — with the MCAS release. |
+| Gateway vs rest gap, 2026 | 21 pts ELA, 23 pts math | derived from the four rows above (45.54−24.77, 47.20−24.22) | ⏳ re-read by 2027-10-31 — moves with them. |
+| Not meeting expectations, math grades 3-8, 2026 | 59% | MA DESE via educationtocareer.data.mass.gov, `i9w6-niyt`, state rows for grades 03-08 MATH, enrolment-weighted to 41.0% meeting or exceeding; 100−41. Verified 2026-11-22 | ⏳ re-read by 2027-10-31 — with the MCAS release. |
+| **Chronic absence, all students, SY2026** | **17.1%** | MA DESE via educationtocareer.data.mass.gov, `ak6h-9k7x`, State / All Students / **End of Year** / `pct_chron_abs_10` = 0.171, read 2026-11-22. NOT the March cut, which is 16.8%. The page distinguishes the two correctly: the KPI cards carry End of Year and a separate chart carries the SY2026 March partial year (16.8 / 26.5 / 10.0, cited as such). I first read the March citation as applying to the cards; it does not | ⏳ re-read by 2027-10-31 — the End of Year file follows the school year. |
+| Chronic absence, Hispanic or Latino, SY2026 | 27.3% | same, End of Year; 0.273 | ⏳ re-read by 2027-10-31 — as above. |
+| Chronic absence, Asian, SY2026 | 9.6% | same, End of Year; 0.096. March is 10.0% | ⏳ re-read by 2027-10-31 — as above. |
+| Chronic absence gap, Hispanic minus Asian | 17.7 pts | derived: 27.3 − 9.6. On the March cut the gap would be 16.5 pts, which is why the period label mattered | ⏳ re-read by 2027-10-31 — moves with the two rows above. |
+| Chronic absence change vs SY2025 | −1.7 pts | same dataset: SY2025 End of Year All Students 0.188 against SY2026 0.171. Verified 2026-11-22 | ⏳ re-read by 2027-10-31 — as above. |
+| ⚠️ Absence BY GROUP chart, `ST_ABSENT` | **SY2025**, a year behind the cards above | Same dataset. All ten values match SY2025 End of Year exactly (All 18.8, High Needs 25.9, Low Income 28.9, EL 27.8, SWD 26.5, Asian 10.9, Black 20.7, Hispanic 29.5, Multi-Race 19.3, White 13.9). SY2026 is published: 17.1, 24.1, 27.3, 25.4, 24.8, 9.6, 19.4, 27.3, 17.3, 12.4. NOT updated here on purpose — the page’s own comment says this series is shared with `education-merrimack-valley.html` and the Boston page "so the two pages that already show them and this one cannot drift apart", so moving it on one page alone would break the invariant it was written to protect. Wants a coordinated update across all three. | ⏳ re-read by 2027-01-31 — brought forward deliberately: the data exists now and this is a known gap, not a waiting one. |
+| **4-year graduation rate, Class of 2025** | **89.3%** (cohort 76,414) | MA DESE via educationtocareer.data.mass.gov, `n2xa-p822`, State / 4-Year Graduation Rate / All Students / sy 2025 = 0.893, read 2026-11-22. 2025 is the newest school year in the dataset | ⏳ re-read by 2027-03-31 — DESE publishes a cohort the winter after it graduates. |
+| 4-year graduation rate, English Learners, Class of 2025 | 71.1% (cohort 10,182) | same; 0.711 | ⏳ re-read by 2027-03-31 — as above. |
+| 4-year graduation rate, Students with Disabilities, Class of 2025 | 78.7% (cohort 15,308) | same; 0.787 | ⏳ re-read by 2027-03-31 — as above. |
+| Graduation change vs Class of 2024 | +0.9 pt | same dataset: Class of 2024 All Students 0.884 against 0.893. Verified 2026-11-22 | ⏳ re-read by 2027-03-31 — as above. |
+| **Per-pupil expenditure, FY2024** | **$23,165** total ($23,165.11); in-district $22,413.93 | DESE Per Pupil Expenditure state report, profiles.doe.mass.edu; held in `data/mcas-latest.json` as `per_pupil`, checked 2026-09-23. FY2024 is the newest year DESE has published | ⏳ re-read by 2027-06-30 — DESE publishes a fiscal year roughly two years after it closes. |
+
 ### Gateway Cities vs. Wealthy Towns (DESE FY2024 / MCAS 2025)
 
 | Metric | Gateway Cities (7) | Wealthy Towns (7) | Gap |

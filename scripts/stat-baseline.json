@@ -1,16 +1,5 @@
 {
  "known": [
-  "education-statewide.html|$23,165",
-  "education-statewide.html|17.1%",
-  "education-statewide.html|17.7pts",
-  "education-statewide.html|24.8%",
-  "education-statewide.html|246",
-  "education-statewide.html|27.3%",
-  "education-statewide.html|45.5%",
-  "education-statewide.html|59%",
-  "education-statewide.html|71.1%",
-  "education-statewide.html|78.7%",
-  "education-statewide.html|89.3%",
   "employment-dashboard.html|132.12M",
   "employment-dashboard.html|32.06M",
   "mbta-3a-dashboard.html|15.3%",
@@ -18,5 +7,5 @@
   "tax-budget-dashboard.html|$94.56",
   "tax-budget-dashboard.html|105.8"
  ],
- "note": "Statistics that are neither declared script-written (data-owned-by on the card) nor documented in method.html. This list should shrink, never grow. Regenerate with --update only when removing entries, or when the RULE changes and the new backlog is recorded deliberately -- as on 2026-11-22, when it rose from 0 to 17. Until that day a data-field attribute counted as proof that an updater owned a value. It is not: of 68 headline values carrying one, the field name of only 11 appeared in any script, workflow or data file. The 17 here are the figures that were resting on the attribute and nothing else. They are NOT fixed by being listed: each needs a row in MASTER_DATA.md, a data-owned-by naming the script that writes it, or a data-frozen reason. 11 are DESE figures on education-statewide.html, 2 are national payroll levels on employment-dashboard.html, and the rest are single figures on mbta-3a, pension and tax-budget."
+ "note": "Statistics that are neither declared script-written (data-owned-by on the card) nor documented in method.html. This list should shrink, never grow. Regenerate with --update only when removing entries, or when the RULE changes and the new backlog is recorded deliberately -- as on 2026-11-22, when it rose from 0 to 17, and to 6 later the same day. Until that morning a data-field attribute counted as proof that an updater owned a value. It is not: of 68 headline values carrying one, the field name of only 11 appeared in any script, workflow or data file. The 17 were the figures resting on the attribute and nothing else. 11 of them -- every DESE figure on education-statewide.html -- were then re-derived from the DESE API and written into MASTER_DATA.md with their method, which is what taking one of these off the list looks like. The 6 left are 2 national payroll levels on employment-dashboard.html and single figures on mbta-3a, pension and tax-budget. Listing them fixes nothing: each needs a register row, a data-owned-by naming the script that writes it, or a data-frozen reason."
 }

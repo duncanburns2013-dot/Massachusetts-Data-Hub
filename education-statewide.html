@@ -2,7 +2,44 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="data-checked" content="2026-08-25"><!-- bump when this page is reconciled against its publisher; scripts/check-freshness.py ages it -->
+<meta name="data-checked" content="2026-11-22"><!-- bump when this page is reconciled against its publisher; scripts/check-freshness.py ages it -->
+<!-- meta.currency, checked 2026-11-22. Says what was ACTUALLY reconciled.
+
+     Every headline figure on this page was re-derived from DESE’s own API today, not
+     read off the page. None of them had a register row until today: they passed the
+     accountability check only because a data-field attribute was taken as proof that
+     an updater owned them, which it never was. All are now in MASTER_DATA.md with the
+     resource id, the method and a re-read date.
+
+     REPRODUCED EXACTLY from educationtocareer.data.mass.gov:
+       246 of 351 districts below 50% ELA (i9w6-niyt, ALL (03-08), All Students, both
+         Public School District and Charter District org types).
+       Gateway Cities ELA 24.8% (24.77%) and rest of state 45.5% (45.54%), enrolment
+         weighted from m_plus_e_cnt / stu_cnt over the 26 Gateway Cities. The method was
+         not stated on the page and it matters: an unweighted mean of district
+         percentages gives 25.7%, not 24.8%.
+       Holyoke 6%, Lynn 14%, Lawrence 17% math, exactly as printed.
+       Chronic absence SY2026 End of Year: all students 17.1%, Hispanic 27.3%, Asian
+         9.6%, gap 17.7pts, change on SY2025 −1.7pt (18.8 → 17.1). ak6h-9k7x.
+       4-year graduation, Class of 2025: 89.3% (cohort 76,414), English Learners 71.1%
+         (10,182), Students with Disabilities 78.7% (15,308), +0.9pt on the Class of
+         2024 (88.4%). n2xa-p822; 2025 is the newest school year in the dataset.
+       Per-pupil FY2024 $23,165.11, the newest year DESE has published.
+
+     CORRECTED: rest-of-state MATH read 47.1%. From student counts it is 136,698 of
+     289,600 = 47.20%. The same method reproduces the ELA figure to the decimal, so
+     this was a rounding slip rather than a different cut.
+
+     KNOWN GAP, deliberately NOT changed here: the absence-by-group chart (ST_ABSENT)
+     is SY2025, a year behind the cards on its own tab. All ten of its values match
+     SY2025 End of Year exactly and SY2026 is published. It is left alone because this
+     file’s own comment says the series is shared with education-merrimack-valley.html
+     and the Boston page so the three cannot drift apart; moving it on one page would
+     break the invariant it exists to protect. Registered as a dated gap instead.
+
+     The separate March year-to-date chart IS current (SY2026 March: 16.8 / 26.5 /
+     10.0) and is cited as March, which is correct. I initially misread that citation
+     as covering the KPI cards. It does not. --><!-- bump when this page is reconciled against its publisher; scripts/check-freshness.py ages it -->
   <!-- Open Graph / Social Cards -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Massachusetts Data Hub">
@@ -303,7 +340,7 @@ tr:hover{background:rgba(15,41,66,.02)}
 <div class="card full">
 <h3>Gateway City Performance (MCAS <span data-field="mcas-year">2026</span>)</h3>
 <div class="chart-wrap gateway"><canvas id="gatewayCities"></canvas></div>
-<div class="insight"><strong>The math floor:</strong> Of the Gateway cities above, <span data-field="gw-low1">Holyoke</span> is lowest at <span data-field="gw-low1v">6%</span> meeting math expectations, then <span data-field="gw-low2">Lynn</span> at <span data-field="gw-low2v">14%</span> and <span data-field="gw-low3">Lawrence</span> at <span data-field="gw-low3v">17%</span>. The statewide Gateway average is <span data-field="gw-avgmath">24.2%</span> against <span data-field="gw-restmath">47.1%</span> in the rest of the state.</div>
+<div class="insight"><strong>The math floor:</strong> Of the Gateway cities above, <span data-field="gw-low1">Holyoke</span> is lowest at <span data-field="gw-low1v">6%</span> meeting math expectations, then <span data-field="gw-low2">Lynn</span> at <span data-field="gw-low2v">14%</span> and <span data-field="gw-low3">Lawrence</span> at <span data-field="gw-low3v">17%</span>. The statewide Gateway average is <span data-field="gw-avgmath">24.2%</span> against <span data-field="gw-restmath">47.2%</span> in the rest of the state.</div>
 <div class="card full">
 <h3>Gateway Cities &mdash; Year-over-Year Change (<span data-field="mcas-prev-year">2025</span> to <span data-field="mcas-year">2026</span>, percentage points)</h3>
 <p class="section-desc">Sorted by ELA change, best first; both panels use that same order so a city sits on the same row in each. Blue is a gain, red a decline, grey unchanged.</p>
