@@ -227,8 +227,9 @@ def scan(collect_frozen=None):
 
     THREE ways a figure can be accounted for, and the third was missing:
 
-      anchored    carries data-field=/data-mig=, so an OUTSIDE updater writes
-                  it -- a bare id= is not ownership, see the module docstring
+      declared    the CARD carries data-owned-by="<script>", naming what
+                  writes it. A data-field or id attribute is not ownership:
+                  it says a field exists, not who fills it.
       documented  its digits appear in method.html
       FROZEN      carries data-frozen="<why>", declaring it a point-in-time
                   claim that must NOT track the newest release
@@ -283,26 +284,26 @@ def scan(collect_frozen=None):
             # bare id=. Same mistake, one attribute along. data-field says "this
             # is a field". It does not say anybody fills it.
             #
-            # Measured before changing it: 68 headline values across six pages
-            # carry a data-field or data-mig anchor, and the field name of only
-            # 11 appears in ANY script, workflow or data file in the repo. 57
-            # were accounted for by an attribute and nothing else --
-            # education-statewide 32 of 32, mbta-3a 11 of 11, immigration 4 of 4,
-            # pension 2 of 2, and 3 of tax-budget's 4. all-things-boston carries
-            # 25 /*@anchor*/ markers and 8 data-field attributes written by
-            # nothing at all: the house substitution convention with no
-            # substitution behind it.
+            # CORRECTED 2026-11-22, later the same day. The measurement behind
+            # this change scanned scripts/*.py, scripts/*.js,
+            # .github/workflows/*.yml and data/*.json, and reported that of 68
+            # headline values carrying a data-field or data-mig anchor, only 11
+            # had a field name appearing in any of them.
             #
-            # So ownership must now be DECLARED. data-owned-by names the script,
-            # on the card, and is the only thing here that counts as an updater
-            # owning a value -- because it is the only one that can be checked
-            # by reading it. The alternative was to grep the scripts for each
-            # field name, which passes on a coincidence: a field called "total"
-            # matches half the repo.
+            # That scan missed the repo ROOT, where 31 updaters live --
+            # update-mcas.py, update-u6.py, update-prit.py, update-mbta-3a.py
+            # and the rest. Including them, 63 of the 68 have a writer, not 11.
+            # I shipped a negative claim from a grep over the wrong directory
+            # set, which is the exact failure figure-gate names: absence is a
+            # positive claim and needs its own command.
             #
-            # A figure with no declaration is not thereby condemned. It can be
-            # documented in method.html, or frozen with a reason. What it can no
-            # longer be is silently fine.
+            # The rule still stands, on a narrower and truer ground. A
+            # data-field says a field exists; it does not say WHICH script
+            # fills it, so a reader cannot check ownership by reading the page.
+            # data-owned-by names the script. And the 17 figures this surfaced
+            # were genuinely absent from method.html -- that part of the
+            # measurement was sound, and documenting them turned up a wrong
+            # rest-of-state figure and an updater with no workflow.
             anchored = False
             frozen = FROZEN.search(whole)
             owned_by = OWNED_BY.search(whole)

@@ -1,0 +1,80 @@
+# .github/workflows/update-mcas.yml
+#
+# MCAS achievement, chronic absence and graduation, from DESE's own open data
+# portal (educationtocareer.data.mass.gov): i9w6-niyt for MCAS, ak6h-9k7x for
+# attendance, n2xa-p822 for graduation.
+#
+# ADDED 2026-11-22, and the reason is the point. update-mcas.py has existed
+# since 2026-10-20, writes THREE pages -- education-statewide.html,
+# all-things-boston.html, education-merrimack-valley.html -- and had no workflow
+# of any kind. Nothing had ever run it. That is why the statewide chronic
+# absence series sat on SY2025 while the cards above it read SY2026, and why
+# nobody could see the two disagree: there was no job to fail.
+#
+# It is the quietest version of the failure this repository keeps finding. A
+# broken feed is loud. A stopped feed is silent. A feed that never started has
+# nothing to stop.
+#
+# The script is idempotent and prints "already current" per page when a page
+# needs nothing, so running it more often than DESE publishes costs a few API
+# calls and changes no bytes. Monthly on the 8th: MCAS lands in the autumn, the
+# End of Year attendance file follows the school year, and graduation cohorts
+# land in the winter, so no single annual date covers all three.
+
+name: Update MCAS, absence and graduation (DESE)
+
+on:
+  schedule:
+    - cron: '20 12 8 * *'   # 07:20 ET on the 8th
+  workflow_dispatch:
+
+jobs:
+  update-mcas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    concurrency:
+      group: push-to-main
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Refresh MCAS, chronic absence and graduation figures
+        run: python update-mcas.py
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet education-statewide.html all-things-boston.html \
+            education-merrimack-valley.html data/mcas-latest.json \
+            && echo "changed=false" >> $GITHUB_OUTPUT \
+            || echo "changed=true"  >> $GITHUB_OUTPUT
+
+      - name: Commit and push
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add education-statewide.html all-things-boston.html \
+            education-merrimack-valley.html data/mcas-latest.json
+          git commit -m "Auto-update: MCAS, absence and graduation $(date +'%B %Y')"
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt"
+              exit 0
+            fi
+            echo "Push attempt $attempt rejected - pulling latest and rebasing"
+            if ! git pull --rebase origin main; then
+              git rebase --abort || true
+              echo "::notice::Another run already published this edition - skipping, nothing lost."
+              exit 0
+            fi
+          done
+          echo "::error::Push failed after 5 attempts"
+          exit 1

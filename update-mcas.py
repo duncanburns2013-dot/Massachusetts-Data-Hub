@@ -318,12 +318,26 @@ def update_statewide_rest(html, sy, prev_sy):
         return round(num / den * 100, 1)
 
     # "Rest of state" is the state total minus the Gateway share, from counts.
+    #
+    # Use the state row's PUBLISHED m_plus_e_cnt, not m_plus_e_pct * stu_cnt.
+    # The API rounds m_plus_e_pct to two decimals, so the product is a rounded
+    # percentage scaled by a six-figure count and the error lands in the result:
+    # for 2026 MATH the state pct is 0.41 against a true 162,007 / 394,111 =
+    # 0.4111, and 0.41 * 394,111 = 161,585 against the published 162,007. Netting
+    # Gateway out of that gave 47.054% where the counts give 47.200%, so the page
+    # printed 47.1% for a figure that is 47.2%.
+    #
+    # ELA hid it: 45.501% and 45.539% both round to 45.5%, so the one subject a
+    # reader would spot-check agreed and the other did not.
     def rest_agg(subject):
         srow = st.get((sy, "ALL (03-08)", subject))
         tot_n = float(srow["stu_cnt"]) if "stu_cnt" in srow else None
         if tot_n is None:
             fail("state row carries no student count; cannot net out Gateway.")
-        tot_me = float(srow["m_plus_e_pct"]) * tot_n
+        if srow.get("m_plus_e_cnt") is not None:
+            tot_me = float(srow["m_plus_e_cnt"])
+        else:
+            tot_me = float(srow["m_plus_e_pct"]) * tot_n
         gnum = sum(float(gwd[(c, subject)]["m_plus_e_cnt"]) for c in GATEWAY_CITIES)
         gden = sum(float(gwd[(c, subject)]["stu_cnt"]) for c in GATEWAY_CITIES)
         return round((tot_me - gnum) / (tot_n - gden) * 100, 1)
