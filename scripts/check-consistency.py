@@ -98,6 +98,19 @@ def checks():
     ) if k in m3a]
 
     # Treasury gold, written in millions of fine troy ounces to one decimal.
+    # PRIT and BEA RPP. Both were printed on a dashboard with no register row until
+    # 2026-11-22, so nothing documented them and nothing compared them with the feed
+    # they came from. Now registered, so the comparison can exist.
+    prit = load('prit-latest.json')
+    if prit.get('assets_billions'):
+        out.append(('Total PRIT Fund assets',
+                    f"${prit['assets_billions']}B", 'prit-latest.json'))
+    col = load('cost-of-living-latest.json')
+    _ma = ((col.get('rpp') or {}).get('MA') or {}).get('all')
+    if _ma:
+        out.append(('MA price level, all items, 2024', str(_ma),
+                    'cost-of-living-latest.json'))
+
     gold = load('gold-reserve-latest.json')
     if gold.get('total_fine_troy_oz'):
         out.append(('gold total fine troy oz',

@@ -383,6 +383,18 @@ Not removable (no official overlap count): public retirees also on Social Securi
 - **Key finding:** "Hiring recession" — low-hire/low-fire environment, worst since 2009 by multiple measures
 - **Healthcare masks weakness:** 713K healthcare jobs > total net gains, meaning all other sectors flat/negative
 
+### CPS employment by nativity (national)
+
+Added 2026-11-22. Both were published on `employment-dashboard.html` with no register
+row. Verified against the BLS API today, not read off the page.
+
+| Metric | Value | Period | Source |
+|--------|-------|--------|--------|
+| Foreign-born employed, national | **32.06M** (32,062k) | October 2026 | BLS CPS `LNU02073395`, NSA, read 2026-11-22 ⏳ re-read by 2026-12-31 — monthly with the Employment Situation. |
+| Native-born employed, national | **132.12M** (132,121k) | October 2026 | BLS CPS `LNU02073413`, NSA, read 2026-11-22 ⏳ re-read by 2026-12-31 — as above. |
+| Foreign-born unemployment rate | 3.2% | October 2026 | BLS CPS `LNU04073395`, read 2026-11-22 (native-born 4.1%, `LNU04073413`) ⏳ re-read by 2026-12-31 — as above. |
+| No October 2025 comparison | — | — | NOT an omission. The API returns NO value for October 2025 on any of these series, so the cards’ "no Oct 25 comparison published" is literally true and must not be filled in with a neighbouring month. Checked 2026-11-22 🔒 a gap in the published series, not in our reading of it. |
+
 ### National — Employment Situation Release Dates
 
 Machine-readable copy lives in [`data/bls-release-schedule.json`](data/bls-release-schedule.json); the employment updater reads it to stamp "Released &lt;date&gt;" on the national block.
@@ -497,6 +509,7 @@ mean of district percentages: the unweighted mean gives 25.7% ELA against the pa
 
 ## 🏗️ Zoning — MBTA Communities Act § 3A
 
+
 **Feed status:** live. `update-mbta-3a.py` reads three EOHLC tables weekly and
 rewrites `mbta-3a-dashboard.html` plus `data/mbta-3a-latest.json`. Do not hand-edit
 the figures below or on the page — change the source or the updater.
@@ -508,6 +521,7 @@ the figures below or on the page — change the source or the updater.
 | Communities subject to § 3A | 177 | EOHLC capacity table | 🔄 written by `update-mbta-3a.py` |
 | 2020 housing units across them | 1,941,671 | EOHLC capacity table | 🔄 written by `update-mbta-3a.py` |
 | Minimum multi-family unit capacity | 297,190 | EOHLC capacity table | 🔄 written by `update-mbta-3a.py` |
+| Required capacity as a share of 2020 stock | **15.3%** | derived: 297,190 required capacity ÷ 1,941,671 housing units = 15.306%. Both inputs are feed-backed in `data/mbta-3a-latest.json` and checked by check-consistency.py; this ratio was on the page with no row of its own | ⏳ re-read by 2027-03-31 — moves only when EOHLC reissues either input. |
 | Minimum gross density | 15 units/acre | MGL c. 40A § 3A | 🔒 set by MGL c. 40A s 3A. Statute. |
 | Distance from a station | 0.5 miles | MGL c. 40A § 3A | 🔒 set by MGL c. 40A s 3A. Statute. |
 | Affordability required | none | MGL c. 40A § 3A | 🔒 set by MGL c. 40A s 3A. Statute. |
@@ -765,6 +779,15 @@ Machine-readable source of truth: [`data/burden-constants.json`](data/burden-con
 that script's TARGETS list holds that page and no other. Change the JSON, not the HTML.
 `tax-burden-nh-comparison.html` is NOT generated: it is maintained by hand and carries
 its own `data-checked` stamp, which the freshness watchdog ages.
+
+
+**BEA Regional Price Parities.** The two figures the tax-budget dashboard prints from
+them had no register row.
+
+| Figure | Value | Source | How it is held up |
+|--------|-------|--------|----------|
+| **MA price level, all items, 2024** | **105.8** (US = 100) | BEA Regional Price Parities (SARPP), MA all items = **105.757**; held in `data/cost-of-living-latest.json` as `rpp.MA.all`, and as the last point of `ma_history.all` (2022 109.431, 2023 107.675, 2024 105.757). Probed by `data/sources.json` id `bea_rpp_state`, retrieved 2026-11-12 | ⏳ re-read by 2026-12-31 — BEA publishes 2025 RPP on 10 December 2026, confirmed on bea.gov/news/schedule 2026-11-22. |
+| **$100 buys** | **$94.56** in real purchasing power | derived: 100 ÷ 1.05757 = 94.556. Computed from the UNROUNDED 105.757, which is why it is $94.56 and not the $94.52 that 105.8 would give — worth knowing before anyone "corrects" it | ⏳ re-read by 2026-12-31 — moves with the row above. |
 
 | Figure | Value | Source | URL | How it is held up |
 |---|---|---|---|---|
@@ -1239,6 +1262,13 @@ Figures on `pension-dashboard.html`. Maintained by hand against the actuarial re
 | Net Deficit Trajectory (FY2015–2024) | Commonwealth ACFR FY2015–FY2024 | FY2015–FY2024 |
 | Pension Funded Ratios — MA vs. Selected States | Public Plans Database; individual state ACFRs | — |
 | MA SERS vs. National Avg, 2001–2024 | Public Plans Database | — |
+
+**PRIT Fund assets.** Feed-backed, and carried here because the figure was on the page
+with no row: nothing documented it and nothing aged it.
+
+| Figure | Value | Source | How it is held up |
+|--------|-------|--------|----------|
+| **Total PRIT Fund assets** | **$129.5B** as of 30 June 2026 (FY2026); net return 12.7%, a $14.7B gain | PRIM, Executive Director’s quarterly update, read from PRIM’s own site; held in `data/prit-latest.json`, verified 2026-09-24 | ⏳ re-read by 2027-09-30 — PRIM publishes fiscal-year figures each August; `data/prit-latest.json` is aged at 400d by check-freshness.py. |
 
 ### Headline figures
 
