@@ -12,8 +12,8 @@ Correct. Layer 3 currently contains two pools:
 | pool | value | source |
 |---|---|---|
 | Federal corporate income tax | $452,089,303,420 | Treasury Final MTS, Sept 2025 |
-| MA corporate & business excise | $4.662B | MA DOR FY2025 close |
-| NH business taxes (BPT + BET) | $1,102.6M | NH DAS, June FY2025 accrual |
+| MA corporate & business excise | $4.170B | MA DOR FY2026 close |
+| NH business taxes (BPT + BET) | $1,137.0M | NH DAS, June FY2026, amnesty excluded |
 
 "Taxes businesses pay and pass on to households" is a much larger category than
 corporate income tax.
@@ -22,19 +22,22 @@ corporate income tax.
 
 ## ⚠️ Collision found first — this one is load-bearing
 
-**The existing $4.662B MA figure is already a combined number.** From the DOR FY2025
-Annual Report, collections by type:
+**The existing $4.170B MA figure is already a combined number.** From the State
+Auditor's Chapter 62F report for FY2026 (Exhibit VI, audited net revenues by type):
 
-| type | FY2025 |
-|---|---|
-| Corporations | $4,036,624K |
-| Insurance | $613,268K |
-| Financial Institutions | $19,949K |
-| **sum** | **$4,669,841K ≈ $4.67B** |
+| type | FY2026 | FY2025 |
+|---|---|---|
+| Corporations | $3,552,470K | $4,036,624K |
+| Insurance | $625,824K | $613,268K |
+| Financial Institutions | $19,294K | $19,949K |
+| **sum** | **$4,197,588K ≈ $4.198B** | $4,669,841K ≈ $4.67B |
 
-That reconciles to the $4.662B already in the model. So **insurance and financial
-institution excises are already counted.** Adding them as new pools would double-count
-roughly $633M — about 14% of the MA pool — and inflate the layer for every household.
+That reconciles to the $4.170B already in the model, within $28M. So **insurance and
+financial institution excises are already counted.** Adding them as new pools would
+double-count roughly $645M — about 15% of the MA pool — and inflate the layer for
+every household. The exposure GREW between FY2025 and FY2026: insurance collections
+rose 2.05% while corporations fell 11.99%, so the two already-counted excises are now
+a larger share of a smaller pool.
 
 This is exactly the failure the critique invites, so it goes at the top.
 
@@ -47,7 +50,7 @@ This is exactly the failure the critique invites, so it goes at the top.
 - **Why it fits cleanly:** the base is compensation paid, so it behaves like NH's BET —
   the model already has a ~90%-to-labour slider for exactly this shape.
 - **Not double-counted:** UI contributions go to a trust fund, not DOR tax collections,
-  so they are absent from the $4.662B above.
+  so they are absent from the $4.170B above.
 - **Source needed:** MA EOLWD / UI Trust Fund annual contributions; NH Employment
   Security equivalent. Must be sourced for BOTH states or it tilts the comparison.
 
