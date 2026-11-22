@@ -201,8 +201,8 @@ STAMPS = [
      r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 400,
      "City of Boston ACFR and data.boston.gov; hand-maintained"),
     ("commercial-re-dashboard.html",
-     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 400,
-     "quarterly brokerage reports; hand-maintained, no updater"),
+     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 150,
+     "quarterly brokerage reports; hand-maintained, no updater. 150d, not 400d: the note always said quarterly while the limit was annual, so this page could sit THREE releases behind and stay green. One quarter plus six weeks for the brokerages to publish"),
     ("pension-dashboard.html",
      r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 400,
      "PERAC/ACFR/PPD publish annually; hand-maintained, no updater"),
@@ -232,6 +232,61 @@ STAMPS = [
      "The page's other input, data/mls-history.json, is deliberately unchecked "
      "below -- this does not override that"),
 ]
+
+
+# A PUBLISHER'S OWN SCHEDULE BEATS A ROLLING WINDOW.  (added 2026-11-22)
+#
+# Every limit above is an age: "fail if the stamp is older than N days". That
+# answers "has anyone looked lately", which is not the question. The question
+# is "has the publisher released something we have not taken in", and for an
+# annual source a rolling window answers it late by construction -- a 400-day
+# limit on a source that publishes each December cannot fire until the release
+# is nearly a year old.
+#
+# The affordability note below is this gap written out by hand: "35d, not 400d,
+# ON PURPOSE ... a 400d limit would hide it until 2028. Widen to 400 once RPP
+# 2025 is in." That is a due date impersonating an age limit, and it has to be
+# un-impersonated by hand afterwards or it nags forever.
+#
+# So: a known release date, and the page fails once it passes while the stamp
+# still predates it. Only dates taken from the publisher go here. A cadence I
+# could not establish is left out rather than guessed -- an invented deadline
+# is worse than none, because it fires on a page that is perfectly current and
+# teaches everyone to ignore the check.
+NEXT_RELEASE = {
+    "affordability-dashboard.html": (
+        "2026-12-10",
+        "BEA Real Personal Consumption Expenditures by State and Real Personal "
+        "Income by State, 2025 -- the release that carries RPP 2025. Date read "
+        "off bea.gov/news/schedule on 2026-11-22, not inferred from last year."),
+    "commercial-re-dashboard.html": (
+        "2027-01-31",
+        "Q4 2026 brokerage market reports. The page is at Q3 2026 with an "
+        "Oct 14 2026 MLS PIN read; Q4 books close 31 Dec and the brokerages "
+        "publish through January."),
+}
+
+# HOW LONG A HAND-MAINTAINED PAGE MAY GO UNREVIEWED.
+#
+# This is a WARNING, never a failure, and the distinction is the whole point.
+# It is not a claim that the page is wrong -- it is a claim that nobody has
+# looked, which is a different thing and cannot be fixed by a script.
+#
+# Two pages are well past it today: pay-to-play at 294 days and
+# all-things-boston at 205. Both are inside their 400-day limits and both
+# report "ok", which is exactly the kind of green this file exists to distrust.
+# Failing on them would turn CI red on a backlog nobody chose, so they are
+# listed every run instead, the way stat-baseline.json records its own: a
+# number that should fall and must never quietly rise.
+REVIEW_DAYS = 180
+HAND_MAINTAINED = {
+    "tax-burden-dashboard.html", "tax-burden-nh-comparison.html",
+    "education-statewide.html", "education-merrimack-valley.html",
+    "healthcare-dashboard.html", "pay-to-play-dashboard.html",
+    "corporate-ledger.html", "all-things-boston.html",
+    "commercial-re-dashboard.html", "pension-dashboard.html",
+    "affordability-dashboard.html", "mbta-3a-dashboard.html",
+}
 
 # Deliberately NOT checked, so the list is a decision rather than an oversight:
 #   mls-history.json          written only by --backfill-history
@@ -395,7 +450,7 @@ def check_refresh_receipt(receipt=REFRESH_RECEIPT, today=TODAY, sources=REFRESH_
 
 
 def main() -> int:
-    rows, stale = [], []
+    rows, stale, unreviewed = [], [], []
 
     for rel, max_age, why in DATA:
         p = REPO / rel
@@ -429,8 +484,23 @@ def main() -> int:
         age = (TODAY - d).days
         bad = age > max_age
         rows.append((f"{rel} (stamp)", f"{age}d", max_age, "STALE" if bad else "ok"))
+        if rel in HAND_MAINTAINED and age > REVIEW_DAYS:
+            unreviewed.append((rel, d, age))
         if bad:
             stale.append((rel, f"page says {d}, {age} days ago", max_age, why))
+
+        # A release the publisher has already made, which this page predates.
+        # Independent of max_age: the point is that waiting out a rolling
+        # window means hearing about an annual release up to a year late.
+        if rel in NEXT_RELEASE:
+            due_s, what = NEXT_RELEASE[rel]
+            due = datetime.date.fromisoformat(due_s)
+            if TODAY > due and d < due:
+                rows[-1] = (f"{rel} (stamp)", f"{age}d", max_age, "PAST DUE")
+                if not bad:
+                    stale.append((rel,
+                                  f"page stamped {d}, but {due} has passed",
+                                  max_age, what))
 
     r_rows, r_problems = check_refresh_receipt()
     rows.extend(r_rows)
@@ -440,6 +510,19 @@ def main() -> int:
     print(f"{'source':<{w}}  {'age':>10}  {'limit':>6}  status")
     for name, age, lim, status in rows:
         print(f"{name:<{w}}  {age:>10}  {lim:>5}d  {status}")
+
+    # Not a failure. See HAND_MAINTAINED above for why.
+    if unreviewed:
+        print()
+        print(f"{len(unreviewed)} hand-maintained page(s) not reviewed in "
+              f"over {REVIEW_DAYS} days (inside their limits, so not a "
+              f"failure -- but nobody has looked):")
+        for rel, d, age in sorted(unreviewed, key=lambda t: -t[2]):
+            print(f"   {rel:<34} stamped {d}, {age}d ago")
+        print("   These have no updater and no probe in data/sources.json, so "
+              "the stamp is the")
+        print("   only thing standing between them and a figure nobody has "
+              "re-read in a year.")
 
     overdue = check_register_rechecks()
 
