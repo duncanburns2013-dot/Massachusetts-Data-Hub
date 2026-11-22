@@ -101,6 +101,16 @@ def checks():
     # PRIT and BEA RPP. Both were printed on a dashboard with no register row until
     # 2026-11-22, so nothing documented them and nothing compared them with the feed
     # they came from. Now registered, so the comparison can exist.
+    # Immigrant-concentration cities. The subsection says "The figures below are
+    # that file's current contents" and nothing checked that they were. The rows
+    # carried the script glyph while update-census-data.py -- which writes the
+    # feed and the page -- never touches this file, so the claim rested on
+    # somebody having copied 14 numbers correctly and nobody having changed them
+    # since. Now it is compared every run.
+    _cen = load('census-latest.json')
+    for _city, _pct in sorted((_cen.get('foreign_born_pct') or {}).items()):
+        out.append((_city, f'{_pct}%', 'census-latest.json'))
+
     prit = load('prit-latest.json')
     if prit.get('assets_billions'):
         out.append(('Total PRIT Fund assets',

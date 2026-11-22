@@ -48,8 +48,8 @@ FIRST, then update the relevant dashboard.
 | FY2022 | 2,378,944 | CBP | 🔒 closed federal fiscal year. These are OHSS total encounters (Border Patrol plus ports of entry); OHSS stopped publishing the ports-of-entry component after FY2024, so this series is complete and cannot be extended or revised. The Border Patrol-only series that does continue is written by update-cbp-encounters.py. |
 | FY2023 | 2,475,669 | CBP | 🔒 closed federal fiscal year. These are OHSS total encounters (Border Patrol plus ports of entry); OHSS stopped publishing the ports-of-entry component after FY2024, so this series is complete and cannot be extended or revised. The Border Patrol-only series that does continue is written by update-cbp-encounters.py. |
 | FY2024 | 2,136,800 | CBP | 🔒 closed federal fiscal year. These are OHSS total encounters (Border Patrol plus ports of entry); OHSS stopped publishing the ports-of-entry component after FY2024, so this series is complete and cannot be extended or revised. The Border Patrol-only series that does continue is written by update-cbp-encounters.py. |
-| FY2025 (full year) | 237,538 | CBP (USBP only) | 🔄 written by `update-cbp-encounters.py`; checked by check-consistency.py |
-| FY2026 (full year) | 98,705 | CBP (USBP only) | 🔄 written by `update-cbp-encounters.py`; checked by check-consistency.py |
+| FY2025 (full year) | 237,538 | CBP (USBP only) | 🔄 guarded by `scripts/check-consistency.py`, which compares this row with `data/cbp-encounters-latest.json` every run. The FEED is written by `update-cbp-encounters.py`; that script writes immigration-dashboard.html and the feed and never touches this file, so until 2026-11-22 this mark claimed a write that does not happen. The row is hand-copied and machine-compared, which is why it cannot drift — but not because anything writes it. |
+| FY2026 (full year) | 98,705 | CBP (USBP only) | 🔄 guarded by `scripts/check-consistency.py`, which compares this row with `data/cbp-encounters-latest.json` every run. The FEED is written by `update-cbp-encounters.py`; that script writes immigration-dashboard.html and the feed and never touches this file, so until 2026-11-22 this mark claimed a write that does not happen. The row is hand-copied and machine-compared, which is why it cannot drift — but not because anything writes it. |
 | FY2027 (thru Oct 2026) | 8,288 | CBP (USBP only) | 🔄 partial year, not checked by check-consistency.py: see `data/cbp-encounters-latest.json` |
 
 - **FY2025 pace:** Lowest since 1970
@@ -266,10 +266,10 @@ Boston $1,333,401. Quote it with its as-of date or not at all.
 
 | Metric | Calendar 2025 | Trailing 12mo (as of 2026-11-22) | Source |
 |--------|--------------|----------------------------------|--------|
-| Avg DOM | 35.6 days | 38 days | MLS PIN 🔄 |
-| SP/LP Ratio | 101.18% | 100.9% | MLS PIN 🔄 |
-| Units Sold | 38,870 | 38,013 | MLS PIN 🔄 |
-| Median Price | $670,000 | $680,000 | MLS PIN 🔄 |
+| Avg DOM | 35.6 days | 38 days | MLS PIN 🔄 — written into this file by `update-mls-figures.py`; the row is matched on the metric name and rewritten with the figure it puts on the page. |
+| SP/LP Ratio | 101.18% | 100.9% | MLS PIN 🔄 — written into this file by `update-mls-figures.py`; the row is matched on the metric name and rewritten with the figure it puts on the page. |
+| Units Sold | 38,870 | 38,013 | MLS PIN 🔄 — written into this file by `update-mls-figures.py`; the row is matched on the metric name and rewritten with the figure it puts on the page. |
+| Median Price | $670,000 | $680,000 | MLS PIN 🔄 — written into this file by `update-mls-figures.py`; the row is matched on the metric name and rewritten with the figure it puts on the page. |
 
 > Earlier revisions listed the trailing-12-month figures under a "2025" heading —
 > most recently "Units Sold 39,323 ✅ Feb 2026", which is the live window, not the
@@ -329,11 +329,11 @@ Values below are that file as of **2026-11-21** (reference month October 2026).
 
 | Metric | Value | Period | Source |
 |--------|-------|--------|--------|
-| MA unemployment rate | 4.2% | October 2026 | BLS LAUS 🔄 |
-| MA unemployment level | 164,934 | October 2026 | BLS LAUS 🔄 |
-| MA labor force | 3,886,370 | October 2026 | BLS LAUS 🔄 |
-| MA total nonfarm | 3,715,000 | October 2026 | BLS CES 🔄 |
-| US unemployment rate | 4.1% | October 2026 | BLS 🔄 |
+| MA unemployment rate | 4.2% | October 2026 | BLS LAUS 🔄 — written into this file by `scripts/fetch-bls-data.js`, which `update-employment.yml` runs as `node fetch-bls-data.js`; it matches on the metric name in column one and rewrites value and period together. Checked by check-consistency.py against `data/employment-latest.json`. |
+| MA unemployment level | 164,934 | October 2026 | BLS LAUS 🔄 — written into this file by `scripts/fetch-bls-data.js`, which `update-employment.yml` runs as `node fetch-bls-data.js`; it matches on the metric name in column one and rewrites value and period together. Checked by check-consistency.py against `data/employment-latest.json`. |
+| MA labor force | 3,886,370 | October 2026 | BLS LAUS 🔄 — written into this file by `scripts/fetch-bls-data.js`, which `update-employment.yml` runs as `node fetch-bls-data.js`; it matches on the metric name in column one and rewrites value and period together. Checked by check-consistency.py against `data/employment-latest.json`. |
+| MA total nonfarm | 3,715,000 | October 2026 | BLS CES 🔄 — written into this file by `scripts/fetch-bls-data.js`, which `update-employment.yml` runs as `node fetch-bls-data.js`; it matches on the metric name in column one and rewrites value and period together. Checked by check-consistency.py against `data/employment-latest.json`. |
+| US unemployment rate | 4.1% | October 2026 | BLS 🔄 — written into this file by `scripts/fetch-bls-data.js`, which `update-employment.yml` runs as `node fetch-bls-data.js`; it matches on the metric name in column one and rewrites value and period together. Checked by check-consistency.py against `data/employment-latest.json`. |
 | US job openings | 7.523M | September 2026 | BLS JOLTS 🔄 written by `scripts/fetch-bls-data.js`, which `update-employment.yml` runs as `node fetch-bls-data.js`; checked by check-consistency.py. Said update-employment.py (no backticks: that file has never existed) until 2026-11-22, a file that has never existed in this repo — the row was right that a job owns the figure and wrong about which, which is the version of that error that survives a reading |
 | MA U-6 underutilisation | 7.8% | 4-quarter average ending Q3 2026 | BLS Alternative Measures of Labor Underutilization for States, via FRED series U6UNEM6MA | ⏳ re-read by 2027-02-28 — BLS publishes the state table quarterly, about six weeks after the quarter. The value lives in `data/u6-latest.json` and is written into employment-dashboard.html by `update-u6.py` at the repo root. CORRECTION 2026-11-22: I first recorded that nothing wrote it, having grepped only `scripts/` — the four `@u6-*` anchors fetch-bls-data.js does not write are written by update-u6.py, which lives beside it in the root. check-consistency.py also compares the page’s array tail against the feed, which is a second guard rather than the only one. |
 | MA U-3 (same series) | 4.4% | 4-quarter average ending Q3 2026 | same FRED/BLS state table, U3UNEM3MA | ⏳ re-read by 2027-02-28 — carried so the U-6 gap (+3.4 pts) printed on the card is checkable against both of its terms, not just the headline one. |

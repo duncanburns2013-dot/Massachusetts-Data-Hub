@@ -45,7 +45,14 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 TICK = "✅"
 DATE_RE = re.compile(r"re-?read by (\d{4})-(\d{2})-(\d{2})")
 SCRIPT_RE = re.compile(r"`([A-Za-z0-9_./-]+\.(?:py|js|mjs|yml))`")
+# A section may attribute a row to a FEED rather than a script -- the
+# concentration-city subsection opens "Live values: `data/census-latest.json`".
+# That is attribution a reader can follow, and since 2026-11-22 those rows are
+# compared with that feed by check-consistency.py every run, so the claim is
+# enforced rather than asserted.
+OWNER_RE = re.compile(r"`([A-Za-z0-9_./-]+\.(?:py|js|mjs|yml|json))`")
 REPO = pathlib.Path(__file__).resolve().parents[1]
+REGISTER_LINES = (REPO / "MASTER_DATA.md").read_text(encoding="utf-8").split(chr(10))
 
 
 def lapsed_rows(rows, today):
@@ -124,6 +131,53 @@ def phantom_scripts(rows):
 
 
 
+def unnamed_scripts(rows):
+    """Script marks that name no script, added 2026-11-22. A WARNING, not a fail.
+
+    The glyph says "a job writes this, you do not have to". Naming the job is
+    what makes that checkable. 40 rows carry the glyph and name nothing: a month
+    ("<glyph> Jul 2026"), a source ("BLS LAUS <glyph>"), or the glyph alone.
+
+    Some are simply unlabelled and fine -- the writer exists, nobody wrote it
+    down. Others are false: update-census-data.py writes pages and a feed and
+    never touches this file, so the fourteen immigrant-concentration city rows
+    claim a register write that does not happen. Telling those two apart takes
+    reading the script, one row at a time, and guessing is exactly how
+    "update-employment.py" came to be named for a file that never existed.
+
+    So this reports rather than fails. The number should fall and must never
+    quietly rise, the way stat-baseline.json works. Failing today would turn CI
+    red on a backlog nobody chose, and the rows are not wrong about being owned
+    -- most of them are just silent about by what.
+    """
+    # Attribution here is often made at SECTION level, not per row: the Energy
+    # heading says "Refreshed by `update-energy-dashboard.py` and
+    # `update-fuel-prices.py`", and the MLS subsection opens with "Source of
+    # truth: `data/mls-history.json`". A row under either IS checkable by
+    # reading, so counting it as unnamed would nag about a convention the file
+    # actually keeps. Scan back to the nearest heading and accept a script
+    # named anywhere in between.
+    out = []
+    for r in rows:
+        if register.SCRIPT not in r["mark"]:
+            continue
+        if SCRIPT_RE.search(r["mark"]):
+            continue
+        try:
+            at = int(r["i"])
+        except (KeyError, TypeError, ValueError):
+            out.append(r)
+            continue
+        top = at
+        while top > 0 and not REGISTER_LINES[top].lstrip().startswith("#"):
+            top -= 1
+        if OWNER_RE.search(chr(10).join(REGISTER_LINES[top:at])):
+            continue
+        out.append(r)
+    return out
+
+
+
 def main():
     rows = register.all_marked_rows()
     bad = [r for r in rows if TICK in r["mark"]]
@@ -137,6 +191,20 @@ def main():
     late = lapsed_rows(rows, today)
     undated = undated_rows(rows)
     phantom = phantom_scripts(rows)
+    unnamed = unnamed_scripts(rows)
+
+    # Not a failure. See unnamed_scripts above for why.
+    if unnamed:
+        print()
+        print("%d row(s) carry the script glyph and name neither a script nor a feed "
+              "(not a failure -- but" % len(unnamed))
+        print("   the claim that a job owns them cannot be checked by reading "
+              "them):")
+        import collections as _c
+        for sec, n in _c.Counter(
+                r["section"].split("::")[0].strip()[:34] for r in unnamed
+        ).most_common():
+            print("   %-36s %d" % (sec, n))
 
     if not bad and not late and not undated and not phantom:
         print("\nNo row rests on a bare tick, every re-read date is in "
