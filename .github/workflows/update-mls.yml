@@ -93,6 +93,18 @@ jobs:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: node update-housing-history.js
 
+      # The Haverhill "Band" panel: the town against its true municipal
+      # abutters. update-town-band.py had NO job of any kind until 2026-11-22 --
+      # it writes haverhill-market-report.html, which this workflow already
+      # stages, and needs the BRIDGE_TOKEN this workflow already holds, so it
+      # belongs here rather than in a second job racing for the same token and
+      # the same push. Its page stamp was 106 days old against a 240-day limit,
+      # ageing toward a failure no job could have cleared.
+      - name: Refresh the town band panel
+        env:
+          BRIDGE_TOKEN: ${{ secrets.BRIDGE_TOKEN }}
+        run: python update-town-band.py
+
       - name: Check for changes
         id: changes
         # Runs even when a step above failed. Same reasoning as update-all.yml,

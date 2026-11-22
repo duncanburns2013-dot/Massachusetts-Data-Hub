@@ -1,0 +1,75 @@
+# .github/workflows/update-gold-reserve.yml
+#
+# US Treasury gold reserve, from Treasury's own Fiscal Data API:
+#   v2/accounting/od/gold_reserve   (no key required)
+#
+# Treasury publishes the Status Report of U.S. Government Gold Reserve monthly.
+#
+# ADDED 2026-11-22. update-gold-reserve.py was written on 2026-10-21 to replace
+# five register rows that each carried a bare hand-verified tick -- its own
+# docstring says "right when a human last looked" is the state that let a wrong
+# HomeBASE figure keep a verified tick for six weeks. It then had no workflow,
+# so the rows it was meant to own were written once and never again, and
+# data/gold-reserve-latest.json was in no freshness list either: a feed nothing
+# wrote and nothing aged, behind a figure check-consistency does compare.
+# The cure for a hand-held figure cannot itself be hand-held.
+#
+# Gold holdings have in fact been flat since 2012, so this will usually change
+# nothing -- which is the point. A run that writes no bytes still proves the
+# series was checked, and if the holdings ever do move, nobody has to notice.
+
+name: Update Treasury gold reserve
+
+on:
+  schedule:
+    - cron: '35 12 6 * *'   # 07:35 ET on the 6th, after the monthly status report
+  workflow_dispatch:
+
+jobs:
+  update-gold-reserve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    concurrency:
+      group: push-to-main
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Refresh gold reserve holdings
+        run: python update-gold-reserve.py
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet data/gold-reserve-latest.json MASTER_DATA.md \
+            && echo "changed=false" >> $GITHUB_OUTPUT \
+            || echo "changed=true"  >> $GITHUB_OUTPUT
+
+      - name: Commit and push
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/gold-reserve-latest.json MASTER_DATA.md
+          git commit -m "Auto-update: Treasury gold reserve $(date +'%B %Y')"
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Push succeeded on attempt $attempt"
+              exit 0
+            fi
+            echo "Push attempt $attempt rejected - pulling latest and rebasing"
+            if ! git pull --rebase origin main; then
+              git rebase --abort || true
+              echo "::notice::Another run already published this edition - skipping, nothing lost."
+              exit 0
+            fi
+          done
+          echo "::error::Push failed after 5 attempts"
+          exit 1

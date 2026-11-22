@@ -56,6 +56,13 @@ DATA = [
     # PRIM reports the PRIT fiscal-year balance and net return once a year, in
     # its August quarterly update. 400 days so a missed August is impossible to
     # ignore. The typed version of these cards sat on FY2024 for two years.
+    # Treasury publishes the Status Report of U.S. Government Gold Reserve
+    # monthly, and update-gold-reserve.py reads it from the Fiscal Data API.
+    # This file was in NO freshness list until 2026-11-22 while its script had
+    # no workflow either: nothing wrote it and nothing aged it, behind a figure
+    # check-consistency.py does compare. 45 days is one cycle plus slack.
+    ("data/gold-reserve-latest.json", 45,
+     "monthly Treasury gold status report; update-gold-reserve.py"),
     ("data/prit-latest.json",           400,  "PRIM publishes FY figures each August"),
     # EOHLC reissues the compliance sheet and the 3A development tracker every
     # few weeks and the filenames carry the edition date, so a stalled feed
