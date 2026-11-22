@@ -2,7 +2,51 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="data-checked" content="2026-05-01"><!-- bump when this page is reconciled against its publisher; scripts/check-freshness.py ages it -->
+<meta name="data-checked" content="2026-11-22"><!-- bump when this page is reconciled against its publisher; scripts/check-freshness.py ages it -->
+<!-- meta.currency, checked 2026-11-22. Says what was ACTUALLY reconciled, source by source.
+
+     The 2026-05-01 stamp was already wrong before today: the page carries MCAS 2026,
+     which DESE does not release until the autumn, so it was refreshed after May and the
+     stamp was left behind. It then aged from the wrong date and showed as the most
+     neglected page on the site at 205 days.
+
+     CORRECTED TODAY -- Boston property tax rates, both classes, FY2019-FY2026.
+     Source: City of Boston, Residential & Commercial Tax Rates (the FY26 Tax Rate
+     History PDF), read 2026-11-22. The page had a hand-built series with 6 of 8
+     residential points and 7 of 8 commercial points wrong, and FY2026 marked "(est.)"
+     with the commercial rate FALLING to $23.80. The City publishes $26.96, up from
+     $25.96: the commercial line ran the wrong way for eight years and the chart was
+     captioned "commercial share erodes -- diverging lines" on the strength of it. The
+     $800K bill series, the YoY column and the cumulative-hike sentence all moved with
+     it ($816 -> $832, $1,472 -> $1,488, +17.4% -> +17.6%). Residential FY2025 and
+     FY2026 were right all along, which is how the error survived a look.
+
+     NEWEST AVAILABLE, verified today:
+       City of Boston ACFRs through FY2025. The FY2025 ACFR was transmitted
+         21 January 2026; FY2026 (year ended 30 June 2026) is due around January 2027.
+       Employee Earnings CY2019-CY2025. data.boston.gov CKAN shows the newest resource
+         modified 2026-03-02; the series publishes each February or March.
+       MCAS 2026 (DESE). Matches data/mcas-latest.json, school_year 2026, checked
+         2026-11-20.
+       Boston Assessing FY2016-FY2026 assessed values, and the tax rates above.
+       MLS PIN commercial, as of 14 October 2026.
+
+     A RELEASE BEHIND, found today and NOT fixed -- each needs a data refresh, not a
+     stamp, and none of it is corrected by this visit:
+       FBI UCR 2024, behind the crime sections. The FBI has published "Reported Crimes
+         in the Nation, 2025" with a 2025 Summary on the Crime Data Explorer.
+       311 at FY2024. data.boston.gov CKAN carries 311 Service Requests for 2025
+         (complete) and 2026 (modified 2026-11-21).
+       Census ACS 2023, the neighbourhood income column in the 311 equity table. This
+         hub’s own data/census-latest.json is already on acs_vintage 2024, so the page
+         contradicts a feed sitting beside it.
+
+     NOT verified on this visit: ICE ERO Boston, Vera, Globe and GBH citations, and the
+     Boston Retirement System actuarial valuations.
+
+     The 25 /*@anchor*/ markers and 8 data-field attributes on this page are written by
+     NOTHING -- no script, workflow or data file references one. They carry the house
+     substitution convention and no substitution. --><!-- bump when this page is reconciled against its publisher; scripts/check-freshness.py ages it -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="canonical" href="https://massachusettsdatahub.com/all-things-boston.html">
 <link rel="icon" href="https://massachusettsdatahub.com/favicon.svg" type="image/svg+xml">
@@ -564,20 +608,12 @@ tr:hover{background:rgba(15,41,66,.02)}.tg{background:rgba(15,41,66,.06);font-we
 <div class="g g2"><div class="cd"><h3>Average Sale Price — All Types (2018–2026)</h3><p class="cs">Boston MLS PIN YTD sold data</p><div class="cw"><canvas id="h1"></canvas></div></div><div class="cd"><h3>Condo Months Supply — Approaching Buyer's Market</h3><p class="cs">6.0 = balanced market. Boston condos at 5.58.</p><div class="cw"><canvas id="h2"></canvas></div></div></div>
 <div class="g g2"><div class="cd"><h3>Average Rent ($/Mo) — Boston</h3><p class="cs">MLS PIN leased data. COVID dip 2021, then snap-back.</p><div class="cw"><canvas id="h3"></canvas></div></div><div class="cd"><h3>Days to Offer — Market Speed</h3><p class="cs">Lower = hotter market. All types slowing.</p><div class="cw"><canvas id="h4"></canvas></div></div></div>
 <div class="g g2"><div class="cd"><h3>Closed Units YTD — Volume Declining</h3><div class="cw"><canvas id="h5"></canvas></div></div><div class="cd"><h3>Condo Listing Inventory (May 14 snapshot)</h3><p class="cs">Inventory nearly doubled since 2022</p><div class="cw"><canvas id="h6"></canvas></div></div></div>
-<div class="g g2"><div class="cd"><h3>Residential vs. Commercial Tax Rate ($/1,000 assessed value)</h3><p class="cs">Residential climbing as commercial share erodes — diverging lines, converging burden</p><div class="cw"><canvas id="h7"></canvas></div></div><div class="cd"><h3>Annual Tax Bill — Owner at $800K Assessment</h3><p class="cs">Rate × $800K constant basis. Pure rate impact, appreciation excluded. FY2026 estimated.</p><div class="cw"><canvas id="h8"></canvas></div></div></div>
-<div class="co amber"><strong>The homeowner number:</strong> At FY2019's rate of $10.56, an $800K home cost <strong>$8,448/year</strong> in property taxes. At FY2025's $11.58 rate it's <strong>$9,264</strong> — a $816 increase on the same assessed value. The estimated FY2026 rate of $12.40 (driven by the $800M commercial assessment decline) pushes that to <strong>$9,920</strong> — a <strong>~$1,472 cumulative hike (+17.4%) since FY2019</strong>, purely from the rate, before any appreciation in your home's value. Source: Boston Assessing Dept.</div>
+<div class="g g2"><div class="cd"><h3>Residential vs. Commercial Tax Rate ($/1,000 assessed value)</h3><p class="cs">Both classes rose since FY2019: residential +17.6% to $12.40, commercial +7.8% to $26.96</p><div class="cw"><canvas id="h7"></canvas></div></div><div class="cd"><h3>Annual Tax Bill — Owner at $800K Assessment</h3><p class="cs">Rate × $800K constant basis. Pure rate impact, appreciation excluded. FY2026 rates are final.</p><div class="cw"><canvas id="h8"></canvas></div></div></div>
+<div class="co amber"><strong>The homeowner number:</strong> At FY2019's rate of $10.54, an $800K home cost <strong>$8,432/year</strong> in property taxes. At FY2025's $11.58 rate it's <strong>$9,264</strong> — a $832 increase on the same assessed value. The FY2026 rate of $12.40 pushes that to <strong>$9,920</strong> — a <strong>$1,488 cumulative hike (+17.6%) since FY2019</strong>, purely from the rate, before any appreciation in your home's value. Source: Boston Assessing Dept.</div>
 <div class="cd"><h3>Boston Property Tax Rates by Fiscal Year</h3>
-<table><thead><tr><th>Fiscal Year</th><th class="r">Residential Rate<br><span style="font-weight:400;font-size:0.6875rem">$/1,000 AV</span></th><th class="r">Commercial Rate<br><span style="font-weight:400;font-size:0.6875rem">$/1,000 AV</span></th><th class="r">Est. Bill<br><span style="font-weight:400;font-size:0.6875rem">$800K home</span></th><th class="r">Resi YoY</th></tr></thead><tbody>
-<tr><td>FY2019</td><td class="r">$10.56</td><td class="r">$25.36</td><td class="r">$8,448</td><td class="r">—</td></tr>
-<tr><td>FY2020</td><td class="r">$10.88</td><td class="r">$25.69</td><td class="r">$8,704</td><td class="r red">+3.0%</td></tr>
-<tr><td>FY2021</td><td class="r">$10.56</td><td class="r">$24.92</td><td class="r">$8,448</td><td class="r green">−2.9%</td></tr>
-<tr><td>FY2022</td><td class="r">$10.74</td><td class="r">$25.21</td><td class="r">$8,592</td><td class="r red">+1.7%</td></tr>
-<tr><td>FY2023</td><td class="r">$10.74</td><td class="r">$24.68</td><td class="r">$8,592</td><td class="r">flat</td></tr>
-<tr><td>FY2024</td><td class="r">$10.88</td><td class="r">$24.41</td><td class="r">$8,704</td><td class="r red">+1.3%</td></tr>
-<tr><td>FY2025</td><td class="r b">$11.58</td><td class="r">$24.17</td><td class="r b">$9,264</td><td class="r red">+6.4%</td></tr>
-<tr><td>FY2026 (est.)</td><td class="r red">~$12.40</td><td class="r green">~$23.80</td><td class="r red">~$9,920</td><td class="r red">~+7.1%</td></tr>
-</tbody></table>
-<p class="src">Source: Boston Assessing Department, annual tax rate classification hearings FY2019–FY2025. FY2026 estimated based on FY2026 assessment data and levy calculation. Residential exemption not applied — rates shown are gross class rates. Actual bills for owner-occupants who claim the exemption are lower.</p></div>
+<table><thead><tr><th>Fiscal Year</th><th class="r">Residential Rate<br><span style="font-weight:400;font-size:0.6875rem">$/1,000 AV</span></th><th class="r">Commercial Rate<br><span style="font-weight:400;font-size:0.6875rem">$/1,000 AV</span></th><th class="r">Bill<br><span style="font-weight:400;font-size:0.6875rem">$800K home</span></th><th class="r">Resi YoY</th></tr></thead><tbody>
+<tr><td>FY2019</td><td class="r">$10.54</td><td class="r">$25.00</td><td class="r">$8,432</td><td class="r ">—</td></tr> <tr><td>FY2020</td><td class="r">$10.56</td><td class="r">$24.92</td><td class="r">$8,448</td><td class="r red">+0.2%</td></tr> <tr><td>FY2021</td><td class="r">$10.67</td><td class="r">$24.55</td><td class="r">$8,536</td><td class="r red">+1.0%</td></tr> <tr><td>FY2022</td><td class="r">$10.88</td><td class="r">$24.98</td><td class="r">$8,704</td><td class="r red">+2.0%</td></tr> <tr><td>FY2023</td><td class="r">$10.74</td><td class="r">$24.68</td><td class="r">$8,592</td><td class="r green">−1.3%</td></tr> <tr><td>FY2024</td><td class="r">$10.90</td><td class="r">$25.27</td><td class="r">$8,720</td><td class="r red">+1.5%</td></tr> <tr><td>FY2025</td><td class="r b">$11.58</td><td class="r">$25.96</td><td class="r b">$9,264</td><td class="r red">+6.2%</td></tr> <tr><td>FY2026</td><td class="r b">$12.40</td><td class="r">$26.96</td><td class="r b">$9,920</td><td class="r red">+7.1%</td></tr> </tbody></table>
+<p class="src">Source: City of Boston, <em>Residential &amp; Commercial Tax Rates</em> (FY26 Tax Rate History), boston.gov/sites/default/files/file/2025/12/FY26 Tax Rate History_1.pdf, read 2026-11-22 — the City’s own published history, every year final. CORRECTED 2026-11-22: this table and both charts previously carried a hand-built series in which 6 of 8 residential points and 7 of 8 commercial points were wrong, and FY2026 was an estimate showing the commercial rate FALLING to $23.80. The City’s figure is $26.96, up from $25.96, so the commercial line ran the wrong way and the chart was captioned accordingly. Residential exemption not applied — rates shown are gross class rates. Actual bills for owner-occupants who claim the exemption are lower.</p></div>
 <table><thead><tr><th>Year</th><th class="r">SF Avg Sale</th><th class="r">SF Units</th><th class="r">Condo Avg</th><th class="r">Condo Units</th><th class="r">Multi Avg</th><th class="r">Rent/Mo</th></tr></thead><tbody>
 <tr><td>2018</td><td class="r">$813K</td><td class="r">242</td><td class="r">$889K</td><td class="r">1,361</td><td class="r">$989K</td><td class="r">$2,934</td></tr>
 <tr><td>2019</td><td class="r">$896K</td><td class="r">265</td><td class="r">$814K</td><td class="r">1,254</td><td class="r">$1.18M</td><td class="r">$2,940</td></tr>
@@ -1020,15 +1056,15 @@ sc('h3',{type:'line',data:{labels:HY,datasets:[{data:[2934,2940,3032,2782,3243,3
 sc('h4',{type:'line',data:{labels:HY,datasets:[{label:'SF',data:[36,37,31,31,26,44,30,37,33],borderColor:C.r,borderWidth:2.5,pointRadius:4,tension:.3},{label:'Condo',data:[34,42,44,48,37,41,40,45,49],borderColor:C.b,borderWidth:2.5,pointRadius:4,tension:.3},{label:'Multi',data:[29,36,46,39,37,40,35,35,40],borderColor:C.g,borderWidth:2.5,pointRadius:4,tension:.3}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{grid:{color:G}},x:{grid:{display:0}}}}});
 sc('h5',{type:'bar',data:{labels:HY,datasets:[{label:'SF',data:[242,265,206,310,286,225,217,210,195],backgroundColor:C.r,borderRadius:4},{label:'Condo',data:[1361,1254,1318,1909,1679,1141,1047,1131,1040],backgroundColor:C.b,borderRadius:4},{label:'Multi',data:[208,222,183,239,235,171,190,187,169],backgroundColor:C.g,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{grid:{color:G}},x:{grid:{display:0}}}}});
 sc('h6',{type:'bar',data:{labels:HY,datasets:[{data:[736,955,799,1165,934,899,1029,1441,1595],backgroundColor:C.b,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{grid:{color:G}},x:{grid:{display:0}}}}});
-var TY=['FY19','FY20','FY21','FY22','FY23','FY24','FY25','FY26*'];
+var TY=['FY19','FY20','FY21','FY22','FY23','FY24','FY25','FY26'];
 sc('h7',{type:'line',data:{labels:TY,datasets:[
-  {label:'Residential Rate ($/1K)',data:[10.56,10.88,10.56,10.74,10.74,10.88,11.58,12.40],borderColor:C.r,backgroundColor:C.rA,fill:1,tension:.3,borderWidth:3,pointRadius:5},
-  {label:'Commercial Rate ($/1K)',data:[25.36,25.69,24.92,25.21,24.68,24.41,24.17,23.80],borderColor:C.b,backgroundColor:C.bA,fill:1,tension:.3,borderWidth:2.5,pointRadius:4}
+  {label:'Residential Rate ($/1K)',data:[10.54,10.56,10.67,10.88,10.74,10.90,11.58,12.40],borderColor:C.r,backgroundColor:C.rA,fill:1,tension:.3,borderWidth:3,pointRadius:5},
+  {label:'Commercial Rate ($/1K)',data:[25.00,24.92,24.55,24.98,24.68,25.27,25.96,26.96],borderColor:C.b,backgroundColor:C.bA,fill:1,tension:.3,borderWidth:2.5,pointRadius:4}
 ]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{min:8,ticks:{callback:function(v){return'$'+v.toFixed(2)}},grid:{color:G}},x:{grid:{display:0}}}}});
 sc('h8',{type:'bar',data:{labels:TY,datasets:[{
   label:'Annual Tax Bill — $800K Home',
-  data:[8448,8704,8448,8592,8592,8704,9264,9920],
-  backgroundColor:function(c){var d=[8448,8704,8448,8592,8592,8704,9264,9920];return d[c.dataIndex]>=9500?C.r:d[c.dataIndex]>=8900?C.am:C.b},
+  data:[8432,8448,8536,8704,8592,8720,9264,9920],
+  backgroundColor:function(c){var d=[8432,8448,8536,8704,8592,8720,9264,9920];return d[c.dataIndex]>=9500?C.r:d[c.dataIndex]>=8900?C.am:C.b},
   borderRadius:4
 }]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0},tooltip:{callbacks:{label:function(c){return'$'+c.raw.toLocaleString()+'/yr'}}}},scales:{y:{min:7800,ticks:{callback:function(v){return'$'+v.toLocaleString()}},grid:{color:G}},x:{grid:{display:0}}}}});
 }

@@ -1377,11 +1377,27 @@ Figures on `all-things-boston.html`. The page states its sources in prose rather
 |--------|--------|---------|
 | Department expenditure, budgeted vs actual | City of Boston ACFR, Schedule of Expenditures Compared to Budget (budgetary basis) | FY2020–FY2025 |
 | Employee payroll | City of Boston Employee Earnings Reports, data.boston.gov | CY2019–CY2025 |
-| Crime | FBI and Boston Police Department figures | — |
+| Crime | FBI and Boston Police Department figures | **FBI UCR 2024 on the page; a release behind.** The FBI has published *Reported Crimes in the Nation, 2025*, with a 2025 summary on the Crime Data Explorer (checked 2026-11-22). Needs a data refresh, not a date. |
 | Schools | Massachusetts DESE School & District Profiles | — |
 | Immigration enforcement | ICE ERO Boston, with UC Berkeley, the Globe and GBH reporting | — |
-| 311 service requests | data.boston.gov | — |
+| 311 service requests | data.boston.gov | **FY2024 on the page; a release behind.** The CKAN API lists 311 Service Requests for 2025 (complete) and 2026 (modified 2026-11-21), checked 2026-11-22. Needs a data refresh. |
 | Assessed property values | City of Boston Assessing Department | — |
+
+**Boston property tax rates.** Carried separately because they are the one set of figures
+on that page with a published, final, year-by-year authority, and because the page had them
+wrong. Until 2026-11-22 `all-things-boston.html` showed a hand-built series in which 6 of 8
+residential points and 7 of 8 commercial points did not match the City, with FY2026 marked
+"(est.)" and the commercial rate falling to $23.80 against the City’s $26.96. The commercial
+line therefore ran the wrong way across eight years, and the chart was captioned
+"commercial share erodes" because of it. There was no register row for any of it.
+
+| Figure | Value | Source | How it is held up |
+|---|---|---|---|
+| **Boston residential tax rate FY2026** | **$12.40** per $1,000 assessed | City of Boston, *Residential & Commercial Tax Rates* (FY26 Tax Rate History), boston.gov — read 2026-11-22; corroborated by the Assessing Department’s *How We Tax Your Property* page | ⏳ re-read by 2027-01-31 — the City sets classified rates at a December classification hearing, so FY2027 lands around then. |
+| **Boston commercial tax rate FY2026** | **$26.96** per $1,000 assessed | same | ⏳ re-read by 2027-01-31 — same hearing. Up from $25.96 in FY2025, which is the movement the page had inverted. |
+| Boston rate history FY2019–FY2026, residential | 10.54, 10.56, 10.67, 10.88, 10.74, 10.90, 11.58, 12.40 | same PDF, which gives every year back to FY1997 and is final for each | ⏳ re-read by 2027-01-31 — one row is appended each year; prior years do not move. |
+| Boston rate history FY2019–FY2026, commercial | 25.00, 24.92, 24.55, 24.98, 24.68, 25.27, 25.96, 26.96 | same | ⏳ re-read by 2027-01-31 — as above. |
+| Boston annual bill at $800K assessed, FY2019–FY2026 | $8,432 → $9,920 (+17.6%) | derived: residential rate × 800, gross of the residential exemption, which the page states | ⏳ re-read by 2027-01-31 — moves with the residential row above. |
 
 ---
 ## ⚖️ Corporate Penalties & Political Money

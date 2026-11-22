@@ -198,8 +198,8 @@ STAMPS = [
      r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 120,
      "agency releases, CTHRU, OCPF, FEC and the lobbying search; built in a research project and copied by hand, no updater"),
     ("all-things-boston.html",
-     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 400,
-     "City of Boston ACFR and data.boston.gov; hand-maintained"),
+     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 200,
+     "City of Boston ACFR and data.boston.gov; hand-maintained. 200d, not 400d: this page has FOUR annual sources landing in different months -- ACFR and the classified tax rates in Dec/Jan, Employee Earnings in Feb/Mar, MCAS in the autumn, FBI UCR in the autumn -- so one annual window cannot cover it"),
     ("commercial-re-dashboard.html",
      r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 150,
      "quarterly brokerage reports; hand-maintained, no updater. 150d, not 400d: the note always said quarterly while the limit was annual, so this page could sit THREE releases behind and stay green. One quarter plus six weeks for the brokerages to publish"),
@@ -259,6 +259,12 @@ NEXT_RELEASE = {
         "BEA Real Personal Consumption Expenditures by State and Real Personal "
         "Income by State, 2025 -- the release that carries RPP 2025. Date read "
         "off bea.gov/news/schedule on 2026-11-22, not inferred from last year."),
+    "all-things-boston.html": (
+        "2027-01-31",
+        "City of Boston ACFR for FY2026 (year ended 30 June 2026) and the FY2027 "
+        "classified tax rates. The FY2025 ACFR was transmitted 21 January 2026 and the "
+        "FY26 Tax Rate History is dated December 2025, so both land around January; "
+        "dates read off boston.gov 2026-11-22."),
     "pay-to-play-dashboard.html": (
         "2027-01-31",
         "SOS lobbyist disclosure for Jul-Dec 2026, due 15 January 2027. Deadlines "
