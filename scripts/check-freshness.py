@@ -192,8 +192,8 @@ STAMPS = [
      r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 400,
      "CMS/KFF/CHIA publish annually; hand-maintained, no updater"),
     ("pay-to-play-dashboard.html",
-     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 400,
-     "OCPF and OpenSecrets; hand-maintained, no updater"),
+     r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 220,
+     "OCPF and OpenSecrets; hand-maintained, no updater. 220d, not 400d: the governing source is the SOS lobbyist register, and MA lobbying disclosure is SEMI-annual (due 15 Jul and 15 Jan), so an annual window is two releases wide"),
     ("corporate-ledger.html",
      r'name="data-checked" content="([^"]+)"', "%Y-%m-%d", 120,
      "agency releases, CTHRU, OCPF, FEC and the lobbying search; built in a research project and copied by hand, no updater"),
@@ -259,6 +259,12 @@ NEXT_RELEASE = {
         "BEA Real Personal Consumption Expenditures by State and Real Personal "
         "Income by State, 2025 -- the release that carries RPP 2025. Date read "
         "off bea.gov/news/schedule on 2026-11-22, not inferred from last year."),
+    "pay-to-play-dashboard.html": (
+        "2027-01-31",
+        "SOS lobbyist disclosure for Jul-Dec 2026, due 15 January 2027. Deadlines "
+        "confirmed on sec.state.ma.us/divisions/lobbyist/lobbying-faqs.htm 2026-11-22: "
+        "15 July covers Jan-Jun, 15 January covers Jul-Dec of the preceding year. Scrape "
+        "AFTER the deadline -- one taken a week early read $0 for all 162 firms."),
     "commercial-re-dashboard.html": (
         "2027-01-31",
         "Q4 2026 brokerage market reports. The page is at Q3 2026 with an "
@@ -278,6 +284,14 @@ NEXT_RELEASE = {
 # Failing on them would turn CI red on a backlog nobody chose, so they are
 # listed every run instead, the way stat-baseline.json records its own: a
 # number that should fall and must never quietly rise.
+# Dates a page states for its own data collection: "Collected 2026-09-27",
+# "retrieved":"2026-11-20", "read 2026-11-22". Used by the stamp invariant in
+# main(); only a date NEWER than the stamp is a problem, so an archival note
+# about an old retrieval cannot trip it.
+COLLECTED_RE = re.compile(
+    r'(?:[Cc]ollected|[Ss]craped|[Rr]etrieved|[Rr]ead)[^<>{}]{0,24}?'
+    r'(\d{4}-\d{2}-\d{2})')
+
 REVIEW_DAYS = 180
 HAND_MAINTAINED = {
     "tax-burden-dashboard.html", "tax-burden-nh-comparison.html",
@@ -470,7 +484,8 @@ def main() -> int:
 
     for rel, pat, fmt, max_age, why in STAMPS:
         p = REPO / rel
-        m = re.search(pat, p.read_text(encoding="utf-8")) if p.exists() else None
+        body = p.read_text(encoding="utf-8") if p.exists() else ""
+        m = re.search(pat, body) if body else None
         if not m:
             stale.append((rel, "STAMP NOT FOUND", max_age, why))
             rows.append((rel, "no stamp", max_age, "STALE"))
@@ -484,6 +499,39 @@ def main() -> int:
         age = (TODAY - d).days
         bad = age > max_age
         rows.append((f"{rel} (stamp)", f"{age}d", max_age, "STALE" if bad else "ok"))
+
+        # A STAMP CANNOT PREDATE THE DATA IT COVERS.  (added 2026-11-22)
+        #
+        # For these pages data-checked means "a human reconciled this page on
+        # this date", so it can never be older than a collection date the page
+        # itself publishes. When it is, the page claims to be staler than it is,
+        # and this watchdog then ages it from the wrong date.
+        #
+        # pay-to-play-dashboard.html was stamped 2026-02-01 while carrying
+        # "Collected 2026-09-27" in its own source lines and a footer reading
+        # "Data compiled February 2026". It was refreshed in September and its
+        # freshness claims were left behind, so it reported itself eight months
+        # staler than it was, sat at 294 days against a 400-day limit, and
+        # looked like the most neglected page on the site when it was not.
+        #
+        # Scoped to HAND_MAINTAINED on purpose. Other stamps are VINTAGES, not
+        # check dates: tax-budget-dashboard.html stamps the covered month of its
+        # oldest EIA vintage and energy-dashboard.html the week of the fuel
+        # survey, so a newer collection date in those files is normal and this
+        # rule would be nonsense applied to them.
+        if rel in HAND_MAINTAINED:
+            found = [datetime.date.fromisoformat(x)
+                     for x in COLLECTED_RE.findall(body)]
+            newest = max(found) if found else None
+            if newest and newest > d:
+                rows[-1] = (f"{rel} (stamp)", f"{age}d", max_age, "STAMP OLD")
+                stale.append((rel,
+                              f"stamp says {d} but the page publishes data "
+                              f"collected {newest}",
+                              max_age,
+                              "the stamp understates the page; bump it to the "
+                              "collection date and say in meta.currency what "
+                              "was actually reconciled"))
         if rel in HAND_MAINTAINED and age > REVIEW_DAYS:
             unreviewed.append((rel, d, age))
         if bad:

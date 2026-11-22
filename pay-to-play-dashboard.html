@@ -2,7 +2,39 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="data-checked" content="2026-02-01"><!-- bump when this page is reconciled against its publisher; scripts/check-freshness.py ages it -->
+<meta name="data-checked" content="2026-11-22"><!-- bump when this page is reconciled against its publisher; scripts/check-freshness.py ages it -->
+<!-- meta.currency, checked 2026-11-22. Says what was ACTUALLY reconciled, because the
+     stamp above covers the whole page and this visit did not re-collect any of it.
+
+     The stamp previously read 2026-02-01 while the lobbying registry data on this page
+     was collected 2026-09-27. The page was refreshed in September and its own freshness
+     claims, here and in the footer, were left behind: it reported itself eight months
+     staler than it was, and check-freshness.py aged it from the wrong date.
+
+     SOS Lobbyist Public Search, registration year 2026, first-half filings.
+     Collected 2026-09-27 via The-Peoples-Audit userscript; the SOS blocks server-side
+     fetches, so no workflow can own this. NEWEST AVAILABLE: disclosure is semi-annual,
+     due 15 July for Jan-Jun and 15 January for Jul-Dec of the preceding year
+     (sec.state.ma.us/divisions/lobbyist/lobbying-faqs.htm, read 2026-11-22). The next
+     new data is therefore the 15 January 2027 filing, and a scrape taken before that
+     deadline reads $0 for every firm, as one taken 2026-07-08 did. NOT re-scraped today.
+
+     OpenSecrets MA State Lobbying 2015-2025, behind four charts. This is a SECONDARY
+     aggregation of the same state filings the SOS register above holds primary, and the
+     page carries SOS-derived annual totals for 2016-2026 alongside it. Those charts
+     should be rebuilt from the primary source rather than re-fetched from the
+     aggregator; flagged, not done. NOT re-fetched today.
+
+     OCPF donation analysis: 4,298 donations from employees of three firms, 2015-2026,
+     plus the Philbin 2024 records. Compiled February 2026, which is what the footer
+     date refers to. An analysis of closed periods, not a running figure. NOT re-run
+     today, and the 2026 window will have grown since.
+
+     Boston Globe (April 2025), NEFAC and the Globe survey (March 2025), MGL c.55 s.7A:
+     fixed citations to published work, not figures that move.
+
+     Neither OpenSecrets nor OCPF is linked anywhere on this page, only named in prose,
+     which makes every figure resting on them slower to check than it should be. --><!-- bump when this page is reconciled against its publisher; scripts/check-freshness.py ages it -->
   <!-- Open Graph / Social Cards -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Massachusetts Data Hub">
@@ -607,7 +639,7 @@ footer a:hover{color:var(--gold)}
 <footer>
   <a href="./">← Back to Massachusetts Data Hub</a><br>
   <span>Sources: OpenSecrets (State Lobbying Data 2015–2025), OCPF Campaign Finance Database (ML Strategies, Smith Costello & Crawford, Bay State Strategies Group donations), Secretary of the Commonwealth (MA Lobbying Reports), Boston Globe, New England First Amendment Coalition, MGL Ch. 55</span><br>
-  <span>Data compiled February 2026 · All data from official government and public disclosure sources</span>
+  <span>Lobbying registry data collected 27 September 2026 from the Secretary of the Commonwealth, covering registration year 2026 first-half filings — the newest available, as disclosure is semi-annual and the next reports are due 15 January 2027. OCPF donation analysis compiled February 2026. Publisher currency last checked 22 November 2026. All data from official government and public disclosure sources.</span>
 </footer>
 
 <script>

@@ -16,7 +16,7 @@
   <meta name="twitter:description" content="What is actually expensive in Massachusetts, where in the state it is expensive, and what a household needs to earn — from BEA Regional Price Parities and the MIT Living Wage Calculator.">
   <meta name="twitter:image" content="https://massachusettsdatahub.com/cards/affordability-dashboard.jpg">
   <meta name="description" content="What is actually expensive in Massachusetts, where in the state it is expensive, and what a household needs to earn — from BEA Regional Price Parities and the MIT Living Wage Calculator.">
-<meta name="data-checked" content="2026-11-12"><!-- bump when this page is reconciled against its publisher; scripts/check-freshness.py ages it -->
+<meta name="data-checked" content="2026-11-20"><!-- bump when this page is reconciled against its publisher; scripts/check-freshness.py ages it -->
 <!-- meta.currency, checked 2026-11-12. Says what was ACTUALLY reconciled, because
      the stamp above covers the page and this visit only covered one of its sources.
      ACS 1-year      2025. VERIFIED today against api.census.gov/data/2025/acs/acs1
@@ -27,6 +27,15 @@
                      so this page goes a release behind that day. NOT re-fetched today.
      BEA per-capita income via FRED   NOT verified on this visit.
      MIT Living Wage                  NOT verified on this visit.
+     ACS by state     Household income by state pulled from
+                      api.census.gov/data/2025/acs/acs1 (B19013_001E, state:*) on
+                      2026-11-20, eight days after this reconciliation; the col-data
+                      blob records it as household_by_state_retrieved. The stamp was
+                      left at 2026-11-12 and so understated the page. Moved to
+                      2026-11-20 to match, on 2026-11-22, when check-freshness.py
+                      began refusing a hand-maintained stamp that predates a
+                      collection date the page itself publishes. Nothing was re-read
+                      on 11-22; the rest of this note stands as written on 11-12.
 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="canonical" href="https://massachusettsdatahub.com/affordability-dashboard.html">
