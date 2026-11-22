@@ -352,11 +352,11 @@ Read 2026-11-22. Shown on tax-budget-dashboard.html (budget tab, `PUBLIC_MONEY`)
 | SSI recipients, MA | 162,498, of which 49,288 also get OASDI | SSA, SSI Recipients by State and County, Dec 2025, table 1 | 🔒 same |
 | Social Security + SSI, unduplicated | 1,522,242 | derived: 1,409,032 + 162,498 − 49,288 | ⏳ re-read by 2027-09-30, when SSA publishes Dec 2026 |
 | Public pension retired members, 104 PERAC systems | 245,580 | PERAC 2025 Annual Report (sum of 105 board profiles; Boston City and Teachers separate) | ⏳ re-read by 2027-09-30, the PERAC 2026 report. Counts retirees wherever they live |
-| Government jobs, MA (federal 42,000; state 137,600; local 297,300) | 476,900 | BLS CES SMS25000009000000001, Oct 2026, SA, preliminary | ⏳ re-read monthly; preliminary until revised |
-| Private-sector jobs, MA | 3,238,100 | BLS CES SMS25000000500000001, Oct 2026, SA, preliminary | ⏳ re-read monthly; preliminary until revised |
-| MassHealth members | 1,866,686 (children 0–20: 673,654) | MassHealth Caseload Snapshot, 31 Jul 2026 (xlsx) | ⏳ re-read monthly, the next snapshot |
-| Medicare–Medicaid dual eligibles, MA | 377,930 (full 287,701; partial 90,229) | CMS Medicare Monthly Enrollment, Jul 2026 | ⏳ re-read monthly |
-| Public money, total | 3,733,478 (53.6% of public + private) | derived; 48.6% without MassHealth children | ⏳ moves with the rows above |
+| Government jobs, MA (federal 42,000; state 137,600; local 297,300) | 476,900 | BLS CES SMS25000009000000001, Oct 2026, SA, preliminary | ⏳ re-read by 2026-12-31 — BLS publishes MA state employment monthly; the November reference month lands 2026-12-18 per `data/bls-release-schedule.json`. Preliminary until revised. Verified against the BLS API 2026-11-22: SMS25000009000000001 = 476.9k for Oct 2026, with federal 42.0k, state 137.6k, local 297.3k, so this row is at the newest published month. |
+| Private-sector jobs, MA | 3,238,100 | BLS CES SMS25000000500000001, Oct 2026, SA, preliminary | ⏳ re-read by 2026-12-31 — same CES release and schedule as the row above. Verified against the BLS API 2026-11-22: SMS25000000500000001 = 3,238.1k for Oct 2026, and 3,238.1 + 476.9 = 3,715.0k, reconciling to MA total nonfarm. |
+| MassHealth members | 1,866,686 (children 0–20: 673,654) | MassHealth Caseload Snapshot, 31 Jul 2026 (xlsx) | ⏳ re-read by 2026-12-31 — monthly snapshot. Verified 2026-11-22 against the publisher’s own index, mass.gov/lists/masshealth-enrollment-and-caseload-metrics: July 2026 is the newest of 218 files listed, so a four-month-old date here is the publisher’s lag, not ours. |
+| Medicare–Medicaid dual eligibles, MA | 377,930 (full 287,701; partial 90,229) | CMS Medicare Monthly Enrollment, Jul 2026 | ⏳ re-read by 2026-12-31 — CMS Medicare Monthly Enrollment. Verified 2026-11-22 on data.cms.gov: July 2026 is still the newest month published, so this is current despite the gap. |
+| Public money, total | 3,733,478 (53.6% of public + private) | derived; 48.6% without MassHealth children | ⏳ re-read by 2026-12-31 — derived; it moves with the four rows above and carries their earliest date. No independent source to re-read. |
 
 Not removable (no official overlap count): public retirees also on Social Security; SSI recipients on MassHealth (up to 113,210 SSI-only); MassHealth members who also hold a job. SNAP (878,922, DTA Aug 2026) left out because it mostly overlaps MassHealth.
 
@@ -947,7 +947,7 @@ outturn ($64.0B) minus the signed headline ($57.8B), two different scopes.
 | **Money actually spent** | $39.879B | $64.196B | **+61.0%** | CTHRU `kv7m-35wn`, `total_expenses` by fiscal year, Transfer/XFR accounts excluded at both ends (read 2026-11-22; feed refreshed 2026-11-20) | ⏳ re-read by 2027-02-28 — CTHRU posts daily but FY2026 is still settling; the Comptroller's SBFR lands Jan–Feb 2027 |
 | Signed budgets (GAA) | $40.197B | $60.974B | +51.7% | `gaabudgets` workbooks, headline scope — see the GAA table above | 🔒 enacted totals for closed years |
 | Taxpayer income | $472.389B | $719.960B | **+52.4%** | BEA Total Personal Income in Massachusetts via FRED `MAOTOT`, quarterly SAAR, averaged Jul–Jun (read 2026-11-22) | ⏳ re-read by 2027-10-31 — each autumn after BEA's Q2 release, which carries the annual update. Written 2026-11-22 with a date three weeks already past; caught by the lapse check added the same day, which is the whole reason that check now exists |
-| Inflation | 248.131 | 327.645 | +32.0% | BLS CPI-U US city average, SA (`CUSR0000SA0` / FRED `CPIAUCSL`), averaged Jul–Jun | ⏳ re-read annually once the fiscal year closes |
+| Inflation | 248.131 | 327.645 | +32.0% | BLS CPI-U US city average, SA (`CUSR0000SA0` / FRED `CPIAUCSL`), averaged Jul–Jun | ⏳ re-read by 2027-08-31 — the Jul–Jun average needs June CPI, which BLS publishes mid-July, so FY2027 is first computable in August 2027. FY2026 is closed and this figure is final for it. |
 
 > **The income figure moved 3.5 points in November 2026 and reversed a headline.**
 > It read +48.9% from a July 2026 retrieval. Re-reading on 2026-11-22 gave +52.4%.

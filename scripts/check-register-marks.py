@@ -60,6 +60,33 @@ def lapsed_rows(rows, today):
     return sorted(out, key=lambda t: t[0])
 
 
+def undated_rows(rows):
+    """Hourglass rows that name no date at all, added 2026-11-22.
+
+    The hourglass means "a human re-reads this, and here is when they are next
+    due". Six rows carried the first half and not the second:
+
+      | Government jobs, MA        | ... | <hourglass> re-read monthly; preliminary until revised |
+      | MassHealth members         | ... | <hourglass> re-read monthly, the next snapshot |
+      | Public money, total        | ... | <hourglass> moves with the rows above |
+      | Inflation                  | ... | <hourglass> re-read annually once the fiscal year closes |
+
+    Every one states a cadence. None states a deadline, so no date could pass
+    and nothing could ever ring -- the lapse check added earlier the same day
+    skipped them on `if not m: continue`, and check-freshness.py skipped them
+    too. "Re-read monthly" with no month is the bare tick this file was written
+    to abolish, wearing a longer sentence.
+
+    Five of the six were MONTHLY figures, which is the worst place for it: the
+    most volatile numbers on the site had the weakest mark on it. All six held
+    correct values when this was found, which is the point -- nothing was wrong
+    yet, and nothing would have said so when it was.
+    """
+    return [r for r in rows
+            if register.RECHECK in r["mark"] and not DATE_RE.search(r["mark"])]
+
+
+
 def main():
     rows = register.all_marked_rows()
     bad = [r for r in rows if TICK in r["mark"]]
@@ -71,10 +98,25 @@ def main():
     print(f"  bare hand tick        {c['hand']}")
     today = datetime.date.today()
     late = lapsed_rows(rows, today)
+    undated = undated_rows(rows)
 
-    if not bad and not late:
-        print("\nNo row rests on a bare tick, and no re-read date has passed.")
+    if not bad and not late and not undated:
+        print("\nNo row rests on a bare tick, every re-read date is in "
+              "the future, and every hourglass names one.")
         return 0
+
+    if undated:
+        print(f"\nFAIL: {len(undated)} hourglass row(s) name no re-read date.\n",
+              file=sys.stderr)
+        for r in undated:
+            print(f"  [{r['section'].split('::')[0].strip()[:26]}] "
+                  f"{r['label'][:46]}", file=sys.stderr)
+            print(f"      mark: {r['mark'][:88]}", file=sys.stderr)
+        print("\nA cadence is not a deadline. Give each one 're-read by "
+              "<YYYY-MM-DD>' from the publisher's own schedule -- and re-read "
+              "it NOW before setting that date, rather than dating a figure "
+              "nobody has looked at.\n", file=sys.stderr)
+
 
     if late:
         print(f"\nFAIL: {len(late)} row(s) are past their re-read date.\n",

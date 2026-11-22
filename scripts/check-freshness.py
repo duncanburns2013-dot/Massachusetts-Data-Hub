@@ -24,6 +24,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import register  # noqa: E402  -- the shape-agnostic register parser
+
 REPO = Path(__file__).resolve().parent.parent
 TODAY = datetime.date.today()
 
@@ -256,27 +259,49 @@ def check_register_rechecks() -> int:
     The whole point is that a forgotten row fails the build rather than
     sitting on the site looking checked.
     """
-    reg = REPO / "MASTER_DATA.md"
-    if not reg.exists():
-        return 0
-    lines = reg.read_text(encoding="utf-8").split("\n")
+    # SHAPE-AGNOSTIC  (changed 2026-11-22)
+    #
+    # This used to parse the register itself and skip any row whose cell count
+    # was not exactly 4:
+    #
+    #     cells = [c.strip() for c in line.strip("|").split("|")]
+    #     if len(cells) != 4:
+    #         continue
+    #
+    # 58 of the register's 140 hourglass rows sit in 5- and 6-column tables, so
+    # 41% of the rows this watchdog exists to age were silently invisible to it
+    # -- among them every row of the growth trio, the FY2026 revenue block, the
+    # household-income block, the energy policy-charge rows, and the two U-6
+    # rows. The skip was quiet: no count, no warning, nothing to notice.
+    #
+    # check-register-marks.py reads the same register through register.py,
+    # whose all_marked_rows() takes "every row of any shape, with its last cell
+    # -- where the mark lives", and that is why the lapse check added on
+    # 2026-11-22 saw all 140. Two parsers over one file, one of them wrong.
+    # This now uses the same one, so there is only one answer to what a row is.
+    #
+    # The 30-day warning below is the part that actually prevents a lapse
+    # rather than reporting one after the fact, which is what made the blind
+    # spot worth fixing rather than merely deduplicating.
     today = datetime.date.today()
     due, soon = [], []
-    for line in lines:
-        if not line.startswith("|") or "⏳" not in line:
+    for r in register.all_marked_rows():
+        if register.RECHECK not in r["mark"]:
             continue
-        cells = [c.strip() for c in line.strip("|").split("|")]
-        if len(cells) != 4:
-            continue
-        m = re.search(r"re-read by (\d{4}-\d{2}-\d{2})\s*—\s*(.*)", cells[3])
+        m = re.search(r"re-?read by (\d{4}-\d{2}-\d{2})(?:\s*[—-]\s*(.*))?",
+                      r["mark"])
         if not m:
+            # An hourglass with no date is caught by check-register-marks.py,
+            # which fails on it. Nothing to age here.
             continue
         when = datetime.date.fromisoformat(m.group(1))
-        what = m.group(2).strip()
+        what = (m.group(2) or "").strip()
+        label = r["label"]
         if when < today:
-            due.append((cells[0], when, what, (today - when).days))
+            due.append((label, when, what, (today - when).days))
         elif (when - today).days <= 30:
-            soon.append((cells[0], when, what))
+            soon.append((label, when, what))
+
     if soon:
         print(f"\n{len(soon)} register row(s) due for a re-read within 30 days:")
         for label, when, what in soon:
