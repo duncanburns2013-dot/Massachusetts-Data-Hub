@@ -937,6 +937,41 @@ outturn ($64.0B) minus the signed headline ($57.8B), two different scopes.
 > overstates the FY25 "overrun" as +25.7% instead of the true +10.0%. Exclude accounts whose
 > description begins *Transfer* or *XFR*, and restrict to accounts present in both workbooks.
 
+### Growth since FY2018 — the four bars on `chartGrowth`
+
+| Series | FY2018 | FY2026 | Growth | Source | How it is held up |
+|---|---|---|---|---|---|
+| **Money actually spent** | $39.879B | $64.196B | **+61.0%** | CTHRU `kv7m-35wn`, `total_expenses` by fiscal year, Transfer/XFR accounts excluded at both ends (read 2026-11-22; feed refreshed 2026-11-20) | ⏳ re-read by 2027-02-28 — CTHRU posts daily but FY2026 is still settling; the Comptroller's SBFR lands Jan–Feb 2027 |
+| Signed budgets (GAA) | $40.197B | $60.974B | +51.7% | `gaabudgets` workbooks, headline scope — see the GAA table above | 🔒 enacted totals for closed years |
+| Taxpayer income | $472.389B | $719.960B | **+52.4%** | BEA Total Personal Income in Massachusetts via FRED `MAOTOT`, quarterly SAAR, averaged Jul–Jun (read 2026-11-22) | ⏳ re-read by 2026-10-31 each year — after BEA's Q2 release, which carries the annual update |
+| Inflation | 248.131 | 327.645 | +32.0% | BLS CPI-U US city average, SA (`CUSR0000SA0` / FRED `CPIAUCSL`), averaged Jul–Jun | ⏳ re-read annually once the fiscal year closes |
+
+> **The income figure moved 3.5 points in November 2026 and reversed a headline.**
+> It read +48.9% from a July 2026 retrieval. Re-reading on 2026-11-22 gave +52.4%.
+> Two causes, and the **smaller** one was the only one the old code comment had
+> anticipated: 2026Q2 posted on 30 Sep 2026 (worth ~0.5 points), but that same BEA
+> release carried the **2026 annual update of the National Economic Accounts**, which
+> revised quarters already banked (~1.8 points). A reminder phrased "re-check once the
+> next quarter posts" does not catch a revision to periods you already hold. Re-read
+> the whole fiscal year.
+>
+> The consequence: against **signed budgets** (+51.7%) income at +52.4% is *ahead*, so
+> the alert heading "Spending Outpaces Income and Inflation" no longer held on that
+> basis. The comparison was re-based on money actually spent, where the gap is wider
+> than the page had ever claimed — 8.6 points against income and 28.9 against
+> inflation, where it previously said 2.8 and 19.6.
+
+> **The two spending rows are different measures and must not be mixed.** CTHRU covers
+> a wider account universe than the 913-account like-for-like behind `GAA_FY25_ACTUAL`
+> and `GAA_FY26_PROJECTED`. Use the CTHRU row for a growth RATE from one consistent
+> series; never subtract it from or add it to those levels. Robustness check on the
+> transfer exclusion: leaving Transfer/XFR accounts IN gives $43.319B → $69.803B =
+> +61.1%, against +61.0% with them out, so the rate does not turn on that choice.
+
+> **FY2026 CPI is an 11-month mean and always will be.** October 2025 was never
+> published. That is a permanent hole, not a month still to come, so do not "fix" the
+> mean later by looking for it.
+
 ### ⚠️ Local-aid CSV ingestion gotcha
 
 `summary-fy-27-local-aid-aid-to-municipalities.csv` carries a **`Total Municipal Aid`

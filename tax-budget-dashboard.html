@@ -214,7 +214,7 @@ footer a:hover{color:var(--gold)}
     <div class="alert-grid">
       <div class="alert-item">Tax Foundation rank: <strong id="ovRankPre">—</strong> the year the surtax passed, worst at <strong id="ovRankWorst">—</strong>, <strong id="ovRankNow">—</strong> now</div>
       <div class="alert-item">MA is <strong>8th worst</strong> overall for tax competitiveness nationally</div>
-      <div class="alert-item">State spending grew <strong id="ovSpend">—</strong> since FY2018 (signed budgets, through FY2026) — income growth <strong id="ovIncome">—</strong></div>
+      <div class="alert-item">Money actually spent grew <strong id="ovActual">—</strong> since FY2018, against income growth of <strong id="ovIncome">—</strong>. Signed budgets grew <strong id="ovSpend">—</strong> — the gap between the two is supplemental spending</div>
       <div class="alert-item">FY2025 spending ran <strong id="ovOverrun">—</strong> above the enacted budget &mdash; supplemental spending, not waste</div>
       <div class="alert-item">Middle class (<span id="ovItepBand">—</span>) pays the <strong>highest effective rate</strong> at <span id="ovItepRate">—</span> (ITEP, all state+local)</div>
       <div class="alert-item">Inflation over the same window was <strong id="ovCpi">—</strong> (CPI-U, fiscal-year averages) — spending grew faster than prices and than incomes</div>
@@ -422,16 +422,17 @@ footer a:hover{color:var(--gold)}
   <div class="stat-row">
     <div class="stat-card"><div class="label">FY2025 Actual Spending</div><div class="value red" id="bgFy25Act">—</div><div class="sub"><span id="bgOverrun">—</span> supplemental spending above the enacted budget (not waste)</div></div>
     <div class="stat-card"><div class="label">FY2026 Signed Budget</div><div class="value amber" id="bgFy26">—</div><div class="sub">Before supplementals</div></div>
-    <div class="stat-card"><div class="label">Growth Since FY2018</div><div class="value red" id="bgGrowth">—</div><div class="sub">Signed budgets: <span id="bgGrowthBasis">—</span></div></div>
+    <div class="stat-card"><div class="label">Actually Spent, Growth Since FY2018</div><div class="value red" id="bgActual">—</div><div class="sub">CTHRU: <span id="bgActualBasis">—</span></div></div>
+    <div class="stat-card"><div class="label">Signed Budgets, Growth Since FY2018</div><div class="value amber" id="bgGrowth">—</div><div class="sub">GAA: <span id="bgGrowthBasis">—</span></div></div>
     <div class="stat-card"><div class="label">Income Growth Since FY2018</div><div class="value amber" id="bgIncome">—</div><div class="sub">BEA personal income, <span id="bgIncomeBasis">—</span></div></div>
   </div>
   <div class="alert">
     <h4>⚠️ Spending Outpaces Income and Inflation</h4>
     <div class="alert-grid">
-      <div class="alert-item">State spending: <strong id="bgTrioSpend">—</strong> since FY2018 (signed budgets, through FY2026). Taxpayer income growth: <strong id="bgTrioIncome">—</strong> (BEA). Inflation: <strong id="bgTrioCpi">—</strong> (CPI-U, fiscal-year averages)</div>
+      <div class="alert-item">Money actually spent: <strong id="bgTrioActual">—</strong> since FY2018 (CTHRU). Signed budgets over the same years: <strong id="bgTrioSpend">—</strong>. Taxpayer income: <strong id="bgTrioIncome">—</strong> (BEA). Inflation: <strong id="bgTrioCpi">—</strong> (CPI-U, fiscal-year averages)</div>
       <div class="alert-item">FY2025: enacted at <span id="bgTrioFy25Sign">—</span>, actual spending hit <strong id="bgTrioFy25Act">—</strong> with supplementals. FY2026 is <strong id="bgTrioFy26Proj">—</strong> against <span id="bgTrioFy26Sign">—</span> enacted (<span id="bgTrioFy26Gap">—</span>) — a projection, not an actual; the Comptroller files the FY2026 figure around Jan–Feb 2027</div>
       <div class="alert-item">FY2026 supplemental appropriations alone came to <strong id="bgTrioFy26Supp">—</strong> (CTHRU, the Comptroller’s own ledger, read 22 Nov 2026) — so the signed budget was never what the year cost</div>
-      <div class="alert-item">Spending has outrun income by <strong id="bgGapIncome">—</strong> and inflation by <strong id="bgGapCpi">—</strong> since FY2018 — every figure here from the GAA, BEA and BLS directly</div>
+      <div class="alert-item">Actual spending has outrun income by <strong id="bgGapIncome">—</strong> and inflation by <strong id="bgGapCpi">—</strong> since FY2018. Measured against <em>signed budgets</em> instead, spending ran <strong id="bgGapSigned">—</strong> income — which is why the basis is named on every bar</div>
     </div>
   </div>
   <div class="chart-grid">
@@ -443,7 +444,7 @@ footer a:hover{color:var(--gold)}
     <div class="chart-card">
       <h3>Growth Comparison Since FY2018</h3>
       <div class="chart-area"><canvas id="chartGrowth"></canvas></div>
-      <div class="source">Sources, all primary: MA General Appropriations Act (signed budgets, FY2018→FY2026); BEA Total Personal Income in Massachusetts (FRED MAOTOT, quarterly SAAR); BLS CPI-U, US city average (CUSR0000SA0). Income and CPI are averaged over the fiscal year (Jul–Jun) to match the budget's clock. FY2026 income is the mean of 3 published quarters — BEA has not released 2026Q2 — which if anything understates income growth.</div>
+      <div class="source">Sources, all primary: money actually spent from the Comptroller’s CTHRU ledger (<em>total_expenses</em> by fiscal year, Transfer/XFR accounts excluded at both ends; read 22 Nov 2026); signed budgets from the MA General Appropriations Act; BEA Total Personal Income in Massachusetts (FRED MAOTOT, quarterly SAAR, re-read 22 Nov 2026 after BEA’s 2026 annual update); BLS CPI-U, US city average (CUSR0000SA0). Income and CPI are averaged over the fiscal year (Jul–Jun) to match the budget’s clock; FY2026 income is now a complete four-quarter mean. The FY2026 CPI mean is over 11 months because October 2025 was never published. The two spending bars are different measures of the same years and the distance between them — what was enacted against what was spent — is the point; CTHRU covers a wider set of accounts than the like-for-like levels quoted on the chart to the left, so these are growth rates from one consistent series, not figures to subtract from those.</div>
     </div>
   </div>
   <!-- A "Major Spending Categories — Growth Since FY2018" table sat here: growth by
@@ -1589,6 +1590,20 @@ const sinceFY18 = v => (v / gaaAt('FY18') - 1) * 100;
 const SPEND_GROWTH_FY26 = sinceFY18(gaaAt('FY26'));          // +51.7%
 const SPEND_GROWTH_FY27 = sinceFY18(FY27_GAA);             // +57.8%
 const CPI_GROWTH_FY18_26 = (CPI_FY2026 / CPI_FY2018 - 1) * 100;  // +32.0%
+
+// Money actually spent, from the Comptroller's CTHRU ledger (Socrata kv7m-35wn,
+// `total_expenses` summed by fiscal year; feed refreshed 2026-11-20, read 2026-11-22).
+// Accounts whose name begins Transfer or XFR are excluded at BOTH ends so inter-fund
+// movement cannot drive the trend — 1595-0029 alone (General Fund to the Education and
+// Transportation Fund) runs billions. Robustness check: leaving the transfer accounts IN
+// gives $43.319B → $69.803B = +61.1%, against +61.0% with them out, so the growth rate
+// does not depend on that choice.
+// CTHRU's account universe is WIDER than the 913-account like-for-like behind
+// GAA_FY25_ACTUAL and GAA_FY26_PROJECTED. Use this for a growth RATE from a
+// self-consistent series; never subtract it from, or add it to, those levels.
+const SPEND_ACTUAL_FY2018 = 39.879;   // $B, CTHRU total_expenses ex-transfers
+const SPEND_ACTUAL_FY2026 = 64.196;   // $B, same basis
+const SPEND_ACTUAL_GROWTH = (SPEND_ACTUAL_FY2026 / SPEND_ACTUAL_FY2018 - 1) * 100;  // +61.0%
 const FY25_OVERRUN = GAA_FY25_ACTUAL - GAA_FY25_ENACTED_LFL;  // $5.736B supplemental spending above enacted
 const SURTAX_CUM_ACTUAL = SURTAX_FY24_ACTUAL + SURTAX_FY25_ACTUAL + SURTAX_FY26_ACTUAL;  // $8.6B (FY24–FY26, actuals only)
 
@@ -1597,24 +1612,33 @@ const SURTAX_CUM_ACTUAL = SURTAX_FY24_ACTUAL + SURTAX_FY25_ACTUAL + SURTAX_FY26_
 // income is measured on the same clock as the budget it is compared against — the same
 // method CPI_FY2018/CPI_FY2026 use above, for the same reason.
 //   FY2018 = 2017Q3–2018Q2 = $472.3B (4 quarters)
-//   FY2026 = 2025Q3–2026Q1 = $703.3B (3 quarters — BEA had not published 2026Q2 at
-//            retrieval, so the mean is over the 3 it had, exactly as the FY2026 CPI mean
-//            is over the 11 months BLS published. Income is still rising quarter on
-//            quarter, so the missing quarter would lift FY2026: this understates income
-//            growth, and so overstates how far spending outpaces it.)
-// Retrieved from FRED 2026-07-16 ⇒ +48.9% FY2018→FY2026. A fiscal-year mean only moves
-// when the FY closes; refresh annually, and re-check once 2026Q2 posts.
+//   FY2026 = 2025Q3–2026Q2 = $720.0B (4 quarters — complete)
+// Re-read from FRED 2026-11-22 ⇒ +52.4% FY2018→FY2026, up from the +48.9% this page
+// carried between July and November 2026. BOTH causes matter and the smaller one was
+// the one previously anticipated: 2026Q2 posted on 30 September 2026, but that same
+// BEA release carried the 2026 annual update of the National Economic Accounts, so the
+// whole series was revised upward. Of the 2.4% rise in FY2026 income, roughly 1.8
+// points is the revision and 0.5 is the added quarter. A note that says "re-check once
+// the next period posts" will not catch a revision to periods already banked — re-read
+// the whole fiscal year, not just its tail.
+// A fiscal-year mean only moves when the FY closes or BEA revises; re-read each autumn
+// after the Q2 release, which is when the annual update lands.
 //
 // This replaces a hand-typed 42% taken from Mass Opportunity Alliance, an advocacy
 // organization, whose own source line called it "MOA analysis of BEA MA personal income".
 // Going to BEA directly rather than trusting an advocacy group's arithmetic on it moved
-// the number ~7 points. The page's claim survives on official data but by a smaller
-// margin than it asserted: spending +51.7% (GAA, headline scope) against income +48.9%
-// (BEA) is a 2.8-point gap, where 42% implied 12.6. (Before the GAA series was put on one
-// scope in Oct 2026 it read +54.6% and 5.7 points.) chartGrowth plots both and names each basis.
-const INC_FY2018 = 472310.9;   // $M, mean of 2017Q3–2018Q2
-const INC_FY2026 = 703330.1;   // $M, mean of 2025Q3–2026Q1 (3 of 4 quarters)
-const INCOME_GROWTH_FY18_26 = (INC_FY2026 / INC_FY2018 - 1) * 100;  // +48.9%
+// the number ~7 points. (Before the GAA series was put on one scope in Oct 2026 it read
+// +54.6% and 5.7 points.)
+//
+// As of 2026-11-22 the comparison is no longer made against signed budgets, because on
+// current data that basis REVERSES: income +52.4% against signed-budget growth of +51.7%
+// puts spending 0.7 points BEHIND income, which would have contradicted the alert's own
+// heading. The honest comparison is against money actually spent — see
+// SPEND_ACTUAL_GROWTH below — and it is a wider gap, not a narrower one. chartGrowth
+// plots all four bars and names each basis.
+const INC_FY2018 = 472389.2;   // $M, mean of 2017Q3–2018Q2 (4 quarters)
+const INC_FY2026 = 719959.9;   // $M, mean of 2025Q3–2026Q2 (4 quarters, complete)
+const INCOME_GROWTH_FY18_26 = (INC_FY2026 / INC_FY2018 - 1) * 100;  // +52.4%
 
 // ── Why there is no cross-state spending comparison on the rankings tab ─────
 // There were two charts here (chartCompGrowth, budget growth FY2018→FY2026 for six
@@ -1796,6 +1820,7 @@ function initCharts(tab) {
 
       pctTxt('ovSpend',   SPEND_GROWTH_FY26);
       pctTxt('ovIncome',  INCOME_GROWTH_FY18_26);
+      pctTxt('ovActual',  SPEND_ACTUAL_GROWTH);
       pctTxt('ovCpi',     CPI_GROWTH_FY18_26);
       putTxt('ovOverrun', '$' + FY25_OVERRUN.toFixed(3) + 'B');
 
@@ -1879,6 +1904,8 @@ function initCharts(tab) {
       putTxt('bgFy26',    '$' + gaaAt('FY26').toFixed(1) + 'B');
       putTxt('bgOverrun', '$' + FY25_OVERRUN.toFixed(3) + 'B');
       pctTxt('bgGrowth',  SPEND_GROWTH_FY26);
+      pctTxt('bgActual',  SPEND_ACTUAL_GROWTH);
+      putTxt('bgActualBasis', '$' + SPEND_ACTUAL_FY2018.toFixed(1) + 'B \u2192 $' + SPEND_ACTUAL_FY2026.toFixed(1) + 'B');
       putTxt('bgGrowthBasis', '$' + gaaAt('FY18').toFixed(1) + 'B → $' + gaaAt('FY26').toFixed(1) + 'B');
       // The income card states its own basis the way the spending card beside it does,
       // so the two are visibly measured over the same fiscal-year window.
@@ -1887,10 +1914,18 @@ function initCharts(tab) {
       pctTxt('bgTrioSpend',  SPEND_GROWTH_FY26);
       pctTxt('bgTrioIncome', INCOME_GROWTH_FY18_26);
       pctTxt('bgTrioCpi',    CPI_GROWTH_FY18_26);
+      pctTxt('bgTrioActual', SPEND_ACTUAL_GROWTH);
       // Stated as gaps rather than left for the reader to subtract. Both shrank when the
       // advocacy-group income figure was replaced with BEA's own series.
-      putTxt('bgGapIncome', (SPEND_GROWTH_FY26 - INCOME_GROWTH_FY18_26).toFixed(1) + ' points');
-      putTxt('bgGapCpi',    (SPEND_GROWTH_FY26 - CPI_GROWTH_FY18_26).toFixed(1) + ' points');
+      putTxt('bgGapIncome', (SPEND_ACTUAL_GROWTH - INCOME_GROWTH_FY18_26).toFixed(1) + ' points');
+      putTxt('bgGapCpi',    (SPEND_ACTUAL_GROWTH - CPI_GROWTH_FY18_26).toFixed(1) + ' points');
+      // Signed budgets ran BEHIND income on current data. Say so rather than hide it:
+      // the sign is computed, so this line cannot drift into a false claim if a
+      // later release moves either series back the other way.
+      (function () {
+        var d = SPEND_GROWTH_FY26 - INCOME_GROWTH_FY18_26;
+        putTxt('bgGapSigned', Math.abs(d).toFixed(1) + ' points ' + (d >= 0 ? 'ahead of' : 'behind'));
+      })();
       putTxt('bgTrioFy25Sign', '$' + GAA_FY25_ENACTED_LFL.toFixed(1) + 'B');
       putTxt('bgTrioFy25Act',  '$' + GAA_FY25_ACTUAL.toFixed(1) + 'B');
       putTxt('bgTrioFy26Proj', '$' + GAA_FY26_PROJECTED.toFixed(1) + 'B');
@@ -1918,8 +1953,8 @@ function initCharts(tab) {
       safeChart('chartGrowth', {
         type: 'bar',
         data: {
-          labels: ['State Spending', 'Taxpayer Income', 'Inflation (CPI-U)'],
-          datasets: [{ label: 'Growth Since FY2018', data: [+SPEND_GROWTH_FY26.toFixed(1), +INCOME_GROWTH_FY18_26.toFixed(1), +CPI_GROWTH_FY18_26.toFixed(1)], backgroundColor: ['#A81733','#14558F','#5A6467'], borderRadius: 8 }]
+          labels: ['Spending (actual)', 'Spending (signed budget)', 'Taxpayer Income', 'Inflation (CPI-U)'],
+          datasets: [{ label: 'Growth Since FY2018', data: [+SPEND_ACTUAL_GROWTH.toFixed(1), +SPEND_GROWTH_FY26.toFixed(1), +INCOME_GROWTH_FY18_26.toFixed(1), +CPI_GROWTH_FY18_26.toFixed(1)], backgroundColor: ['#A81733','#B07C20','#14558F','#5A6467'], borderRadius: 8 }]
         },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, title: { display: true, text: '% Growth' } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `+${ctx.parsed.y.toFixed(1)}% since FY2018` } } } }
       });
