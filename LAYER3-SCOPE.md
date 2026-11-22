@@ -11,7 +11,7 @@ Correct. Layer 3 currently contains two pools:
 
 | pool | value | source |
 |---|---|---|
-| Federal corporate income tax | $452,089,303,420 | Treasury Final MTS, Sept 2025 |
+| Federal corporate income tax | $381,414,689,058 | Treasury Final MTS, Sept 2026 |
 | MA corporate & business excise | $4.170B | MA DOR FY2026 close |
 | NH business taxes (BPT + BET) | $1,137.0M | NH DAS, June FY2026, amnesty excluded |
 
