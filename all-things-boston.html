@@ -40,13 +40,28 @@
      the state comparison line the explorer draws, which would have published state
      figures labelled Boston.
 
-     A RELEASE BEHIND, found today and NOT fixed -- each needs a data refresh, not a
-     stamp, and none of it is corrected by this visit:
-       311 at FY2024. data.boston.gov CKAN carries 311 Service Requests for 2025
-         (complete) and 2026 (modified 2026-11-21).
-       Census ACS 2023, the neighbourhood income column in the 311 equity table. This
-         hub’s own data/census-latest.json is already on acs_vintage 2024, so the page
-         contradicts a feed sitting beside it.
+     311 REFRESHED 2026-11-23, and the figures moved a long way. The page had been
+     carrying FY2024 numbers that did not reproduce from any reading of the city file.
+     Recomputed from data.boston.gov 311 Service Requests 2025, all 276,093 rows: the
+     annual series was roughly HALF the real volume throughout (2019 showed 121,000
+     against 253,782 actual), rodent complaints were overstated 3x, Dorchester was
+     credited with 25% of all requests against 12.6% actual, and the top-category mix
+     was wrong - parking enforcement alone is 22% of 311 and did not appear at all.
+
+     The page also asserted a service-equity gap: the four neighborhoods with 80% of
+     shootings waiting "3-4x longer" for 311. That claim does not survive the data and
+     has been corrected on the page. Compared like for like, on the SAME request type,
+     those four are served as fast or faster than the rest of the city (potholes 5.0
+     days against 6.5, street cleaning 1.0 against 2.0, trash barrels 0.5 either way).
+     The raw neighborhood averages the old claim rested on track request MIX, not
+     service: the slowest averages are West Roxbury, Charlestown and Roslindale, which
+     file more tree, sidewalk and sign work, and those types are slow everywhere.
+
+     STILL UNVERIFIED, and now said so on the page: the median household income column.
+     Boston neighborhoods are not Census geographies, and neither the city nor BPDA
+     publishes a current neighborhood income table - BPDA’s own profiles are 2007-2011
+     ACS. Checking it needs a tract-to-neighborhood spatial join nobody here has made,
+     so the column is labelled indicative rather than quietly presented as sourced.
 
      NOT verified on this visit: ICE ERO Boston, Vera, Globe and GBH citations, and the
      Boston Retirement System actuarial valuations.
@@ -202,7 +217,7 @@ tr:hover{background:rgba(15,41,66,.02)}.tg{background:rgba(15,41,66,.06);font-we
 <div class="sb"><div class="n bad">0/12</div><div class="l">BPS HS Ach Pts</div></div>
 <div class="sb"><div class="n">5,100+</div><div class="l">ICE Arrests '25</div></div>
 <div class="sb"><div class="n bad">19.0%</div><div class="l">Office Vacancy Q2'26</div></div>
-<div class="sb"><div class="n bad">11.2d</div><div class="l">Mattapan 311 Wait</div></div>
+<div class="sb"><div class="n">276K</div><div class="l">311 Requests 2025</div></div>
 <div class="sb"><div class="n bad">$3.4B</div><div class="l">Pension+OPEB Gap</div></div>
 </div></div>
 
@@ -648,47 +663,47 @@ tr:hover{background:rgba(15,41,66,.02)}.tg{background:rgba(15,41,66,.06);font-we
 
 <!-- 311 SERVICES -->
 <div class="tab" id="svc311">
-<div class="co red"><strong>Service Equity Gap:</strong> The same 4 neighborhoods absorbing 80% of Boston's shootings also wait <strong>3–4× longer</strong> for basic 311 services. Mattapan residents wait 11.2 days on average; Back Bay waits 3.1. The city spends $28.5M on equity offices while service delivery to minority neighborhoods is measurably slower. Source: data.boston.gov 311 open dataset.</div>
+<div class="co"><strong>What the 2025 data actually shows.</strong> This page previously said the four neighborhoods carrying 80% of Boston’s shootings wait 3–4× longer for 311 service. Read against the full 2025 dataset, that does not hold. Compared like for like, on the same request type, Dorchester, Roxbury, Mattapan and Jamaica Plain are served as fast or faster than the rest of the city: potholes close in 5.0 days against 6.5 elsewhere, street cleaning in 1.0 against 2.0, trash barrels in 0.5 either way. Raw neighborhood averages do differ, but they track what people ask for rather than who is asking: the slowest averages belong to West Roxbury, Charlestown and Roslindale, which file more tree, sidewalk and sign work, and those categories are slow everywhere. The figures below are recomputed from the city’s own file and the claim has been corrected.</div>
 <div class="kg">
-<div class="kpi red"><div class="v">138K</div><div class="lb">Total Requests<br>FY2024</div></div>
-<div class="kpi red"><div class="v">11.2d</div><div class="lb">Mattapan Avg<br>Resolution</div></div>
-<div class="kpi green"><div class="v">3.1d</div><div class="lb">Back Bay Avg<br>Resolution</div></div>
-<div class="kpi amber"><div class="v">3.6×</div><div class="lb">Service Speed<br>Disparity</div></div>
-<div class="kpi purple"><div class="v">+62%</div><div class="lb">Rodent Complaints<br>Since 2019</div></div>
-<div class="kpi orange"><div class="v">14%</div><div class="lb">Unresolved<br>&gt;30 Days</div></div>
+<div class="kpi purple"><div class="v">276K</div><div class="lb">Total Requests<br>2025</div></div>
+<div class="kpi amber"><div class="v">8.3d</div><div class="lb">Citywide Avg<br>Resolution</div></div>
+<div class="kpi red"><div class="v">14.1d</div><div class="lb">West Roxbury<br>Slowest Avg</div></div>
+<div class="kpi green"><div class="v">5.0d</div><div class="lb">Beacon Hill<br>Fastest Avg</div></div>
+<div class="kpi orange"><div class="v">22%</div><div class="lb">Parking Enforcement<br>Share of All 311</div></div>
+<div class="kpi red"><div class="v">29.7%</div><div class="lb">Not Closed<br>&gt;30 Days</div></div>
 </div>
 
 <div class="g g2">
-<div class="cd full"><h3>Average 311 Resolution Time by Neighborhood (Days)</h3><p class="cs">Sorted worst to best. Red = the 4 neighborhoods with 80% of shootings. Same neighborhoods, slowest service.</p><div class="cw tall"><canvas id="s4"></canvas></div></div>
+<div class="cd full"><h3>Average 311 Resolution Time by Neighborhood (2025, Days)</h3><p class="cs">Mean calendar days from open to closed, closed cases only. Red = the 4 neighborhoods with 80% of shootings; they sit mid-table, not at the top. Raw averages track what a neighborhood files, not how fast it is served.</p><div class="cw tall"><canvas id="s4"></canvas></div></div>
 </div>
 <div class="g g2">
-<div class="cd"><h3>311 Complaints by Neighborhood (FY2024, thousands)</h3><p class="cs">Red = high-violence neighborhoods. Dorchester alone = 25% of all requests.</p><div class="cw tall"><canvas id="s1"></canvas></div></div>
-<div class="cd"><h3>Top Request Categories (FY2024)</h3><p class="cs">Pothole, trash, and rodent = 43% of all 311 calls</p><div class="cw tall"><canvas id="s2"></canvas></div></div>
+<div class="cd"><h3>311 Requests by Neighborhood (2025, thousands)</h3><p class="cs">Red = high-violence neighborhoods. Dorchester files the most, 34,831, which is 12.6% of the city total.</p><div class="cw tall"><canvas id="s1"></canvas></div></div>
+<div class="cd"><h3>Top Request Types (2025, thousands)</h3><p class="cs">Parking enforcement alone is 22% of everything 311 takes. The top three are 37%.</p><div class="cw tall"><canvas id="s2"></canvas></div></div>
 </div>
 <div class="g g2">
-<div class="cd"><h3>Annual 311 Requests (2019–2025)</h3><p class="cs">COVID dip 2020, steady climb since. +14% vs 2019.</p><div class="cw"><canvas id="s3"></canvas></div></div>
-<div class="cd"><h3>Rodent Activity Complaints (2019–2024)</h3><p class="cs">+62% since 2019 — citywide infestation crisis</p><div class="cw"><canvas id="s5"></canvas></div></div>
+<div class="cd"><h3>Annual 311 Requests (2019–2025)</h3><p class="cs">Peak 307,791 in 2023; 276,093 in 2025, up 8.8% on 2019.</p><div class="cw"><canvas id="s3"></canvas></div></div>
+<div class="cd"><h3>Rodent Activity Requests (2019–2025)</h3><p class="cs">2,355 in 2019 to 5,225 in 2025, up 122%.</p><div class="cw"><canvas id="s5"></canvas></div></div>
 </div>
 <div class="g g2">
-<div class="cd"><h3>Unresolved Requests by Type (&gt;30 Days, FY2024)</h3><p class="cs">Graffiti and streetlights hardest to close</p><div class="cw"><canvas id="s6"></canvas></div></div>
-<div class="cd"><h3>Service Gap vs. Violence Concentration</h3><p class="cs">Resolution time (days) vs shooting share (%) — same neighborhoods, both highest</p><div class="cw"><canvas id="s7"></canvas></div></div>
+<div class="cd"><h3>Share Not Closed Within 30 Days (2025)</h3><p class="cs">Still open, or took longer than 30 days. Parking enforcement drives the citywide 29.7%: those cases are dispatched and largely never closed out.</p><div class="cw"><canvas id="s6"></canvas></div></div>
+<div class="cd"><h3>Same Request Type, Four Neighborhoods vs the Rest (2025)</h3><p class="cs">The test the raw averages cannot settle. On identical work, Dorchester, Roxbury, Mattapan and Jamaica Plain are served as fast or faster.</p><div class="cw"><canvas id="s7"></canvas></div></div>
 </div>
 
-<div class="cd"><h3>311 Service Equity by Neighborhood (FY2024)</h3>
-<table><thead><tr><th>Neighborhood</th><th class="r">FY2024 Requests</th><th class="r">Avg Resolution (Days)</th><th class="r">Shootings 2024</th><th class="r">Median HH Income</th></tr></thead><tbody>
-<tr><td class="b red">Dorchester</td><td class="r">35,012</td><td class="r red">9.1</td><td class="r red">61</td><td class="r">$52K</td></tr>
-<tr><td class="b red">Roxbury</td><td class="r">16,204</td><td class="r red">9.8</td><td class="r red">31</td><td class="r">$40K</td></tr>
-<tr><td class="b red">Mattapan</td><td class="r">7,412</td><td class="r red">11.2</td><td class="r red">19</td><td class="r">$48K</td></tr>
-<tr><td class="b amber">Jamaica Plain</td><td class="r">9,518</td><td class="r amber">5.6</td><td class="r amber">12</td><td class="r">$74K</td></tr>
-<tr><td>South End</td><td class="r">12,018</td><td class="r">4.2</td><td class="r">4</td><td class="r">$91K</td></tr>
-<tr><td>East Boston</td><td class="r">10,892</td><td class="r">7.1</td><td class="r">6</td><td class="r">$56K</td></tr>
-<tr><td>Allston/Brighton</td><td class="r">8,134</td><td class="r">5.8</td><td class="r">3</td><td class="r">$68K</td></tr>
-<tr><td>Hyde Park</td><td class="r">4,521</td><td class="r">7.8</td><td class="r">4</td><td class="r">$62K</td></tr>
-<tr><td>West Roxbury</td><td class="r">5,187</td><td class="r green">3.8</td><td class="r">1</td><td class="r">$98K</td></tr>
-<tr><td>Back Bay</td><td class="r">8,213</td><td class="r green">3.1</td><td class="r">0</td><td class="r">$116K</td></tr>
-<tr><td>Beacon Hill</td><td class="r">2,814</td><td class="r green">2.7</td><td class="r">0</td><td class="r">$134K</td></tr>
+<div class="cd"><h3>311 Service by Neighborhood (2025)</h3>
+<table><thead><tr><th>Neighborhood</th><th class="r">2025 Requests</th><th class="r">Avg Days to Close</th><th class="r">Shootings 2024</th><th class="r">Median HH Income</th></tr></thead><tbody>
+<tr><td class="b red">Dorchester</td><td class="r">34,831</td><td class="r">8.4</td><td class="r">61</td><td class="r">$52K</td></tr>
+<tr><td class="b red">Roxbury</td><td class="r">25,174</td><td class="r green">6.1</td><td class="r">31</td><td class="r">$40K</td></tr>
+<tr><td class="b red">Mattapan</td><td class="r">10,431</td><td class="r amber">10.1</td><td class="r">19</td><td class="r">$48K</td></tr>
+<tr><td class="b red">Jamaica Plain</td><td class="r">15,975</td><td class="r amber">10.2</td><td class="r">12</td><td class="r">$74K</td></tr>
+<tr><td class="b">South End</td><td class="r">22,455</td><td class="r green">6.0</td><td class="r">4</td><td class="r">$91K</td></tr>
+<tr><td class="b">East Boston</td><td class="r">17,487</td><td class="r">8.7</td><td class="r">6</td><td class="r">$56K</td></tr>
+<tr><td class="b">Allston/Brighton</td><td class="r">25,286</td><td class="r">6.9</td><td class="r">3</td><td class="r">$68K</td></tr>
+<tr><td class="b">Hyde Park</td><td class="r">9,513</td><td class="r amber">10.5</td><td class="r">4</td><td class="r">$62K</td></tr>
+<tr><td class="b">West Roxbury</td><td class="r">8,115</td><td class="r red">14.1</td><td class="r">1</td><td class="r">$98K</td></tr>
+<tr><td class="b">Back Bay</td><td class="r">15,398</td><td class="r">7.2</td><td class="r">0</td><td class="r">$116K</td></tr>
+<tr><td class="b">Beacon Hill</td><td class="r">8,755</td><td class="r green">5.0</td><td class="r">0</td><td class="r">$134K</td></tr>
 </tbody></table>
-<p class="src">Source: data.boston.gov 311 Service Requests open dataset (FY2024). Resolution time = calendar days from open to closed. Shooting data: BPD. Income: U.S. Census ACS 2023. Red rows = the 4 neighborhoods with 80% of shootings.</p></div>
+<p class="src"><strong>Requests and resolution time:</strong> recomputed 2026-11-23 from data.boston.gov, 311 Service Requests 2025 (resource 9d7c2214), all 276,093 rows of the calendar year, queried through CKAN datastore_search_sql. Calendar year, not fiscal: the city publishes one file per calendar year, so this needs no splicing and matches the trend chart above. Resolution time is the mean of closed_dt minus open_dt in calendar days over closed cases only. Neighborhood names are rolled up where the city uses more than one label for the same place (Allston, Brighton and "Allston / Brighton"; Mattapan and "Greater Mattapan"); 14,331 rows carry no usable neighborhood and are excluded from this table. <strong>Red names</strong> are the 4 neighborhoods with 80% of shootings, and this column no longer supports the claim that they wait longer: see the like-for-like chart above. <strong>Shootings:</strong> BPD, 2024, not refreshed on this pass. <strong>Median household income:</strong> ACS 2023, carried forward unverified. Boston neighborhoods are not Census geographies and neither the city nor BPDA publishes a current neighborhood income table (BPDA’s own neighborhood profiles are 2007–2011 ACS), so these figures cannot be checked against a primary source without a tract-to-neighborhood spatial join nobody here has made. Treat the column as indicative.</p></div>
 </div>
 
 <!-- PENSION / OPEB -->
@@ -743,7 +758,7 @@ tr:hover{background:rgba(15,41,66,.02)}.tg{background:rgba(15,41,66,.06);font-we
 
 </div><!-- /ct -->
 
-<div class="footer">Data compiled May 2026 · Budget: Boston ACFRs FY2020–FY2025 · Payroll: data.boston.gov · Crime: FBI UCR, BPD, EOPSS · Education: DESE MCAS · ICE: ERO, UC Berkeley · CRE: C&W, Trepp, Boston Assessing · 311: data.boston.gov open dataset · Pension/OPEB: Boston Retirement System, ACFRs<br><a href="https://github.com/duncanburns2013-dot/All-Things-Boston">GitHub</a> · <a href="https://massachusettsdatahub.com/">MA Data Hub</a></div>
+<div class="footer">Data compiled May 2026 · Budget: Boston ACFRs FY2020–FY2025 · Payroll: data.boston.gov · Crime: FBI UCR, BPD, EOPSS · Education: DESE MCAS · ICE: ERO, UC Berkeley · CRE: C&W, Trepp, Boston Assessing · 311: data.boston.gov 311 Service Requests 2025, read 2026-11-23 · Pension/OPEB: Boston Retirement System, ACFRs<br><a href="https://github.com/duncanburns2013-dot/All-Things-Boston">GitHub</a> · <a href="https://massachusettsdatahub.com/">MA Data Hub</a></div>
 
 <script>
 Chart.defaults.font.family="'DM Sans',sans-serif";Chart.defaults.font.size=11;Chart.defaults.plugins.legend.labels.boxWidth=12;Chart.defaults.plugins.legend.labels.padding=14;
@@ -1091,22 +1106,22 @@ sc('h8',{type:'bar',data:{labels:TY,datasets:[{
 // ---- 311 SERVICES ----
 if(id==='svc311'){
 // s4: Resolution time by neighborhood (the headline chart — sorted worst to best)
-var sNeighs=['Mattapan','Roxbury','Dorchester','Hyde Park','East Boston','Allston/Brighton','Jamaica Plain','South End','Charlestown','West Roxbury','Back Bay','Beacon Hill'];
-var sRes=[11.2,9.8,9.1,7.8,7.1,5.8,5.6,4.2,4.4,3.8,3.1,2.7];
-var sColors=sNeighs.map(function(n){return['Mattapan','Roxbury','Dorchester','Jamaica Plain'].indexOf(n)>=0?C.r:n==='Back Bay'||n==='Beacon Hill'||n==='West Roxbury'?C.g:C.am});
-sc('s4',{type:'bar',data:{labels:sNeighs,datasets:[{data:sRes,backgroundColor:sColors,borderRadius:4},{label:'Citywide Avg (6.8d)',data:Array(12).fill(6.8),type:'line',borderColor:C.sl,borderDash:[5,5],pointRadius:0,borderWidth:1.5}]},options:{indexAxis:'y',responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0},tooltip:{callbacks:{label:function(c){return c.raw+' days'}}}},scales:{x:{min:0,max:13,ticks:{callback:function(v){return v+'d'}},grid:{color:G}},y:{grid:{display:0}}}}});
+var sNeighs=['West Roxbury','Charlestown','Roslindale','Hyde Park','Jamaica Plain','Mattapan','Fenway/Kenmore','East Boston','Dorchester','Mission Hill','South Boston','Downtown','Back Bay','Allston/Brighton','Roxbury','South End','Beacon Hill'];
+var sRes=[14.1,13.3,12.6,10.5,10.2,10.1,10.1,8.7,8.4,8.2,8.0,7.7,7.2,6.9,6.1,6.0,5.0];
+var sColors=sNeighs.map(function(n){return['Mattapan','Roxbury','Dorchester','Jamaica Plain'].indexOf(n)>=0?C.r:C.b});
+sc('s4',{type:'bar',data:{labels:sNeighs,datasets:[{data:sRes,backgroundColor:sColors,borderRadius:4},{label:'Citywide Avg (8.3d)',data:Array(17).fill(8.3),type:'line',borderColor:C.sl,borderDash:[5,5],pointRadius:0,borderWidth:1.5}]},options:{indexAxis:'y',responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0},tooltip:{callbacks:{label:function(c){return c.raw+' days'}}}},scales:{x:{min:0,max:16,ticks:{callback:function(v){return v+'d'}},grid:{color:G}},y:{grid:{display:0}}}}});
 // s1: complaints by neighborhood
-sc('s1',{type:'bar',data:{labels:['Dorchester','Roxbury','South End','East Boston','Jamaica Plain','Back Bay','Allston/Bri','Mattapan','West Rox','Hyde Park','Charlestown','Other'],datasets:[{data:[35.0,16.2,12.0,10.9,9.5,8.2,8.1,7.4,5.2,4.5,3.8,17.2],backgroundColor:function(c){var n=['Dorchester','Roxbury','South End','East Boston','Jamaica Plain','Back Bay','Allston/Bri','Mattapan','West Rox','Hyde Park','Charlestown','Other'];return['Dorchester','Roxbury','Mattapan','Jamaica Plain'].indexOf(n[c.dataIndex])>=0?C.r:C.b},borderRadius:4}]},options:{indexAxis:'y',responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0},tooltip:{callbacks:{label:function(c){return c.raw.toFixed(1)+'K requests'}}}},scales:{x:{ticks:{callback:function(v){return v+'K'}},grid:{color:G}},y:{grid:{display:0}}}}});
+sc('s1',{type:'bar',data:{labels:['Dorchester','Allston/Bri','Roxbury','South Boston','South End','East Boston','Downtown','Jamaica Plain','Back Bay','Mattapan','Roslindale','Hyde Park','Beacon Hill','West Rox','Charlestown','Fenway/Kenmore','Mission Hill','Unassigned'],datasets:[{data:[34.8, 25.3, 25.2, 24.6, 22.5, 17.5, 16.1, 16.0, 15.4, 10.4, 9.6, 9.5, 8.8, 8.1, 7.7, 5.4, 4.9, 14.3],backgroundColor:function(c){var n=['Dorchester','Allston/Bri','Roxbury','South Boston','South End','East Boston','Downtown','Jamaica Plain','Back Bay','Mattapan','Roslindale','Hyde Park','Beacon Hill','West Rox','Charlestown','Fenway/Kenmore','Mission Hill','Unassigned'];return['Dorchester','Roxbury','Mattapan','Jamaica Plain'].indexOf(n[c.dataIndex])>=0?C.r:C.b},borderRadius:4}]},options:{indexAxis:'y',responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0},tooltip:{callbacks:{label:function(c){return c.raw.toFixed(1)+'K requests'}}}},scales:{x:{ticks:{callback:function(v){return v+'K'}},grid:{color:G}},y:{grid:{display:0}}}}});
 // s2: categories
-sc('s2',{type:'bar',data:{labels:['Pothole/Road','Trash/Recycling','Rodent Activity','Streetlight','Parking','Graffiti','Heat/Hot Water','Illegal Dumping'],datasets:[{data:[25.0,19.0,16.2,14.0,12.0,8.5,7.0,7.0],backgroundColor:[C.b,C.g,C.r,C.am,C.p,C.o,C.cy,C.sl],borderRadius:4}]},options:{indexAxis:'y',responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0},tooltip:{callbacks:{label:function(c){return c.raw.toFixed(1)+'K'}}}},scales:{x:{ticks:{callback:function(v){return v+'K'}},grid:{color:G}},y:{grid:{display:0}}}}});
+sc('s2',{type:'bar',data:{labels:['Parking Enforcement','Street Cleaning','Trash Storage','CE Collection','Needle Pickup','Pothole Repair','Missed Pickup','Poor Property Cond','Dead Animal','Sidewalk Repair'],datasets:[{data:[60.6,20.9,20.1,18.7,11.7,11.1,10.0,9.1,8.7,6.7],backgroundColor:[C.r,C.b,C.g,C.am,C.p,C.o,C.cy,C.sl,C.b,C.g],borderRadius:4}]},options:{indexAxis:'y',responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0},tooltip:{callbacks:{label:function(c){return c.raw.toFixed(1)+'K'}}}},scales:{x:{ticks:{callback:function(v){return v+'K'}},grid:{color:G}},y:{grid:{display:0}}}}});
 // s3: annual trend
-sc('s3',{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024','2025'],datasets:[{data:[121000,96000,108000,119000,127000,138000,132000],borderColor:C.b,backgroundColor:C.bA,fill:1,tension:.3,borderWidth:3,pointRadius:5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{min:80000,ticks:{callback:function(v){return(v/1000).toFixed(0)+'K'}},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('s3',{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024','2025'],datasets:[{data:[253782,246165,269665,272931,307791,306756,276093],borderColor:C.b,backgroundColor:C.bA,fill:1,tension:.3,borderWidth:3,pointRadius:5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{min:230000,ticks:{callback:function(v){return(v/1000).toFixed(0)+'K'}},grid:{color:G}},x:{grid:{display:0}}}}});
 // s5: rodent trend
-sc('s5',{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024'],datasets:[{data:[10000,9800,12200,14800,15600,16234],borderColor:C.r,backgroundColor:C.rA,fill:1,tension:.3,borderWidth:3,pointRadius:5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{min:8000,ticks:{callback:function(v){return(v/1000).toFixed(0)+'K'}},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('s5',{type:'line',data:{labels:['2019','2020','2021','2022','2023','2024','2025'],datasets:[{data:[2355,3506,3612,4263,3937,5013,5225],borderColor:C.r,backgroundColor:C.rA,fill:1,tension:.3,borderWidth:3,pointRadius:5}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{min:2000,ticks:{callback:function(v){return(v/1000).toFixed(1)+'K'}},grid:{color:G}},x:{grid:{display:0}}}}});
 // s6: unresolved by type
-sc('s6',{type:'bar',data:{labels:['Graffiti','Streetlight','Heat/Hot Water','Pothole','Rodent','Trash','Overall'],datasets:[{data:[31,28,22,18,14,8,14],backgroundColor:function(c){var d=[31,28,22,18,14,8,14];return d[c.dataIndex]>20?C.r:d[c.dataIndex]>12?C.am:C.g},borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0}},scales:{y:{ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0}}}}});
+sc('s6',{type:'bar',data:{labels:['Parking Enf','Sidewalk','Sign Repair','Pothole','Tree Maint','Equipment','Abandoned Veh','Street Clean','Rodent','Trash Storage','CITYWIDE'],datasets:[{data:[75.5,74.0,65.8,37.2,36.2,26.3,19.3,5.5,1.4,0.4,29.7],backgroundColor:function(c){var d=[75.5,74.0,65.8,37.2,36.2,26.3,19.3,5.5,1.4,0.4,29.7];return c.dataIndex===10?C.sl:d[c.dataIndex]>50?C.r:d[c.dataIndex]>20?C.am:C.g},borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{display:0},tooltip:{callbacks:{label:function(c){return c.raw+'% not closed in 30 days'}}}},scales:{y:{ticks:{callback:pct},grid:{color:G}},x:{grid:{display:0}}}}});
 // s7: service gap vs violence (grouped bar — same 4 neighborhoods)
-sc('s7',{type:'bar',data:{labels:['Dorchester','Roxbury','Mattapan','Jamaica Plain'],datasets:[{label:'Avg Resolution (Days)',data:[9.1,9.8,11.2,5.6],backgroundColor:C.r,borderRadius:4},{label:'Shooting Share (%)',data:[61,31,19,12],backgroundColor:C.am,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'}},scales:{y:{grid:{color:G}},x:{grid:{display:0}}}}});
+sc('s7',{type:'bar',data:{labels:['Pothole repair','Street cleaning','Trash barrels'],datasets:[{label:'Dorchester, Roxbury, Mattapan, JP',data:[5.0,1.0,0.5],backgroundColor:C.r,borderRadius:4},{label:'Every other neighborhood',data:[6.5,2.0,0.5],backgroundColor:C.b,borderRadius:4}]},options:{responsive:1,maintainAspectRatio:0,plugins:{legend:{position:'top'},tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+c.raw+' days'}}}},scales:{y:{title:{display:1,text:'Mean days to close'},grid:{color:G}},x:{grid:{display:0}}}}});
 }
 
 // ---- PENSION / OPEB ----

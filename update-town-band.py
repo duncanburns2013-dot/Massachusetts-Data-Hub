@@ -32,7 +32,7 @@ Bradford is both the top MLSAreaMajor value (104 sales) and its own ZIP 01835
 ZIP is therefore the spine, and named areas ship as a clearly-captioned
 secondary cut. Do NOT promote MLSAreaMajor to the primary cut for a new town
 without re-running that coverage check: a 21% field silently ranks whichever
-neighbourhoods agents happened to type.
+neighborhoods agents happened to type.
 
 Requires: BRIDGE_TOKEN. Usage:  python update-town-band.py [--refresh]
 """
