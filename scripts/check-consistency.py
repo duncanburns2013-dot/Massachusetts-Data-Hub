@@ -246,6 +246,15 @@ def checks():
     mig = load('domestic-migration-latest.json')
     out.append(('Net domestic out-migration', money(mig['net_domestic_outmigration']),
                 'domestic-migration-latest.json'))
+    # Natural change was the one component of this block with no comparison:
+    # the register carried +26,617 and the feed carries the six yearly values
+    # that sum to it, and nothing added them up. Added 2026-11-22.
+    _nat = (mig.get('components') or {}).get('nat') or {}
+    if _nat:
+        out.append(('Natural change (births less deaths), 2020-2025',
+                    money(sum(_nat.values())),
+                    'domestic-migration-latest.json'))
+
     for comp, label in [('intl', 'Net international migration'),
                         ('netmig', 'Net migration'), ('popchg', 'Population change')]:
         if comp in mig.get('components', {}):

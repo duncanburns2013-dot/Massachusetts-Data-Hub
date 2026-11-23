@@ -161,7 +161,15 @@ def unnamed_scripts(rows):
     for r in rows:
         if register.SCRIPT not in r["mark"]:
             continue
-        if SCRIPT_RE.search(r["mark"]):
+        if OWNER_RE.search(r["mark"]):
+            continue
+        # A row may name its owner in its own SOURCE cell rather than in the
+        # mark: "| MA median household income | $103,960 | ACS 2024 (5-yr),
+        # `data/census-latest.json` | <glyph> Jul 2026 |". That is attribution
+        # a reader can follow, and check-consistency.py compares that row with
+        # that feed, so it is enforced too. Scanning only the mark counted it
+        # as unattributed.
+        if OWNER_RE.search(" ".join(r.get("cells") or [])):
             continue
         try:
             at = int(r["i"])
