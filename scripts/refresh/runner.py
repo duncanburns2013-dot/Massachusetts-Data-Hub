@@ -440,6 +440,38 @@ def apply(move: Move, *, fetch=urlopen_text, dry=False, root: Path = ROOT, today
     new_view = view({"household": f["household"], "family": f["family"], "vintage": year,
                      "source": _source_label(year)})
 
+    # PLAUSIBILITY. Added 2026-11-22 after a probe published $12 and
+    # $103,960,000 as Massachusetts median household income.
+    #
+    # _num rejects nulls, negatives and infinity, and _fetch_acs proves the two
+    # Census calls describe one release by cross-checking MA between them. What
+    # none of that can catch is a value that is internally CONSISTENT and wrong:
+    # both reads come from the same API, so an API-side error agrees with
+    # itself. Fed a consistent 1,039,600 the engine accepted it and would have
+    # written it to all four targets.
+    #
+    # The old figure is already in hand -- apply reads it to compute
+    # _divergent -- so the check costs one comparison. ACS 1-year median
+    # household income moves a few per cent a year; the band is set at 25%,
+    # loose enough that no real release trips it and tight enough that the
+    # 10x, 1000x and $12 cases cannot pass.
+    #
+    # It raises FetchError, so the loop records a failure and publishes
+    # nothing, rather than a ValueError that would read like a bad target.
+    # A genuine restatement beyond the band has to be applied by a person who
+    # has looked at it, which is the right bar for a figure this one feeds.
+    BAND = 0.25
+    for k in ("household", "family"):
+        was, now = inc.get(k), new_view[k]
+        if not was:
+            continue
+        if not (1 - BAND) <= now / was <= (1 + BAND):
+            raise FetchError(
+                f"{move.source_id}: {k} moves {was:,.0f} -> {now:,.0f}, "
+                f"{now / was:.2f}x, outside the {BAND:.0%} band for one ACS "
+                f"year. Nothing written. Check the release before applying it "
+                f"by hand.")
+
     changed = [t for t in src.targets if news[t] != olds[t]]
     written = []
     if not dry:

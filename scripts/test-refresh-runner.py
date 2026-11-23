@@ -231,6 +231,29 @@ try:
         a_l, b_l = live.splitlines(), got.splitlines()
         assert len(a_l) == len(b_l) and sum(x != y for x, y in zip(a_l, b_l)) <= 2, rel
 
+    # 1b. a consistent but implausible release is refused, and nothing is written.
+    #
+# _num rejects nulls, negatives and infinity, and _fetch_acs proves the two
+    # Census calls describe one release. Neither can catch a value that is
+    # internally consistent and wrong: both reads come from the same API, so an
+    # API-side error agrees with itself. Before the band, feeding this a
+    # consistent 1,065,390 published it to all three targets; $12 published too.
+    for bad_hh in (106539 * 10, 106539 * 1000, 12, int(106539 * 1.26)):
+        root = stale_root()
+        before = snap(root)
+        try:
+            apply(acs_move, fetch=stub_census_full(ma_hh=bad_hh), root=root, today=TODAY)
+            assert False, f"{bad_hh} was published"
+        except runner.FetchError as e:
+            assert "outside the" in str(e) and "band" in str(e), e
+        assert snap(root) == before, f"{bad_hh} wrote to disk before being refused"
+
+    # the band must not refuse a real release: ACS moves a few per cent a year
+    for ok_hh in (int(106539 * 1.04), int(106539 * 0.97)):
+        root = stale_root()
+        a = apply(acs_move, fetch=stub_census_full(ma_hh=ok_hh), root=root, today=TODAY)
+        assert a.new["household"] == float(ok_hh), a.new
+
     # 2. line endings survive exactly, and the diff is confined to the figure
     for html_eol, json_eol in (("\n", "\r\n"), ("\r\n", "\n")):
         root = stale_root(html_eol=html_eol, json_eol=json_eol)
