@@ -190,6 +190,20 @@ def main():
         print("No claim is made about their automation. Re-run with a token, "
               "or wait out the rate limit.", file=sys.stderr)
     if not checked:
+        # Distinguish "could not run" from "ran and found nothing". CI supplies
+        # GITHUB_TOKEN (freshness.yml), so there a total failure IS the anomaly
+        # worth an email. On a developer box there is no token, the anonymous
+        # budget is 60/hour shared with every other tool on the machine, and a
+        # rate limit is the NORMAL outcome -- failing on it would make the local
+        # suite permanently red, which trains a reader to ignore the one check
+        # that is supposed to be worth an email. A SKIP is not a PASS: it says
+        # so on stderr and claims nothing.
+        if not os.environ.get("GITHUB_TOKEN"):
+            print("\nSKIPPED: no GITHUB_TOKEN, so the anonymous budget ran out "
+                  "before anything could be read.", file=sys.stderr)
+            print("This run makes NO claim about any repo. CI sets the token "
+                  "and does check.", file=sys.stderr)
+            return 0
         print("\nNOTHING was verified, so this watchdog reported nothing "
               "at all.", file=sys.stderr)
         return 1
