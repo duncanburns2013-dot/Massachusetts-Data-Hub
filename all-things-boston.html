@@ -57,11 +57,15 @@
      service: the slowest averages are West Roxbury, Charlestown and Roslindale, which
      file more tree, sidewalk and sign work, and those types are slow everywhere.
 
-     STILL UNVERIFIED, and now said so on the page: the median household income column.
-     Boston neighborhoods are not Census geographies, and neither the city nor BPDA
-     publishes a current neighborhood income table - BPDA’s own profiles are 2007-2011
-     ACS. Checking it needs a tract-to-neighborhood spatial join nobody here has made,
-     so the column is labelled indicative rather than quietly presented as sourced.
+     MEDIAN HOUSEHOLD INCOME REMOVED 2026-11-23, at Duncan’s instruction. The column
+     had been carried at ACS 2023 and could not be checked against anything: Boston
+     neighborhoods are not Census geographies, data.boston.gov publishes no
+     neighborhood income dataset, and BPDA’s own neighborhood profiles are 2007-2011
+     ACS, older than what the page was already showing. Verifying it would have meant
+     a tract-to-neighborhood spatial join plus a choice between aggregate-income-over-
+     households (a MEAN, a different statistic) and a weighted-median approximation.
+     Either answer would have been our choice, not a published figure, so the column
+     is gone rather than labelled. The shootings column stays, BPD 2024, labelled.
 
      NOT verified on this visit: ICE ERO Boston, Vera, Globe and GBH citations, and the
      Boston Retirement System actuarial valuations.
@@ -690,20 +694,20 @@ tr:hover{background:rgba(15,41,66,.02)}.tg{background:rgba(15,41,66,.06);font-we
 </div>
 
 <div class="cd"><h3>311 Service by Neighborhood (2025)</h3>
-<table><thead><tr><th>Neighborhood</th><th class="r">2025 Requests</th><th class="r">Avg Days to Close</th><th class="r">Shootings 2024</th><th class="r">Median HH Income</th></tr></thead><tbody>
-<tr><td class="b red">Dorchester</td><td class="r">34,831</td><td class="r">8.4</td><td class="r">61</td><td class="r">$52K</td></tr>
-<tr><td class="b red">Roxbury</td><td class="r">25,174</td><td class="r green">6.1</td><td class="r">31</td><td class="r">$40K</td></tr>
-<tr><td class="b red">Mattapan</td><td class="r">10,431</td><td class="r amber">10.1</td><td class="r">19</td><td class="r">$48K</td></tr>
-<tr><td class="b red">Jamaica Plain</td><td class="r">15,975</td><td class="r amber">10.2</td><td class="r">12</td><td class="r">$74K</td></tr>
-<tr><td class="b">South End</td><td class="r">22,455</td><td class="r green">6.0</td><td class="r">4</td><td class="r">$91K</td></tr>
-<tr><td class="b">East Boston</td><td class="r">17,487</td><td class="r">8.7</td><td class="r">6</td><td class="r">$56K</td></tr>
-<tr><td class="b">Allston/Brighton</td><td class="r">25,286</td><td class="r">6.9</td><td class="r">3</td><td class="r">$68K</td></tr>
-<tr><td class="b">Hyde Park</td><td class="r">9,513</td><td class="r amber">10.5</td><td class="r">4</td><td class="r">$62K</td></tr>
-<tr><td class="b">West Roxbury</td><td class="r">8,115</td><td class="r red">14.1</td><td class="r">1</td><td class="r">$98K</td></tr>
-<tr><td class="b">Back Bay</td><td class="r">15,398</td><td class="r">7.2</td><td class="r">0</td><td class="r">$116K</td></tr>
-<tr><td class="b">Beacon Hill</td><td class="r">8,755</td><td class="r green">5.0</td><td class="r">0</td><td class="r">$134K</td></tr>
+<table><thead><tr><th>Neighborhood</th><th class="r">2025 Requests</th><th class="r">Avg Days to Close</th><th class="r">Shootings 2024</th></tr></thead><tbody>
+<tr><td class="b red">Dorchester</td><td class="r">34,831</td><td class="r">8.4</td><td class="r">61</td></tr>
+<tr><td class="b red">Roxbury</td><td class="r">25,174</td><td class="r green">6.1</td><td class="r">31</td></tr>
+<tr><td class="b red">Mattapan</td><td class="r">10,431</td><td class="r amber">10.1</td><td class="r">19</td></tr>
+<tr><td class="b red">Jamaica Plain</td><td class="r">15,975</td><td class="r amber">10.2</td><td class="r">12</td></tr>
+<tr><td class="b">South End</td><td class="r">22,455</td><td class="r green">6.0</td><td class="r">4</td></tr>
+<tr><td class="b">East Boston</td><td class="r">17,487</td><td class="r">8.7</td><td class="r">6</td></tr>
+<tr><td class="b">Allston/Brighton</td><td class="r">25,286</td><td class="r">6.9</td><td class="r">3</td></tr>
+<tr><td class="b">Hyde Park</td><td class="r">9,513</td><td class="r amber">10.5</td><td class="r">4</td></tr>
+<tr><td class="b">West Roxbury</td><td class="r">8,115</td><td class="r red">14.1</td><td class="r">1</td></tr>
+<tr><td class="b">Back Bay</td><td class="r">15,398</td><td class="r">7.2</td><td class="r">0</td></tr>
+<tr><td class="b">Beacon Hill</td><td class="r">8,755</td><td class="r green">5.0</td><td class="r">0</td></tr>
 </tbody></table>
-<p class="src"><strong>Requests and resolution time:</strong> recomputed 2026-11-23 from data.boston.gov, 311 Service Requests 2025 (resource 9d7c2214), all 276,093 rows of the calendar year, queried through CKAN datastore_search_sql. Calendar year, not fiscal: the city publishes one file per calendar year, so this needs no splicing and matches the trend chart above. Resolution time is the mean of closed_dt minus open_dt in calendar days over closed cases only. Neighborhood names are rolled up where the city uses more than one label for the same place (Allston, Brighton and "Allston / Brighton"; Mattapan and "Greater Mattapan"); 14,331 rows carry no usable neighborhood and are excluded from this table. <strong>Red names</strong> are the 4 neighborhoods with 80% of shootings, and this column no longer supports the claim that they wait longer: see the like-for-like chart above. <strong>Shootings:</strong> BPD, 2024, not refreshed on this pass. <strong>Median household income:</strong> ACS 2023, carried forward unverified. Boston neighborhoods are not Census geographies and neither the city nor BPDA publishes a current neighborhood income table (BPDA’s own neighborhood profiles are 2007–2011 ACS), so these figures cannot be checked against a primary source without a tract-to-neighborhood spatial join nobody here has made. Treat the column as indicative.</p></div>
+<p class="src"><strong>Requests and resolution time:</strong> recomputed 2026-11-23 from data.boston.gov, 311 Service Requests 2025 (resource 9d7c2214), all 276,093 rows of the calendar year, queried through CKAN datastore_search_sql. Calendar year, not fiscal: the city publishes one file per calendar year, so this needs no splicing and matches the trend chart above. Resolution time is the mean of closed_dt minus open_dt in calendar days over closed cases only. Neighborhood names are rolled up where the city uses more than one label for the same place (Allston, Brighton and "Allston / Brighton"; Mattapan and "Greater Mattapan"); 14,331 rows carry no usable neighborhood and are excluded from this table. <strong>Red names</strong> are the 4 neighborhoods with 80% of shootings, and this column no longer supports the claim that they wait longer: see the like-for-like chart above. <strong>Shootings:</strong> BPD, 2024, not refreshed on this pass. <strong>Median household income was removed on 2026-11-23.</strong> It had been carried at ACS 2023 and could not be checked: Boston neighborhoods are not Census geographies, neither the city nor BPDA publishes a current neighborhood income table, and verifying it would have meant choosing a tract aggregation nobody here had made. An unverifiable column is worse than no column.</p></div>
 </div>
 
 <!-- PENSION / OPEB -->
