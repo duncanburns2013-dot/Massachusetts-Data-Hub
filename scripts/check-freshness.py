@@ -409,7 +409,7 @@ RECEIPT_LABEL = "data/refresh-receipt.json (last_run)"
 LOOP = "the refresh loop (scripts/refresh/runner.py, .github/workflows/refresh-loop.yml)"
 
 
-def check_refresh_receipt(receipt=REFRESH_RECEIPT, today=TODAY, sources=REFRESH_SOURCES):
+def check_refresh_receipt(receipt=REFRESH_RECEIPT, today=None, sources=REFRESH_SOURCES):
     """The refresh loop's backstop. Returns (rows, problems); problems are (label, detail).
 
     THE DEAD-MAN'S SWITCH. The loop reports quiet runs by saying nothing, so silence only means
@@ -421,6 +421,18 @@ def check_refresh_receipt(receipt=REFRESH_RECEIPT, today=TODAY, sources=REFRESH_
     and deliberately does NOT fail here. A human_fetch source past its `due` date fails; that is
     computed from the register now, not from the receipt, so it clears the day `due` is moved.
     """
+    # UTC, because the receipt is written by a UTC runner and TODAY is local.
+    # Added 2026-11-23. The loop committed its receipt at 01:47 UTC on the 23rd
+    # while this machine still read the 22nd, so the age came out -1 and the
+    # dead-man's switch reported STALE on a receipt eleven hours old. The
+    # age < 0 branch below was written for a receipt genuinely from the future;
+    # a one-day skew is just a clock difference and should not be either.
+    #
+    # Only the default moves. Every caller that passes `today` -- the refresh
+    # tests all do -- still controls it, and TODAY stays local for the page
+    # stamps and register dates, which are calendar dates a person wrote.
+    if today is None:
+        today = datetime.datetime.now(datetime.timezone.utc).date()
     rows, problems = [], []
     dead = "DEAD-MAN'S SWITCH: "
     try:
