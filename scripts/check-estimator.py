@@ -144,6 +144,35 @@ def main():
     # the neither-working four-child column copies the one-earner derived one
     expected[DERIVED[3]] = expected["2 adults (1 working), 4 children (derived)"]
 
+    # THE ARITHMETIC, not a substring.  (changed 2026-11-22)
+    #
+    # Until today this block checked only that "/3" and "mean of the three"
+    # still appeared somewhere in the page, and the expected[] values computed
+    # above were never compared with anything -- they were printed at the end
+    # and discarded. So the docstring's promise, repeated in freshness.yml,
+    # that "the derived values are recomputed from MIT's columns rather than
+    # string-matched, so a change to the derivation fails too" was false.
+    #
+    # Proven by mutation: changing the page's own extrapolation from
+    # arr[i3]+step to arr[i3]+step*2 -- which roughly doubles the per-child
+    # increment on three published columns -- left this check at exit 0, still
+    # printing its own untouched $234,935 / $134,564 / $236,132.
+    #
+    # The page computes the column in JS at load, so there is no literal for a
+    # stdlib check to compare. What CAN be pinned is the expression, and that is
+    # what the mutation changed. Both halves are required: the mean-of-three
+    # step, and adding exactly one step to the three-child column.
+    STEP = ("var step=((arr[i1]-arr[i0])+(arr[i2]-arr[i1])"
+            "+(arr[i3]-arr[i2]))/3")
+    PUSH = "arr.push(Math.round(arr[i3]+step));"
+    flat = re.sub(r"\s+", "", html)
+    if re.sub(r"\s+", "", STEP) not in flat:
+        bad.append("the gross/tax extrapolation no longer averages the three "
+                   "observed per-child increments")
+    if re.sub(r"\s+", "", PUSH) not in flat:
+        bad.append("the derived column is no longer the three-child column "
+                   "plus exactly one mean increment -- the published figures "
+                   "have moved and expected[] above no longer describes them")
     if "/3" not in html or "mean of the three" not in html:
         bad.append("the derivation no longer averages the three observed "
                    "per-child increments, or stopped saying so")
