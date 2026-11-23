@@ -360,7 +360,10 @@
    "id": "energy-boston-federal-rescinded",
    "subject": "Boston federal climate funding rescinded",
    "wrong": [
-    "$105M+"
+    "$105M+",
+    "105M",
+    "$105 million",
+    "105 million"
    ],
    "right": "16% of $148M (about $24M) rescinded, 22% pending (2030 CAP)",
    "context": "(?i)federal|rescind",
@@ -369,13 +372,15 @@
    "retired_on": "2026-10-29",
    "allow": [
     "data/retired-figures.json"
-   ]
+   ],
+   "note": "Variants added 2026-11-23. The retired value was recorded in one rendering only; these are the other renderings it could come back in, each measured at zero current occurrences outside this file before being added. Bare \"3,500\" is deliberately NOT listed: the context is (?i)BERDO|buildings over a 900-character window, \"buildings\" is a common word, and tax-budget-dashboard.html already carries \"3,500\" three times, so it would trip on an unrelated figure."
   },
   {
    "id": "energy-berdo-building-count",
    "subject": "Buildings covered by BERDO",
    "wrong": [
-    "~3,500"
+    "~3,500",
+    "3,500 buildings"
    ],
    "right": "over 5,000 buildings (2030 CAP)",
    "context": "(?i)BERDO|buildings",
@@ -384,7 +389,8 @@
    "retired_on": "2026-10-29",
    "allow": [
     "data/retired-figures.json"
-   ]
+   ],
+   "note": "Variants added 2026-11-23. The retired value was recorded in one rendering only; these are the other renderings it could come back in, each measured at zero current occurrences outside this file before being added. Bare \"3,500\" is deliberately NOT listed: the context is (?i)BERDO|buildings over a 900-character window, \"buildings\" is a common word, and tax-budget-dashboard.html already carries \"3,500\" three times, so it would trip on an unrelated figure."
   },
   {
    "id": "energy-lobbying-totals",
