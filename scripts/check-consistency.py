@@ -42,8 +42,26 @@ def money(v):
     return f'{round(v):,}'
 
 
+BAD_FEEDS = []
+
+
 def load(name):
-    return json.loads((REPO / 'data' / name).read_text())
+    """A feed, or a named failure. Never a traceback.
+
+    This was a bare json.loads(read_text()), so a feed that was missing, empty
+    or half-written took the whole check down with a stack trace instead of
+    reporting which file was bad. Red for the wrong reason is nearly as bad as
+    green for the wrong reason: whoever reads the log learns that Python threw,
+    not that a figure is unverified.
+    """
+    p = REPO / "data" / name
+    try:
+        return json.loads(p.read_text())
+    except FileNotFoundError:
+        BAD_FEEDS.append((name, "missing"))
+    except (json.JSONDecodeError, UnicodeDecodeError, OSError) as e:
+        BAD_FEEDS.append((name, type(e).__name__ + ": " + str(e)[:60]))
+    return {}
 
 
 def checks():
@@ -317,6 +335,19 @@ def checks():
 def main():
     text = MASTER.read_text(encoding='utf-8')
     rows = checks()
+
+    # A feed that would not load is reported BY NAME and fails, because load()
+    # now returns {} rather than raising. Without this the hardening would have
+# turned a loud traceback into a silent skip: the checks that feed owns
+    # would quietly vanish from the run and the total would shrink unnoticed.
+    if BAD_FEEDS:
+        print("\n%d feed(s) could not be read:" % len(BAD_FEEDS),
+              file=sys.stderr)
+        for _n, _why in BAD_FEEDS:
+            print("  data/%s  %s" % (_n, _why), file=sys.stderr)
+        print("Every figure those feeds back is unverified in this run.",
+              file=sys.stderr)
+        return 1
     width = max(len(c[0]) for c in rows)
 
     print(f'{"figure".ljust(width)}  {"live value":>14}  status   source')

@@ -57,6 +57,10 @@ EXPECT_QUIET = {
 NOW = datetime.datetime.now(datetime.timezone.utc)
 
 
+class RateLimited(Exception):
+    """The API refused us; nothing was learned about this repo."""
+
+
 def api(path):
     req = urllib.request.Request(
         "https://api.github.com" + path,
@@ -71,27 +75,13 @@ def api(path):
             return json.load(r)
     except urllib.error.HTTPError as e:
         if e.code == 403:
-            print("  rate-limited by the API; skipping the rest of this pass")
-            raise SystemExit(0)
+            # Was `raise SystemExit(0)`: a rate-limited pass printed one line
+            # and exited GREEN, so "Every watched repo's automation is
+            # running" was reported on a pass that had verified nothing. This
+            # watchdog exists because a stopped feed is silent; it must not
+            # become silent itself. Raised now and counted as unverified.
+            raise RateLimited("rate-limited by the GitHub API")
         raise
-
-
-def cron_days(expr):
-    """Roughly how many days between firings. Generous on purpose."""
-    f = expr.split()
-    if len(f) != 5:
-        return 7
-    dom, mon, dow = f[2], f[3], f[4]
-    if dom != "*" and dom.isdigit():
-        return 31              # monthly
-    if dow != "*":
-        return 7 / max(1, len(dow.split(",")))
-    if f[1].startswith("*/"):
-        try:
-            return int(f[1][2:]) / 24
-        except ValueError:
-            return 1
-    return 1                   # daily
 
 
 def check(repo):
@@ -152,12 +142,18 @@ def check(repo):
 
 def main():
     problems = []
+    unverified = []
     for repo in REPOS:
         print(f"{repo} ...")
         try:
             found = check(repo)
+        except RateLimited as e:
+            print(f"  {e} - nothing verified for this repo")
+            unverified.append(repo)
+            continue
         except urllib.error.HTTPError as e:
-            print(f"  cannot read ({e.code}) - skipped")
+            print(f"  cannot read ({e.code}) - nothing verified for this repo")
+            unverified.append(repo)
             continue
         for p in found:
             print(f"  {p[2]:9s} {p[1]:34s} {p[3]}")
@@ -174,8 +170,32 @@ def main():
         print("\nA STOPPED workflow in a quiet repo is usually GitHub disabling the")
         print("schedule after 60 days without a push; re-enable it from the Actions tab.")
         return 1
+    # The claim this job makes on a green run is "every watched repo's
+    # automation is running". It may only make that claim about repos it could
+    # actually read. Until 2026-11-22 a 403 raised SystemExit(0) from inside
+    # api(), so a wholly rate-limited pass printed one line and exited green,
+    # making the claim about nothing.
+    #
+    # Failing on ANY unverified repo was my first fix and it is too brittle:
+    # this file's own header says a failure here is "worth an email", and a
+    # transient rate limit is not the same event as a stopped cron. So the
+    # claim is narrowed to what was read, the gap is printed where a reader
+    # will see it, and the run only FAILS when nothing at all was verified --
+    # which means the watchdog is giving no signal and that is worth an email.
+    checked = [r for r in REPOS if r not in unverified]
+    if unverified:
+        print("\nNOT VERIFIED: %d of %d repo(s) could not be read (%s)."
+              % (len(unverified), len(REPOS), ", ".join(unverified)),
+              file=sys.stderr)
+        print("No claim is made about their automation. Re-run with a token, "
+              "or wait out the rate limit.", file=sys.stderr)
+    if not checked:
+        print("\nNOTHING was verified, so this watchdog reported nothing "
+              "at all.", file=sys.stderr)
+        return 1
 
-    print("\nEvery watched repo's automation is running.")
+    print("\nAutomation is running in all %d repo(s) this pass could read."
+          % len(checked))
     return 0
 
 

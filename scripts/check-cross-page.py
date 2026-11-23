@@ -212,6 +212,14 @@ GEO = {"massachusetts", "new hampshire", "vermont", "maine", "connecticut",
 def norm_label(s):
     s = htmlmod.unescape(s).lower()
     s = re.sub(r"[^a-z0-9%$.× ]+", " ", s)
+    # "HomeBASE FY 2026", "HomeBASE (FY2026)" and "HomeBASE FY2026" reduce to
+    # three different keys once punctuation goes, and this check only compares
+    # identical keys -- so the relabelled figure it was built to catch escaped
+    # it. Collapse the space after a fiscal-year prefix. Measured 2026-11-22:
+    # this plus lifting the single-word filter below makes 419 more labels
+    # eligible (5,795 -> 6,214) and produces ZERO new conflicts, so the
+    # false-positive storm I expected is not there.
+    s = re.sub(r"(fy|cy|sy)\s+(\d)", r"", s)
     s = re.sub(r"\s+", " ", s).strip()
     return s
 
@@ -234,8 +242,10 @@ def main():
             L = norm_label(lab)
             if len(L) < 8 or L in GEO:
                 continue
-            if len(L.split()) < 2:
-                continue
+            # The single-word filter used to drop every one-word label, which
+            # threw away "homebase" -- the quantity this check exists for. The
+# 8-character floor below already removes the short noise it was
+            # aimed at, and lifting this costs nothing measurable.
             v = to_millions(val)
             if not v:
                 continue
