@@ -88,9 +88,18 @@ def convert(md):
         if table:
             head, rows = table[0], [r for r in table[1:]
                                     if not re.match(r'^[\s|:-]+$', '|'.join(r))]
+            # data-label carries the column name onto every cell. Below 620px the
+            # table stops being a table (see the media block in the CSS): each row
+            # stacks into a card and each cell prints its own heading from this
+            # attribute, because the <thead> is no longer beside it.
+            labels = [H.escape(re.sub(r'[*`]', '', c).strip(), quote=True) for c in head]
+            def cells(r, _lb=labels):
+                return ''.join('<td data-label="%s">%s</td>'
+                               % (_lb[i] if i < len(_lb) else '', inline(c))
+                               for i, c in enumerate(r))
             out.append('<div class="mk-tw"><table class="mk-t"><thead><tr>%s</tr></thead><tbody>%s</tbody></table></div>' % (
                 ''.join('<th>%s</th>' % inline(c) for c in head),
-                ''.join('<tr>%s</tr>' % ''.join('<td>%s</td>' % inline(c) for c in r) for r in rows)))
+                ''.join('<tr>%s</tr>' % cells(r) for r in rows)))
             table.clear()
 
     while i < len(lines):
@@ -183,7 +192,32 @@ CSS = """/* == method:css start == */
 .mk-t td:nth-child(2){font-family:var(--font-mono);font-size:13px;white-space:nowrap}
 .mk-body code{font-family:var(--font-mono);font-size:12.5px;padding:1px 5px;border-radius:4px;
   background:rgba(11,17,19,.06);color:rgba(11,17,19,.78)}
-@media (max-width:620px){ .mk-t{min-width:440px} }
+/* A register row is one figure, one source and one note, and the note can run to
+   a paragraph. Keeping three columns on a phone forced the table to roughly 900px
+   inside a ~475px wrapper, so the note sat off-screen to the right and the row
+   stood 2,000px tall. The nowrap on column 2 was the trigger: it was written for
+   short values like "$12.40" and now also holds strings like a 95-character CKAN
+   resource id. Below 620px the table therefore stops being a table and each row
+   becomes a card, which gives the note the full width instead of a 190px column
+   and removes the sideways scroll entirely. Each cell prints its own heading from
+   the data-label the builder writes, since the thead is hidden. */
+@media (max-width:620px){
+  .mk-tw{overflow-x:visible;background:transparent;border:0;border-radius:0}
+  .mk-t{min-width:0;display:block}
+  .mk-t thead{display:none}
+  .mk-t tbody{display:block}
+  .mk-t tbody tr{display:block;margin:0 0 10px;padding:4px 0 8px;border-radius:11px;
+    border:1px solid rgba(11,17,19,.09);background:rgba(255,255,255,.55)}
+  .mk-t tbody tr:hover{background:rgba(255,255,255,.55)}
+  .mk-t td{display:block;padding:5px 14px;border-bottom:0;white-space:normal;
+    overflow-wrap:anywhere}
+  .mk-t td:nth-child(2){white-space:normal;font-size:13px}
+  .mk-t td:empty{display:none}
+  .mk-t td[data-label]:not(:empty):before{content:attr(data-label);display:block;
+    font-family:var(--font-mono);font-size:10px;font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;color:rgba(11,17,19,.5);margin-bottom:2px}
+  .mk-t tbody tr td:first-child{font-weight:600}
+}
 /* == method:css end == */"""
 
 
