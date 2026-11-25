@@ -548,14 +548,35 @@ else:
 # 18.34c), and the freshness job went red. update-nh-figures.py and
 # update-mls-figures.py already stamp their own rows; this is the same pattern.
 #
-# ONLY MA, US and the month are stamped, because only those are fetched. NH is
-# not in STATES -- its 27.01c figure comes from somewhere else and is hand-kept,
-# so advancing it here would be inventing a number. The New England figure is
-# deliberately frozen with its own note in the file. Both are left alone.
+# NH used to be excluded here. The note said NH was "not in STATES -- its
+# 27.01c figure comes from somewhere else and is hand-kept, so advancing it
+# here would be inventing a number". That stopped being true the day
+# CONSTANTS_STATES gained NH: this script fetches NH from the same EIA series,
+# in update_burden_constants below, and writes it into burden-constants.json.
+# The register row was the last place still holding the hand-typed value, so
+# method.html published NH at 27.01c (Jun 2026) while tax-burden-dashboard.html
+# published 29.17c (Sep 2026) off this script's own fetch -- three EIA releases
+# apart, both live at once, and no check compared them. (Found 2026-11-25.)
+#
+# The row carries its OWN month label, so unlike the MA-vs-NH burden comparison
+# it does not need NH to be on the same month as MA. Whatever EIA's newest NH
+# figure is, stamped with the month it actually belongs to, is correct.
+#
+# Fetched HERE and handed down to update_burden_constants rather than fetched
+# twice: two calls minutes apart can straddle an EIA publication and write two
+# different months into two files, which is the exact failure this is fixing.
+#
+# The New England figure is deliberately frozen with its own note in the file
+# and is still left alone.
 #
 # An anchor that fails to match aborts rather than writing a half-updated file,
 # per PLAYBOOK.md.
 MD_FILE = os.path.join(HERE, "MASTER_DATA.md")
+
+nh_price, nh_period = latest_monthly("NH")
+_nh_y, _nh_m = nh_period.split("-")
+nh_abbr = f"{MON_ABBR[int(_nh_m)]} {_nh_y}"
+print(f"NH {nh_abbr}: {cents(nh_price)}c")
 
 md_subs = [
     ("MA residential electricity",
@@ -567,6 +588,9 @@ md_subs = [
     ("annual overpayment",
      r'(\| \*\*MA annual overpayment vs US average\*\* \| \*\*\$)[\d,]+(/household\*\* \()[A-Za-z]{3} \d{4}(\))',
      rf'\g<1>{dollars(overpay)}\g<2>{mon_abbr}\g<3>'),
+    ("NH residential electricity",
+     r'(\| \*\*NH residential electricity, all-in\*\* \| \*\*)[\d.]+(¢/kWh\*\* \()[A-Za-z]{3} \d{4}(\))',
+     rf'\g<1>{cents(nh_price)}\g<2>{nh_abbr}\g<3>'),
     ("FL comparison rate",
      r'(\| FL residential electricity — the dashboard’s low-rate comparison \| )[\d.]+(¢/kWh \()[A-Za-z]{3} \d{4}(\))',
      rf'\g<1>{cents(rate["FL"])}\g<2>{mon_abbr}\g<3>'),
@@ -622,6 +646,11 @@ def update_burden_constants():
     for st in CONSTANTS_STATES:
         if st in rate and st == "MA":
             price, per = rate[st], period
+        elif st == "NH":
+            # Already fetched for the register stamp above. Reusing it keeps
+            # both writes on one EIA read, so the register row and this file
+            # cannot land on different months.
+            price, per = nh_price, nh_period
         else:
             price, per = latest_monthly(st)
         if per != period:

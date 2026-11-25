@@ -826,7 +826,7 @@ them had no register row.
 | MA unfunded pension + OPEB (stock) | $55.8B total · $42.1B pension-only · $19,719/household | Commonwealth ACFR FY2024; PERAC | See pension-dashboard.html | ⏳ re-read by 2027-03-31 — the annual comprehensive financial report |
 | MA annual pension appropriation FY2026 | $4.9B — ~8% of the state budget, **already in Layer 1** | Commonwealth budget FY2026 | same | 🔒 an enacted appropriation for a closed fiscal year. |
 | **MA residential electricity, all-in** | **30.97¢/kWh** (Sep 2026) | EIA Electric Power Monthly Table 5.6.A via API v2 | api.eia.gov/v2/electricity/retail-sales/data/ | 🔄 written by `update-energy-dashboard.py` |
-| **NH residential electricity, all-in** | **27.01¢/kWh** (Jun 2026) | same | same | ⏳ re-read by 2026-12-31 — EIA Electric Power Monthly Table 5.6.A |
+| **NH residential electricity, all-in** | **29.17¢/kWh** (Sep 2026) | same | same | 🔄 written by `update-energy-dashboard.py` |
 | US / New England residential electricity | 18.17¢ (Sep 2026) / 28.14¢ (May 2026 — the newest New England figure in this repo. The MA and US cells are stamped from the EIA fetch by update-energy-dashboard.py; this one is not fetched, so it stays put until a newer New England figure is actually published here) | same | same | 🔄 written by `update-energy-dashboard.py` |
 | **MA annual overpayment vs US average** | **$922/household** (Sep 2026) | Derived: (MA rate − US rate) × 7,200 kWh/yr | same | 🔄 written by `update-energy-dashboard.py` |
 | **MA premium over the US average** | **+70%** (Sep 2026) | Derived: MA rate ÷ US rate − 1, EIA Table 5.6.A | same | 🔄 written by `update-energy-dashboard.py` |

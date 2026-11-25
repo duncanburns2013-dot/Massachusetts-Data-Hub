@@ -315,6 +315,38 @@ def checks():
         out.append((f'Top spender #{c["rank"]} {c["name"][:20]}',
                     str(round(c['total'])), 'ma-lobbying-firms-latest.json'))
 
+    # burden-constants.json is written by update-energy-dashboard.py and its MA
+    # and NH retail rates ALSO exist as register rows. Nothing compared the two,
+    # and on 2026-11-25 they were three EIA releases apart: the register said NH
+    # 27.01c (Jun 2026) while this feed and tax-burden-dashboard.html said 29.17c
+    # (Sep 2026). Both were live. The MA row was safe only because the energy
+    # dashboard happens to publish MA and the row below already cross-checks it;
+    # NH appears on no dashboard this file reads, so it had nothing holding it.
+    #
+    # The period is checked as its own row, not folded into the value, because a
+    # right number under a wrong month is the failure mode that actually happens
+    # here -- that is how the register came to describe June's figure as July's.
+    bc = load('burden-constants.json')
+    for _st in ('MA', 'NH'):
+        _n = bc.get('states', {}).get(_st, {}).get('utility', {})                .get('retailElectricCentsPerKwh', {})
+        if _n.get('value') is None or not _n.get('period'):
+            continue
+        _lab = f'{_st} residential electricity, all-in'
+        # Two decimals because cents() in update-energy-dashboard.py always
+        # writes two, so this is the register's own spelling, not a guess.
+        out.append((_lab, f'{_n["value"]:.2f}', 'burden-constants.json'))
+        _y, _m = _n['period'].split('-')
+        _abbr = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][int(_m)]
+        # SAME label as the value row, deliberately. Tier 2 of bind() accepts
+        # any ONE distinctive word from the label on a line carrying the value,
+        # and "residential" is enough -- so a label of "<ST> residential
+        # electricity, all-in period" binds to whichever state's row happens to
+        # carry the right month. Reverting NH to 27.01c (Jun 2026) left this
+        # row reporting ok because the MA row above it says Sep 2026. Sharing
+        # the label forces tier 1, which binds to the register row by name.
+        out.append((_lab, f'{_abbr} {_y}', 'burden-constants.json'))
+
     # Electricity lives in the dashboard, not a JSON file: update-energy-dashboard.py
     # writes the page directly. Read it back from there so the comparison is against
     # what readers actually see.
