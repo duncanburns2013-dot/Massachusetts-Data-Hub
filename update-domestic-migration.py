@@ -72,7 +72,7 @@ def fetch_latest():
     """Newest published vintage. Returns (vintage, csv_text) or (None, None)."""
     # One year ahead of today, because a vintage is released in December for the
     # year it names; from January onwards that file is the current one.
-    for v in range(datetime.date.today().year + 1, 2019, -1):
+    for v in range(datetime.datetime.now(datetime.timezone.utc).date().year + 1, 2019, -1):
         try:
             req = urllib.request.Request(URL.format(v=v), headers=UA)
             with urllib.request.urlopen(req, timeout=45) as r:

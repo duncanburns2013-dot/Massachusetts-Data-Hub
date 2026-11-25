@@ -14,7 +14,7 @@ import json
 import os
 import re
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from urllib.request import urlopen, Request
 from urllib.error import URLError
 from urllib.parse import urlencode
@@ -67,7 +67,7 @@ FRED_SERIES = {
 
 def fetch_bls(series_list, start_year=2020, end_year=None):
     if end_year is None:
-        end_year = datetime.now().year
+        end_year = datetime.now(timezone.utc).year
     api_key = os.environ.get("BLS_API_KEY", "")
     payload = {
         "seriesid": series_list,

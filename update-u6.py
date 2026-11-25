@@ -48,7 +48,7 @@ import os
 import subprocess
 import sys
 import tempfile
-from datetime import date
+from datetime import date, datetime, timezone
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 HTML_FILE = os.path.join(BASE_DIR, "employment-dashboard.html")
@@ -277,7 +277,7 @@ def main():
         "quarters": [{"quarter": qlabel(q), "fred_date": q,
                       "u3": ma["U-3"][q], "u6": ma["U-6"][q],
                       "labor_force": lf_q[q]} for q in chart_q],
-        "verified": date.today().isoformat(),
+        "verified": datetime.now(timezone.utc).date().isoformat(),
         "source": ("BLS Alternative Measures of Labor Underutilization for "
                    "States, quarterly 4-quarter moving averages, NSA"),
         "source_url": "https://www.bls.gov/lau/stalt.htm",
@@ -287,7 +287,7 @@ def main():
                            "(U1RATENSA, U2RATENSA, UNRATENSA, U4RATENSA, "
                            "U5RATENSA, U6RATENSA); October 2025 has no "
                            "observation, so windows containing it average 11"),
-        "meta": {"currency": {"checked": date.today().isoformat(),
+        "meta": {"currency": {"checked": datetime.now(timezone.utc).date().isoformat(),
                               "newest_available": qlabel(latest),
                               "cadence": "quarterly, about 3 weeks after the "
                                          "quarter's final month"}},

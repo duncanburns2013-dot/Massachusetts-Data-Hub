@@ -87,7 +87,7 @@ def main():
     # Match the typed form that was there: "18 Aug 2026", no zero padding.
     stamp = f"{when.day} {when:%b %Y}"
 
-    age = (datetime.date.today() - when).days
+    age = (datetime.datetime.now(datetime.timezone.utc).date() - when).days
     print(f"  newest data/ commit   {when}  ({age}d ago)")
     print(f"  fetched feeds         {feeds}")
 

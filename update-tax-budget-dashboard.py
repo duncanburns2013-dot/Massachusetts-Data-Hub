@@ -54,7 +54,7 @@ Env:
 """
 import json, os, re, sys, time
 from urllib.request import urlopen, Request
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 import envfile  # noqa: E402  -- fills missing keys from .env
@@ -601,7 +601,7 @@ def main():
 
     # ── BLS CPI: the Live Cost Tracker rows only ──
     print("\nFetching BLS CPI...")
-    now = datetime.now()
+    now = datetime.now(timezone.utc)
     # The two Northeast series used to be asked for as CUSR0100SA0 and
     # CUSR0100SAH1. BLS does not have them. Its own reply says so in a field
     # nothing here was reading: "Series does not exist for Series

@@ -28,7 +28,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import register  # noqa: E402  -- the shape-agnostic register parser
 
 REPO = Path(__file__).resolve().parent.parent
-TODAY = datetime.date.today()
+TODAY = datetime.datetime.now(datetime.timezone.utc).date()
 
 # path, max age in days, why that number
 DATA = [
@@ -365,7 +365,7 @@ def check_register_rechecks() -> int:
     # The 30-day warning below is the part that actually prevents a lapse
     # rather than reporting one after the fact, which is what made the blind
     # spot worth fixing rather than merely deduplicating.
-    today = datetime.date.today()
+    today = datetime.datetime.now(datetime.timezone.utc).date()
     due, soon = [], []
     for r in register.all_marked_rows():
         if register.RECHECK not in r["mark"]:

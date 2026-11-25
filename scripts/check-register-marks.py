@@ -195,7 +195,7 @@ def main():
     print(f"  frozen, with a reason {c['frozen']}")
     print(f"  re-read by a date     {c['recheck']}")
     print(f"  bare hand tick        {c['hand']}")
-    today = datetime.date.today()
+    today = datetime.datetime.now(datetime.timezone.utc).date()
     late = lapsed_rows(rows, today)
     undated = undated_rows(rows)
     phantom = phantom_scripts(rows)

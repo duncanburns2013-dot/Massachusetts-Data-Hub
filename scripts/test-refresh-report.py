@@ -80,7 +80,7 @@ try:
     assert json.loads(p.read_text(encoding="utf-8"))["divergent"] == ["census_acs1_ma_income"]
     assert not (tmp / "receipt.json.tmp").exists()
     write_receipt(p, RunRecord())  # default run_date is today
-    assert json.loads(p.read_text())["last_run"] == datetime.date.today().isoformat()
+    assert json.loads(p.read_text())["last_run"] == datetime.datetime.now(datetime.timezone.utc).date().isoformat()
 
     # 3. the gate. Source register stub: one human_fetch source, due in the future
     reg = tmp / "sources.json"

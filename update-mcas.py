@@ -40,7 +40,7 @@ import subprocess
 import sys
 import tempfile
 import urllib.parse
-from datetime import date
+from datetime import date, datetime, timezone
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 HTML_FILE = os.path.join(BASE_DIR, "education-statewide.html")
@@ -1189,7 +1189,7 @@ def main():
     # published school year rather than by whenever someone last edited a page.
     out = {
         "school_year": sy,
-        "checked": date.today().isoformat(),
+        "checked": datetime.now(timezone.utc).date().isoformat(),
         "source": "MA DESE via educationtocareer.data.mass.gov resource i9w6-niyt",
         "url": f"{API}?$where=sy='{sy}' AND org_type='State'",
         # Per-pupil expenditure is a DIFFERENT DESE release on its own cadence.

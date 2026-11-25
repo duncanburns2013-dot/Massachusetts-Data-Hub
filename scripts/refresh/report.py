@@ -31,7 +31,7 @@ class RunRecord:
 
 
 def _date(run: RunRecord) -> str:
-    return run.run_date or datetime.date.today().isoformat()
+    return run.run_date or datetime.datetime.now(datetime.timezone.utc).date().isoformat()
 
 
 def write_receipt(path: Path, run: RunRecord) -> None:

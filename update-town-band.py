@@ -336,7 +336,7 @@ def build(refresh=False):
                    f"from the band — MLS PIN sees NH listings only when dual-listed, so including "
                    f"one would understate its volume by an unknown margin. A known gap in the "
                    f"comparison, not a claim that they do not matter."),
-        "generated": datetime.date.today().isoformat(),
+        "generated": datetime.datetime.now(datetime.timezone.utc).date().isoformat(),
     }
     return payload
 

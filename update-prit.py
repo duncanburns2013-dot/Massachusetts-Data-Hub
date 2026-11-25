@@ -33,7 +33,7 @@ import re
 import subprocess
 import sys
 import tempfile
-from datetime import date
+from datetime import date, datetime, timezone
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 HTML_FILE = os.path.join(BASE_DIR, "pension-dashboard.html")
@@ -149,11 +149,11 @@ def main():
         "return_pct_net": float(pct),
         "change_billions": (float(delta.replace(",", "")) if delta else None),
         "change_direction": direction,
-        "verified": date.today().isoformat(),
+        "verified": datetime.now(timezone.utc).date().isoformat(),
         "source": "PRIM, Executive Director's quarterly update (PRIT Fund "
                   "performance), read from PRIM's own site",
         "source_url": SOURCE_URL,
-        "meta": {"currency": {"checked": date.today().isoformat(),
+        "meta": {"currency": {"checked": datetime.now(timezone.utc).date().isoformat(),
                               "newest_available": f"FY{fy}",
                               "cadence": "fiscal-year figures land in PRIM's "
                                          "August quarterly update"}},

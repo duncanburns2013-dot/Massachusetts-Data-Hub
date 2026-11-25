@@ -150,7 +150,7 @@ def main():
             "flat": flat,
         },
         "meta": {"currency": {
-            "checked": datetime.date.today().isoformat(),
+            "checked": datetime.datetime.now(datetime.timezone.utc).date().isoformat(),
             "newest_available": newest_date,
             "cadence": "Treasury issues the status report monthly",
         }},

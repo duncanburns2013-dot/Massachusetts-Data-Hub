@@ -37,7 +37,7 @@ MONTHLY = HERE / "data" / "nh-state-monthly.json"     # statewide monthly suffic
 MD = HERE / "MASTER_DATA.md"                           # NH block stamped from OUT
 
 START_YEAR = 2020
-TODAY = datetime.date.today()
+TODAY = datetime.datetime.now(datetime.timezone.utc).date()
 BIN = 5000
 SELECT = "ListingId,ClosePrice,ListPrice,CloseDate,DaysOnMarket,BedroomsTotal,City"
 SF = ("StandardStatus eq 'Closed' and PropertyType eq 'Residential' "

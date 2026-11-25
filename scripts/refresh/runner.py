@@ -407,7 +407,7 @@ def apply(move: Move, *, fetch=urlopen_text, dry=False, root: Path = ROOT, today
     Nothing is written until the complete new value is built and every target's new text
     exists in memory. A write that fails partway restores the files already written.
     """
-    today = today or datetime.date.today().isoformat()
+    today = today or datetime.datetime.now(datetime.timezone.utc).date().isoformat()
     src = {s.id: s for s in load_sources(root / "data" / "sources.json")}.get(move.source_id)
     if src is None or src.probe != "census_acs1":
         raise ValueError(f"{move.source_id}: apply handles census_acs1 sources only")
@@ -560,7 +560,7 @@ def apply_and_recheck(m: Move, *, apply_fn=apply, recheck=pull_and_recheck, git=
             if left:
                 raise Conflict(f"{m.source_id}: after pulling, {left} still disagree with the new figure")
         touched.append("data/sources.json")
-        _bump_register(root, m.source_id, m.newest, today or datetime.date.today().isoformat())
+        _bump_register(root, m.source_id, m.newest, today or datetime.datetime.now(datetime.timezone.utc).date().isoformat())
     except Exception as e:
         try:
             git(["checkout", "HEAD", "--", *touched], root)
@@ -577,7 +577,7 @@ def run(sources: list[Source], claims, *, fetch=urlopen_text, apply_fn=apply,
     """One complete run: survey, apply what we may, judge the claims. Writes nothing itself
     (apply_fn does, for apply:true sources). Only plain strings are kept from any failure:
     `str(e)` of the scrubbed FetchError, never the exception, never its chain."""
-    today = today or datetime.date.today().isoformat()
+    today = today or datetime.datetime.now(datetime.timezone.utc).date().isoformat()
     by_id = {s.id: s for s in sources}
     result = survey(sources, fetch=fetch)
     rec = RunRecord(run_date=today, claims=claims)

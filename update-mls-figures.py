@@ -92,7 +92,7 @@ if not TOKEN:
 
 REPO = Path(__file__).resolve().parent
 BASE = "https://api.bridgedataoutput.com/api/v2/mlspin/listings"
-TODAY = datetime.date.today()
+TODAY = datetime.datetime.now(datetime.timezone.utc).date()
 YEAR = TODAY.year
 MONTHS_ELAPSED = max(TODAY.month, 1)
 TRAILING_12MO_START = (TODAY - datetime.timedelta(days=365)).strftime("%Y-%m-%d")

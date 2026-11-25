@@ -21,7 +21,7 @@ except Exception:
     pass
 
 REPO = Path(__file__).resolve().parent.parent
-YEAR = int(sys.argv[1]) if len(sys.argv) > 1 else datetime.date.today().year - 1
+YEAR = int(sys.argv[1]) if len(sys.argv) > 1 else datetime.datetime.now(datetime.timezone.utc).date().year - 1
 KEY = os.environ.get("CENSUS_API_KEY")
 if not KEY:
     for line in (REPO / ".env").read_text(encoding="utf-8").splitlines():
@@ -43,7 +43,7 @@ def pull(geo):
     return {k: int(row[head.index(v)]) for k, v in TABLES.items()}
 
 
-today = datetime.date.today().isoformat()
+today = datetime.datetime.now(datetime.timezone.utc).date().isoformat()
 release = f"ACS {YEAR} 1-year"
 path = REPO / "data" / "burden-constants.json"
 data = json.loads(path.read_text(encoding="utf-8"))

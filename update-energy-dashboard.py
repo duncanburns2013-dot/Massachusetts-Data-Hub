@@ -675,7 +675,7 @@ def update_burden_constants():
         node["period"] = period
         node["usAverageCentsPerKwh"] = round(us, 2)
         node["premiumPctVsUs"] = premium_pct(price, us)
-        node["verified"] = time.strftime("%Y-%m-%d")
+        node["verified"] = time.strftime("%Y-%m-%d", time.gmtime())
 
         # Author-owned prose. Only the leading period stamp is rewritten, and
         # only because leaving it contradicting node["period"] is worse. The

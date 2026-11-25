@@ -50,7 +50,7 @@ import subprocess
 import sys
 import tempfile
 import urllib.parse
-from datetime import date
+from datetime import date, datetime, timezone
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 HTML_FILE = os.path.join(BASE_DIR, "mbta-3a-dashboard.html")
@@ -266,7 +266,7 @@ def main():
 
     sta_date = edition(sta_u, "")
     dev_date = edition(dev_u, "")
-    today = date.today()
+    today = datetime.now(timezone.utc).date()
 
     print(f"  communities      {len(towns)}")
     print(f"  2020 housing     {stock:,}")

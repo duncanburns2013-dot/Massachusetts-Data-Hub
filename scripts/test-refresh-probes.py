@@ -84,7 +84,7 @@ try:
     assert probe(doi, fetch=stub_doi(7, prose="this is the final decision")).is_final is False
     # DOI walk skips a 404 year and reports the year it found
     import datetime
-    nxt = datetime.date.today().year + 1
+    nxt = datetime.datetime.now(datetime.timezone.utc).date().year + 1
     assert probe(doi, fetch=stub_doi(8, years=[nxt - 1])).newest_period == str(nxt - 1)
     # unparseable DOI page raises
     assert raises(doi, stub_bea("<html><p>Access denied</p></html>"))

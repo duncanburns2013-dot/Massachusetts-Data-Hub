@@ -142,7 +142,7 @@ def main():
     if not m:
         sys.exit("ERROR: YEARS array not found.")
     years = [int(y) for y in re.findall(r"\d{4}", m.group(1))]
-    this_year = datetime.date.today().year
+    this_year = datetime.datetime.now(datetime.timezone.utc).date().year
     if years[-1] >= this_year:
         sys.exit(f"ERROR: YEARS ends at {years[-1]}, which is not a complete "
                  f"calendar year. Annual averages would be partial.")

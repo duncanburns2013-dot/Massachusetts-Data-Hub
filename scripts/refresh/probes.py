@@ -87,7 +87,7 @@ def _census_acs1(source, fetch):
     if not key:
         # Keyless, Census answers HTTP 200 with an HTML "Missing Key" page: never send one and read it.
         raise ProbeError("CENSUS_API_KEY is not set: the Census API refuses keyless requests")
-    this = datetime.date.today().year
+    this = datetime.datetime.now(datetime.timezone.utc).date().year
     yr, url, body = _walk(
         fetch, range(this, this - WALK, -1),
         lambda y: f"https://api.census.gov/data/{y}/acs/acs1?get=NAME,B19113_001E,B19013_001E&for=state:25",
@@ -165,7 +165,7 @@ def _final_table_carriers(page, url):
 
 
 def _doi_rates(source, fetch):
-    nxt = datetime.date.today().year + 1
+    nxt = datetime.datetime.now(datetime.timezone.utc).date().year + 1
     yr, url, page = _walk(fetch, range(nxt, nxt - WALK, -1),
                           lambda y: f"https://www.mass.gov/info-details/{y}-health-insurance-rates")
     n = _final_table_carriers(page, url)
