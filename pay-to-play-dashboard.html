@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="data-checked" content="2026-11-22"><!-- bump when this page is reconciled against its publisher; scripts/check-freshness.py ages it -->
-<!-- meta.currency, checked 2026-11-22. Says what was ACTUALLY reconciled, because the
+<meta name="data-checked" content="2026-11-25"><!-- bump when this page is reconciled against its publisher; scripts/check-freshness.py ages it -->
+<!-- meta.currency, checked 2026-11-25. Says what was ACTUALLY reconciled, because the
      stamp above covers the whole page and this visit did not re-collect any of it.
 
      The stamp previously read 2026-02-01 while the lobbying registry data on this page
@@ -12,12 +12,22 @@
      staler than it was, and check-freshness.py aged it from the wrong date.
 
      SOS Lobbyist Public Search, registration year 2026, first-half filings.
-     Collected 2026-09-27 via The-Peoples-Audit userscript; the SOS blocks server-side
-     fetches, so no workflow can own this. NEWEST AVAILABLE: disclosure is semi-annual,
-     due 15 July for Jan-Jun and 15 January for Jul-Dec of the preceding year
+     RE-SCRAPED 2026-11-25 via The-Peoples-Audit userscript; the SOS blocks server-side
+     fetches, so no workflow can own this. Four passes this time, not one: client,
+     individual-lobbyist and lobbyist-entity detail pages, plus the Industry Type grid.
+     Amendments since September added $124,210.61 to client outlay (+0.20%) and 28 more
+     clients. NEWEST AVAILABLE: disclosure is semi-annual, due 15 July for Jan-Jun and
+     15 January for Jul-Dec of the preceding year
      (sec.state.ma.us/divisions/lobbyist/lobbying-faqs.htm, read 2026-11-22). The next
      new data is therefore the 15 January 2027 filing, and a scrape taken before that
-     deadline reads $0 for every firm, as one taken 2026-07-08 did. NOT re-scraped today.
+     deadline reads $0 for every firm, as one taken 2026-07-08 did. Figures here will
+     keep creeping up until then as late and amended filings land.
+
+     The entity scrape is alphabetical and starts at its first captured row, so the two
+     firms whose names begin with digits (21c; 27 South Strategies, LLC) were missed.
+     Their clients and lobbyists name them, which is how the firm count of 171 is known
+     while only 169 firm pages were read. Those two are the whole of the $246,770 gap
+     between what clients say they paid firms and what firm pages report receiving.
 
      OpenSecrets MA State Lobbying 2015-2025, behind four charts. This is a SECONDARY
      aggregation of the same state filings the SOS register above holds primary, and the
@@ -226,55 +236,56 @@ footer a:hover{color:var(--gold)}
       followed to where it stops. <strong>Only half of what reaches a lobbying firm is reported as
       paid on to the lobbyists who do the work.</strong>
     </div>
-<svg viewBox="0 0 1000 452" width="100%" role="img" aria-label="Of $62.6M in client lobbying spending in the first half of 2026, $45.9M went to lobbying firms, $10.8M to clients’ own in-house lobbyists and $5.9M to expenses. Of the $45.9M reaching firms, $23.2M was paid on to individual lobbyists and $22.6M was retained by the firms.">
+<svg viewBox="0 0 1000 452" width="100%" role="img" aria-label="Of $62.7M in client lobbying spending in the first half of 2026, $46.0M went to lobbying firms, $10.8M to clients’ own in-house lobbyists and $5.9M to expenses. Of the $46.0M reaching firms, $23.2M was paid on to individual lobbyists and $22.7M was retained by the firms.">
 <style>.l{paint-order:stroke;stroke:#fff;stroke-width:3.5px;stroke-linejoin:round}.n{font:600 12.5px ui-sans-serif,system-ui,sans-serif;fill:#1a1a1a}.v{font:700 13px ui-monospace,monospace;fill:#1a1a1a}.s{font:11px ui-sans-serif,system-ui,sans-serif;fill:#7a756e}.h{font:600 11px ui-sans-serif,system-ui,sans-serif;fill:#9a948c;letter-spacing:.09em}.hv{font:700 15px ui-monospace,monospace;fill:#0f2942}g.f{transition:opacity .15s}svg:hover g.f{opacity:.4}svg g.f:hover{opacity:1}</style>
 <text class="h" x="16" y="20">ALL CLIENT SPENDING</text>
-<text class="hv" x="16" y="40">$62.6M</text>
+<text class="hv" x="16" y="40">$62.7M</text>
 <text class="h" x="264" y="20">WHICH GOES TO</text>
 <text class="h" x="592" y="20">AND ENDS UP</text>
 <rect x="16" y="56" width="20" height="382" rx="3" fill="#0f2942"/>
 <g class="f">
-<path d="M36,56 C134.0,56 134.0,56 232,56 L232,325.8154365565151 C134.0,325.8154365565151 134.0,325.8154365565151 36,325.8154365565151 Z" fill="#14558F" fill-opacity="0.45"/>
-<rect x="232" y="56" width="20" height="269.8154365565151" rx="3" fill="#14558F"/>
-<title>Lobbying firms: $45,864,365 — 73.3% of all client spending</title>
+<path d="M36,56 C134.0,56 134.0,56 232,56 L232,325.80915145744007 C134.0,325.80915145744007 134.0,325.80915145744007 36,325.80915145744007 Z" fill="#14558F" fill-opacity="0.45"/>
+<rect x="232" y="56" width="20" height="269.80915145744007" rx="3" fill="#14558F"/>
+<title>Lobbying firms: $45,954,365 — 73.3% of all client spending</title>
 </g>
 <text class="l n" x="262" y="71">Lobbying firms</text>
-<text class="l v" x="262" y="89">$45.9M<tspan class="s">  73%</tspan></text>
+<text class="l v" x="262" y="89">$46.0M<tspan class="s">  73%</tspan></text>
 <g class="f">
-<path d="M36,328.9654365565151 C134.0,328.9654365565151 134.0,332.8154365565151 232,332.8154365565151 L232,396.3411345897246 C134.0,396.3411345897246 134.0,392.4911345897246 36,392.4911345897246 Z" fill="#1a7a4c" fill-opacity="0.45"/>
-<rect x="232" y="332.8154365565151" width="20" height="63.5256980332095" rx="3" fill="#1a7a4c"/>
-<title>Clients’ own in-house lobbyists: $10,798,366 — 17.3% of all client spending</title>
+<path d="M36,328.95915145744004 C134.0,328.95915145744004 134.0,332.80915145744007 232,332.80915145744007 L232,396.22833487694135 C134.0,396.22833487694135 134.0,392.3783348769413 36,392.3783348769413 Z" fill="#1a7a4c" fill-opacity="0.45"/>
+<rect x="232" y="332.80915145744007" width="20" height="63.419183419501294" rx="3" fill="#1a7a4c"/>
+<title>Clients’ own in-house lobbyists: $10,801,666 — 17.2% of all client spending</title>
 </g>
-<text class="l n" x="262" y="347.8154365565151">Clients’ own in-house lobbyists</text>
-<text class="l v" x="262" y="365.8154365565151">$10.8M<tspan class="s">  17%</tspan></text>
+<text class="l n" x="262" y="347.80915145744007">Clients’ own in-house lobbyists</text>
+<text class="l v" x="262" y="365.80915145744007">$10.8M<tspan class="s">  17%</tspan></text>
 <g class="f">
-<path d="M36,395.64113458972463 C134.0,395.64113458972463 134.0,403.3411345897246 232,403.3411345897246 L232,438.0 C134.0,438.0 134.0,430.3 36,430.3 Z" fill="#B07C20" fill-opacity="0.45"/>
-<rect x="232" y="403.3411345897246" width="20" height="34.65886541027538" rx="3" fill="#B07C20"/>
-<title>Client expenses: $5,891,460 — 9.4% of all client spending</title>
+<path d="M36,395.5283348769413 C134.0,395.5283348769413 134.0,403.22833487694135 232,403.22833487694135 L232,438.0 C134.0,438.0 134.0,430.29999999999995 36,430.29999999999995 Z" fill="#B07C20" fill-opacity="0.45"/>
+<rect x="232" y="403.22833487694135" width="20" height="34.77166512305864" rx="3" fill="#B07C20"/>
+<title>Client expenses: $5,922,371 — 9.4% of all client spending</title>
 </g>
-<text class="l n" x="262" y="418.3411345897246">Client expenses</text>
-<text class="l v" x="262" y="436.3411345897246">$5.9M<tspan class="s">  9%</tspan></text>
+<text class="l n" x="262" y="418.22833487694135">Client expenses</text>
+<text class="l v" x="262" y="436.22833487694135">$5.9M<tspan class="s">  9%</tspan></text>
 <g class="f">
-<path d="M252,56 C406.0,56 406.0,56 560,56 L560,192.63386077313598 C406.0,192.63386077313598 406.0,192.63386077313598 252,192.63386077313598 Z" fill="#14558F" fill-opacity="0.45"/>
-<rect x="560" y="56" width="20" height="136.63386077313598" rx="3" fill="#14558F"/>
-<title>Paid on to individual lobbyists: $23,225,599 — 50.6% of the $45.9M that reached lobbying firms</title>
+<path d="M252,56 C406.0,56 406.0,56 560,56 L560,192.36309165907795 C406.0,192.36309165907795 406.0,192.36309165907795 252,192.36309165907795 Z" fill="#14558F" fill-opacity="0.45"/>
+<rect x="560" y="56" width="20" height="136.36309165907795" rx="3" fill="#14558F"/>
+<title>Paid on to individual lobbyists: $23,225,599 — 50.5% of the $46.0M that reached lobbying firms</title>
 </g>
-<text class="l n" x="590" y="120.31693038656799">Paid on to individual lobbyists</text>
-<text class="l v" x="590" y="139.316930386568">$23.2M<tspan class="s">  51% of the firm flow</tspan></text>
+<text class="l n" x="590" y="120.18154582953898">Paid on to individual lobbyists</text>
+<text class="l v" x="590" y="139.18154582953898">$23.2M<tspan class="s">  51% of the firm flow</tspan></text>
 <g class="f">
-<path d="M252,199.63386077313598 C406.0,199.63386077313598 406.0,199.63386077313598 560,199.63386077313598 L560,332.8154365565151 C406.0,332.8154365565151 406.0,332.8154365565151 252,332.8154365565151 Z" fill="#A81733" fill-opacity="0.6"/>
-<rect x="560" y="199.63386077313598" width="20" height="133.18157578337912" rx="3" fill="#A81733"/>
-<title>Retained by the firms: $22,638,765 — 49.4% of the $45.9M that reached lobbying firms</title>
+<path d="M252,199.36309165907795 C406.0,199.36309165907795 406.0,199.36309165907795 560,199.36309165907795 L560,332.80915145744007 C406.0,332.80915145744007 406.0,332.80915145744007 252,332.80915145744007 Z" fill="#A81733" fill-opacity="0.6"/>
+<rect x="560" y="199.36309165907795" width="20" height="133.44605979836214" rx="3" fill="#A81733"/>
+<title>Retained by the firms: $22,728,765 — 49.5% of the $46.0M that reached lobbying firms</title>
 </g>
-<text class="l n" x="590" y="262.2246486648255">Retained by the firms</text>
-<text class="l v" x="590" y="281.2246486648255">$22.6M<tspan class="s">  49% of the firm flow</tspan></text>
-<text class="l s" x="590" y="297.2246486648255">partner draw, overhead, profit</text>
+<text class="l n" x="590" y="262.08612155825904">Retained by the firms</text>
+<text class="l v" x="590" y="281.08612155825904">$22.7M<tspan class="s">  49% of the firm flow</tspan></text>
+<text class="l s" x="590" y="297.08612155825904">partner draw, overhead, profit</text>
 </svg>
     <div class="source">Source: Secretary of the Commonwealth, Lobbyist Public Search — the client,
-    firm and lobbyist registers for registration year 2026, as filed at the July 15 deadline. The
-    client→firm total reconciles to the cent against what firms independently reported receiving.
+    firm and lobbyist registers for registration year 2026, first-half filings plus amendments. What
+    clients report paying firms exceeds what firm pages report receiving by $246,770, all of it two
+    firms the entity scrape missed; the 169 it captured agree with their clients to the cent.
     “Retained by the firms” is the difference between fees received and the salaries a firm reported
-    paying its own lobbyists: 39 of the 148 earning firms reported paying no lobbyist salary at all,
+    paying its own lobbyists: 38 of the 147 earning firms reported paying no lobbyist salary at all,
     which for an owner-operator is a disclosure structure rather than a margin. The median firm passes
     through 69%; the aggregate is 51% because the largest firms retain the most.</div>
   </div>
@@ -338,9 +349,9 @@ footer a:hover{color:var(--gold)}
       <div class="alert-item"><strong>6 of the top 10</strong> spenders are from the healthcare sector — an industry that depends heavily on MassHealth funding</div>
       <div class="alert-item">In 2024 alone: MA Assn of Health Plans spent <strong>$1.3M</strong> and MH&HA spent <strong>$1.1M</strong> — the only two groups over $1M</div>
       <div class="alert-item">Hospitals/Nursing Homes: <strong>$43.4M</strong> in lobbying. Insurance: <strong>$42.8M</strong>. Pharma: <strong>$37.3M</strong></div>
-      <div class="alert-item"><strong>And it holds year over year.</strong> Health was <strong>24.48%</strong> of all client spending across the full year 2025 and <strong>25.16%</strong> in the first half of 2026 — two full scrapes, 100% coverage, 1,697 and 1,733 clients</div>
+      <div class="alert-item"><strong>And it holds year over year.</strong> Health was <strong>24.48%</strong> of all client spending across the full year 2025 and <strong>25.14%</strong> in the first half of 2026 — two full scrapes, 100% coverage, 1,697 and 1,761 clients</div>
       <div class="alert-item"><strong>A scrape is a snapshot, not a final figure.</strong> The May 2025 scrape recorded firms receiving $88,409,949; re-reading the client side in September gives $88,602,704. Amendments added $192,755 — and four of the five changed filings are <strong>exactly double</strong>, first-half figures that later gained their second half. The 2026 numbers here reconcile to the cent only because both sides were scraped the same day</div>
-      <div class="alert-item"><strong>Confirmed by a second source.</strong> The state’s own 2026 industry labels split health across four categories — Healthcare, Pharmaceutical, Medical Insurance and Hospitals. Rolled up they are <strong>$15,738,477 of $62,554,191, or 25.2%</strong> — which independently matches OpenSecrets’ 25% for the health sector over 2015–2025, from a different source and method</div>
+      <div class="alert-item"><strong>Confirmed by a second source.</strong> The state’s own 2026 industry labels split health across four categories — Healthcare, Pharmaceutical, Medical Insurance and Hospitals. Rolled up they are <strong>$15,759,782 of $62,678,401, or 25.1%</strong> — which independently matches OpenSecrets’ 25% for the health sector over 2015–2025, from a different source and method</div>
       <div class="alert-item">These organizations receive <strong>billions in taxpayer money</strong> via MassHealth, then spend millions lobbying to keep the money flowing</div>
     </div>
   </div>
@@ -351,7 +362,7 @@ footer a:hover{color:var(--gold)}
       <div class="chart-area chart-tall"><canvas id="chartSpenders2026"></canvas></div>
       <div class="source">Source: Secretary of the Commonwealth, Lobbyist Public Search — what each client
       reported paying: fees to lobbying firms, salaries to its own in-house lobbyists, and expenses.
-      Registration year 2026 as filed at the July 15 deadline. Collected 2026-09-27.</div>
+      Registration year 2026, first-half filings plus amendments. Collected 2026-11-25.</div>
     </div>
     <div class="chart-card">
       <h3>What Moved Since 2025</h3>
@@ -364,15 +375,15 @@ footer a:hover{color:var(--gold)}
       <h3>Inside Health: Hospitals Down, Plans Up</h3>
       <div class="chart-area chart-tall"><canvas id="chartHealthMix"></canvas></div>
       <div class="source">The four labels the SOS splits health across. Health’s total share barely
-      moved (24.5% → 25.2%), but its composition did: hospitals fell 1.25 points while Healthcare —
-      which holds the insurers and plans — rose 1.69.</div>
+      moved (24.5% → 25.1%), but its composition did: hospitals fell 1.26 points while Healthcare —
+      which holds the insurers and plans — rose 1.70.</div>
     </div>
     <div class="chart-card">
       <h3>Health’s Share Holds — 2025 vs 2026</h3>
       <div class="chart-area"><canvas id="chartHealthShare"></canvas></div>
       <div class="source">Secretary of the Commonwealth, Industry Type register, both years joined on the
-      SOS’s own key at 100% coverage (1,697 of 1,697 clients in 2025; 1,733 of 1,733 in 2026).
-      2025 is a full year totalling $119,177,253; 2026 is first-half filings totalling $62,554,191, so the
+      SOS’s own key at 100% coverage (1,697 of 1,697 clients in 2025; 1,761 of 1,761 in 2026).
+      2025 is a full year totalling $119,177,253; 2026 is first-half filings totalling $62,678,401, so the
       <em>totals</em> are not comparable — the <em>shares</em> are.</div>
     </div>
     <div class="chart-card">
@@ -380,7 +391,7 @@ footer a:hover{color:var(--gold)}
       <div class="chart-area chart-tall"><canvas id="chartIndustry2026"></canvas></div>
       <div class="source">Source: Secretary of the Commonwealth, Lobbyist Public Search — Industry Type.
       The label is chosen by each client at registration, not inferred by us: 35 labels across
-      1,733 clients, joined to the spending records on the SOS’s own key and matching 1,733 of 1,733.
+      1,761 clients, joined to the spending records on the SOS’s own key and matching 1,761 of 1,761.
       Registration year 2026, first-half filings.</div>
     </div>
     <div class="chart-card">
@@ -397,10 +408,10 @@ footer a:hover{color:var(--gold)}
   <p style="font-size:0.85rem;color:var(--muted);margin-bottom:20px">These firms earn millions lobbying politicians — then their employees personally donate to those same politicians. OCPF records from just 3 firms reveal 4,298 individual donations totaling $822,463. <strong>The cards below are single-year 2025 fees, from the state’s own filings</strong> — a different order from the eleven-year cumulative totals charted below them. 2026 covers only what was filed at the July 15 deadline — roughly the first half of the year — so it is not comparable to a full year.</p>
 
   <div class="stat-row">
-    <div class="stat-card"><div class="label">Smith Costello</div><div class="value red">$4.4M</div><div class="sub">2026 H1 · 143 clients</div></div>
-    <div class="stat-card"><div class="label">Tremont Strategies</div><div class="value red">$3.4M</div><div class="sub">2026 H1 · 112 clients</div></div>
-    <div class="stat-card"><div class="label">O'Neill & Partners</div><div class="value red">$2.7M</div><div class="sub">2026 H1 · 88 clients</div></div>
-    <div class="stat-card"><div class="label">Dempsey Associates</div><div class="value amber">$2.3M</div><div class="sub">2026 H1 · 62 clients</div></div>
+    <div class="stat-card"><div class="label">Smith Costello</div><div class="value red">$4.4M</div><div class="sub">2026 H1 · 146 clients</div></div>
+    <div class="stat-card"><div class="label">Tremont Strategies</div><div class="value red">$3.4M</div><div class="sub">2026 H1 · 116 clients</div></div>
+    <div class="stat-card"><div class="label">O'Neill & Partners</div><div class="value red">$2.7M</div><div class="sub">2026 H1 · 92 clients</div></div>
+    <div class="stat-card"><div class="label">Dempsey Associates</div><div class="value amber">$2.3M</div><div class="sub">2026 H1 · 69 clients</div></div>
   </div>
 
   <div class="alert">
@@ -419,7 +430,7 @@ footer a:hover{color:var(--gold)}
     <div class="chart-card">
       <h3>Top 10 Firms by 2026 Fees — State Filings</h3>
       <div class="chart-area chart-tall"><canvas id="chartFirms2026"></canvas></div>
-      <div class="source">Source: Secretary of the Commonwealth, Lobbyist Public Search — fees Lobbyist Entities reported receiving, registration year 2026 as filed at the July 15 deadline (169 firms, $45.9M). Collected 2026-09-27.</div>
+      <div class="source">Source: Secretary of the Commonwealth, Lobbyist Public Search — fees Lobbyist Entities reported receiving, registration year 2026, first-half filings plus amendments. 171 firms registered; the 169 whose pages were captured reported receiving $45,707,595. Collected 2026-11-25.</div>
     </div>
     <div class="chart-card">
       <h3>A Decade of Lobbying Fees (2016–2026)</h3>
@@ -639,7 +650,7 @@ footer a:hover{color:var(--gold)}
 <footer>
   <a href="./">← Back to Massachusetts Data Hub</a><br>
   <span>Sources: OpenSecrets (State Lobbying Data 2015–2025), OCPF Campaign Finance Database (ML Strategies, Smith Costello & Crawford, Bay State Strategies Group donations), Secretary of the Commonwealth (MA Lobbying Reports), Boston Globe, New England First Amendment Coalition, MGL Ch. 55</span><br>
-  <span>Lobbying registry data collected 27 September 2026 from the Secretary of the Commonwealth, covering registration year 2026 first-half filings — the newest available, as disclosure is semi-annual and the next reports are due 15 January 2027. OCPF donation analysis compiled February 2026. Publisher currency last checked 22 November 2026. All data from official government and public disclosure sources.</span>
+  <span>Lobbying registry data collected 25 November 2026 from the Secretary of the Commonwealth, covering registration year 2026 first-half filings — the newest available, as disclosure is semi-annual and the next reports are due 15 January 2027. OCPF donation analysis compiled February 2026. Publisher currency last checked 25 November 2026. All data from official government and public disclosure sources.</span>
 </footer>
 
 <script>
@@ -655,17 +666,17 @@ function initCharts(tab){
       break;
 
     case 'sectors':
-      safeChart('chartSpenders2026',{type:'bar',data:{labels:["Mass. Assn of Health Plans", "Fallon Community Health Plan", "Mass. Health & Hospital Assn", "Pharmaceutical Research and Manuf\u2026", "American Families for Vaccines Ac\u2026", "New England Connectivity and Tele\u2026", "Mass. Municipal Assn, INC.", "Mass. Biotechnology Council", "Assn for Behavioral Healthcare", "National Strategies", "Mass. Nurses Assn", "United HealthCare Services"],datasets:[{label:'2026 H1 total reported ($)',data:[752499, 625854, 599952, 592461, 514128, 404771, 399816, 349929, 329439, 301000, 295402, 278569],backgroundColor:'#A81733',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Reported spending ($)'}}},plugins:{legend:{display:false}}}});
-      safeChart('chartShareShift',{type:'bar',data:{labels:["Healthcare", "Insurance (auto/home/life)", "Travel & tourism", "Insurance (medical/dental)", "Energy (oil, hydro, nuclear)", "Information technology", "Marijuana", "Entertainment", "Gaming", "Business associations", "Real estate & development", "Hospitals & health systems"],datasets:[{label:'Change in share (percentage points)',data:[1.69, 0.49, 0.44, 0.43, 0.43, 0.32, -0.26, -0.31, -0.38, -0.74, -0.78, -1.25],backgroundColor:ctx=>ctx.raw>=0?'#A81733':'#14558F',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{y:{ticks:{autoSkip:false,font:{size:11}}},x:{title:{display:true,text:'Percentage points'},grid:{color:ctx=>ctx.tick.value===0?'#1a1a1a':'rgba(0,0,0,.06)',lineWidth:ctx=>ctx.tick.value===0?1.5:1}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.raw>=0?'+':'')+c.raw+' points '+(c.raw>=0?'of share gained':'of share lost')}}}}});
+      safeChart('chartSpenders2026',{type:'bar',data:{labels:["Mass. Assn of Health Plans", "Fallon Community Health Plan", "Mass. Health & Hospital Assn", "Pharmaceutical Research and Manuf\u2026", "American Families for Vaccines Ac\u2026", "New England Connectivity and Tele\u2026", "Mass. Municipal Assn, INC.", "Mass. Biotechnology Council", "Assn for Behavioral Healthcare", "National Strategies", "Mass. Nurses Assn", "United HealthCare Services"],datasets:[{label:'2026 H1 total reported ($)',data:[752499, 625854, 599952, 592461, 535433, 404771, 399816, 349929, 329439, 301000, 295402, 278569],backgroundColor:'#A81733',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Reported spending ($)'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartShareShift',{type:'bar',data:{labels:["Healthcare", "Insurance (auto/home/life)", "Travel & tourism", "Insurance (medical/dental)", "Energy (oil, hydro, nuclear)", "Information technology", "Marijuana", "Entertainment", "Gaming", "Business associations", "Real estate & development", "Hospitals & health systems"],datasets:[{label:'Change in share (percentage points)',data:[1.7, 0.49, 0.44, 0.42, 0.42, 0.31, -0.26, -0.18, -0.39, -0.75, -0.79, -1.26],backgroundColor:ctx=>ctx.raw>=0?'#A81733':'#14558F',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{y:{ticks:{autoSkip:false,font:{size:11}}},x:{title:{display:true,text:'Percentage points'},grid:{color:ctx=>ctx.tick.value===0?'#1a1a1a':'rgba(0,0,0,.06)',lineWidth:ctx=>ctx.tick.value===0?1.5:1}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.raw>=0?'+':'')+c.raw+' points '+(c.raw>=0?'of share gained':'of share lost')}}}}});
       safeChart('chartHealthMix',{type:'bar',data:{labels:["Healthcare", "Insurance (medical/dental)", "Pharmaceutical", "Hospitals & health systems"],datasets:[{label:'2025 (full year)',data:[12.83, 2.99, 4.72, 3.94],backgroundColor:'#14558F',borderRadius:4},{label:'2026 (first half)',data:[14.52, 3.42, 4.52, 2.69],backgroundColor:'#A81733',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{y:{ticks:{autoSkip:false}},x:{beginAtZero:true,title:{display:true,text:'Share of all client spending (%)'}}},plugins:{tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.raw+'% of all client spending'}}}}});
-      safeChart('chartHealthShare',{type:'bar',data:{labels:['2025 (full year)','2026 (first half)'],datasets:[{label:'Health',data:[24.48,25.16],backgroundColor:'#A81733',borderRadius:4},{label:'Everything else',data:[75.52,74.84],backgroundColor:'#14558F',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,max:100,title:{display:true,text:'% of all client spending'}}}}});
-      safeChart('chartIndustry2026',{type:'bar',data:{labels:["Healthcare", "Education", "Human Services", "Information Technology", "Business Associations, Organi\u2026", "Energy", "Pharmaceutical Industry", "Transportation", "Real Estate", "Environment", "Insurance", "Utilities", "Government", "Hospitals"],datasets:[{label:'2026 H1 spend ($)',data:[9080168, 4598710, 4044642, 3116557, 3041929, 2856357, 2830428, 2267729, 2214777, 2164095, 2142124, 1996976, 1993640, 1685757],backgroundColor:ctx=>[0,6,10,13].includes(ctx.dataIndex)?'#A81733':'#14558F',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Reported spending ($)'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartHealthShare',{type:'bar',data:{labels:['2025 (full year)','2026 (first half)'],datasets:[{label:'Health',data:[24.48,25.14],backgroundColor:'#A81733',borderRadius:4},{label:'Everything else',data:[75.52,74.86],backgroundColor:'#14558F',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,max:100,title:{display:true,text:'% of all client spending'}}}}});
+      safeChart('chartIndustry2026',{type:'bar',data:{labels:["Healthcare", "Education", "Human Services", "Information Technology", "Business Associations, Organi\u2026", "Energy", "Pharmaceutical Industry", "Transportation", "Real Estate", "Environment", "Insurance", "Utilities", "Government", "Hospitals"],datasets:[{label:'2026 H1 spend ($)',data:[9101473, 4617315, 4044642, 3116557, 3041929, 2856357, 2830428, 2267729, 2214777, 2164095, 2142124, 1996976, 1993640, 1685757],backgroundColor:ctx=>[0,6,10,13].includes(ctx.dataIndex)?'#A81733':'#14558F',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Reported spending ($)'}}},plugins:{legend:{display:false}}}});
       safeChart('chartHealthDominance',{type:'doughnut',data:{labels:['Health ($112.7M)','Finance/Insurance/RE ($74.4M)','Misc Business ($63.8M)','Energy ($39.3M)','Labor ($36.7M)','All Other ($130.6M)'],datasets:[{data:[112.7,74.4,63.8,39.3,36.7,130.6],backgroundColor:['#A81733','#14558F','#5C97CC','#B07C20','#46527A','#5A6467']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11}}}}}});
       break;
 
     case 'firms':
-      safeChart('chartFirms2026',{type:'bar',data:{labels:["Smith Costello", "Tremont Strategies", "O'Neill & Partners", "Dempsey Associates", "Kearney Donovan", "Bay State Strategies", "Issues Mgmt Group", "Preti Strategies", "Rasky Partners", "ML Strategies"],datasets:[{label:'2026 H1 Fees Received ($M)',data:[4.42, 3.35, 2.72, 2.31, 1.99, 1.63, 1.23, 1.06, 1.06, 1.06],backgroundColor:ctx=>ctx.dataIndex<3?'#A81733':'#14558F',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Millions ($)'}}},plugins:{legend:{display:false}}}});
-      safeChart('chartFeeTrend',{type:'line',data:{labels:[2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026],datasets:[{label:'Fees received ($M)',data:[61.3, 63.3, 66.3, 68.4, 67.8, 71.5, 73.4, 79.3, 84.6, 88.6, 45.9],borderColor:'#A81733',backgroundColor:'rgba(168,23,51,.12)',fill:true,tension:.3,segment:{borderDash:c=>c.p1DataIndex===10?[6,4]:undefined}},{label:'Paid to lobbyists ($M)',data:[37.5, 38.0, 39.2, 40.3, 40.9, 43.2, 42.9, 44.5, 46.4, 48.3, 23.2],borderColor:'#14558F',backgroundColor:'rgba(20,85,143,.10)',fill:true,tension:.3,segment:{borderDash:c=>c.p1DataIndex===10?[6,4]:undefined}}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,title:{display:true,text:'Millions ($)'}}}}});
+      safeChart('chartFirms2026',{type:'bar',data:{labels:["Smith Costello", "Tremont Strategies", "O'Neill & Partners", "Dempsey Associates", "Kearney Donovan", "Bay State Strategies", "Issues Mgmt Group", "Preti Strategies", "Suffolk Group", "Rasky Partners"],datasets:[{label:'2026 H1 Fees Received ($M)',data:[4.42, 3.4, 2.72, 2.31, 1.99, 1.63, 1.23, 1.06, 1.06, 1.06],backgroundColor:ctx=>ctx.dataIndex<3?'#A81733':'#14558F',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Millions ($)'}}},plugins:{legend:{display:false}}}});
+      safeChart('chartFeeTrend',{type:'line',data:{labels:[2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026],datasets:[{label:'Fees received ($M)',data:[61.3, 63.3, 66.3, 68.4, 67.8, 71.5, 73.4, 79.3, 84.6, 88.6, 46.0],borderColor:'#A81733',backgroundColor:'rgba(168,23,51,.12)',fill:true,tension:.3,segment:{borderDash:c=>c.p1DataIndex===10?[6,4]:undefined}},{label:'Paid to lobbyists ($M)',data:[37.5, 38.0, 39.2, 40.3, 40.9, 43.2, 42.9, 44.5, 46.4, 48.3, 23.2],borderColor:'#14558F',backgroundColor:'rgba(20,85,143,.10)',fill:true,tension:.3,segment:{borderDash:c=>c.p1DataIndex===10?[6,4]:undefined}}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,title:{display:true,text:'Millions ($)'}}}}});
       safeChart('chartFirmIncome',{type:'bar',data:{labels:['ML Strategies','Smith Costello','Bay State Strategies','O\'Neill & Partners','Murphy Donoghue','Tremont Strategies','Preti Strategies','Serlin Haley','Kearney Donovan','O\'Neill & Assoc'],datasets:[{label:'Total Income ($M)',data:[25.4,20.4,17.3,13.6,13.0,12.7,11.4,11.0,10.7,10.4],backgroundColor:ctx=>ctx.dataIndex<3?'#A81733':ctx.dataIndex===3?'#5A6467':'#14558F',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true,title:{display:true,text:'Millions ($)'}}},plugins:{legend:{display:false}}}});
       safeChart('chartDonationDist',{type:'bar',data:{labels:['$200','$100','$500','$150','$250','$125','$1,000','Other'],datasets:[{label:'# of Donations',data:[3539,572,48,34,33,29,12,31],backgroundColor:ctx=>ctx.dataIndex===0?'#A81733':'#14558F',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,title:{display:true,text:'Number of Donations'}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const pct=(ctx.parsed.y/4298*100).toFixed(1);return `${ctx.parsed.y} donations (${pct}%)`}}}}}});
       safeChart('chartFirmDonations',{type:'bar',data:{labels:['ML Strategies','Smith Costello & Crawford','Bay State Strategies'],datasets:[{label:'Total ($)',data:[335496,273517,213450],backgroundColor:['#A81733','#14558F','#B07C20'],borderRadius:8},{label:'# Donations',data:[1809,1379,1110],backgroundColor:['rgba(168,23,51,0.3)','rgba(20,85,143,0.3)','rgba(176,124,32,0.3)'],borderRadius:8}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true}},plugins:{legend:{position:'top',labels:{font:{size:11}}}}}});

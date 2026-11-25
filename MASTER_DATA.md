@@ -1331,19 +1331,27 @@ The SOS figures are the only ones here backed by a file in `data/`. They cannot 
 
 **Registration year 2026 — first-half filings.** MA lobbying disclosure is semi-annual (due Jul 15 and
 Jan 15), so these cover roughly January to June and are **not** comparable to the full-year totals for
-2016–2025. Collected 2026-09-27.
+2016–2025. Collected 2026-11-25.
 
 | Channel | Reported |
 |---|---|
-| Clients → lobbying firms | $45,864,365 |
-| Clients → their own in-house lobbyists | $10,798,366 |
-| Client expenses | $5,891,460 |
-| **Total client outlay** | **$62,554,191** |
+| Clients → lobbying firms | $45,954,365 |
+| Clients → their own in-house lobbyists | $10,801,666 |
+| Client expenses | $5,922,371 |
+| **Total client outlay** | **$62,678,401** |
 
-Both flows reconcile to the cent against the other side of the ledger: the client→firm total equals what
-the 169 firms reported receiving, and the client→lobbyist total equals what the 1,528 individual
-lobbyists reported receiving. 1,733 clients filed. For reference, registration year 2025 — a full year —
-had 175 entities receiving $88,409,949.
+Every figure above is both the sum of the page totals and the sum of the line items behind them, equal
+to the cent. Two of the three legs also reconcile against the other side of the ledger: the
+client→lobbyist total equals what the 1,557 individual lobbyists reported receiving, and what firms
+reported paying their own lobbyists ($23,225,599) equals what those lobbyists reported receiving from
+firms. The client→firm leg does not, and the reason is a gap in the scrape rather than in the filings:
+the entity grid is alphabetical and the scrape began at its first captured row, missing the two firms
+whose names start with digits (21c; 27 South Strategies, LLC). Their own clients and lobbyists name
+them, which is how the count of 171 firms is known while only 169 firm pages were read, and their
+$246,770 is the whole of the difference between $45,954,365 paid and $45,707,595 received. All 169
+captured firms agree with their clients to the cent. 1,761 clients filed. For reference, registration
+year 2025 — a full year — had 175 entities receiving $88,409,949, a count taken the same way and
+so likely short by however many digit-named firms filed that year.
 
 ### Joining these files
 
@@ -1355,37 +1363,37 @@ client names carry double spaces in the industry results but not on their own pa
 `hvS0w46oEfUey9UWwnkaG…` and every 2026 key `j980aMf4IpOwXPZWPGG1x…`. The overlap between the two
 years is **zero** — for clients and for firms. An earlier version of this file said “join on sysvalue,
 not on name” without that qualification, which would lead anyone comparing years to conclude that all
-1,697 clients left and 1,733 different ones arrived.
+1,697 clients left and 1,761 different ones arrived.
 
 Year-over-year therefore has to match on **normalised names** (lowercase, punctuation and corporate
-suffixes stripped, whitespace collapsed), which resolves 1,454 of 1,733 clients. The remainder are a
+suffixes stripped, whitespace collapsed), which resolved 1,454 of the 1,733 clients in the 2026-09-27 scrape (not re-run against the 1,761 now filing). The remainder are a
 mix of genuine entries and exits and of names that moved too far to match, so treat churn counts as
 approximate and spend comparisons on matched names as sound.
 
 **Industry labels are the state’s, not ours.** The SOS’s Industry Type register assigns every client one
 of 36 labels at registration; 35 are in use (“Other” is empty). Joined on `sysvalue` it covers
-**1,733 of 1,733 clients**. A name-keyword classifier managed 46.4%, which is why nothing inferred is
+**1,761 of 1,761 clients**. A name-keyword classifier managed 46.4%, which is why nothing inferred is
 published here.
 
 The single “Healthcare” line understates health, because the SOS splits it four ways:
 
 | Label | 2026 H1 spend |
 |---|---|
-| Healthcare | $9,080,168 |
+| Healthcare | $9,101,473 |
 | Pharmaceutical Industry | $2,830,428 |
 | Insurance: Medical, Dental, Mental Health | $2,142,124 |
 | Hospitals: Healthcare Systems, Medical Orgs | $1,685,757 |
-| **Health, rolled up** | **$15,738,477 — 25.2%** |
+| **Health, rolled up** | **$15,759,782 — 25.1%** |
 
-That 25.2% independently matches OpenSecrets’ 25% for the health sector over 2015–2025 — a different
+That 25.1% independently matches OpenSecrets’ 25% for the health sector over 2015–2025 — a different
 source, method and window — and it holds across a second full scrape:
 
 | | 2025 (full year) | 2026 (first half) |
 |---|---|---|
-| Clients filing | 1,697 | 1,733 |
+| Clients filing | 1,697 | 1,761 |
 | Matched to an SOS label | 100% | 100% |
-| Total client outlay | $119,177,253 | $62,554,191 |
-| Health share | **24.48%** | **25.16%** |
+| Total client outlay | $119,177,253 | $62,678,401 |
+| Health share | **24.48%** | **25.14%** |
 
 The totals are not comparable — one is a year, the other half of one. The shares are.
 
@@ -1414,7 +1422,7 @@ land, exactly as 2025 did.
 | Top 10 Industries by Lobbying Spend (2015–2025) | OpenSecrets, Massachusetts State Lobbying by Industry (2015–2025) | 2015–2025 |
 | Spending by Industry — 2026, State’s Own Labels ✅ | Secretary of the Commonwealth, Lobbyist Public Search — Industry Type; `data/ma-lobbying-firms-latest.json` | 2026 H1 |
 | Health share, 2025 full year — 24.48% of $119,177,253 ✅ | Secretary of the Commonwealth, Lobbyist Public Search — Industry Type | 2025 |
-| Health rolled up across 4 SOS labels — $15,738,477, 25.2% ✅ | Secretary of the Commonwealth, Lobbyist Public Search — Industry Type | 2026 H1 |
+| Health rolled up across 4 SOS labels — $15,759,782, 25.1% ✅ | Secretary of the Commonwealth, Lobbyist Public Search — Industry Type | 2026 H1 |
 | **Hero: total lobbying spend, 2025** — $119.2M ✅ | Secretary of the Commonwealth, Lobbyist Public Search — client filings: $88,602,704 to firms + $20,888,628 to in-house lobbyists + $9,685,922 expenses = $119,177,253 | 2025 |
 | **Hero: lobbyists per lawmaker** — 8:1 ✅ | Secretary of the Commonwealth registrant index: 1,555 registered lobbyists ÷ 200 legislators (160 House + 40 Senate) = 7.78 | 2025 |
 | Top Spenders — 2026 First-Half Filings ✅ | Secretary of the Commonwealth, Lobbyist Public Search — `data/ma-lobbying-firms-latest.json`; client-reported fees, in-house salaries and expenses | 2026 H1 |

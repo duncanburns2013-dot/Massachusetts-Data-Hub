@@ -4,19 +4,19 @@
   "source": "Massachusetts Secretary of the Commonwealth \u2014 Lobbyist Public Search",
   "source_url": "https://www.sec.state.ma.us/LobbyistPublicSearch/Default.aspx",
   "collected_via": "The-Peoples-Audit/userscripts/sos-lobbyist-detail-scraper.user.js \u2014 an in-browser userscript. The SOS blocks server-side fetches, so no workflow can own this; it is refreshed by hand from a browser session.",
-  "scraped_at": "2026-09-27T19:07:08.236Z",
+  "scraped_at": "2026-11-25T16:52:45.461Z",
   "note": "MA lobbying disclosure is semi-annual (filed by Jul 15 and Jan 15). These are registration year 2026 figures as filed at the July deadline, so they cover roughly the first half of the year and are NOT comparable to the full-year totals for 2016-2025. A scrape taken 2026-07-08, a week before the deadline, read $0 for all 162 firms.",
   "ledger_2026": {
-    "clients_to_firms": 45864364.87,
-    "clients_to_individual_lobbyists": 10798365.84,
-    "client_expenses": 5891459.99,
-    "total_client_outlay": 62554190.7,
-    "reconciliation": "clients_to_firms equals the sum firms reported RECEIVING, and clients_to_individual_lobbyists equals the sum lobbyists reported receiving, both to the cent \u2014 the two sides of each ledger were checked against each other."
+    "clients_to_firms": 45954364.87,
+    "clients_to_individual_lobbyists": 10801665.84,
+    "client_expenses": 5922370.6,
+    "total_client_outlay": 62678401.31,
+    "reconciliation": "Every figure here is the sum of page totals AND the sum of the individual line items behind them, equal to the cent. Two of the three legs also reconcile exactly against the other side of the ledger: clients_to_individual_lobbyists equals what the 1557 individual lobbyists reported receiving from clients, and what firms reported paying their own lobbyists ($23,225,599.41) equals what those lobbyists reported receiving from firms. The third leg does not: clients report paying firms $45,954,364.87 while the scraped firm pages report receiving $45,707,594.87. The entire $246,770.00 difference is 2 firms the entity scrape missed \u2014 21c and 27 South Strategies, LLC \u2014 whose names begin with digits and sort above its first captured row; both are named by their own clients and lobbyists, which is how the count of 171 is known. All 169 firms that were captured agree with their clients to the cent."
   },
   "counts": {
-    "firms": 169,
-    "clients": 1733,
-    "individual_lobbyists": 1528
+    "firms": 171,
+    "clients": 1761,
+    "individual_lobbyists": 1557
   },
   "series": [
     {
@@ -93,8 +93,8 @@
     },
     {
       "year": 2026,
-      "firms": 169,
-      "received": 45864364.87,
+      "firms": 171,
+      "received": 45954364.87,
       "paid": 23225599.41,
       "partial": true
     }
@@ -104,35 +104,35 @@
       "rank": 1,
       "name": "Smith Costello & Crawford Public Policy Group, LLC",
       "received": 4422575.98,
-      "clients": 143,
+      "clients": 146,
       "lobbyists": 13
     },
     {
       "rank": 2,
       "name": "Tremont Strategies Group LLC",
-      "received": 3352840.19,
-      "clients": 112,
+      "received": 3397840.19,
+      "clients": 116,
       "lobbyists": 8
     },
     {
       "rank": 3,
       "name": "O'Neill and Partners LLC.",
       "received": 2723695.0,
-      "clients": 88,
+      "clients": 92,
       "lobbyists": 12
     },
     {
       "rank": 4,
       "name": "Dempsey Associates LLC",
       "received": 2313299.96,
-      "clients": 62,
+      "clients": 69,
       "lobbyists": 1
     },
     {
       "rank": 5,
       "name": "Kearney Donovan & McGee, LLC",
       "received": 1985549.98,
-      "clients": 59,
+      "clients": 60,
       "lobbyists": 6
     },
     {
@@ -147,48 +147,48 @@
       "name": "Issues Management Group Public Affairs, LLC",
       "received": 1234239.98,
       "clients": 42,
-      "lobbyists": 12
+      "lobbyists": 13
     },
     {
       "rank": 8,
       "name": "Preti Strategies, LLC",
       "received": 1064633.36,
-      "clients": 43,
+      "clients": 44,
       "lobbyists": 6
     },
     {
       "rank": 9,
+      "name": "The Suffolk Group, LLC",
+      "received": 1059245.96,
+      "clients": 45,
+      "lobbyists": 3
+    },
+    {
+      "rank": 10,
       "name": "Rasky Partners, Inc.",
       "received": 1058350.0,
       "clients": 36,
       "lobbyists": 7
     },
     {
-      "rank": 10,
+      "rank": 11,
       "name": "ML Strategies, LLC",
       "received": 1055846.0,
-      "clients": 34,
+      "clients": 35,
       "lobbyists": 8
-    },
-    {
-      "rank": 11,
-      "name": "The Suffolk Group, LLC",
-      "received": 1023245.96,
-      "clients": 44,
-      "lobbyists": 3
     },
     {
       "rank": 12,
       "name": "TSK Associates LLC",
       "received": 989039.53,
-      "clients": 32,
+      "clients": 33,
       "lobbyists": 6
     },
     {
       "rank": 13,
       "name": "Commonwealth Counsel, LLC",
       "received": 941099.98,
-      "clients": 28,
+      "clients": 29,
       "lobbyists": 3
     },
     {
@@ -202,7 +202,7 @@
       "rank": 15,
       "name": "Serlin Haley LLP",
       "received": 854208.33,
-      "clients": 31,
+      "clients": 32,
       "lobbyists": 3
     }
   ],
@@ -242,10 +242,10 @@
     {
       "rank": 5,
       "name": "American Families for Vaccines Action Fund, Inc.",
-      "total": 514127.65,
+      "total": 535433.26,
       "to_firms": 30000.0,
       "in_house": 36652.38,
-      "expenses": 447475.27
+      "expenses": 468780.88
     },
     {
       "rank": 6,
@@ -370,10 +370,10 @@
   ],
   "industries": {
     "source": "Massachusetts Secretary of the Commonwealth \u2014 Lobbyist Public Search, Industry Type",
-    "scraped_at": "2026-09-27T19:43:41.285Z",
-    "note": "The SOS\u2019s own labels, chosen by each client at registration \u2014 not an inferred classification. One label per client, 35 of 36 in use (\u201cOther\u201d is empty). Joined to the spending records on sysvalue, matching 1,733 of 1,733 with no duplicates. A name-keyword classifier managed 46.4%.",
+    "scraped_at": "2026-11-25T19:11:04.761Z",
+    "note": "The SOS\u2019s own labels, chosen by each client at registration \u2014 not an inferred classification. One label per client, 35 of 36 in use (\u201cOther\u201d is empty). Joined to the spending records on sysvalue, matching 1761 of 1761 with no duplicates. A name-keyword classifier managed 46.4%.",
     "label_count": 35,
-    "client_count": 1733,
+    "client_count": 1761,
     "health_rollup": {
       "labels": [
         "Healthcare",
@@ -381,39 +381,39 @@
         "Insurance: Medical, Dental, Mental Health",
         "Hospitals: Healthcare Systems, Medical Orgs"
       ],
-      "spend": 15738476.63,
-      "clients": 305,
-      "share_pct": 25.2,
-      "note": "The SOS splits health across four labels, so the single \"Healthcare\" line understates it. Rolled up it is 25.2%, which independently matches OpenSecrets\u2019 25% for the health sector over 2015-2025 \u2014 a different source, method and window."
+      "spend": 15759782.24,
+      "clients": 313,
+      "share_pct": 25.1,
+      "note": "The SOS splits health across four labels, so the single \"Healthcare\" line understates it. Rolled up it is 25.1%, which independently matches OpenSecrets\u2019 25% for the health sector over 2015-2025 \u2014 a different source, method and window."
     },
     "by_spend": [
       {
         "industry": "Healthcare",
-        "spend": 9080167.6,
-        "clients": 206,
+        "spend": 9101473.21,
+        "clients": 212,
         "share_pct": 14.5,
-        "avg_per_client": 44078.48
+        "avg_per_client": 42931.48
       },
       {
         "industry": "Education",
-        "spend": 4598710.03,
-        "clients": 160,
+        "spend": 4617315.03,
+        "clients": 162,
         "share_pct": 7.4,
-        "avg_per_client": 28741.94
+        "avg_per_client": 28501.94
       },
       {
         "industry": "Human Services",
         "spend": 4044642.17,
-        "clients": 143,
+        "clients": 144,
         "share_pct": 6.5,
-        "avg_per_client": 28284.21
+        "avg_per_client": 28087.79
       },
       {
         "industry": "Information Technology",
         "spend": 3116557.23,
-        "clients": 93,
+        "clients": 95,
         "share_pct": 5.0,
-        "avg_per_client": 33511.37
+        "avg_per_client": 32805.87
       },
       {
         "industry": "Business Associations, Organizations",
@@ -425,44 +425,44 @@
       {
         "industry": "Energy: Petroleum, Hydro, Nuclear, Oil",
         "spend": 2856356.57,
-        "clients": 81,
+        "clients": 83,
         "share_pct": 4.6,
-        "avg_per_client": 35263.66
+        "avg_per_client": 34413.93
       },
       {
         "industry": "Pharmaceutical Industry",
         "spend": 2830427.92,
-        "clients": 51,
+        "clients": 52,
         "share_pct": 4.5,
-        "avg_per_client": 55498.59
+        "avg_per_client": 54431.31
       },
       {
         "industry": "Transportation",
         "spend": 2267729.08,
-        "clients": 58,
+        "clients": 59,
         "share_pct": 3.6,
-        "avg_per_client": 39098.78
+        "avg_per_client": 38436.09
       },
       {
         "industry": "Real Estate: Development and Property",
         "spend": 2214777.02,
-        "clients": 66,
+        "clients": 67,
         "share_pct": 3.5,
-        "avg_per_client": 33557.23
+        "avg_per_client": 33056.37
       },
       {
         "industry": "Environment",
         "spend": 2164095.35,
-        "clients": 86,
+        "clients": 87,
         "share_pct": 3.5,
-        "avg_per_client": 25163.9
+        "avg_per_client": 24874.66
       },
       {
         "industry": "Insurance: Medical, Dental, Mental Health",
         "spend": 2142123.9,
-        "clients": 15,
+        "clients": 16,
         "share_pct": 3.4,
-        "avg_per_client": 142808.26
+        "avg_per_client": 133882.74
       },
       {
         "industry": "Utilities",
@@ -502,9 +502,9 @@
       {
         "industry": "High Technology",
         "spend": 1524957.7,
-        "clients": 44,
+        "clients": 45,
         "share_pct": 2.4,
-        "avg_per_client": 34658.13
+        "avg_per_client": 33887.95
       },
       {
         "industry": "Insurance: Auto, Home, Life, Other",
@@ -523,16 +523,16 @@
       {
         "industry": "Food and Beverage: Industry and Services",
         "spend": 1234166.48,
-        "clients": 29,
+        "clients": 31,
         "share_pct": 2.0,
-        "avg_per_client": 42557.46
+        "avg_per_client": 39811.82
       },
       {
         "industry": "Travel, Tourism, Entertainment",
         "spend": 1174490.51,
-        "clients": 42,
+        "clients": 43,
         "share_pct": 1.9,
-        "avg_per_client": 27964.06
+        "avg_per_client": 27313.73
       },
       {
         "industry": "Finance, Insurance, Real Estate",
@@ -544,9 +544,9 @@
       {
         "industry": "Contractors, Subcontractors",
         "spend": 1051626.97,
-        "clients": 28,
+        "clients": 29,
         "share_pct": 1.7,
-        "avg_per_client": 37558.11
+        "avg_per_client": 36263.0
       },
       {
         "industry": "SocialServices",
@@ -558,16 +558,16 @@
       {
         "industry": "Manufacturing",
         "spend": 823619.44,
-        "clients": 27,
+        "clients": 28,
         "share_pct": 1.3,
-        "avg_per_client": 30504.42
+        "avg_per_client": 29414.98
       },
       {
         "industry": "Banking: Lending, Investment",
         "spend": 797847.25,
-        "clients": 34,
+        "clients": 35,
         "share_pct": 1.3,
-        "avg_per_client": 23466.1
+        "avg_per_client": 22795.64
       },
       {
         "industry": "Automotive Industry",
@@ -586,9 +586,9 @@
       {
         "industry": "Police, Fire, Law Enforcement Organizations",
         "spend": 572427.3,
-        "clients": 20,
+        "clients": 21,
         "share_pct": 0.9,
-        "avg_per_client": 28621.37
+        "avg_per_client": 27258.44
       },
       {
         "industry": "Tobacco, Alcohol",
@@ -612,18 +612,18 @@
         "avg_per_client": 24440.78
       },
       {
-        "industry": "Agriculture, Forestry, and Fishing",
-        "spend": 282258.61,
-        "clients": 16,
+        "industry": "Entertainment",
+        "spend": 299793.71,
+        "clients": 11,
         "share_pct": 0.5,
-        "avg_per_client": 17641.16
+        "avg_per_client": 27253.97
       },
       {
-        "industry": "Entertainment",
-        "spend": 215493.71,
-        "clients": 10,
-        "share_pct": 0.3,
-        "avg_per_client": 21549.37
+        "industry": "Agriculture, Forestry, and Fishing",
+        "spend": 282258.61,
+        "clients": 17,
+        "share_pct": 0.5,
+        "avg_per_client": 16603.45
       },
       {
         "industry": "Lobbying Organizations",
@@ -648,15 +648,15 @@
       "scraped_at": "2026-09-27T20:02:20.654Z"
     },
     "2026_first_half": {
-      "clients": 1733,
+      "clients": 1761,
       "labels": 35,
-      "to_firms": 45864364.87,
-      "to_lobbyists": 10798365.84,
-      "expenses": 5891459.99,
-      "total": 62554190.7,
-      "health_spend": 15738476.63,
-      "health_share_pct": 25.16,
-      "scraped_at": "2026-09-27T19:43:41.285Z"
+      "to_firms": 45954364.87,
+      "to_lobbyists": 10801665.84,
+      "expenses": 5922370.6,
+      "total": 62678401.31,
+      "health_spend": 15759782.24,
+      "health_share_pct": 25.14,
+      "scraped_at": "2026-11-25T19:11:04.761Z"
     }
   },
   "amendments": {
