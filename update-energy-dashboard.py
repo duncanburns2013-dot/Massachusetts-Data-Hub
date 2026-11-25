@@ -503,6 +503,20 @@ for m in re.finditer(r'\$([\d,]+)/yr', live):
     if m.group(1) not in allowed_per_yr:
         stale.add(f"${m.group(1)}/yr")
 for _lit, _why in BANNED_LITERALS.items():
+    # The ban exists to stop these figures being RETYPED. It must not fire on
+    # the arithmetic itself: September 2026 EIA data put the MA premium at
+    # exactly $922/yr, every anchor wrote it correctly, and the run then died
+    # on its own output having written nothing -- taking the fuel,
+    # burden-constant and tax-budget steps down with it. A literal this run
+    # DERIVED is allowed; every other literal is still banned.
+    #
+    # Exempting the whole value, not just the "$922/yr" spelling, because the
+    # anchors write it four different ways: "$922", "+$922" in the state
+    # table, and bare "922" in prose. The case no guard can see is a stale 922
+    # left somewhere in a run whose own overpayment is also 922 -- textually
+    # identical to the live one.
+    if _lit == dollars(overpay):
+        continue
     # Not part of a longer number: bare 922, not 1922 or 922.5.
     if re.search(rf'(?<![\d.]){_lit}(?![\d.])', live):
         stale.add(f"{_lit} (banned: {_why})")
