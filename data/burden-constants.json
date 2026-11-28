@@ -2,7 +2,7 @@
   "_meta": {
     "purpose": "Single source of truth for every constant shared by tax-burden-dashboard.html and tax-burden-nh-comparison.html. Edit here, run update-burden-constants.py, never hand-edit the K object in either HTML file.",
     "maintainer": "Duncan Burns",
-    "updated": "2026-11-08",
+    "updated": "2026-11-28",
     "rules": [
       "Every figure needs value + source + url + verified. A figure with verified:false BLOCKS publication.",
       "meanHouseholdIncome and incomeShare are DERIVED from aggregateHouseholdIncome / households. Do not hardcode them.",
@@ -194,18 +194,18 @@
       "verified": "2026-08-08"
     },
     "deficit": {
-      "value": 1800000000000,
-      "note": "FY2025 actual, ~5.8-5.9% of GDP. Rounded to $1.8T as published.",
-      "source": "CBO Monthly Budget Review, October 2025",
-      "url": "https://www.cbo.gov/publication/61307",
-      "verified": "2026-08-08"
+      "value": 1992473224352,
+      "note": "FY2026 actual, $1,992,473,224,352.42: the fiscal-year-to-date deficit in the Final Monthly Treasury Statement for September 2026 (fiscal year close), Table 1. CBO's Monthly Budget Review: Summary for Fiscal Year 2026 (Nov 9, 2026) reports the same year at $1,992B, up $217B or 12% from FY2025. Replaces the FY2025 figure, which had been rounded to $1.8T as CBO published it (Treasury's FY2025 actual is $1,775,369,189,818.35).",
+      "source": "U.S. Treasury, Final Monthly Treasury Statement Sept 2026, Table 1, via the Fiscal Data API; CBO Monthly Budget Review, Summary for FY2026",
+      "url": "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/mts/mts_table_1?filter=record_fiscal_year:eq:2026,record_calendar_month:eq:09",
+      "verified": "2026-11-28"
     },
     "corporateReceipts": {
-      "value": 452089303420,
-      "note": "FY2025 net Corporation Income Taxes, $452,089,303,419.78, from the Final Monthly Treasury Statement for September 2025 (fiscal year close). Down from FY2024's $529,866,802,637.57, a fall of $77.8B or 14.7% -- CBO attributed part of the drop to timing effects from IRS disaster-related deadline postponements that had inflated early FY2024. This replaces a rounded $500B placeholder that overstated the figure by $48B (10.6%) and inflated Layer 3 in both dashboards.",
-      "source": "U.S. Treasury, Final Monthly Treasury Statement Sept 2025, Table 4, via the Fiscal Data API",
-      "url": "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/mts/mts_table_4?filter=record_fiscal_year:eq:2025,record_calendar_month:eq:09",
-      "verified": "2026-08-08"
+      "value": 381414689058,
+      "note": "FY2026 net Corporation Income Taxes, $381,414,689,057.62, from the Final Monthly Treasury Statement for September 2026 (fiscal year close). Down from FY2025's $452,089,303,419.78, a fall of $70.7B or 15.6%. Replaces the FY2025 figure.",
+      "source": "U.S. Treasury, Final Monthly Treasury Statement Sept 2026, Table 4, via the Fiscal Data API",
+      "url": "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v1/accounting/mts/mts_table_4?filter=record_fiscal_year:eq:2026,record_calendar_month:eq:09",
+      "verified": "2026-11-28"
     }
   },
   "national_acs": {
@@ -296,11 +296,11 @@
         "verified": "2026-08-08"
       },
       "corporateExcisePool": {
-        "value": 4662000000,
-        "note": "FY2025 corporate and business excise collections. COMPOSITION, per the DOR FY2025 Annual Report collections-by-type table: Corporations $4,036,624K + Insurance $613,268K + Financial Institutions $19,949K = $4.670B, reconciling to this figure. That matters for any Layer 3 expansion: insurance and financial institution excises are ALREADY IN HERE. Adding them as separate pools would double-count about $633M, roughly 14% of the MA pool. See LAYER3-SCOPE.md.",
-        "source": "MA DOR FY2025 revenue close, August 2025",
-        "url": "https://www.mass.gov/news/fiscal-year-2025-revenue-collections-totaled-43708-billion",
-        "verified": "2026-08-08"
+        "value": 4170000000,
+        "note": "FY2026 corporate and business tax collections, $4.170B, PRELIMINARY as published by DOR on Aug 13, 2026: $498M or 10.7% less than FY2025, which DOR attributes mostly to lower estimated payments and higher refunds. DOR's corporate/business category is the corporate, financial institutions, insurance and public utility excises, the same scope as the FY2025 figure below. Replace with the final figure when the DOR FY2026 annual report lands. FY2025 HISTORY: $4.662B. COMPOSITION, per the DOR FY2025 Annual Report collections-by-type table: Corporations $4,036,624K + Insurance $613,268K + Financial Institutions $19,949K = $4.670B, reconciling to this figure. That matters for any Layer 3 expansion: insurance and financial institution excises are ALREADY IN HERE. Adding them as separate pools would double-count about $633M, roughly 14% of the MA pool. See LAYER3-SCOPE.md.",
+        "source": "MA DOR FY2026 revenue collections (preliminary), August 13, 2026",
+        "url": "https://www.mass.gov/news/fiscal-year-2026-revenue-collections-totaled-45542-billion",
+        "verified": "2026-11-28"
       },
       "enterpriseTaxPool": {
         "value": 0,
