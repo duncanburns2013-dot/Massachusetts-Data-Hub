@@ -11,9 +11,9 @@
       "avg_sale": 953760,
       "avg_dom": 30,
       "splp_pct": 99.2,
-      "active_count": 37,
-      "active_avg_list": 2969139,
-      "active_median_list": 1490000,
+      "active_count": 36,
+      "active_avg_list": 3014116,
+      "active_median_list": 1492500,
       "by_bedroom": {
         "1": {
           "avg": 550938,
@@ -135,7 +135,7 @@
       "avg_dom": 19,
       "splp_pct": 101.54,
       "active_count": 24,
-      "active_avg_list": 746679,
+      "active_avg_list": 746258,
       "active_median_list": 664500,
       "by_bedroom": {
         "1": {
@@ -498,13 +498,13 @@
       ]
     },
     "NH Statewide": {
-      "volume": 96582,
-      "median_sale": 447843,
-      "avg_sale": 535803,
+      "volume": 96584,
+      "median_sale": 447835,
+      "avg_sale": 535797,
       "avg_dom": 29,
       "splp_pct": 100.3,
-      "active_count": 2622,
-      "active_avg_list": 839535,
+      "active_count": 2620,
+      "active_avg_list": 838916,
       "active_median_list": 595000,
       "by_bedroom": {
         "1": {
@@ -512,12 +512,12 @@
           "n": 1621
         },
         "2": {
-          "avg": 367194,
-          "n": 14933
+          "avg": 367178,
+          "n": 14934
         },
         "3": {
-          "avg": 485467,
-          "n": 51002
+          "avg": 485465,
+          "n": 51003
         },
         "4": {
           "avg": 675345,
@@ -560,15 +560,15 @@
           "avg": 637769
         },
         "2026": {
-          "n": 11491,
-          "median": 560841,
-          "avg": 669456
+          "n": 11493,
+          "median": 560797,
+          "avg": 669387
         }
       },
       "distribution": [
         {
           "band": "<$200K",
-          "count": 6655
+          "count": 6656
         },
         {
           "band": "$200-300K",
@@ -580,7 +580,7 @@
         },
         {
           "band": "$400-500K",
-          "count": 18573
+          "count": 18574
         },
         {
           "band": "$500-600K",
@@ -621,5 +621,5 @@
       ]
     }
   },
-  "updated": "2026-11-27"
+  "updated": "2026-11-28"
 }
